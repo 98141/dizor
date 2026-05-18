@@ -1,44 +1,53 @@
 import Link from "next/link";
+import { getContentPages } from "@/services/cmsService";
 
-export default function SiteFooter() {
+export default async function SiteFooter() {
+  let pages = [];
+
+  try {
+    const data = await getContentPages();
+    pages = (data.pages || []).filter((p) => p.showInFooter !== false);
+  } catch {
+    pages = [];
+  }
+
   return (
     <footer className="site-footer">
       <div className="site-footer__inner">
         <div>
           <p className="site-footer__brand">Dizor</p>
-          <p style={{ opacity: 0.85, fontSize: "0.9rem", marginTop: "0.5rem" }}>
+          <p className="site-footer__tagline">
             Sombreros artesanales en palma de iraca · Sandoná, Nariño, Colombia
           </p>
         </div>
 
         <div className="site-footer__grid">
           <div>
-            <strong style={{ display: "block", marginBottom: "0.75rem" }}>
-              Tienda
-            </strong>
+            <strong className="site-footer__heading">Tienda</strong>
             <Link href="/catalogo">Catálogo</Link>
             <Link href="/catalogo?featured=true">Destacados</Link>
+            <Link href="/personalizar">Personalizar</Link>
+            <Link href="/pedido-mayor">Por mayor</Link>
           </div>
           <div>
-            <strong style={{ display: "block", marginBottom: "0.75rem" }}>
-              Ayuda
-            </strong>
-            <Link href="/login">Mi cuenta</Link>
+            <strong className="site-footer__heading">Ayuda</strong>
+            <Link href="/cuenta">Mi cuenta</Link>
             <Link href="/seguimiento">Seguimiento de pedido</Link>
             <Link href="/solicitud/seguimiento">Mis solicitudes</Link>
-            <Link href="/personalizar">Personalización</Link>
-            <Link href="/pedido-mayor">Pedido al por mayor</Link>
             <a href="https://wa.me/573000000000" target="_blank" rel="noreferrer">
               WhatsApp
             </a>
           </div>
           <div>
-            <strong style={{ display: "block", marginBottom: "0.75rem" }}>
-              Legal
-            </strong>
-            <span style={{ fontSize: "0.9rem", opacity: 0.8 }}>
-              Políticas — próximamente
-            </span>
+            <strong className="site-footer__heading">Información</strong>
+            {pages.map((p) => (
+              <Link key={p.slug} href={`/pagina/${p.slug}`}>
+                {p.title}
+              </Link>
+            ))}
+            {pages.length === 0 && (
+              <span className="site-footer__muted">Próximamente</span>
+            )}
           </div>
         </div>
 

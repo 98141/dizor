@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import ProductCard from "@/components/products/ProductCard";
 import CatalogFilters from "@/components/catalog/CatalogFilters";
 import { CatalogFiltersSidebar } from "@/components/catalog/CatalogFilters";
+import CatalogPromo from "@/components/cms/CatalogPromo";
 import { getCatalogFilters, getProducts } from "@/services/productService";
 
 function CatalogoContent() {
@@ -121,6 +122,8 @@ function CatalogoContent() {
           Sombreros artesanales en palma de iraca · {total} productos
         </p>
       </header>
+
+      <CatalogPromo />
 
       <div className="catalog-layout__toolbar">
         <CatalogFilters

@@ -1,5 +1,7 @@
 import Link from "next/link";
 import ProductCard from "@/components/products/ProductCard";
+import PromoBanner from "@/components/cms/PromoBanner";
+import { getHomeContent } from "@/services/cmsService";
 
 async function getFeatured() {
   try {
@@ -16,30 +18,58 @@ async function getFeatured() {
 }
 
 export default async function HomePage() {
-  const featured = await getFeatured();
+  const [cmsData, featured] = await Promise.all([
+    getHomeContent().catch(() => null),
+    getFeatured(),
+  ]);
+
+  const home = cmsData?.home;
+  const hero = home?.hero;
+  const features = home?.features?.length ? home.features : [];
+  const featuredSection = home?.featuredSection;
+  const midBanner = cmsData?.banners?.[0];
+
+  const heroStyle =
+    hero?.imageUrl
+      ? {
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url(${hero.imageUrl})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }
+      : undefined;
 
   return (
     <>
-      <section className="home-hero">
+      <section className="home-hero" style={heroStyle}>
         <div className="home-hero__inner">
           <h1 className="home-hero__title">
-            Sombreros artesanales de Sandoná
+            {hero?.title || "Sombreros artesanales de Sandoná"}
           </h1>
           <p className="home-hero__text">
-            Palma de iraca tejida a mano en Nariño, Colombia. Tradición,
-            elegancia y calidad en cada pieza.
+            {hero?.subtitle ||
+              "Palma de iraca tejida a mano en Nariño, Colombia."}
           </p>
-          <Link href="/catalogo" className="home-hero__cta">
-            Ver catálogo
+          <Link
+            href={hero?.ctaHref || "/catalogo"}
+            className="home-hero__cta"
+          >
+            {hero?.ctaLabel || "Ver catálogo"}
           </Link>
         </div>
       </section>
 
+      {midBanner && <PromoBanner banner={midBanner} />}
+
       <section className="home-section">
         <div className="home-section__header">
-          <h2 className="home-section__title">Destacados</h2>
-          <Link href="/catalogo?featured=true" className="home-section__link">
-            Ver todos
+          <h2 className="home-section__title">
+            {featuredSection?.title || "Destacados"}
+          </h2>
+          <Link
+            href={featuredSection?.linkHref || "/catalogo?featured=true"}
+            className="home-section__link"
+          >
+            {featuredSection?.linkLabel || "Ver todos"}
           </Link>
         </div>
         {featured.length > 0 ? (
@@ -56,28 +86,18 @@ export default async function HomePage() {
         )}
       </section>
 
-      <section className="home-section">
-        <div className="home-features">
-          <div className="home-feature">
-            <h3 className="home-feature__title">Tejido artesanal</h3>
-            <p className="home-feature__text">
-              Brisa, Común y Súper fino — tipos de tejido para cada ocasión.
-            </p>
+      {features.length > 0 && (
+        <section className="home-section">
+          <div className="home-features">
+            {features.map((feature) => (
+              <div key={feature.title} className="home-feature">
+                <h3 className="home-feature__title">{feature.title}</h3>
+                <p className="home-feature__text">{feature.text}</p>
+              </div>
+            ))}
           </div>
-          <div className="home-feature">
-            <h3 className="home-feature__title">Hormas clásicas</h3>
-            <p className="home-feature__text">
-              Indiana, Safari, Panamá Hats y más estilos icónicos.
-            </p>
-          </div>
-          <div className="home-feature">
-            <h3 className="home-feature__title">Envíos en Colombia</h3>
-            <p className="home-feature__text">
-              Interrapidísimo, Envía y Coordinadora. Pagos en COP.
-            </p>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
     </>
   );
 }

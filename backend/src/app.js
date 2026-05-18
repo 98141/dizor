@@ -19,6 +19,8 @@ const adminOrderRoutes = require("./routes/adminOrderRoutes");
 const adminSettingsRoutes = require("./routes/adminSettingsRoutes");
 const specialRequestRoutes = require("./routes/specialRequestRoutes");
 const specialRequestAdminRoutes = require("./routes/specialRequestAdminRoutes");
+const contentPublicRoutes = require("./routes/contentPublicRoutes");
+const contentAdminRoutes = require("./routes/contentAdminRoutes");
 
 const app = express();
 
@@ -98,6 +100,8 @@ app.use("/api/admin/orders", adminOrderRoutes);
 app.use("/api/admin/settings", adminSettingsRoutes);
 app.use("/api/special-requests", specialRequestRoutes);
 app.use("/api/admin/special-requests", specialRequestAdminRoutes);
+app.use("/api/content", contentPublicRoutes);
+app.use("/api/admin/content", contentAdminRoutes);
 
 app.use((req, res, next) => {
   next(new AppError(`Ruta no encontrada: ${req.originalUrl}`, 404));

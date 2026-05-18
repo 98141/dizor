@@ -68,6 +68,9 @@ function AdminDashboard() {
         <Link href="/admin/solicitudes" className="admin-btn admin-btn--primary">
           Solicitudes especiales
         </Link>
+        <Link href="/admin/contenido" className="admin-btn">
+          Editar contenido
+        </Link>
         <Link href="/admin/productos" className="admin-btn">
           Ver productos
         </Link>

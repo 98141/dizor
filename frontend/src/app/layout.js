@@ -7,6 +7,8 @@ import "@/styles/components/auth-form.css";
 import "@/styles/pages/cuenta.css";
 import "@/styles/layouts/public-header.css";
 import "@/styles/layouts/public-footer.css";
+import "@/styles/layouts/site-announcement.css";
+import "@/styles/pages/admin-cms.css";
 import "@/styles/components/product-card.css";
 import "@/styles/components/catalog-filters.css";
 import "@/styles/pages/home.css";
