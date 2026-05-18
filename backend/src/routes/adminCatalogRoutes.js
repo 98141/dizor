@@ -23,6 +23,7 @@ Object.entries(taxonomyAdminController.handlers).forEach(([type, handlers]) => {
   router.delete(`/${type}/:id`, authorizeRoles(...adminRoles), handlers.remove);
 });
 
+router.get("/meta", productAdminController.getCatalogMeta);
 router.get("/products/inventory", productAdminController.getInventorySummary);
 router.get("/products", productAdminController.getProducts);
 router.get("/products/:id", productAdminController.getProduct);
@@ -39,6 +40,16 @@ router.post(
   requireCloudinary,
   uploadProductImages,
   productAdminController.uploadImages
+);
+router.post(
+  "/products/:id/images/url",
+  authorizeRoles(...adminRoles),
+  productAdminController.addImageUrl
+);
+router.patch(
+  "/products/:id/images",
+  authorizeRoles(...adminRoles),
+  productAdminController.removeImage
 );
 
 module.exports = router;

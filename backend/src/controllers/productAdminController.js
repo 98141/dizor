@@ -65,9 +65,43 @@ exports.getProduct = catchAsync(async (req, res, next) => {
     return next(new AppError("Producto no encontrado", 404));
   }
 
+  const formatted = formatProductAdmin(product, req.user.role);
+  formatted.variants = product.variants.map((v) => ({
+    id: v._id,
+    size: v.size?._id || v.size,
+    color: v.color?._id || v.color,
+    sizeName: v.size?.name,
+    colorName: v.color?.name,
+    sku: v.sku,
+    stock: v.stock,
+    price: v.price,
+    isActive: v.isActive,
+  }));
+
   res.status(200).json({
     status: "success",
-    product: formatProductAdmin(product, req.user.role),
+    product: formatted,
+  });
+});
+
+exports.getCatalogMeta = catchAsync(async (req, res) => {
+  const Category = require("../models/category");
+  const Color = require("../models/color");
+  const Size = require("../models/size");
+  const WeaveType = require("../models/weaveType");
+  const Style = require("../models/style");
+
+  const [categories, colors, sizes, weaveTypes, styles] = await Promise.all([
+    Category.find().sort({ sortOrder: 1, name: 1 }),
+    Color.find().sort({ sortOrder: 1, name: 1 }),
+    Size.find().sort({ sortOrder: 1, name: 1 }),
+    WeaveType.find().sort({ sortOrder: 1, name: 1 }),
+    Style.find().sort({ sortOrder: 1, name: 1 }),
+  ]);
+
+  res.status(200).json({
+    status: "success",
+    meta: { categories, colors, sizes, weaveTypes, styles },
   });
 });
 
@@ -128,6 +162,73 @@ exports.deleteProduct = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     message: "Producto eliminado",
+  });
+});
+
+exports.addImageUrl = catchAsync(async (req, res, next) => {
+  const { url, alt } = req.body;
+
+  if (!url?.trim()) {
+    return next(new AppError("La URL de la imagen es obligatoria", 400));
+  }
+
+  const product = await Product.findById(req.params.id);
+
+  if (!product) {
+    return next(new AppError("Producto no encontrado", 404));
+  }
+
+  if (product.images.length >= 10) {
+    return next(new AppError("Máximo 10 imágenes por producto", 400));
+  }
+
+  product.images.push({
+    url: url.trim(),
+    alt: alt || product.name,
+    publicId: null,
+  });
+
+  if (!product.mainImage) {
+    product.mainImage = url.trim();
+  }
+
+  await product.save();
+
+  res.status(200).json({
+    status: "success",
+    images: product.images,
+    mainImage: product.mainImage,
+  });
+});
+
+exports.removeImage = catchAsync(async (req, res, next) => {
+  const { imageIndex } = req.body;
+  const product = await Product.findById(req.params.id);
+
+  if (!product) {
+    return next(new AppError("Producto no encontrado", 404));
+  }
+
+  if (imageIndex < 0 || imageIndex >= product.images.length) {
+    return next(new AppError("Imagen no encontrada", 400));
+  }
+
+  product.images.splice(imageIndex, 1);
+
+  if (!product.images.length) {
+    return next(new AppError("El producto debe tener al menos una imagen", 400));
+  }
+
+  if (!product.images.find((img) => img.url === product.mainImage)) {
+    product.mainImage = product.images[0].url;
+  }
+
+  await product.save();
+
+  res.status(200).json({
+    status: "success",
+    images: product.images,
+    mainImage: product.mainImage,
   });
 });
 
