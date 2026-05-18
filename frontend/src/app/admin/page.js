@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import RoleRoute from "@/guards/RoleRoute";
 import { useAuth } from "@/context/AuthContext";
 
@@ -13,7 +14,9 @@ function AdminDashboard() {
       <p>Rol: {user.role}</p>
 
       <ul>
-        <li>Productos</li>
+        <li>
+          <Link href="/admin/productos">Productos</Link>
+        </li>
         <li>Pedidos</li>
         <li>Clientes</li>
         <li>Inventario</li>
