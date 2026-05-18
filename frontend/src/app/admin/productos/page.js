@@ -3,8 +3,13 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import RoleRoute from "@/guards/RoleRoute";
+import AdminShell from "@/components/admin/AdminShell";
 import { useAuth } from "@/context/AuthContext";
-import { getAdminProducts, getInventory } from "@/services/adminCatalogService";
+import {
+  deleteAdminProduct,
+  getAdminProducts,
+  getInventory,
+} from "@/services/adminCatalogService";
 import { formatCOP } from "@/lib/formatCurrency";
 
 const stockClass = {
@@ -26,48 +31,65 @@ function AdminProductosContent() {
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState("list");
 
-  const canViewCosts = ["superadmin", "admin"].includes(user?.role);
+  const isAdmin = ["superadmin", "admin"].includes(user?.role);
+  const canViewCosts = isAdmin;
+
+  const load = async () => {
+    setLoading(true);
+    try {
+      const [prodData, invData] = await Promise.all([
+        getAdminProducts({ limit: 100 }),
+        getInventory(),
+      ]);
+      setProducts(prodData.products || []);
+      setInventory(invData.inventory || []);
+    } catch {
+      setProducts([]);
+      setInventory([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const load = async () => {
-      setLoading(true);
-      try {
-        const [prodData, invData] = await Promise.all([
-          getAdminProducts({ limit: 50 }),
-          getInventory(),
-        ]);
-        setProducts(prodData.products || []);
-        setInventory(invData.inventory || []);
-      } catch {
-        setProducts([]);
-        setInventory([]);
-      } finally {
-        setLoading(false);
-      }
-    };
     load();
   }, []);
+
+  const handleDelete = async (id, name) => {
+    if (!window.confirm(`¿Eliminar "${name}"? Esta acción no se puede deshacer.`)) {
+      return;
+    }
+    try {
+      await deleteAdminProduct(id);
+      await load();
+    } catch (err) {
+      alert(err.response?.data?.message || "No se pudo eliminar");
+    }
+  };
 
   return (
     <div className="admin-page">
       <div className="admin-page__header">
         <h1 className="admin-page__title">Productos</h1>
-        {canViewCosts && (
-          <span style={{ fontSize: "0.85rem", color: "var(--color-text-muted)" }}>
-            Puedes ver costos y márgenes
-          </span>
+        {isAdmin && (
+          <div className="admin-page__actions">
+            <Link href="/admin/productos/nuevo" className="admin-btn admin-btn--primary">
+              + Nuevo producto
+            </Link>
+            <Link href="/admin/catalogo" className="admin-btn">
+              Catálogo base
+            </Link>
+          </div>
         )}
       </div>
 
-      <nav className="admin-nav">
-        <Link href="/admin">Dashboard</Link>
-        <Link href="/admin/productos" className="active">
-          Productos
-        </Link>
-        <Link href="/vendedor">Panel vendedor</Link>
-      </nav>
+      {canViewCosts && (
+        <p className="admin-page__subtitle">
+          Puedes ver costos y márgenes. Los vendedores solo consultan inventario.
+        </p>
+      )}
 
-      <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1rem" }}>
+      <div className="admin-view-tabs">
         <button
           type="button"
           className={`admin-btn${view === "list" ? " admin-btn--primary" : ""}`}
@@ -85,7 +107,7 @@ function AdminProductosContent() {
       </div>
 
       {loading ? (
-        <p className="auth-loading">Cargando...</p>
+        <p className="auth-loading">Cargando…</p>
       ) : view === "inventory" ? (
         <div className="admin-table-wrap">
           <table className="admin-table">
@@ -109,9 +131,7 @@ function AdminProductosContent() {
                       {stockLabel[item.stockStatus]}
                     </span>
                   </td>
-                  {canViewCosts && (
-                    <td>{formatCOP(item.salePrice)}</td>
-                  )}
+                  {canViewCosts && <td>{formatCOP(item.salePrice)}</td>}
                 </tr>
               ))}
             </tbody>
@@ -127,35 +147,56 @@ function AdminProductosContent() {
                 {canViewCosts && <th>Costo</th>}
                 <th>Stock</th>
                 <th>Estado</th>
+                {isAdmin && <th>Acciones</th>}
               </tr>
             </thead>
             <tbody>
               {products.map((p) => (
                 <tr key={p.id}>
                   <td>
-                    <Link href={`/producto/${p.slug}`}>{p.name}</Link>
+                    <Link
+                      href={
+                        p.slug
+                          ? `/producto/${encodeURIComponent(p.slug)}`
+                          : `/admin/productos/${p.id}/editar`
+                      }
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {p.name}
+                    </Link>
                   </td>
                   <td>{formatCOP(p.effectivePrice)}</td>
                   {canViewCosts && (
                     <td>
-                      {p.internalCost != null
-                        ? formatCOP(p.internalCost)
-                        : "—"}
+                      {p.internalCost != null ? formatCOP(p.internalCost) : "—"}
                     </td>
                   )}
                   <td>{p.totalStock}</td>
                   <td>{p.isActive ? "Activo" : "Inactivo"}</td>
+                  {isAdmin && (
+                    <td className="admin-table__actions">
+                      <Link
+                        href={`/admin/productos/${p.id}/editar`}
+                        className="admin-btn admin-btn--sm"
+                      >
+                        Editar
+                      </Link>
+                      <button
+                        type="button"
+                        className="admin-btn admin-btn--sm admin-btn--danger"
+                        onClick={() => handleDelete(p.id, p.name)}
+                      >
+                        Eliminar
+                      </button>
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       )}
-
-      <p style={{ marginTop: "1.5rem", fontSize: "0.9rem", color: "var(--color-text-muted)" }}>
-        El formulario completo de creación/edición de productos llegará en la
-        siguiente iteración. Por ahora usa la API admin o el seed de catálogo.
-      </p>
     </div>
   );
 }
@@ -163,7 +204,9 @@ function AdminProductosContent() {
 export default function AdminProductosPage() {
   return (
     <RoleRoute allowedRoles={["superadmin", "admin", "vendedor"]}>
-      <AdminProductosContent />
+      <AdminShell variant="admin">
+        <AdminProductosContent />
+      </AdminShell>
     </RoleRoute>
   );
 }

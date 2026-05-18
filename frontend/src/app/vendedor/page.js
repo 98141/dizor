@@ -1,41 +1,50 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import RoleRoute from "@/guards/RoleRoute";
-import { useAuth } from "@/context/AuthContext";
+import AdminShell from "@/components/admin/AdminShell";
+import { getOrderStats } from "@/services/orderAdminService";
 
 function VendedorDashboard() {
-  const { user, logout } = useAuth();
+  const [stats, setStats] = useState(null);
+
+  useEffect(() => {
+    getOrderStats()
+      .then((d) => setStats(d.stats))
+      .catch(() => setStats(null));
+  }, []);
 
   return (
-    <main>
-      <h1>Panel vendedor Dizor</h1>
-      <p>Bienvenido: {user.name}</p>
-      <p>Rol: {user.role}</p>
+    <div className="admin-page">
+      <h1 className="admin-page__title">Panel vendedor</h1>
 
-      <ul>
-        <li>Pedidos asignados</li>
-        <li>Pagos manuales</li>
-        <li>Solicitudes especiales</li>
-        <li>Exportar pedidos</li>
-      </ul>
+      {stats && (
+        <div className="admin-stats">
+          <div className="admin-stat-card">
+            <p className="admin-stat-card__value">{stats.pendingPayment}</p>
+            <p className="admin-stat-card__label">Pagos por confirmar</p>
+          </div>
+          <div className="admin-stat-card">
+            <p className="admin-stat-card__value">{stats.toPrepare}</p>
+            <p className="admin-stat-card__label">Por preparar</p>
+          </div>
+        </div>
+      )}
 
-      <button
-        type="button"
-        onClick={async () => {
-          await logout();
-          window.location.href = "/login";
-        }}
-      >
-        Cerrar sesión
-      </button>
-    </main>
+      <Link href="/vendedor/pedidos" className="admin-btn admin-btn--primary">
+        Ver todos los pedidos
+      </Link>
+    </div>
   );
 }
 
 export default function VendedorPage() {
   return (
     <RoleRoute allowedRoles={["superadmin", "admin", "vendedor"]}>
-      <VendedorDashboard />
+      <AdminShell variant="vendedor">
+        <VendedorDashboard />
+      </AdminShell>
     </RoleRoute>
   );
 }

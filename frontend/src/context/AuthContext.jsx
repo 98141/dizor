@@ -8,6 +8,7 @@ import {
   refreshSession,
   registerUser,
   updatePassword as updatePasswordApi,
+  updateProfile as updateProfileApi,
 } from "@/services/authService";
 
 const AuthContext = createContext(null);
@@ -35,6 +36,12 @@ export const AuthProvider = ({ children }) => {
 
   const updatePassword = async (formData) => {
     const data = await updatePasswordApi(formData);
+    setUser(data.user);
+    return data;
+  };
+
+  const updateProfile = async (formData) => {
+    const data = await updateProfileApi(formData);
     setUser(data.user);
     return data;
   };
@@ -74,6 +81,7 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         updatePassword,
+        updateProfile,
         setAuthUser,
         loadUser,
       }}

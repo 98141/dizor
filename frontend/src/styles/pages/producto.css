@@ -1,3 +1,12 @@
+.product-detail__preview-banner {
+  margin: 0 0 var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  background: #fef9c3;
+  color: #854d0e;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+}
+
 .product-detail {
   max-width: var(--container-max);
   margin: 0 auto;
@@ -143,6 +152,23 @@
 .product-detail__variant-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+}
+
+.product-detail__custom-btn {
+  display: block;
+  width: 100%;
+  margin-top: var(--space-sm);
+  padding: 0.75rem 1rem;
+  text-align: center;
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  color: var(--color-primary);
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+
+.product-detail__custom-btn:hover {
+  background: rgba(61, 79, 58, 0.06);
 }
 
 .product-detail__add-btn {

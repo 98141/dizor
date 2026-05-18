@@ -58,6 +58,18 @@ export default function CheckoutPage() {
         email: user.email || "",
         phone: user.phone || "",
       });
+
+      const saved = user.shippingAddresses || [];
+      if (saved.length > 0) {
+        const defaultAddr =
+          saved.find((a) => a.isDefault) || saved[0];
+        setShipping({
+          address: defaultAddr.address,
+          city: defaultAddr.city,
+          department: defaultAddr.department,
+          postalCode: defaultAddr.postalCode || "",
+        });
+      }
     }
   }, [user]);
 
@@ -194,6 +206,37 @@ export default function CheckoutPage() {
         <div className="checkout-card">
           <h2>Dirección de envío</h2>
           <form className="checkout-form">
+            {isAuthenticated && user?.shippingAddresses?.length > 0 && (
+              <div className="auth-field">
+                <label className="auth-field__label" htmlFor="savedAddress">
+                  Dirección guardada
+                </label>
+                <select
+                  id="savedAddress"
+                  className="auth-field__input"
+                  defaultValue=""
+                  onChange={(e) => {
+                    const addr = user.shippingAddresses.find(
+                      (a) => a.id === e.target.value
+                    );
+                    if (!addr) return;
+                    setShipping({
+                      address: addr.address,
+                      city: addr.city,
+                      department: addr.department,
+                      postalCode: addr.postalCode || "",
+                    });
+                  }}
+                >
+                  <option value="">Escribir otra dirección</option>
+                  {user.shippingAddresses.map((addr) => (
+                    <option key={addr.id} value={addr.id}>
+                      {addr.label} — {addr.address}, {addr.city}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
             <AuthFormField
               label="Dirección"
               name="address"

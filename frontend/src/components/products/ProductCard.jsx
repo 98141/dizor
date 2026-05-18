@@ -10,7 +10,10 @@ export default function ProductCard({ product }) {
 
   return (
     <article className="product-card">
-      <Link href={`/producto/${product.slug}`} className="product-card__image-wrap">
+      <Link
+        href={`/producto/${encodeURIComponent(product.slug)}`}
+        className="product-card__image-wrap"
+      >
         <Image
           src={product.mainImage}
           alt={product.images?.[0]?.alt || product.name}
@@ -39,7 +42,9 @@ export default function ProductCard({ product }) {
           {product.weaveType?.name} · {product.style?.name}
         </p>
         <h2 className="product-card__title">
-          <Link href={`/producto/${product.slug}`}>{product.name}</Link>
+          <Link href={`/producto/${encodeURIComponent(product.slug)}`}>
+            {product.name}
+          </Link>
         </h2>
         <div className="product-card__price">
           <span className="product-card__price-current">

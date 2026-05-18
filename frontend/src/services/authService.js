@@ -39,3 +39,23 @@ export const updatePassword = async (data) => {
   const res = await api.patch("/auth/update-password", data);
   return res.data;
 };
+
+export const updateProfile = async (data) => {
+  const res = await api.patch("/auth/me", data);
+  return res.data;
+};
+
+export const addAddress = async (data) => {
+  const res = await api.post("/auth/me/addresses", data);
+  return res.data;
+};
+
+export const updateAddress = async (addressId, data) => {
+  const res = await api.patch(`/auth/me/addresses/${addressId}`, data);
+  return res.data;
+};
+
+export const deleteAddress = async (addressId) => {
+  const res = await api.delete(`/auth/me/addresses/${addressId}`);
+  return res.data;
+};

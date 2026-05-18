@@ -9,11 +9,23 @@ import { useCart } from "@/context/CartContext";
 import { getProductBySlug } from "@/services/productService";
 import { formatCOP } from "@/lib/formatCurrency";
 
+const resolveSlug = (slugParam) => {
+  const raw = Array.isArray(slugParam) ? slugParam[0] : slugParam;
+  if (!raw) return "";
+  try {
+    return decodeURIComponent(raw).trim();
+  } catch {
+    return String(raw).trim();
+  }
+};
+
 export default function ProductoPage() {
-  const { slug } = useParams();
+  const params = useParams();
+  const slug = resolveSlug(params.slug);
   const router = useRouter();
   const { addItem } = useCart();
   const [data, setData] = useState(null);
+  const [loadError, setLoadError] = useState("");
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState(null);
@@ -23,6 +35,7 @@ export default function ProductoPage() {
   useEffect(() => {
     if (!slug) return;
     setLoading(true);
+    setLoadError("");
     getProductBySlug(slug)
       .then((res) => {
         setData(res);
@@ -35,7 +48,13 @@ export default function ProductoPage() {
           }
         }
       })
-      .catch(() => setData(null))
+      .catch((err) => {
+        setData(null);
+        setLoadError(
+          err.response?.data?.message ||
+            "No se pudo cargar el producto. Verifica que esté activo en la tienda."
+        );
+      })
       .finally(() => setLoading(false));
   }, [slug]);
 
@@ -85,7 +104,7 @@ export default function ProductoPage() {
   if (!product) {
     return (
       <div className="catalog-empty">
-        <p>Producto no encontrado.</p>
+        <p>{loadError || "Producto no encontrado."}</p>
         <Link href="/catalogo">Volver al catálogo</Link>
       </div>
     );
@@ -125,6 +144,12 @@ export default function ProductoPage() {
 
   return (
     <article className="product-detail">
+      {data?.preview && (
+        <p className="product-detail__preview-banner" role="status">
+          Vista previa: este producto está inactivo y no es visible en el catálogo
+          público.
+        </p>
+      )}
       <div className="product-detail__grid">
         <div className="product-detail__gallery">
           <div className="product-detail__main-image">
@@ -238,6 +263,15 @@ export default function ProductoPage() {
               ? "Agregar al carrito"
               : "Selecciona talla y color disponibles"}
           </button>
+
+          {product.allowsCustomization && (
+            <Link
+              href={`/personalizar?producto=${encodeURIComponent(product.slug)}`}
+              className="product-detail__custom-btn"
+            >
+              Solicitar personalización
+            </Link>
+          )}
 
           {addedMsg && (
             <p style={{ color: "var(--color-success)", fontSize: "0.9rem" }}>

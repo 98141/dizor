@@ -25,6 +25,9 @@ export default function SiteFooter() {
             </strong>
             <Link href="/login">Mi cuenta</Link>
             <Link href="/seguimiento">Seguimiento de pedido</Link>
+            <Link href="/solicitud/seguimiento">Mis solicitudes</Link>
+            <Link href="/personalizar">Personalización</Link>
+            <Link href="/pedido-mayor">Pedido al por mayor</Link>
             <a href="https://wa.me/573000000000" target="_blank" rel="noreferrer">
               WhatsApp
             </a>

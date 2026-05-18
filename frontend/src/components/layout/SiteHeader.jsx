@@ -42,6 +42,8 @@ export default function SiteHeader() {
           <Link href="/catalogo">Catálogo</Link>
           <Link href="/catalogo?featured=true">Destacados</Link>
           <Link href="/catalogo?isNew=true">Novedades</Link>
+          <Link href="/personalizar">Personalizar</Link>
+          <Link href="/pedido-mayor">Por mayor</Link>
         </nav>
 
         <form className="site-header__search" onSubmit={handleSearch}>

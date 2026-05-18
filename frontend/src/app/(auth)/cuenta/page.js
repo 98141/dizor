@@ -5,19 +5,40 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { getMyOrders, cancelOrder } from "@/services/checkoutService";
+import { getMySpecialRequests } from "@/services/specialRequestService";
 import { formatCOP } from "@/lib/formatCurrency";
+import {
+  REQUEST_STATUS_LABELS,
+  REQUEST_TYPE_LABELS,
+  getRequestBadgeClass,
+} from "@/lib/specialRequestLabels";
 import ProtectedRoute from "@/guards/ProtectedRoute";
 import AuthFormField from "@/components/auth/AuthFormField";
 import AuthSubmitButton from "@/components/auth/AuthSubmitButton";
 import AuthErrorAlert from "@/components/auth/AuthErrorAlert";
+import AddressBook from "@/components/cuenta/AddressBook";
 import {
   validatePassword,
   validatePasswordConfirm,
 } from "@/lib/validators/authSchemas";
 
+const TABS = [
+  { id: "perfil", label: "Perfil" },
+  { id: "pedidos", label: "Pedidos" },
+  { id: "solicitudes", label: "Solicitudes" },
+  { id: "direcciones", label: "Direcciones" },
+  { id: "seguridad", label: "Seguridad" },
+];
+
 function CuentaContent() {
   const router = useRouter();
-  const { user, logout, updatePassword } = useAuth();
+  const { user, logout, updatePassword, updateProfile, loadUser } = useAuth();
+  const [tab, setTab] = useState("perfil");
+  const [profileForm, setProfileForm] = useState({ name: "", phone: "" });
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [profileMsg, setProfileMsg] = useState("");
+  const [profileError, setProfileError] = useState(false);
+  const [addresses, setAddresses] = useState([]);
   const [showPasswordForm, setShowPasswordForm] = useState(false);
   const [pwdForm, setPwdForm] = useState({
     currentPassword: "",
@@ -30,12 +51,25 @@ function CuentaContent() {
   const [pwdLoading, setPwdLoading] = useState(false);
   const [orders, setOrders] = useState([]);
   const [ordersLoading, setOrdersLoading] = useState(true);
+  const [specialRequests, setSpecialRequests] = useState([]);
+  const [requestsLoading, setRequestsLoading] = useState(true);
+
+  useEffect(() => {
+    if (user) {
+      setProfileForm({ name: user.name || "", phone: user.phone || "" });
+      setAddresses(user.shippingAddresses || []);
+    }
+  }, [user]);
 
   useEffect(() => {
     getMyOrders()
       .then((d) => setOrders(d.orders || []))
       .catch(() => setOrders([]))
       .finally(() => setOrdersLoading(false));
+    getMySpecialRequests()
+      .then((d) => setSpecialRequests(d.requests || []))
+      .catch(() => setSpecialRequests([]))
+      .finally(() => setRequestsLoading(false));
   }, []);
 
   const handleCancelOrder = async (orderId) => {
@@ -55,6 +89,27 @@ function CuentaContent() {
   const handleLogout = async () => {
     await logout();
     router.push("/login");
+  };
+
+  const handleProfileSubmit = async (e) => {
+    e.preventDefault();
+    setProfileLoading(true);
+    setProfileMsg("");
+    setProfileError(false);
+    try {
+      await updateProfile(profileForm);
+      setProfileMsg("Perfil actualizado");
+    } catch (err) {
+      setProfileMsg(err.response?.data?.message || "Error al guardar");
+      setProfileError(true);
+    } finally {
+      setProfileLoading(false);
+    }
+  };
+
+  const handleAddressesChange = async (nextAddresses) => {
+    setAddresses(nextAddresses);
+    await loadUser();
   };
 
   const handlePwdChange = (e) => {
@@ -105,156 +160,209 @@ function CuentaContent() {
       <div className="cuenta-page">
         <h1 className="cuenta-page__title">Mi cuenta</h1>
 
-        <div className="cuenta-card">
-          <div className="cuenta-card__row">
-            <span className="cuenta-card__label">Nombre</span>
-            <span>{user.name}</span>
-          </div>
-          <div className="cuenta-card__row">
-            <span className="cuenta-card__label">Correo</span>
-            <span>{user.email}</span>
-          </div>
-          <div className="cuenta-card__row">
-            <span className="cuenta-card__label">Teléfono</span>
-            <span>{user.phone || "—"}</span>
-          </div>
-          <div className="cuenta-card__row">
-            <span className="cuenta-card__label">Rol</span>
-            <span>{user.role}</span>
-          </div>
-        </div>
-
-        <div className="cuenta-card" style={{ marginBottom: "var(--space-lg)" }}>
-          <h2
-            style={{
-              fontFamily: "var(--font-serif)",
-              fontSize: "1.125rem",
-              margin: "0 0 var(--space-md)",
-            }}
-          >
-            Mis pedidos
-          </h2>
-          {ordersLoading ? (
-            <p>Cargando pedidos...</p>
-          ) : orders.length === 0 ? (
-            <p style={{ color: "var(--color-text-muted)" }}>
-              Aún no tienes pedidos.{" "}
-              <Link href="/catalogo">Ir al catálogo</Link>
-            </p>
-          ) : (
-            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-              {orders.map((order) => (
-                <li
-                  key={order._id}
-                  style={{
-                    padding: "0.75rem 0",
-                    borderBottom: "1px solid var(--color-border)",
-                  }}
-                >
-                  <strong>{order.orderNumber}</strong>
-                  <br />
-                  <span style={{ fontSize: "0.85rem" }}>
-                    {formatCOP(order.total)} · {order.orderStatus}
-                  </span>
-                  {order.trackingNumber && (
-                    <p style={{ fontSize: "0.8rem", margin: "0.25rem 0 0" }}>
-                      Guía: {order.trackingNumber}
-                    </p>
-                  )}
-                  {!["enviado", "entregado", "cancelado"].includes(
-                    order.orderStatus
-                  ) && (
-                    <button
-                      type="button"
-                      className="cuenta-logout"
-                      style={{ marginTop: "0.5rem" }}
-                      onClick={() => handleCancelOrder(order._id)}
-                    >
-                      Cancelar pedido
-                    </button>
-                  )}
-                </li>
-              ))}
-            </ul>
-          )}
-          <p style={{ marginTop: "0.75rem" }}>
-            <Link href="/seguimiento">Rastrear pedido</Link>
-          </p>
-        </div>
-
-        <div className="cuenta-links">
-          {["superadmin", "admin"].includes(user.role) && (
-            <Link href="/admin">Panel administrativo</Link>
-          )}
-          {["superadmin", "admin", "vendedor"].includes(user.role) && (
-            <Link href="/vendedor">Panel vendedor</Link>
-          )}
-        </div>
-
-        <div className="cuenta-card" style={{ marginBottom: "var(--space-lg)" }}>
-          <h2
-            style={{
-              fontFamily: "var(--font-serif)",
-              fontSize: "1.125rem",
-              margin: "0 0 var(--space-md)",
-            }}
-          >
-            Seguridad
-          </h2>
-          {!showPasswordForm ? (
+        <nav className="cuenta-tabs" aria-label="Secciones de cuenta">
+          {TABS.map((t) => (
             <button
+              key={t.id}
               type="button"
-              className="cuenta-logout"
-              onClick={() => setShowPasswordForm(true)}
+              className={tab === t.id ? "active" : ""}
+              onClick={() => setTab(t.id)}
             >
-              Cambiar contraseña
+              {t.label}
             </button>
-          ) : (
-            <form className="auth-form" onSubmit={handleUpdatePassword}>
+          ))}
+        </nav>
+
+        {tab === "perfil" && (
+          <div className="cuenta-card">
+            <form className="auth-form" onSubmit={handleProfileSubmit}>
               <AuthFormField
-                label="Contraseña actual"
-                name="currentPassword"
-                type="password"
-                value={pwdForm.currentPassword}
-                onChange={handlePwdChange}
-                error={pwdErrors.currentPassword}
-                autoComplete="current-password"
+                label="Nombre"
+                name="name"
+                value={profileForm.name}
+                onChange={(e) =>
+                  setProfileForm((p) => ({ ...p, name: e.target.value }))
+                }
+                required
               />
               <AuthFormField
-                label="Nueva contraseña"
-                name="password"
-                type="password"
-                value={pwdForm.password}
-                onChange={handlePwdChange}
-                error={pwdErrors.password}
-                autoComplete="new-password"
+                label="Correo"
+                name="email"
+                value={user.email}
+                disabled
               />
               <AuthFormField
-                label="Confirmar nueva contraseña"
-                name="passwordConfirm"
-                type="password"
-                value={pwdForm.passwordConfirm}
-                onChange={handlePwdChange}
-                error={pwdErrors.passwordConfirm}
-                autoComplete="new-password"
+                label="Teléfono"
+                name="phone"
+                value={profileForm.phone}
+                onChange={(e) =>
+                  setProfileForm((p) => ({ ...p, phone: e.target.value }))
+                }
               />
               <AuthErrorAlert
-                message={pwdMessage}
-                variant={pwdSuccess ? "success" : "error"}
+                message={profileMsg}
+                variant={profileError ? "error" : "success"}
               />
-              <AuthSubmitButton loading={pwdLoading}>
-                Guardar contraseña
+              <AuthSubmitButton loading={profileLoading}>
+                Guardar perfil
               </AuthSubmitButton>
+            </form>
+            <div className="cuenta-links">
+              {["superadmin", "admin"].includes(user.role) && (
+                <Link href="/admin">Panel administrativo</Link>
+              )}
+              {["superadmin", "admin", "vendedor"].includes(user.role) && (
+                <Link href="/vendedor">Panel vendedor</Link>
+              )}
+            </div>
+          </div>
+        )}
+
+        {tab === "pedidos" && (
+          <div className="cuenta-card">
+            {ordersLoading ? (
+              <p>Cargando pedidos...</p>
+            ) : orders.length === 0 ? (
+              <p className="cuenta-muted">
+                Aún no tienes pedidos.{" "}
+                <Link href="/catalogo">Ir al catálogo</Link>
+              </p>
+            ) : (
+              <ul className="cuenta-orders">
+                {orders.map((order) => (
+                  <li key={order._id} className="cuenta-orders__item">
+                    <strong>{order.orderNumber}</strong>
+                    <span>
+                      {formatCOP(order.total)} · {order.orderStatus}
+                    </span>
+                    {order.trackingNumber && (
+                      <span className="cuenta-muted">
+                        Guía: {order.trackingNumber}
+                      </span>
+                    )}
+                    {!["enviado", "entregado", "cancelado"].includes(
+                      order.orderStatus
+                    ) && (
+                      <button
+                        type="button"
+                        className="cuenta-logout"
+                        onClick={() => handleCancelOrder(order._id)}
+                      >
+                        Cancelar pedido
+                      </button>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+            <p className="cuenta-muted">
+              <Link href="/seguimiento">Rastrear pedido</Link>
+            </p>
+          </div>
+        )}
+
+        {tab === "solicitudes" && (
+          <div className="cuenta-card">
+            {requestsLoading ? (
+              <p>Cargando solicitudes...</p>
+            ) : specialRequests.length === 0 ? (
+              <p className="cuenta-muted">
+                No tienes solicitudes.{" "}
+                <Link href="/personalizar">Personalizar</Link> ·{" "}
+                <Link href="/pedido-mayor">Por mayor</Link>
+              </p>
+            ) : (
+              <ul className="cuenta-orders">
+                {specialRequests.map((req) => (
+                  <li key={req.id} className="cuenta-orders__item">
+                    <strong>{req.requestNumber}</strong>
+                    <span>
+                      {REQUEST_TYPE_LABELS[req.type]} ·{" "}
+                      <span
+                        className={`request-badge ${getRequestBadgeClass(req.status)}`}
+                      >
+                        {REQUEST_STATUS_LABELS[req.status]}
+                      </span>
+                    </span>
+                    {req.quotedAmount != null && (
+                      <span>{formatCOP(req.quotedAmount)}</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+            <p className="cuenta-muted">
+              <Link href="/solicitud/seguimiento">Consultar con número y correo</Link>
+            </p>
+          </div>
+        )}
+
+        {tab === "direcciones" && (
+          <div className="cuenta-card">
+            <AddressBook
+              addresses={addresses}
+              onChange={handleAddressesChange}
+            />
+          </div>
+        )}
+
+        {tab === "seguridad" && (
+          <div className="cuenta-card">
+            {!showPasswordForm ? (
               <button
                 type="button"
                 className="cuenta-logout"
-                onClick={() => setShowPasswordForm(false)}
+                onClick={() => setShowPasswordForm(true)}
               >
-                Cancelar
+                Cambiar contraseña
               </button>
-            </form>
-          )}
-        </div>
+            ) : (
+              <form className="auth-form" onSubmit={handleUpdatePassword}>
+                <AuthFormField
+                  label="Contraseña actual"
+                  name="currentPassword"
+                  type="password"
+                  value={pwdForm.currentPassword}
+                  onChange={handlePwdChange}
+                  error={pwdErrors.currentPassword}
+                  autoComplete="current-password"
+                />
+                <AuthFormField
+                  label="Nueva contraseña"
+                  name="password"
+                  type="password"
+                  value={pwdForm.password}
+                  onChange={handlePwdChange}
+                  error={pwdErrors.password}
+                  autoComplete="new-password"
+                />
+                <AuthFormField
+                  label="Confirmar nueva contraseña"
+                  name="passwordConfirm"
+                  type="password"
+                  value={pwdForm.passwordConfirm}
+                  onChange={handlePwdChange}
+                  error={pwdErrors.passwordConfirm}
+                  autoComplete="new-password"
+                />
+                <AuthErrorAlert
+                  message={pwdMessage}
+                  variant={pwdSuccess ? "success" : "error"}
+                />
+                <AuthSubmitButton loading={pwdLoading}>
+                  Guardar contraseña
+                </AuthSubmitButton>
+                <button
+                  type="button"
+                  className="cuenta-logout"
+                  onClick={() => setShowPasswordForm(false)}
+                >
+                  Cancelar
+                </button>
+              </form>
+            )}
+          </div>
+        )}
 
         <button type="button" className="cuenta-logout" onClick={handleLogout}>
           Cerrar sesión

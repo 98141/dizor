@@ -8,6 +8,7 @@ export default function AuthFormField({
   hint,
   placeholder,
   autoComplete,
+  disabled = false,
 }) {
   return (
     <div className="auth-field">
@@ -23,6 +24,7 @@ export default function AuthFormField({
         onChange={onChange}
         placeholder={placeholder}
         autoComplete={autoComplete}
+        disabled={disabled}
       />
       {hint && !error && <span className="auth-field__hint">{hint}</span>}
       {error && <span className="auth-field__error">{error}</span>}

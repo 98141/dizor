@@ -1,0 +1,14 @@
+node_modules
+.next
+dist
+build
+coverage
+logs
+tmp
+temp
+uploads
+*.log
+backend/node_modules
+frontend/node_modules
+backend/uploads
+frontend/.next

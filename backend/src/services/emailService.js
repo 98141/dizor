@@ -48,3 +48,44 @@ exports.sendPasswordResetEmail = async ({ to, name, resetUrl }) => {
 
   return { devMode: false };
 };
+
+const TYPE_LABELS = {
+  customization: "Personalización",
+  wholesale: "Pedido al por mayor",
+};
+
+exports.sendSpecialRequestEmail = async (request) => {
+  const client = getResendClient();
+  const from = process.env.EMAIL_FROM || "Dizor <onboarding@resend.dev>";
+  const adminEmail = process.env.ADMIN_NOTIFY_EMAIL || process.env.EMAIL_FROM;
+  const typeLabel = TYPE_LABELS[request.type] || request.type;
+
+  const summary =
+    request.type === "wholesale"
+      ? `${request.estimatedQuantity} uds — ${request.productsDescription?.slice(0, 120)}`
+      : `${request.productName || "Producto"} — ${request.customizationDetails?.slice(0, 120)}`;
+
+  const html = `
+    <div style="font-family: Georgia, serif; max-width: 560px; margin: 0 auto;">
+      <h1 style="font-size: 20px;">Nueva solicitud ${typeLabel}</h1>
+      <p><strong>${request.requestNumber}</strong></p>
+      <p>${request.contact.name} · ${request.contact.email} · ${request.contact.phone}</p>
+      <p>${summary}</p>
+      <p style="font-size: 12px; color: #666;">Revisa el panel admin de Dizor.</p>
+    </div>
+  `;
+
+  if (!client || !adminEmail) {
+    console.log("[Dizor] Nueva solicitud especial:", request.requestNumber, typeLabel);
+    return { devMode: true };
+  }
+
+  await client.emails.send({
+    from,
+    to: adminEmail,
+    subject: `[Dizor] Nueva solicitud ${request.requestNumber}`,
+    html,
+  });
+
+  return { devMode: false };
+};

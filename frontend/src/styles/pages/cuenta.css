@@ -60,3 +60,86 @@
   border-color: var(--color-primary);
   color: var(--color-primary);
 }
+
+.cuenta-logout--danger:hover {
+  border-color: #b91c1c;
+  color: #b91c1c;
+}
+
+.cuenta-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-lg);
+}
+
+.cuenta-tabs button {
+  padding: 0.45rem 0.85rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-card);
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.cuenta-tabs button.active {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.cuenta-muted {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.cuenta-orders {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cuenta-orders__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.address-book__list {
+  list-style: none;
+  margin: 0 0 var(--space-md);
+  padding: 0;
+}
+
+.address-book__item {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: var(--space-md) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.address-book__item p {
+  margin: var(--space-xs) 0 0;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.address-book__default {
+  margin-left: var(--space-sm);
+  font-size: 0.75rem;
+  color: var(--color-primary);
+}
+
+.address-book__actions {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.address-book__empty {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}

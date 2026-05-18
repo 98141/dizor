@@ -1,46 +1,87 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import RoleRoute from "@/guards/RoleRoute";
-import { useAuth } from "@/context/AuthContext";
+import AdminShell from "@/components/admin/AdminShell";
+import { getOrderStats } from "@/services/orderAdminService";
+import { getSpecialRequestStats } from "@/services/specialRequestAdminService";
 
 function AdminDashboard() {
-  const { user, logout } = useAuth();
+  const [stats, setStats] = useState(null);
+  const [reqStats, setReqStats] = useState(null);
+
+  useEffect(() => {
+    getOrderStats()
+      .then((d) => setStats(d.stats))
+      .catch(() => setStats(null));
+    getSpecialRequestStats()
+      .then((d) => setReqStats(d.stats))
+      .catch(() => setReqStats(null));
+  }, []);
 
   return (
-    <main>
-      <h1>Panel administrativo Dizor</h1>
-      <p>Bienvenido: {user.name}</p>
-      <p>Rol: {user.role}</p>
+    <div className="admin-page">
+      <h1 className="admin-page__title">Dashboard</h1>
+      <p style={{ color: "var(--color-text-muted)", marginBottom: "1.5rem" }}>
+        Panel administrativo Dizor
+      </p>
 
-      <ul>
-        <li>
-          <Link href="/admin/productos">Productos</Link>
-        </li>
-        <li>Pedidos</li>
-        <li>Clientes</li>
-        <li>Inventario</li>
-        <li>Reportes</li>
-        <li>Configuración</li>
-      </ul>
+      {stats && (
+        <div className="admin-stats">
+          <div className="admin-stat-card">
+            <p className="admin-stat-card__value">{stats.total}</p>
+            <p className="admin-stat-card__label">Pedidos totales</p>
+          </div>
+          <div className="admin-stat-card">
+            <p className="admin-stat-card__value">{stats.pendingPayment}</p>
+            <p className="admin-stat-card__label">Pagos pendientes</p>
+          </div>
+          <div className="admin-stat-card">
+            <p className="admin-stat-card__value">{stats.toPrepare}</p>
+            <p className="admin-stat-card__label">Por preparar</p>
+          </div>
+          <div className="admin-stat-card">
+            <p className="admin-stat-card__value">{stats.shippedToday}</p>
+            <p className="admin-stat-card__label">Enviados hoy</p>
+          </div>
+        </div>
+      )}
 
-      <button
-        type="button"
-        onClick={async () => {
-          await logout();
-          window.location.href = "/login";
-        }}
-      >
-        Cerrar sesión
-      </button>
-    </main>
+      {reqStats && (
+        <div className="admin-stats" style={{ marginTop: "1rem" }}>
+          <div className="admin-stat-card">
+            <p className="admin-stat-card__value">{reqStats.pending}</p>
+            <p className="admin-stat-card__label">Solicitudes pendientes</p>
+          </div>
+          <div className="admin-stat-card">
+            <p className="admin-stat-card__value">{reqStats.inReview}</p>
+            <p className="admin-stat-card__label">En revisión</p>
+          </div>
+        </div>
+      )}
+
+      <div className="admin-page__actions" style={{ marginTop: "1.5rem" }}>
+        <Link href="/admin/pedidos" className="admin-btn admin-btn--primary">
+          Gestionar pedidos
+        </Link>
+        <Link href="/admin/solicitudes" className="admin-btn admin-btn--primary">
+          Solicitudes especiales
+        </Link>
+        <Link href="/admin/productos" className="admin-btn">
+          Ver productos
+        </Link>
+      </div>
+    </div>
   );
 }
 
 export default function AdminPage() {
   return (
     <RoleRoute allowedRoles={["superadmin", "admin"]}>
-      <AdminDashboard />
+      <AdminShell variant="admin">
+        <AdminDashboard />
+      </AdminShell>
     </RoleRoute>
   );
 }

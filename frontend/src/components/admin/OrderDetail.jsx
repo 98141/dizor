@@ -1,0 +1,306 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
+import {
+  getAdminOrder,
+  updateOrderStatus,
+  confirmPayment,
+  updateOrderShipping,
+} from "@/services/orderAdminService";
+import { formatCOP } from "@/lib/formatCurrency";
+import {
+  ORDER_STATUS_LABELS,
+  PAYMENT_STATUS_LABELS,
+  PAYMENT_METHOD_LABELS,
+  CARRIER_LABELS,
+  getStatusBadgeClass,
+} from "@/lib/orderLabels";
+
+export default function OrderDetail({ orderId, backHref }) {
+  const { user } = useAuth();
+  const [order, setOrder] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+
+  const [newStatus, setNewStatus] = useState("");
+  const [statusNote, setStatusNote] = useState("");
+  const [paymentProofUrl, setPaymentProofUrl] = useState("");
+  const [trackingNumber, setTrackingNumber] = useState("");
+  const [carrier, setCarrier] = useState("");
+
+  const allowedStatuses =
+    user?.role === "vendedor"
+      ? ["pago_pendiente", "pagado", "en_preparacion", "enviado"]
+      : Object.keys(ORDER_STATUS_LABELS);
+
+  const canConfirm =
+    order?.paymentStatus === "pendiente" &&
+    ["nequi_manual", "contra_entrega", "wompi"].includes(order?.paymentMethod);
+
+  const load = async () => {
+    setLoading(true);
+    try {
+      const data = await getAdminOrder(orderId);
+      setOrder(data.order);
+      setNewStatus(data.order.orderStatus);
+      setTrackingNumber(data.order.trackingNumber || "");
+      setCarrier(data.order.carrier || "interrapidisimo");
+      setPaymentProofUrl(data.order.paymentProofUrl || "");
+    } catch {
+      setOrder(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (orderId) load();
+  }, [orderId]);
+
+  const handleConfirmPayment = async () => {
+    setError("");
+    setMessage("");
+    try {
+      await confirmPayment(orderId, {
+        paymentProofUrl,
+        note: "Pago confirmado desde panel",
+      });
+      setMessage("Pago confirmado");
+      load();
+    } catch (err) {
+      setError(err.response?.data?.message || "Error al confirmar pago");
+    }
+  };
+
+  const handleUpdateStatus = async () => {
+    setError("");
+    setMessage("");
+    try {
+      await updateOrderStatus(orderId, {
+        orderStatus: newStatus,
+        note: statusNote,
+      });
+      setMessage("Estado actualizado");
+      load();
+    } catch (err) {
+      setError(err.response?.data?.message || "Error al actualizar estado");
+    }
+  };
+
+  const handleUpdateShipping = async () => {
+    setError("");
+    setMessage("");
+    try {
+      await updateOrderShipping(orderId, {
+        carrier,
+        trackingNumber,
+      });
+      setMessage("Envío actualizado");
+      load();
+    } catch (err) {
+      setError(err.response?.data?.message || "Error al actualizar envío");
+    }
+  };
+
+  if (loading) return <p className="auth-loading">Cargando pedido...</p>;
+  if (!order) return <p className="catalog-empty">Pedido no encontrado</p>;
+
+  const whatsappMsg = encodeURIComponent(
+    `Hola ${order.buyer.name}, tu pedido ${order.orderNumber} en Dizor está ${ORDER_STATUS_LABELS[order.orderStatus]}.`
+  );
+
+  return (
+    <div>
+      <p style={{ marginBottom: "1rem" }}>
+        <Link href={backHref}>← Volver a pedidos</Link>
+      </p>
+
+      <div className="admin-page__header">
+        <h1 className="admin-page__title">{order.orderNumber}</h1>
+        <span className={`status-badge ${getStatusBadgeClass(order.orderStatus)}`}>
+          {ORDER_STATUS_LABELS[order.orderStatus]}
+        </span>
+      </div>
+
+      {message && (
+        <p style={{ color: "var(--color-success)", marginBottom: "1rem" }}>
+          {message}
+        </p>
+      )}
+      {error && (
+        <p style={{ color: "var(--color-error)", marginBottom: "1rem" }}>
+          {error}
+        </p>
+      )}
+
+      <div className="order-detail-grid">
+        <div>
+          <div className="order-detail-card">
+            <h2>Cliente</h2>
+            <div className="order-detail-row">
+              <span>Nombre</span>
+              <span>{order.buyer.name}</span>
+            </div>
+            <div className="order-detail-row">
+              <span>Correo</span>
+              <span>{order.buyer.email}</span>
+            </div>
+            <div className="order-detail-row">
+              <span>Teléfono</span>
+              <span>
+                <a
+                  href={`https://wa.me/57${order.buyer.phone.replace(/\D/g, "")}?text=${whatsappMsg}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {order.buyer.phone} (WhatsApp)
+                </a>
+              </span>
+            </div>
+          </div>
+
+          <div className="order-detail-card">
+            <h2>Envío</h2>
+            <div className="order-detail-row">
+              <span>Dirección</span>
+              <span>{order.shippingAddress.address}</span>
+            </div>
+            <div className="order-detail-row">
+              <span>Ciudad</span>
+              <span>
+                {order.shippingAddress.city}, {order.shippingAddress.department}
+              </span>
+            </div>
+            {order.customerNotes && (
+              <div className="order-detail-row">
+                <span>Notas</span>
+                <span>{order.customerNotes}</span>
+              </div>
+            )}
+          </div>
+
+          <div className="order-detail-card">
+            <h2>Productos</h2>
+            {order.items.map((item) => (
+              <div key={item._id} className="order-detail-row">
+                <span>
+                  {item.productName} ({item.sizeName}/{item.colorName}) x
+                  {item.quantity}
+                </span>
+                <span>{formatCOP(item.lineTotal)}</span>
+              </div>
+            ))}
+            <div className="order-detail-row" style={{ fontWeight: 600 }}>
+              <span>Total</span>
+              <span>{formatCOP(order.total)}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="order-actions">
+          <div className="order-detail-card">
+            <h2>Pago</h2>
+            <p>
+              {PAYMENT_METHOD_LABELS[order.paymentMethod]} —{" "}
+              <span className={`status-badge ${getStatusBadgeClass(order.paymentStatus)}`}>
+                {PAYMENT_STATUS_LABELS[order.paymentStatus]}
+              </span>
+            </p>
+            {canConfirm && (
+              <>
+                <label className="auth-field__label" style={{ marginTop: "1rem" }}>
+                  URL comprobante (opcional)
+                </label>
+                <input
+                  value={paymentProofUrl}
+                  onChange={(e) => setPaymentProofUrl(e.target.value)}
+                  placeholder="https://..."
+                />
+                <button
+                  type="button"
+                  className="admin-btn admin-btn--primary"
+                  style={{ marginTop: "0.75rem", width: "100%" }}
+                  onClick={handleConfirmPayment}
+                >
+                  Confirmar pago
+                </button>
+              </>
+            )}
+          </div>
+
+          <div className="order-detail-card">
+            <h2>Cambiar estado</h2>
+            <select value={newStatus} onChange={(e) => setNewStatus(e.target.value)}>
+              {allowedStatuses.map((k) => (
+                <option key={k} value={k}>
+                  {ORDER_STATUS_LABELS[k]}
+                </option>
+              ))}
+            </select>
+            <textarea
+              rows={2}
+              placeholder="Nota interna"
+              value={statusNote}
+              onChange={(e) => setStatusNote(e.target.value)}
+              style={{ marginTop: "0.5rem" }}
+            />
+            <button
+              type="button"
+              className="admin-btn admin-btn--primary"
+              style={{ marginTop: "0.5rem", width: "100%" }}
+              onClick={handleUpdateStatus}
+            >
+              Actualizar estado
+            </button>
+          </div>
+
+          <div className="order-detail-card">
+            <h2>Guía de envío</h2>
+            <select value={carrier} onChange={(e) => setCarrier(e.target.value)}>
+              {Object.entries(CARRIER_LABELS).map(([k, v]) => (
+                <option key={k} value={k}>
+                  {v}
+                </option>
+              ))}
+            </select>
+            <input
+              style={{ marginTop: "0.5rem" }}
+              placeholder="Número de guía"
+              value={trackingNumber}
+              onChange={(e) => setTrackingNumber(e.target.value)}
+            />
+            <button
+              type="button"
+              className="admin-btn"
+              style={{ marginTop: "0.5rem", width: "100%" }}
+              onClick={handleUpdateShipping}
+            >
+              Guardar guía
+            </button>
+          </div>
+
+          {order.statusHistory?.length > 0 && (
+            <div className="order-detail-card">
+              <h2>Historial</h2>
+              <ul className="order-history">
+                {[...order.statusHistory].reverse().map((h, i) => (
+                  <li key={i}>
+                    <strong>{ORDER_STATUS_LABELS[h.status] || h.status}</strong>
+                    {h.note && ` — ${h.note}`}
+                    <br />
+                    <small>
+                      {new Date(h.changedAt).toLocaleString("es-CO")}
+                    </small>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
