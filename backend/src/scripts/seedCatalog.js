@@ -1,3 +1,4 @@
+// backend/src/scripts/seedCatalog.js
 require("dotenv").config();
 
 const connectDB = require("../config/db");
@@ -7,17 +8,30 @@ const Size = require("../models/size");
 const WeaveType = require("../models/weaveType");
 const Style = require("../models/style");
 const Product = require("../models/product");
+const slugifyText = require("../utils/slugifyText");
 
 const upsertMany = async (Model, items, key = "name") => {
   const results = [];
+
   for (const item of items) {
+    const data = {
+      ...item,
+      slug: item.slug || slugifyText(item.name),
+    };
+
     const doc = await Model.findOneAndUpdate(
-      { [key]: item[key] },
-      item,
-      { upsert: true, new: true, setDefaultsOnInsert: true }
+      { slug: data.slug },
+      data,
+      {
+        upsert: true,
+        returnDocument: "after",
+        setDefaultsOnInsert: true,
+      }
     );
+
     results.push(doc);
   }
+
   return results;
 };
 

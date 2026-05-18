@@ -9,7 +9,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "seed:superadmin": "node src/scripts/seedSuperadmin.js",
     "seed:catalog": "node src/scripts/seedCatalog.js",
-    "seed:settings": "node src/scripts/seedStoreSettings.js"
+    "seed:settings": "node src/scripts/seedStoreSettings.js",
+    "seed:demo-order": "node src/scripts/seedDemoOrder.js"
   },
   "keywords": [],
   "author": "",

@@ -1,3 +1,4 @@
+// backend/src/models/weaveType.js
 const mongoose = require("mongoose");
 const slugifyText = require("../utils/slugifyText");
 
@@ -11,8 +12,10 @@ const weaveTypeSchema = new mongoose.Schema(
     },
     slug: {
       type: String,
+      required: true,
       unique: true,
       lowercase: true,
+      trim: true,
     },
     description: {
       type: String,
@@ -28,13 +31,14 @@ const weaveTypeSchema = new mongoose.Schema(
       default: 0,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-weaveTypeSchema.pre("save", function () {
+weaveTypeSchema.pre("save", function (next) {
   if (this.isModified("name") || !this.slug) {
     this.slug = slugifyText(this.name);
   }
+  next();
 });
 
 module.exports = mongoose.model("WeaveType", weaveTypeSchema);
