@@ -1,4 +1,5 @@
 import { AuthProvider } from "@/context/AuthContext";
+import { CartProvider } from "@/context/CartContext";
 import "@/styles/base/variables.css";
 import "@/styles/base/globals.css";
 import "@/styles/components/auth-card.css";
@@ -11,6 +12,8 @@ import "@/styles/components/catalog-filters.css";
 import "@/styles/pages/home.css";
 import "@/styles/pages/producto.css";
 import "@/styles/pages/admin-products.css";
+import "@/styles/pages/carrito.css";
+import "@/styles/pages/checkout.css";
 
 export const metadata = {
   title: "Dizor | Sombreros artesanales",
@@ -21,7 +24,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="es">
       <body>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <CartProvider>{children}</CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

@@ -1,20 +1,24 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import ProductCard from "@/components/products/ProductCard";
+import { useCart } from "@/context/CartContext";
 import { getProductBySlug } from "@/services/productService";
 import { formatCOP } from "@/lib/formatCurrency";
 
 export default function ProductoPage() {
   const { slug } = useParams();
+  const router = useRouter();
+  const { addItem } = useCart();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
+  const [addedMsg, setAddedMsg] = useState("");
 
   useEffect(() => {
     if (!slug) return;
@@ -97,6 +101,27 @@ export default function ProductoPage() {
     : [{ url: product.mainImage, alt: product.name }];
 
   const variantPrice = selectedVariant?.price || product.effectivePrice;
+
+  const handleAddToCart = () => {
+    if (!selectedVariant) return;
+
+    addItem({
+      productId: product.id,
+      variantId: selectedVariant.id,
+      quantity: 1,
+      productName: product.name,
+      productSlug: product.slug,
+      productImage: product.mainImage,
+      sizeName: selectedVariant.size?.name || "",
+      colorName: selectedVariant.color?.name || "",
+      sku: selectedVariant.sku,
+      unitPrice: variantPrice,
+      maxStock: selectedVariant.stock,
+    });
+
+    setAddedMsg("Producto agregado al carrito");
+    setTimeout(() => setAddedMsg(""), 3000);
+  };
 
   return (
     <article className="product-detail">
@@ -207,11 +232,31 @@ export default function ProductoPage() {
             type="button"
             className="product-detail__add-btn"
             disabled={!selectedVariant || selectedVariant.stock < 1}
+            onClick={handleAddToCart}
           >
             {selectedVariant?.stock > 0
-              ? "Agregar al carrito (próximamente)"
+              ? "Agregar al carrito"
               : "Selecciona talla y color disponibles"}
           </button>
+
+          {addedMsg && (
+            <p style={{ color: "var(--color-success)", fontSize: "0.9rem" }}>
+              {addedMsg}{" "}
+              <button
+                type="button"
+                onClick={() => router.push("/carrito")}
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "var(--color-primary)",
+                  textDecoration: "underline",
+                  cursor: "pointer",
+                }}
+              >
+                Ver carrito
+              </button>
+            </p>
+          )}
 
           {selectedVariant && (
             <p style={{ fontSize: "0.85rem", color: "var(--color-text-muted)" }}>

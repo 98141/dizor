@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { getMyOrders, cancelOrder } from "@/services/checkoutService";
+import { formatCOP } from "@/lib/formatCurrency";
 import ProtectedRoute from "@/guards/ProtectedRoute";
 import AuthFormField from "@/components/auth/AuthFormField";
 import AuthSubmitButton from "@/components/auth/AuthSubmitButton";
@@ -26,6 +28,29 @@ function CuentaContent() {
   const [pwdMessage, setPwdMessage] = useState("");
   const [pwdSuccess, setPwdSuccess] = useState(false);
   const [pwdLoading, setPwdLoading] = useState(false);
+  const [orders, setOrders] = useState([]);
+  const [ordersLoading, setOrdersLoading] = useState(true);
+
+  useEffect(() => {
+    getMyOrders()
+      .then((d) => setOrders(d.orders || []))
+      .catch(() => setOrders([]))
+      .finally(() => setOrdersLoading(false));
+  }, []);
+
+  const handleCancelOrder = async (orderId) => {
+    if (!confirm("¿Cancelar este pedido?")) return;
+    try {
+      await cancelOrder(orderId);
+      setOrders((prev) =>
+        prev.map((o) =>
+          o._id === orderId ? { ...o, orderStatus: "cancelado" } : o
+        )
+      );
+    } catch {
+      alert("No se pudo cancelar el pedido");
+    }
+  };
 
   const handleLogout = async () => {
     await logout();
@@ -97,6 +122,64 @@ function CuentaContent() {
             <span className="cuenta-card__label">Rol</span>
             <span>{user.role}</span>
           </div>
+        </div>
+
+        <div className="cuenta-card" style={{ marginBottom: "var(--space-lg)" }}>
+          <h2
+            style={{
+              fontFamily: "var(--font-serif)",
+              fontSize: "1.125rem",
+              margin: "0 0 var(--space-md)",
+            }}
+          >
+            Mis pedidos
+          </h2>
+          {ordersLoading ? (
+            <p>Cargando pedidos...</p>
+          ) : orders.length === 0 ? (
+            <p style={{ color: "var(--color-text-muted)" }}>
+              Aún no tienes pedidos.{" "}
+              <Link href="/catalogo">Ir al catálogo</Link>
+            </p>
+          ) : (
+            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+              {orders.map((order) => (
+                <li
+                  key={order._id}
+                  style={{
+                    padding: "0.75rem 0",
+                    borderBottom: "1px solid var(--color-border)",
+                  }}
+                >
+                  <strong>{order.orderNumber}</strong>
+                  <br />
+                  <span style={{ fontSize: "0.85rem" }}>
+                    {formatCOP(order.total)} · {order.orderStatus}
+                  </span>
+                  {order.trackingNumber && (
+                    <p style={{ fontSize: "0.8rem", margin: "0.25rem 0 0" }}>
+                      Guía: {order.trackingNumber}
+                    </p>
+                  )}
+                  {!["enviado", "entregado", "cancelado"].includes(
+                    order.orderStatus
+                  ) && (
+                    <button
+                      type="button"
+                      className="cuenta-logout"
+                      style={{ marginTop: "0.5rem" }}
+                      onClick={() => handleCancelOrder(order._id)}
+                    >
+                      Cancelar pedido
+                    </button>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+          <p style={{ marginTop: "0.75rem" }}>
+            <Link href="/seguimiento">Rastrear pedido</Link>
+          </p>
         </div>
 
         <div className="cuenta-links">

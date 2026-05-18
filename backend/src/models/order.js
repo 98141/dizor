@@ -1,0 +1,124 @@
+const mongoose = require("mongoose");
+
+const orderItemSchema = new mongoose.Schema(
+  {
+    product: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Product",
+      required: true,
+    },
+    variantId: { type: mongoose.Schema.Types.ObjectId, required: true },
+    productName: String,
+    productSlug: String,
+    productImage: String,
+    sizeName: String,
+    colorName: String,
+    sku: String,
+    quantity: { type: Number, required: true, min: 1 },
+    unitPrice: { type: Number, required: true },
+    lineTotal: { type: Number, required: true },
+    customizationNotes: { type: String, default: "" },
+  },
+  { _id: true }
+);
+
+const statusHistorySchema = new mongoose.Schema(
+  {
+    status: { type: String, required: true },
+    note: { type: String, default: "" },
+    changedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
+    changedAt: { type: Date, default: Date.now },
+  },
+  { _id: false }
+);
+
+const orderSchema = new mongoose.Schema(
+  {
+    orderNumber: {
+      type: String,
+      unique: true,
+      required: true,
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
+    isGuest: { type: Boolean, default: false },
+    buyer: {
+      name: { type: String, required: true, trim: true },
+      email: { type: String, required: true, trim: true, lowercase: true },
+      phone: { type: String, required: true, trim: true },
+    },
+    shippingAddress: {
+      address: { type: String, required: true, trim: true },
+      city: { type: String, required: true, trim: true },
+      department: { type: String, required: true, trim: true },
+      postalCode: { type: String, trim: true, default: "" },
+      country: { type: String, default: "Colombia" },
+    },
+    items: [orderItemSchema],
+    subtotal: { type: Number, required: true },
+    discountTotal: { type: Number, default: 0 },
+    taxTotal: { type: Number, default: 0 },
+    shippingCost: { type: Number, default: 0 },
+    total: { type: Number, required: true },
+    paymentMethod: {
+      type: String,
+      enum: ["wompi", "nequi_manual", "contra_entrega"],
+      required: true,
+    },
+    paymentStatus: {
+      type: String,
+      enum: ["pendiente", "pagado", "rechazado", "reembolsado"],
+      default: "pendiente",
+    },
+    paymentProofUrl: { type: String, default: "" },
+    paymentConfirmedAt: { type: Date, default: null },
+    paymentConfirmedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
+    orderStatus: {
+      type: String,
+      enum: [
+        "pendiente",
+        "pago_pendiente",
+        "pagado",
+        "en_preparacion",
+        "enviado",
+        "entregado",
+        "cancelado",
+        "rechazado",
+        "devuelto",
+      ],
+      default: "pendiente",
+    },
+    carrier: {
+      type: String,
+      enum: ["interrapidisimo", "envia", "coordinadora", ""],
+      default: "",
+    },
+    trackingNumber: { type: String, default: "" },
+    shippingNotes: { type: String, default: "" },
+    customerNotes: { type: String, default: "" },
+    assignedTo: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
+    statusHistory: [statusHistorySchema],
+  },
+  { timestamps: true }
+);
+
+orderSchema.index({ orderNumber: 1 });
+orderSchema.index({ user: 1, createdAt: -1 });
+orderSchema.index({ "buyer.email": 1 });
+
+module.exports = mongoose.model("Order", orderSchema);

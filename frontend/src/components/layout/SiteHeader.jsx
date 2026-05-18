@@ -4,10 +4,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { useCart } from "@/context/CartContext";
 
 export default function SiteHeader() {
   const router = useRouter();
   const { user, isAuthenticated } = useAuth();
+  const { itemCount, hydrated } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [search, setSearch] = useState("");
 
@@ -62,12 +64,15 @@ export default function SiteHeader() {
             👤
           </Link>
           <Link
-            href="/catalogo"
-            className="site-header__icon-btn"
+            href="/carrito"
+            className="site-header__icon-btn site-header__cart-btn"
             aria-label="Carrito"
-            title="Carrito (próximamente)"
+            title="Carrito"
           >
             🛒
+            {hydrated && itemCount > 0 && (
+              <span className="site-header__cart-badge">{itemCount}</span>
+            )}
           </Link>
           <a
             href="https://wa.me/573000000000"

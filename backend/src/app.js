@@ -13,6 +13,8 @@ const authRoutes = require("./routes/authRoutes");
 const adminUserRoutes = require("./routes/adminUserRoutes");
 const productPublicRoutes = require("./routes/productPublicRoutes");
 const adminCatalogRoutes = require("./routes/adminCatalogRoutes");
+const cartRoutes = require("./routes/cartRoutes");
+const checkoutRoutes = require("./routes/checkoutRoutes");
 
 const app = express();
 
@@ -86,6 +88,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/admin/users", adminUserRoutes);
 app.use("/api/products", productPublicRoutes);
 app.use("/api/admin/catalog", adminCatalogRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/checkout", checkoutRoutes);
 
 app.use((req, res, next) => {
   next(new AppError(`Ruta no encontrada: ${req.originalUrl}`, 404));
