@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "open-cli http://localhost:3000 && next dev --turbopack",
+    "dev": " open-cli http://localhost:3000 && next dev --turbopack  ",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
@@ -17,7 +17,6 @@
   },
   "devDependencies": {
     "eslint": "^9",
-    "eslint-config-next": "16.2.6",
-    "open-cli": "^9.0.0"
+    "eslint-config-next": "16.2.6"
   }
 }

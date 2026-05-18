@@ -15,7 +15,27 @@ export const getMe = async () => {
   return res.data;
 };
 
+export const refreshSession = async () => {
+  const res = await api.post("/auth/refresh-token");
+  return res.data;
+};
+
 export const logoutUser = async () => {
   const res = await api.post("/auth/logout");
+  return res.data;
+};
+
+export const forgotPassword = async (data) => {
+  const res = await api.post("/auth/forgot-password", data);
+  return res.data;
+};
+
+export const resetPassword = async (token, data) => {
+  const res = await api.patch(`/auth/reset-password/${token}`, data);
+  return res.data;
+};
+
+export const updatePassword = async (data) => {
+  const res = await api.patch("/auth/update-password", data);
   return res.data;
 };

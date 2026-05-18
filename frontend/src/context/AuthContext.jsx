@@ -5,34 +5,42 @@ import {
   getMe,
   loginUser,
   logoutUser,
+  refreshSession,
   registerUser,
+  updatePassword as updatePasswordApi,
 } from "@/services/authService";
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
   const [loadingAuth, setLoadingAuth] = useState(true);
 
   const register = async (formData) => {
     const data = await registerUser(formData);
     setUser(data.user);
-    setToken(data.token);
     return data;
   };
 
   const login = async (formData) => {
     const data = await loginUser(formData);
     setUser(data.user);
-    setToken(data.token);
     return data;
   };
 
   const logout = async () => {
     await logoutUser();
     setUser(null);
-    setToken(null);
+  };
+
+  const updatePassword = async (formData) => {
+    const data = await updatePasswordApi(formData);
+    setUser(data.user);
+    return data;
+  };
+
+  const setAuthUser = (userData) => {
+    setUser(userData);
   };
 
   const loadUser = async () => {
@@ -40,7 +48,13 @@ export const AuthProvider = ({ children }) => {
       const data = await getMe();
       setUser(data.user);
     } catch {
-      setUser(null);
+      try {
+        await refreshSession();
+        const data = await getMe();
+        setUser(data.user);
+      } catch {
+        setUser(null);
+      }
     } finally {
       setLoadingAuth(false);
     }
@@ -54,12 +68,13 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         user,
-        token,
         loadingAuth,
         isAuthenticated: !!user,
         register,
         login,
         logout,
+        updatePassword,
+        setAuthUser,
         loadUser,
       }}
     >

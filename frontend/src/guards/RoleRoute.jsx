@@ -19,7 +19,7 @@ export default function RoleRoute({ children, allowedRoles = [] }) {
     }
   }, [loadingAuth, user, allowedRoles, router]);
 
-  if (loadingAuth) return <p>Cargando...</p>;
+  if (loadingAuth) return <p className="auth-loading">Cargando...</p>;
 
   if (!user) return null;
 

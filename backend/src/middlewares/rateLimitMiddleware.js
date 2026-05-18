@@ -22,7 +22,19 @@ const authLimiter = rateLimit({
   },
 });
 
+const forgotPasswordLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    status: "fail",
+    message: "Demasiadas solicitudes de recuperación. Intenta más tarde.",
+  },
+});
+
 module.exports = {
   loginLimiter,
   authLimiter,
+  forgotPasswordLimiter,
 };

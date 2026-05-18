@@ -1,0 +1,62 @@
+.cuenta-page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: var(--space-2xl) var(--space-lg);
+}
+
+.cuenta-page__title {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  margin: 0 0 var(--space-lg);
+}
+
+.cuenta-card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-lg);
+}
+
+.cuenta-card__row {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.95rem;
+}
+
+.cuenta-card__row:last-child {
+  border-bottom: none;
+}
+
+.cuenta-card__label {
+  color: var(--color-text-muted);
+}
+
+.cuenta-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.cuenta-links a {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.cuenta-logout {
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.cuenta-logout:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}

@@ -10,6 +10,7 @@ const hpp = require("hpp");
 const AppError = require("./utils/AppError");
 const globalErrorHandler = require("./middlewares/errorMiddleware");
 const authRoutes = require("./routes/authRoutes");
+const adminUserRoutes = require("./routes/adminUserRoutes");
 
 const app = express();
 
@@ -80,6 +81,7 @@ app.get("/health", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/admin/users", adminUserRoutes);
 
 app.use((req, res, next) => {
   next(new AppError(`Ruta no encontrada: ${req.originalUrl}`, 404));

@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const validator = require("validator");
+const { hashToken, createRandomToken } = require("../utils/cryptoUtils");
 
 const userSchema = new mongoose.Schema(
   {
@@ -65,8 +66,20 @@ const userSchema = new mongoose.Schema(
       type: Date,
       select: false,
     },
+
+    failedLoginAttempts: {
+      type: Number,
+      default: 0,
+      select: false,
+    },
+
+    accountLockedUntil: {
+      type: Date,
+      default: null,
+      select: false,
+    },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 userSchema.index({ email: 1 }, { unique: true });
@@ -83,7 +96,7 @@ userSchema.pre("save", async function () {
 
 userSchema.methods.comparePassword = async function (
   candidatePassword,
-  userPassword,
+  userPassword
 ) {
   return bcrypt.compare(candidatePassword, userPassword);
 };
@@ -92,13 +105,45 @@ userSchema.methods.changedPasswordAfter = function (jwtTimestamp) {
   if (this.passwordChangedAt) {
     const changedTimestamp = parseInt(
       this.passwordChangedAt.getTime() / 1000,
-      10,
+      10
     );
 
     return jwtTimestamp < changedTimestamp;
   }
 
   return false;
+};
+
+userSchema.methods.createPasswordResetToken = function () {
+  const resetToken = createRandomToken();
+
+  this.passwordResetToken = hashToken(resetToken);
+  this.passwordResetExpires = Date.now() + 15 * 60 * 1000;
+
+  return resetToken;
+};
+
+userSchema.methods.isAccountLocked = function () {
+  return this.accountLockedUntil && this.accountLockedUntil > Date.now();
+};
+
+userSchema.methods.registerFailedLogin = async function () {
+  this.failedLoginAttempts += 1;
+
+  if (this.failedLoginAttempts >= 5) {
+    this.accountLockedUntil = new Date(Date.now() + 15 * 60 * 1000);
+    this.failedLoginAttempts = 0;
+  }
+
+  await this.save({ validateBeforeSave: false });
+};
+
+userSchema.methods.resetLoginAttempts = async function () {
+  if (this.failedLoginAttempts > 0 || this.accountLockedUntil) {
+    this.failedLoginAttempts = 0;
+    this.accountLockedUntil = null;
+    await this.save({ validateBeforeSave: false });
+  }
 };
 
 module.exports = mongoose.model("User", userSchema);
