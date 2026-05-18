@@ -16,12 +16,23 @@ const cookieOptions = () => ({
   path: "/",
 });
 
+const formatAddress = (addr) => ({
+  id: addr._id,
+  label: addr.label,
+  address: addr.address,
+  city: addr.city,
+  department: addr.department,
+  postalCode: addr.postalCode || "",
+  isDefault: addr.isDefault,
+});
+
 const formatUser = (user) => ({
   id: user._id,
   name: user.name,
   email: user.email,
   role: user.role,
   phone: user.phone || "",
+  shippingAddresses: (user.shippingAddresses || []).map(formatAddress),
 });
 
 const sendAuthResponse = async (user, statusCode, res) => {
@@ -208,6 +219,128 @@ exports.getMe = catchAsync(async (req, res, next) => {
       ...formatUser(user),
       createdAt: user.createdAt,
     },
+  });
+});
+
+exports.updateProfile = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+
+  if (!user) {
+    return next(new AppError("Usuario no encontrado", 404));
+  }
+
+  const { name, phone } = req.body;
+
+  if (name?.trim()) user.name = name.trim();
+  if (phone !== undefined) user.phone = String(phone).trim();
+
+  await user.save();
+
+  res.status(200).json({
+    status: "success",
+    user: formatUser(user),
+  });
+});
+
+exports.addAddress = catchAsync(async (req, res, next) => {
+  const { label, address, city, department, postalCode, isDefault } = req.body;
+
+  if (!address?.trim() || !city?.trim() || !department?.trim()) {
+    return next(
+      new AppError("Dirección, ciudad y departamento son obligatorios", 400)
+    );
+  }
+
+  const user = await User.findById(req.user.id);
+
+  if (!user) {
+    return next(new AppError("Usuario no encontrado", 404));
+  }
+
+  if (isDefault || user.shippingAddresses.length === 0) {
+    user.shippingAddresses.forEach((a) => {
+      a.isDefault = false;
+    });
+  }
+
+  user.shippingAddresses.push({
+    label: label?.trim() || "Casa",
+    address: address.trim(),
+    city: city.trim(),
+    department: department.trim(),
+    postalCode: postalCode?.trim() || "",
+    isDefault: Boolean(isDefault) || user.shippingAddresses.length === 0,
+  });
+
+  await user.save();
+
+  res.status(201).json({
+    status: "success",
+    addresses: user.shippingAddresses.map(formatAddress),
+  });
+});
+
+exports.updateAddress = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+
+  if (!user) {
+    return next(new AppError("Usuario no encontrado", 404));
+  }
+
+  const addr = user.shippingAddresses.id(req.params.addressId);
+
+  if (!addr) {
+    return next(new AppError("Dirección no encontrada", 404));
+  }
+
+  const { label, address, city, department, postalCode, isDefault } = req.body;
+
+  if (label !== undefined) addr.label = label.trim() || addr.label;
+  if (address !== undefined) addr.address = address.trim();
+  if (city !== undefined) addr.city = city.trim();
+  if (department !== undefined) addr.department = department.trim();
+  if (postalCode !== undefined) addr.postalCode = postalCode.trim();
+
+  if (isDefault) {
+    user.shippingAddresses.forEach((a) => {
+      a.isDefault = false;
+    });
+    addr.isDefault = true;
+  }
+
+  await user.save();
+
+  res.status(200).json({
+    status: "success",
+    addresses: user.shippingAddresses.map(formatAddress),
+  });
+});
+
+exports.deleteAddress = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+
+  if (!user) {
+    return next(new AppError("Usuario no encontrado", 404));
+  }
+
+  const addr = user.shippingAddresses.id(req.params.addressId);
+
+  if (!addr) {
+    return next(new AppError("Dirección no encontrada", 404));
+  }
+
+  const wasDefault = addr.isDefault;
+  addr.deleteOne();
+
+  if (wasDefault && user.shippingAddresses.length > 0) {
+    user.shippingAddresses[0].isDefault = true;
+  }
+
+  await user.save();
+
+  res.status(200).json({
+    status: "success",
+    addresses: user.shippingAddresses.map(formatAddress),
   });
 });
 

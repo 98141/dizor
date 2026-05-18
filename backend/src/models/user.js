@@ -78,6 +78,20 @@ const userSchema = new mongoose.Schema(
       default: null,
       select: false,
     },
+
+    shippingAddresses: {
+      type: [
+        {
+          label: { type: String, trim: true, maxlength: 60, default: "Casa" },
+          address: { type: String, required: true, trim: true, maxlength: 200 },
+          city: { type: String, required: true, trim: true, maxlength: 80 },
+          department: { type: String, required: true, trim: true, maxlength: 80 },
+          postalCode: { type: String, trim: true, maxlength: 20, default: "" },
+          isDefault: { type: Boolean, default: false },
+        },
+      ],
+      default: [],
+    },
   },
   { timestamps: true }
 );

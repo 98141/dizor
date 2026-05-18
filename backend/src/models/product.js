@@ -187,6 +187,10 @@ productSchema.pre("save", function () {
     this.slug = slugifyText(this.name);
   }
 
+  if (this.slug) {
+    this.slug = String(this.slug).trim().toLowerCase();
+  }
+
   if (!this.seoTitle) {
     this.seoTitle = this.name;
   }

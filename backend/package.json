@@ -10,7 +10,8 @@
     "seed:superadmin": "node src/scripts/seedSuperadmin.js",
     "seed:catalog": "node src/scripts/seedCatalog.js",
     "seed:settings": "node src/scripts/seedStoreSettings.js",
-    "seed:demo-order": "node src/scripts/seedDemoOrder.js"
+    "seed:demo-order": "node src/scripts/seedDemoOrder.js",
+    "fix:slugs": "node src/scripts/fixProductSlugs.js"
   },
   "keywords": [],
   "author": "",

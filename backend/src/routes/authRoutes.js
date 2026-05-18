@@ -50,6 +50,10 @@ router.patch(
 );
 
 router.get("/me", protect, authController.getMe);
+router.patch("/me", protect, authController.updateProfile);
+router.post("/me/addresses", protect, authController.addAddress);
+router.patch("/me/addresses/:addressId", protect, authController.updateAddress);
+router.delete("/me/addresses/:addressId", protect, authController.deleteAddress);
 router.patch(
   "/update-password",
   protect,

@@ -117,31 +117,72 @@ exports.getFeaturedProducts = catchAsync(async (req, res) => {
   });
 });
 
+const normalizeSlugParam = (raw) =>
+  decodeURIComponent(String(raw || ""))
+    .trim()
+    .toLowerCase();
+
+const canPreviewInactive = (role) =>
+  ["superadmin", "admin"].includes(role);
+
 exports.getProductBySlug = catchAsync(async (req, res, next) => {
-  const product = await Product.findOne({
-    slug: req.params.slug,
-    isActive: true,
-  }).populate(populateDetail);
+  const slug = normalizeSlugParam(req.params.slug);
+
+  if (!slug) {
+    return next(new AppError("Producto no encontrado", 404));
+  }
+
+  const staffPreview = canPreviewInactive(req.user?.role);
+  const filter = { slug };
+  if (!staffPreview) {
+    filter.isActive = true;
+  }
+
+  let product = await Product.findOne(filter).populate(populateDetail);
+
+  if (!product) {
+    const looseFilter = {
+      slug: {
+        $regex: new RegExp(
+          `^${slug.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`,
+          "i"
+        ),
+      },
+    };
+    if (!staffPreview) looseFilter.isActive = true;
+    product = await Product.findOne(looseFilter).populate(populateDetail);
+  }
+
+  if (!product && /^[a-f\d]{24}$/i.test(slug) && staffPreview) {
+    product = await Product.findById(slug).populate(populateDetail);
+  }
 
   if (!product) {
     return next(new AppError("Producto no encontrado", 404));
   }
 
-  product.viewsCount += 1;
-  await product.save({ validateBeforeSave: false });
+  if (product.isActive) {
+    product.viewsCount += 1;
+    await product.save({ validateBeforeSave: false });
+  }
 
-  const related = await Product.find({
+  const relatedFilter = {
     isActive: true,
     _id: { $ne: product._id },
     $or: [{ category: product.category }, { style: product.style }],
-  })
+  };
+
+  const related = await Product.find(relatedFilter)
     .populate(populateList)
     .sort({ salesCount: -1 })
     .limit(4);
 
+  const formatted = formatProductPublic(product);
+
   res.status(200).json({
     status: "success",
-    product: formatProductPublic(product),
+    product: formatted,
+    preview: staffPreview && !product.isActive,
     related: related.map(formatProductPublic),
   });
 });
