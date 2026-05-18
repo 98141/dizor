@@ -71,6 +71,9 @@ function AdminDashboard() {
         <Link href="/admin/contenido" className="admin-btn">
           Editar contenido
         </Link>
+        <Link href="/admin/marketing" className="admin-btn">
+          Marketing
+        </Link>
         <Link href="/admin/productos" className="admin-btn">
           Ver productos
         </Link>

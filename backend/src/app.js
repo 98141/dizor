@@ -21,6 +21,9 @@ const specialRequestRoutes = require("./routes/specialRequestRoutes");
 const specialRequestAdminRoutes = require("./routes/specialRequestAdminRoutes");
 const contentPublicRoutes = require("./routes/contentPublicRoutes");
 const contentAdminRoutes = require("./routes/contentAdminRoutes");
+const marketingPublicRoutes = require("./routes/marketingPublicRoutes");
+const marketingAdminRoutes = require("./routes/marketingAdminRoutes");
+const wompiWebhookRoutes = require("./routes/wompiWebhookRoutes");
 
 const app = express();
 
@@ -102,6 +105,9 @@ app.use("/api/special-requests", specialRequestRoutes);
 app.use("/api/admin/special-requests", specialRequestAdminRoutes);
 app.use("/api/content", contentPublicRoutes);
 app.use("/api/admin/content", contentAdminRoutes);
+app.use("/api/marketing", marketingPublicRoutes);
+app.use("/api/admin/marketing", marketingAdminRoutes);
+app.use("/api/webhooks", wompiWebhookRoutes);
 
 app.use((req, res, next) => {
   next(new AppError(`Ruta no encontrada: ${req.originalUrl}`, 404));

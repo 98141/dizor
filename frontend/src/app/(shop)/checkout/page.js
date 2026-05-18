@@ -138,6 +138,12 @@ export default function CheckoutPage() {
       });
       clearCart();
       setSuccess(data.order);
+
+      if (data.paymentUrl) {
+        window.location.href = data.paymentUrl;
+        return;
+      }
+
       router.push(
         `/pedido/confirmacion?order=${data.order.orderNumber}&total=${data.order.total}&payment=${data.order.paymentMethod}`
       );

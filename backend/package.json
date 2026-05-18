@@ -12,7 +12,9 @@
     "seed:settings": "node src/scripts/seedStoreSettings.js",
     "seed:demo-order": "node src/scripts/seedDemoOrder.js",
     "fix:slugs": "node src/scripts/fixProductSlugs.js",
-    "seed:cms": "node src/scripts/seedCms.js"
+    "seed:cms": "node src/scripts/seedCms.js",
+    "seed:marketing": "node src/scripts/seedMarketing.js",
+    "marketing:reminders": "node src/scripts/sendAbandonedReminders.js"
   },
   "keywords": [],
   "author": "",

@@ -8,6 +8,7 @@ import {
   getCatalogMeta,
   getAdminProduct,
   updateAdminProduct,
+  uploadProductImages,
 } from "@/services/adminCatalogService";
 
 const emptyVariant = () => ({
@@ -51,6 +52,7 @@ export default function ProductForm({ productId }) {
   const [newImageUrl, setNewImageUrl] = useState("");
   const [loading, setLoading] = useState(isEdit);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -159,6 +161,26 @@ export default function ProductForm({ productId }) {
       };
     });
     setNewImageUrl("");
+  };
+
+  const handleFileUpload = async (e) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length || !productId) return;
+    setUploading(true);
+    setError("");
+    try {
+      const data = await uploadProductImages(productId, files);
+      setForm((prev) => ({
+        ...prev,
+        images: data.images || prev.images,
+        mainImage: data.mainImage || prev.mainImage,
+      }));
+    } catch (err) {
+      setError(err.response?.data?.message || "Error al subir imágenes");
+    } finally {
+      setUploading(false);
+      e.target.value = "";
+    }
   };
 
   const removeImage = (index) => {
@@ -486,6 +508,30 @@ export default function ProductForm({ productId }) {
 
       <section className="product-form__section">
         <h2>Imágenes</h2>
+        {meta?.cloudinaryConfigured && isEdit ? (
+          <div className="image-upload-block" style={{ marginBottom: "1rem" }}>
+            <label className="admin-btn admin-btn--sm" style={{ cursor: "pointer" }}>
+              {uploading ? "Subiendo…" : "Subir a Cloudinary"}
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                hidden
+                disabled={uploading}
+                onChange={handleFileUpload}
+              />
+            </label>
+            <p style={{ fontSize: "0.8rem", color: "var(--color-text-muted)", marginTop: "0.35rem" }}>
+              Máx. 10 imágenes · 5 MB c/u
+            </p>
+          </div>
+        ) : (
+          !isEdit && (
+            <p style={{ fontSize: "0.85rem", color: "var(--color-text-muted)", marginBottom: "0.75rem" }}>
+              Guarda el producto primero para subir imágenes a Cloudinary.
+            </p>
+          )
+        )}
         <div className="image-url-add">
           <input
             type="url"

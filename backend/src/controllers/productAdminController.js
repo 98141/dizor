@@ -6,6 +6,8 @@ const { formatProductAdmin } = require("../utils/productFormatter");
 const { uploadProductImages } = require("../services/cloudinaryService");
 const { isCloudinaryConfigured } = require("../config/cloudinary");
 
+const cloudinaryConfigured = () => isCloudinaryConfigured();
+
 const populateAll =
   "category weaveType style variants.size variants.color";
 
@@ -101,7 +103,14 @@ exports.getCatalogMeta = catchAsync(async (req, res) => {
 
   res.status(200).json({
     status: "success",
-    meta: { categories, colors, sizes, weaveTypes, styles },
+    meta: {
+      categories,
+      colors,
+      sizes,
+      weaveTypes,
+      styles,
+      cloudinaryConfigured: cloudinaryConfigured(),
+    },
   });
 });
 

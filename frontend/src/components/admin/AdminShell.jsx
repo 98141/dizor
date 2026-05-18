@@ -15,6 +15,7 @@ const adminLinks = [
   { href: "/admin/productos", label: "Productos", roles: ["superadmin", "admin"] },
   { href: "/admin/catalogo", label: "Catálogo", roles: ["superadmin", "admin"] },
   { href: "/admin/contenido", label: "Contenido", roles: ["superadmin", "admin"] },
+  { href: "/admin/marketing", label: "Marketing", roles: ["superadmin", "admin"] },
   {
     href: "/admin/configuracion",
     label: "Configuración",

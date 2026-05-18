@@ -1,0 +1,49 @@
+.marketing-admin__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.marketing-admin__tabs button {
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--color-border, #ddd);
+  background: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font: inherit;
+}
+
+.marketing-admin__tabs button.active {
+  background: var(--color-primary, #3d4f3a);
+  color: #fff;
+  border-color: var(--color-primary, #3d4f3a);
+}
+
+.marketing-admin__card {
+  background: #fff;
+  border: 1px solid var(--color-border, #e8e4dc);
+  border-radius: 6px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.marketing-admin__exports {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.marketing-admin__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.marketing-admin__table th,
+.marketing-admin__table td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--color-border, #eee);
+  text-align: left;
+}

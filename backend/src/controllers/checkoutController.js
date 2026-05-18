@@ -8,6 +8,8 @@ const {
 } = require("../services/cartService");
 const { getStoreSettings } = require("../services/settingsService");
 const { createOrder } = require("../services/orderService");
+const { isWompiConfigured, createPaymentLink } = require("../services/wompiService");
+const { markAbandonedCartRecovered } = require("../services/marketingService");
 
 exports.getCheckoutConfig = catchAsync(async (req, res) => {
   const settings = await getStoreSettings();
@@ -22,11 +24,15 @@ exports.getCheckoutConfig = catchAsync(async (req, res) => {
       freeShippingMinAmount: settings.freeShippingMinAmount,
       carriers: settings.carriers,
       paymentMethods: [
-        {
-          id: "wompi",
-          label: "Tarjeta / PSE (Wompi)",
-          description: "Pago en línea seguro",
-        },
+        ...(isWompiConfigured()
+          ? [
+              {
+                id: "wompi",
+                label: "Tarjeta / PSE (Wompi)",
+                description: "Pago en línea seguro",
+              },
+            ]
+          : []),
         {
           id: "nequi_manual",
           label: "Nequi (transferencia manual)",
@@ -153,6 +159,31 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
     );
   }
 
+  await markAbandonedCartRecovered(buyer.email, order.orderNumber);
+
+  let paymentUrl = null;
+
+  if (paymentMethod === "wompi") {
+    if (!isWompiConfigured()) {
+      return next(
+        new AppError("Wompi no está configurado en el servidor", 503)
+      );
+    }
+    try {
+      const wompi = await createPaymentLink(order);
+      order.wompi = {
+        paymentLinkId: wompi.paymentLinkId,
+        paymentLinkUrl: wompi.paymentLinkUrl,
+      };
+      await order.save();
+      paymentUrl = wompi.paymentLinkUrl;
+    } catch (err) {
+      return next(
+        new AppError(err.message || "No se pudo iniciar el pago con Wompi", 502)
+      );
+    }
+  }
+
   res.status(201).json({
     status: "success",
     order: {
@@ -163,9 +194,10 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
       orderStatus: order.orderStatus,
       paymentStatus: order.paymentStatus,
     },
+    paymentUrl,
     message:
       paymentMethod === "wompi"
-        ? "Pedido creado. Integración Wompi en la siguiente fase."
+        ? "Pedido creado. Serás redirigido a Wompi para completar el pago."
         : paymentMethod === "nequi_manual"
           ? "Pedido creado. Envía tu comprobante Nequi por WhatsApp."
           : "Pedido creado. Pagarás al recibir tu pedido.",

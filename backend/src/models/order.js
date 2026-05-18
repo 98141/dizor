@@ -113,6 +113,13 @@ const orderSchema = new mongoose.Schema(
       default: null,
     },
     statusHistory: [statusHistorySchema],
+    wompi: {
+      paymentLinkId: { type: String, default: "" },
+      paymentLinkUrl: { type: String, default: "" },
+      transactionId: { type: String, default: "" },
+      reference: { type: String, default: "" },
+      status: { type: String, default: "" },
+    },
   },
   { timestamps: true }
 );

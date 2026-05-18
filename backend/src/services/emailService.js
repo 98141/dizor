@@ -89,3 +89,52 @@ exports.sendSpecialRequestEmail = async (request) => {
 
   return { devMode: false };
 };
+
+exports.sendAbandonedCartEmail = async ({
+  to,
+  name,
+  items,
+  subtotal,
+  cartUrl,
+  subject,
+}) => {
+  const client = getResendClient();
+  const from = process.env.EMAIL_FROM || "Dizor <onboarding@resend.dev>";
+
+  const itemsHtml = (items || [])
+    .slice(0, 5)
+    .map(
+      (i) =>
+        `<li>${i.productName || "Producto"} × ${i.quantity} — $${Number(i.lineTotal || 0).toLocaleString("es-CO")} COP</li>`
+    )
+    .join("");
+
+  const html = `
+    <div style="font-family: Georgia, serif; max-width: 560px; margin: 0 auto; color: #1f1f1f;">
+      <h1 style="font-size: 22px; font-weight: 500;">Hola${name ? `, ${name}` : ""}</h1>
+      <p>Dejaste productos en tu carrito en Dizor. Aún están disponibles:</p>
+      <ul style="padding-left: 1.2rem; line-height: 1.6;">${itemsHtml}</ul>
+      <p style="font-weight: 600;">Subtotal aprox.: $${Number(subtotal || 0).toLocaleString("es-CO")} COP</p>
+      <p>
+        <a href="${cartUrl}" style="display: inline-block; padding: 12px 24px; background: #3d4f3a; color: #fff; text-decoration: none; border-radius: 4px;">
+          Volver al carrito
+        </a>
+      </p>
+      <p style="font-size: 12px; color: #999;">Sombreros artesanales — Sandoná, Nariño</p>
+    </div>
+  `;
+
+  if (!client) {
+    console.log("[Dizor] Recordatorio carrito abandonado para:", to);
+    return { devMode: true };
+  }
+
+  await client.emails.send({
+    from,
+    to,
+    subject: subject || "Tu carrito te espera — Dizor",
+    html,
+  });
+
+  return { devMode: false };
+};

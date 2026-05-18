@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import { validateCart } from "@/services/cartService";
+import AbandonedCartCapture from "@/components/marketing/AbandonedCartCapture";
 import { formatCOP } from "@/lib/formatCurrency";
 
 export default function CarritoPage() {
@@ -166,6 +167,8 @@ export default function CarritoPage() {
               <p style={{ fontSize: "0.8rem", color: "var(--color-text-muted)" }}>
                 Envío final según departamento en checkout
               </p>
+              <AbandonedCartCapture />
+
               <Link href="/checkout" className="cart-summary__cta">
                 Ir a checkout
               </Link>

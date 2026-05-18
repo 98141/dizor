@@ -35,6 +35,17 @@ export const addProductImageUrl = async (id, data) => {
   return res.data;
 };
 
+export const uploadProductImages = async (id, files) => {
+  const formData = new FormData();
+  for (const file of files) {
+    formData.append("images", file);
+  }
+  const res = await api.post(`/admin/catalog/products/${id}/images`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return res.data;
+};
+
 export const getInventory = async () => {
   const res = await api.get("/admin/catalog/products/inventory");
   return res.data;
