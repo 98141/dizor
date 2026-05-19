@@ -1,3 +1,4 @@
+// backend/src/utils/productFormatter.js
 const canViewCosts = (role) => ["superadmin", "admin"].includes(role);
 
 const formatVariant = (variant) => ({

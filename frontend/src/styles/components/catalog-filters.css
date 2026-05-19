@@ -29,6 +29,36 @@
   margin-bottom: var(--space-lg);
 }
 
+.catalog-search {
+  position: relative;
+  flex: 1 1 200px;
+  min-width: 0;
+  max-width: 320px;
+}
+
+.catalog-search__input {
+  width: 100%;
+  padding-right: 2.25rem;
+}
+
+.catalog-search__clear {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  padding: 0.15rem 0.35rem;
+}
+
+.catalog-search__clear:hover {
+  color: var(--color-text);
+}
+
 .catalog-layout__grid-wrap {
   display: grid;
   gap: var(--space-lg);

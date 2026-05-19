@@ -1,22 +1,76 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 
-export default function SiteHeader() {
+const MIN_SEARCH_CHARS = 1;
+const SEARCH_DEBOUNCE_MS = 300;
+
+function useHeaderSearch() {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    setSearch(searchParams.get("term") || "");
+  }, [searchParams]);
+
+  const pushSearch = useCallback(
+    (term) => {
+      const trimmed = term.trim();
+      if (pathname === "/catalogo") {
+        const params = new URLSearchParams(searchParams.toString());
+        if (trimmed) params.set("term", trimmed);
+        else params.delete("term");
+        params.delete("page");
+        router.push(`/catalogo?${params.toString()}`);
+        return;
+      }
+      if (trimmed) {
+        router.push(`/catalogo?term=${encodeURIComponent(trimmed)}`);
+      }
+    },
+    [pathname, router, searchParams]
+  );
+
+  useEffect(() => {
+    const trimmed = search.trim();
+    const urlTerm = searchParams.get("term") || "";
+
+    if (trimmed.length < MIN_SEARCH_CHARS) {
+      if (pathname === "/catalogo" && urlTerm) {
+        const timer = setTimeout(() => pushSearch(""), SEARCH_DEBOUNCE_MS);
+        return () => clearTimeout(timer);
+      }
+      return undefined;
+    }
+
+    if (trimmed === urlTerm) return undefined;
+
+    const timer = setTimeout(() => pushSearch(trimmed), SEARCH_DEBOUNCE_MS);
+    return () => clearTimeout(timer);
+  }, [search, pathname, pushSearch, searchParams]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    pushSearch(search);
+  };
+
+  return { search, setSearch, handleSubmit };
+}
+
+function SiteHeaderInner() {
   const { user, isAuthenticated } = useAuth();
   const { itemCount, hydrated } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [search, setSearch] = useState("");
+  const { search, setSearch, handleSubmit } = useHeaderSearch();
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (!search.trim()) return;
-    router.push(`/catalogo?q=${encodeURIComponent(search.trim())}`);
+  const onSubmit = (e) => {
+    handleSubmit(e);
     setMobileOpen(false);
   };
 
@@ -46,13 +100,14 @@ export default function SiteHeader() {
           <Link href="/pedido-mayor">Por mayor</Link>
         </nav>
 
-        <form className="site-header__search" onSubmit={handleSearch}>
+        <form className="site-header__search" onSubmit={onSubmit}>
           <input
             type="search"
             placeholder="Buscar sombreros..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             aria-label="Buscar productos"
+            autoComplete="off"
           />
         </form>
 
@@ -102,15 +157,24 @@ export default function SiteHeader() {
         <Link href={accountHref} onClick={() => setMobileOpen(false)}>
           {isAuthenticated ? "Mi cuenta" : "Iniciar sesión"}
         </Link>
-        <form onSubmit={handleSearch}>
+        <form onSubmit={onSubmit}>
           <input
             type="search"
             placeholder="Buscar..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+            autoComplete="off"
           />
         </form>
       </nav>
     </header>
+  );
+}
+
+export default function SiteHeader() {
+  return (
+    <Suspense fallback={<header className="site-header" />}>
+      <SiteHeaderInner />
+    </Suspense>
   );
 }

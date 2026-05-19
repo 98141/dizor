@@ -13,10 +13,8 @@ const {
   toObjectId,
 } = require("../utils/objectIdUtils");
 
-const populateList =
-  "category weaveType style variants.size variants.color";
-const populateDetail =
-  "category weaveType style variants.size variants.color";
+const populateList = "category weaveType style variants.size variants.color";
+const populateDetail = "category weaveType style variants.size variants.color";
 
 const assignObjectIdFilter = (filter, key, rawValue) => {
   const value = pickQueryValue({ [key]: rawValue }, key);
@@ -41,8 +39,9 @@ const buildProductFilter = (query) => {
     if (query.maxPrice) filter.salePrice.$lte = Number(query.maxPrice);
   }
 
-  if (query.q?.trim()) {
-    const term = query.q.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const searchTerm = pickQueryValue(query, "term");
+  if (searchTerm) {
+    const term = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     filter.$or = [
       { name: { $regex: term, $options: "i" } },
       { shortDescription: { $regex: term, $options: "i" } },
@@ -55,6 +54,7 @@ const buildProductFilter = (query) => {
   const variantMatch = { isActive: true };
   const sizeOid = toObjectId(sizeId);
   const colorOid = toObjectId(colorId);
+
   if (sizeOid) variantMatch.size = sizeOid;
   if (colorOid) variantMatch.color = colorOid;
   if (query.inStock === "true") variantMatch.stock = { $gt: 0 };
@@ -80,6 +80,13 @@ const getSort = (sort) => {
       return { createdAt: -1 };
   }
 };
+
+const normalizeSlugParam = (raw) =>
+  decodeURIComponent(String(raw || ""))
+    .trim()
+    .toLowerCase();
+
+const canPreviewInactive = (role) => ["superadmin", "admin"].includes(role);
 
 exports.getCatalogFilters = catchAsync(async (req, res) => {
   const [categories, colors, sizes, weaveTypes, styles] = await Promise.all([
@@ -126,7 +133,10 @@ exports.getProducts = catchAsync(async (req, res) => {
 exports.getFeaturedProducts = catchAsync(async (req, res) => {
   const limit = Math.min(12, parseInt(req.query.limit, 10) || 8);
 
-  const products = await Product.find({ isActive: true, isFeatured: true })
+  const products = await Product.find({
+    isActive: true,
+    isFeatured: true,
+  })
     .populate(populateList)
     .sort({ createdAt: -1 })
     .limit(limit);
@@ -138,14 +148,6 @@ exports.getFeaturedProducts = catchAsync(async (req, res) => {
   });
 });
 
-const normalizeSlugParam = (raw) =>
-  decodeURIComponent(String(raw || ""))
-    .trim()
-    .toLowerCase();
-
-const canPreviewInactive = (role) =>
-  ["superadmin", "admin"].includes(role);
-
 exports.getProductBySlug = catchAsync(async (req, res, next) => {
   const slug = normalizeSlugParam(req.params.slug);
 
@@ -154,7 +156,9 @@ exports.getProductBySlug = catchAsync(async (req, res, next) => {
   }
 
   const staffPreview = canPreviewInactive(req.user?.role);
+
   const filter = { slug };
+
   if (!staffPreview) {
     filter.isActive = true;
   }
@@ -166,11 +170,15 @@ exports.getProductBySlug = catchAsync(async (req, res, next) => {
       slug: {
         $regex: new RegExp(
           `^${slug.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`,
-          "i"
+          "i",
         ),
       },
     };
-    if (!staffPreview) looseFilter.isActive = true;
+
+    if (!staffPreview) {
+      looseFilter.isActive = true;
+    }
+
     product = await Product.findOne(looseFilter).populate(populateDetail);
   }
 
@@ -180,7 +188,11 @@ exports.getProductBySlug = catchAsync(async (req, res, next) => {
 
   if (!product && isValidObjectId(slug)) {
     const byIdFilter = { _id: slug };
-    if (!staffPreview) byIdFilter.isActive = true;
+
+    if (!staffPreview) {
+      byIdFilter.isActive = true;
+    }
+
     product = await Product.findOne(byIdFilter).populate(populateDetail);
   }
 
@@ -197,20 +209,24 @@ exports.getProductBySlug = catchAsync(async (req, res, next) => {
 
   const relatedFilter = {
     isActive: true,
-    _id: { $ne: product._id },
     $or: [
       ...(categoryId ? [{ category: categoryId }] : []),
       ...(styleId ? [{ style: styleId }] : []),
     ],
   };
 
-  const related =
-    relatedFilter.$or?.length > 0
-      ? await Product.find(relatedFilter)
-          .populate(populateList)
-          .sort({ salesCount: -1 })
-          .limit(4)
-      : [];
+  let related = [];
+
+  if (relatedFilter.$or.length > 0) {
+    const relatedCandidates = await Product.find(relatedFilter)
+      .populate(populateList)
+      .sort({ salesCount: -1 })
+      .limit(8);
+
+    related = relatedCandidates
+      .filter((item) => String(item._id) !== String(product._id))
+      .slice(0, 4);
+  }
 
   const formatted = formatProductPublic(product);
 

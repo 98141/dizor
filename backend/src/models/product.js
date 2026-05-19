@@ -1,3 +1,4 @@
+// backend/src/models/product.js
 const mongoose = require("mongoose");
 const slugifyText = require("../utils/slugifyText");
 

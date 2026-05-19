@@ -1,3 +1,4 @@
+// backend/src/utils/objectIdUtils.js
 const mongoose = require("mongoose");
 
 /** Normaliza query params (p. ej. arrays de hpp) a un solo valor string. */
@@ -9,8 +10,11 @@ exports.pickQueryValue = (query, key) => {
 };
 
 exports.isValidObjectId = (value) => {
-  if (value == null || value === "") return false;
-  return mongoose.Types.ObjectId.isValid(String(value));
+  if (!value) return false;
+
+  const str = String(value);
+
+  return /^[a-fA-F0-9]{24}$/.test(str);
 };
 
 exports.toObjectId = (value) => {

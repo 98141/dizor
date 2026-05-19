@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import ProductCard from "@/components/products/ProductCard";
 import CatalogFilters from "@/components/catalog/CatalogFilters";
 import { CatalogFiltersSidebar } from "@/components/catalog/CatalogFilters";
+import CatalogSearch from "@/components/catalog/CatalogSearch";
 import CatalogPromo from "@/components/cms/CatalogPromo";
 import { getCatalogFilters, getProducts } from "@/services/productService";
 
@@ -25,7 +26,7 @@ function CatalogoContent() {
   const buildParamsFromUrl = useCallback(() => {
     const params = {};
     [
-      "q",
+      "term",
       "category",
       "weaveType",
       "style",
@@ -76,6 +77,18 @@ function CatalogoContent() {
   }, []);
 
   useEffect(() => {
+    const legacy =
+      searchParams.get("q")?.trim() || searchParams.get("search")?.trim();
+    if (!legacy || searchParams.get("term")) return;
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("q");
+    params.delete("search");
+    params.set("term", legacy);
+    params.delete("page");
+    router.replace(`/catalogo?${params.toString()}`);
+  }, [searchParams, router]);
+
+  useEffect(() => {
     setDraftFilters(buildParamsFromUrl());
     loadProducts();
   }, [searchParams, loadProducts, buildParamsFromUrl]);
@@ -118,7 +131,20 @@ function CatalogoContent() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const searchQuery = searchParams.get("q")?.trim();
+  const searchQuery = searchParams.get("term")?.trim();
+
+  const updateSearchInUrl = useCallback(
+    (value) => {
+      const params = new URLSearchParams(searchParams.toString());
+      const trimmed = value.trim();
+      if (trimmed) params.set("term", trimmed);
+      else params.delete("term");
+      params.delete("page");
+      router.push(`/catalogo?${params.toString()}`);
+    },
+    [router, searchParams]
+  );
+
 
   const pageTitle = searchQuery
     ? `Resultados: “${searchQuery}”`
@@ -145,6 +171,7 @@ function CatalogoContent() {
           isOpen={filtersOpen}
           onToggle={() => setFiltersOpen((o) => !o)}
         />
+        <CatalogSearch value={searchQuery || ""} onSearch={updateSearchInUrl} />
         <div className="catalog-sort">
           <select
             value={searchParams.get("sort") || ""}
