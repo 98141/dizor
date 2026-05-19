@@ -66,12 +66,20 @@ function useHeaderSearch() {
 function SiteHeaderInner() {
   const { user, isAuthenticated } = useAuth();
   const { itemCount, hydrated } = useCart();
+  const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const { search, setSearch, handleSubmit } = useHeaderSearch();
+
+  useEffect(() => {
+    setMobileOpen(false);
+    setMobileSearchOpen(false);
+  }, [pathname]);
 
   const onSubmit = (e) => {
     handleSubmit(e);
     setMobileOpen(false);
+    setMobileSearchOpen(false);
   };
 
   const accountHref = isAuthenticated ? "/cuenta" : "/login";
@@ -109,9 +117,25 @@ function SiteHeaderInner() {
             aria-label="Buscar productos"
             autoComplete="off"
           />
+          <button
+            type="submit"
+            className="site-header__search-submit"
+            aria-label="Buscar"
+          >
+            ⌕
+          </button>
         </form>
 
         <div className="site-header__actions">
+          <button
+            type="button"
+            className="site-header__icon-btn site-header__mobile-search-btn"
+            aria-label="Buscar"
+            title="Buscar"
+            onClick={() => setMobileSearchOpen((o) => !o)}
+          >
+            ⌕
+          </button>
           <Link
             href={accountHref}
             className="site-header__icon-btn"
@@ -144,6 +168,32 @@ function SiteHeaderInner() {
         </div>
       </div>
 
+      {mobileSearchOpen && (
+        <div className="site-header__search-overlay">
+          <form onSubmit={onSubmit}>
+            <input
+              type="search"
+              placeholder="¿Qué sombrero buscas?"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              autoFocus
+              autoComplete="off"
+              aria-label="Buscar productos"
+            />
+            <button type="submit" aria-label="Buscar">
+              ⌕
+            </button>
+            <button
+              type="button"
+              aria-label="Cerrar búsqueda"
+              onClick={() => setMobileSearchOpen(false)}
+            >
+              ×
+            </button>
+          </form>
+        </div>
+      )}
+
       <nav
         className={`site-header__mobile-nav${mobileOpen ? " site-header__mobile-nav--open" : ""}`}
         aria-label="Menú móvil"
@@ -154,18 +204,18 @@ function SiteHeaderInner() {
         <Link href="/catalogo?featured=true" onClick={() => setMobileOpen(false)}>
           Destacados
         </Link>
+        <Link href="/catalogo?isNew=true" onClick={() => setMobileOpen(false)}>
+          Novedades
+        </Link>
+        <Link href="/personalizar" onClick={() => setMobileOpen(false)}>
+          Personalizar
+        </Link>
+        <Link href="/pedido-mayor" onClick={() => setMobileOpen(false)}>
+          Por mayor
+        </Link>
         <Link href={accountHref} onClick={() => setMobileOpen(false)}>
           {isAuthenticated ? "Mi cuenta" : "Iniciar sesión"}
         </Link>
-        <form onSubmit={onSubmit}>
-          <input
-            type="search"
-            placeholder="Buscar..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            autoComplete="off"
-          />
-        </form>
       </nav>
     </header>
   );
