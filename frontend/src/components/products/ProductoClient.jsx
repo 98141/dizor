@@ -1,0 +1,447 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import ProductCard from "@/components/products/ProductCard";
+import { useCart } from "@/context/CartContext";
+import { getProductBySlug } from "@/services/productService";
+import { formatCOP } from "@/lib/formatCurrency";
+
+const LOW_STOCK_THRESHOLD = 5;
+
+function StockAlert({ stock }) {
+  if (!stock || stock > LOW_STOCK_THRESHOLD) return null;
+  return (
+    <p className="product-detail__stock-alert">
+      {stock === 1
+        ? "Última unidad disponible"
+        : `Últimas ${stock} unidades`}
+    </p>
+  );
+}
+
+export default function ProductoClient({ slug }) {
+  const router = useRouter();
+  const { addItem } = useCart();
+  const [data, setData] = useState(null);
+  const [loadError, setLoadError] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [activeImage, setActiveImage] = useState(0);
+  const [selectedSize, setSelectedSize] = useState(null);
+  const [selectedColor, setSelectedColor] = useState(null);
+  const [quantity, setQuantity] = useState(1);
+  const [addedMsg, setAddedMsg] = useState("");
+
+  const resolvedSlug = useMemo(() => {
+    const raw = Array.isArray(slug) ? slug[0] : slug;
+    if (!raw) return "";
+    try {
+      return decodeURIComponent(raw).trim();
+    } catch {
+      return String(raw).trim();
+    }
+  }, [slug]);
+
+  useEffect(() => {
+    if (!resolvedSlug) return;
+    setLoading(true);
+    setLoadError("");
+    getProductBySlug(resolvedSlug)
+      .then((res) => {
+        setData(res);
+        const product = res.product;
+        if (product.variants?.length) {
+          const first = product.variants.find((v) => v.isActive && v.stock > 0);
+          if (first) {
+            setSelectedSize(first.size?._id || first.size);
+            setSelectedColor(first.color?._id || first.color);
+          }
+        }
+      })
+      .catch((err) => {
+        setData(null);
+        setLoadError(
+          err.response?.data?.message ||
+            "No se pudo cargar el producto. Verifica que esté activo en la tienda."
+        );
+      })
+      .finally(() => setLoading(false));
+  }, [resolvedSlug]);
+
+  useEffect(() => {
+    setQuantity(1);
+  }, [selectedSize, selectedColor]);
+
+  const product = data?.product;
+
+  const selectedVariant = useMemo(() => {
+    if (!product?.variants) return null;
+    return product.variants.find((v) => {
+      const sizeId = v.size?._id || v.size;
+      const colorId = v.color?._id || v.color;
+      return (
+        String(sizeId) === String(selectedSize) &&
+        String(colorId) === String(selectedColor) &&
+        v.isActive
+      );
+    });
+  }, [product, selectedSize, selectedColor]);
+
+  const availableSizes = useMemo(() => {
+    if (!product?.variants) return [];
+    const map = new Map();
+    product.variants.forEach((v) => {
+      if (!v.isActive) return;
+      const size = v.size;
+      if (size?._id) map.set(String(size._id), size);
+    });
+    return [...map.values()];
+  }, [product]);
+
+  const availableColors = useMemo(() => {
+    if (!product?.variants) return [];
+    const map = new Map();
+    product.variants.forEach((v) => {
+      if (!v.isActive) return;
+      const sizeId = v.size?._id || v.size;
+      if (selectedSize && String(sizeId) !== String(selectedSize)) return;
+      const color = v.color;
+      if (color?._id) map.set(String(color._id), color);
+    });
+    return [...map.values()];
+  }, [product, selectedSize]);
+
+  if (loading) {
+    return <p className="auth-loading">Cargando producto...</p>;
+  }
+
+  if (!product) {
+    return (
+      <div className="catalog-empty">
+        <p>{loadError || "Producto no encontrado."}</p>
+        <Link href="/catalogo">Volver al catálogo</Link>
+      </div>
+    );
+  }
+
+  const hasPromo =
+    product.onPromotion &&
+    product.discountPercent > 0 &&
+    product.effectivePrice < product.salePrice;
+
+  const images = product.images?.length
+    ? product.images
+    : [{ url: product.mainImage, alt: product.name }];
+
+  const variantPrice = selectedVariant?.price || product.effectivePrice;
+  const maxQty = selectedVariant?.stock || 1;
+
+  const handleAddToCart = () => {
+    if (!selectedVariant) return;
+
+    addItem({
+      productId: product.id,
+      variantId: selectedVariant.id,
+      quantity,
+      productName: product.name,
+      productSlug: product.slug,
+      productImage: product.mainImage,
+      sizeName: selectedVariant.size?.name || "",
+      colorName: selectedVariant.color?.name || "",
+      sku: selectedVariant.sku,
+      unitPrice: variantPrice,
+      maxStock: selectedVariant.stock,
+    });
+
+    setAddedMsg("Producto agregado al carrito");
+    setTimeout(() => setAddedMsg(""), 3000);
+  };
+
+  const isOutOfStock = !selectedVariant || selectedVariant.stock < 1;
+
+  return (
+    <article className="product-detail">
+      {data?.preview && (
+        <p className="product-detail__preview-banner" role="status">
+          Vista previa: este producto está inactivo y no es visible en el
+          catálogo público.
+        </p>
+      )}
+      <div className="product-detail__grid">
+        {/* ─── GALERÍA ─── */}
+        <div className="product-detail__gallery">
+          <div className="product-detail__main-image">
+            <Image
+              src={images[activeImage]?.url || product.mainImage}
+              alt={images[activeImage]?.alt || product.name}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              style={{ objectFit: "cover" }}
+              priority
+            />
+          </div>
+          {images.length > 1 && (
+            <div className="product-detail__thumbs">
+              {images.map((img, i) => (
+                <button
+                  key={img.url}
+                  type="button"
+                  className={`product-detail__thumb${activeImage === i ? " product-detail__thumb--active" : ""}`}
+                  onClick={() => setActiveImage(i)}
+                >
+                  <Image
+                    src={img.url}
+                    alt={img.alt || ""}
+                    width={72}
+                    height={72}
+                    style={{ objectFit: "cover" }}
+                  />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* ─── INFO ─── */}
+        <div className="product-detail__info">
+          <p className="product-detail__breadcrumb">
+            <Link href="/catalogo">Catálogo</Link>
+            {product.category?.name ? ` / ${product.category.name}` : ""} /{" "}
+            {product.name}
+          </p>
+
+          <h1 className="product-detail__title">{product.name}</h1>
+
+          <div className="product-detail__price-row">
+            <span className="product-detail__price">
+              {formatCOP(variantPrice)}
+            </span>
+            {hasPromo && (
+              <span className="product-detail__price-old">
+                {formatCOP(product.salePrice)}
+              </span>
+            )}
+            {hasPromo && (
+              <span className="product-detail__discount-badge">
+                -{product.discountPercent}%
+              </span>
+            )}
+          </div>
+
+          <p className="product-detail__short-desc">
+            {product.shortDescription}
+          </p>
+
+          <div className="product-detail__attrs">
+            {product.weaveType?.name && (
+              <div className="product-detail__attr">
+                <span className="product-detail__attr-label">Tejido</span>
+                <span>{product.weaveType.name}</span>
+              </div>
+            )}
+            {product.style?.name && (
+              <div className="product-detail__attr">
+                <span className="product-detail__attr-label">Horma</span>
+                <span>{product.style.name}</span>
+              </div>
+            )}
+            {product.material && (
+              <div className="product-detail__attr">
+                <span className="product-detail__attr-label">Material</span>
+                <span>{product.material}</span>
+              </div>
+            )}
+          </div>
+
+          {/* ─── VARIANTES ─── */}
+          <div className="product-detail__variants">
+            {/* Talla */}
+            <div className="product-detail__variant-group">
+              <div className="product-detail__variant-header">
+                <label>
+                  Talla
+                  {selectedSize && (
+                    <span className="product-detail__selected-label">
+                      {" "}—{" "}
+                      {availableSizes.find(
+                        (s) => String(s._id) === String(selectedSize)
+                      )?.name}
+                    </span>
+                  )}
+                </label>
+                <Link
+                  href="/pagina/guia-de-tallas"
+                  className="product-detail__size-guide"
+                  target="_blank"
+                >
+                  Guía de tallas
+                </Link>
+              </div>
+              <div className="product-detail__variant-options">
+                {availableSizes.map((size) => {
+                  const hasStock = product.variants?.some(
+                    (v) =>
+                      v.isActive &&
+                      String(v.size?._id || v.size) === String(size._id) &&
+                      v.stock > 0
+                  );
+                  return (
+                    <button
+                      key={size._id}
+                      type="button"
+                      className={`product-detail__variant-btn${String(selectedSize) === String(size._id) ? " product-detail__variant-btn--active" : ""}${!hasStock ? " product-detail__variant-btn--unavailable" : ""}`}
+                      onClick={() => {
+                        setSelectedSize(size._id);
+                        setSelectedColor(null);
+                      }}
+                      title={!hasStock ? "Sin stock en esta talla" : size.name}
+                    >
+                      {size.name}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Color */}
+            {availableColors.length > 0 && (
+              <div className="product-detail__variant-group">
+                <label>
+                  Color
+                  {selectedColor && (
+                    <span className="product-detail__selected-label">
+                      {" "}—{" "}
+                      {availableColors.find(
+                        (c) => String(c._id) === String(selectedColor)
+                      )?.name}
+                    </span>
+                  )}
+                </label>
+                <div className="product-detail__variant-options">
+                  {availableColors.map((color) =>
+                    color.hexCode ? (
+                      <button
+                        key={color._id}
+                        type="button"
+                        title={color.name}
+                        aria-label={color.name}
+                        className={`product-detail__color-swatch${String(selectedColor) === String(color._id) ? " product-detail__color-swatch--active" : ""}`}
+                        style={{ backgroundColor: color.hexCode }}
+                        onClick={() => setSelectedColor(color._id)}
+                      />
+                    ) : (
+                      <button
+                        key={color._id}
+                        type="button"
+                        className={`product-detail__variant-btn${String(selectedColor) === String(color._id) ? " product-detail__variant-btn--active" : ""}`}
+                        onClick={() => setSelectedColor(color._id)}
+                      >
+                        {color.name}
+                      </button>
+                    )
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* ─── STOCK ALERT ─── */}
+          <StockAlert stock={selectedVariant?.stock} />
+
+          {/* ─── CANTIDAD ─── */}
+          {!isOutOfStock && (
+            <div className="product-detail__qty-row">
+              <span className="product-detail__qty-label">Cantidad</span>
+              <div className="product-detail__qty">
+                <button
+                  type="button"
+                  className="product-detail__qty-btn"
+                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                  disabled={quantity <= 1}
+                  aria-label="Reducir cantidad"
+                >
+                  −
+                </button>
+                <span className="product-detail__qty-value">{quantity}</span>
+                <button
+                  type="button"
+                  className="product-detail__qty-btn"
+                  onClick={() => setQuantity((q) => Math.min(maxQty, q + 1))}
+                  disabled={quantity >= maxQty}
+                  aria-label="Aumentar cantidad"
+                >
+                  +
+                </button>
+              </div>
+              {selectedVariant?.sku && (
+                <span className="product-detail__sku">
+                  SKU: {selectedVariant.sku}
+                </span>
+              )}
+            </div>
+          )}
+
+          {/* ─── BOTÓN AGREGAR ─── */}
+          <button
+            type="button"
+            className="product-detail__add-btn"
+            disabled={isOutOfStock}
+            onClick={handleAddToCart}
+          >
+            {isOutOfStock
+              ? selectedVariant
+                ? "Sin stock"
+                : "Selecciona talla y color"
+              : "Agregar al carrito"}
+          </button>
+
+          {product.allowsCustomization && (
+            <Link
+              href={`/personalizar?producto=${encodeURIComponent(product.slug)}`}
+              className="product-detail__custom-btn"
+            >
+              Solicitar personalización
+            </Link>
+          )}
+
+          {addedMsg && (
+            <p className="product-detail__added-msg">
+              {addedMsg}{" "}
+              <button
+                type="button"
+                className="product-detail__go-cart"
+                onClick={() => router.push("/carrito")}
+              >
+                Ver carrito
+              </button>
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* ─── DESCRIPCIÓN COMPLETA ─── */}
+      {product.fullDescription && (
+        <div className="product-detail__description">
+          <h2>Descripción</h2>
+          <p>{product.fullDescription}</p>
+        </div>
+      )}
+
+      {/* ─── RELACIONADOS ─── */}
+      {data.related?.length > 0 && (
+        <section className="product-detail__related">
+          <h2 className="product-detail__related-title">
+            También te puede gustar
+          </h2>
+          <div className="products-grid">
+            {data.related.map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+          </div>
+        </section>
+      )}
+    </article>
+  );
+}

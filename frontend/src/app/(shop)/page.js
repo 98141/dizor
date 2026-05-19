@@ -5,6 +5,19 @@ import PromoBanner from "@/components/cms/PromoBanner";
 import NewsletterSignup from "@/components/marketing/NewsletterSignup";
 import { getHomeContent } from "@/services/cmsService";
 
+export const metadata = {
+  title: {
+    absolute: "Dizor | Sombreros artesanales de Sandoná",
+  },
+  description:
+    "Sombreros artesanales en palma de iraca de Sandoná, Nariño. Tejidos Brisa, Común y Súper fino. Envíos a todo Colombia.",
+  openGraph: {
+    title: "Dizor | Sombreros artesanales de Sandoná",
+    description:
+      "Sombreros artesanales en palma de iraca de Sandoná, Nariño. Tejidos Brisa, Común y Súper fino.",
+  },
+};
+
 const BASE = process.env.NEXT_PUBLIC_API_URL;
 
 async function fetchFeatured() {

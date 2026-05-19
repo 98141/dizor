@@ -2,6 +2,24 @@ import Link from "next/link";
 import Image from "next/image";
 import { formatCOP } from "@/lib/formatCurrency";
 
+const MAX_SWATCHES = 5;
+
+function getUniqueColors(variants = []) {
+  const seen = new Set();
+  const colors = [];
+  for (const v of variants) {
+    if (!v.isActive) continue;
+    const c = v.color;
+    if (!c?._id) continue;
+    const id = String(c._id);
+    if (!seen.has(id)) {
+      seen.add(id);
+      colors.push(c);
+    }
+  }
+  return colors;
+}
+
 export default function ProductCard({ product }) {
   const hasPromo =
     product.onPromotion &&
@@ -12,12 +30,13 @@ export default function ProductCard({ product }) {
     ? `/producto/${encodeURIComponent(product.slug)}`
     : `/producto/${product.id}`;
 
+  const uniqueColors = getUniqueColors(product.variants);
+  const visibleColors = uniqueColors.slice(0, MAX_SWATCHES);
+  const extraColors = uniqueColors.length - visibleColors.length;
+
   return (
-    <article className="product-card">
-      <Link
-        href={productHref}
-        className="product-card__image-wrap"
-      >
+    <article className={`product-card${!product.inStock ? " product-card--out" : ""}`}>
+      <Link href={productHref} className="product-card__image-wrap">
         <Image
           src={product.mainImage}
           alt={product.images?.[0]?.alt || product.name}
@@ -27,29 +46,61 @@ export default function ProductCard({ product }) {
           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
         <div className="product-card__badges">
-          {product.isNew && (
-            <span className="product-card__badge">Nuevo</span>
+          {!product.inStock && (
+            <span className="product-card__badge product-card__badge--out">
+              Agotado
+            </span>
+          )}
+          {product.isNew && product.inStock && (
+            <span className="product-card__badge product-card__badge--new">
+              Nuevo
+            </span>
           )}
           {hasPromo && (
             <span className="product-card__badge product-card__badge--promo">
               -{product.discountPercent}%
             </span>
           )}
-          {product.isFeatured && (
-            <span className="product-card__badge">Destacado</span>
-          )}
         </div>
       </Link>
 
       <div className="product-card__body">
         <p className="product-card__meta">
-          {product.weaveType?.name} · {product.style?.name}
+          {product.weaveType?.name}
+          {product.style?.name ? ` · ${product.style.name}` : ""}
         </p>
+
         <h2 className="product-card__title">
-          <Link href={productHref}>
-            {product.name}
-          </Link>
+          <Link href={productHref}>{product.name}</Link>
         </h2>
+
+        {visibleColors.length > 0 && (
+          <div className="product-card__colors" aria-label="Colores disponibles">
+            {visibleColors.map((color) =>
+              color.hexCode ? (
+                <span
+                  key={String(color._id)}
+                  className="product-card__color-dot"
+                  style={{ backgroundColor: color.hexCode }}
+                  title={color.name}
+                  aria-label={color.name}
+                />
+              ) : (
+                <span
+                  key={String(color._id)}
+                  className="product-card__color-dot product-card__color-dot--text"
+                  title={color.name}
+                >
+                  {color.name?.charAt(0).toUpperCase()}
+                </span>
+              )
+            )}
+            {extraColors > 0 && (
+              <span className="product-card__color-more">+{extraColors}</span>
+            )}
+          </div>
+        )}
+
         <div className="product-card__price">
           <span className="product-card__price-current">
             {formatCOP(product.effectivePrice)}
@@ -60,11 +111,12 @@ export default function ProductCard({ product }) {
             </span>
           )}
         </div>
-        <p
-          className={`product-card__stock${!product.inStock ? " product-card__stock--out" : ""}`}
-        >
-          {product.inStock ? "Disponible" : "Agotado"}
-        </p>
+
+        {!product.inStock && (
+          <p className="product-card__stock product-card__stock--out">
+            Sin stock
+          </p>
+        )}
       </div>
     </article>
   );

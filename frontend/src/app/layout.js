@@ -23,10 +23,38 @@ import "@/styles/components/marketing.css";
 import "@/styles/pages/admin-marketing.css";
 import "@/styles/pages/admin-dashboard.css";
 import "@/styles/pages/admin-finanzas.css";
+import "@/styles/pages/not-found.css";
 
 export const metadata = {
-  title: "Dizor | Sombreros artesanales",
-  description: "Sombreros artesanales en palma de iraca de Sandoná, Nariño.",
+  title: {
+    default: "Dizor | Sombreros artesanales de Sandoná",
+    template: "%s | Dizor",
+  },
+  description:
+    "Sombreros artesanales en palma de iraca de Sandoná, Nariño, Colombia. Tejidos Brisa, Común y Súper fino. Envíos a todo el país.",
+  keywords: [
+    "sombreros artesanales",
+    "palma de iraca",
+    "Sandoná",
+    "Nariño",
+    "Colombia",
+    "sombrero hecho a mano",
+  ],
+  openGraph: {
+    type: "website",
+    locale: "es_CO",
+    siteName: "Dizor",
+    title: "Dizor | Sombreros artesanales de Sandoná",
+    description:
+      "Sombreros artesanales en palma de iraca de Sandoná, Nariño, Colombia.",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({ children }) {
