@@ -1,12 +1,15 @@
 import Link from "next/link";
+import Image from "next/image";
 import ProductCard from "@/components/products/ProductCard";
 import PromoBanner from "@/components/cms/PromoBanner";
+import NewsletterSignup from "@/components/marketing/NewsletterSignup";
 import { getHomeContent } from "@/services/cmsService";
 
-async function getFeatured() {
+const BASE = process.env.NEXT_PUBLIC_API_URL;
+
+async function fetchFeatured() {
   try {
-    const base = process.env.NEXT_PUBLIC_API_URL;
-    const res = await fetch(`${base}/products/featured?limit=8`, {
+    const res = await fetch(`${BASE}/products/featured?limit=8`, {
       next: { revalidate: 60 },
     });
     if (!res.ok) return [];
@@ -17,29 +20,76 @@ async function getFeatured() {
   }
 }
 
+async function fetchNewProducts() {
+  try {
+    const res = await fetch(`${BASE}/products?isNew=true&limit=8`, {
+      next: { revalidate: 60 },
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data.products || [];
+  } catch {
+    return [];
+  }
+}
+
+async function fetchBestsellers() {
+  try {
+    const res = await fetch(`${BASE}/products?sort=popular&limit=8`, {
+      next: { revalidate: 120 },
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data.products || [];
+  } catch {
+    return [];
+  }
+}
+
+async function fetchCraftTypes() {
+  try {
+    const res = await fetch(`${BASE}/products/filters`, {
+      next: { revalidate: 300 },
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data.filters?.weaveTypes || [];
+  } catch {
+    return [];
+  }
+}
+
 export default async function HomePage() {
-  const [cmsData, featured] = await Promise.all([
-    getHomeContent().catch(() => null),
-    getFeatured(),
-  ]);
+  const [cmsData, featured, newProducts, bestsellers, craftTypes] =
+    await Promise.all([
+      getHomeContent().catch(() => null),
+      fetchFeatured(),
+      fetchNewProducts(),
+      fetchBestsellers(),
+      fetchCraftTypes(),
+    ]);
 
   const home = cmsData?.home;
   const hero = home?.hero;
   const features = home?.features?.length ? home.features : [];
   const featuredSection = home?.featuredSection;
+  const newSection = home?.newSection;
+  const craftSection = home?.craftSection;
+  const historia = home?.historia;
+  const bestsellerSection = home?.bestsellerSection;
   const midBanner = cmsData?.banners?.[0];
 
-  const heroStyle =
-    hero?.imageUrl
-      ? {
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url(${hero.imageUrl})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }
-      : undefined;
+  const heroStyle = hero?.imageUrl
+    ? {
+        backgroundImage: `linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url(${hero.imageUrl})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }
+    : undefined;
 
   return (
     <>
+      {/* ─── HERO ─── */}
       <section className="home-hero" style={heroStyle}>
         <div className="home-hero__inner">
           <h1 className="home-hero__title">
@@ -47,19 +97,40 @@ export default async function HomePage() {
           </h1>
           <p className="home-hero__text">
             {hero?.subtitle ||
-              "Palma de iraca tejida a mano en Nariño, Colombia."}
+              "Palma de iraca tejida a mano en Nariño, Colombia. Tradición, elegancia y calidad en cada pieza."}
           </p>
-          <Link
-            href={hero?.ctaHref || "/catalogo"}
-            className="home-hero__cta"
-          >
+          <Link href={hero?.ctaHref || "/catalogo"} className="home-hero__cta">
             {hero?.ctaLabel || "Ver catálogo"}
           </Link>
         </div>
       </section>
 
+      {/* ─── BANNER PROMOCIONAL ─── */}
       {midBanner && <PromoBanner banner={midBanner} />}
 
+      {/* ─── NOVEDADES ─── */}
+      {newSection?.isActive !== false && newProducts.length > 0 && (
+        <section className="home-section">
+          <div className="home-section__header">
+            <h2 className="home-section__title">
+              {newSection?.title || "Novedades"}
+            </h2>
+            <Link
+              href={newSection?.linkHref || "/catalogo?isNew=true"}
+              className="home-section__link"
+            >
+              {newSection?.linkLabel || "Ver novedades"}
+            </Link>
+          </div>
+          <div className="products-grid">
+            {newProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ─── DESTACADOS ─── */}
       <section className="home-section">
         <div className="home-section__header">
           <h2 className="home-section__title">
@@ -86,6 +157,108 @@ export default async function HomePage() {
         )}
       </section>
 
+      {/* ─── TIPOS DE TEJIDO ─── */}
+      {craftTypes.length > 0 && (
+        <section className="home-craft">
+          <div className="home-craft__header">
+            <h2 className="home-craft__title">
+              {craftSection?.title || "Nuestros tejidos"}
+            </h2>
+            {(craftSection?.subtitle ||
+              !craftSection) && (
+              <p className="home-craft__subtitle">
+                {craftSection?.subtitle ||
+                  "Cada tipo de tejido tiene su propio carácter, finura y tiempo de elaboración."}
+              </p>
+            )}
+          </div>
+          <div className="home-craft__grid">
+            {craftTypes.map((wt, idx) => (
+              <Link
+                key={wt._id}
+                href={`/catalogo?weaveType=${wt._id}`}
+                className={`home-craft-card home-craft-card--${(idx % 3) + 1}`}
+              >
+                <span className="home-craft-card__name">{wt.name}</span>
+                {wt.description && (
+                  <span className="home-craft-card__desc">{wt.description}</span>
+                )}
+                <span className="home-craft-card__cta">
+                  {craftSection?.linkLabel || "Explorar"} →
+                </span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ─── HISTORIA DE DIZOR ─── */}
+      {(historia?.title || historia?.body) && (
+        <section
+          className={`home-story${historia?.imageUrl ? " home-story--with-image" : ""}`}
+        >
+          <div className="home-story__inner">
+            {historia?.imageUrl && (
+              <div className="home-story__image-wrap">
+                <Image
+                  src={historia.imageUrl}
+                  alt="Historia Dizor"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  style={{ objectFit: "cover" }}
+                />
+              </div>
+            )}
+            <div className="home-story__content">
+              <h2 className="home-story__title">
+                {historia?.title || "Nuestra historia"}
+              </h2>
+              <p className="home-story__body">
+                {historia?.body ||
+                  "Desde las manos de las artesanas de Sandoná, Nariño, nace cada sombrero Dizor."}
+              </p>
+              {historia?.ctaLabel && historia?.ctaHref && (
+                <Link href={historia.ctaHref} className="home-story__cta">
+                  {historia.ctaLabel}
+                </Link>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ═══════════════════════════════════════════════════════════════
+          MÁS VENDIDOS
+          Activar cuando el catálogo tenga historial de ventas suficiente.
+          Pasos para activar:
+            1. Ir al admin → CMS → Inicio
+            2. Cambiar "bestsellerSection.isActive" a true
+            La sección se mostrará automáticamente cuando haya productos
+            con salesCount > 0. Si no hay ventas aún, no aparece aunque
+            isActive esté en true (bestsellers.length === 0).
+          ═══════════════════════════════════════════════════════════════ */}
+      {bestsellerSection?.isActive && bestsellers.length > 0 && (
+        <section className="home-section">
+          <div className="home-section__header">
+            <h2 className="home-section__title">
+              {bestsellerSection?.title || "Más vendidos"}
+            </h2>
+            <Link
+              href={bestsellerSection?.linkHref || "/catalogo?sort=popular"}
+              className="home-section__link"
+            >
+              {bestsellerSection?.linkLabel || "Ver todos"}
+            </Link>
+          </div>
+          <div className="products-grid">
+            {bestsellers.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ─── CARACTERÍSTICAS / PROPUESTA DE VALOR ─── */}
       {features.length > 0 && (
         <section className="home-section">
           <div className="home-features">
@@ -98,6 +271,17 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
+      {/* ─── NEWSLETTER ─── */}
+      <section className="home-newsletter">
+        <div className="home-newsletter__inner">
+          <NewsletterSignup
+            title="Únete a la comunidad Dizor"
+            description="Recibe primero los nuevos lanzamientos, ofertas exclusivas e historias de nuestros artesanos."
+            source="home"
+          />
+        </div>
+      </section>
     </>
   );
 }

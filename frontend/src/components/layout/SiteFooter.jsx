@@ -55,7 +55,7 @@ export default async function SiteFooter() {
         <NewsletterFooter />
 
         <p className="site-footer__copy">
-          © {new Date().getFullYear()} Dizor. Todos los derechos reservados.
+          © {new Date().getFullYear()} Armando Mora. Todos los derechos reservados.
         </p>
       </div>
     </footer>

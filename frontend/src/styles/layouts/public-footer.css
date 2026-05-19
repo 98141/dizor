@@ -35,6 +35,27 @@
   color: #fff;
 }
 
+.site-footer__tagline {
+  font-size: 0.85rem;
+  color: #c9c4bc;
+  margin: var(--space-xs) 0 0;
+  line-height: 1.5;
+}
+
+.site-footer__heading {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #a09a92;
+  margin-bottom: var(--space-sm);
+}
+
+.site-footer__muted {
+  font-size: 0.85rem;
+  color: #a09a92;
+}
+
 .site-footer__copy {
   border-top: 1px solid rgba(255, 255, 255, 0.15);
   padding-top: var(--space-md);

@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(exist .next rmdir /s /q .next)"
+      "Bash(exist .next rmdir /s /q .next)",
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\Asus ExpertBook\\\\Desktop\\\\Desarrollo_MBT\\\\Dizor\\\\dizor\" -Force)",
+      "Bash(Select-Object Name, FullName)"
     ]
   }
 }
