@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(exist .next rmdir /s /q .next)"
+    ]
+  }
+}

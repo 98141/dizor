@@ -5,6 +5,14 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
+
+const STAFF_ROLES = ["superadmin", "admin", "vendedor"];
+
+const ROLE_LABELS = {
+  superadmin: "Super Admin",
+  admin: "Administrador",
+  vendedor: "Vendedor",
+};
 import AuthFormField from "@/components/auth/AuthFormField";
 import AuthErrorAlert from "@/components/auth/AuthErrorAlert";
 import {
@@ -154,8 +162,34 @@ export default function CheckoutPage() {
     }
   };
 
+  const isStaff = user && STAFF_ROLES.includes(user.role);
+
   if (!hydrated || !config) {
     return <p className="auth-loading">Preparando checkout...</p>;
+  }
+
+  if (isStaff) {
+    return (
+      <div className="checkout-page">
+        <h1 className="checkout-page__title">Checkout</h1>
+        <div className="checkout-staff-notice">
+          <span className="checkout-staff-notice__icon">⚠</span>
+          <h2 className="checkout-staff-notice__title">
+            Cuenta de personal — compras no disponibles
+          </h2>
+          <p className="checkout-staff-notice__text">
+            Estás navegando como <strong>{ROLE_LABELS[user.role]}</strong>. Las
+            cuentas de personal no pueden realizar compras en la tienda. Para
+            hacer un pedido, inicia sesión con una cuenta de cliente o compra
+            como invitado.
+          </p>
+          <div className="checkout-staff-notice__actions">
+            <Link href="/catalogo">Seguir explorando</Link>
+            <Link href="/carrito">Ver carrito</Link>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
