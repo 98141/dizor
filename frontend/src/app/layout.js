@@ -21,6 +21,8 @@ import "@/styles/pages/checkout.css";
 import "@/styles/pages/special-requests.css";
 import "@/styles/components/marketing.css";
 import "@/styles/pages/admin-marketing.css";
+import "@/styles/pages/admin-dashboard.css";
+import "@/styles/pages/admin-finanzas.css";
 
 export const metadata = {
   title: "Dizor | Sombreros artesanales",

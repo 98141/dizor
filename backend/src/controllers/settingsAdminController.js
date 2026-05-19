@@ -1,6 +1,7 @@
 const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/catchAsync");
 const { getStoreSettings } = require("../services/settingsService");
+const { logAuditEvent, safeLog } = require("../services/auditService");
 
 const formatSettings = (settings) => {
   const doc = settings.toObject ? settings.toObject() : settings;
@@ -64,6 +65,21 @@ exports.updateSettings = catchAsync(async (req, res, next) => {
   }
 
   await settings.save();
+
+  safeLog(
+    logAuditEvent({
+      req,
+      action: "settings_updated",
+      module: "settings",
+      user: req.user,
+      entityType: "store_settings",
+      summary: "Configuración de tienda actualizada",
+      newData: {
+        taxEnabled: settings.taxEnabled,
+        shippingMode: settings.shippingMode,
+      },
+    })
+  );
 
   res.status(200).json({
     status: "success",

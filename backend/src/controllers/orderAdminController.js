@@ -1,7 +1,7 @@
 const Order = require("../models/order");
 const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/catchAsync");
-const { logAuthEvent } = require("../services/auditService");
+const { logAuditEvent, safeLog } = require("../services/auditService");
 const {
   isAdmin,
   canUpdateOrderStatus,
@@ -150,13 +150,19 @@ exports.updateOrderStatus = catchAsync(async (req, res, next) => {
 
   await order.save();
 
-  await logAuthEvent({
-    req,
-    action: "order_status_changed",
-    user: req.user,
-    previousData: { status: previousStatus },
-    newData: { status: orderStatus, orderNumber: order.orderNumber },
-  }).catch(() => {});
+  safeLog(
+    logAuditEvent({
+      req,
+      action: "order_status_changed",
+      module: "orders",
+      user: req.user,
+      entityId: order._id,
+      entityType: "order",
+      summary: `Pedido ${order.orderNumber}: ${previousStatus} → ${orderStatus}`,
+      previousData: { status: previousStatus },
+      newData: { status: orderStatus, orderNumber: order.orderNumber },
+    })
+  );
 
   res.status(200).json({
     status: "success",
@@ -200,15 +206,21 @@ exports.confirmPayment = catchAsync(async (req, res, next) => {
 
   await order.save();
 
-  await logAuthEvent({
-    req,
-    action: "payment_confirmed",
-    user: req.user,
-    newData: {
-      orderNumber: order.orderNumber,
-      paymentMethod: order.paymentMethod,
-    },
-  }).catch(() => {});
+  safeLog(
+    logAuditEvent({
+      req,
+      action: "payment_confirmed",
+      module: "orders",
+      user: req.user,
+      entityId: order._id,
+      entityType: "order",
+      summary: `Pago confirmado · ${order.orderNumber}`,
+      newData: {
+        orderNumber: order.orderNumber,
+        paymentMethod: order.paymentMethod,
+      },
+    })
+  );
 
   res.status(200).json({
     status: "success",
@@ -242,12 +254,18 @@ exports.updateShipping = catchAsync(async (req, res, next) => {
 
   await order.save();
 
-  await logAuthEvent({
-    req,
-    action: "tracking_registered",
-    user: req.user,
-    newData: { orderNumber: order.orderNumber, trackingNumber },
-  }).catch(() => {});
+  safeLog(
+    logAuditEvent({
+      req,
+      action: "tracking_registered",
+      module: "orders",
+      user: req.user,
+      entityId: order._id,
+      entityType: "order",
+      summary: `Guía ${trackingNumber || "—"} · ${order.orderNumber}`,
+      newData: { orderNumber: order.orderNumber, trackingNumber },
+    })
+  );
 
   res.status(200).json({
     status: "success",

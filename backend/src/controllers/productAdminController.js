@@ -5,6 +5,14 @@ const slugifyText = require("../utils/slugifyText");
 const { formatProductAdmin } = require("../utils/productFormatter");
 const { uploadProductImages } = require("../services/cloudinaryService");
 const { isCloudinaryConfigured } = require("../config/cloudinary");
+const { logAuditEvent, safeLog } = require("../services/auditService");
+const {
+  logProductCreated,
+  logProductDeleted,
+  logProductUpdates,
+  snapshotProductForHistory,
+  safeLogProductHistory,
+} = require("../services/productHistoryService");
 
 const cloudinaryConfigured = () => isCloudinaryConfigured();
 
@@ -122,6 +130,23 @@ exports.createProduct = catchAsync(async (req, res, next) => {
   const product = await Product.create(req.body);
   await product.populate(populateAll);
 
+  safeLog(
+    logAuditEvent({
+      req,
+      action: "product_created",
+      module: "catalog",
+      user: req.user,
+      entityId: product._id,
+      entityType: "product",
+      summary: `Producto creado · ${product.name}`,
+      newData: { name: product.name, slug: product.slug },
+    })
+  );
+
+  safeLogProductHistory(
+    logProductCreated({ product, user: req.user, req })
+  );
+
   res.status(201).json({
     status: "success",
     product: formatProductAdmin(product, req.user.role),
@@ -145,9 +170,36 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
     return next(new AppError("Producto no encontrado", 404));
   }
 
+  await product.populate(populateAll);
+  const productBefore = snapshotProductForHistory(product);
+
   Object.assign(product, req.body);
   await product.save();
   await product.populate(populateAll);
+
+  const productAfter = snapshotProductForHistory(product);
+
+  safeLog(
+    logAuditEvent({
+      req,
+      action: "product_updated",
+      module: "catalog",
+      user: req.user,
+      entityId: product._id,
+      entityType: "product",
+      summary: `Producto actualizado · ${product.name}`,
+      previousData: { name: productBefore.name },
+      newData: { name: product.name, isActive: product.isActive },
+    })
+  );
+
+  safeLogProductHistory(
+    logProductUpdates({
+      productBefore,
+      productAfter,
+      user: req.user,
+    })
+  );
 
   res.status(200).json({
     status: "success",
@@ -167,6 +219,21 @@ exports.deleteProduct = catchAsync(async (req, res, next) => {
   if (!product) {
     return next(new AppError("Producto no encontrado", 404));
   }
+
+  safeLog(
+    logAuditEvent({
+      req,
+      action: "product_deleted",
+      module: "catalog",
+      user: req.user,
+      entityId: product._id,
+      entityType: "product",
+      summary: `Producto eliminado · ${product.name}`,
+      previousData: { name: product.name, slug: product.slug },
+    })
+  );
+
+  safeLogProductHistory(logProductDeleted({ product, user: req.user }));
 
   res.status(200).json({
     status: "success",

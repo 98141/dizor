@@ -2,6 +2,7 @@ const validator = require("validator");
 const User = require("../models/user");
 const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/catchAsync");
+const { logAuditEvent, safeLog } = require("../services/auditService");
 
 const allowedRolesToCreate = ["admin", "vendedor"];
 
@@ -53,6 +54,19 @@ exports.createAdminUser = catchAsync(async (req, res, next) => {
     role,
   });
 
+  safeLog(
+    logAuditEvent({
+      req,
+      action: "staff_user_created",
+      module: "users",
+      user: req.user,
+      entityId: user._id,
+      entityType: "user",
+      summary: `Usuario ${role} creado · ${user.email}`,
+      newData: { email: user.email, role: user.role },
+    })
+  );
+
   res.status(201).json({
     status: "success",
     message: "Usuario administrativo creado correctamente",
@@ -98,8 +112,23 @@ exports.updateAdminUserStatus = catchAsync(async (req, res, next) => {
     return next(new AppError("Usuario administrativo no encontrado", 404));
   }
 
+  const wasActive = user.isActive;
   user.isActive = isActive;
   await user.save({ validateBeforeSave: false });
+
+  safeLog(
+    logAuditEvent({
+      req,
+      action: "staff_user_status_changed",
+      module: "users",
+      user: req.user,
+      entityId: user._id,
+      entityType: "user",
+      summary: `${user.email} · ${isActive ? "activado" : "desactivado"}`,
+      previousData: { isActive: wasActive },
+      newData: { isActive },
+    })
+  );
 
   res.status(200).json({
     status: "success",

@@ -5,6 +5,7 @@ const {
   formatRequestAdmin,
   pushStatusHistory,
 } = require("../services/specialRequestService");
+const { logAuditEvent, safeLog } = require("../services/auditService");
 
 const formatList = (doc) => ({
   id: doc._id,
@@ -108,9 +109,24 @@ exports.updateStatus = catchAsync(async (req, res, next) => {
     return next(new AppError("Solicitud no encontrada", 404));
   }
 
+  const previousStatus = doc.status;
   doc.status = status;
   pushStatusHistory(doc, status, note, req.user.id);
   await doc.save();
+
+  safeLog(
+    logAuditEvent({
+      req,
+      action: "special_request_status_changed",
+      module: "special_requests",
+      user: req.user,
+      entityId: doc._id,
+      entityType: "special_request",
+      summary: `${doc.requestNumber}: ${previousStatus} → ${status}`,
+      previousData: { status: previousStatus },
+      newData: { status, requestNumber: doc.requestNumber },
+    })
+  );
 
   res.status(200).json({
     status: "success",
@@ -145,6 +161,23 @@ exports.updateQuote = catchAsync(async (req, res, next) => {
   }
 
   await doc.save();
+
+  safeLog(
+    logAuditEvent({
+      req,
+      action: "special_request_quoted",
+      module: "special_requests",
+      user: req.user,
+      entityId: doc._id,
+      entityType: "special_request",
+      summary: `Cotización · ${doc.requestNumber}`,
+      newData: {
+        requestNumber: doc.requestNumber,
+        quotedAmount: doc.quotedAmount,
+        status: doc.status,
+      },
+    })
+  );
 
   res.status(200).json({
     status: "success",

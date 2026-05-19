@@ -24,6 +24,10 @@ const contentPublicRoutes = require("./routes/contentPublicRoutes");
 const contentAdminRoutes = require("./routes/contentAdminRoutes");
 const marketingPublicRoutes = require("./routes/marketingPublicRoutes");
 const marketingAdminRoutes = require("./routes/marketingAdminRoutes");
+const adminDashboardRoutes = require("./routes/adminDashboardRoutes");
+const adminAuditRoutes = require("./routes/adminAuditRoutes");
+const adminInventoryRoutes = require("./routes/adminInventoryRoutes");
+const adminFinanceRoutes = require("./routes/adminFinanceRoutes");
 const wompiWebhookRoutes = require("./routes/wompiWebhookRoutes");
 
 const app = express();
@@ -82,6 +86,10 @@ app.use(
       "style",
       "weaveType",
       "tags",
+      "range",
+      "period",
+      "from",
+      "to",
     ],
   })
 );
@@ -108,6 +116,10 @@ app.use("/api/content", contentPublicRoutes);
 app.use("/api/admin/content", contentAdminRoutes);
 app.use("/api/marketing", marketingPublicRoutes);
 app.use("/api/admin/marketing", marketingAdminRoutes);
+app.use("/api/admin/dashboard", adminDashboardRoutes);
+app.use("/api/admin/audit", adminAuditRoutes);
+app.use("/api/admin/inventory", adminInventoryRoutes);
+app.use("/api/admin/finance", adminFinanceRoutes);
 app.use("/api/webhooks", wompiWebhookRoutes);
 
 app.use((req, res, next) => {

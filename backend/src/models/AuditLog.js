@@ -26,6 +26,21 @@ const auditLogSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    entityId: {
+      type: mongoose.Schema.Types.ObjectId,
+      default: null,
+    },
+    entityType: {
+      type: String,
+      trim: true,
+      default: null,
+    },
+    summary: {
+      type: String,
+      trim: true,
+      maxlength: 500,
+      default: null,
+    },
     ip: {
       type: String,
       default: null,
@@ -52,5 +67,7 @@ const auditLogSchema = new mongoose.Schema(
 
 auditLogSchema.index({ createdAt: -1 });
 auditLogSchema.index({ userId: 1, action: 1 });
+auditLogSchema.index({ module: 1, createdAt: -1 });
+auditLogSchema.index({ action: 1, createdAt: -1 });
 
 module.exports = mongoose.model("AuditLog", auditLogSchema);

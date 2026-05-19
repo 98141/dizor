@@ -79,6 +79,9 @@ function AdminProductosContent() {
             <Link href="/admin/catalogo" className="admin-btn">
               Catálogo base
             </Link>
+            <Link href="/admin/inventario" className="admin-btn">
+              Historial inventario
+            </Link>
           </div>
         )}
       </div>

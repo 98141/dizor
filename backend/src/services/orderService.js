@@ -1,6 +1,10 @@
 const Order = require("../models/order");
 const Product = require("../models/product");
-const { logAuthEvent } = require("./auditService");
+const { logAuditEvent, safeLog } = require("./auditService");
+const {
+  logProductSale,
+  safeLogProductHistory,
+} = require("./productHistoryService");
 
 const generateOrderNumber = async () => {
   const now = new Date();
@@ -39,13 +43,21 @@ exports.createOrder = async ({
     }
   }
 
+  const stockDeductions = [];
+
+  const productCosts = new Map();
+
   for (const item of items) {
-    const product = await Product.findById(item.productId);
+    const product = await Product.findById(item.productId).select(
+      "+internalCost"
+    );
     const variant = product.variants.id(item.variantId);
+    productCosts.set(String(product._id), product.internalCost ?? null);
     variant.stock -= item.quantity;
     product.cartAddsCount = (product.cartAddsCount || 0) + item.quantity;
     product.salesCount = (product.salesCount || 0) + item.quantity;
     await product.save({ validateBeforeSave: false });
+    stockDeductions.push({ product, variant, item });
   }
 
   const orderNumber = await generateOrderNumber();
@@ -71,6 +83,7 @@ exports.createOrder = async ({
       quantity: i.quantity,
       unitPrice: i.unitPrice,
       lineTotal: i.lineTotal,
+      unitCost: productCosts.get(String(i.productId)) ?? null,
     })),
     subtotal: totals.subtotal,
     discountTotal: totals.discountTotal,
@@ -91,13 +104,33 @@ exports.createOrder = async ({
   });
 
   if (req && user) {
-    await logAuthEvent({
-      req,
-      action: "order_created",
-      user,
-      success: true,
-      newData: { orderNumber },
-    }).catch(() => {});
+    safeLog(
+      logAuditEvent({
+        req,
+        action: "order_created",
+        module: "orders",
+        user,
+        entityId: order._id,
+        entityType: "order",
+        summary: `Pedido creado · ${orderNumber}`,
+        newData: { orderNumber },
+      })
+    );
+  }
+
+  for (const { product, variant, item } of stockDeductions) {
+    safeLogProductHistory(
+      logProductSale({
+        product,
+        variant,
+        quantity: item.quantity,
+        orderId: order._id,
+        orderNumber,
+        user: user || null,
+        sizeName: item.sizeName,
+        colorName: item.colorName,
+      })
+    );
   }
 
   return order;

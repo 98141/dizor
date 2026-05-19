@@ -6,6 +6,12 @@ import { useAuth } from "@/context/AuthContext";
 
 const adminLinks = [
   { href: "/admin", label: "Dashboard", roles: ["superadmin", "admin"] },
+  { href: "/admin/auditoria", label: "Auditoría", roles: ["superadmin", "admin"] },
+  {
+    href: "/admin/inventario",
+    label: "Inventario",
+    roles: ["superadmin", "admin"],
+  },
   { href: "/admin/pedidos", label: "Pedidos", roles: ["superadmin", "admin"] },
   {
     href: "/admin/solicitudes",
@@ -22,6 +28,7 @@ const adminLinks = [
     roles: ["superadmin", "admin"],
   },
   { href: "/admin/usuarios", label: "Usuarios", roles: ["superadmin"] },
+  { href: "/admin/finanzas", label: "Finanzas", roles: ["superadmin"] },
 ];
 
 const vendorLinks = [

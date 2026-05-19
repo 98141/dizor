@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/catchAsync");
+const { isValidObjectId } = require("../utils/objectIdUtils");
 
 const protect = catchAsync(async (req, res, next) => {
   let token;
@@ -20,6 +21,10 @@ const protect = catchAsync(async (req, res, next) => {
   }
 
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+  if (!decoded?.id || !isValidObjectId(decoded.id)) {
+    return next(new AppError("Token inválido. Inicia sesión nuevamente", 401));
+  }
 
   const currentUser = await User.findById(decoded.id).select(
     "+refreshToken"
