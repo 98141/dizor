@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const Order = require("../models/order");
 const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/catchAsync");
 const { hashToken } = require("../utils/cryptoUtils");
@@ -76,6 +77,12 @@ exports.register = catchAsync(async (req, res, next) => {
     role: "cliente",
   });
 
+  // Vincular pedidos de invitado que usaron este mismo correo
+  await Order.updateMany(
+    { "buyer.email": email.toLowerCase(), user: null },
+    { $set: { user: user._id } }
+  );
+
   await logAuthEvent({
     req,
     action: "register",
@@ -127,6 +134,12 @@ exports.login = catchAsync(async (req, res, next) => {
   }
 
   await user.resetLoginAttempts();
+
+  // Vincular pedidos de invitado que usaron este mismo correo
+  await Order.updateMany(
+    { "buyer.email": user.email.toLowerCase(), user: null },
+    { $set: { user: user._id } }
+  );
 
   await logAuthEvent({
     req,

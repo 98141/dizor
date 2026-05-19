@@ -3,8 +3,13 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
-import { getMyOrders, cancelOrder } from "@/services/checkoutService";
+import {
+  getMyOrders,
+  getMyOrder,
+  cancelOrder,
+} from "@/services/checkoutService";
 import { getMySpecialRequests } from "@/services/specialRequestService";
 import { formatCOP } from "@/lib/formatCurrency";
 import {
@@ -29,13 +34,45 @@ const ROLE_LABELS = {
 };
 
 const ORDER_STATUS = {
-  pendiente_pago: { label: "Pendiente pago", cls: "badge--warning" },
-  pagado:         { label: "Pagado",         cls: "badge--info" },
-  procesando:     { label: "Procesando",     cls: "badge--info" },
-  enviado:        { label: "Enviado",        cls: "badge--purple" },
-  entregado:      { label: "Entregado",      cls: "badge--success" },
-  cancelado:      { label: "Cancelado",      cls: "badge--danger" },
+  pendiente:       { label: "Pendiente",        cls: "badge--gray" },
+  pago_pendiente:  { label: "Pendiente pago",   cls: "badge--warning" },
+  pagado:          { label: "Pagado",           cls: "badge--info" },
+  en_preparacion:  { label: "En preparación",   cls: "badge--info" },
+  enviado:         { label: "Enviado",          cls: "badge--purple" },
+  entregado:       { label: "Entregado",        cls: "badge--success" },
+  cancelado:       { label: "Cancelado",        cls: "badge--danger" },
+  rechazado:       { label: "Rechazado",        cls: "badge--danger" },
+  devuelto:        { label: "Devuelto",         cls: "badge--danger" },
 };
+
+const PAYMENT_STATUS_LABELS = {
+  pendiente:    "Pago pendiente",
+  pagado:       "Pagado",
+  rechazado:    "Rechazado",
+  reembolsado:  "Reembolsado",
+};
+
+const PAYMENT_METHOD_LABELS = {
+  wompi:          "Tarjeta / PSE (Wompi)",
+  nequi_manual:   "Nequi manual",
+  contra_entrega: "Contra entrega",
+};
+
+const CARRIER_LABELS = {
+  interrapidisimo: "Interrapidísimo",
+  envia: "Envía",
+  coordinadora: "Coordinadora",
+};
+
+const CARRIER_TRACKING_URL = {
+  interrapidisimo: (g) =>
+    `https://www.interrapidisimo.com/servicios/rastreo/?guia=${g}`,
+  envia: (g) => `https://www.envia.co/rastreo?numero=${g}`,
+  coordinadora: (g) =>
+    `https://www.coordinadora.com/portafolio-de-servicios/servicios-en-linea/rastrear-guias/?guia=${g}`,
+};
+
+const NON_CANCELLABLE = ["enviado", "entregado", "cancelado", "rechazado", "devuelto"];
 
 const REQUEST_BADGE = {
   pendiente:   "badge--warning",
@@ -64,6 +101,192 @@ const getInitials = (name = "") =>
     .map((n) => n[0]?.toUpperCase() || "")
     .join("");
 
+function OrderDetail({ orderId }) {
+  const [detail, setDetail] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getMyOrder(orderId)
+      .then((d) => setDetail(d.order))
+      .catch(() => setDetail(null))
+      .finally(() => setLoading(false));
+  }, [orderId]);
+
+  if (loading) {
+    return <p className="cuenta-muted cuenta-order-detail-loading">Cargando detalle...</p>;
+  }
+
+  if (!detail) {
+    return (
+      <p className="cuenta-muted">No se pudo cargar el detalle del pedido.</p>
+    );
+  }
+
+  const trackingUrl =
+    detail.trackingNumber && detail.carrier
+      ? CARRIER_TRACKING_URL[detail.carrier]?.(detail.trackingNumber)
+      : null;
+
+  return (
+    <div className="cuenta-order-detail">
+      {/* ── Productos ── */}
+      <div className="cuenta-order-section">
+        <h4 className="cuenta-order-section__title">Productos</h4>
+        <ul className="cuenta-order-items">
+          {detail.items?.map((item, i) => (
+            <li key={i} className="cuenta-order-item">
+              {item.productImage && (
+                <div className="cuenta-order-item__img">
+                  <Image
+                    src={item.productImage}
+                    alt={item.productName}
+                    width={56}
+                    height={70}
+                    style={{ objectFit: "cover", borderRadius: "var(--radius-sm)" }}
+                  />
+                </div>
+              )}
+              <div className="cuenta-order-item__info">
+                <span className="cuenta-order-item__name">
+                  {item.productSlug ? (
+                    <Link href={`/producto/${item.productSlug}`}>
+                      {item.productName}
+                    </Link>
+                  ) : (
+                    item.productName
+                  )}
+                </span>
+                <span className="cuenta-order-item__meta">
+                  {[item.sizeName, item.colorName]
+                    .filter(Boolean)
+                    .join(" · ")}
+                  {item.sku ? ` · SKU: ${item.sku}` : ""}
+                </span>
+              </div>
+              <div className="cuenta-order-item__right">
+                <span className="cuenta-order-item__qty">
+                  ×{item.quantity}
+                </span>
+                <span className="cuenta-order-item__price">
+                  {formatCOP(item.lineTotal)}
+                </span>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="cuenta-order-detail-cols">
+        {/* ── Envío ── */}
+        <div className="cuenta-order-section">
+          <h4 className="cuenta-order-section__title">Envío</h4>
+          <div className="cuenta-order-section__rows">
+            <div className="cuenta-card__row">
+              <span className="cuenta-card__label">Dirección</span>
+              <span>{detail.shippingAddress?.address}</span>
+            </div>
+            <div className="cuenta-card__row">
+              <span className="cuenta-card__label">Ciudad</span>
+              <span>
+                {detail.shippingAddress?.city},{" "}
+                {detail.shippingAddress?.department}
+              </span>
+            </div>
+            {detail.carrier && (
+              <div className="cuenta-card__row">
+                <span className="cuenta-card__label">Transportadora</span>
+                <span>{CARRIER_LABELS[detail.carrier] || detail.carrier}</span>
+              </div>
+            )}
+            {detail.trackingNumber && (
+              <div className="cuenta-card__row">
+                <span className="cuenta-card__label">Guía</span>
+                <span>
+                  {trackingUrl ? (
+                    <a
+                      href={trackingUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="cuenta-order-track-link"
+                    >
+                      {detail.trackingNumber} ↗
+                    </a>
+                  ) : (
+                    detail.trackingNumber
+                  )}
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* ── Pago y totales ── */}
+        <div className="cuenta-order-section">
+          <h4 className="cuenta-order-section__title">Pago</h4>
+          <div className="cuenta-order-section__rows">
+            <div className="cuenta-card__row">
+              <span className="cuenta-card__label">Método</span>
+              <span>
+                {PAYMENT_METHOD_LABELS[detail.paymentMethod] ||
+                  detail.paymentMethod}
+              </span>
+            </div>
+            <div className="cuenta-card__row">
+              <span className="cuenta-card__label">Estado de pago</span>
+              <span>
+                {PAYMENT_STATUS_LABELS[detail.paymentStatus] ||
+                  detail.paymentStatus}
+              </span>
+            </div>
+            <div className="cuenta-card__row">
+              <span className="cuenta-card__label">Subtotal</span>
+              <span>{formatCOP(detail.subtotal)}</span>
+            </div>
+            {detail.shippingCost > 0 && (
+              <div className="cuenta-card__row">
+                <span className="cuenta-card__label">Envío</span>
+                <span>{formatCOP(detail.shippingCost)}</span>
+              </div>
+            )}
+            {detail.shippingCost === 0 && (
+              <div className="cuenta-card__row">
+                <span className="cuenta-card__label">Envío</span>
+                <span>Gratis</span>
+              </div>
+            )}
+            {detail.taxTotal > 0 && (
+              <div className="cuenta-card__row">
+                <span className="cuenta-card__label">Impuestos</span>
+                <span>{formatCOP(detail.taxTotal)}</span>
+              </div>
+            )}
+            {detail.discountTotal > 0 && (
+              <div className="cuenta-card__row">
+                <span className="cuenta-card__label">Descuento</span>
+                <span>-{formatCOP(detail.discountTotal)}</span>
+              </div>
+            )}
+            <div className="cuenta-card__row cuenta-order-total-row">
+              <span>Total</span>
+              <span className="cuenta-order-total">
+                {formatCOP(detail.total)}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Notas del cliente ── */}
+      {detail.customerNotes && (
+        <div className="cuenta-order-section">
+          <h4 className="cuenta-order-section__title">Notas del pedido</h4>
+          <p className="cuenta-muted">{detail.customerNotes}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function CuentaContent() {
   const router = useRouter();
   const { user, logout, updatePassword, updateProfile, loadUser } = useAuth();
@@ -88,6 +311,9 @@ function CuentaContent() {
   const [specialRequests, setSpecialRequests] = useState([]);
   const [requestsLoading, setRequestsLoading] = useState(true);
 
+  // Estado para detalle expandible de pedidos
+  const [expandedOrderId, setExpandedOrderId] = useState(null);
+
   useEffect(() => {
     if (user) {
       setProfileForm({ name: user.name || "", phone: user.phone || "" });
@@ -105,6 +331,10 @@ function CuentaContent() {
       .catch(() => setSpecialRequests([]))
       .finally(() => setRequestsLoading(false));
   }, []);
+
+  const handleToggleDetail = (orderId) => {
+    setExpandedOrderId((prev) => (prev === orderId ? null : orderId));
+  };
 
   const handleCancelOrder = async (orderId) => {
     if (!confirm("¿Cancelar este pedido?")) return;
@@ -351,10 +581,15 @@ function CuentaContent() {
                     label: order.orderStatus,
                     cls: "badge--gray",
                   };
+                  const isExpanded = expandedOrderId === order._id;
+
                   return (
-                    <li key={order._id} className="cuenta-orders__item">
+                    <li key={order._id} className="cuenta-orders__item cuenta-orders__item--expandable">
+                      {/* ── Fila principal ── */}
                       <div className="cuenta-order-main">
-                        <span className="cuenta-order-num">{order.orderNumber}</span>
+                        <span className="cuenta-order-num">
+                          {order.orderNumber}
+                        </span>
                         <span className="cuenta-order-date">
                           {formatDate(order.createdAt)}
                         </span>
@@ -363,31 +598,52 @@ function CuentaContent() {
                             Guía: {order.trackingNumber}
                           </span>
                         )}
+                        {order.carrier && !order.trackingNumber && (
+                          <span className="cuenta-order-date">
+                            {CARRIER_LABELS[order.carrier] || order.carrier}
+                          </span>
+                        )}
                       </div>
+
                       <div className="cuenta-order-aside">
                         <span className="cuenta-order-total">
                           {formatCOP(order.total)}
                         </span>
                         <span className={`badge ${st.cls}`}>{st.label}</span>
-                        {!["enviado", "entregado", "cancelado"].includes(
-                          order.orderStatus
-                        ) && (
+                        <button
+                          type="button"
+                          className="cuenta-order-toggle"
+                          onClick={() => handleToggleDetail(order._id)}
+                          aria-expanded={isExpanded}
+                        >
+                          {isExpanded ? "Cerrar" : "Ver detalle"}
+                        </button>
+                        {!NON_CANCELLABLE.includes(order.orderStatus) && (
                           <button
                             type="button"
                             className="cuenta-order-cancel"
                             onClick={() => handleCancelOrder(order._id)}
                           >
-                            Cancelar pedido
+                            Cancelar
                           </button>
                         )}
                       </div>
+
+                      {/* ── Detalle expandible ── */}
+                      {isExpanded && (
+                        <div className="cuenta-order-detail-wrap">
+                          <OrderDetail orderId={order._id} />
+                        </div>
+                      )}
                     </li>
                   );
                 })}
               </ul>
             )}
             <p className="cuenta-muted" style={{ marginTop: "var(--space-md)" }}>
-              <Link href="/seguimiento">Rastrear pedido con número de guía</Link>
+              <Link href="/seguimiento">
+                Rastrear pedido con número de guía →
+              </Link>
             </p>
           </div>
         )}
@@ -434,7 +690,7 @@ function CuentaContent() {
             )}
             <p className="cuenta-muted" style={{ marginTop: "var(--space-md)" }}>
               <Link href="/solicitud/seguimiento">
-                Consultar con número y correo
+                Consultar con número y correo →
               </Link>
             </p>
           </div>

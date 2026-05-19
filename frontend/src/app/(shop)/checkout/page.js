@@ -153,7 +153,7 @@ export default function CheckoutPage() {
       }
 
       router.push(
-        `/pedido/confirmacion?order=${data.order.orderNumber}&total=${data.order.total}&payment=${data.order.paymentMethod}`
+        `/pedido/confirmacion?order=${data.order.orderNumber}&total=${data.order.total}&payment=${data.order.paymentMethod}&email=${encodeURIComponent(buyer.email)}&name=${encodeURIComponent(buyer.name)}`
       );
     } catch (err) {
       setError(err.response?.data?.message || "No se pudo crear el pedido");

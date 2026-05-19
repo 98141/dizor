@@ -253,7 +253,7 @@ exports.getMyOrders = catchAsync(async (req, res, next) => {
   const orders = await Order.find({ user: req.user.id })
     .sort({ createdAt: -1 })
     .select(
-      "orderNumber orderStatus paymentStatus total createdAt trackingNumber carrier"
+      "orderNumber orderStatus paymentStatus paymentMethod total subtotal shippingCost taxTotal discountTotal createdAt trackingNumber carrier"
     );
 
   res.status(200).json({

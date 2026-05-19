@@ -374,6 +374,182 @@
   font-size: 0.9rem;
 }
 
+/* ── Order detail expandable ──────────────────────────── */
+.cuenta-orders__item--expandable {
+  display: block;
+  padding: var(--space-md) 0;
+}
+
+.cuenta-orders__item--expandable > .cuenta-order-main,
+.cuenta-orders__item--expandable > .cuenta-order-aside {
+  display: inline-flex;
+}
+
+.cuenta-orders__item--expandable {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  gap: var(--space-xs) var(--space-md);
+  align-items: start;
+}
+
+.cuenta-order-detail-wrap {
+  grid-column: 1 / -1;
+  margin-top: var(--space-sm);
+}
+
+.cuenta-order-toggle {
+  font-size: 0.78rem;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-primary);
+  cursor: pointer;
+  padding: 0.2rem 0.6rem;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.cuenta-order-toggle:hover {
+  background: rgba(61, 79, 58, 0.06);
+  border-color: var(--color-primary);
+}
+
+.cuenta-order-detail {
+  background: #f9f7f4;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.cuenta-order-detail-loading {
+  padding: var(--space-md) 0;
+}
+
+.cuenta-order-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.cuenta-order-section__title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.cuenta-order-section__rows {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.cuenta-order-detail-cols {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.cuenta-order-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.cuenta-order-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--space-sm);
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.9rem;
+}
+
+.cuenta-order-item:last-child {
+  border-bottom: none;
+}
+
+.cuenta-order-item__img {
+  flex-shrink: 0;
+  width: 56px;
+  height: 70px;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+}
+
+.cuenta-order-item__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.cuenta-order-item__name {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cuenta-order-item__name a {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.cuenta-order-item__name a:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.cuenta-order-item__meta {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+
+.cuenta-order-item__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.2rem;
+  white-space: nowrap;
+}
+
+.cuenta-order-item__qty {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.cuenta-order-item__price {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-primary);
+}
+
+.cuenta-order-total-row {
+  font-weight: 600;
+  font-size: 1rem;
+  border-top: 2px solid var(--color-border) !important;
+}
+
+.cuenta-order-track-link {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
 /* ── Responsive ───────────────────────────────────────── */
 @media (max-width: 600px) {
   .cuenta-page { padding: var(--space-lg) var(--space-md); }
@@ -389,4 +565,11 @@
 
   .cuenta-orders__item { grid-template-columns: 1fr; }
   .cuenta-order-aside { align-items: flex-start; flex-direction: row; flex-wrap: wrap; gap: var(--space-xs); }
+  .cuenta-order-item { grid-template-columns: auto 1fr auto; }
+}
+
+@media (min-width: 640px) {
+  .cuenta-order-detail-cols {
+    grid-template-columns: 1fr 1fr;
+  }
 }
