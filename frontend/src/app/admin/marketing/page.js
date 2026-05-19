@@ -25,6 +25,34 @@ const TABS = [
   { id: "exports", label: "Exportar" },
 ];
 
+const normalizeSettings = (raw) => ({
+  ...raw,
+  popup: {
+    enabled: false,
+    delaySeconds: 4,
+    showNewsletterForm: true,
+    title: "",
+    text: "",
+    ctaLabel: "Suscribirme",
+    ctaHref: "",
+    imageUrl: "",
+    ...(raw?.popup || {}),
+  },
+  newsletter: {
+    footerTitle: "Newsletter Dizor",
+    footerText: "",
+    successMessage: "¡Gracias! Te hemos suscrito.",
+    ...(raw?.newsletter || {}),
+  },
+  abandonedCart: {
+    enabled: true,
+    delayHours: 24,
+    maxReminders: 2,
+    emailSubject: "Tu carrito te espera — Dizor",
+    ...(raw?.abandonedCart || {}),
+  },
+});
+
 function MarketingAdminContent() {
   const [tab, setTab] = useState("settings");
   const [settings, setSettings] = useState(null);
@@ -37,21 +65,34 @@ function MarketingAdminContent() {
 
   const load = async () => {
     setLoading(true);
+    setMessage("");
+    setError(false);
     try {
-      const [settingsRes, subsRes, cartsRes] = await Promise.all([
-        getMarketingSettings(),
-        getNewsletterSubscribers({ limit: 50 }),
-        getAbandonedCarts({ limit: 30 }),
-      ]);
-      setSettings(settingsRes.settings);
+      const settingsRes = await getMarketingSettings();
+      setSettings(normalizeSettings(settingsRes.settings));
+    } catch (err) {
+      setMessage(
+        err.response?.data?.message || "Error al cargar configuración de marketing"
+      );
+      setError(true);
+      setSettings(normalizeSettings({}));
+    }
+
+    try {
+      const subsRes = await getNewsletterSubscribers({ limit: 50 });
       setSubscribers(subsRes.subscribers || []);
+    } catch {
+      setSubscribers([]);
+    }
+
+    try {
+      const cartsRes = await getAbandonedCarts({ limit: 30 });
       setCarts(cartsRes.carts || []);
     } catch {
-      setMessage("Error al cargar marketing");
-      setError(true);
-    } finally {
-      setLoading(false);
+      setCarts([]);
     }
+
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -69,7 +110,7 @@ function MarketingAdminContent() {
         newsletter: settings.newsletter,
         abandonedCart: settings.abandonedCart,
       });
-      setSettings(data.settings);
+      setSettings(normalizeSettings(data.settings));
       setMessage("Configuración guardada");
     } catch (err) {
       setMessage(err.response?.data?.message || "No se pudo guardar");
@@ -95,20 +136,31 @@ function MarketingAdminContent() {
   };
 
   const setPopup = (key, value) =>
-    setSettings((s) => ({ ...s, popup: { ...s.popup, [key]: value } }));
+    setSettings((s) => ({
+      ...s,
+      popup: { ...normalizeSettings(s).popup, [key]: value },
+    }));
   const setNewsletter = (key, value) =>
     setSettings((s) => ({
       ...s,
-      newsletter: { ...s.newsletter, [key]: value },
+      newsletter: { ...normalizeSettings(s).newsletter, [key]: value },
     }));
   const setAbandoned = (key, value) =>
     setSettings((s) => ({
       ...s,
-      abandonedCart: { ...s.abandonedCart, [key]: value },
+      abandonedCart: { ...normalizeSettings(s).abandonedCart, [key]: value },
     }));
 
-  if (loading || !settings) {
+  if (loading) {
     return <p className="auth-loading">Cargando marketing…</p>;
+  }
+
+  if (!settings) {
+    return (
+      <p className="auth-loading">
+        No se pudo cargar marketing. Revisa que el backend esté en marcha.
+      </p>
+    );
   }
 
   return (
@@ -206,7 +258,7 @@ function MarketingAdminContent() {
             }
           />
 
-          <AuthSubmitButton loading={saving} label="Guardar configuración" />
+          <AuthSubmitButton loading={saving}>Guardar configuración</AuthSubmitButton>
         </form>
       )}
 

@@ -9,8 +9,14 @@ export default function NewsletterFooter() {
 
   useEffect(() => {
     getMarketingConfig()
-      .then((d) => setNewsletter(d.config?.newsletter))
-      .catch(() => setNewsletter(null));
+      .then((d) => setNewsletter(d.config?.newsletter || null))
+      .catch(() => {
+        setNewsletter({
+          footerTitle: "Newsletter Dizor",
+          footerText: "Recibe lanzamientos y ofertas.",
+          successMessage: "¡Gracias! Te hemos suscrito.",
+        });
+      });
   }, []);
 
   return (

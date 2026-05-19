@@ -23,7 +23,6 @@ const newsletterSubscriberSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-newsletterSubscriberSchema.index({ email: 1 });
 newsletterSubscriberSchema.index({ isActive: 1, createdAt: -1 });
 
 module.exports = mongoose.model("NewsletterSubscriber", newsletterSubscriberSchema);

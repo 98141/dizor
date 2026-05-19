@@ -1,51 +1,47 @@
+const validator = require("validator");
 const MarketingSettings = require("../models/marketingSettings");
 const NewsletterSubscriber = require("../models/newsletterSubscriber");
 const AbandonedCart = require("../models/abandonedCart");
 const AppError = require("../utils/AppError");
 const { resolveCartItems } = require("./cartService");
 const { sendAbandonedCartEmail } = require("./emailService");
-
-const DEFAULT_SETTINGS = {
-  popup: {
-    enabled: false,
-    title: "10% en tu primera compra",
-    text: "Suscríbete y recibe novedades de colecciones artesanales.",
-    ctaLabel: "Suscribirme",
-    ctaHref: "",
-    imageUrl: "",
-    delaySeconds: 4,
-    showNewsletterForm: true,
-  },
-  newsletter: {
-    footerTitle: "Newsletter Dizor",
-    footerText: "Recibe lanzamientos y ofertas de sombreros artesanales.",
-    successMessage: "¡Gracias! Te hemos suscrito correctamente.",
-  },
-  abandonedCart: {
-    enabled: true,
-    delayHours: 24,
-    maxReminders: 2,
-    emailSubject: "Tu carrito te espera — Dizor",
-  },
-};
+const {
+  formatMarketingSettings,
+  formatPublicMarketingConfig,
+} = require("../utils/formatMarketingSettings");
 
 exports.getOrCreateSettings = async () => {
   let doc = await MarketingSettings.findOne({ key: "default" });
   if (!doc) {
-    doc = await MarketingSettings.create({ key: "default", ...DEFAULT_SETTINGS });
+    doc = await MarketingSettings.create({
+      key: "default",
+      popup: {
+        enabled: true,
+        title: "Bienvenido a Dizor",
+        text: "Suscríbete y entérate de nuevas colecciones artesanales.",
+        delaySeconds: 4,
+        showNewsletterForm: true,
+      },
+    });
   }
   return doc;
 };
 
+exports.getFormattedSettings = async () => {
+  const doc = await exports.getOrCreateSettings();
+  return formatMarketingSettings(doc);
+};
+
 exports.getPublicConfig = async () => {
-  const settings = await exports.getOrCreateSettings();
-  return {
-    popup: settings.popup,
-    newsletter: settings.newsletter,
-  };
+  const doc = await exports.getOrCreateSettings();
+  return formatPublicMarketingConfig(doc);
 };
 
 exports.subscribeNewsletter = async ({ email, name, source }) => {
+  if (!email?.trim() || !validator.isEmail(email.trim())) {
+    throw new AppError("Correo inválido", 400);
+  }
+
   const normalized = email.trim().toLowerCase();
   let sub = await NewsletterSubscriber.findOne({ email: normalized });
 

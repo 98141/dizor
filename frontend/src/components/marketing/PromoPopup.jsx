@@ -58,11 +58,10 @@ export default function PromoPopup() {
         <p className="promo-popup__text">{popup.text}</p>
         {popup.showNewsletterForm !== false ? (
           <NewsletterSignup
-            title=""
-            description=""
             source="popup"
             compact
             successMessage={config.newsletter?.successMessage}
+            onSuccess={close}
           />
         ) : popup.ctaHref ? (
           <a href={popup.ctaHref} className="promo-popup__cta" onClick={close}>

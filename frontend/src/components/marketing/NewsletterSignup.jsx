@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { subscribeNewsletter } from "@/services/marketingService";
+import {
+  subscribeNewsletter,
+  marketingError,
+} from "@/services/marketingService";
 
 export default function NewsletterSignup({
   title = "Newsletter Dizor",
@@ -9,6 +12,7 @@ export default function NewsletterSignup({
   successMessage = "¡Gracias! Te hemos suscrito.",
   source = "footer",
   compact = false,
+  onSuccess,
 }) {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -25,16 +29,17 @@ export default function NewsletterSignup({
       setMessage(data.message || successMessage);
       setEmail("");
       setName("");
+      onSuccess?.();
     } catch (err) {
       setStatus("error");
-      setMessage(err.response?.data?.message || "No se pudo completar la suscripción");
+      setMessage(marketingError(err, "No se pudo completar la suscripción"));
     }
   };
 
   return (
     <div className={`newsletter${compact ? " newsletter--compact" : ""}`}>
-      <h3 className="newsletter__title">{title}</h3>
-      <p className="newsletter__text">{description}</p>
+      {title ? <h3 className="newsletter__title">{title}</h3> : null}
+      {description ? <p className="newsletter__text">{description}</p> : null}
       <form className="newsletter__form" onSubmit={handleSubmit}>
         {!compact && (
           <input

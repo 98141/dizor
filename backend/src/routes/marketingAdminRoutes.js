@@ -11,14 +11,8 @@ router.use(authorizeRoles(...adminRoles));
 
 router.get("/settings", marketingAdminController.getSettings);
 router.patch("/settings", marketingAdminController.updateSettings);
-router.get("/newsletter", marketingAdminController.getSubscribers);
-router.delete(
-  "/newsletter/:id",
-  marketingAdminController.unsubscribeSubscriber
-);
 router.get("/newsletter/export", marketingAdminController.exportNewsletterCsv);
 router.get("/orders/export", marketingAdminController.exportOrdersCsv);
-router.get("/abandoned-carts", marketingAdminController.getAbandonedCarts);
 router.get(
   "/abandoned-carts/export",
   marketingAdminController.exportAbandonedCartsCsv
@@ -27,5 +21,11 @@ router.post(
   "/abandoned-carts/send-reminders",
   marketingAdminController.sendAbandonedReminders
 );
+router.get("/newsletter", marketingAdminController.getSubscribers);
+router.delete(
+  "/newsletter/:id",
+  marketingAdminController.unsubscribeSubscriber
+);
+router.get("/abandoned-carts", marketingAdminController.getAbandonedCarts);
 
 module.exports = router;

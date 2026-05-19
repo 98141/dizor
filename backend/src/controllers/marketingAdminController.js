@@ -6,11 +6,12 @@ const Order = require("../models/order");
 const { toCsv } = require("../utils/csvExport");
 const {
   getOrCreateSettings,
+  getFormattedSettings,
   sendDueAbandonedReminders,
 } = require("../services/marketingService");
 
 exports.getSettings = catchAsync(async (req, res) => {
-  const settings = await getOrCreateSettings();
+  const settings = await getFormattedSettings();
   res.status(200).json({ status: "success", settings });
 });
 
@@ -36,7 +37,7 @@ exports.updateSettings = catchAsync(async (req, res) => {
   res.status(200).json({
     status: "success",
     message: "Configuración de marketing actualizada",
-    settings,
+    settings: await getFormattedSettings(),
   });
 });
 

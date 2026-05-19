@@ -46,6 +46,22 @@
   font: inherit;
 }
 
+.site-footer .newsletter__btn {
+  background: #f5f3ef;
+  color: var(--color-primary, #3d4f3a);
+  font-weight: 600;
+}
+
+.site-footer .newsletter__btn:hover {
+  background: #fff;
+}
+
+.site-footer .newsletter__input {
+  background: #fff;
+  border-color: rgba(255, 255, 255, 0.35);
+  color: var(--color-text, #1f1f1f);
+}
+
 .newsletter__btn:disabled {
   opacity: 0.6;
 }
