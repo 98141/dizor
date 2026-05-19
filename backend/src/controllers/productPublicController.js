@@ -7,18 +7,30 @@ const Style = require("../models/style");
 const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/catchAsync");
 const { formatProductPublic } = require("../utils/productFormatter");
+const {
+  isValidObjectId,
+  pickQueryValue,
+  toObjectId,
+} = require("../utils/objectIdUtils");
 
 const populateList =
   "category weaveType style variants.size variants.color";
 const populateDetail =
   "category weaveType style variants.size variants.color";
 
+const assignObjectIdFilter = (filter, key, rawValue) => {
+  const value = pickQueryValue({ [key]: rawValue }, key);
+  if (!value || !isValidObjectId(value)) return;
+  filter[key] = toObjectId(value);
+};
+
 const buildProductFilter = (query) => {
   const filter = { isActive: true };
 
-  if (query.category) filter.category = query.category;
-  if (query.weaveType) filter.weaveType = query.weaveType;
-  if (query.style) filter.style = query.style;
+  assignObjectIdFilter(filter, "category", query.category);
+  assignObjectIdFilter(filter, "weaveType", query.weaveType);
+  assignObjectIdFilter(filter, "style", query.style);
+
   if (query.onPromotion === "true") filter.onPromotion = true;
   if (query.featured === "true") filter.isFeatured = true;
   if (query.isNew === "true") filter.isNew = true;
@@ -30,15 +42,24 @@ const buildProductFilter = (query) => {
   }
 
   if (query.q?.trim()) {
-    filter.$text = { $search: query.q.trim() };
+    const term = query.q.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    filter.$or = [
+      { name: { $regex: term, $options: "i" } },
+      { shortDescription: { $regex: term, $options: "i" } },
+      { slug: { $regex: term, $options: "i" } },
+    ];
   }
 
+  const sizeId = pickQueryValue(query, "size");
+  const colorId = pickQueryValue(query, "color");
   const variantMatch = { isActive: true };
-  if (query.size) variantMatch.size = query.size;
-  if (query.color) variantMatch.color = query.color;
+  const sizeOid = toObjectId(sizeId);
+  const colorOid = toObjectId(colorId);
+  if (sizeOid) variantMatch.size = sizeOid;
+  if (colorOid) variantMatch.color = colorOid;
   if (query.inStock === "true") variantMatch.stock = { $gt: 0 };
 
-  if (query.size || query.color || query.inStock === "true") {
+  if (sizeOid || colorOid || query.inStock === "true") {
     filter.variants = { $elemMatch: variantMatch };
   }
 
@@ -157,25 +178,39 @@ exports.getProductBySlug = catchAsync(async (req, res, next) => {
     product = await Product.findById(slug).populate(populateDetail);
   }
 
+  if (!product && isValidObjectId(slug)) {
+    const byIdFilter = { _id: slug };
+    if (!staffPreview) byIdFilter.isActive = true;
+    product = await Product.findOne(byIdFilter).populate(populateDetail);
+  }
+
   if (!product) {
     return next(new AppError("Producto no encontrado", 404));
   }
 
   if (product.isActive) {
-    product.viewsCount += 1;
-    await product.save({ validateBeforeSave: false });
+    await Product.updateOne({ _id: product._id }, { $inc: { viewsCount: 1 } });
   }
+
+  const categoryId = product.category?._id || product.category;
+  const styleId = product.style?._id || product.style;
 
   const relatedFilter = {
     isActive: true,
     _id: { $ne: product._id },
-    $or: [{ category: product.category }, { style: product.style }],
+    $or: [
+      ...(categoryId ? [{ category: categoryId }] : []),
+      ...(styleId ? [{ style: styleId }] : []),
+    ],
   };
 
-  const related = await Product.find(relatedFilter)
-    .populate(populateList)
-    .sort({ salesCount: -1 })
-    .limit(4);
+  const related =
+    relatedFilter.$or?.length > 0
+      ? await Product.find(relatedFilter)
+          .populate(populateList)
+          .sort({ salesCount: -1 })
+          .limit(4)
+      : [];
 
   const formatted = formatProductPublic(product);
 

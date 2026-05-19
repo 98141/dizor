@@ -17,7 +17,7 @@ exports.formatProductPublic = (product) => {
     : doc.salePrice;
 
   return {
-    id: doc._id,
+    id: String(doc._id),
     name: doc.name,
     slug: doc.slug,
     shortDescription: doc.shortDescription,

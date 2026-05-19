@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const catchAsync = require("../utils/catchAsync");
+const { isValidObjectId } = require("../utils/objectIdUtils");
 
 exports.optionalAuth = catchAsync(async (req, res, next) => {
   let token;
@@ -20,7 +21,10 @@ exports.optionalAuth = catchAsync(async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id);
+    const user =
+      decoded?.id && isValidObjectId(decoded.id)
+        ? await User.findById(decoded.id)
+        : null;
 
     if (user && user.isActive) {
       req.user = {

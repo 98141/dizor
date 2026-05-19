@@ -20,6 +20,7 @@ function CatalogoContent() {
   const [totalPages, setTotalPages] = useState(1);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [draftFilters, setDraftFilters] = useState({});
+  const [loadError, setLoadError] = useState("");
 
   const buildParamsFromUrl = useCallback(() => {
     const params = {};
@@ -46,6 +47,7 @@ function CatalogoContent() {
 
   const loadProducts = useCallback(async () => {
     setLoading(true);
+    setLoadError("");
     try {
       const params = buildParamsFromUrl();
       const data = await getProducts({
@@ -53,12 +55,17 @@ function CatalogoContent() {
         page: searchParams.get("page") || 1,
         limit: 12,
       });
-      setProducts(data.products);
+      setProducts(data.products || []);
       setTotal(data.total);
       setPage(data.page);
       setTotalPages(data.totalPages);
-    } catch {
+    } catch (err) {
       setProducts([]);
+      setTotal(0);
+      setLoadError(
+        err.response?.data?.message ||
+          "No se pudo cargar el catálogo. Revisa que el backend esté activo."
+      );
     } finally {
       setLoading(false);
     }
@@ -73,18 +80,21 @@ function CatalogoContent() {
     loadProducts();
   }, [searchParams, loadProducts, buildParamsFromUrl]);
 
+  const pushFiltersToUrl = (source) => {
+    const params = new URLSearchParams();
+    Object.entries(source).forEach(([k, v]) => {
+      if (v) params.set(k, String(v));
+    });
+    router.push(`/catalogo?${params.toString()}`);
+    setFiltersOpen(false);
+  };
+
   const filterProps = {
     filters: filterOptions,
     values: draftFilters,
-    onChange: (key, value) =>
-      setDraftFilters((prev) => ({ ...prev, [key]: value })),
-    onApply: () => {
-      const params = new URLSearchParams();
-      Object.entries(draftFilters).forEach(([k, v]) => {
-        if (v) params.set(k, v);
-      });
-      router.push(`/catalogo?${params.toString()}`);
-      setFiltersOpen(false);
+    onChange: (next) => setDraftFilters(next),
+    onApply: (nextFilters) => {
+      pushFiltersToUrl(nextFilters || draftFilters);
     },
     onClear: () => {
       setDraftFilters({});
@@ -108,11 +118,15 @@ function CatalogoContent() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const pageTitle = searchParams.get("featured")
-    ? "Destacados"
-    : searchParams.get("isNew")
-      ? "Novedades"
-      : "Catálogo";
+  const searchQuery = searchParams.get("q")?.trim();
+
+  const pageTitle = searchQuery
+    ? `Resultados: “${searchQuery}”`
+    : searchParams.get("featured")
+      ? "Destacados"
+      : searchParams.get("isNew")
+        ? "Novedades"
+        : "Catálogo";
 
   return (
     <div className="catalog-layout">
@@ -152,11 +166,17 @@ function CatalogoContent() {
         </div>
 
         <div>
-          {loading ? (
+          {loadError ? (
+            <p className="catalog-empty" style={{ color: "#b33" }}>
+              {loadError}
+            </p>
+          ) : loading ? (
             <p className="auth-loading">Cargando catálogo...</p>
           ) : products.length === 0 ? (
             <p className="catalog-empty">
-              No encontramos productos con estos filtros.
+              {searchQuery
+                ? `No hay resultados para “${searchQuery}”.`
+                : "No encontramos productos con estos filtros."}
             </p>
           ) : (
             <div className="products-grid">

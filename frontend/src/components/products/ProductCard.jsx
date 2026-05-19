@@ -8,10 +8,14 @@ export default function ProductCard({ product }) {
     product.discountPercent > 0 &&
     product.effectivePrice < product.salePrice;
 
+  const productHref = product.slug
+    ? `/producto/${encodeURIComponent(product.slug)}`
+    : `/producto/${product.id}`;
+
   return (
     <article className="product-card">
       <Link
-        href={`/producto/${encodeURIComponent(product.slug)}`}
+        href={productHref}
         className="product-card__image-wrap"
       >
         <Image
@@ -42,7 +46,7 @@ export default function ProductCard({ product }) {
           {product.weaveType?.name} · {product.style?.name}
         </p>
         <h2 className="product-card__title">
-          <Link href={`/producto/${encodeURIComponent(product.slug)}`}>
+          <Link href={productHref}>
             {product.name}
           </Link>
         </h2>

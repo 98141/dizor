@@ -16,6 +16,7 @@ export const getFeaturedProducts = async (limit = 8) => {
 };
 
 export const getProductBySlug = async (slug) => {
-  const res = await api.get(`/products/${slug}`);
+  const safeSlug = encodeURIComponent(String(slug || "").trim());
+  const res = await api.get(`/products/${safeSlug}`);
   return res.data;
 };

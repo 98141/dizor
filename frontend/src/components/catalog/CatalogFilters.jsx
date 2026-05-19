@@ -1,28 +1,54 @@
 "use client";
 
-function FilterPanel({ filters, values, onChange, onApply, onClear, className = "" }) {
+function mergeFilterValues(prev, key, value) {
+  const next = { ...prev };
+  const normalized = value ? String(value) : "";
+  if (normalized) next[key] = normalized;
+  else delete next[key];
+  return next;
+}
+
+function FilterPanel({
+  filters,
+  values,
+  onChange,
+  onApply,
+  onClear,
+  className = "",
+  instantApply = false,
+  fieldNamePrefix = "catalog",
+}) {
   if (!filters) return null;
+
+  const handleChange = (key, value) => {
+    const next = mergeFilterValues(values, key, value);
+    onChange(next);
+    if (instantApply) onApply(next);
+  };
 
   const renderGroup = (title, key, items) => (
     <div key={key}>
       <h3 className="catalog-filters__group-title">{title}</h3>
       <div className="catalog-filters__options">
-        {items.map((item) => (
-          <label key={item._id} className="catalog-filters__option">
-            <input
-              type="radio"
-              name={key}
-              checked={values[key] === item._id}
-              onChange={() => onChange(key, item._id)}
-            />
-            {item.name}
-          </label>
-        ))}
+        {items.map((item) => {
+          const itemId = String(item._id);
+          return (
+            <label key={itemId} className="catalog-filters__option">
+              <input
+                type="radio"
+                name={`${fieldNamePrefix}-${key}`}
+                checked={String(values[key] || "") === itemId}
+                onChange={() => handleChange(key, itemId)}
+              />
+              {item.name}
+            </label>
+          );
+        })}
         {values[key] && (
           <button
             type="button"
             className="catalog-filters__btn"
-            onClick={() => onChange(key, "")}
+            onClick={() => handleChange(key, "")}
           >
             Quitar
           </button>
@@ -46,14 +72,14 @@ function FilterPanel({ filters, values, onChange, onApply, onClear, className = 
             type="number"
             placeholder="Precio mínimo"
             value={values.minPrice || ""}
-            onChange={(e) => onChange("minPrice", e.target.value)}
+            onChange={(e) => handleChange("minPrice", e.target.value)}
             className="auth-field__input"
           />
           <input
             type="number"
             placeholder="Precio máximo"
             value={values.maxPrice || ""}
-            onChange={(e) => onChange("maxPrice", e.target.value)}
+            onChange={(e) => handleChange("maxPrice", e.target.value)}
             className="auth-field__input"
           />
         </div>
@@ -63,7 +89,9 @@ function FilterPanel({ filters, values, onChange, onApply, onClear, className = 
         <input
           type="checkbox"
           checked={values.inStock === "true"}
-          onChange={(e) => onChange("inStock", e.target.checked ? "true" : "")}
+          onChange={(e) =>
+            handleChange("inStock", e.target.checked ? "true" : "")
+          }
         />
         Solo disponibles
       </label>
@@ -73,20 +101,22 @@ function FilterPanel({ filters, values, onChange, onApply, onClear, className = 
           type="checkbox"
           checked={values.onPromotion === "true"}
           onChange={(e) =>
-            onChange("onPromotion", e.target.checked ? "true" : "")
+            handleChange("onPromotion", e.target.checked ? "true" : "")
           }
         />
         En promoción
       </label>
 
       <div className="catalog-filters__actions">
-        <button
-          type="button"
-          className="catalog-filters__btn catalog-filters__btn--primary"
-          onClick={onApply}
-        >
-          Aplicar
-        </button>
+        {!instantApply && (
+          <button
+            type="button"
+            className="catalog-filters__btn catalog-filters__btn--primary"
+            onClick={() => onApply({ ...values })}
+          >
+            Aplicar
+          </button>
+        )}
         <button type="button" className="catalog-filters__btn" onClick={onClear}>
           Limpiar
         </button>
@@ -122,11 +152,18 @@ export default function CatalogFilters({
         onApply={onApply}
         onClear={onClear}
         className={isOpen ? "catalog-filters--open" : ""}
+        fieldNamePrefix="catalog-mobile"
       />
     </>
   );
 }
 
 export function CatalogFiltersSidebar(props) {
-  return <FilterPanel {...props} />;
+  return (
+    <FilterPanel
+      {...props}
+      instantApply
+      fieldNamePrefix="catalog-desktop"
+    />
+  );
 }

@@ -54,12 +54,16 @@ export const AuthProvider = ({ children }) => {
     try {
       const data = await getMe();
       setUser(data.user);
-    } catch {
-      try {
-        await refreshSession();
-        const data = await getMe();
-        setUser(data.user);
-      } catch {
+    } catch (err) {
+      if (err.response?.status === 401) {
+        try {
+          await refreshSession();
+          const data = await getMe();
+          setUser(data.user);
+        } catch {
+          setUser(null);
+        }
+      } else {
         setUser(null);
       }
     } finally {
