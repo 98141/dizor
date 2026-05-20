@@ -31,6 +31,7 @@ const adminFinanceRoutes = require("./routes/adminFinanceRoutes");
 const wompiWebhookRoutes = require("./routes/wompiWebhookRoutes");
 const adminCouponRoutes = require("./routes/adminCouponRoutes");
 const adminPosRoutes = require("./routes/adminPosRoutes");
+const adminAlertRoutes = require("./routes/adminAlertRoutes");
 
 const app = express();
 
@@ -127,6 +128,7 @@ app.use("/api/admin/finance", adminFinanceRoutes);
 app.use("/api/webhooks", wompiWebhookRoutes);
 app.use("/api/admin/coupons", adminCouponRoutes);
 app.use("/api/admin/pos", adminPosRoutes);
+app.use("/api/admin/alerts", adminAlertRoutes);
 
 app.use((req, res, next) => {
   next(new AppError(`Ruta no encontrada: ${req.originalUrl}`, 404));
