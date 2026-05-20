@@ -63,7 +63,7 @@ const productHistorySchema = new mongoose.Schema(
     },
     referenceType: {
       type: String,
-      enum: ["order", "admin", "system", null],
+      enum: ["order", "admin", "system", "pos", null],
       default: null,
     },
     referenceId: {

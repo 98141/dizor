@@ -2,6 +2,11 @@ const PosOrder = require("../models/posOrder");
 const Product = require("../models/product");
 const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/catchAsync");
+const {
+  logPosSale,
+  logPosVoidReturn,
+  safeLogProductHistory,
+} = require("../services/productHistoryService");
 
 const formatMoney = (n) =>
   new Intl.NumberFormat("es-CO", {
@@ -106,14 +111,17 @@ exports.createPosSale = catchAsync(async (req, res, next) => {
 
     safeItems.push({
       productId: product._id,
+      productSlug: product.slug || null,
       variantId: variant._id,
       productName: product.name,
-      sizeName: item.sizeName || "",
-      colorName: item.colorName || "",
+      sizeName: item.sizeName || variant.size?.name || "",
+      colorName: item.colorName || variant.color?.name || "",
       sku: variant.sku || "",
       quantity: qty,
       unitPrice,
       lineTotal,
+      stockBefore: variant.stock,
+      stockAfter: variant.stock - qty,
     });
   }
 
@@ -149,6 +157,28 @@ exports.createPosSale = catchAsync(async (req, res, next) => {
   });
 
   await sale.populate("soldBy", "name");
+
+  // Log each item to inventory history
+  for (const item of safeItems) {
+    safeLogProductHistory(
+      logPosSale({
+        productId: item.productId,
+        productName: item.productName,
+        productSlug: item.productSlug,
+        variantId: item.variantId,
+        sku: item.sku,
+        sizeName: item.sizeName,
+        colorName: item.colorName,
+        quantity: item.quantity,
+        stockBefore: item.stockBefore,
+        stockAfter: item.stockAfter,
+        posOrderNumber: sale.posOrderNumber,
+        posOrderId: sale._id,
+        user: req.user,
+        unitPrice: item.unitPrice,
+      })
+    );
+  }
 
   res.status(201).json({ sale });
 });
@@ -190,6 +220,16 @@ exports.voidPosSale = catchAsync(async (req, res, next) => {
   sale.voidReason = (req.body.reason || "").trim();
   await sale.save();
 
+  // Fetch current stocks before restoring (for before/after tracking)
+  const stockSnapshots = {};
+  for (const item of sale.items) {
+    const prod = await Product.findOne(
+      { _id: item.productId, "variants._id": item.variantId },
+      { "variants.$": 1 }
+    ).lean();
+    stockSnapshots[String(item.variantId)] = prod?.variants?.[0]?.stock ?? 0;
+  }
+
   await Promise.all(
     sale.items.map((item) =>
       Product.findOneAndUpdate(
@@ -198,6 +238,28 @@ exports.voidPosSale = catchAsync(async (req, res, next) => {
       )
     )
   );
+
+  // Log each item return to inventory history
+  for (const item of sale.items) {
+    const stockBefore = stockSnapshots[String(item.variantId)] ?? 0;
+    safeLogProductHistory(
+      logPosVoidReturn({
+        productId: item.productId,
+        productName: item.productName,
+        productSlug: null,
+        variantId: item.variantId,
+        sku: item.sku,
+        sizeName: item.sizeName,
+        colorName: item.colorName,
+        quantity: item.quantity,
+        stockBefore,
+        stockAfter: stockBefore + item.quantity,
+        posOrderNumber: sale.posOrderNumber,
+        posOrderId: sale._id,
+        user: req.user,
+      })
+    );
+  }
 
   res.json({ sale });
 });

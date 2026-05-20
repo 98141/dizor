@@ -11,10 +11,22 @@ export const metadata = {
   },
   description:
     "Sombreros artesanales en palma de iraca de Sandoná, Nariño. Tejidos Brisa, Común y Súper fino. Envíos a todo Colombia.",
+  keywords: [
+    "sombreros artesanales Colombia",
+    "sombrero palma de iraca",
+    "sombreros Sandoná",
+    "artesanías Nariño",
+    "sombreros tejidos a mano",
+    "sombreros Dizor",
+  ],
   openGraph: {
     title: "Dizor | Sombreros artesanales de Sandoná",
     description:
       "Sombreros artesanales en palma de iraca de Sandoná, Nariño. Tejidos Brisa, Común y Súper fino.",
+    type: "website",
+  },
+  alternates: {
+    canonical: "/",
   },
 };
 
@@ -100,8 +112,29 @@ export default async function HomePage() {
       }
     : undefined;
 
+  const homePageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${process.env.NEXT_PUBLIC_SITE_URL || "https://dizor.com.co"}/#homepage`,
+    name: "Dizor | Sombreros artesanales de Sandoná",
+    description: "Sombreros artesanales en palma de iraca de Sandoná, Nariño, Colombia.",
+    url: process.env.NEXT_PUBLIC_SITE_URL || "https://dizor.com.co",
+    isPartOf: { "@id": `${process.env.NEXT_PUBLIC_SITE_URL || "https://dizor.com.co"}/#website` },
+    about: { "@id": `${process.env.NEXT_PUBLIC_SITE_URL || "https://dizor.com.co"}/#organization` },
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Inicio", item: process.env.NEXT_PUBLIC_SITE_URL || "https://dizor.com.co" },
+      ],
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homePageSchema) }}
+      />
       {/* ─── HERO ─── */}
       <section className="home-hero" style={heroStyle}>
         <div className="home-hero__inner">

@@ -27,7 +27,40 @@ import "@/styles/pages/not-found.css";
 import "@/styles/pages/admin-pos.css";
 import "@/styles/pages/admin-alertas.css";
 
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://dizor.com.co").replace(/\/$/, "");
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": `${SITE_URL}/#organization`,
+  name: "Dizor",
+  url: SITE_URL,
+  description: "Sombreros artesanales en palma de iraca de Sandoná, Nariño, Colombia. Tejidos Brisa, Común y Súper fino.",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Sandoná",
+    addressRegion: "Nariño",
+    addressCountry: "CO",
+  },
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${SITE_URL}/#website`,
+  url: SITE_URL,
+  name: "Dizor",
+  inLanguage: "es-CO",
+  publisher: { "@id": `${SITE_URL}/#organization` },
+  potentialAction: {
+    "@type": "SearchAction",
+    target: { "@type": "EntryPoint", urlTemplate: `${SITE_URL}/catalogo?q={search_term_string}` },
+    "query-input": "required name=search_term_string",
+  },
+};
+
 export const metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Dizor | Sombreros artesanales de Sandoná",
     template: "%s | Dizor",
@@ -41,6 +74,12 @@ export const metadata = {
     "Nariño",
     "Colombia",
     "sombrero hecho a mano",
+    "sombreros colombianos",
+    "artesanías Colombia",
+    "sombrero iraca",
+    "comprar sombrero artesanal",
+    "sombreros al por mayor",
+    "sombreros personalizados",
   ],
   openGraph: {
     type: "website",
@@ -56,6 +95,7 @@ export const metadata = {
   robots: {
     index: true,
     follow: true,
+    googleBot: { index: true, follow: true },
   },
 };
 
@@ -63,6 +103,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="es">
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
         <AuthProvider>
           <CartProvider>{children}</CartProvider>
         </AuthProvider>

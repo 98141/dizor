@@ -354,6 +354,127 @@
   border: 1px solid var(--color-border);
 }
 
+/* ── Product thumbnail ─────────────────────────────────────── */
+.product-thumb-cell {
+  width: 48px;
+  padding: 0.3rem 0.4rem !important;
+}
+
+.product-thumb {
+  display: block;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+.product-thumb--empty {
+  background: var(--color-bg);
+}
+
+/* ── Product name in list ──────────────────────────────────── */
+.product-name-link {
+  font-weight: 500;
+}
+
+.product-low-stock-hint {
+  font-size: 0.72rem;
+  color: #b45309;
+  font-weight: 500;
+}
+
+/* ── Toggle active/inactive button ────────────────────────── */
+.toggle-active-btn {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+}
+
+.toggle-active-btn:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+.toggle-active-btn--on {
+  background: #dcfce7;
+  color: #166534;
+  border-color: #bbf7d0;
+}
+
+.toggle-active-btn--on:hover:not(:disabled) {
+  background: #bbf7d0;
+}
+
+.toggle-active-btn--off {
+  background: #f3f4f6;
+  color: #6b7280;
+  border-color: #e5e7eb;
+}
+
+.toggle-active-btn--off:hover:not(:disabled) {
+  background: #fee2e2;
+  color: #991b1b;
+  border-color: #fecaca;
+}
+
+/* ── Variants expanded row ─────────────────────────────────── */
+.product-variants-expanded-row {
+  background: #f8fafc;
+}
+
+.variants-panel {
+  padding: 0.75rem 1rem 0.9rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.variants-panel__title {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin: 0 0 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.variants-mini-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.variants-mini-table th {
+  padding: 0.25rem 0.6rem;
+  text-align: left;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  border-bottom: 1px solid var(--color-border);
+  background: transparent;
+}
+
+.variants-mini-table td {
+  padding: 0.3rem 0.6rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.variants-mini-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ── Product list table tweak ──────────────────────────────── */
+.product-list-table td {
+  vertical-align: middle;
+}
+
 @media (min-width: 640px) {
   .admin-form__row {
     grid-template-columns: repeat(2, 1fr);

@@ -34,9 +34,19 @@ export async function generateMetadata({ params }) {
   return {
     title: p.name,
     description,
+    keywords: [
+      p.name,
+      "sombrero artesanal",
+      "palma de iraca",
+      "Sandoná",
+      "Nariño",
+      "Colombia",
+      ...(p.weaveType?.name ? [p.weaveType.name] : []),
+    ].filter(Boolean),
     openGraph: {
       title: p.name,
       description,
+      type: "og:product",
       images: p.mainImage
         ? [{ url: p.mainImage, width: 800, height: 1000, alt: p.name }]
         : [],
@@ -47,11 +57,72 @@ export async function generateMetadata({ params }) {
       description,
       images: p.mainImage ? [p.mainImage] : [],
     },
+    alternates: {
+      canonical: `/producto/${encodeURIComponent(slug)}`,
+    },
   };
 }
 
 export default async function ProductoPage({ params }) {
   const { slug: slugParam } = await params;
   const slug = Array.isArray(slugParam) ? slugParam[0] : slugParam;
-  return <ProductoClient slug={slug} />;
+
+  const SITE = (process.env.NEXT_PUBLIC_SITE_URL || "https://dizor.com.co").replace(/\/$/, "");
+  const data = await fetchProductMeta(slug);
+  const p = data?.product;
+
+  const prices = (p?.variants || []).map((v) => v.price).filter(Boolean);
+  const minPrice = prices.length ? Math.min(...prices) : null;
+
+  const productSchema = p
+    ? {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        name: p.name,
+        description:
+          p.shortDescription ||
+          `Sombrero artesanal ${p.name}. Palma de iraca tejida a mano en Sandoná, Nariño, Colombia.`,
+        image: p.mainImage ? [p.mainImage] : undefined,
+        brand: { "@type": "Brand", name: "Dizor" },
+        url: `${SITE}/producto/${encodeURIComponent(slug)}`,
+        ...(minPrice != null && {
+          offers: {
+            "@type": "Offer",
+            priceCurrency: "COP",
+            price: minPrice,
+            availability: "https://schema.org/InStock",
+            url: `${SITE}/producto/${encodeURIComponent(slug)}`,
+            seller: { "@type": "Organization", name: "Dizor" },
+          },
+        }),
+      }
+    : null;
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Inicio", item: SITE },
+      { "@type": "ListItem", position: 2, name: "Catálogo", item: `${SITE}/catalogo` },
+      ...(p
+        ? [{ "@type": "ListItem", position: 3, name: p.name, item: `${SITE}/producto/${encodeURIComponent(slug)}` }]
+        : []),
+    ],
+  };
+
+  return (
+    <>
+      {productSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+        />
+      )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <ProductoClient slug={slug} />
+    </>
+  );
 }

@@ -4,6 +4,7 @@ const User = require("../models/user");
 const SpecialRequest = require("../models/specialRequest");
 const NewsletterSubscriber = require("../models/newsletterSubscriber");
 const AuditLog = require("../models/AuditLog");
+const Coupon = require("../models/coupon");
 const catchAsync = require("../utils/catchAsync");
 
 const startOfToday = () => {
@@ -34,11 +35,7 @@ const countProductStockHealth = async () => {
     else if (total <= 5) lowStock += 1;
   });
 
-  return {
-    active: products.length,
-    outOfStock,
-    lowStock,
-  };
+  return { active: products.length, outOfStock, lowStock };
 };
 
 const formatAuditPreview = (log) => ({
@@ -55,6 +52,8 @@ const formatAuditPreview = (log) => ({
 exports.getDashboard = catchAsync(async (req, res) => {
   const today = startOfToday();
   const monthStart = startOfMonth();
+  const now = new Date();
+  const in3Days = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
 
   const [
     ordersTotal,
@@ -74,6 +73,9 @@ exports.getDashboard = catchAsync(async (req, res) => {
     newsletterActive,
     auditToday,
     recentActivity,
+    recentOrders,
+    activeCoupons,
+    expiringCoupons,
   ] = await Promise.all([
     Order.countDocuments(),
     Order.countDocuments({
@@ -111,11 +113,19 @@ exports.getDashboard = catchAsync(async (req, res) => {
     AuditLog.countDocuments({ createdAt: { $gte: today } }),
     AuditLog.find()
       .sort({ createdAt: -1 })
-      .limit(10)
-      .select(
-        "action module userEmail role summary success createdAt"
-      )
+      .limit(7)
+      .select("action module userEmail role summary success createdAt")
       .lean(),
+    Order.find()
+      .sort({ createdAt: -1 })
+      .limit(8)
+      .select("orderNumber buyer total orderStatus paymentStatus paymentMethod createdAt")
+      .lean(),
+    Coupon.countDocuments({ isActive: true }),
+    Coupon.countDocuments({
+      isActive: true,
+      expiresAt: { $gte: now, $lte: in3Days },
+    }),
   ]);
 
   const revenueMonth = revenueMonthAgg[0]?.total || 0;
@@ -149,6 +159,20 @@ exports.getDashboard = catchAsync(async (req, res) => {
       marketing: {
         newsletterSubscribers: newsletterActive,
       },
+      coupons: {
+        active: activeCoupons,
+        expiringSoon: expiringCoupons,
+      },
+      recentOrders: recentOrders.map((o) => ({
+        id: o._id,
+        orderNumber: o.orderNumber,
+        buyerName: o.buyer?.name || "—",
+        total: o.total,
+        orderStatus: o.orderStatus,
+        paymentStatus: o.paymentStatus,
+        paymentMethod: o.paymentMethod,
+        createdAt: o.createdAt,
+      })),
       audit: {
         eventsToday: auditToday,
         recent: recentActivity.map(formatAuditPreview),

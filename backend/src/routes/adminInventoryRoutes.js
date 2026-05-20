@@ -11,6 +11,7 @@ router.use(protect);
 router.use(authorizeRoles(...adminRoles));
 
 router.get("/history/stats", productHistoryAdminController.getStats);
+router.get("/history/export-pdf", productHistoryAdminController.exportPdf);
 router.get("/history", productHistoryAdminController.getHistory);
 
 module.exports = router;
