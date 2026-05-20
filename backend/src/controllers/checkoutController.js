@@ -2,6 +2,7 @@ const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/catchAsync");
 const Order = require("../models/order");
 const Cart = require("../models/cart");
+const Coupon = require("../models/coupon");
 const {
   resolveCartItems,
   calculateTotals,
@@ -104,6 +105,7 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
     paymentMethod,
     carrier,
     customerNotes,
+    couponCode,
   } = req.body;
 
   if (!buyer?.name || !buyer?.email || !buyer?.phone) {
@@ -130,6 +132,33 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
     settings,
     shippingAddress.department
   );
+
+  // Aplicar cupón si se envió uno
+  if (couponCode) {
+    const coupon = await Coupon.findOne({
+      code: couponCode.trim().toUpperCase(),
+      isActive: true,
+    });
+
+    if (coupon) {
+      const notExpired = !coupon.expiresAt || coupon.expiresAt > new Date();
+      const hasUses = coupon.maxUses === null || coupon.usedCount < coupon.maxUses;
+      const meetsMin = totals.subtotal >= coupon.minOrderAmount;
+
+      if (notExpired && hasUses && meetsMin) {
+        const discount =
+          coupon.type === "percentage"
+            ? Math.round(totals.subtotal * (coupon.value / 100))
+            : Math.min(coupon.value, totals.subtotal);
+
+        totals.discountTotal = discount;
+        totals.total = totals.subtotal - discount + totals.taxTotal + totals.shippingCost;
+
+        coupon.usedCount += 1;
+        await coupon.save();
+      }
+    }
+  }
 
   const isGuest = !req.user;
 

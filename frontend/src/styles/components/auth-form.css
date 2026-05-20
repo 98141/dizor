@@ -88,6 +88,37 @@
   cursor: not-allowed;
 }
 
+/* ── Password toggle ─────────────────────────────────── */
+.auth-field__input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.auth-field__input--pwd {
+  padding-right: 2.75rem;
+}
+
+.auth-field__toggle-pwd {
+  position: absolute;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s;
+  line-height: 0;
+}
+
+.auth-field__toggle-pwd:hover {
+  color: var(--color-text);
+}
+
 .auth-loading {
   text-align: center;
   padding: var(--space-2xl);

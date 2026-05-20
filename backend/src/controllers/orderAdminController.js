@@ -274,6 +274,78 @@ exports.updateShipping = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.exportOrdersPdf = catchAsync(async (req, res) => {
+  const PDFDocument = require("pdfkit");
+
+  const filter = {};
+  if (req.query.orderStatus) filter.orderStatus = req.query.orderStatus;
+  if (req.query.paymentStatus) filter.paymentStatus = req.query.paymentStatus;
+  if (req.query.q?.trim()) {
+    const q = req.query.q.trim();
+    filter.$or = [
+      { orderNumber: { $regex: q, $options: "i" } },
+      { "buyer.name": { $regex: q, $options: "i" } },
+      { "buyer.email": { $regex: q, $options: "i" } },
+    ];
+  }
+  if (req.query.from || req.query.to) {
+    filter.createdAt = {};
+    if (req.query.from) filter.createdAt.$gte = new Date(req.query.from);
+    if (req.query.to) filter.createdAt.$lte = new Date(req.query.to);
+  }
+
+  const orders = await Order.find(filter).sort({ createdAt: -1 }).limit(500);
+
+  const STATUS_ES = {
+    pendiente: "Pendiente",
+    pago_pendiente: "Pago pendiente",
+    pagado: "Pagado",
+    en_preparacion: "En preparación",
+    enviado: "Enviado",
+    entregado: "Entregado",
+    cancelado: "Cancelado",
+    rechazado: "Rechazado",
+    devuelto: "Devuelto",
+  };
+  const PM_ES = { wompi: "Wompi", nequi_manual: "Nequi", contra_entrega: "Contraentrega" };
+  const fmt = (n) =>
+    new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(n || 0);
+
+  const doc = new PDFDocument({ margin: 40, size: "A4" });
+  const chunks = [];
+  doc.on("data", (c) => chunks.push(c));
+
+  await new Promise((resolve, reject) => {
+    doc.on("end", resolve);
+    doc.on("error", reject);
+
+    doc.fontSize(16).text("Listado de pedidos — Dizor", { align: "center" });
+    doc.fontSize(10).text(
+      `Generado: ${new Date().toLocaleString("es-CO")}   Total: ${orders.length} pedido(s)`,
+      { align: "center" }
+    );
+    doc.moveDown(1);
+
+    for (const order of orders) {
+      const date = new Date(order.createdAt).toLocaleDateString("es-CO", {
+        day: "2-digit", month: "short", year: "numeric",
+      });
+      doc
+        .fontSize(10)
+        .text(
+          `${order.orderNumber}  ·  ${date}  ·  ${order.buyer.name}  ·  ${STATUS_ES[order.orderStatus] || order.orderStatus}  ·  ${PM_ES[order.paymentMethod] || order.paymentMethod}  ·  ${fmt(order.total)}`
+        );
+    }
+
+    doc.end();
+  });
+
+  const filename = `dizor-pedidos-${Date.now()}.pdf`;
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+  res.send(Buffer.concat(chunks));
+});
+
 exports.assignOrder = catchAsync(async (req, res, next) => {
   if (!isAdmin(req.user.role)) {
     return next(new AppError("Solo administradores pueden asignar pedidos", 403));

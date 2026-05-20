@@ -110,7 +110,7 @@ export default function FinanceDashboard() {
     return (
       <div className="finance-dashboard">
         <p style={{ color: "#b33" }}>{error}</p>
-        <button type="button" className="btn btn--secondary" onClick={load}>
+        <button type="button" className="admin-btn" onClick={load}>
           Reintentar
         </button>
       </div>
@@ -146,7 +146,7 @@ export default function FinanceDashboard() {
           <div className="finance-export-btns">
             <button
               type="button"
-              className="btn btn--secondary btn--sm"
+              className="admin-btn admin-btn--sm"
               disabled={!!exporting}
               onClick={() => handleExport("csv")}
             >
@@ -154,7 +154,7 @@ export default function FinanceDashboard() {
             </button>
             <button
               type="button"
-              className="btn btn--secondary btn--sm"
+              className="admin-btn admin-btn--sm"
               disabled={!!exporting}
               onClick={() => handleExport("xlsx")}
             >
@@ -162,7 +162,7 @@ export default function FinanceDashboard() {
             </button>
             <button
               type="button"
-              className="btn btn--secondary btn--sm"
+              className="admin-btn admin-btn--sm"
               disabled={!!exporting}
               onClick={() => handleExport("pdf")}
             >

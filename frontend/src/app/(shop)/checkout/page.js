@@ -32,7 +32,7 @@ const CARRIER_LABELS = {
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { items, hydrated, toApiItems, clearCart } = useCart();
+  const { items, hydrated, toApiItems, clearCart, appliedCoupon, clearCoupon } = useCart();
   const { user, isAuthenticated } = useAuth();
 
   const [step, setStep] = useState(0);
@@ -143,8 +143,10 @@ export default function CheckoutPage() {
         paymentMethod,
         carrier,
         customerNotes,
+        couponCode: appliedCoupon?.code || null,
       });
       clearCart();
+      clearCoupon();
       setSuccess(data.order);
 
       if (data.paymentUrl) {
@@ -418,12 +420,22 @@ export default function CheckoutPage() {
                   <span>{formatCOP(totals.taxTotal)}</span>
                 </div>
               )}
+              {appliedCoupon && (
+                <div className="checkout-review-item" style={{ color: "var(--color-success)" }}>
+                  <span>Cupón ({appliedCoupon.code})</span>
+                  <span>−{formatCOP(appliedCoupon.discountAmount)}</span>
+                </div>
+              )}
               <div
                 className="checkout-review-item"
                 style={{ fontWeight: 600, fontSize: "1.1rem" }}
               >
                 <span>Total</span>
-                <span>{formatCOP(totals.total)}</span>
+                <span>
+                  {formatCOP(
+                    totals.total - (appliedCoupon?.discountAmount || 0)
+                  )}
+                </span>
               </div>
             </>
           )}

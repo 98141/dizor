@@ -1,4 +1,5 @@
 const Cart = require("../models/cart");
+const Coupon = require("../models/coupon");
 const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/catchAsync");
 const { resolveCartItems } = require("../services/cartService");
@@ -11,13 +12,72 @@ exports.validateCart = catchAsync(async (req, res) => {
   const settings = await getStoreSettings();
   const subtotal = resolved.reduce((s, i) => s + i.lineTotal, 0);
   const shippingCost = getShippingCost(settings, subtotal, department);
+  const taxTotal = settings.taxEnabled
+    ? Math.round(subtotal * (settings.taxRate / 100))
+    : 0;
+  const total = subtotal + taxTotal + shippingCost;
 
   res.status(200).json({
     status: "success",
     items: resolved,
     subtotal,
+    taxTotal,
     shippingCost,
+    total,
+    taxEnabled: settings.taxEnabled,
+    taxRate: settings.taxRate,
     itemCount: resolved.reduce((s, i) => s + i.quantity, 0),
+  });
+});
+
+exports.validateCoupon = catchAsync(async (req, res, next) => {
+  const { code, subtotal } = req.body;
+
+  if (!code?.trim()) {
+    return next(new AppError("Ingresa un código de cupón", 400));
+  }
+
+  const coupon = await Coupon.findOne({
+    code: code.trim().toUpperCase(),
+    isActive: true,
+  });
+
+  if (!coupon) {
+    return next(new AppError("Cupón no válido o no existe", 400));
+  }
+
+  if (coupon.expiresAt && coupon.expiresAt < new Date()) {
+    return next(new AppError("Este cupón ha expirado", 400));
+  }
+
+  if (coupon.maxUses !== null && coupon.usedCount >= coupon.maxUses) {
+    return next(new AppError("Este cupón ya alcanzó el límite de usos", 400));
+  }
+
+  const orderSubtotal = Number(subtotal) || 0;
+  if (orderSubtotal < coupon.minOrderAmount) {
+    return next(
+      new AppError(
+        `El pedido mínimo para este cupón es $${coupon.minOrderAmount.toLocaleString("es-CO")}`,
+        400
+      )
+    );
+  }
+
+  const discountAmount =
+    coupon.type === "percentage"
+      ? Math.round(orderSubtotal * (coupon.value / 100))
+      : Math.min(coupon.value, orderSubtotal);
+
+  res.status(200).json({
+    status: "success",
+    coupon: {
+      code: coupon.code,
+      description: coupon.description,
+      type: coupon.type,
+      value: coupon.value,
+      discountAmount,
+    },
   });
 });
 
