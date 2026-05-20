@@ -21,6 +21,25 @@ export const PAYMENT_METHOD_LABELS = {
   wompi: "Wompi",
   nequi_manual: "Nequi manual",
   contra_entrega: "Contra entrega",
+  efectivo: "Efectivo",
+  nequi_presencial: "Nequi",
+  tarjeta: "Tarjeta",
+  transferencia: "Transferencia",
+};
+
+export const CHANNEL_ORIGIN_LABELS = {
+  presencial: "Presencial",
+  whatsapp: "WhatsApp",
+  instagram: "Instagram",
+  facebook: "Facebook",
+  telefono: "Teléfono",
+  otro: "Otro",
+};
+
+export const SOURCE_LABELS = {
+  web: "Web",
+  manual: "Manual",
+  pos: "POS",
 };
 
 export const CARRIER_LABELS = {

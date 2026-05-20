@@ -1,4 +1,5 @@
 const Order = require("../models/order");
+const Product = require("../models/product");
 const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/catchAsync");
 const { logAuditEvent, safeLog } = require("../services/auditService");
@@ -7,6 +8,19 @@ const {
   canUpdateOrderStatus,
   canConfirmPayment,
 } = require("../utils/orderPermissions");
+const {
+  logPosSale,
+  safeLogProductHistory,
+} = require("../services/productHistoryService");
+
+const generateManualOrderNumber = async () => {
+  const today = new Date();
+  const prefix = `MAN-${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, "0")}${String(today.getDate()).padStart(2, "0")}`;
+  const start = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const end = new Date(start.getTime() + 86400000);
+  const count = await Order.countDocuments({ source: "manual", createdAt: { $gte: start, $lt: end } });
+  return `${prefix}-${String(count + 1).padStart(3, "0")}`;
+};
 
 const formatOrderList = (order) => ({
   id: order._id,
@@ -19,6 +33,9 @@ const formatOrderList = (order) => ({
   carrier: order.carrier,
   trackingNumber: order.trackingNumber,
   isGuest: order.isGuest,
+  source: order.source || "web",
+  channelOrigin: order.channelOrigin || "",
+  shippingRequired: order.shippingRequired !== false,
   createdAt: order.createdAt,
   itemCount: order.items?.length || 0,
 });
@@ -67,6 +84,7 @@ exports.getOrders = catchAsync(async (req, res) => {
   if (req.query.orderStatus) filter.orderStatus = req.query.orderStatus;
   if (req.query.paymentStatus) filter.paymentStatus = req.query.paymentStatus;
   if (req.query.paymentMethod) filter.paymentMethod = req.query.paymentMethod;
+  if (req.query.source) filter.source = req.query.source;
 
   if (req.query.q?.trim()) {
     const q = req.query.q.trim();
@@ -365,6 +383,159 @@ exports.assignOrder = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     message: "Pedido asignado",
+    order: formatOrderList(order),
+  });
+});
+
+exports.createManualOrder = catchAsync(async (req, res, next) => {
+  const {
+    customerName,
+    customerPhone,
+    customerEmail,
+    channelOrigin = "presencial",
+    items,
+    paymentMethod,
+    paymentStatus = "pagado",
+    shippingRequired = false,
+    shippingAddress,
+    notes,
+    discountAmount,
+  } = req.body;
+
+  if (!customerName?.trim()) return next(new AppError("El nombre del cliente es obligatorio", 400));
+  if (!customerPhone?.trim()) return next(new AppError("El teléfono del cliente es obligatorio", 400));
+  if (!Array.isArray(items) || items.length === 0) return next(new AppError("Agrega al menos un producto", 400));
+  if (!paymentMethod) return next(new AppError("Selecciona un método de pago", 400));
+
+  if (shippingRequired && (!shippingAddress?.city?.trim() || !shippingAddress?.address?.trim())) {
+    return next(new AppError("La dirección y ciudad de envío son obligatorias", 400));
+  }
+
+  const safeItems = [];
+  let subtotal = 0;
+
+  for (const item of items) {
+    const product = await Product.findById(item.productId)
+      .select("+internalCost salePrice name slug variants")
+      .populate("variants.size", "name")
+      .populate("variants.color", "name");
+    if (!product) return next(new AppError(`Producto no encontrado: ${item.productId}`, 404));
+
+    const variant = product.variants.id(item.variantId);
+    if (!variant) return next(new AppError("Variante no encontrada", 404));
+
+    const qty = Number(item.quantity) || 1;
+    if (variant.stock < qty) {
+      return next(new AppError(`Stock insuficiente para ${product.name} (disponible: ${variant.stock})`, 400));
+    }
+
+    const unitPrice = item.unitPrice != null ? Number(item.unitPrice) : (variant.price ?? product.salePrice ?? 0);
+    const lineTotal = unitPrice * qty;
+    subtotal += lineTotal;
+
+    safeItems.push({
+      product: product._id,
+      variantId: variant._id,
+      productName: product.name,
+      productSlug: product.slug || "",
+      sizeName: variant.size?.name || item.sizeName || "",
+      colorName: variant.color?.name || item.colorName || "",
+      sku: variant.sku || "",
+      quantity: qty,
+      unitPrice,
+      lineTotal,
+      unitCost: product.internalCost || 0,
+      stockBefore: variant.stock,
+      stockAfter: variant.stock - qty,
+    });
+  }
+
+  const discount = Math.max(0, Number(discountAmount) || 0);
+  const total = Math.max(0, subtotal - discount);
+
+  // Reduce stock
+  await Promise.all(
+    safeItems.map((item) =>
+      Product.findOneAndUpdate(
+        { _id: item.product, "variants._id": item.variantId },
+        { $inc: { "variants.$.stock": -item.quantity } }
+      )
+    )
+  );
+
+  const orderNumber = await generateManualOrderNumber();
+
+  const initialOrderStatus = paymentStatus === "pagado"
+    ? (shippingRequired ? "en_preparacion" : "entregado")
+    : "pendiente";
+
+  const order = await Order.create({
+    orderNumber,
+    isGuest: true,
+    source: "manual",
+    channelOrigin,
+    shippingRequired,
+    buyer: {
+      name: customerName.trim(),
+      email: customerEmail?.trim() || "",
+      phone: customerPhone.trim(),
+    },
+    shippingAddress: shippingRequired
+      ? { address: shippingAddress.address, city: shippingAddress.city, department: shippingAddress.department || "—", country: "Colombia" }
+      : { address: "Entrega local", city: "Sandoná", department: "Nariño", country: "Colombia" },
+    items: safeItems.map(({ stockBefore, stockAfter, ...i }) => i),
+    subtotal,
+    discountTotal: discount,
+    total,
+    paymentMethod,
+    paymentStatus,
+    orderStatus: initialOrderStatus,
+    customerNotes: notes?.trim() || "",
+    statusHistory: [{
+      status: initialOrderStatus,
+      note: `Pedido manual · Canal: ${channelOrigin}`,
+      changedBy: req.user.id,
+      changedAt: new Date(),
+    }],
+  });
+
+  // Log inventory history per item
+  for (const item of safeItems) {
+    safeLogProductHistory(
+      logPosSale({
+        productId: item.product,
+        productName: item.productName,
+        productSlug: item.productSlug,
+        variantId: item.variantId,
+        sku: item.sku,
+        sizeName: item.sizeName,
+        colorName: item.colorName,
+        quantity: item.quantity,
+        stockBefore: item.stockBefore,
+        stockAfter: item.stockAfter,
+        posOrderNumber: order.orderNumber,
+        posOrderId: order._id,
+        user: req.user,
+        unitPrice: item.unitPrice,
+      })
+    );
+  }
+
+  safeLog(
+    logAuditEvent({
+      req,
+      action: "manual_order_created",
+      module: "orders",
+      user: req.user,
+      entityId: order._id,
+      entityType: "order",
+      summary: `Pedido manual ${order.orderNumber} · ${customerName} · canal: ${channelOrigin}`,
+      newData: { orderNumber: order.orderNumber, total, channelOrigin },
+    })
+  );
+
+  res.status(201).json({
+    status: "success",
     order: formatOrderList(order),
   });
 });

@@ -20,6 +20,12 @@ const PM_LABELS = {
   transferencia: "Transferencia",
 };
 
+const ONLINE_PM_LABELS = {
+  wompi: "Wompi (PSE / Tarjeta)",
+  nequi_manual: "Nequi (transferencia)",
+  contra_entrega: "Contraentrega pagada",
+};
+
 const todayStr = () => new Date().toISOString().split("T")[0];
 
 /* ─── ProductSearch ─────────────────────────────────── */
@@ -106,6 +112,8 @@ function CashCloseView() {
     finally { setExporting(false); }
   };
 
+  const online = data?.online;
+
   return (
     <div className="pos-close">
       <div className="pos-close__header">
@@ -124,7 +132,7 @@ function CashCloseView() {
           </button>
           {data && (
             <button type="button" className="admin-btn" onClick={handleExport} disabled={exporting}>
-              {exporting ? "Exportando…" : "PDF"}
+              {exporting ? "Exportando…" : "⬇ PDF"}
             </button>
           )}
         </div>
@@ -136,74 +144,124 @@ function CashCloseView() {
         <>
           <p className="pos-close__date-label">{data.label}</p>
 
+          {/* ── Resumen combinado ── */}
           <div className="admin-stats admin-stats--compact" style={{ marginBottom: "1.5rem" }}>
             <div className="admin-stat-card admin-stat-card--highlight">
+              <p className="admin-stat-card__value">{formatCOP(data.combinedTotal ?? data.grandTotal)}</p>
+              <p className="admin-stat-card__label">Ingreso total del día</p>
+            </div>
+            <div className="admin-stat-card">
               <p className="admin-stat-card__value">{formatCOP(data.grandTotal)}</p>
-              <p className="admin-stat-card__label">Total del día</p>
+              <p className="admin-stat-card__label">POS · {data.salesCount} venta(s)</p>
             </div>
             <div className="admin-stat-card">
-              <p className="admin-stat-card__value">{data.salesCount}</p>
-              <p className="admin-stat-card__label">Ventas</p>
-            </div>
-            <div className="admin-stat-card">
-              <p className="admin-stat-card__value">{data.totalItems}</p>
-              <p className="admin-stat-card__label">Unidades vendidas</p>
+              <p className="admin-stat-card__value">{formatCOP(online?.total ?? 0)}</p>
+              <p className="admin-stat-card__label">Online · {online?.salesCount ?? 0} pedido(s)</p>
             </div>
             <div className="admin-stat-card">
               <p className="admin-stat-card__value">{formatCOP(data.expectedCash)}</p>
-              <p className="admin-stat-card__label">Efectivo esperado</p>
+              <p className="admin-stat-card__label">Efectivo en caja</p>
             </div>
           </div>
 
-          <div className="pos-close__methods">
-            {Object.entries(data.byMethod).map(([pm, info]) => (
-              <div key={pm} className="pos-close__method-row">
-                <span>{PM_LABELS[pm] || pm}</span>
-                <span>{info.count} vta(s)</span>
-                <span style={{ fontWeight: 600 }}>{formatCOP(info.total)}</span>
-              </div>
-            ))}
-          </div>
+          {/* ── Sección POS ── */}
+          <div className="pos-close__section">
+            <h3 className="pos-close__section-title">Ventas presenciales (POS)</h3>
 
-          {data.sales?.length > 0 && (
-            <div className="admin-table-wrap" style={{ marginTop: "1.5rem" }}>
-              <table className="admin-table">
-                <thead>
-                  <tr>
-                    <th>Nro.</th>
-                    <th>Hora</th>
-                    <th>Cliente</th>
-                    <th>Método</th>
-                    <th>Total</th>
-                    <th>Vendedor</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.sales.map((s) => (
-                    <tr key={s._id}>
-                      <td><span style={{ fontFamily: "monospace", fontSize: "0.8rem" }}>{s.posOrderNumber}</span></td>
-                      <td>
-                        {new Date(s.createdAt).toLocaleTimeString("es-CO", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </td>
-                      <td>{s.customerName}</td>
-                      <td>{PM_LABELS[s.paymentMethod] || s.paymentMethod}</td>
-                      <td>{formatCOP(s.total)}</td>
-                      <td>{s.soldBy?.name || "—"}</td>
-                    </tr>
+            {data.salesCount === 0 ? (
+              <p className="pos-close__empty">Sin ventas POS para este día.</p>
+            ) : (
+              <>
+                <div className="pos-close__methods">
+                  {Object.entries(data.byMethod).map(([pm, info]) => (
+                    <div key={pm} className="pos-close__method-row">
+                      <span>{PM_LABELS[pm] || pm}</span>
+                      <span>{info.count} vta(s)</span>
+                      <span style={{ fontWeight: 600 }}>{formatCOP(info.total)}</span>
+                    </div>
                   ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+                </div>
 
-          {data.salesCount === 0 && (
-            <p style={{ color: "var(--color-text-muted)", marginTop: "1rem" }}>
-              Sin ventas POS para este día.
-            </p>
-          )}
+                <div className="admin-table-wrap" style={{ marginTop: "0.75rem" }}>
+                  <table className="admin-table">
+                    <thead>
+                      <tr>
+                        <th>Nro.</th>
+                        <th>Hora</th>
+                        <th>Cliente</th>
+                        <th>Método</th>
+                        <th>Total</th>
+                        <th>Vendedor</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data.sales.map((s) => (
+                        <tr key={s._id}>
+                          <td><span style={{ fontFamily: "monospace", fontSize: "0.8rem" }}>{s.posOrderNumber}</span></td>
+                          <td>{new Date(s.createdAt).toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit" })}</td>
+                          <td>{s.customerName}</td>
+                          <td>{PM_LABELS[s.paymentMethod] || s.paymentMethod}</td>
+                          <td>{formatCOP(s.total)}</td>
+                          <td>{s.soldBy?.name || "—"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* ── Sección Online ── */}
+          <div className="pos-close__section">
+            <h3 className="pos-close__section-title">
+              Pedidos online confirmados
+              <span className="pos-close__section-badge">pagados</span>
+            </h3>
+
+            {!online || online.salesCount === 0 ? (
+              <p className="pos-close__empty">Sin pedidos online pagados para este día.</p>
+            ) : (
+              <>
+                <div className="pos-close__methods">
+                  {Object.entries(online.byMethod).map(([pm, info]) => (
+                    <div key={pm} className="pos-close__method-row">
+                      <span>{ONLINE_PM_LABELS[pm] || pm}</span>
+                      <span>{info.count} pedido(s)</span>
+                      <span style={{ fontWeight: 600 }}>{formatCOP(info.total)}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="admin-table-wrap" style={{ marginTop: "0.75rem" }}>
+                  <table className="admin-table">
+                    <thead>
+                      <tr>
+                        <th>Pedido</th>
+                        <th>Hora</th>
+                        <th>Cliente</th>
+                        <th>Canal de pago</th>
+                        <th>Und.</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {online.orders.map((o) => (
+                        <tr key={o._id}>
+                          <td><span style={{ fontFamily: "monospace", fontSize: "0.8rem" }}>{o.orderNumber}</span></td>
+                          <td>{new Date(o.createdAt).toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit" })}</td>
+                          <td>{o.customerName}</td>
+                          <td>{ONLINE_PM_LABELS[o.paymentMethod] || o.paymentMethod}</td>
+                          <td style={{ textAlign: "center" }}>{o.itemCount}</td>
+                          <td>{formatCOP(o.total)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            )}
+          </div>
         </>
       )}
     </div>
