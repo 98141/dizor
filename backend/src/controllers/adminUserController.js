@@ -25,6 +25,10 @@ exports.createAdminUser = catchAsync(async (req, res, next) => {
     return next(new AppError("Correo inválido", 400));
   }
 
+  if (password.length > 128) {
+    return next(new AppError("La contraseña no puede superar 128 caracteres", 400));
+  }
+
   if (
     !validator.isStrongPassword(password, {
       minLength: 8,

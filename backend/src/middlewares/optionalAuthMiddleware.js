@@ -27,7 +27,7 @@ exports.optionalAuth = catchAsync(async (req, res, next) => {
         ? await User.findById(decoded.id)
         : null;
 
-    if (user && user.isActive) {
+    if (user && user.isActive && !user.changedPasswordAfter(decoded.iat)) {
       req.user = {
         id: user._id,
         name: user.name,

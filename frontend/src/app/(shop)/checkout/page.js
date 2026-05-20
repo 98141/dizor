@@ -5,6 +5,14 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
+
+const STAFF_ROLES = ["superadmin", "admin", "vendedor"];
+
+const ROLE_LABELS = {
+  superadmin: "Super Admin",
+  admin: "Administrador",
+  vendedor: "Vendedor",
+};
 import AuthFormField from "@/components/auth/AuthFormField";
 import AuthErrorAlert from "@/components/auth/AuthErrorAlert";
 import {
@@ -24,7 +32,7 @@ const CARRIER_LABELS = {
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { items, hydrated, toApiItems, clearCart } = useCart();
+  const { items, hydrated, toApiItems, clearCart, appliedCoupon, clearCoupon } = useCart();
   const { user, isAuthenticated } = useAuth();
 
   const [step, setStep] = useState(0);
@@ -135,8 +143,10 @@ export default function CheckoutPage() {
         paymentMethod,
         carrier,
         customerNotes,
+        couponCode: appliedCoupon?.code || null,
       });
       clearCart();
+      clearCoupon();
       setSuccess(data.order);
 
       if (data.paymentUrl) {
@@ -145,7 +155,7 @@ export default function CheckoutPage() {
       }
 
       router.push(
-        `/pedido/confirmacion?order=${data.order.orderNumber}&total=${data.order.total}&payment=${data.order.paymentMethod}`
+        `/pedido/confirmacion?order=${data.order.orderNumber}&total=${data.order.total}&payment=${data.order.paymentMethod}&email=${encodeURIComponent(buyer.email)}&name=${encodeURIComponent(buyer.name)}`
       );
     } catch (err) {
       setError(err.response?.data?.message || "No se pudo crear el pedido");
@@ -154,8 +164,34 @@ export default function CheckoutPage() {
     }
   };
 
+  const isStaff = user && STAFF_ROLES.includes(user.role);
+
   if (!hydrated || !config) {
     return <p className="auth-loading">Preparando checkout...</p>;
+  }
+
+  if (isStaff) {
+    return (
+      <div className="checkout-page">
+        <h1 className="checkout-page__title">Checkout</h1>
+        <div className="checkout-staff-notice">
+          <span className="checkout-staff-notice__icon">⚠</span>
+          <h2 className="checkout-staff-notice__title">
+            Cuenta de personal — compras no disponibles
+          </h2>
+          <p className="checkout-staff-notice__text">
+            Estás navegando como <strong>{ROLE_LABELS[user.role]}</strong>. Las
+            cuentas de personal no pueden realizar compras en la tienda. Para
+            hacer un pedido, inicia sesión con una cuenta de cliente o compra
+            como invitado.
+          </p>
+          <div className="checkout-staff-notice__actions">
+            <Link href="/catalogo">Seguir explorando</Link>
+            <Link href="/carrito">Ver carrito</Link>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -384,12 +420,22 @@ export default function CheckoutPage() {
                   <span>{formatCOP(totals.taxTotal)}</span>
                 </div>
               )}
+              {appliedCoupon && (
+                <div className="checkout-review-item" style={{ color: "var(--color-success)" }}>
+                  <span>Cupón ({appliedCoupon.code})</span>
+                  <span>−{formatCOP(appliedCoupon.discountAmount)}</span>
+                </div>
+              )}
               <div
                 className="checkout-review-item"
                 style={{ fontWeight: 600, fontSize: "1.1rem" }}
               >
                 <span>Total</span>
-                <span>{formatCOP(totals.total)}</span>
+                <span>
+                  {formatCOP(
+                    totals.total - (appliedCoupon?.discountAmount || 0)
+                  )}
+                </span>
               </div>
             </>
           )}

@@ -11,7 +11,8 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import { syncCart } from "@/services/cartService";
 
-const STORAGE_KEY = "dizor_cart_v1";
+const STORAGE_KEY   = "dizor_cart_v1";
+const COUPON_KEY    = "dizor_coupon_v1";
 
 const CartContext = createContext(null);
 
@@ -34,17 +35,35 @@ export const CartProvider = ({ children }) => {
   const { isAuthenticated } = useAuth();
   const [items, setItems] = useState([]);
   const [hydrated, setHydrated] = useState(false);
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
 
+  // Hydrate from localStorage
   useEffect(() => {
     setItems(loadStored());
+    try {
+      const raw = localStorage.getItem(COUPON_KEY);
+      if (raw) setAppliedCoupon(JSON.parse(raw));
+    } catch {}
     setHydrated(true);
   }, []);
 
+  // Persist cart
   useEffect(() => {
     if (!hydrated) return;
     saveStored(items);
   }, [items, hydrated]);
 
+  // Persist coupon
+  useEffect(() => {
+    if (!hydrated) return;
+    if (appliedCoupon) {
+      localStorage.setItem(COUPON_KEY, JSON.stringify(appliedCoupon));
+    } else {
+      localStorage.removeItem(COUPON_KEY);
+    }
+  }, [appliedCoupon, hydrated]);
+
+  // Sync to server when authenticated
   useEffect(() => {
     if (!hydrated || !isAuthenticated || items.length === 0) return;
 
@@ -97,7 +116,13 @@ export const CartProvider = ({ children }) => {
     );
   }, []);
 
-  const clearCart = useCallback(() => setItems([]), []);
+  const clearCart = useCallback(() => {
+    setItems([]);
+    setAppliedCoupon(null);
+  }, []);
+
+  const applyCoupon = useCallback((coupon) => setAppliedCoupon(coupon), []);
+  const clearCoupon = useCallback(() => setAppliedCoupon(null), []);
 
   const itemCount = useMemo(
     () => items.reduce((s, i) => s + i.quantity, 0),
@@ -126,10 +151,13 @@ export const CartProvider = ({ children }) => {
         hydrated,
         itemCount,
         subtotal,
+        appliedCoupon,
         addItem,
         updateQuantity,
         removeItem,
         clearCart,
+        applyCoupon,
+        clearCoupon,
         toApiItems,
       }}
     >

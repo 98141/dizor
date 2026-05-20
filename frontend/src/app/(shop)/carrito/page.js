@@ -1,18 +1,32 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
-import { validateCart } from "@/services/cartService";
+import { validateCart, validateCoupon } from "@/services/cartService";
 import AbandonedCartCapture from "@/components/marketing/AbandonedCartCapture";
 import { formatCOP } from "@/lib/formatCurrency";
 
 export default function CarritoPage() {
-  const { items, hydrated, itemCount, updateQuantity, removeItem, toApiItems } =
-    useCart();
+  const {
+    items,
+    hydrated,
+    itemCount,
+    updateQuantity,
+    removeItem,
+    toApiItems,
+    appliedCoupon,
+    applyCoupon,
+    clearCoupon,
+  } = useCart();
+
   const [totals, setTotals] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [couponInput, setCouponInput] = useState("");
+  const [couponLoading, setCouponLoading] = useState(false);
+  const [couponError, setCouponError] = useState("");
+  const couponRef = useRef(null);
 
   useEffect(() => {
     if (!hydrated || items.length === 0) {
@@ -26,7 +40,11 @@ export default function CarritoPage() {
         const data = await validateCart(toApiItems());
         setTotals({
           subtotal: data.subtotal,
+          taxTotal: data.taxTotal ?? 0,
+          taxEnabled: data.taxEnabled ?? false,
+          taxRate: data.taxRate ?? 0,
           shippingCost: data.shippingCost,
+          total: data.total,
           items: data.items,
         });
       } catch {
@@ -38,6 +56,28 @@ export default function CarritoPage() {
 
     run();
   }, [items, hydrated, toApiItems]);
+
+  const handleApplyCoupon = async (e) => {
+    e.preventDefault();
+    if (!couponInput.trim()) return;
+    setCouponLoading(true);
+    setCouponError("");
+    try {
+      const data = await validateCoupon(couponInput.trim(), totals?.subtotal || 0);
+      applyCoupon(data.coupon);
+      setCouponInput("");
+    } catch (err) {
+      setCouponError(err.response?.data?.message || "Cupón no válido");
+    } finally {
+      setCouponLoading(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    clearCoupon();
+    setCouponError("");
+    setTimeout(() => couponRef.current?.focus(), 50);
+  };
 
   if (!hydrated) {
     return <p className="auth-loading">Cargando carrito...</p>;
@@ -56,12 +96,15 @@ export default function CarritoPage() {
   }
 
   const displayItems = totals?.items || items;
+  const discount = appliedCoupon?.discountAmount || 0;
+  const displayTotal = totals ? totals.subtotal + (totals.taxTotal || 0) + totals.shippingCost - discount : null;
 
   return (
     <div className="cart-page">
       <h1 className="cart-page__title">Tu carrito ({itemCount})</h1>
 
       <div className="cart-layout">
+        {/* ── Lista de productos ── */}
         <div>
           {displayItems.map((item) => {
             const cartItem = items.find(
@@ -95,18 +138,16 @@ export default function CarritoPage() {
                     </Link>
                   </h2>
                   <p className="cart-item__meta">
-                    {item.sizeName} · {item.colorName} · {item.sku}
+                    {[item.sizeName, item.colorName, item.sku]
+                      .filter(Boolean)
+                      .join(" · ")}
                   </p>
                   <div className="cart-item__row">
                     <div className="cart-qty">
                       <button
                         type="button"
                         onClick={() =>
-                          updateQuantity(
-                            item.productId,
-                            item.variantId,
-                            qty - 1
-                          )
+                          updateQuantity(item.productId, item.variantId, qty - 1)
                         }
                         aria-label="Reducir cantidad"
                       >
@@ -116,11 +157,7 @@ export default function CarritoPage() {
                       <button
                         type="button"
                         onClick={() =>
-                          updateQuantity(
-                            item.productId,
-                            item.variantId,
-                            qty + 1
-                          )
+                          updateQuantity(item.productId, item.variantId, qty + 1)
                         }
                         aria-label="Aumentar cantidad"
                       >
@@ -134,9 +171,7 @@ export default function CarritoPage() {
                   <button
                     type="button"
                     className="cart-item__remove"
-                    onClick={() =>
-                      removeItem(item.productId, item.variantId)
-                    }
+                    onClick={() => removeItem(item.productId, item.variantId)}
                   >
                     Eliminar
                   </button>
@@ -146,16 +181,28 @@ export default function CarritoPage() {
           })}
         </div>
 
+        {/* ── Resumen ── */}
         <aside className="cart-summary">
           <h2 className="cart-summary__title">Resumen</h2>
+
           {loading ? (
-            <p>Calculando...</p>
+            <p style={{ color: "var(--color-text-muted)", fontSize: "0.9rem" }}>
+              Calculando...
+            </p>
           ) : (
             <>
               <div className="cart-summary__row">
                 <span>Subtotal</span>
                 <span>{formatCOP(totals?.subtotal)}</span>
               </div>
+
+              {totals?.taxEnabled && totals?.taxTotal > 0 && (
+                <div className="cart-summary__row">
+                  <span>IVA ({totals.taxRate}%)</span>
+                  <span>{formatCOP(totals.taxTotal)}</span>
+                </div>
+              )}
+
               <div className="cart-summary__row">
                 <span>Envío estimado</span>
                 <span>
@@ -164,15 +211,80 @@ export default function CarritoPage() {
                     : formatCOP(totals?.shippingCost)}
                 </span>
               </div>
-              <p style={{ fontSize: "0.8rem", color: "var(--color-text-muted)" }}>
+
+              {/* ── Cupón aplicado ── */}
+              {appliedCoupon && (
+                <div className="cart-summary__row cart-summary__row--discount">
+                  <span>
+                    Cupón{" "}
+                    <span className="cart-coupon-code">{appliedCoupon.code}</span>
+                    <button
+                      type="button"
+                      className="cart-coupon-remove"
+                      onClick={handleRemoveCoupon}
+                      aria-label="Quitar cupón"
+                    >
+                      ×
+                    </button>
+                  </span>
+                  <span>−{formatCOP(discount)}</span>
+                </div>
+              )}
+
+              {/* ── Total ── */}
+              <div className="cart-summary__row cart-summary__row--total">
+                <span>Total estimado</span>
+                <span>{displayTotal != null ? formatCOP(displayTotal) : "—"}</span>
+              </div>
+
+              <p className="cart-summary__note">
                 Envío final según departamento en checkout
               </p>
+
+              {/* ── Campo de cupón ── */}
+              {!appliedCoupon && (
+                <form className="cart-coupon" onSubmit={handleApplyCoupon}>
+                  <label className="cart-coupon__label" htmlFor="couponCode">
+                    ¿Tienes un cupón?
+                  </label>
+                  <div className="cart-coupon__row">
+                    <input
+                      ref={couponRef}
+                      id="couponCode"
+                      type="text"
+                      className="cart-coupon__input"
+                      value={couponInput}
+                      onChange={(e) => {
+                        setCouponInput(e.target.value.toUpperCase());
+                        setCouponError("");
+                      }}
+                      placeholder="CÓDIGO"
+                      autoComplete="off"
+                      maxLength={32}
+                    />
+                    <button
+                      type="submit"
+                      className="cart-coupon__btn"
+                      disabled={couponLoading || !couponInput.trim()}
+                    >
+                      {couponLoading ? "..." : "Aplicar"}
+                    </button>
+                  </div>
+                  {couponError && (
+                    <p className="cart-coupon__error">{couponError}</p>
+                  )}
+                </form>
+              )}
+
               <AbandonedCartCapture />
 
               <Link href="/checkout" className="cart-summary__cta">
                 Ir a checkout
               </Link>
-              <Link href="/catalogo" className="cart-summary__cta cart-summary__cta--secondary">
+              <Link
+                href="/catalogo"
+                className="cart-summary__cta cart-summary__cta--secondary"
+              >
                 Seguir comprando
               </Link>
             </>

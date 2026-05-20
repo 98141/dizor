@@ -31,6 +31,31 @@ const DEFAULT_HOME = {
     linkLabel: "Ver todos",
     linkHref: "/catalogo?featured=true",
   },
+  newSection: {
+    title: "Novedades",
+    linkLabel: "Ver novedades",
+    linkHref: "/catalogo?isNew=true",
+    isActive: true,
+  },
+  craftSection: {
+    title: "Nuestros tejidos",
+    subtitle:
+      "Cada tipo de tejido tiene su propio carácter, finura y tiempo de elaboración.",
+    linkLabel: "Explorar",
+  },
+  historia: {
+    title: "Tejidos de Sandoná, historia en cada puntada",
+    body: "Desde las manos de las artesanas de Sandoná, Nariño, nace cada sombrero Dizor. La palma de iraca se corta, se blanquea y se teje con una disciplina que se transmite de generación en generación. Cada puntada es un acto de memoria cultural, una forma de decir que lo hecho a mano tiene valor, permanencia y alma.",
+    imageUrl: "",
+    ctaLabel: "Sobre Dizor",
+    ctaHref: "/pagina/sobre-dizor",
+  },
+  bestsellerSection: {
+    title: "Más vendidos",
+    linkLabel: "Ver todos",
+    linkHref: "/catalogo?sort=popular",
+    isActive: false,
+  },
   announcement: {
     text: "",
     linkHref: "",
@@ -68,6 +93,10 @@ exports.formatHome = (doc) => ({
   hero: doc.hero,
   features: doc.features,
   featuredSection: doc.featuredSection,
+  newSection: doc.newSection,
+  craftSection: doc.craftSection,
+  historia: doc.historia,
+  bestsellerSection: doc.bestsellerSection,
   announcement: doc.announcement,
 });
 

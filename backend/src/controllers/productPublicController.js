@@ -41,11 +41,13 @@ const buildProductFilter = (query) => {
 
   const searchTerm = pickQueryValue(query, "term");
   if (searchTerm) {
-    const term = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const escaped = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const regex = new RegExp(escaped, "i");
     filter.$or = [
-      { name: { $regex: term, $options: "i" } },
-      { shortDescription: { $regex: term, $options: "i" } },
-      { slug: { $regex: term, $options: "i" } },
+      { name: regex },
+      { shortDescription: regex },
+      { material: regex },
+      { slug: regex },
     ];
   }
 

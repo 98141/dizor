@@ -14,3 +14,8 @@ export const getSavedCart = async () => {
   const res = await api.get("/cart");
   return res.data;
 };
+
+export const validateCoupon = async (code, subtotal) => {
+  const res = await api.post("/cart/coupon", { code, subtotal });
+  return res.data;
+};

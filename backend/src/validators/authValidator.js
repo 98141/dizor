@@ -17,8 +17,8 @@ exports.registerRules = [
   body("password")
     .notEmpty()
     .withMessage("La contraseña es obligatoria")
-    .isLength({ min: 8 })
-    .withMessage("La contraseña debe tener mínimo 8 caracteres")
+    .isLength({ min: 8, max: 128 })
+    .withMessage("La contraseña debe tener entre 8 y 128 caracteres")
     .matches(/[0-9]/)
     .withMessage("La contraseña debe incluir al menos un número"),
   body("phone")
@@ -36,7 +36,11 @@ exports.loginRules = [
     .isEmail()
     .withMessage("Correo inválido")
     .normalizeEmail(),
-  body("password").notEmpty().withMessage("La contraseña es obligatoria"),
+  body("password")
+    .notEmpty()
+    .withMessage("La contraseña es obligatoria")
+    .isLength({ max: 128 })
+    .withMessage("Credenciales inválidas"),
 ];
 
 exports.forgotPasswordRules = [
@@ -53,10 +57,12 @@ exports.resetPasswordRules = [
   body("password")
     .notEmpty()
     .withMessage("La contraseña es obligatoria")
-    .isLength({ min: 8 })
-    .withMessage("La contraseña debe tener mínimo 8 caracteres")
+    .isLength({ min: 8, max: 128 })
+    .withMessage("La contraseña debe tener entre 8 y 128 caracteres")
     .matches(/[0-9]/)
-    .withMessage("La contraseña debe incluir al menos un número"),
+    .withMessage("La contraseña debe incluir al menos un número")
+    .matches(/[^a-zA-Z0-9]/)
+    .withMessage("La contraseña debe incluir al menos un símbolo especial"),
   body("passwordConfirm")
     .notEmpty()
     .withMessage("Debes confirmar la contraseña")
@@ -75,10 +81,12 @@ exports.updatePasswordRules = [
   body("password")
     .notEmpty()
     .withMessage("La nueva contraseña es obligatoria")
-    .isLength({ min: 8 })
-    .withMessage("La contraseña debe tener mínimo 8 caracteres")
+    .isLength({ min: 8, max: 128 })
+    .withMessage("La contraseña debe tener entre 8 y 128 caracteres")
     .matches(/[0-9]/)
-    .withMessage("La contraseña debe incluir al menos un número"),
+    .withMessage("La contraseña debe incluir al menos un número")
+    .matches(/[^a-zA-Z0-9]/)
+    .withMessage("La contraseña debe incluir al menos un símbolo especial"),
   body("passwordConfirm")
     .notEmpty()
     .withMessage("Debes confirmar la contraseña")

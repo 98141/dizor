@@ -5,19 +5,111 @@ import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { getAdminDashboard } from "@/services/adminDashboardService";
 import { formatCOP } from "@/lib/formatCurrency";
-import {
-  getAuditActionLabel,
-  getAuditModuleLabel,
-} from "@/lib/auditLabels";
+import { getAuditActionLabel, getAuditModuleLabel } from "@/lib/auditLabels";
 
-function formatDateTime(value) {
-  if (!value) return "—";
-  return new Date(value).toLocaleString("es-CO", {
+// ── Helpers ────────────────────────────────────────────────────────────
+function getGreeting() {
+  const h = new Date().getHours();
+  if (h < 12) return "Buenos días";
+  if (h < 18) return "Buenas tardes";
+  return "Buenas noches";
+}
+
+function fmtDate(d) {
+  return new Date(d).toLocaleDateString("es-CO", {
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+function fmtDateTime(d) {
+  if (!d) return "—";
+  return new Date(d).toLocaleString("es-CO", {
     dateStyle: "short",
     timeStyle: "short",
   });
 }
 
+const ORDER_STATUS_LABELS = {
+  pendiente: "Pendiente",
+  pago_pendiente: "Pago pendiente",
+  pagado: "Pagado",
+  en_preparacion: "En preparación",
+  enviado: "Enviado",
+  entregado: "Entregado",
+  cancelado: "Cancelado",
+  rechazado: "Rechazado",
+};
+
+const PAYMENT_METHOD_SHORT = {
+  wompi: "Wompi",
+  nequi_manual: "Nequi",
+  contra_entrega: "Contraentrega",
+};
+
+// ── Sub-components ─────────────────────────────────────────────────────
+function KpiCard({ value, label, color = "primary", href, urgent, highlight }) {
+  const colorMap = {
+    red: "#dc2626",
+    amber: "#d97706",
+    green: "#16a34a",
+    blue: "#2563eb",
+    primary: "var(--color-primary)",
+    purple: "#7c3aed",
+  };
+  const borderColor = colorMap[color] ?? colorMap.primary;
+
+  const card = (
+    <div
+      className={`dash-kpi${highlight ? " dash-kpi--highlight" : ""}${urgent ? " dash-kpi--urgent" : ""}`}
+      style={{ borderLeftColor: borderColor }}
+    >
+      <p className="dash-kpi__value" style={{ color: borderColor }}>
+        {value}
+      </p>
+      <p className="dash-kpi__label">{label}</p>
+    </div>
+  );
+
+  return href ? (
+    <Link href={href} className="dash-kpi-link">
+      {card}
+    </Link>
+  ) : (
+    card
+  );
+}
+
+function OrderBadge({ status }) {
+  return (
+    <span className={`dash-badge dash-badge--${status}`}>
+      {ORDER_STATUS_LABELS[status] ?? status}
+    </span>
+  );
+}
+
+function PayBadge({ status }) {
+  const map = { pendiente: "dash-pay--pending", pagado: "dash-pay--paid", rechazado: "dash-pay--rejected" };
+  const labels = { pendiente: "Pend.", pagado: "Pagado", rechazado: "Rechazado" };
+  return (
+    <span className={`dash-badge ${map[status] ?? ""}`}>
+      {labels[status] ?? status}
+    </span>
+  );
+}
+
+const QUICK_LINKS = [
+  { href: "/admin/pedidos",     icon: "📦", label: "Pedidos",      desc: "Envíos y pagos" },
+  { href: "/admin/inventario",  icon: "📊", label: "Inventario",   desc: "Historial de stock" },
+  { href: "/admin/productos",   icon: "🧢", label: "Productos",    desc: "Catálogo y precios" },
+  { href: "/admin/solicitudes", icon: "📝", label: "Solicitudes",  desc: "Pedidos especiales" },
+  { href: "/admin/cupones",     icon: "🏷️",  label: "Cupones",     desc: "Descuentos activos" },
+  { href: "/admin/alertas",     icon: "🔔", label: "Alertas",      desc: "Monitoreo sistema" },
+];
+
+// ── Página ─────────────────────────────────────────────────────────────
 export default function AdminDashboard() {
   const { user } = useAuth();
   const isSuperadmin = user?.role === "superadmin";
@@ -33,154 +125,266 @@ export default function AdminDashboard() {
   }, []);
 
   if (loading) {
-    return <p className="auth-loading">Cargando dashboard...</p>;
+    return (
+      <div className="dash-page">
+        <div className="dash-loading">Cargando dashboard…</div>
+      </div>
+    );
   }
 
   if (error || !data) {
     return (
-      <p className="admin-page__error" style={{ color: "#b33" }}>
-        {error || "Sin datos disponibles."}
-      </p>
+      <div className="dash-page">
+        <p style={{ color: "#b33" }}>{error || "Sin datos disponibles."}</p>
+      </div>
     );
   }
 
-  const { orders, specialRequests, catalog, users, marketing, audit } = data;
+  const { orders, specialRequests, catalog, users, marketing, coupons, recentOrders, audit } = data;
+
+  const todayStr = new Date().toLocaleDateString("es-CO", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  });
+
+  const urgentCount =
+    (orders.pendingPayment || 0) +
+    (orders.toPrepare || 0) +
+    (catalog.outOfStock || 0) +
+    (specialRequests.pending || 0);
 
   return (
-    <div className="admin-page">
-      <div className="admin-page__header-row">
+    <div className="dash-page">
+
+      {/* ── Header de bienvenida ── */}
+      <div className="dash-header">
         <div>
-          <h1 className="admin-page__title">Dashboard</h1>
-          <p className="admin-page__subtitle">
-            Resumen operativo de la tienda Dizor
-          </p>
+          <h1 className="dash-greeting">
+            {getGreeting()}, {user?.name?.split(" ")[0] ?? "admin"}
+          </h1>
+          <p className="dash-date" style={{ textTransform: "capitalize" }}>{todayStr}</p>
         </div>
-        <div className="admin-page__actions" style={{ margin: 0 }}>
-          {isSuperadmin && (
-            <Link href="/admin/finanzas" className="admin-btn admin-btn--primary">
-              Finanzas
+        <div className="dash-header-actions">
+          {urgentCount > 0 && (
+            <Link href="/admin/alertas" className="dash-alert-link">
+              🔔 {urgentCount} alerta{urgentCount !== 1 ? "s" : ""} activa{urgentCount !== 1 ? "s" : ""}
             </Link>
           )}
-          <Link href="/admin/inventario" className="admin-btn">
-            Inventario
-          </Link>
+          {isSuperadmin && (
+            <Link href="/admin/finanzas" className="admin-btn admin-btn--primary">
+              Ver finanzas
+            </Link>
+          )}
         </div>
       </div>
 
-      <section className="admin-dashboard-section">
-        <h2 className="admin-dashboard-section__title">Pedidos</h2>
-        <div className="admin-stats">
-          <div className="admin-stat-card">
-            <p className="admin-stat-card__value">{orders.total}</p>
-            <p className="admin-stat-card__label">Total pedidos</p>
+      {/* ── Sección 1: Requieren atención ── */}
+      <section className="dash-section">
+        <p className="dash-section__title">⚡ Requieren atención</p>
+        <div className="dash-kpi-grid">
+          <KpiCard
+            value={orders.pendingPayment}
+            label="Pagos por confirmar"
+            color="red"
+            href="/admin/pedidos"
+            urgent={orders.pendingPayment > 0}
+          />
+          <KpiCard
+            value={orders.toPrepare}
+            label="Por preparar"
+            color="amber"
+            href="/admin/pedidos"
+            urgent={orders.toPrepare > 0}
+          />
+          <KpiCard
+            value={catalog.outOfStock}
+            label="Productos sin stock"
+            color="red"
+            href="/admin/inventario"
+            urgent={catalog.outOfStock > 0}
+          />
+          <KpiCard
+            value={specialRequests.pending}
+            label="Solicitudes pendientes"
+            color="amber"
+            href="/admin/solicitudes"
+            urgent={specialRequests.pending > 0}
+          />
+        </div>
+      </section>
+
+      {/* ── Sección 2: Actividad del día y mes ── */}
+      <section className="dash-section">
+        <p className="dash-section__title">📊 Actividad</p>
+        <div className="dash-kpi-grid">
+          <KpiCard
+            value={formatCOP(orders.revenueMonth)}
+            label="Ventas del mes (pagadas)"
+            color="primary"
+            highlight
+          />
+          <KpiCard
+            value={orders.ordersToday}
+            label="Pedidos recibidos hoy"
+            color="primary"
+          />
+          <KpiCard
+            value={orders.shippedToday}
+            label="Enviados hoy"
+            color="green"
+          />
+          <KpiCard
+            value={catalog.lowStock}
+            label="Productos stock bajo"
+            color="amber"
+            href="/admin/inventario"
+          />
+          <KpiCard
+            value={users.clients}
+            label="Clientes activos"
+            color="blue"
+          />
+          <KpiCard
+            value={marketing.newsletterSubscribers}
+            label="Suscritos al newsletter"
+            color="blue"
+          />
+        </div>
+      </section>
+
+      {/* ── Accesos rápidos ── */}
+      <section className="dash-section">
+        <p className="dash-section__title">🔗 Acceso rápido</p>
+        <div className="dash-quick-links">
+          {QUICK_LINKS.map((ql) => (
+            <Link key={ql.href} href={ql.href} className="dash-quick-link">
+              <span className="dash-quick-link__icon">{ql.icon}</span>
+              <span className="dash-quick-link__label">{ql.label}</span>
+              <span className="dash-quick-link__desc">{ql.desc}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Pedidos recientes ── */}
+      <section className="dash-section">
+        <div className="dash-section-header">
+          <p className="dash-section__title" style={{ margin: 0 }}>📋 Pedidos recientes</p>
+          <Link href="/admin/pedidos" className="dash-see-all">
+            Ver todos →
+          </Link>
+        </div>
+        {recentOrders?.length ? (
+          <div className="admin-table-wrap" style={{ marginTop: "var(--space-md)" }}>
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>N° pedido</th>
+                  <th>Cliente</th>
+                  <th>Estado</th>
+                  <th>Pago</th>
+                  <th>Método</th>
+                  <th>Total</th>
+                  <th>Fecha</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentOrders.map((o) => (
+                  <tr key={o.id}>
+                    <td>
+                      <Link href="/admin/pedidos" className="dash-order-link">
+                        #{o.orderNumber}
+                      </Link>
+                    </td>
+                    <td>{o.buyerName}</td>
+                    <td><OrderBadge status={o.orderStatus} /></td>
+                    <td><PayBadge status={o.paymentStatus} /></td>
+                    <td>{PAYMENT_METHOD_SHORT[o.paymentMethod] ?? o.paymentMethod ?? "—"}</td>
+                    <td>{formatCOP(o.total)}</td>
+                    <td style={{ whiteSpace: "nowrap" }}>{fmtDate(o.createdAt)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-          <div className="admin-stat-card">
-            <p className="admin-stat-card__value">{orders.ordersToday}</p>
-            <p className="admin-stat-card__label">Hoy</p>
+        ) : (
+          <p className="dash-empty">Aún no hay pedidos registrados.</p>
+        )}
+      </section>
+
+      {/* ── Dos columnas: Solicitudes + Cupones ── */}
+      <div className="dash-two-col">
+
+        {/* Solicitudes especiales */}
+        <section className="dash-section">
+          <div className="dash-section-header">
+            <p className="dash-section__title" style={{ margin: 0 }}>📝 Solicitudes especiales</p>
+            <Link href="/admin/solicitudes" className="dash-see-all">Ver →</Link>
           </div>
-          <div className="admin-stat-card">
-            <p className="admin-stat-card__value">{orders.pendingPayment}</p>
-            <p className="admin-stat-card__label">Pagos pendientes</p>
+          <div className="dash-sol-grid">
+            <div className="dash-sol-card dash-sol-card--warn">
+              <p className="dash-sol-card__value">{specialRequests.pending}</p>
+              <p className="dash-sol-card__label">Pendientes</p>
+            </div>
+            <div className="dash-sol-card">
+              <p className="dash-sol-card__value">{specialRequests.inReview}</p>
+              <p className="dash-sol-card__label">En revisión</p>
+            </div>
+            <div className="dash-sol-card">
+              <p className="dash-sol-card__value">{specialRequests.quoted}</p>
+              <p className="dash-sol-card__label">Cotizadas</p>
+            </div>
           </div>
-          <div className="admin-stat-card">
-            <p className="admin-stat-card__value">{orders.toPrepare}</p>
-            <p className="admin-stat-card__label">Por preparar</p>
+          <p className="dash-sol-total">
+            {specialRequests.total} solicitudes en total
+          </p>
+        </section>
+
+        {/* Cupones */}
+        <section className="dash-section">
+          <div className="dash-section-header">
+            <p className="dash-section__title" style={{ margin: 0 }}>🏷️ Cupones</p>
+            <Link href="/admin/cupones" className="dash-see-all">Gestionar →</Link>
           </div>
-          <div className="admin-stat-card">
-            <p className="admin-stat-card__value">{orders.shippedToday}</p>
-            <p className="admin-stat-card__label">Enviados hoy</p>
+          <div className="dash-coupon-row">
+            <div className="dash-coupon-stat">
+              <p className="dash-coupon-stat__value" style={{ color: "var(--color-primary)" }}>
+                {coupons?.active ?? 0}
+              </p>
+              <p className="dash-coupon-stat__label">Cupones activos</p>
+            </div>
+            <div className="dash-coupon-stat">
+              <p
+                className="dash-coupon-stat__value"
+                style={{ color: (coupons?.expiringSoon ?? 0) > 0 ? "#d97706" : "var(--color-text-muted)" }}
+              >
+                {coupons?.expiringSoon ?? 0}
+              </p>
+              <p className="dash-coupon-stat__label">Vencen en 3 días</p>
+            </div>
           </div>
-          <div className="admin-stat-card admin-stat-card--highlight">
-            <p className="admin-stat-card__value">
-              {formatCOP(orders.revenueMonth)}
+          {(coupons?.expiringSoon ?? 0) > 0 && (
+            <p className="dash-coupon-warn">
+              ⚠️ {coupons.expiringSoon} cupón{coupons.expiringSoon !== 1 ? "es" : ""} próximo{coupons.expiringSoon !== 1 ? "s" : ""} a vencer — revísalos antes de que caduquen.
             </p>
-            <p className="admin-stat-card__label">Ventas del mes (pagadas)</p>
-          </div>
-        </div>
-        <div className="admin-page__actions">
-          <Link href="/admin/pedidos" className="admin-btn admin-btn--primary">
-            Gestionar pedidos
-          </Link>
-        </div>
-      </section>
+          )}
+        </section>
+      </div>
 
-      <section className="admin-dashboard-section">
-        <h2 className="admin-dashboard-section__title">Catálogo y clientes</h2>
-        <div className="admin-stats admin-stats--compact">
-          <div className="admin-stat-card">
-            <p className="admin-stat-card__value">{catalog.activeProducts}</p>
-            <p className="admin-stat-card__label">Productos activos</p>
-          </div>
-          <div className="admin-stat-card">
-            <p className="admin-stat-card__value">{catalog.lowStock}</p>
-            <p className="admin-stat-card__label">Stock bajo</p>
-          </div>
-          <div className="admin-stat-card">
-            <p className="admin-stat-card__value">{catalog.outOfStock}</p>
-            <p className="admin-stat-card__label">Sin stock</p>
-          </div>
-          <div className="admin-stat-card">
-            <p className="admin-stat-card__value">{users.clients}</p>
-            <p className="admin-stat-card__label">Clientes activos</p>
-          </div>
-          <div className="admin-stat-card">
-            <p className="admin-stat-card__value">{users.staff}</p>
-            <p className="admin-stat-card__label">Equipo activo</p>
-          </div>
-          <div className="admin-stat-card">
-            <p className="admin-stat-card__value">
-              {marketing.newsletterSubscribers}
-            </p>
-            <p className="admin-stat-card__label">Newsletter</p>
-          </div>
-        </div>
-        <div className="admin-page__actions">
-          <Link href="/admin/inventario" className="admin-btn admin-btn--primary">
-            Historial inventario
-          </Link>
-          <Link href="/admin/productos" className="admin-btn">
-            Productos
-          </Link>
-          <Link href="/admin/marketing" className="admin-btn">
-            Marketing
-          </Link>
-        </div>
-      </section>
-
-      <section className="admin-dashboard-section">
-        <h2 className="admin-dashboard-section__title">Solicitudes especiales</h2>
-        <div className="admin-stats admin-stats--compact">
-          <div className="admin-stat-card">
-            <p className="admin-stat-card__value">{specialRequests.pending}</p>
-            <p className="admin-stat-card__label">Pendientes</p>
-          </div>
-          <div className="admin-stat-card">
-            <p className="admin-stat-card__value">{specialRequests.inReview}</p>
-            <p className="admin-stat-card__label">En revisión</p>
-          </div>
-          <div className="admin-stat-card">
-            <p className="admin-stat-card__value">{specialRequests.quoted}</p>
-            <p className="admin-stat-card__label">Cotizadas</p>
-          </div>
-        </div>
-        <div className="admin-page__actions">
-          <Link href="/admin/solicitudes" className="admin-btn admin-btn--primary">
-            Ver solicitudes
-          </Link>
-        </div>
-      </section>
-
-      <section className="admin-dashboard-section">
-        <div className="admin-page__header-row">
-          <h2 className="admin-dashboard-section__title">
-            Actividad reciente
-          </h2>
-          <span className="admin-dashboard-badge">
-            {audit.eventsToday} eventos hoy
+      {/* ── Actividad reciente (auditoría) ── */}
+      <section className="dash-section">
+        <div className="dash-section-header">
+          <p className="dash-section__title" style={{ margin: 0 }}>
+            🕓 Actividad reciente
+          </p>
+          <span style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+            <span className="admin-dashboard-badge">{audit.eventsToday} eventos hoy</span>
+            <Link href="/admin/auditoria" className="dash-see-all">Historial completo →</Link>
           </span>
         </div>
         {audit.recent?.length ? (
-          <div className="admin-audit-preview">
+          <div className="admin-table-wrap" style={{ marginTop: "var(--space-md)" }}>
             <table className="admin-table">
               <thead>
                 <tr>
@@ -194,7 +398,7 @@ export default function AdminDashboard() {
               <tbody>
                 {audit.recent.map((log) => (
                   <tr key={log.id}>
-                    <td>{formatDateTime(log.createdAt)}</td>
+                    <td style={{ whiteSpace: "nowrap" }}>{fmtDateTime(log.createdAt)}</td>
                     <td>{log.userEmail || "—"}</td>
                     <td>{getAuditModuleLabel(log.module)}</td>
                     <td>{getAuditActionLabel(log.action)}</td>
@@ -205,20 +409,10 @@ export default function AdminDashboard() {
             </table>
           </div>
         ) : (
-          <p className="admin-page__subtitle">Aún no hay eventos registrados.</p>
+          <p className="dash-empty">Aún no hay eventos registrados.</p>
         )}
-        <div className="admin-page__actions" style={{ marginTop: "1rem" }}>
-          <Link href="/admin/auditoria" className="admin-btn">
-            Historial completo
-          </Link>
-          <Link href="/admin/contenido" className="admin-btn">
-            Contenido
-          </Link>
-          <Link href="/admin/configuracion" className="admin-btn">
-            Configuración
-          </Link>
-        </div>
       </section>
+
     </div>
   );
 }

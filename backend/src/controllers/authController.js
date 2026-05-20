@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const Order = require("../models/order");
 const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/catchAsync");
 const { hashToken } = require("../utils/cryptoUtils");
@@ -39,7 +40,7 @@ const sendAuthResponse = async (user, statusCode, res) => {
   const accessToken = generateAccessToken(user);
   const refreshToken = generateRefreshToken(user);
 
-  user.refreshToken = refreshToken;
+  user.refreshToken = hashToken(refreshToken);
   user.lastLoginAt = new Date();
   await user.save({ validateBeforeSave: false });
 
@@ -55,7 +56,6 @@ const sendAuthResponse = async (user, statusCode, res) => {
 
   res.status(statusCode).json({
     status: "success",
-    token: accessToken,
     user: formatUser(user),
   });
 };
@@ -76,6 +76,12 @@ exports.register = catchAsync(async (req, res, next) => {
     phone,
     role: "cliente",
   });
+
+  // Vincular pedidos de invitado que usaron este mismo correo
+  await Order.updateMany(
+    { "buyer.email": email.toLowerCase(), user: null },
+    { $set: { user: user._id } }
+  );
 
   await logAuthEvent({
     req,
@@ -129,6 +135,12 @@ exports.login = catchAsync(async (req, res, next) => {
 
   await user.resetLoginAttempts();
 
+  // Vincular pedidos de invitado que usaron este mismo correo
+  await Order.updateMany(
+    { "buyer.email": user.email.toLowerCase(), user: null },
+    { $set: { user: user._id } }
+  );
+
   await logAuthEvent({
     req,
     action: "login",
@@ -158,20 +170,28 @@ exports.refreshToken = catchAsync(async (req, res, next) => {
 
   const user = await User.findById(decoded.id).select("+refreshToken");
 
-  if (!user || user.refreshToken !== token) {
+  if (!user || user.refreshToken !== hashToken(token)) {
     return next(new AppError("Refresh token inválido", 401));
   }
 
   const accessToken = generateAccessToken(user);
+  const newRefreshToken = generateRefreshToken(user);
+
+  user.refreshToken = hashToken(newRefreshToken);
+  await user.save({ validateBeforeSave: false });
 
   res.cookie("accessToken", accessToken, {
     ...cookieOptions(),
     maxAge: 15 * 60 * 1000,
   });
 
+  res.cookie("refreshToken", newRefreshToken, {
+    ...cookieOptions(),
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
+
   res.status(200).json({
     status: "success",
-    token: accessToken,
     user: formatUser(user),
   });
 });
@@ -180,10 +200,11 @@ exports.logout = catchAsync(async (req, res) => {
   const token = req.cookies?.refreshToken;
 
   if (token) {
-    const user = await User.findOne({ refreshToken: token });
+    const hashedToken = hashToken(token);
+    const user = await User.findOne({ refreshToken: hashedToken });
 
     await User.findOneAndUpdate(
-      { refreshToken: token },
+      { refreshToken: hashedToken },
       { refreshToken: null }
     );
 

@@ -3,30 +3,22 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import AlertBell from "./AlertBell";
 
 const adminLinks = [
   { href: "/admin", label: "Dashboard", roles: ["superadmin", "admin"] },
   { href: "/admin/auditoria", label: "Auditoría", roles: ["superadmin", "admin"] },
-  {
-    href: "/admin/inventario",
-    label: "Inventario",
-    roles: ["superadmin", "admin"],
-  },
+  { href: "/admin/inventario", label: "Inventario", roles: ["superadmin", "admin"] },
   { href: "/admin/pedidos", label: "Pedidos", roles: ["superadmin", "admin"] },
-  {
-    href: "/admin/solicitudes",
-    label: "Solicitudes",
-    roles: ["superadmin", "admin", "vendedor"],
-  },
+  { href: "/admin/solicitudes", label: "Solicitudes", roles: ["superadmin", "admin", "vendedor"] },
   { href: "/admin/productos", label: "Productos", roles: ["superadmin", "admin"] },
   { href: "/admin/catalogo", label: "Catálogo", roles: ["superadmin", "admin"] },
   { href: "/admin/contenido", label: "Contenido", roles: ["superadmin", "admin"] },
   { href: "/admin/marketing", label: "Marketing", roles: ["superadmin", "admin"] },
-  {
-    href: "/admin/configuracion",
-    label: "Configuración",
-    roles: ["superadmin", "admin"],
-  },
+  { href: "/admin/pos", label: "POS", roles: ["superadmin", "admin", "vendedor"] },
+  { href: "/admin/cupones", label: "Cupones", roles: ["superadmin", "admin"] },
+  { href: "/admin/alertas", label: "Alertas", roles: ["superadmin", "admin"] },
+  { href: "/admin/configuracion", label: "Configuración", roles: ["superadmin", "admin"] },
   { href: "/admin/usuarios", label: "Usuarios", roles: ["superadmin"] },
   { href: "/admin/finanzas", label: "Finanzas", roles: ["superadmin"] },
 ];
@@ -34,11 +26,8 @@ const adminLinks = [
 const vendorLinks = [
   { href: "/vendedor", label: "Dashboard", roles: ["superadmin", "admin", "vendedor"] },
   { href: "/vendedor/pedidos", label: "Pedidos", roles: ["superadmin", "admin", "vendedor"] },
-  {
-    href: "/admin/solicitudes",
-    label: "Solicitudes",
-    roles: ["superadmin", "admin", "vendedor"],
-  },
+  { href: "/admin/pos", label: "POS", roles: ["superadmin", "admin", "vendedor"] },
+  { href: "/admin/solicitudes", label: "Solicitudes", roles: ["superadmin", "admin", "vendedor"] },
 ];
 
 export default function AdminShell({ children, variant = "admin" }) {
@@ -47,11 +36,10 @@ export default function AdminShell({ children, variant = "admin" }) {
 
   const links = variant === "vendedor" ? vendorLinks : adminLinks;
   const visibleLinks = links.filter((l) => l.roles.includes(user?.role));
+  const showBell = ["superadmin", "admin"].includes(user?.role);
 
   const isActive = (href) => {
-    if (href === "/admin" || href === "/vendedor") {
-      return pathname === href;
-    }
+    if (href === "/admin" || href === "/vendedor") return pathname === href;
     return pathname.startsWith(href);
   };
 
@@ -101,6 +89,11 @@ export default function AdminShell({ children, variant = "admin" }) {
       </aside>
 
       <div className="admin-main">
+        {showBell && (
+          <div className="admin-topbar">
+            <AlertBell />
+          </div>
+        )}
         <NavLinks className="admin-mobile-nav" />
         {children}
       </div>

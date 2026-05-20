@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { getAdminOrders } from "@/services/orderAdminService";
+import { getAdminOrders, exportOrdersPdf } from "@/services/orderAdminService";
 import { formatCOP } from "@/lib/formatCurrency";
 import {
   ORDER_STATUS_LABELS,
@@ -21,6 +21,7 @@ export default function OrdersList({ basePath = "/admin/pedidos" }) {
   });
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [exporting, setExporting] = useState(false);
 
   const load = async () => {
     setLoading(true);
@@ -88,6 +89,19 @@ export default function OrdersList({ basePath = "/admin/pedidos" }) {
         </select>
         <button type="submit" className="admin-btn admin-btn--primary">
           Buscar
+        </button>
+        <button
+          type="button"
+          className="admin-btn"
+          disabled={exporting}
+          onClick={async () => {
+            setExporting(true);
+            try { await exportOrdersPdf(filters); }
+            catch { alert("No se pudo exportar el PDF"); }
+            finally { setExporting(false); }
+          }}
+        >
+          {exporting ? "Exportando…" : "PDF"}
         </button>
       </form>
 

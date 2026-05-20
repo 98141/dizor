@@ -9,6 +9,7 @@ import {
   deleteAdminProduct,
   getAdminProducts,
   getInventory,
+  updateAdminProduct,
 } from "@/services/adminCatalogService";
 import { formatCOP } from "@/lib/formatCurrency";
 
@@ -23,6 +24,154 @@ const stockLabel = {
   low: "Bajo",
   out: "Agotado",
 };
+
+function getStockStatus(total) {
+  if (total <= 0) return "out";
+  if (total <= 5) return "low";
+  return "healthy";
+}
+
+function VariantRow({ variant }) {
+  const sizeName = variant.size?.name || "";
+  const colorName = variant.color?.name || "";
+  const status = getStockStatus(variant.stock ?? 0);
+
+  return (
+    <tr>
+      <td>{sizeName || "—"}</td>
+      <td>{colorName || "—"}</td>
+      <td style={{ fontFamily: "monospace", fontSize: "0.77rem" }}>{variant.sku || "—"}</td>
+      <td>
+        <span className={`stock-badge ${stockClass[status]}`}>{variant.stock ?? 0}</span>
+      </td>
+      <td>{variant.price ? formatCOP(variant.price) : "—"}</td>
+      <td>
+        <span style={{ fontSize: "0.72rem", fontWeight: 600, color: variant.isActive !== false ? "#166534" : "#991b1b" }}>
+          {variant.isActive !== false ? "Activa" : "Inactiva"}
+        </span>
+      </td>
+    </tr>
+  );
+}
+
+function ProductRow({ p, isAdmin, canViewCosts, onDelete, onToggleActive }) {
+  const [expanded, setExpanded] = useState(false);
+  const [toggling, setToggling] = useState(false);
+
+  const variants = p.variants || [];
+  const colSpan = 5 + (canViewCosts ? 1 : 0) + (isAdmin ? 1 : 0);
+  const stockStatus = getStockStatus(p.totalStock);
+
+  const handleToggle = async () => {
+    setToggling(true);
+    try {
+      await onToggleActive(p.id, !p.isActive);
+    } finally {
+      setToggling(false);
+    }
+  };
+
+  return (
+    <>
+      <tr>
+        <td className="product-thumb-cell">
+          {p.mainImage ? (
+            <img src={p.mainImage} alt={p.name} className="product-thumb" />
+          ) : (
+            <div className="product-thumb product-thumb--empty" />
+          )}
+        </td>
+        <td>
+          <Link
+            href={p.slug ? `/producto/${encodeURIComponent(p.slug)}` : `/admin/productos/${p.id}/editar`}
+            target="_blank"
+            rel="noreferrer"
+            className="product-name-link"
+          >
+            {p.name}
+          </Link>
+          {p.totalStock <= 5 && p.totalStock > 0 && (
+            <span className="product-low-stock-hint"> · stock bajo</span>
+          )}
+        </td>
+        <td>{formatCOP(p.effectivePrice)}</td>
+        {canViewCosts && (
+          <td>{p.internalCost != null ? formatCOP(p.internalCost) : "—"}</td>
+        )}
+        <td>
+          <span className={`stock-badge ${stockClass[stockStatus]}`}>{p.totalStock}</span>
+        </td>
+        <td>
+          {isAdmin ? (
+            <button
+              type="button"
+              className={`toggle-active-btn ${p.isActive ? "toggle-active-btn--on" : "toggle-active-btn--off"}`}
+              onClick={handleToggle}
+              disabled={toggling}
+              title={p.isActive ? "Clic para desactivar" : "Clic para activar"}
+            >
+              {toggling ? "…" : p.isActive ? "Activo" : "Inactivo"}
+            </button>
+          ) : (
+            <span style={{ fontSize: "0.85rem" }}>{p.isActive ? "Activo" : "Inactivo"}</span>
+          )}
+        </td>
+        {isAdmin && (
+          <td>
+            <div className="admin-table__actions">
+              {variants.length > 0 && (
+                <button
+                  type="button"
+                  className="admin-btn admin-btn--sm"
+                  onClick={() => setExpanded((v) => !v)}
+                  title="Ver tallas, colores y stock por variante"
+                >
+                  {expanded ? "▲" : "▼"} {variants.length} var.
+                </button>
+              )}
+              <Link href={`/admin/productos/${p.id}/editar`} className="admin-btn admin-btn--sm">
+                Editar
+              </Link>
+              <button
+                type="button"
+                className="admin-btn admin-btn--sm admin-btn--danger"
+                onClick={() => onDelete(p.id, p.name)}
+              >
+                Eliminar
+              </button>
+            </div>
+          </td>
+        )}
+      </tr>
+      {expanded && variants.length > 0 && (
+        <tr className="product-variants-expanded-row">
+          <td colSpan={colSpan} style={{ padding: 0 }}>
+            <div className="variants-panel">
+              <p className="variants-panel__title">Variantes de {p.name}</p>
+              <table className="variants-mini-table">
+                <thead>
+                  <tr>
+                    <th>Talla</th>
+                    <th>Color</th>
+                    <th>SKU</th>
+                    <th>Stock</th>
+                    <th>Precio variante</th>
+                    <th>Estado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {variants.map((v) => (
+                    <VariantRow key={v.id} variant={v} />
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </td>
+        </tr>
+      )}
+    </>
+  );
+}
 
 function AdminProductosContent() {
   const { user } = useAuth();
@@ -56,14 +205,22 @@ function AdminProductosContent() {
   }, []);
 
   const handleDelete = async (id, name) => {
-    if (!window.confirm(`¿Eliminar "${name}"? Esta acción no se puede deshacer.`)) {
-      return;
-    }
+    if (!window.confirm(`¿Eliminar "${name}"? Esta acción no se puede deshacer.`)) return;
     try {
       await deleteAdminProduct(id);
       await load();
     } catch (err) {
       alert(err.response?.data?.message || "No se pudo eliminar");
+    }
+  };
+
+  const handleToggleActive = async (id, newValue) => {
+    setProducts((prev) => prev.map((p) => (p.id === id ? { ...p, isActive: newValue } : p)));
+    try {
+      await updateAdminProduct(id, { isActive: newValue });
+    } catch (err) {
+      setProducts((prev) => prev.map((p) => (p.id === id ? { ...p, isActive: !newValue } : p)));
+      alert(err.response?.data?.message || "No se pudo cambiar el estado");
     }
   };
 
@@ -126,11 +283,13 @@ function AdminProductosContent() {
               {inventory.map((item) => (
                 <tr key={item.id}>
                   <td>{item.name}</td>
-                  <td>{item.totalStock}</td>
                   <td>
-                    <span
-                      className={`stock-badge ${stockClass[item.stockStatus]}`}
-                    >
+                    <span className={`stock-badge ${stockClass[item.stockStatus]}`}>
+                      {item.totalStock}
+                    </span>
+                  </td>
+                  <td>
+                    <span className={`stock-badge ${stockClass[item.stockStatus]}`}>
                       {stockLabel[item.stockStatus]}
                     </span>
                   </td>
@@ -142,9 +301,10 @@ function AdminProductosContent() {
         </div>
       ) : (
         <div className="admin-table-wrap">
-          <table className="admin-table">
+          <table className="admin-table product-list-table">
             <thead>
               <tr>
+                <th style={{ width: "48px" }}></th>
                 <th>Nombre</th>
                 <th>Precio</th>
                 {canViewCosts && <th>Costo</th>}
@@ -155,46 +315,14 @@ function AdminProductosContent() {
             </thead>
             <tbody>
               {products.map((p) => (
-                <tr key={p.id}>
-                  <td>
-                    <Link
-                      href={
-                        p.slug
-                          ? `/producto/${encodeURIComponent(p.slug)}`
-                          : `/admin/productos/${p.id}/editar`
-                      }
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {p.name}
-                    </Link>
-                  </td>
-                  <td>{formatCOP(p.effectivePrice)}</td>
-                  {canViewCosts && (
-                    <td>
-                      {p.internalCost != null ? formatCOP(p.internalCost) : "—"}
-                    </td>
-                  )}
-                  <td>{p.totalStock}</td>
-                  <td>{p.isActive ? "Activo" : "Inactivo"}</td>
-                  {isAdmin && (
-                    <td className="admin-table__actions">
-                      <Link
-                        href={`/admin/productos/${p.id}/editar`}
-                        className="admin-btn admin-btn--sm"
-                      >
-                        Editar
-                      </Link>
-                      <button
-                        type="button"
-                        className="admin-btn admin-btn--sm admin-btn--danger"
-                        onClick={() => handleDelete(p.id, p.name)}
-                      >
-                        Eliminar
-                      </button>
-                    </td>
-                  )}
-                </tr>
+                <ProductRow
+                  key={p.id}
+                  p={p}
+                  isAdmin={isAdmin}
+                  canViewCosts={canViewCosts}
+                  onDelete={handleDelete}
+                  onToggleActive={handleToggleActive}
+                />
               ))}
             </tbody>
           </table>

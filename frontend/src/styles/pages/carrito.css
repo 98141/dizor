@@ -155,6 +155,120 @@
   text-decoration: underline;
 }
 
+/* ── Summary extras ── */
+.cart-summary__row--discount {
+  color: var(--color-success);
+}
+
+.cart-summary__note {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  margin: var(--space-xs) 0 var(--space-md);
+  line-height: 1.4;
+}
+
+/* ── Coupon tag in discount row ── */
+.cart-coupon-code {
+  font-weight: 700;
+  font-size: 0.78rem;
+  background: #d1fae5;
+  color: #065f46;
+  border-radius: var(--radius-sm);
+  padding: 0.1rem 0.4rem;
+  letter-spacing: 0.04em;
+}
+
+.cart-coupon-remove {
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0 0.2rem;
+  margin-left: 0.2rem;
+  vertical-align: middle;
+  transition: color 0.15s;
+}
+
+.cart-coupon-remove:hover {
+  color: var(--color-error);
+}
+
+/* ── Coupon input form ── */
+.cart-coupon {
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px dashed var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.cart-coupon__label {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.cart-coupon__row {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.cart-coupon__input {
+  flex: 1;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  background: var(--color-bg);
+  color: var(--color-text);
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  transition: border-color 0.2s;
+  min-width: 0;
+}
+
+.cart-coupon__input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.cart-coupon__input::placeholder {
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--color-text-muted);
+}
+
+.cart-coupon__btn {
+  padding: 0.55rem 0.9rem;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.cart-coupon__btn:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+}
+
+.cart-coupon__btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.cart-coupon__error {
+  font-size: 0.8rem;
+  color: var(--color-error);
+  margin: 0;
+}
+
 @media (min-width: 768px) {
   .cart-layout {
     grid-template-columns: 1fr 340px;

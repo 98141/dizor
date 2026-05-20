@@ -29,3 +29,19 @@ export const updateOrderShipping = async (id, data) => {
   const res = await api.patch(`/admin/orders/${id}/shipping`, data);
   return res.data;
 };
+
+export const exportOrdersPdf = async (params = {}) => {
+  const res = await api.get("/admin/orders/export/pdf", {
+    params,
+    responseType: "blob",
+  });
+  const blob = new Blob([res.data], { type: "application/pdf" });
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `dizor-pedidos-${Date.now()}.pdf`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.URL.revokeObjectURL(url);
+};

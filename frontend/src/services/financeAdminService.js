@@ -58,3 +58,20 @@ export const exportFinancePdf = (params) =>
     params,
     `dizor-finanzas-${Date.now()}.pdf`
   );
+
+export const getFinanceHistory = async (params = {}) => {
+  const res = await api.get("/admin/finance/history", { params });
+  return res.data;
+};
+
+export const getFinanceProducts = async () => {
+  const res = await api.get("/admin/finance/products");
+  return res.data;
+};
+
+export const updateProductCost = async (id, internalCost) => {
+  const res = await api.patch(`/admin/finance/products/${id}/cost`, {
+    internalCost,
+  });
+  return res.data;
+};

@@ -10,6 +10,9 @@ router.use(authorizeRoles("superadmin"));
 
 router.get("/report", financeAdminController.getReport);
 router.get("/overview", financeAdminController.getOverview);
+router.get("/history", financeAdminController.getFinanceHistory);
+router.get("/products", financeAdminController.getFinanceProducts);
+router.patch("/products/:id/cost", financeAdminController.updateProductCost);
 router.get("/export/csv", financeAdminController.exportCsv);
 router.get("/export/xlsx", financeAdminController.exportXlsx);
 router.get("/export/pdf", financeAdminController.exportPdf);

@@ -7,6 +7,7 @@ const snapshotVariants = (product) => {
     variantId: String(v._id),
     sku: v.sku,
     stock: v.stock ?? 0,
+    price: v.price ?? null,
     isActive: v.isActive !== false,
     sizeName: v.size?.name || null,
     colorName: v.color?.name || null,
@@ -142,8 +143,10 @@ exports.logProductSale = async ({
 exports.logProductUpdates = async ({ productBefore, productAfter, user }) => {
   const before = snapshotVariants(productBefore);
   const after = snapshotVariants(productAfter);
+  const beforeMap = new Map(before.map((v) => [v.variantId, v]));
   const afterMap = new Map(after.map((v) => [v.variantId, v]));
 
+  // Existing variants — stock, price, isActive changes
   for (const prev of before) {
     const next = afterMap.get(prev.variantId);
     if (!next) continue;
@@ -165,10 +168,69 @@ exports.logProductUpdates = async ({ productBefore, productAfter, user }) => {
         referenceType: "admin",
         user,
         summary:
-          delta >= 0
-            ? `Entrada +${delta} uds · ${next.sku}`
-            : `Salida ${delta} uds · ${next.sku}`,
+          delta > 0
+            ? `Ingreso +${delta} uds · ${next.sku}${next.sizeName ? ` · ${next.sizeName}` : ""}${next.colorName ? ` / ${next.colorName}` : ""}`
+            : `Salida ${delta} uds · ${next.sku}${next.sizeName ? ` · ${next.sizeName}` : ""}${next.colorName ? ` / ${next.colorName}` : ""}`,
         details: { reason: "manual_adjustment" },
+      });
+    }
+
+    if (prev.price !== next.price && next.price != null) {
+      await exports.logProductHistory({
+        productId: productAfter._id,
+        productName: productAfter.name,
+        productSlug: productAfter.slug,
+        variantId: next.variantId,
+        sku: next.sku,
+        sizeName: next.sizeName,
+        colorName: next.colorName,
+        eventType: "price_change",
+        referenceType: "admin",
+        user,
+        summary: `Precio variante ${next.sku}: ${prev.price ?? "—"} → ${next.price}`,
+        details: { field: "variant_price", before: prev.price, after: next.price },
+      });
+    }
+
+    if (prev.isActive !== next.isActive) {
+      await exports.logProductHistory({
+        productId: productAfter._id,
+        productName: productAfter.name,
+        productSlug: productAfter.slug,
+        variantId: next.variantId,
+        sku: next.sku,
+        sizeName: next.sizeName,
+        colorName: next.colorName,
+        eventType: "status_change",
+        referenceType: "admin",
+        user,
+        summary: next.isActive
+          ? `Variante activada · ${next.sku}`
+          : `Variante desactivada · ${next.sku}`,
+        details: { field: "variant_isActive", isActive: next.isActive },
+      });
+    }
+  }
+
+  // New variants (present in after but not in before)
+  for (const next of after) {
+    if (!beforeMap.has(next.variantId)) {
+      await exports.logProductHistory({
+        productId: productAfter._id,
+        productName: productAfter.name,
+        productSlug: productAfter.slug,
+        variantId: next.variantId,
+        sku: next.sku,
+        sizeName: next.sizeName,
+        colorName: next.colorName,
+        eventType: "stock_adjustment",
+        quantityChange: next.stock,
+        stockBefore: 0,
+        stockAfter: next.stock,
+        referenceType: "admin",
+        user,
+        summary: `Nueva variante agregada · ${next.sku} · stock inicial ${next.stock}`,
+        details: { reason: "new_variant" },
       });
     }
   }
@@ -181,11 +243,8 @@ exports.logProductUpdates = async ({ productBefore, productAfter, user }) => {
       eventType: "price_change",
       referenceType: "admin",
       user,
-      summary: `Precio ${productBefore.salePrice} → ${productAfter.salePrice}`,
-      details: {
-        before: productBefore.salePrice,
-        after: productAfter.salePrice,
-      },
+      summary: `Precio base: ${productBefore.salePrice ?? "—"} → ${productAfter.salePrice ?? "—"}`,
+      details: { field: "salePrice", before: productBefore.salePrice, after: productAfter.salePrice },
     });
   }
 
@@ -200,9 +259,7 @@ exports.logProductUpdates = async ({ productBefore, productAfter, user }) => {
       summary: productAfter.isActive
         ? "Producto activado en tienda"
         : "Producto desactivado en tienda",
-      details: {
-        isActive: productAfter.isActive,
-      },
+      details: { isActive: productAfter.isActive },
     });
   }
 
@@ -214,14 +271,83 @@ exports.logProductUpdates = async ({ productBefore, productAfter, user }) => {
       eventType: "updated",
       referenceType: "admin",
       user,
-      summary: `Nombre: ${productBefore.name} → ${productAfter.name}`,
-      details: {
-        field: "name",
-        before: productBefore.name,
-        after: productAfter.name,
-      },
+      summary: `Nombre: "${productBefore.name}" → "${productAfter.name}"`,
+      details: { field: "name", before: productBefore.name, after: productAfter.name },
     });
   }
+};
+
+exports.logPosSale = async ({
+  productId,
+  productName,
+  productSlug,
+  variantId,
+  sku,
+  sizeName,
+  colorName,
+  quantity,
+  stockBefore,
+  stockAfter,
+  posOrderNumber,
+  posOrderId,
+  user,
+  unitPrice,
+}) => {
+  await exports.logProductHistory({
+    productId,
+    productName,
+    productSlug,
+    variantId,
+    sku,
+    sizeName: sizeName || null,
+    colorName: colorName || null,
+    eventType: "sale",
+    quantityChange: -quantity,
+    stockBefore,
+    stockAfter,
+    referenceType: "pos",
+    referenceId: posOrderId,
+    referenceLabel: posOrderNumber,
+    user,
+    summary: `Venta POS ${quantity} uds · ${posOrderNumber} · quedan ${stockAfter}`,
+    details: { posOrderNumber, unitPrice, channel: "pos" },
+  });
+};
+
+exports.logPosVoidReturn = async ({
+  productId,
+  productName,
+  productSlug,
+  variantId,
+  sku,
+  sizeName,
+  colorName,
+  quantity,
+  stockBefore,
+  stockAfter,
+  posOrderNumber,
+  posOrderId,
+  user,
+}) => {
+  await exports.logProductHistory({
+    productId,
+    productName,
+    productSlug,
+    variantId,
+    sku,
+    sizeName: sizeName || null,
+    colorName: colorName || null,
+    eventType: "stock_adjustment",
+    quantityChange: quantity,
+    stockBefore,
+    stockAfter,
+    referenceType: "pos",
+    referenceId: posOrderId,
+    referenceLabel: posOrderNumber,
+    user,
+    summary: `Devolución POS +${quantity} uds · ${posOrderNumber} · anulación`,
+    details: { reason: "pos_void_return", posOrderNumber, channel: "pos" },
+  });
 };
 
 exports.snapshotProductForHistory = (product) => ({
@@ -234,6 +360,7 @@ exports.snapshotProductForHistory = (product) => ({
     _id: v._id,
     sku: v.sku,
     stock: v.stock,
+    price: v.price ?? null,
     isActive: v.isActive,
     size: v.size,
     color: v.color,

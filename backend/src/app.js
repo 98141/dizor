@@ -29,11 +29,16 @@ const adminAuditRoutes = require("./routes/adminAuditRoutes");
 const adminInventoryRoutes = require("./routes/adminInventoryRoutes");
 const adminFinanceRoutes = require("./routes/adminFinanceRoutes");
 const wompiWebhookRoutes = require("./routes/wompiWebhookRoutes");
+const adminCouponRoutes = require("./routes/adminCouponRoutes");
+const adminPosRoutes = require("./routes/adminPosRoutes");
+const adminAlertRoutes = require("./routes/adminAlertRoutes");
 
 const app = express();
 
 app.disable("x-powered-by");
-app.set("trust proxy", 1);
+if (process.env.NODE_ENV === "production") {
+  app.set("trust proxy", 1);
+}
 
 app.use(
   helmet({
@@ -121,6 +126,9 @@ app.use("/api/admin/audit", adminAuditRoutes);
 app.use("/api/admin/inventory", adminInventoryRoutes);
 app.use("/api/admin/finance", adminFinanceRoutes);
 app.use("/api/webhooks", wompiWebhookRoutes);
+app.use("/api/admin/coupons", adminCouponRoutes);
+app.use("/api/admin/pos", adminPosRoutes);
+app.use("/api/admin/alerts", adminAlertRoutes);
 
 app.use((req, res, next) => {
   next(new AppError(`Ruta no encontrada: ${req.originalUrl}`, 404));
