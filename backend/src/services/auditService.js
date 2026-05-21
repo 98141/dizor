@@ -1,8 +1,11 @@
 const AuditLog = require("../models/AuditLog");
+const logger = require("../lib/logger");
 
 const getRequestMeta = (req) => ({
   ip: req?.ip || req?.headers?.["x-forwarded-for"] || null,
   userAgent: req?.headers?.["user-agent"] || null,
+  method: req?.method || null,
+  path: req?.originalUrl || req?.path || null,
 });
 
 const sanitizePayload = (data) => {
@@ -31,23 +34,35 @@ exports.logAuditEvent = async ({
 }) => {
   if (!action || !module) return;
 
-  const meta = req ? getRequestMeta(req) : { ip: null, userAgent: null };
+  const meta = req
+    ? getRequestMeta(req)
+    : { ip: null, userAgent: null, method: null, path: null };
 
-  await AuditLog.create({
-    userId: user?._id || user?.id || null,
-    userEmail: user?.email || req?.body?.email || null,
-    role: user?.role || null,
-    action,
-    module,
-    ip: meta.ip,
-    userAgent: meta.userAgent,
-    previousData: sanitizePayload(previousData),
-    newData: sanitizePayload(newData),
-    entityId: entityId || null,
-    entityType: entityType || null,
-    summary: summary ? String(summary).slice(0, 500) : null,
-    success,
-  });
+  try {
+    await AuditLog.create({
+      userId: user?._id || user?.id || null,
+      userEmail: user?.email || req?.body?.email || null,
+      role: user?.role || null,
+      action,
+      module,
+      ip: meta.ip,
+      userAgent: meta.userAgent,
+      method: meta.method,
+      path: meta.path,
+      previousData: sanitizePayload(previousData),
+      newData: sanitizePayload(newData),
+      entityId: entityId || null,
+      entityType: entityType || null,
+      summary: summary ? String(summary).slice(0, 500) : null,
+      success,
+    });
+  } catch (saveErr) {
+    logger.warn("Audit log save failed", {
+      action,
+      module,
+      error: saveErr.message,
+    });
+  }
 };
 
 /** Compatibilidad con llamadas existentes (auth y pedidos legacy). */

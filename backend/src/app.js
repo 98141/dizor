@@ -10,6 +10,7 @@ const hpp = require("hpp");
 
 const AppError = require("./utils/AppError");
 const globalErrorHandler = require("./middlewares/errorMiddleware");
+const logger = require("./lib/logger");
 const authRoutes = require("./routes/authRoutes");
 const adminUserRoutes = require("./routes/adminUserRoutes");
 const productPublicRoutes = require("./routes/productPublicRoutes");
@@ -53,9 +54,11 @@ app.use(
   })
 );
 
-if (process.env.NODE_ENV === "development") {
-  app.use(morgan("dev"));
-}
+app.use(
+  morgan(process.env.NODE_ENV === "production" ? "combined" : "dev", {
+    stream: logger.stream,
+  })
+);
 
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,

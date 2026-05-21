@@ -1,5 +1,5 @@
-// backend/src/middlewares/errorMiddleware.js
 const AppError = require("../utils/AppError");
+const logger = require("../lib/logger");
 
 const handleCastErrorDB = () => {
   return new AppError("ID inválido", 400);
@@ -54,6 +54,28 @@ const globalErrorHandler = (err, req, res, next) => {
   if (error.name === "ValidationError") error = handleValidationErrorDB(error);
   if (error.name === "JsonWebTokenError") error = handleJWTError();
   if (error.name === "TokenExpiredError") error = handleJWTExpiredError();
+
+  const statusCode = error.statusCode || 500;
+
+  if (statusCode >= 500) {
+    logger.error("Server error", {
+      method: req.method,
+      url: req.originalUrl,
+      statusCode,
+      userId: req.user?.id || null,
+      ip: req.ip,
+      message: err.message,
+      stack: err.stack,
+    });
+  } else if (statusCode === 401 || statusCode === 403) {
+    logger.warn("Auth failure", {
+      method: req.method,
+      url: req.originalUrl,
+      statusCode,
+      ip: req.ip,
+      message: error.message,
+    });
+  }
 
   if (process.env.NODE_ENV === "development") {
     return sendErrorDev(error, res);
