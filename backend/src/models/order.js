@@ -50,15 +50,18 @@ const orderSchema = new mongoose.Schema(
       default: null,
     },
     isGuest: { type: Boolean, default: false },
+    source: { type: String, enum: ["web", "manual"], default: "web" },
+    channelOrigin: { type: String, default: "" },
+    shippingRequired: { type: Boolean, default: true },
     buyer: {
       name: { type: String, required: true, trim: true },
-      email: { type: String, required: true, trim: true, lowercase: true },
+      email: { type: String, default: "", trim: true, lowercase: true },
       phone: { type: String, required: true, trim: true },
     },
     shippingAddress: {
-      address: { type: String, required: true, trim: true },
-      city: { type: String, required: true, trim: true },
-      department: { type: String, required: true, trim: true },
+      address: { type: String, default: "", trim: true },
+      city: { type: String, default: "", trim: true },
+      department: { type: String, default: "", trim: true },
       postalCode: { type: String, trim: true, default: "" },
       country: { type: String, default: "Colombia" },
     },
@@ -70,7 +73,7 @@ const orderSchema = new mongoose.Schema(
     total: { type: Number, required: true },
     paymentMethod: {
       type: String,
-      enum: ["wompi", "nequi_manual", "contra_entrega"],
+      enum: ["wompi", "nequi_manual", "contra_entrega", "efectivo", "nequi_presencial", "tarjeta", "transferencia"],
       required: true,
     },
     paymentStatus: {
@@ -121,6 +124,10 @@ const orderSchema = new mongoose.Schema(
       reference: { type: String, default: "" },
       status: { type: String, default: "" },
     },
+    stockDeducted: { type: Boolean, default: true },
+    idempotencyKey: { type: String, default: null },
+    couponCode: { type: String, default: "" },
+    couponConsumed: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
@@ -128,5 +135,6 @@ const orderSchema = new mongoose.Schema(
 orderSchema.index({ orderNumber: 1 });
 orderSchema.index({ user: 1, createdAt: -1 });
 orderSchema.index({ "buyer.email": 1 });
+orderSchema.index({ idempotencyKey: 1 }, { sparse: true, unique: true });
 
 module.exports = mongoose.model("Order", orderSchema);

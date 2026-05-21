@@ -7,7 +7,7 @@ import {
 } from "@/services/marketingService";
 
 export default function NewsletterSignup({
-  title = "Newsletter Dizor",
+  title = "Newsletter Dizor prueba",
   description = "Recibe lanzamientos y ofertas.",
   successMessage = "¡Gracias! Te hemos suscrito.",
   source = "footer",

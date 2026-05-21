@@ -15,6 +15,17 @@ const formatMoney = (n) =>
     maximumFractionDigits: 0,
   }).format(n || 0);
 
+// Parse "YYYY-MM-DD" as LOCAL midnight to avoid UTC offset shifting the day
+const parseLocalDay = (dateStr) => {
+  if (!dateStr) {
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+    return now;
+  }
+  const [y, m, d] = dateStr.split("-").map(Number);
+  return new Date(y, m - 1, d, 0, 0, 0, 0);
+};
+
 const generatePosNumber = async () => {
   const today = new Date();
   const prefix = `POS-${today.getFullYear()}${String(today.getMonth() + 1).padStart(2, "0")}${String(today.getDate()).padStart(2, "0")}`;
@@ -128,14 +139,28 @@ exports.createPosSale = catchAsync(async (req, res, next) => {
   const discount = Math.max(0, Number(discountAmount) || 0);
   const total = Math.max(0, subtotal - discount);
 
-  await Promise.all(
-    safeItems.map((item) =>
-      Product.findOneAndUpdate(
-        { _id: item.productId, "variants._id": item.variantId },
-        { $inc: { "variants.$.stock": -item.quantity } }
-      )
-    )
-  );
+  // Descontar stock atómicamente — el $gte evita stock negativo por doble envío
+  const deductedPos = [];
+  for (const item of safeItems) {
+    const updated = await Product.findOneAndUpdate(
+      {
+        _id: item.productId,
+        "variants._id": item.variantId,
+        "variants.stock": { $gte: item.quantity },
+      },
+      { $inc: { "variants.$.stock": -item.quantity } }
+    );
+    if (!updated) {
+      for (const prev of deductedPos) {
+        await Product.findOneAndUpdate(
+          { _id: prev.productId, "variants._id": prev.variantId },
+          { $inc: { "variants.$.stock": prev.quantity } }
+        ).catch(() => {});
+      }
+      return next(new AppError(`Stock insuficiente: ${item.productName} (ya no hay unidades disponibles)`, 400));
+    }
+    deductedPos.push(item);
+  }
 
   const posOrderNumber = await generatePosNumber();
 
@@ -152,7 +177,7 @@ exports.createPosSale = catchAsync(async (req, res, next) => {
     paymentMethod,
     cashReceived: cashIn,
     changeGiven: changeOut,
-    soldBy: req.user._id,
+    soldBy: req.user.id,
     notes: (notes || "").trim(),
   });
 
@@ -188,14 +213,22 @@ exports.getPosSales = catchAsync(async (req, res) => {
   const limit = Math.min(50, parseInt(req.query.limit, 10) || 30);
   const skip = (page - 1) * limit;
 
-  const day = req.query.date ? new Date(req.query.date) : new Date();
-  day.setHours(0, 0, 0, 0);
-  const nextDay = new Date(day.getTime() + 86400000);
+  const filter = {};
 
-  const filter = {
-    createdAt: { $gte: day, $lt: nextDay },
-    ...(req.query.includeVoided !== "true" ? { isVoided: false } : {}),
-  };
+  if (req.query.all !== "true") {
+    const day = parseLocalDay(req.query.date);
+    const nextDay = new Date(day.getTime() + 86400000);
+    filter.createdAt = { $gte: day, $lt: nextDay };
+  } else if (req.query.from || req.query.to) {
+    filter.createdAt = {};
+    if (req.query.from) filter.createdAt.$gte = parseLocalDay(req.query.from);
+    if (req.query.to) {
+      const to = parseLocalDay(req.query.to);
+      filter.createdAt.$lte = new Date(to.getTime() + 86400000 - 1);
+    }
+  }
+
+  if (req.query.includeVoided !== "true") filter.isVoided = false;
 
   const [sales, total] = await Promise.all([
     PosOrder.find(filter)
@@ -216,7 +249,7 @@ exports.voidPosSale = catchAsync(async (req, res, next) => {
 
   sale.isVoided = true;
   sale.voidedAt = new Date();
-  sale.voidedBy = req.user._id;
+  sale.voidedBy = req.user.id;
   sale.voidReason = (req.body.reason || "").trim();
   await sale.save();
 
@@ -265,22 +298,25 @@ exports.voidPosSale = catchAsync(async (req, res, next) => {
 });
 
 exports.getCashClose = catchAsync(async (req, res) => {
-  const day = req.query.date ? new Date(req.query.date) : new Date();
-  day.setHours(0, 0, 0, 0);
+  const Order = require("../models/order");
+
+  const day = parseLocalDay(req.query.date);
   const nextDay = new Date(day.getTime() + 86400000);
 
-  const sales = await PosOrder.find({
-    createdAt: { $gte: day, $lt: nextDay },
-    isVoided: false,
-  })
-    .populate("soldBy", "name")
-    .sort({ createdAt: 1 })
-    .lean();
+  const [sales, onlineOrders] = await Promise.all([
+    PosOrder.find({ createdAt: { $gte: day, $lt: nextDay }, isVoided: false })
+      .populate("soldBy", "name")
+      .sort({ createdAt: 1 })
+      .lean(),
+    Order.find({ createdAt: { $gte: day, $lt: nextDay }, paymentStatus: "pagado" })
+      .select("orderNumber buyer total paymentMethod createdAt items")
+      .sort({ createdAt: 1 })
+      .lean(),
+  ]);
 
   const byMethod = {};
   let grandTotal = 0;
   let totalItems = 0;
-
   for (const sale of sales) {
     const pm = sale.paymentMethod;
     if (!byMethod[pm]) byMethod[pm] = { count: 0, total: 0 };
@@ -288,6 +324,18 @@ exports.getCashClose = catchAsync(async (req, res) => {
     byMethod[pm].total += sale.total;
     grandTotal += sale.total;
     totalItems += sale.items.reduce((s, i) => s + i.quantity, 0);
+  }
+
+  const onlineByMethod = {};
+  let onlineTotal = 0;
+  let onlineItems = 0;
+  for (const order of onlineOrders) {
+    const pm = order.paymentMethod;
+    if (!onlineByMethod[pm]) onlineByMethod[pm] = { count: 0, total: 0 };
+    onlineByMethod[pm].count += 1;
+    onlineByMethod[pm].total += order.total;
+    onlineTotal += order.total;
+    onlineItems += (order.items || []).reduce((s, i) => s + i.quantity, 0);
   }
 
   const label = day.toLocaleDateString("es-CO", {
@@ -306,23 +354,42 @@ exports.getCashClose = catchAsync(async (req, res) => {
     expectedCash: byMethod["efectivo"]?.total || 0,
     byMethod,
     sales,
+    online: {
+      salesCount: onlineOrders.length,
+      total: onlineTotal,
+      totalItems: onlineItems,
+      byMethod: onlineByMethod,
+      orders: onlineOrders.map((o) => ({
+        _id: o._id,
+        orderNumber: o.orderNumber,
+        customerName: o.buyer?.name || "—",
+        total: o.total,
+        paymentMethod: o.paymentMethod,
+        createdAt: o.createdAt,
+        itemCount: (o.items || []).reduce((s, i) => s + i.quantity, 0),
+      })),
+    },
+    combinedTotal: grandTotal + onlineTotal,
   });
 });
 
 exports.exportCashClosePdf = catchAsync(async (req, res) => {
   const PDFDocument = require("pdfkit");
+  const Order = require("../models/order");
 
-  const day = req.query.date ? new Date(req.query.date) : new Date();
-  day.setHours(0, 0, 0, 0);
+  const day = parseLocalDay(req.query.date);
   const nextDay = new Date(day.getTime() + 86400000);
 
-  const sales = await PosOrder.find({
-    createdAt: { $gte: day, $lt: nextDay },
-    isVoided: false,
-  })
-    .populate("soldBy", "name")
-    .sort({ createdAt: 1 })
-    .lean();
+  const [sales, onlineOrders] = await Promise.all([
+    PosOrder.find({ createdAt: { $gte: day, $lt: nextDay }, isVoided: false })
+      .populate("soldBy", "name")
+      .sort({ createdAt: 1 })
+      .lean(),
+    Order.find({ createdAt: { $gte: day, $lt: nextDay }, paymentStatus: "pagado" })
+      .select("orderNumber buyer total paymentMethod createdAt items")
+      .sort({ createdAt: 1 })
+      .lean(),
+  ]);
 
   const byMethod = {};
   let grandTotal = 0;
@@ -334,11 +401,27 @@ exports.exportCashClosePdf = catchAsync(async (req, res) => {
     grandTotal += sale.total;
   }
 
-  const PM_LABELS = {
+  const onlineByMethod = {};
+  let onlineTotal = 0;
+  for (const order of onlineOrders) {
+    const pm = order.paymentMethod;
+    if (!onlineByMethod[pm]) onlineByMethod[pm] = { count: 0, total: 0 };
+    onlineByMethod[pm].count += 1;
+    onlineByMethod[pm].total += order.total;
+    onlineTotal += order.total;
+  }
+
+  const POS_PM_LABELS = {
     efectivo: "Efectivo",
     tarjeta: "Tarjeta",
     nequi: "Nequi",
     transferencia: "Transferencia",
+  };
+
+  const ONLINE_PM_LABELS = {
+    wompi: "Wompi (PSE / Tarjeta)",
+    nequi_manual: "Nequi (transferencia)",
+    contra_entrega: "Contraentrega pagada",
   };
 
   const dateLabel = day.toLocaleDateString("es-CO", {
@@ -355,44 +438,74 @@ exports.exportCashClosePdf = catchAsync(async (req, res) => {
     doc.on("end", resolve);
     doc.on("error", reject);
 
-    doc.fontSize(18).text("Cierre de caja — Dizor", { align: "center" });
-    doc.fontSize(12).text(dateLabel, { align: "center" });
-    doc.moveDown(1.5);
-
-    doc.fontSize(13).text("Resumen por método de pago", { underline: true });
+    // ── Header ──
+    doc.fontSize(18).font("Helvetica-Bold").text("Cierre de caja — Dizor", { align: "center" });
+    doc.fontSize(12).font("Helvetica").text(dateLabel, { align: "center" });
     doc.moveDown(0.5);
+
+    // ── Combined total banner ──
+    doc.fontSize(13).font("Helvetica-Bold")
+      .text(`INGRESO TOTAL DEL DÍA: ${formatMoney(grandTotal + onlineTotal)}`, { align: "center" });
+    doc.font("Helvetica").moveDown(1.2);
+
+    // ── POS section ──
+    doc.moveTo(40, doc.y).lineTo(555, doc.y).stroke("#d1d5db").moveDown(0.5);
+    doc.fontSize(13).font("Helvetica-Bold").text("Ventas presenciales (POS)");
+    doc.font("Helvetica").moveDown(0.5);
     doc.fontSize(10);
-    for (const [pm, data] of Object.entries(byMethod)) {
-      doc.text(
-        `${PM_LABELS[pm] || pm}: ${data.count} venta(s) — ${formatMoney(data.total)}`
-      );
-    }
-    doc.moveDown(0.5);
-    doc
-      .fontSize(12)
-      .font("Helvetica-Bold")
-      .text(`TOTAL DEL DÍA: ${formatMoney(grandTotal)}`);
-    doc.font("Helvetica").moveDown(1.5);
-
-    doc.fontSize(13).text("Detalle de ventas", { underline: true });
-    doc.moveDown(0.5);
-    doc.fontSize(9);
-
-    for (const sale of sales) {
-      const time = new Date(sale.createdAt).toLocaleTimeString("es-CO", {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-      doc.text(
-        `${sale.posOrderNumber}  ${time}  ${sale.customerName}  —  ${PM_LABELS[sale.paymentMethod] || sale.paymentMethod}  ${formatMoney(sale.total)}`
-      );
-      for (const item of sale.items) {
-        doc.text(
-          `      ${item.productName} ${item.sizeName} ${item.colorName} x${item.quantity} = ${formatMoney(item.lineTotal)}`
-        );
+    if (Object.keys(byMethod).length === 0) {
+      doc.fillColor("#999").text("Sin ventas POS para este día.").fillColor("#000");
+    } else {
+      for (const [pm, d] of Object.entries(byMethod)) {
+        doc.text(`  ${POS_PM_LABELS[pm] || pm}: ${d.count} venta(s) — ${formatMoney(d.total)}`);
       }
-      doc.moveDown(0.3);
+      doc.moveDown(0.3).font("Helvetica-Bold")
+        .text(`  Subtotal POS: ${formatMoney(grandTotal)}`);
+      doc.font("Helvetica");
     }
+    doc.moveDown(1);
+
+    // ── POS detail ──
+    if (sales.length > 0) {
+      doc.fontSize(11).font("Helvetica-Bold").text("Detalle ventas POS");
+      doc.font("Helvetica").moveDown(0.4).fontSize(9);
+      for (const sale of sales) {
+        const time = new Date(sale.createdAt).toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit" });
+        doc.text(`${sale.posOrderNumber}  ${time}  ${sale.customerName}  —  ${POS_PM_LABELS[sale.paymentMethod] || sale.paymentMethod}  ${formatMoney(sale.total)}`);
+        for (const item of sale.items) {
+          doc.text(`      ${item.productName} ${item.sizeName} ${item.colorName} x${item.quantity} = ${formatMoney(item.lineTotal)}`);
+        }
+        doc.moveDown(0.3);
+      }
+    }
+
+    // ── Online section ──
+    doc.moveDown(0.5);
+    doc.moveTo(40, doc.y).lineTo(555, doc.y).stroke("#d1d5db").moveDown(0.5);
+    doc.fontSize(13).font("Helvetica-Bold").text("Pedidos online confirmados");
+    doc.font("Helvetica").moveDown(0.5).fontSize(10);
+    if (onlineOrders.length === 0) {
+      doc.fillColor("#999").text("Sin pedidos online pagados para este día.").fillColor("#000");
+    } else {
+      for (const [pm, d] of Object.entries(onlineByMethod)) {
+        doc.text(`  ${ONLINE_PM_LABELS[pm] || pm}: ${d.count} pedido(s) — ${formatMoney(d.total)}`);
+      }
+      doc.moveDown(0.3).font("Helvetica-Bold")
+        .text(`  Subtotal online: ${formatMoney(onlineTotal)}`);
+      doc.font("Helvetica").moveDown(0.8).fontSize(9);
+      for (const order of onlineOrders) {
+        const time = new Date(order.createdAt).toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit" });
+        const itemCount = (order.items || []).reduce((s, i) => s + i.quantity, 0);
+        doc.text(`${order.orderNumber}  ${time}  ${order.buyer?.name || "—"}  —  ${ONLINE_PM_LABELS[order.paymentMethod] || order.paymentMethod}  ${formatMoney(order.total)}  (${itemCount} und.)`);
+        doc.moveDown(0.25);
+      }
+    }
+
+    // ── Footer ──
+    doc.moveDown(0.8);
+    doc.moveTo(40, doc.y).lineTo(555, doc.y).stroke("#d1d5db").moveDown(0.4);
+    doc.fontSize(8).fillColor("#999")
+      .text(`Generado automáticamente por Dizor · ${dateLabel}`, { align: "center" });
 
     doc.end();
   });

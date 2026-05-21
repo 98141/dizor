@@ -8,7 +8,7 @@ const {
   calculateTotals,
 } = require("../services/cartService");
 const { getStoreSettings } = require("../services/settingsService");
-const { createOrder } = require("../services/orderService");
+const { createOrder, restoreOrderStock } = require("../services/orderService");
 const { isWompiConfigured, createPaymentLink } = require("../services/wompiService");
 const { markAbandonedCartRecovered } = require("../services/marketingService");
 
@@ -106,6 +106,7 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
     carrier,
     customerNotes,
     couponCode,
+    idempotencyKey,
   } = req.body;
 
   if (!buyer?.name || !buyer?.email || !buyer?.phone) {
@@ -133,7 +134,28 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
     shippingAddress.department
   );
 
-  // Aplicar cupón si se envió uno
+  // Idempotencia: si ya existe una orden con esta clave, devolverla directamente
+  if (idempotencyKey) {
+    const existing = await Order.findOne({ idempotencyKey });
+    if (existing) {
+      return res.status(200).json({
+        status: "success",
+        order: {
+          id: existing._id,
+          orderNumber: existing.orderNumber,
+          total: existing.total,
+          paymentMethod: existing.paymentMethod,
+          orderStatus: existing.orderStatus,
+          paymentStatus: existing.paymentStatus,
+        },
+        paymentUrl: existing.wompi?.paymentLinkUrl || null,
+        message: "Pedido ya registrado.",
+      });
+    }
+  }
+
+  // Validar y aplicar cupón (sin consumirlo todavía)
+  let appliedCoupon = null;
   if (couponCode) {
     const coupon = await Coupon.findOne({
       code: couponCode.trim().toUpperCase(),
@@ -153,14 +175,14 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
 
         totals.discountTotal = discount;
         totals.total = totals.subtotal - discount + totals.taxTotal + totals.shippingCost;
-
-        coupon.usedCount += 1;
-        await coupon.save();
+        appliedCoupon = coupon;
       }
     }
   }
 
   const isGuest = !req.user;
+  // Para Wompi diferimos el descuento de stock hasta que el webhook confirme el pago
+  const deductStock = paymentMethod !== "wompi";
 
   let order;
   try {
@@ -174,10 +196,22 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
       paymentMethod,
       carrier,
       customerNotes,
+      couponCode: appliedCoupon?.code || "",
+      deductStock,
+      idempotencyKey: idempotencyKey || null,
       req,
     });
   } catch (err) {
     return next(new AppError(err.message || "No se pudo crear el pedido", 400));
+  }
+
+  // Consumir cupón solo para métodos de pago que no sean Wompi
+  // (Wompi lo consume el webhook cuando confirma el pago)
+  if (appliedCoupon && deductStock) {
+    appliedCoupon.usedCount += 1;
+    await appliedCoupon.save();
+    order.couponConsumed = true;
+    await order.save({ validateBeforeSave: false });
   }
 
   if (req.user) {
@@ -194,6 +228,8 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
 
   if (paymentMethod === "wompi") {
     if (!isWompiConfigured()) {
+      // Limpiar la orden si Wompi no está configurado
+      await Order.findByIdAndDelete(order._id).catch(() => {});
       return next(
         new AppError("Wompi no está configurado en el servidor", 503)
       );
@@ -207,6 +243,7 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
       await order.save();
       paymentUrl = wompi.paymentLinkUrl;
     } catch (err) {
+      await Order.findByIdAndDelete(order._id).catch(() => {});
       return next(
         new AppError(err.message || "No se pudo iniciar el pago con Wompi", 502)
       );
@@ -330,6 +367,12 @@ exports.cancelMyOrder = catchAsync(async (req, res, next) => {
     return next(
       new AppError("Este pedido no puede cancelarse en su estado actual", 400)
     );
+  }
+
+  // Restaurar stock si ya fue descontado
+  if (order.stockDeducted) {
+    await restoreOrderStock(order.items);
+    order.stockDeducted = false;
   }
 
   order.orderStatus = "cancelado";

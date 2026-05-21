@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { getContentPages } from "@/services/cmsService";
-import NewsletterFooter from "@/components/marketing/NewsletterFooter";
 
 export default async function SiteFooter() {
   let pages = [];
@@ -51,8 +50,6 @@ export default async function SiteFooter() {
             )}
           </div>
         </div>
-
-        <NewsletterFooter />
 
         <p className="site-footer__copy">
           © {new Date().getFullYear()} Armando Mora. Todos los derechos reservados.

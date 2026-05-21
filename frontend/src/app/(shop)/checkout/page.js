@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
@@ -34,6 +34,14 @@ export default function CheckoutPage() {
   const router = useRouter();
   const { items, hydrated, toApiItems, clearCart, appliedCoupon, clearCoupon } = useCart();
   const { user, isAuthenticated } = useAuth();
+
+  // Clave única por sesión de checkout — evita órdenes duplicadas por doble clic o reenvío
+  const [idempotencyKey] = useState(() =>
+    typeof crypto !== "undefined" && crypto.randomUUID
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(36).slice(2)}`
+  );
+  const submittingRef = useRef(false);
 
   const [step, setStep] = useState(0);
   const [config, setConfig] = useState(null);
@@ -133,6 +141,9 @@ export default function CheckoutPage() {
   };
 
   const handleSubmit = async () => {
+    // Bloqueo de doble envío: el ref persiste entre re-renders y no reactiva el botón
+    if (submittingRef.current) return;
+    submittingRef.current = true;
     setLoading(true);
     setError("");
     try {
@@ -144,6 +155,7 @@ export default function CheckoutPage() {
         carrier,
         customerNotes,
         couponCode: appliedCoupon?.code || null,
+        idempotencyKey,
       });
       clearCart();
       clearCoupon();
@@ -159,6 +171,7 @@ export default function CheckoutPage() {
       );
     } catch (err) {
       setError(err.response?.data?.message || "No se pudo crear el pedido");
+      submittingRef.current = false; // Permitir reintentar solo si hubo error
     } finally {
       setLoading(false);
     }

@@ -12,6 +12,7 @@ router.use(authorizeRoles(...staffRoles));
 
 router.get("/stats", orderAdminController.getOrderStats);
 router.get("/export/pdf", orderAdminController.exportOrdersPdf);
+router.post("/manual", orderAdminController.createManualOrder);
 router.get("/", orderAdminController.getOrders);
 router.get("/:id", orderAdminController.getOrder);
 router.patch("/:id/status", orderAdminController.updateOrderStatus);
