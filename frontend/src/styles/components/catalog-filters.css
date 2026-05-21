@@ -214,3 +214,49 @@
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+/* ─── Shop skeleton loader ─── */
+.shop-loading {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--space-lg) var(--space-md) var(--space-2xl);
+}
+
+.shop-loading__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+}
+
+.shop-loading__card {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+}
+
+.shop-loading__card-img {
+  aspect-ratio: 4 / 5;
+  width: 100%;
+}
+
+.shop-loading__card-body {
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+@media (min-width: 768px) {
+  .shop-loading__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .shop-loading__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
