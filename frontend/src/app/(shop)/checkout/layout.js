@@ -2,6 +2,6 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function AuthLayout({ children }) {
+export default function CheckoutLayout({ children }) {
   return children;
 }
