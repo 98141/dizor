@@ -4,11 +4,10 @@ import ProductCard from "@/components/products/ProductCard";
 import PromoBanner from "@/components/cms/PromoBanner";
 import NewsletterSignup from "@/components/marketing/NewsletterSignup";
 import { getHomeContent } from "@/services/cmsService";
+import { fetchAppearance, getSiteName } from "@/lib/fetchAppearance";
 
 export const metadata = {
-  title: {
-    absolute: "Dizor | Sombreros artesanales de Sandoná",
-  },
+  title: "Sombreros artesanales de Sandoná",
   description:
     "Sombreros artesanales en palma de iraca de Sandoná, Nariño. Tejidos Brisa, Común y Súper fino. Envíos a todo Colombia.",
   keywords: [
@@ -17,10 +16,9 @@ export const metadata = {
     "sombreros Sandoná",
     "artesanías Nariño",
     "sombreros tejidos a mano",
-    "sombreros Dizor",
   ],
   openGraph: {
-    title: "Dizor | Sombreros artesanales de Sandoná",
+    title: "Sombreros artesanales de Sandoná",
     description:
       "Sombreros artesanales en palma de iraca de Sandoná, Nariño. Tejidos Brisa, Común y Súper fino.",
     type: "website",
@@ -85,14 +83,17 @@ async function fetchCraftTypes() {
 }
 
 export default async function HomePage() {
-  const [cmsData, featured, newProducts, bestsellers, craftTypes] =
+  const [cmsData, featured, newProducts, bestsellers, craftTypes, appearance] =
     await Promise.all([
       getHomeContent().catch(() => null),
       fetchFeatured(),
       fetchNewProducts(),
       fetchBestsellers(),
       fetchCraftTypes(),
+      fetchAppearance(),
     ]);
+
+  const siteName = getSiteName(appearance);
 
   const home = cmsData?.home;
   const hero = home?.hero;
@@ -116,7 +117,7 @@ export default async function HomePage() {
     "@context": "https://schema.org",
     "@type": "WebPage",
     "@id": `${process.env.NEXT_PUBLIC_SITE_URL || "https://dizor.com.co"}/#homepage`,
-    name: "Dizor | Sombreros artesanales de Sandoná",
+    name: `${siteName} | Sombreros artesanales de Sandoná`,
     description: "Sombreros artesanales en palma de iraca de Sandoná, Nariño, Colombia.",
     url: process.env.NEXT_PUBLIC_SITE_URL || "https://dizor.com.co",
     isPartOf: { "@id": `${process.env.NEXT_PUBLIC_SITE_URL || "https://dizor.com.co"}/#website` },

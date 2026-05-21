@@ -10,7 +10,7 @@ export const metadata = {
     "sombrero iraca personalizado",
   ],
   openGraph: {
-    title: "Personalizar sombrero | Dizor",
+    title: "Personalizar sombrero",
     description:
       "Solicita tu sombrero artesanal personalizado. Bordados, cintas y colores especiales desde Sandoná.",
   },

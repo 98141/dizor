@@ -14,10 +14,12 @@ import {
   validatePassword,
 } from "@/lib/validators/authSchemas";
 import { getAuthRedirect } from "@/lib/auth/getAuthRedirect";
+import { useSiteConfig } from "@/context/SiteConfigContext";
 
 export default function RegisterPage() {
   const router = useRouter();
   const { register } = useAuth();
+  const { siteName } = useSiteConfig();
 
   const [form, setForm] = useState({
     name: "",
@@ -66,7 +68,7 @@ export default function RegisterPage() {
   return (
     <AuthCard
       title="Crear cuenta"
-      subtitle="Únete a la comunidad Dizor"
+      subtitle={`Únete a la comunidad ${siteName}`}
       footerText="¿Ya tienes cuenta?"
       footerLinkText="Inicia sesión"
       footerHref="/login"

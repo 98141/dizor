@@ -7,5 +7,6 @@ router.get("/home", contentPublicController.getHomeContent);
 router.get("/banners", contentPublicController.getBanners);
 router.get("/pages", contentPublicController.getPages);
 router.get("/pages/:slug", contentPublicController.getPageBySlug);
+router.get("/appearance", contentPublicController.getAppearance);
 
 module.exports = router;

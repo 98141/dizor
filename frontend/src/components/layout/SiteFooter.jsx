@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getContentPages } from "@/services/cmsService";
+import { fetchAppearance, getSiteName } from "@/lib/fetchAppearance";
 
 export default async function SiteFooter() {
   let pages = [];
@@ -11,11 +12,14 @@ export default async function SiteFooter() {
     pages = [];
   }
 
+  const appearance = await fetchAppearance();
+  const siteName = getSiteName(appearance);
+
   return (
     <footer className="site-footer">
       <div className="site-footer__inner">
         <div>
-          <p className="site-footer__brand">Dizor</p>
+          <p className="site-footer__brand">{siteName}</p>
           <p className="site-footer__tagline">
             Sombreros artesanales en palma de iraca · Sandoná, Nariño, Colombia
           </p>

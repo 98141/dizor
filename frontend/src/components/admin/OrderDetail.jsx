@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
+import { useSiteConfig } from "@/context/SiteConfigContext";
 import {
   getAdminOrder,
   updateOrderStatus,
@@ -20,6 +21,7 @@ import {
 
 export default function OrderDetail({ orderId, backHref }) {
   const { user } = useAuth();
+  const { siteName } = useSiteConfig();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
@@ -109,7 +111,7 @@ export default function OrderDetail({ orderId, backHref }) {
   if (!order) return <p className="catalog-empty">Pedido no encontrado</p>;
 
   const whatsappMsg = encodeURIComponent(
-    `Hola ${order.buyer.name}, tu pedido ${order.orderNumber} en Dizor está ${ORDER_STATUS_LABELS[order.orderStatus]}.`
+    `Hola ${order.buyer.name}, tu pedido ${order.orderNumber} en ${siteName} está ${ORDER_STATUS_LABELS[order.orderStatus]}.`
   );
 
   return (

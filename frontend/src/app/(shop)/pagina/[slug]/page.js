@@ -5,9 +5,9 @@ import { getContentPage } from "@/services/cmsService";
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const data = await getContentPage(slug);
-  if (!data?.page) return { title: "Página | Dizor" };
+  if (!data?.page) return { title: "Página" };
   return {
-    title: `${data.page.seoTitle || data.page.title} | Dizor`,
+    title: data.page.seoTitle || data.page.title,
     description: data.page.seoDescription || data.page.excerpt,
   };
 }

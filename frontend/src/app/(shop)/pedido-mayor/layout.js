@@ -10,7 +10,7 @@ export const metadata = {
     "sombreros corporativos Colombia",
   ],
   openGraph: {
-    title: "Pedido al por mayor | Dizor",
+    title: "Pedido al por mayor",
     description:
       "Sombreros artesanales al por mayor desde 5 unidades. Cotización personalizada para tiendas y eventos.",
   },

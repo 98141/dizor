@@ -44,3 +44,26 @@
   border-radius: var(--radius-sm);
   margin-bottom: var(--space-sm);
 }
+
+/* ── Apariencia ── */
+.appearance-color-field {
+  margin-bottom: var(--space-md);
+}
+
+.appearance-color-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-xs);
+}
+
+.appearance-color-picker {
+  width: 44px;
+  height: 36px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+  cursor: pointer;
+  background: var(--color-bg-card);
+  flex-shrink: 0;
+}

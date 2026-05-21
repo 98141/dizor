@@ -1,13 +1,20 @@
-export default function manifest() {
+import { fetchAppearance, getSiteName } from "@/lib/fetchAppearance";
+
+export default async function manifest() {
+  const appearance = await fetchAppearance();
+  const siteName = getSiteName(appearance);
+  const themeColor = appearance?.primaryColor || "#3d4f3a";
+  const bgColor = appearance?.bgColor || "#f5f3ef";
+
   return {
-    name: "Dizor — Sombreros artesanales",
-    short_name: "Dizor",
+    name: `${siteName} — Sombreros artesanales`,
+    short_name: siteName,
     description:
       "Sombreros artesanales en palma de iraca de Sandoná, Nariño, Colombia.",
     start_url: "/",
     display: "standalone",
-    background_color: "#f5f3ef",
-    theme_color: "#3d4f3a",
+    background_color: bgColor,
+    theme_color: themeColor,
     orientation: "portrait",
     lang: "es-CO",
     categories: ["shopping", "lifestyle"],

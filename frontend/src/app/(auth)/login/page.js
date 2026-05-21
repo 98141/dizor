@@ -10,10 +10,12 @@ import AuthSubmitButton from "@/components/auth/AuthSubmitButton";
 import AuthErrorAlert from "@/components/auth/AuthErrorAlert";
 import { validateEmail, validatePassword } from "@/lib/validators/authSchemas";
 import { getAuthRedirect } from "@/lib/auth/getAuthRedirect";
+import { useSiteConfig } from "@/context/SiteConfigContext";
 
 export default function LoginPage() {
   const router = useRouter();
   const { login } = useAuth();
+  const { siteName } = useSiteConfig();
 
   const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
@@ -58,7 +60,7 @@ export default function LoginPage() {
   return (
     <AuthCard
       title="Iniciar sesión"
-      subtitle="Accede a tu cuenta Dizor"
+      subtitle={`Accede a tu cuenta ${siteName}`}
       footerText="¿No tienes cuenta?"
       footerLinkText="Regístrate"
       footerHref="/register"
