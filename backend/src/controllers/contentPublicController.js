@@ -8,6 +8,7 @@ const {
   formatPage,
   formatBanner,
 } = require("../services/cmsService");
+const { getStoreSettings } = require("../services/settingsService");
 
 exports.getHomeContent = catchAsync(async (req, res) => {
   const doc = await getOrCreateHomeContent();
@@ -44,6 +45,22 @@ exports.getPages = catchAsync(async (req, res) => {
       excerpt: p.excerpt,
       showInFooter: p.showInFooter,
     })),
+  });
+});
+
+exports.getAppearance = catchAsync(async (req, res) => {
+  const settings = await getStoreSettings();
+  const a = settings.appearance || {};
+
+  res.status(200).json({
+    status: "success",
+    appearance: {
+      siteName: a.siteName || "",
+      primaryColor: a.primaryColor || "",
+      accentColor: a.accentColor || "",
+      bgColor: a.bgColor || "",
+      faviconUrl: a.faviconUrl || "",
+    },
   });
 });
 

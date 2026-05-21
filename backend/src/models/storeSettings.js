@@ -26,6 +26,13 @@ const storeSettingsSchema = new mongoose.Schema(
       type: [String],
       default: ["interrapidisimo", "envia", "coordinadora"],
     },
+    appearance: {
+      siteName: { type: String, default: "" },
+      primaryColor: { type: String, default: "" },
+      accentColor: { type: String, default: "" },
+      bgColor: { type: String, default: "" },
+      faviconUrl: { type: String, default: "" },
+    },
   },
   { timestamps: true }
 );

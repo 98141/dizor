@@ -20,11 +20,31 @@ import {
   updateAdminBanner,
   deleteAdminBanner,
 } from "@/services/adminCmsService";
+import {
+  getMarketingSettings,
+  updateMarketingSettings,
+  getNewsletterSubscribers,
+  getAbandonedCarts,
+  sendAbandonedReminders,
+  exportNewsletterCsv,
+  exportOrdersCsv,
+  exportAbandonedCartsCsv,
+} from "@/services/adminMarketingService";
+import {
+  getStoreSettings,
+  updateStoreSettings,
+} from "@/services/adminSettingsService";
+import { formatCOP } from "@/lib/formatCurrency";
 
 const TABS = [
   { id: "home", label: "Inicio" },
   { id: "banners", label: "Banners" },
   { id: "pages", label: "Páginas" },
+  { id: "popup", label: "Popup" },
+  { id: "newsletter", label: "Newsletter" },
+  { id: "carritos", label: "Carritos" },
+  { id: "exports", label: "Exportar" },
+  { id: "appearance", label: "Apariencia" },
 ];
 
 const emptyPage = () => ({
@@ -49,8 +69,80 @@ const emptyBanner = () => ({
   isActive: true,
 });
 
-function CmsAdminContent() {
+const normalizeMarketing = (raw) => ({
+  ...raw,
+  popup: {
+    enabled: false,
+    delaySeconds: 4,
+    showNewsletterForm: true,
+    title: "",
+    text: "",
+    ctaLabel: "Suscribirme",
+    ctaHref: "",
+    imageUrl: "",
+    ...(raw?.popup || {}),
+  },
+  newsletter: {
+    footerTitle: "Newsletter Dizor",
+    footerText: "",
+    successMessage: "¡Gracias! Te hemos suscrito.",
+    ...(raw?.newsletter || {}),
+  },
+  abandonedCart: {
+    enabled: true,
+    delayHours: 24,
+    maxReminders: 2,
+    emailSubject: "Tu carrito te espera — Dizor",
+    ...(raw?.abandonedCart || {}),
+  },
+});
+
+const normalizeAppearance = (raw) => ({
+  siteName: "",
+  primaryColor: "",
+  accentColor: "",
+  bgColor: "",
+  faviconUrl: "",
+  ...(raw || {}),
+});
+
+function ColorField({ label, value, onChange }) {
+  return (
+    <div className="appearance-color-field">
+      <label className="auth-field__label">{label}</label>
+      <div className="appearance-color-row">
+        <input
+          type="color"
+          value={value || "#3d4f3a"}
+          onChange={(e) => onChange(e.target.value)}
+          className="appearance-color-picker"
+        />
+        <input
+          type="text"
+          className="auth-field__input"
+          value={value}
+          placeholder="Vacío = color por defecto"
+          onChange={(e) => onChange(e.target.value)}
+          style={{ flex: 1 }}
+        />
+        {value && (
+          <button
+            type="button"
+            className="admin-btn admin-btn--sm"
+            onClick={() => onChange("")}
+          >
+            Restablecer
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ContenidoAdminContent() {
   const [tab, setTab] = useState("home");
+
+  // CMS state
   const [home, setHome] = useState(null);
   const [pages, setPages] = useState([]);
   const [banners, setBanners] = useState([]);
@@ -58,13 +150,29 @@ function CmsAdminContent() {
   const [editingPageId, setEditingPageId] = useState(null);
   const [bannerForm, setBannerForm] = useState(emptyBanner());
   const [editingBannerId, setEditingBannerId] = useState(null);
+
+  // Marketing state
+  const [marketing, setMarketing] = useState(null);
+  const [subscribers, setSubscribers] = useState([]);
+  const [carts, setCarts] = useState([]);
+
+  // Appearance state
+  const [appearance, setAppearance] = useState(normalizeAppearance(null));
+
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
 
+  const showMsg = (text, isError = false) => {
+    setMessage(text);
+    setError(isError);
+  };
+
   const load = async () => {
     setLoading(true);
+    setMessage("");
+    setError(false);
     try {
       const [homeRes, pagesRes, bannersRes] = await Promise.all([
         getAdminHomeContent(),
@@ -75,17 +183,40 @@ function CmsAdminContent() {
       setPages(pagesRes.pages || []);
       setBanners(bannersRes.banners || []);
     } catch {
-      setMessage("Error al cargar contenido");
-      setError(true);
-    } finally {
-      setLoading(false);
+      showMsg("Error al cargar contenido CMS", true);
     }
+
+    try {
+      const mRes = await getMarketingSettings();
+      setMarketing(normalizeMarketing(mRes.settings));
+    } catch {
+      setMarketing(normalizeMarketing({}));
+    }
+
+    try {
+      const [subsRes, cartsRes] = await Promise.all([
+        getNewsletterSubscribers({ limit: 50 }),
+        getAbandonedCarts({ limit: 30 }),
+      ]);
+      setSubscribers(subsRes.subscribers || []);
+      setCarts(cartsRes.carts || []);
+    } catch {
+      /* non-fatal */
+    }
+
+    try {
+      const sRes = await getStoreSettings();
+      setAppearance(normalizeAppearance(sRes.settings?.appearance));
+    } catch {
+      /* non-fatal */
+    }
+
+    setLoading(false);
   };
 
-  useEffect(() => {
-    load();
-  }, []);
+  useEffect(() => { load(); }, []);
 
+  // ── CMS handlers ──────────────────────────────────────
   const saveHome = async (e) => {
     e.preventDefault();
     setSaving(true);
@@ -94,43 +225,29 @@ function CmsAdminContent() {
     try {
       const data = await updateAdminHomeContent(home);
       setHome(data.home);
-      setMessage("Inicio guardado");
+      showMsg("Inicio guardado");
     } catch (err) {
-      setMessage(err.response?.data?.message || "Error al guardar");
-      setError(true);
+      showMsg(err.response?.data?.message || "Error al guardar", true);
     } finally {
       setSaving(false);
     }
   };
 
-  const addFeature = () => {
-    setHome((h) => ({
-      ...h,
-      features: [...(h.features || []), { title: "", text: "" }],
-    }));
-  };
+  const addFeature = () =>
+    setHome((h) => ({ ...h, features: [...(h.features || []), { title: "", text: "" }] }));
 
-  const updateFeature = (index, key, value) => {
+  const updateFeature = (i, key, value) =>
     setHome((h) => {
       const features = [...h.features];
-      features[index] = { ...features[index], [key]: value };
+      features[i] = { ...features[i], [key]: value };
       return { ...h, features };
     });
-  };
 
-  const removeFeature = (index) => {
-    setHome((h) => ({
-      ...h,
-      features: h.features.filter((_, i) => i !== index),
-    }));
-  };
+  const removeFeature = (i) =>
+    setHome((h) => ({ ...h, features: h.features.filter((_, idx) => idx !== i) }));
 
   const startEditPage = async (id) => {
-    if (!id) {
-      setEditingPageId(null);
-      setPageForm(emptyPage());
-      return;
-    }
+    if (!id) { setEditingPageId(null); setPageForm(emptyPage()); return; }
     const data = await getAdminPage(id);
     setEditingPageId(id);
     setPageForm({
@@ -151,18 +268,14 @@ function CmsAdminContent() {
     setMessage("");
     setError(false);
     try {
-      if (editingPageId) {
-        await updateAdminPage(editingPageId, pageForm);
-      } else {
-        await createAdminPage(pageForm);
-      }
-      setMessage("Página guardada");
+      if (editingPageId) await updateAdminPage(editingPageId, pageForm);
+      else await createAdminPage(pageForm);
+      showMsg("Página guardada");
       setEditingPageId(null);
       setPageForm(emptyPage());
       await load();
     } catch (err) {
-      setMessage(err.response?.data?.message || "Error al guardar página");
-      setError(true);
+      showMsg(err.response?.data?.message || "Error al guardar página", true);
     } finally {
       setSaving(false);
     }
@@ -176,11 +289,7 @@ function CmsAdminContent() {
   };
 
   const startEditBanner = (banner) => {
-    if (!banner) {
-      setEditingBannerId(null);
-      setBannerForm(emptyBanner());
-      return;
-    }
+    if (!banner) { setEditingBannerId(null); setBannerForm(emptyBanner()); return; }
     setEditingBannerId(banner.id);
     setBannerForm({ ...banner });
   };
@@ -191,17 +300,13 @@ function CmsAdminContent() {
     setMessage("");
     setError(false);
     try {
-      if (editingBannerId) {
-        await updateAdminBanner(editingBannerId, bannerForm);
-      } else {
-        await createAdminBanner(bannerForm);
-      }
-      setMessage("Banner guardado");
+      if (editingBannerId) await updateAdminBanner(editingBannerId, bannerForm);
+      else await createAdminBanner(bannerForm);
+      showMsg("Banner guardado");
       startEditBanner(null);
       await load();
     } catch (err) {
-      setMessage(err.response?.data?.message || "Error al guardar banner");
-      setError(true);
+      showMsg(err.response?.data?.message || "Error al guardar banner", true);
     } finally {
       setSaving(false);
     }
@@ -214,15 +319,73 @@ function CmsAdminContent() {
     await load();
   };
 
-  if (loading) {
-    return <p className="auth-loading">Cargando CMS…</p>;
-  }
+  // ── Marketing handlers ────────────────────────────────
+  const setPopup = (key, value) =>
+    setMarketing((s) => ({ ...s, popup: { ...normalizeMarketing(s).popup, [key]: value } }));
+  const setNl = (key, value) =>
+    setMarketing((s) => ({ ...s, newsletter: { ...normalizeMarketing(s).newsletter, [key]: value } }));
+  const setAbandoned = (key, value) =>
+    setMarketing((s) => ({ ...s, abandonedCart: { ...normalizeMarketing(s).abandonedCart, [key]: value } }));
+
+  const saveMarketing = async (e) => {
+    e.preventDefault();
+    setSaving(true);
+    setMessage("");
+    setError(false);
+    try {
+      const data = await updateMarketingSettings({
+        popup: marketing.popup,
+        newsletter: marketing.newsletter,
+        abandonedCart: marketing.abandonedCart,
+      });
+      setMarketing(normalizeMarketing(data.settings));
+      showMsg("Configuración de marketing guardada");
+    } catch (err) {
+      showMsg(err.response?.data?.message || "No se pudo guardar", true);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleSendReminders = async () => {
+    setSaving(true);
+    try {
+      const data = await sendAbandonedReminders();
+      showMsg(data.message || "Recordatorios procesados");
+      await load();
+    } catch (err) {
+      showMsg(err.response?.data?.message || "Error al enviar", true);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // ── Appearance handler ────────────────────────────────
+  const saveAppearance = async (e) => {
+    e.preventDefault();
+    setSaving(true);
+    setMessage("");
+    setError(false);
+    try {
+      await updateStoreSettings({ appearance });
+      showMsg("Apariencia guardada — recarga la tienda para ver los cambios");
+    } catch (err) {
+      showMsg(err.response?.data?.message || "No se pudo guardar", true);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const setAppearanceField = (key, value) =>
+    setAppearance((a) => ({ ...a, [key]: value }));
+
+  if (loading) return <p className="auth-loading">Cargando…</p>;
 
   return (
     <div className="admin-page">
-      <h1 className="admin-page__title">Contenido (CMS)</h1>
+      <h1 className="admin-page__title">Contenido & Marketing</h1>
       <p className="admin-page__subtitle">
-        Edita el inicio, banners promocionales y páginas informativas.
+        CMS, banners, páginas, marketing y apariencia del sitio.
       </p>
 
       <nav className="cms-tabs">
@@ -231,7 +394,7 @@ function CmsAdminContent() {
             key={t.id}
             type="button"
             className={tab === t.id ? "active" : ""}
-            onClick={() => setTab(t.id)}
+            onClick={() => { setTab(t.id); setMessage(""); }}
           >
             {t.label}
           </button>
@@ -240,228 +403,85 @@ function CmsAdminContent() {
 
       <AuthErrorAlert message={message} variant={error ? "error" : "success"} />
 
+      {/* ── INICIO ── */}
       {tab === "home" && home && (
         <form className="admin-form product-form__section" onSubmit={saveHome}>
           <h2>Hero</h2>
-          <AuthFormField
-            label="Título"
-            name="heroTitle"
-            value={home.hero.title}
-            onChange={(e) =>
-              setHome((h) => ({
-                ...h,
-                hero: { ...h.hero, title: e.target.value },
-              }))
-            }
-          />
+          <AuthFormField label="Título" name="heroTitle" value={home.hero.title}
+            onChange={(e) => setHome((h) => ({ ...h, hero: { ...h.hero, title: e.target.value } }))} />
           <div className="auth-field">
             <label className="auth-field__label">Subtítulo</label>
-            <textarea
-              className="auth-field__input"
-              rows={3}
-              value={home.hero.subtitle}
-              onChange={(e) =>
-                setHome((h) => ({
-                  ...h,
-                  hero: { ...h.hero, subtitle: e.target.value },
-                }))
-              }
-            />
+            <textarea className="auth-field__input" rows={3} value={home.hero.subtitle}
+              onChange={(e) => setHome((h) => ({ ...h, hero: { ...h.hero, subtitle: e.target.value } }))} />
           </div>
-          <AuthFormField
-            label="Texto botón"
-            name="ctaLabel"
-            value={home.hero.ctaLabel}
-            onChange={(e) =>
-              setHome((h) => ({
-                ...h,
-                hero: { ...h.hero, ctaLabel: e.target.value },
-              }))
-            }
-          />
-          <AuthFormField
-            label="Enlace botón"
-            name="ctaHref"
-            value={home.hero.ctaHref}
-            onChange={(e) =>
-              setHome((h) => ({
-                ...h,
-                hero: { ...h.hero, ctaHref: e.target.value },
-              }))
-            }
-          />
-          <AuthFormField
-            label="Imagen de fondo (URL)"
-            name="heroImage"
-            value={home.hero.imageUrl || ""}
-            onChange={(e) =>
-              setHome((h) => ({
-                ...h,
-                hero: { ...h.hero, imageUrl: e.target.value },
-              }))
-            }
-          />
+          <AuthFormField label="Texto botón" name="ctaLabel" value={home.hero.ctaLabel}
+            onChange={(e) => setHome((h) => ({ ...h, hero: { ...h.hero, ctaLabel: e.target.value } }))} />
+          <AuthFormField label="Enlace botón" name="ctaHref" value={home.hero.ctaHref}
+            onChange={(e) => setHome((h) => ({ ...h, hero: { ...h.hero, ctaHref: e.target.value } }))} />
+          <AuthFormField label="Imagen de fondo (URL)" name="heroImage" value={home.hero.imageUrl || ""}
+            onChange={(e) => setHome((h) => ({ ...h, hero: { ...h.hero, imageUrl: e.target.value } }))} />
 
           <h2>Barra de anuncio</h2>
           <label className="admin-checkbox">
-            <input
-              type="checkbox"
-              checked={home.announcement.isActive}
-              onChange={(e) =>
-                setHome((h) => ({
-                  ...h,
-                  announcement: {
-                    ...h.announcement,
-                    isActive: e.target.checked,
-                  },
-                }))
-              }
-            />
+            <input type="checkbox" checked={home.announcement.isActive}
+              onChange={(e) => setHome((h) => ({ ...h, announcement: { ...h.announcement, isActive: e.target.checked } }))} />
             Mostrar barra superior
           </label>
-          <AuthFormField
-            label="Texto anuncio"
-            name="announceText"
-            value={home.announcement.text}
-            onChange={(e) =>
-              setHome((h) => ({
-                ...h,
-                announcement: { ...h.announcement, text: e.target.value },
-              }))
-            }
-          />
-          <AuthFormField
-            label="Enlace anuncio"
-            name="announceLink"
-            value={home.announcement.linkHref}
-            onChange={(e) =>
-              setHome((h) => ({
-                ...h,
-                announcement: { ...h.announcement, linkHref: e.target.value },
-              }))
-            }
-          />
+          <AuthFormField label="Texto anuncio" name="announceText" value={home.announcement.text}
+            onChange={(e) => setHome((h) => ({ ...h, announcement: { ...h.announcement, text: e.target.value } }))} />
+          <AuthFormField label="Enlace anuncio" name="announceLink" value={home.announcement.linkHref}
+            onChange={(e) => setHome((h) => ({ ...h, announcement: { ...h.announcement, linkHref: e.target.value } }))} />
 
           <h2>Sección destacados</h2>
-          <AuthFormField
-            label="Título"
-            name="featTitle"
-            value={home.featuredSection.title}
-            onChange={(e) =>
-              setHome((h) => ({
-                ...h,
-                featuredSection: {
-                  ...h.featuredSection,
-                  title: e.target.value,
-                },
-              }))
-            }
-          />
+          <AuthFormField label="Título" name="featTitle" value={home.featuredSection.title}
+            onChange={(e) => setHome((h) => ({ ...h, featuredSection: { ...h.featuredSection, title: e.target.value } }))} />
 
           <h2>Bloques informativos</h2>
           {home.features.map((f, i) => (
             <div key={i} className="cms-feature-row">
-              <AuthFormField
-                label="Título"
-                name={`ft-${i}`}
-                value={f.title}
-                onChange={(e) => updateFeature(i, "title", e.target.value)}
-              />
-              <AuthFormField
-                label="Texto"
-                name={`fx-${i}`}
-                value={f.text}
-                onChange={(e) => updateFeature(i, "text", e.target.value)}
-              />
-              <button
-                type="button"
-                className="admin-btn admin-btn--sm admin-btn--danger"
-                onClick={() => removeFeature(i)}
-              >
-                Quitar
-              </button>
+              <AuthFormField label="Título" name={`ft-${i}`} value={f.title}
+                onChange={(e) => updateFeature(i, "title", e.target.value)} />
+              <AuthFormField label="Texto" name={`fx-${i}`} value={f.text}
+                onChange={(e) => updateFeature(i, "text", e.target.value)} />
+              <button type="button" className="admin-btn admin-btn--sm admin-btn--danger"
+                onClick={() => removeFeature(i)}>Quitar</button>
             </div>
           ))}
-          <button type="button" className="admin-btn" onClick={addFeature}>
-            + Bloque
-          </button>
-
+          <button type="button" className="admin-btn" onClick={addFeature}>+ Bloque</button>
           <AuthSubmitButton loading={saving}>Guardar inicio</AuthSubmitButton>
         </form>
       )}
 
+      {/* ── BANNERS ── */}
       {tab === "banners" && (
         <div className="admin-grid-2">
           <section className="taxonomy-form-card">
             <h2>{editingBannerId ? "Editar banner" : "Nuevo banner"}</h2>
             <form className="admin-form" onSubmit={saveBanner}>
-              <AuthFormField
-                label="Título"
-                name="bTitle"
-                value={bannerForm.title}
-                onChange={(e) =>
-                  setBannerForm((p) => ({ ...p, title: e.target.value }))
-                }
-                required
-              />
-              <AuthFormField
-                label="Subtítulo"
-                name="bSub"
-                value={bannerForm.subtitle}
-                onChange={(e) =>
-                  setBannerForm((p) => ({ ...p, subtitle: e.target.value }))
-                }
-              />
-              <AuthFormField
-                label="Imagen URL"
-                name="bImg"
-                value={bannerForm.imageUrl}
-                onChange={(e) =>
-                  setBannerForm((p) => ({ ...p, imageUrl: e.target.value }))
-                }
-              />
-              <AuthFormField
-                label="Enlace"
-                name="bLink"
-                value={bannerForm.linkHref}
-                onChange={(e) =>
-                  setBannerForm((p) => ({ ...p, linkHref: e.target.value }))
-                }
-              />
+              <AuthFormField label="Título" name="bTitle" value={bannerForm.title} required
+                onChange={(e) => setBannerForm((p) => ({ ...p, title: e.target.value }))} />
+              <AuthFormField label="Subtítulo" name="bSub" value={bannerForm.subtitle}
+                onChange={(e) => setBannerForm((p) => ({ ...p, subtitle: e.target.value }))} />
+              <AuthFormField label="Imagen URL" name="bImg" value={bannerForm.imageUrl}
+                onChange={(e) => setBannerForm((p) => ({ ...p, imageUrl: e.target.value }))} />
+              <AuthFormField label="Enlace" name="bLink" value={bannerForm.linkHref}
+                onChange={(e) => setBannerForm((p) => ({ ...p, linkHref: e.target.value }))} />
               <div className="admin-form__group">
                 <label htmlFor="placement">Ubicación</label>
-                <select
-                  id="placement"
-                  value={bannerForm.placement}
-                  onChange={(e) =>
-                    setBannerForm((p) => ({ ...p, placement: e.target.value }))
-                  }
-                >
+                <select id="placement" value={bannerForm.placement}
+                  onChange={(e) => setBannerForm((p) => ({ ...p, placement: e.target.value }))}>
                   <option value="home_mid">Inicio (medio)</option>
                   <option value="catalog_top">Catálogo (arriba)</option>
                 </select>
               </div>
               <label className="admin-checkbox">
-                <input
-                  type="checkbox"
-                  checked={bannerForm.isActive}
-                  onChange={(e) =>
-                    setBannerForm((p) => ({ ...p, isActive: e.target.checked }))
-                  }
-                />
+                <input type="checkbox" checked={bannerForm.isActive}
+                  onChange={(e) => setBannerForm((p) => ({ ...p, isActive: e.target.checked }))} />
                 Activo
               </label>
-              <AuthSubmitButton loading={saving}>
-                {editingBannerId ? "Actualizar" : "Crear"}
-              </AuthSubmitButton>
+              <AuthSubmitButton loading={saving}>{editingBannerId ? "Actualizar" : "Crear"}</AuthSubmitButton>
               {editingBannerId && (
-                <button
-                  type="button"
-                  className="admin-btn"
-                  onClick={() => startEditBanner(null)}
-                >
-                  Cancelar
-                </button>
+                <button type="button" className="admin-btn" onClick={() => startEditBanner(null)}>Cancelar</button>
               )}
             </form>
           </section>
@@ -472,20 +492,8 @@ function CmsAdminContent() {
                 <strong>{b.title}</strong>
                 <p className="admin-muted">{b.placement}</p>
                 <div className="admin-table__actions">
-                  <button
-                    type="button"
-                    className="admin-btn admin-btn--sm"
-                    onClick={() => startEditBanner(b)}
-                  >
-                    Editar
-                  </button>
-                  <button
-                    type="button"
-                    className="admin-btn admin-btn--sm admin-btn--danger"
-                    onClick={() => removeBanner(b.id)}
-                  >
-                    Eliminar
-                  </button>
+                  <button type="button" className="admin-btn admin-btn--sm" onClick={() => startEditBanner(b)}>Editar</button>
+                  <button type="button" className="admin-btn admin-btn--sm admin-btn--danger" onClick={() => removeBanner(b.id)}>Eliminar</button>
                 </div>
               </div>
             ))}
@@ -493,131 +501,58 @@ function CmsAdminContent() {
         </div>
       )}
 
+      {/* ── PÁGINAS ── */}
       {tab === "pages" && (
         <div className="admin-grid-2">
           <section className="taxonomy-form-card">
             <h2>{editingPageId ? "Editar página" : "Nueva página"}</h2>
             <form className="admin-form" onSubmit={savePage}>
-              <AuthFormField
-                label="Título"
-                name="pTitle"
-                value={pageForm.title}
-                onChange={(e) =>
-                  setPageForm((p) => ({ ...p, title: e.target.value }))
-                }
-                required
-              />
-              <AuthFormField
-                label="Extracto"
-                name="pExcerpt"
-                value={pageForm.excerpt}
-                onChange={(e) =>
-                  setPageForm((p) => ({ ...p, excerpt: e.target.value }))
-                }
-              />
+              <AuthFormField label="Título" name="pTitle" value={pageForm.title} required
+                onChange={(e) => setPageForm((p) => ({ ...p, title: e.target.value }))} />
+              <AuthFormField label="Extracto" name="pExcerpt" value={pageForm.excerpt}
+                onChange={(e) => setPageForm((p) => ({ ...p, excerpt: e.target.value }))} />
               <div className="auth-field">
                 <label className="auth-field__label">Contenido</label>
-                <textarea
-                  className="auth-field__input"
-                  rows={8}
-                  value={pageForm.body}
-                  onChange={(e) =>
-                    setPageForm((p) => ({ ...p, body: e.target.value }))
-                  }
-                />
+                <textarea className="auth-field__input" rows={8} value={pageForm.body}
+                  onChange={(e) => setPageForm((p) => ({ ...p, body: e.target.value }))} />
               </div>
               <label className="admin-checkbox">
-                <input
-                  type="checkbox"
-                  checked={pageForm.isPublished}
-                  onChange={(e) =>
-                    setPageForm((p) => ({
-                      ...p,
-                      isPublished: e.target.checked,
-                    }))
-                  }
-                />
+                <input type="checkbox" checked={pageForm.isPublished}
+                  onChange={(e) => setPageForm((p) => ({ ...p, isPublished: e.target.checked }))} />
                 Publicada
               </label>
               <label className="admin-checkbox">
-                <input
-                  type="checkbox"
-                  checked={pageForm.showInFooter}
-                  onChange={(e) =>
-                    setPageForm((p) => ({
-                      ...p,
-                      showInFooter: e.target.checked,
-                    }))
-                  }
-                />
+                <input type="checkbox" checked={pageForm.showInFooter}
+                  onChange={(e) => setPageForm((p) => ({ ...p, showInFooter: e.target.checked }))} />
                 Mostrar en footer
               </label>
-              <AuthSubmitButton loading={saving}>
-                {editingPageId ? "Actualizar" : "Crear"}
-              </AuthSubmitButton>
+              <AuthSubmitButton loading={saving}>{editingPageId ? "Actualizar" : "Crear"}</AuthSubmitButton>
               {editingPageId && (
                 <>
-                  <button
-                    type="button"
-                    className="admin-btn"
-                    onClick={() => startEditPage(null)}
-                  >
-                    Cancelar
-                  </button>
-                  <Link
-                    href={`/pagina/${pages.find((p) => p.id === editingPageId)?.slug || ""}`}
-                    target="_blank"
-                    className="admin-btn"
-                  >
-                    Ver en tienda
-                  </Link>
+                  <button type="button" className="admin-btn" onClick={() => startEditPage(null)}>Cancelar</button>
+                  <Link href={`/pagina/${pages.find((p) => p.id === editingPageId)?.slug || ""}`}
+                    target="_blank" className="admin-btn">Ver en tienda</Link>
                 </>
               )}
             </form>
           </section>
           <section className="taxonomy-list-card">
             <h2>Páginas</h2>
-            <button
-              type="button"
-              className="admin-btn"
-              style={{ marginBottom: "1rem" }}
-              onClick={() => startEditPage(null)}
-            >
-              + Nueva página
-            </button>
+            <button type="button" className="admin-btn" style={{ marginBottom: "1rem" }}
+              onClick={() => startEditPage(null)}>+ Nueva página</button>
             <div className="admin-table-wrap">
               <table className="admin-table">
                 <thead>
-                  <tr>
-                    <th>Título</th>
-                    <th>Estado</th>
-                    <th />
-                  </tr>
+                  <tr><th>Título</th><th>Estado</th><th /></tr>
                 </thead>
                 <tbody>
                   {pages.map((p) => (
                     <tr key={p.id}>
-                      <td>
-                        {p.title}
-                        <br />
-                        <span className="admin-muted">/pagina/{p.slug}</span>
-                      </td>
+                      <td>{p.title}<br /><span className="admin-muted">/pagina/{p.slug}</span></td>
                       <td>{p.isPublished ? "Publicada" : "Borrador"}</td>
                       <td className="admin-table__actions">
-                        <button
-                          type="button"
-                          className="admin-btn admin-btn--sm"
-                          onClick={() => startEditPage(p.id)}
-                        >
-                          Editar
-                        </button>
-                        <button
-                          type="button"
-                          className="admin-btn admin-btn--sm admin-btn--danger"
-                          onClick={() => removePage(p.id)}
-                        >
-                          Eliminar
-                        </button>
+                        <button type="button" className="admin-btn admin-btn--sm" onClick={() => startEditPage(p.id)}>Editar</button>
+                        <button type="button" className="admin-btn admin-btn--sm admin-btn--danger" onClick={() => removePage(p.id)}>Eliminar</button>
                       </td>
                     </tr>
                   ))}
@@ -627,6 +562,165 @@ function CmsAdminContent() {
           </section>
         </div>
       )}
+
+      {/* ── POPUP ── */}
+      {tab === "popup" && marketing && (
+        <form className="admin-form product-form__section" onSubmit={saveMarketing}>
+          <h2>Popup promocional</h2>
+          <label className="admin-checkbox">
+            <input type="checkbox" checked={Boolean(marketing.popup?.enabled)}
+              onChange={(e) => setPopup("enabled", e.target.checked)} />
+            Activar popup
+          </label>
+          <AuthFormField label="Título" name="popupTitle" value={marketing.popup?.title || ""}
+            onChange={(e) => setPopup("title", e.target.value)} />
+          <AuthFormField label="Texto" name="popupText" value={marketing.popup?.text || ""}
+            onChange={(e) => setPopup("text", e.target.value)} />
+          <AuthFormField label="Retraso (segundos)" name="delay" type="number"
+            value={marketing.popup?.delaySeconds ?? 4}
+            onChange={(e) => setPopup("delaySeconds", Number(e.target.value))} />
+
+          <h2 style={{ marginTop: "1.5rem" }}>Newsletter (footer)</h2>
+          <AuthFormField label="Título footer" name="nlTitle" value={marketing.newsletter?.footerTitle || ""}
+            onChange={(e) => setNl("footerTitle", e.target.value)} />
+          <AuthFormField label="Texto footer" name="nlText" value={marketing.newsletter?.footerText || ""}
+            onChange={(e) => setNl("footerText", e.target.value)} />
+
+          <h2 style={{ marginTop: "1.5rem" }}>Carrito abandonado</h2>
+          <label className="admin-checkbox">
+            <input type="checkbox" checked={Boolean(marketing.abandonedCart?.enabled)}
+              onChange={(e) => setAbandoned("enabled", e.target.checked)} />
+            Enviar recordatorios
+          </label>
+          <AuthFormField label="Horas antes del primer correo" name="delayHours" type="number"
+            value={marketing.abandonedCart?.delayHours ?? 24}
+            onChange={(e) => setAbandoned("delayHours", Number(e.target.value))} />
+          <AuthFormField label="Máximo de recordatorios" name="maxReminders" type="number"
+            value={marketing.abandonedCart?.maxReminders ?? 2}
+            onChange={(e) => setAbandoned("maxReminders", Number(e.target.value))} />
+
+          <AuthSubmitButton loading={saving}>Guardar configuración</AuthSubmitButton>
+        </form>
+      )}
+
+      {/* ── NEWSLETTER ── */}
+      {tab === "newsletter" && (
+        <div className="marketing-admin__card">
+          <p>{subscribers.length} suscriptores activos (últimos 50)</p>
+          <table className="marketing-admin__table">
+            <thead>
+              <tr><th>Correo</th><th>Nombre</th><th>Fuente</th><th>Fecha</th></tr>
+            </thead>
+            <tbody>
+              {subscribers.map((s) => (
+                <tr key={s._id}>
+                  <td>{s.email}</td>
+                  <td>{s.name || "—"}</td>
+                  <td>{s.source}</td>
+                  <td>{new Date(s.createdAt).toLocaleDateString("es-CO")}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* ── CARRITOS ── */}
+      {tab === "carritos" && (
+        <div className="marketing-admin__card">
+          <button type="button" className="admin-btn admin-btn--primary"
+            onClick={handleSendReminders} disabled={saving} style={{ marginBottom: "1rem" }}>
+            Enviar recordatorios pendientes
+          </button>
+          <table className="marketing-admin__table">
+            <thead>
+              <tr><th>Correo</th><th>Ítems</th><th>Subtotal</th><th>Recordatorios</th><th>Actualizado</th></tr>
+            </thead>
+            <tbody>
+              {carts.map((c) => (
+                <tr key={c._id}>
+                  <td>{c.email}</td>
+                  <td>{c.itemCount}</td>
+                  <td>{formatCOP(c.subtotal)}</td>
+                  <td>{c.remindersSent}</td>
+                  <td>{new Date(c.updatedAt).toLocaleString("es-CO")}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* ── EXPORTAR ── */}
+      {tab === "exports" && (
+        <div className="marketing-admin__card">
+          <div className="marketing-admin__exports">
+            <button type="button" className="admin-btn" onClick={() => exportNewsletterCsv().catch(() => {})}>
+              Exportar newsletter (CSV)
+            </button>
+            <button type="button" className="admin-btn" onClick={() => exportOrdersCsv().catch(() => {})}>
+              Exportar pedidos (CSV)
+            </button>
+            <button type="button" className="admin-btn" onClick={() => exportAbandonedCartsCsv().catch(() => {})}>
+              Exportar carritos (CSV)
+            </button>
+          </div>
+          <p style={{ fontSize: "0.9rem", color: "var(--color-text-muted)", marginTop: "1rem" }}>
+            Los archivos CSV se descargan en tu navegador. Máximo 5.000–10.000 registros por exportación.
+          </p>
+        </div>
+      )}
+
+      {/* ── APARIENCIA ── */}
+      {tab === "appearance" && (
+        <form className="admin-form product-form__section" onSubmit={saveAppearance}>
+          <h2>Identidad del sitio</h2>
+          <AuthFormField
+            label="Nombre del sitio"
+            name="siteName"
+            value={appearance.siteName}
+            placeholder="Dizor"
+            onChange={(e) => setAppearanceField("siteName", e.target.value)}
+          />
+          <p className="admin-muted" style={{ marginTop: "-0.5rem" }}>
+            Aparece en el título del navegador y en los resultados de Google.
+          </p>
+
+          <h2 style={{ marginTop: "1.5rem" }}>Colores</h2>
+          <p className="admin-muted">
+            Deja en blanco para usar el color por defecto del tema.
+          </p>
+          <ColorField
+            label="Color principal (botones, precio, links)"
+            value={appearance.primaryColor}
+            onChange={(v) => setAppearanceField("primaryColor", v)}
+          />
+          <ColorField
+            label="Color de acento (badges, ofertas)"
+            value={appearance.accentColor}
+            onChange={(v) => setAppearanceField("accentColor", v)}
+          />
+          <ColorField
+            label="Color de fondo"
+            value={appearance.bgColor}
+            onChange={(v) => setAppearanceField("bgColor", v)}
+          />
+
+          <h2 style={{ marginTop: "1.5rem" }}>Favicon</h2>
+          <AuthFormField
+            label="URL del favicon"
+            name="faviconUrl"
+            value={appearance.faviconUrl}
+            placeholder="https://tudominio.com/favicon.ico"
+            onChange={(e) => setAppearanceField("faviconUrl", e.target.value)}
+          />
+          <p className="admin-muted" style={{ marginTop: "-0.5rem" }}>
+            URL completa de tu ícono (.ico, .png). Se aplica al abrir una nueva pestaña.
+          </p>
+
+          <AuthSubmitButton loading={saving}>Guardar apariencia</AuthSubmitButton>
+        </form>
+      )}
     </div>
   );
 }
@@ -635,7 +729,7 @@ export default function AdminContenidoPage() {
   return (
     <RoleRoute allowedRoles={["superadmin", "admin"]}>
       <AdminShell variant="admin">
-        <CmsAdminContent />
+        <ContenidoAdminContent />
       </AdminShell>
     </RoleRoute>
   );

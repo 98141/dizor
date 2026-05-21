@@ -388,3 +388,20 @@
     gap: var(--space-2xl);
   }
 }
+
+/* ─── Skeleton loader ─── */
+@keyframes skel-shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.skel-box {
+  background: linear-gradient(
+    90deg,
+    var(--color-border) 25%,
+    var(--color-bg) 50%,
+    var(--color-border) 75%
+  );
+  background-size: 800px 100%;
+  animation: skel-shimmer 1.4s ease-in-out infinite;
+}

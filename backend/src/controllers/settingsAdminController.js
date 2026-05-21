@@ -25,6 +25,7 @@ const formatSettings = (settings) => {
     shippingByDepartment,
     currency: doc.currency,
     carriers: doc.carriers,
+    appearance: doc.appearance || {},
     updatedAt: doc.updatedAt,
   };
 };
@@ -48,12 +49,17 @@ exports.updateSettings = catchAsync(async (req, res, next) => {
     "freeShippingMinAmount",
     "shippingByDepartment",
     "carriers",
+    "appearance",
   ];
 
   allowed.forEach((key) => {
     if (req.body[key] !== undefined) {
       if (key === "shippingByDepartment" && req.body[key]) {
         settings.shippingByDepartment = req.body[key];
+      } else if (key === "appearance" && req.body[key]) {
+        const current = settings.appearance?.toObject?.() || settings.appearance || {};
+        settings.appearance = { ...current, ...req.body[key] };
+        settings.markModified("appearance");
       } else {
         settings[key] = req.body[key];
       }

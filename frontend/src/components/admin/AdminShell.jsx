@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { useSiteConfig } from "@/context/SiteConfigContext";
 import AlertBell from "./AlertBell";
 
 const adminLinks = [
@@ -14,7 +15,6 @@ const adminLinks = [
   { href: "/admin/productos", label: "Productos", roles: ["superadmin", "admin"] },
   { href: "/admin/catalogo", label: "Catálogo", roles: ["superadmin", "admin"] },
   { href: "/admin/contenido", label: "Contenido", roles: ["superadmin", "admin"] },
-  { href: "/admin/marketing", label: "Marketing", roles: ["superadmin", "admin"] },
   { href: "/admin/pos", label: "POS", roles: ["superadmin", "admin", "vendedor"] },
   { href: "/admin/cupones", label: "Cupones", roles: ["superadmin", "admin"] },
   { href: "/admin/alertas", label: "Alertas", roles: ["superadmin", "admin"] },
@@ -33,6 +33,7 @@ const vendorLinks = [
 export default function AdminShell({ children, variant = "admin" }) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
+  const { siteName } = useSiteConfig();
 
   const links = variant === "vendedor" ? vendorLinks : adminLinks;
   const visibleLinks = links.filter((l) => l.roles.includes(user?.role));
@@ -81,7 +82,7 @@ export default function AdminShell({ children, variant = "admin" }) {
   return (
     <div className="admin-shell">
       <aside className="admin-sidebar">
-        <p className="admin-sidebar__brand">Dizor {variant}</p>
+        <p className="admin-sidebar__brand">{siteName} {variant}</p>
         <p style={{ fontSize: "0.85rem", opacity: 0.85, margin: "-1rem 0 1.5rem" }}>
           {user?.name}
         </p>
