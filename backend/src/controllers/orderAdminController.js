@@ -12,6 +12,7 @@ const {
   logPosSale,
   safeLogProductHistory,
 } = require("../services/productHistoryService");
+const { restoreOrderStock } = require("../services/orderService");
 
 const generateManualOrderNumber = async () => {
   const today = new Date();
@@ -159,6 +160,13 @@ exports.updateOrderStatus = catchAsync(async (req, res, next) => {
   }
 
   const previousStatus = order.orderStatus;
+
+  // Restaurar stock al cancelar o marcar como devuelto
+  if (["cancelado", "devuelto"].includes(orderStatus) && order.stockDeducted) {
+    await restoreOrderStock(order.items);
+    order.stockDeducted = false;
+  }
+
   order.orderStatus = orderStatus;
   pushStatusHistory(order, orderStatus, note, req.user.id);
 
@@ -453,15 +461,29 @@ exports.createManualOrder = catchAsync(async (req, res, next) => {
   const discount = Math.max(0, Number(discountAmount) || 0);
   const total = Math.max(0, subtotal - discount);
 
-  // Reduce stock
-  await Promise.all(
-    safeItems.map((item) =>
-      Product.findOneAndUpdate(
-        { _id: item.product, "variants._id": item.variantId },
-        { $inc: { "variants.$.stock": -item.quantity } }
-      )
-    )
-  );
+  // Descontar stock atómicamente (con check de disponibilidad)
+  const deducted = [];
+  for (const item of safeItems) {
+    const updated = await Product.findOneAndUpdate(
+      {
+        _id: item.product,
+        "variants._id": item.variantId,
+        "variants.stock": { $gte: item.quantity },
+      },
+      { $inc: { "variants.$.stock": -item.quantity } }
+    );
+    if (!updated) {
+      // Revertir lo ya descontado
+      for (const prev of deducted) {
+        await Product.findOneAndUpdate(
+          { _id: prev.product, "variants._id": prev.variantId },
+          { $inc: { "variants.$.stock": prev.quantity } }
+        ).catch(() => {});
+      }
+      return next(new AppError(`Stock insuficiente: ${item.productName} (ya no hay unidades disponibles)`, 400));
+    }
+    deducted.push(item);
+  }
 
   const orderNumber = await generateManualOrderNumber();
 
@@ -491,6 +513,7 @@ exports.createManualOrder = catchAsync(async (req, res, next) => {
     paymentStatus,
     orderStatus: initialOrderStatus,
     customerNotes: notes?.trim() || "",
+    stockDeducted: true,
     statusHistory: [{
       status: initialOrderStatus,
       note: `Pedido manual · Canal: ${channelOrigin}`,

@@ -17,6 +17,49 @@ const generateOrderNumber = async () => {
   return `${prefix}-${String(count + 1).padStart(4, "0")}`;
 };
 
+// Atomically deduct stock for each order item.
+// orderItems uses { product (ObjectId), variantId, quantity, productName }
+// Rolls back partial deductions and throws if any item has insufficient stock.
+exports.deductOrderStock = async (orderItems) => {
+  const deducted = [];
+  for (const item of orderItems) {
+    const productId = item.product || item.productId;
+    const updated = await Product.findOneAndUpdate(
+      {
+        _id: productId,
+        "variants._id": item.variantId,
+        "variants.stock": { $gte: item.quantity },
+      },
+      { $inc: { "variants.$.stock": -item.quantity, salesCount: item.quantity } },
+      { new: true }
+    );
+    if (!updated) {
+      for (const prev of deducted) {
+        const prevId = prev.product || prev.productId;
+        await Product.findOneAndUpdate(
+          { _id: prevId, "variants._id": prev.variantId },
+          { $inc: { "variants.$.stock": prev.quantity } }
+        ).catch(() => {});
+      }
+      throw new Error(`Stock insuficiente: ${item.productName}`);
+    }
+    deducted.push(item);
+  }
+};
+
+// Restore stock when an order is cancelled or returned.
+exports.restoreOrderStock = async (orderItems) => {
+  await Promise.all(
+    orderItems.map((item) => {
+      const productId = item.product || item.productId;
+      return Product.findOneAndUpdate(
+        { _id: productId, "variants._id": item.variantId },
+        { $inc: { "variants.$.stock": item.quantity } }
+      );
+    })
+  );
+};
+
 exports.createOrder = async ({
   user,
   isGuest,
@@ -27,41 +70,28 @@ exports.createOrder = async ({
   paymentMethod,
   carrier,
   customerNotes,
+  couponCode = "",
+  deductStock = true,
+  idempotencyKey = null,
   req,
 }) => {
+  // Read-only stock check before touching anything
   for (const item of items) {
-    const product = await Product.findById(item.productId);
-
-    if (!product) {
-      throw new Error("Producto no encontrado");
-    }
-
+    const product = await Product.findById(item.productId).select("name variants");
+    if (!product) throw new Error("Producto no encontrado");
     const variant = product.variants.id(item.variantId);
-
     if (!variant || variant.stock < item.quantity) {
       throw new Error(`Stock insuficiente: ${item.productName}`);
     }
   }
 
-  const stockDeductions = [];
-
   const productCosts = new Map();
-
   for (const item of items) {
-    const product = await Product.findById(item.productId).select(
-      "+internalCost"
-    );
-    const variant = product.variants.id(item.variantId);
-    productCosts.set(String(product._id), product.internalCost ?? null);
-    variant.stock -= item.quantity;
-    product.cartAddsCount = (product.cartAddsCount || 0) + item.quantity;
-    product.salesCount = (product.salesCount || 0) + item.quantity;
-    await product.save({ validateBeforeSave: false });
-    stockDeductions.push({ product, variant, item });
+    const product = await Product.findById(item.productId).select("+internalCost");
+    productCosts.set(String(item.productId), product?.internalCost ?? null);
   }
 
   const orderNumber = await generateOrderNumber();
-
   const initialStatus =
     paymentMethod === "contra_entrega" ? "pendiente" : "pago_pendiente";
 
@@ -95,13 +125,59 @@ exports.createOrder = async ({
     orderStatus: initialStatus,
     carrier: carrier || "",
     customerNotes: customerNotes || "",
-    statusHistory: [
-      {
-        status: initialStatus,
-        note: "Pedido creado",
-      },
-    ],
+    couponCode: couponCode || "",
+    couponConsumed: false,
+    stockDeducted: false,
+    idempotencyKey: idempotencyKey || null,
+    statusHistory: [{ status: initialStatus, note: "Pedido creado" }],
   });
+
+  if (deductStock) {
+    const deducted = [];
+    try {
+      for (const item of items) {
+        const updated = await Product.findOneAndUpdate(
+          {
+            _id: item.productId,
+            "variants._id": item.variantId,
+            "variants.stock": { $gte: item.quantity },
+          },
+          { $inc: { "variants.$.stock": -item.quantity, salesCount: item.quantity } },
+          { new: true }
+        );
+        if (!updated) throw new Error(`Stock insuficiente: ${item.productName}`);
+        deducted.push({ productId: item.productId, variantId: item.variantId, quantity: item.quantity });
+      }
+    } catch (err) {
+      // Roll back partial deductions
+      for (const prev of deducted) {
+        await Product.findOneAndUpdate(
+          { _id: prev.productId, "variants._id": prev.variantId },
+          { $inc: { "variants.$.stock": prev.quantity } }
+        ).catch(() => {});
+      }
+      await Order.findByIdAndDelete(order._id).catch(() => {});
+      throw err;
+    }
+
+    order.stockDeducted = true;
+    await order.save({ validateBeforeSave: false });
+
+    for (const item of items) {
+      safeLogProductHistory(
+        logProductSale({
+          product: { _id: item.productId, name: item.productName, slug: item.productSlug },
+          variant: { _id: item.variantId, stock: 0 },
+          quantity: item.quantity,
+          orderId: order._id,
+          orderNumber,
+          user: user || null,
+          sizeName: item.sizeName,
+          colorName: item.colorName,
+        })
+      );
+    }
+  }
 
   if (req && user) {
     safeLog(
@@ -114,21 +190,6 @@ exports.createOrder = async ({
         entityType: "order",
         summary: `Pedido creado · ${orderNumber}`,
         newData: { orderNumber },
-      })
-    );
-  }
-
-  for (const { product, variant, item } of stockDeductions) {
-    safeLogProductHistory(
-      logProductSale({
-        product,
-        variant,
-        quantity: item.quantity,
-        orderId: order._id,
-        orderNumber,
-        user: user || null,
-        sizeName: item.sizeName,
-        colorName: item.colorName,
       })
     );
   }

@@ -124,6 +124,10 @@ const orderSchema = new mongoose.Schema(
       reference: { type: String, default: "" },
       status: { type: String, default: "" },
     },
+    stockDeducted: { type: Boolean, default: true },
+    idempotencyKey: { type: String, default: null },
+    couponCode: { type: String, default: "" },
+    couponConsumed: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
@@ -131,5 +135,6 @@ const orderSchema = new mongoose.Schema(
 orderSchema.index({ orderNumber: 1 });
 orderSchema.index({ user: 1, createdAt: -1 });
 orderSchema.index({ "buyer.email": 1 });
+orderSchema.index({ idempotencyKey: 1 }, { sparse: true, unique: true });
 
 module.exports = mongoose.model("Order", orderSchema);

@@ -139,14 +139,28 @@ exports.createPosSale = catchAsync(async (req, res, next) => {
   const discount = Math.max(0, Number(discountAmount) || 0);
   const total = Math.max(0, subtotal - discount);
 
-  await Promise.all(
-    safeItems.map((item) =>
-      Product.findOneAndUpdate(
-        { _id: item.productId, "variants._id": item.variantId },
-        { $inc: { "variants.$.stock": -item.quantity } }
-      )
-    )
-  );
+  // Descontar stock atómicamente — el $gte evita stock negativo por doble envío
+  const deductedPos = [];
+  for (const item of safeItems) {
+    const updated = await Product.findOneAndUpdate(
+      {
+        _id: item.productId,
+        "variants._id": item.variantId,
+        "variants.stock": { $gte: item.quantity },
+      },
+      { $inc: { "variants.$.stock": -item.quantity } }
+    );
+    if (!updated) {
+      for (const prev of deductedPos) {
+        await Product.findOneAndUpdate(
+          { _id: prev.productId, "variants._id": prev.variantId },
+          { $inc: { "variants.$.stock": prev.quantity } }
+        ).catch(() => {});
+      }
+      return next(new AppError(`Stock insuficiente: ${item.productName} (ya no hay unidades disponibles)`, 400));
+    }
+    deductedPos.push(item);
+  }
 
   const posOrderNumber = await generatePosNumber();
 
