@@ -304,9 +304,8 @@ export default function ProductForm({ productId }) {
         await updateAdminProduct(productId, payload);
         router.push("/admin/productos");
       } else {
-        const res = await createAdminProduct(payload);
-        const id = res.product?.id || res.product?._id;
-        router.push(id ? `/admin/productos/${id}/editar` : "/admin/productos");
+        await createAdminProduct(payload);
+        router.push("/admin/productos");
       }
     } catch (err) {
       setError(
