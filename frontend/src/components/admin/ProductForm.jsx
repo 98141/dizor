@@ -9,6 +9,7 @@ import {
   getAdminProduct,
   updateAdminProduct,
   uploadProductImages,
+  uploadTempImages,
 } from "@/services/adminCatalogService";
 
 const emptyVariant = () => ({
@@ -53,7 +54,11 @@ export default function ProductForm({ productId }) {
   const [loading, setLoading] = useState(isEdit);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploadingCount, setUploadingCount] = useState(0);
   const [error, setError] = useState("");
+
+  const MAX_IMAGES = 10;
+  const MAX_BATCH = 3;
 
   useEffect(() => {
     const load = async () => {
@@ -163,23 +168,66 @@ export default function ProductForm({ productId }) {
     setNewImageUrl("");
   };
 
+  const MAX_FILE_BYTES = 10 * 1024 * 1024;
+
+  const validateFiles = (files) => {
+    if (files.length > MAX_BATCH)
+      return `Selecciona máximo ${MAX_BATCH} imágenes por subida`;
+    const oversized = files.find((f) => f.size > MAX_FILE_BYTES);
+    if (oversized)
+      return `"${oversized.name}" supera el límite de peso de 10 MB. Reduce el tamaño o usa otra imagen.`;
+    return null;
+  };
+
   const handleFileUpload = async (e) => {
     const files = Array.from(e.target.files || []);
-    if (!files.length || !productId) return;
+    e.target.value = "";
+    if (!files.length) return;
+
+    const validationError = validateFiles(files);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
+    const remaining = MAX_IMAGES - form.images.length;
+    if (files.length > remaining) {
+      setError(
+        remaining === 0
+          ? "El producto ya tiene el máximo de 10 imágenes"
+          : `Solo puedes agregar ${remaining} imagen${remaining !== 1 ? "es" : ""} más (máximo ${MAX_IMAGES})`
+      );
+      return;
+    }
+
+    setUploadingCount(files.length);
     setUploading(true);
     setError("");
     try {
-      const data = await uploadProductImages(productId, files);
-      setForm((prev) => ({
-        ...prev,
-        images: data.images || prev.images,
-        mainImage: data.mainImage || prev.mainImage,
-      }));
+      if (productId) {
+        const data = await uploadProductImages(productId, files);
+        setForm((prev) => ({
+          ...prev,
+          images: data.images || prev.images,
+          mainImage: data.mainImage || prev.mainImage,
+        }));
+      } else {
+        const data = await uploadTempImages(files);
+        const newImages = data.images || [];
+        setForm((prev) => {
+          const combined = [...prev.images, ...newImages];
+          return {
+            ...prev,
+            images: combined,
+            mainImage: prev.mainImage || newImages[0]?.url || "",
+          };
+        });
+      }
     } catch (err) {
       setError(err.response?.data?.message || "Error al subir imágenes");
     } finally {
       setUploading(false);
-      e.target.value = "";
+      setUploadingCount(0);
     }
   };
 
@@ -239,7 +287,7 @@ export default function ProductForm({ productId }) {
     setError("");
 
     if (!form.images.length) {
-      setError("Agrega al menos una imagen (URL)");
+      setError("Agrega al menos una imagen antes de guardar");
       setSaving(false);
       return;
     }
@@ -507,42 +555,78 @@ export default function ProductForm({ productId }) {
       </section>
 
       <section className="product-form__section">
-        <h2>Imágenes</h2>
-        {meta?.cloudinaryConfigured && isEdit ? (
-          <div className="image-upload-block" style={{ marginBottom: "1rem" }}>
-            <label className="admin-btn admin-btn--sm" style={{ cursor: "pointer" }}>
-              {uploading ? "Subiendo…" : "Subir a Cloudinary"}
+        <h2>
+          Imágenes
+          <span
+            className={`image-count-badge${form.images.length >= MAX_IMAGES ? " image-count-badge--full" : ""}`}
+          >
+            {form.images.length} / {MAX_IMAGES}
+          </span>
+        </h2>
+
+        {meta?.cloudinaryConfigured ? (
+          <div className="image-upload-block">
+            <label
+              className={`admin-btn admin-btn--sm image-upload-label${uploading ? " is-uploading" : ""}`}
+            >
+              {uploading ? (
+                <>
+                  <span className="upload-spinner" aria-hidden="true" />
+                  Subiendo {uploadingCount} imagen{uploadingCount !== 1 ? "es" : ""}…
+                </>
+              ) : (
+                "Subir desde equipo"
+              )}
               <input
                 type="file"
                 accept="image/*"
                 multiple
                 hidden
-                disabled={uploading}
+                disabled={uploading || form.images.length >= MAX_IMAGES}
                 onChange={handleFileUpload}
               />
             </label>
-            <p style={{ fontSize: "0.8rem", color: "var(--color-text-muted)", marginTop: "0.35rem" }}>
-              Máx. 10 imágenes · 5 MB c/u
+            <p className="image-upload-hint">
+              Máx. {MAX_BATCH} archivos por subida · 10 MB c/u · JPG, PNG, WebP
             </p>
           </div>
         ) : (
-          !isEdit && (
-            <p style={{ fontSize: "0.85rem", color: "var(--color-text-muted)", marginBottom: "0.75rem" }}>
-              Guarda el producto primero para subir imágenes a Cloudinary.
-            </p>
-          )
+          <p className="image-upload-hint image-upload-hint--info">
+            Para subir archivos desde tu equipo, agrega{" "}
+            <strong>CLOUDINARY_CLOUD_NAME</strong>,{" "}
+            <strong>CLOUDINARY_API_KEY</strong> y{" "}
+            <strong>CLOUDINARY_API_SECRET</strong> en el <code>.env</code> del
+            backend y reinicia el servidor.
+          </p>
         )}
+
+        <div className="image-section-divider">
+          <span>o agrega por enlace</span>
+        </div>
+
         <div className="image-url-add">
           <input
             type="url"
             placeholder="https://… URL de imagen"
             value={newImageUrl}
             onChange={(e) => setNewImageUrl(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                addImage();
+              }
+            }}
           />
-          <button type="button" className="admin-btn" onClick={addImage}>
+          <button
+            type="button"
+            className="admin-btn"
+            onClick={addImage}
+            disabled={form.images.length >= MAX_IMAGES}
+          >
             Agregar
           </button>
         </div>
+
         {form.images.length > 0 && (
           <ul className="image-list">
             {form.images.map((img, index) => (

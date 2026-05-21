@@ -339,6 +339,14 @@ exports.uploadImages = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.uploadTempImages = catchAsync(async (req, res, next) => {
+  if (!req.files?.length) {
+    return next(new AppError("Debes enviar al menos una imagen", 400));
+  }
+  const uploaded = await uploadProductImages(req.files);
+  res.status(200).json({ status: "success", images: uploaded });
+});
+
 exports.getInventorySummary = catchAsync(async (req, res) => {
   let query = Product.find().populate("variants.size variants.color");
 

@@ -23,6 +23,15 @@ const handleJWTExpiredError = () => {
   return new AppError("Tu sesión expiró. Inicia sesión nuevamente", 401);
 };
 
+const handleMulterError = (err) => {
+  const messages = {
+    LIMIT_FILE_SIZE: "Imagen demasiado pesada. El peso máximo permitido es 10 MB por imagen.",
+    LIMIT_FILE_COUNT: "Demasiados archivos. Máximo 3 imágenes por subida.",
+    LIMIT_UNEXPECTED_FILE: "Campo de archivo no esperado.",
+  };
+  return new AppError(messages[err.code] || "Error al procesar el archivo.", 400);
+};
+
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode || 500).json({
     status: err.status || "error",
@@ -49,6 +58,7 @@ const sendErrorProd = (err, res) => {
 const globalErrorHandler = (err, req, res, next) => {
   let error = err;
 
+  if (error.name === "MulterError") error = handleMulterError(error);
   if (error.name === "CastError") error = handleCastErrorDB(error);
   if (error.code === 11000) error = handleDuplicateFieldsDB(error);
   if (error.name === "ValidationError") error = handleValidationErrorDB(error);
