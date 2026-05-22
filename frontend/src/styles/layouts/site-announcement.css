@@ -68,34 +68,173 @@
 }
 
 .content-page {
-  max-width: 720px;
+  max-width: 800px;
   margin: 0 auto;
-  padding: var(--space-2xl) var(--space-md);
+  padding: var(--space-xl) var(--space-md) var(--space-2xl);
 }
 
 .content-page__breadcrumb {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: var(--color-text-muted);
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-lg);
 }
 
 .content-page__breadcrumb a {
   color: var(--color-primary);
 }
 
+/* ── Header: texto + imagen lado a lado en desktop ── */
+.content-page__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-xl);
+}
+
+.content-page__header-text {
+  flex: 1;
+}
+
 .content-page__title {
   font-family: var(--font-serif);
   font-size: clamp(1.75rem, 4vw, 2.25rem);
-  margin: 0 0 var(--space-md);
+  margin: 0 0 var(--space-sm);
 }
 
 .content-page__excerpt {
   color: var(--color-text-muted);
-  font-size: 1.05rem;
-  margin: 0 0 var(--space-xl);
+  font-size: 1rem;
+  line-height: 1.65;
+  margin: 0;
 }
 
+.content-page__header-image {
+  flex-shrink: 0;
+  width: 100%;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+}
+
+.content-page__image {
+  width: 100%;
+  height: auto;
+  display: block;
+  max-height: 340px;
+  object-fit: cover;
+}
+
+/* ── Body content ── */
+.content-page__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.content-page__body-p {
+  line-height: 1.8;
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+/* Compatibilidad con páginas antiguas que usan <p> directo */
 .content-page__body p {
-  line-height: 1.75;
-  margin: 0 0 var(--space-md);
+  line-height: 1.8;
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.content-page__section-title {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-weight: 400;
+  margin: var(--space-sm) 0 0;
+  padding-bottom: var(--space-xs);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+/* ── Lista de items ── */
+.content-page__list {
+  margin: 0;
+  padding-left: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.content-page__list li {
+  line-height: 1.7;
+  color: var(--color-text-muted);
+}
+
+/* ── Tabla de tallas ── */
+.content-page__size-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-sm);
+  margin: var(--space-xs) 0;
+}
+
+.content-page__size-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-md) var(--space-sm);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  text-align: center;
+  gap: var(--space-xs);
+}
+
+.content-page__size-label {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--color-primary);
+}
+
+.content-page__size-value {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+/* ── Link de vuelta ── */
+.content-page__back {
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+.content-page__back-link {
+  font-size: 0.9rem;
+  color: var(--color-primary);
+}
+
+/* ── Responsive ── */
+@media (min-width: 640px) {
+  .content-page__size-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  .content-page__header {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .content-page__header-image {
+    width: 300px;
+  }
+
+  .content-page__image {
+    max-height: 280px;
+  }
+
+  .content-page__size-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }

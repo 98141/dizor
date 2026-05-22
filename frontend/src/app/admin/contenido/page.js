@@ -50,6 +50,8 @@ const TABS = [
 const emptyPage = () => ({
   title: "",
   excerpt: "",
+  imageUrl: "",
+  imageAlt: "",
   body: "",
   isPublished: false,
   showInFooter: true,
@@ -253,6 +255,8 @@ function ContenidoAdminContent() {
     setPageForm({
       title: data.page.title,
       excerpt: data.page.excerpt || "",
+      imageUrl: data.page.imageUrl || "",
+      imageAlt: data.page.imageAlt || "",
       body: data.page.body || "",
       isPublished: data.page.isPublished,
       showInFooter: data.page.showInFooter !== false,
@@ -509,13 +513,48 @@ function ContenidoAdminContent() {
             <form className="admin-form" onSubmit={savePage}>
               <AuthFormField label="Título" name="pTitle" value={pageForm.title} required
                 onChange={(e) => setPageForm((p) => ({ ...p, title: e.target.value }))} />
-              <AuthFormField label="Extracto" name="pExcerpt" value={pageForm.excerpt}
+              <AuthFormField label="Extracto (subtítulo visible)" name="pExcerpt" value={pageForm.excerpt}
                 onChange={(e) => setPageForm((p) => ({ ...p, excerpt: e.target.value }))} />
+
               <div className="auth-field">
-                <label className="auth-field__label">Contenido</label>
-                <textarea className="auth-field__input" rows={8} value={pageForm.body}
+                <label className="auth-field__label">Imagen destacada (URL)</label>
+                <input className="auth-field__input" type="url"
+                  placeholder="https://res.cloudinary.com/…"
+                  value={pageForm.imageUrl}
+                  onChange={(e) => setPageForm((p) => ({ ...p, imageUrl: e.target.value }))} />
+              </div>
+              {pageForm.imageUrl && (
+                <div style={{ marginBottom: "0.75rem" }}>
+                  <img src={pageForm.imageUrl} alt={pageForm.imageAlt || "Vista previa"}
+                    style={{ maxWidth: "100%", maxHeight: 180, objectFit: "cover", borderRadius: 6, border: "1px solid var(--color-border)" }} />
+                </div>
+              )}
+              <AuthFormField label="Texto alternativo de la imagen (accesibilidad)" name="pImageAlt"
+                value={pageForm.imageAlt}
+                onChange={(e) => setPageForm((p) => ({ ...p, imageAlt: e.target.value }))} />
+
+              <div className="auth-field">
+                <label className="auth-field__label">
+                  Contenido
+                  <span style={{ fontWeight: 400, color: "var(--color-text-muted)", marginLeft: "0.5rem", fontSize: "0.78rem" }}>
+                    Usa # para títulos de sección · Talla X — NN cm para tabla de tallas · - para listas
+                  </span>
+                </label>
+                <textarea className="auth-field__input" rows={10} value={pageForm.body}
                   onChange={(e) => setPageForm((p) => ({ ...p, body: e.target.value }))} />
               </div>
+
+              <div className="auth-field">
+                <label className="auth-field__label">Título SEO <span style={{ fontWeight: 400, color: "var(--color-text-muted)", fontSize: "0.78rem" }}>(máx. 70 caracteres)</span></label>
+                <input className="auth-field__input" maxLength={70} value={pageForm.seoTitle}
+                  onChange={(e) => setPageForm((p) => ({ ...p, seoTitle: e.target.value }))} />
+              </div>
+              <div className="auth-field">
+                <label className="auth-field__label">Descripción SEO <span style={{ fontWeight: 400, color: "var(--color-text-muted)", fontSize: "0.78rem" }}>(máx. 160 caracteres)</span></label>
+                <textarea className="auth-field__input" rows={2} maxLength={160} value={pageForm.seoDescription}
+                  onChange={(e) => setPageForm((p) => ({ ...p, seoDescription: e.target.value }))} />
+              </div>
+
               <label className="admin-checkbox">
                 <input type="checkbox" checked={pageForm.isPublished}
                   onChange={(e) => setPageForm((p) => ({ ...p, isPublished: e.target.checked }))} />
