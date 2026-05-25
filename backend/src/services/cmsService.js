@@ -105,6 +105,8 @@ exports.formatPage = (page) => ({
   title: page.title,
   slug: page.slug,
   excerpt: page.excerpt,
+  imageUrl: page.imageUrl || "",
+  imageAlt: page.imageAlt || "",
   body: page.body,
   isPublished: page.isPublished,
   showInFooter: page.showInFooter,

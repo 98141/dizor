@@ -65,6 +65,18 @@ const globalLimiter = rateLimit({
   max: 300,
   standardHeaders: true,
   legacyHeaders: false,
+  skip: (req) => req.path.startsWith("/admin"),
+  message: {
+    status: "fail",
+    message: "Demasiadas solicitudes desde esta IP. Intenta más tarde.",
+  },
+});
+
+const adminLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 1500,
+  standardHeaders: true,
+  legacyHeaders: false,
   message: {
     status: "fail",
     message: "Demasiadas solicitudes desde esta IP. Intenta más tarde.",
@@ -72,6 +84,7 @@ const globalLimiter = rateLimit({
 });
 
 app.use("/api", globalLimiter);
+app.use("/api/admin", adminLimiter);
 
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true, limit: "1mb" }));
