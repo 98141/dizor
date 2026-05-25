@@ -1,5 +1,5 @@
-// backend/src/middlewares/errorMiddleware.js
 const AppError = require("../utils/AppError");
+const logger = require("../lib/logger");
 
 const handleCastErrorDB = () => {
   return new AppError("ID inválido", 400);
@@ -21,6 +21,15 @@ const handleJWTError = () => {
 
 const handleJWTExpiredError = () => {
   return new AppError("Tu sesión expiró. Inicia sesión nuevamente", 401);
+};
+
+const handleMulterError = (err) => {
+  const messages = {
+    LIMIT_FILE_SIZE: "Imagen demasiado pesada. El peso máximo permitido es 10 MB por imagen.",
+    LIMIT_FILE_COUNT: "Demasiados archivos. Máximo 3 imágenes por subida.",
+    LIMIT_UNEXPECTED_FILE: "Campo de archivo no esperado.",
+  };
+  return new AppError(messages[err.code] || "Error al procesar el archivo.", 400);
 };
 
 const sendErrorDev = (err, res) => {
@@ -49,11 +58,34 @@ const sendErrorProd = (err, res) => {
 const globalErrorHandler = (err, req, res, next) => {
   let error = err;
 
+  if (error.name === "MulterError") error = handleMulterError(error);
   if (error.name === "CastError") error = handleCastErrorDB(error);
   if (error.code === 11000) error = handleDuplicateFieldsDB(error);
   if (error.name === "ValidationError") error = handleValidationErrorDB(error);
   if (error.name === "JsonWebTokenError") error = handleJWTError();
   if (error.name === "TokenExpiredError") error = handleJWTExpiredError();
+
+  const statusCode = error.statusCode || 500;
+
+  if (statusCode >= 500) {
+    logger.error("Server error", {
+      method: req.method,
+      url: req.originalUrl,
+      statusCode,
+      userId: req.user?.id || null,
+      ip: req.ip,
+      message: err.message,
+      stack: err.stack,
+    });
+  } else if (statusCode === 401 || statusCode === 403) {
+    logger.warn("Auth failure", {
+      method: req.method,
+      url: req.originalUrl,
+      statusCode,
+      ip: req.ip,
+      message: error.message,
+    });
+  }
 
   if (process.env.NODE_ENV === "development") {
     return sendErrorDev(error, res);

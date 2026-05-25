@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(node -e \"require\\('dotenv'\\).config\\(\\); const mongoose = require\\('mongoose'\\); mongoose.connect\\(process.env.MONGO_URI\\).then\\(async \\(\\) => { const ContentPage = require\\('./src/models/contentPage'\\); const p = await ContentPage.findOne\\({slug:'guia-de-tallas'}\\).lean\\(\\); console.log\\('slug:', p.slug\\); console.log\\('isPublished:', p.isPublished\\); console.log\\('showInFooter:', p.showInFooter\\); console.log\\('imageUrl:', p.imageUrl\\); console.log\\('body preview:', p.body.slice\\(0, 120\\)\\); process.exit\\(0\\); }\\).catch\\(e => { console.error\\(e.message\\); process.exit\\(1\\); }\\);\")",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "PowerShell(head -30)",
+      "PowerShell(Get-ChildItem -Path \"c:\\\\Users\\\\Asus ExpertBook\\\\Desktop\\\\Desarrollo_MBT\\\\Dizor\\\\dizor\\\\backend\" -MaxDepth 1 | Where-Object {$_.Name -match \"^\\(server|index\\)\\\\.\\(js|ts\\)$\"})",
+      "PowerShell(Get-ChildItem -Path \"c:\\\\Users\\\\Asus ExpertBook\\\\Desktop\\\\Desarrollo_MBT\\\\Dizor\\\\dizor\\\\backend\" -Depth 1 | Where-Object {$_.Name -match \"^\\(server|index\\)\\\\.\\(js|ts\\)$\"})",
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\Asus ExpertBook\\\\Desktop\\\\Desarrollo_MBT\\\\Dizor\\\\dizor\" -Directory)"
+    ]
+  }
+}

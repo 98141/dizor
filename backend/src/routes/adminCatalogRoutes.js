@@ -23,6 +23,14 @@ Object.entries(taxonomyAdminController.handlers).forEach(([type, handlers]) => {
   router.delete(`/${type}/:id`, authorizeRoles(...adminRoles), handlers.remove);
 });
 
+router.post(
+  "/upload",
+  authorizeRoles(...adminRoles),
+  requireCloudinary,
+  uploadProductImages,
+  productAdminController.uploadTempImages
+);
+
 router.get("/meta", productAdminController.getCatalogMeta);
 router.get("/products/inventory", productAdminController.getInventorySummary);
 router.get("/products", productAdminController.getProducts);

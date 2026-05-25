@@ -18,7 +18,7 @@ export const getContentPages = async () => {
 
 export const getContentPage = async (slug) => {
   const res = await fetch(`${API}/content/pages/${slug}`, {
-    next: { revalidate: 120 },
+    next: { revalidate: 30 },
   });
   if (!res.ok) return null;
   return res.json();

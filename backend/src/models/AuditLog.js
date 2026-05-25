@@ -49,6 +49,14 @@ const auditLogSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    method: {
+      type: String,
+      default: null,
+    },
+    path: {
+      type: String,
+      default: null,
+    },
     previousData: {
       type: mongoose.Schema.Types.Mixed,
       default: null,

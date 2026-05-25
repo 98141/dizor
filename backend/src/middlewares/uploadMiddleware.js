@@ -15,12 +15,12 @@ const upload = multer({
   storage,
   fileFilter,
   limits: {
-    fileSize: 5 * 1024 * 1024,
-    files: 10,
+    fileSize: 10 * 1024 * 1024,
+    files: 3,
   },
 });
 
-exports.uploadProductImages = upload.array("images", 10);
+exports.uploadProductImages = upload.array("images", 3);
 
 exports.requireCloudinary = (req, res, next) => {
   if (!isCloudinaryConfigured()) {

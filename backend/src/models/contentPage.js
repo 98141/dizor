@@ -37,6 +37,8 @@ const contentPageSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    imageUrl: { type: String, trim: true, default: "" },
+    imageAlt: { type: String, trim: true, default: "" },
     seoTitle: { type: String, trim: true, maxlength: 70 },
     seoDescription: { type: String, trim: true, maxlength: 160 },
   },

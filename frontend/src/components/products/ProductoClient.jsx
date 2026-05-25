@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -33,6 +33,10 @@ export default function ProductoClient({ slug }) {
   const [selectedColor, setSelectedColor] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [addedMsg, setAddedMsg] = useState("");
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const imagesLengthRef = useRef(0);
+
+  const closeLightbox = () => setLightboxOpen(false);
 
   const resolvedSlug = useMemo(() => {
     const raw = Array.isArray(slug) ? slug[0] : slug;
@@ -73,6 +77,27 @@ export default function ProductoClient({ slug }) {
   useEffect(() => {
     setQuantity(1);
   }, [selectedSize, selectedColor]);
+
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    document.body.style.overflow = "hidden";
+    const handle = (e) => {
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowRight")
+        setActiveImage((i) =>
+          i === imagesLengthRef.current - 1 ? 0 : i + 1
+        );
+      if (e.key === "ArrowLeft")
+        setActiveImage((i) =>
+          i === 0 ? imagesLengthRef.current - 1 : i - 1
+        );
+    };
+    window.addEventListener("keydown", handle);
+    return () => {
+      window.removeEventListener("keydown", handle);
+      document.body.style.overflow = "";
+    };
+  }, [lightboxOpen]);
 
   const product = data?.product;
 
@@ -134,6 +159,7 @@ export default function ProductoClient({ slug }) {
   const images = product.images?.length
     ? product.images
     : [{ url: product.mainImage, alt: product.name }];
+  imagesLengthRef.current = images.length;
 
   const variantPrice = selectedVariant?.price || product.effectivePrice;
   const maxQty = selectedVariant?.stock || 1;
@@ -172,7 +198,14 @@ export default function ProductoClient({ slug }) {
       <div className="product-detail__grid">
         {/* ─── GALERÍA ─── */}
         <div className="product-detail__gallery">
-          <div className="product-detail__main-image">
+          <div
+            className="product-detail__main-image product-detail__main-image--clickable"
+            onClick={() => setLightboxOpen(true)}
+            role="button"
+            tabIndex={0}
+            aria-label="Ver imagen ampliada"
+            onKeyDown={(e) => e.key === "Enter" && setLightboxOpen(true)}
+          >
             <Image
               src={images[activeImage]?.url || product.mainImage}
               alt={images[activeImage]?.alt || product.name}
@@ -441,6 +474,63 @@ export default function ProductoClient({ slug }) {
             ))}
           </div>
         </section>
+      )}
+
+      {/* ─── LIGHTBOX ─── */}
+      {lightboxOpen && (
+        <div
+          className="lightbox-backdrop"
+          onClick={closeLightbox}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Imagen ampliada"
+        >
+          <button
+            className="lightbox-close"
+            onClick={closeLightbox}
+            aria-label="Cerrar"
+          >
+            ✕
+          </button>
+
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={images[activeImage]?.url}
+            alt={images[activeImage]?.alt || product.name}
+            className="lightbox-img"
+            onClick={(e) => e.stopPropagation()}
+          />
+
+          {images.length > 1 && (
+            <>
+              <button
+                className="lightbox-nav lightbox-nav--prev"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveImage((i) => (i === 0 ? images.length - 1 : i - 1));
+                }}
+                aria-label="Imagen anterior"
+              >
+                ‹
+              </button>
+              <button
+                className="lightbox-nav lightbox-nav--next"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveImage((i) =>
+                    i === images.length - 1 ? 0 : i + 1
+                  );
+                }}
+                aria-label="Imagen siguiente"
+              >
+                ›
+              </button>
+              <p className="lightbox-counter">
+                {activeImage + 1} / {images.length}
+              </p>
+            </>
+          )}
+        </div>
       )}
     </article>
   );

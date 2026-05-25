@@ -5,7 +5,6 @@ import { useSearchParams, useRouter } from "next/navigation";
 import ProductCard from "@/components/products/ProductCard";
 import CatalogFilters from "@/components/catalog/CatalogFilters";
 import { CatalogFiltersSidebar } from "@/components/catalog/CatalogFilters";
-import CatalogSearch from "@/components/catalog/CatalogSearch";
 import CatalogPromo from "@/components/cms/CatalogPromo";
 import { getCatalogFilters, getProducts } from "@/services/productService";
 
@@ -171,7 +170,7 @@ function CatalogoContent() {
           isOpen={filtersOpen}
           onToggle={() => setFiltersOpen((o) => !o)}
         />
-        <CatalogSearch value={searchQuery || ""} onSearch={updateSearchInUrl} />
+        
         <div className="catalog-sort">
           <select
             value={searchParams.get("sort") || ""}
