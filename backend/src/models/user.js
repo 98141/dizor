@@ -146,7 +146,8 @@ userSchema.methods.registerFailedLogin = async function () {
 
   if (this.failedLoginAttempts >= 5) {
     this.accountLockedUntil = new Date(Date.now() + 15 * 60 * 1000);
-    this.failedLoginAttempts = 0;
+    // No se resetea el contador: cada intento fallido tras el lockout
+    // renueva el bloqueo inmediatamente hasta que se inicie sesión correctamente.
   }
 
   await this.save({ validateBeforeSave: false });

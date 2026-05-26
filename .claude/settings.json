@@ -7,7 +7,8 @@
       "PowerShell(head -30)",
       "PowerShell(Get-ChildItem -Path \"c:\\\\Users\\\\Asus ExpertBook\\\\Desktop\\\\Desarrollo_MBT\\\\Dizor\\\\dizor\\\\backend\" -MaxDepth 1 | Where-Object {$_.Name -match \"^\\(server|index\\)\\\\.\\(js|ts\\)$\"})",
       "PowerShell(Get-ChildItem -Path \"c:\\\\Users\\\\Asus ExpertBook\\\\Desktop\\\\Desarrollo_MBT\\\\Dizor\\\\dizor\\\\backend\" -Depth 1 | Where-Object {$_.Name -match \"^\\(server|index\\)\\\\.\\(js|ts\\)$\"})",
-      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\Asus ExpertBook\\\\Desktop\\\\Desarrollo_MBT\\\\Dizor\\\\dizor\" -Directory)"
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\Asus ExpertBook\\\\Desktop\\\\Desarrollo_MBT\\\\Dizor\\\\dizor\" -Directory)",
+      "Bash(Get-ChildItem \"c:\\\\Users\\\\Asus ExpertBook\\\\Desktop\\\\Desarrollo_MBT\\\\Dizor\\\\dizor\\\\frontend\" -Filter \"*.env*\" -Force)"
     ]
   }
 }

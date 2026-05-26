@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 const rateLimit = require("express-rate-limit");
 const mongoSanitize = require("mongo-sanitize");
 const hpp = require("hpp");
+const xss = require("xss-clean");
 
 const AppError = require("./utils/AppError");
 const globalErrorHandler = require("./middlewares/errorMiddleware");
@@ -96,6 +97,8 @@ app.use((req, res, next) => {
   req.query = mongoSanitize(req.query);
   next();
 });
+
+app.use(xss());
 
 app.use(
   hpp({

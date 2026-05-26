@@ -12,6 +12,47 @@ const { createOrder, restoreOrderStock } = require("../services/orderService");
 const { isWompiConfigured, createPaymentLink } = require("../services/wompiService");
 const { markAbandonedCartRecovered } = require("../services/marketingService");
 
+// DTO seguro: nunca expone unitCost, internalCost ni datos administrativos al cliente
+const formatOrderForClient = (order) => ({
+  id: order._id,
+  orderNumber: order.orderNumber,
+  orderStatus: order.orderStatus,
+  paymentStatus: order.paymentStatus,
+  paymentMethod: order.paymentMethod,
+  subtotal: order.subtotal,
+  discountTotal: order.discountTotal,
+  taxTotal: order.taxTotal,
+  shippingCost: order.shippingCost,
+  total: order.total,
+  couponCode: order.couponCode,
+  carrier: order.carrier,
+  trackingNumber: order.trackingNumber,
+  customerNotes: order.customerNotes,
+  createdAt: order.createdAt,
+  shippingAddress: {
+    address: order.shippingAddress?.address,
+    city: order.shippingAddress?.city,
+    department: order.shippingAddress?.department,
+  },
+  items: (order.items || []).map((i) => ({
+    productName: i.productName,
+    productSlug: i.productSlug,
+    productImage: i.productImage,
+    sizeName: i.sizeName,
+    colorName: i.colorName,
+    sku: i.sku,
+    quantity: i.quantity,
+    unitPrice: i.unitPrice,
+    lineTotal: i.lineTotal,
+    customizationNotes: i.customizationNotes,
+  })),
+  statusHistory: (order.statusHistory || []).map((h) => ({
+    status: h.status,
+    note: h.note,
+    changedAt: h.changedAt,
+  })),
+});
+
 exports.getCheckoutConfig = catchAsync(async (req, res) => {
   const settings = await getStoreSettings();
 
@@ -134,23 +175,31 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
     shippingAddress.department
   );
 
-  // Idempotencia: si ya existe una orden con esta clave, devolverla directamente
+  // Idempotencia: si ya existe una orden con esta clave, devolverla solo si pertenece al mismo actor
   if (idempotencyKey) {
     const existing = await Order.findOne({ idempotencyKey });
     if (existing) {
-      return res.status(200).json({
-        status: "success",
-        order: {
-          id: existing._id,
-          orderNumber: existing.orderNumber,
-          total: existing.total,
-          paymentMethod: existing.paymentMethod,
-          orderStatus: existing.orderStatus,
-          paymentStatus: existing.paymentStatus,
-        },
-        paymentUrl: existing.wompi?.paymentLinkUrl || null,
-        message: "Pedido ya registrado.",
-      });
+      const ownerUserId = req.user?.id?.toString() || null;
+      const ownerEmail = buyer?.email?.toLowerCase() || "";
+      const sameUser = ownerUserId && existing.user?.toString() === ownerUserId;
+      const sameEmail = !ownerUserId && existing.buyer?.email === ownerEmail;
+
+      if (sameUser || sameEmail) {
+        return res.status(200).json({
+          status: "success",
+          order: {
+            id: existing._id,
+            orderNumber: existing.orderNumber,
+            total: existing.total,
+            paymentMethod: existing.paymentMethod,
+            orderStatus: existing.orderStatus,
+            paymentStatus: existing.paymentStatus,
+          },
+          paymentUrl: existing.wompi?.paymentLinkUrl || null,
+          message: "Pedido ya registrado.",
+        });
+      }
+      // Key no pertenece a este actor: ignorar y continuar (la BD rechazará por unique index)
     }
   }
 
@@ -345,7 +394,7 @@ exports.getMyOrder = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: "success",
-    order,
+    order: formatOrderForClient(order),
   });
 });
 

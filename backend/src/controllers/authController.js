@@ -174,6 +174,14 @@ exports.refreshToken = catchAsync(async (req, res, next) => {
     return next(new AppError("Refresh token inválido", 401));
   }
 
+  if (!user.isActive) {
+    return next(new AppError("Usuario inactivo. Contacta al administrador.", 403));
+  }
+
+  if (user.changedPasswordAfter(decoded.iat)) {
+    return next(new AppError("La contraseña fue cambiada. Inicia sesión nuevamente.", 401));
+  }
+
   const accessToken = generateAccessToken(user);
   const newRefreshToken = generateRefreshToken(user);
 

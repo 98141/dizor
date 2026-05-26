@@ -71,16 +71,19 @@ exports.handleWompiEvent = catchAsync(async (req, res) => {
       }
     }
 
-    // Consumir cupón si aplica
+    // Consumir cupón de forma atómica: incremento condicional evita race conditions
     if (order.couponCode && !order.couponConsumed) {
-      const coupon = await Coupon.findOne({
-        code: order.couponCode,
-        isActive: true,
-      });
-      if (coupon) {
-        coupon.usedCount += 1;
-        await coupon.save();
-      }
+      await Coupon.findOneAndUpdate(
+        {
+          code: order.couponCode,
+          isActive: true,
+          $or: [
+            { maxUses: null },
+            { $expr: { $lt: ["$usedCount", "$maxUses"] } },
+          ],
+        },
+        { $inc: { usedCount: 1 } }
+      );
       order.couponConsumed = true;
     }
 
