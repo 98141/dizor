@@ -256,9 +256,24 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
 
   // Consumir cupón solo para métodos de pago que no sean Wompi
   // (Wompi lo consume el webhook cuando confirma el pago)
+  // Incremento atómico con condición: evita race condition si dos requests
+  // concurrentes usan el mismo cupón al mismo tiempo
   if (appliedCoupon && deductStock) {
-    appliedCoupon.usedCount += 1;
-    await appliedCoupon.save();
+    const consumed = await Coupon.findOneAndUpdate(
+      {
+        _id: appliedCoupon._id,
+        isActive: true,
+        $or: [
+          { maxUses: null },
+          { $expr: { $lt: ["$usedCount", "$maxUses"] } },
+        ],
+      },
+      { $inc: { usedCount: 1 } },
+      { new: true }
+    );
+    if (!consumed) {
+      return next(new AppError("El cupón ya no está disponible.", 400));
+    }
     order.couponConsumed = true;
     await order.save({ validateBeforeSave: false });
   }
