@@ -11,29 +11,57 @@ const nextConfig = {
         protocol: "https",
         hostname: "res.cloudinary.com",
       },
-      {
-        protocol: "https",
-        hostname: "**",
-      },
+      // Wildcard eliminado: solo se permiten dominios confiables explícitos
     ],
   },
 
   async headers() {
+    // Extraer el origen del backend para incluirlo en connect-src
+    const apiOrigin = process.env.NEXT_PUBLIC_API_URL
+      ? new URL(process.env.NEXT_PUBLIC_API_URL).origin
+      : "http://localhost:5000";
+
+    const isDev = process.env.NODE_ENV !== "production";
+
+    // Content-Security-Policy: ajustada para Next.js + Cloudinary + Wompi
+    // En desarrollo, unsafe-eval es requerido por React para source maps y HMR
+    const csp = [
+      "default-src 'self'",
+      isDev
+        ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
+        : "script-src 'self' 'unsafe-inline'",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: blob: https://res.cloudinary.com https://images.unsplash.com",
+      "font-src 'self'",
+      `connect-src 'self' ${apiOrigin} https://checkout.wompi.co https://sandbox.wompi.co https://production.wompi.co`,
+      // Wompi checkout se abre en un frame/redirect
+      "frame-src https://checkout.wompi.co",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+    ].join("; ");
+
     return [
-      // Prevent indexing of private/admin areas at HTTP level
+      // Admin y vendedor: no indexar, no framear (protección clickjacking)
       {
         source: "/admin/:path*",
-        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+        headers: [
+          { key: "X-Robots-Tag", value: "noindex, nofollow" },
+          { key: "X-Frame-Options", value: "DENY" },
+        ],
       },
       {
         source: "/vendedor/:path*",
-        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+        headers: [
+          { key: "X-Robots-Tag", value: "noindex, nofollow" },
+          { key: "X-Frame-Options", value: "DENY" },
+        ],
       },
       {
         source: "/api/:path*",
         headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
       },
-      // Security headers applied to all routes
+      // Cabeceras de seguridad globales en todas las rutas
       {
         source: "/:path*",
         headers: [
@@ -44,6 +72,7 @@ const nextConfig = {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=()",
           },
+          { key: "Content-Security-Policy", value: csp },
         ],
       },
     ];

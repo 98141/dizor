@@ -66,6 +66,14 @@ exports.verifyEventChecksum = (eventBody, checksumHeader) => {
     return false;
   }
 
+  // Anti-replay: rechazar eventos con más de 5 minutos de antigüedad o del futuro
+  const eventTimestamp = eventBody.timestamp;
+  if (!eventTimestamp) return false;
+  const ageMs = Date.now() - eventTimestamp * 1000;
+  if (ageMs > 5 * 60 * 1000 || ageMs < -60 * 1000) {
+    return false;
+  }
+
   const { properties } = eventBody.signature;
   const timestamp = eventBody.timestamp;
   let chain = "";

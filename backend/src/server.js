@@ -10,10 +10,25 @@ const requiredEnvVars = ["MONGO_URI", "JWT_SECRET", "JWT_REFRESH_SECRET"];
 
 requiredEnvVars.forEach((envName) => {
   if (!process.env[envName]) {
-    logger.error(`Falta variable de entorno requerida: ${envName}`);
+    logger.error(`[SECURITY] Falta variable de entorno requerida: ${envName}`);
     process.exit(1);
   }
 });
+
+// Secretos JWT deben tener mínimo 32 caracteres
+const MIN_SECRET_LENGTH = 32;
+["JWT_SECRET", "JWT_REFRESH_SECRET"].forEach((key) => {
+  if ((process.env[key] || "").length < MIN_SECRET_LENGTH) {
+    logger.error(`[SECURITY] ${key} es demasiado corto (mínimo ${MIN_SECRET_LENGTH} caracteres). Servidor detenido.`);
+    process.exit(1);
+  }
+});
+
+// En producción, Wompi debe estar en modo producción
+if (process.env.NODE_ENV === "production" && process.env.WOMPI_ENV !== "production") {
+  logger.error("[SECURITY] WOMPI_ENV debe ser 'production' en entorno de producción. Servidor detenido.");
+  process.exit(1);
+}
 
 connectDB();
 

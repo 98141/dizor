@@ -33,8 +33,34 @@ const forgotPasswordLimiter = rateLimit({
   },
 });
 
+// Tracking de pedidos guest: límite estricto para evitar enumeración de emails
+const trackingLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 15,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    status: "fail",
+    message: "Demasiadas consultas de seguimiento. Intenta en unos minutos.",
+  },
+});
+
+// Webhook Wompi: limitar para evitar abuso/spam del endpoint
+const webhookLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    status: "fail",
+    message: "Demasiadas solicitudes al webhook.",
+  },
+});
+
 module.exports = {
   loginLimiter,
   authLimiter,
   forgotPasswordLimiter,
+  trackingLimiter,
+  webhookLimiter,
 };
