@@ -7,7 +7,7 @@ const cookieParser = require("cookie-parser");
 const rateLimit = require("express-rate-limit");
 const mongoSanitize = require("mongo-sanitize");
 const hpp = require("hpp");
-const xss = require("xss-clean");
+const xssFilters = require("xss");
 
 const AppError = require("./utils/AppError");
 const globalErrorHandler = require("./middlewares/errorMiddleware");
@@ -91,14 +91,32 @@ app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true, limit: "1mb" }));
 app.use(cookieParser());
 
+// Sanitizar recursivamente XSS + NoSQL injection en objetos de request
+const sanitizeObject = (obj) => {
+  if (!obj || typeof obj !== "object") return obj;
+  for (const key of Object.keys(obj)) {
+    if (typeof obj[key] === "string") {
+      obj[key] = xssFilters(mongoSanitize(obj[key]));
+    } else if (typeof obj[key] === "object") {
+      sanitizeObject(obj[key]);
+    }
+  }
+  return obj;
+};
+
 app.use((req, res, next) => {
-  req.body = mongoSanitize(req.body);
-  req.params = mongoSanitize(req.params);
-  req.query = mongoSanitize(req.query);
+  // body y params son propiedades escritas por Express → se pueden mutar
+  sanitizeObject(req.body);
+  sanitizeObject(req.params);
+  // req.query es un getter-only en Express moderno → sobrescribir el descriptor
+  // con una copia sanitizada para que todos los handlers vean la versión limpia
+  const sanitizedQuery = sanitizeObject({ ...req.query });
+  Object.defineProperty(req, "query", {
+    get: () => sanitizedQuery,
+    configurable: true,
+  });
   next();
 });
-
-app.use(xss());
 
 app.use(
   hpp({

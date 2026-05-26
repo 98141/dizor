@@ -21,11 +21,15 @@ const nextConfig = {
       ? new URL(process.env.NEXT_PUBLIC_API_URL).origin
       : "http://localhost:5000";
 
+    const isDev = process.env.NODE_ENV !== "production";
+
     // Content-Security-Policy: ajustada para Next.js + Cloudinary + Wompi
+    // En desarrollo, unsafe-eval es requerido por React para source maps y HMR
     const csp = [
       "default-src 'self'",
-      // Next.js requiere unsafe-inline para sus scripts de runtime en producción
-      "script-src 'self' 'unsafe-inline'",
+      isDev
+        ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
+        : "script-src 'self' 'unsafe-inline'",
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https://res.cloudinary.com https://images.unsplash.com",
       "font-src 'self'",
