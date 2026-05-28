@@ -11,7 +11,9 @@
       "Bash(Get-ChildItem \"c:\\\\Users\\\\Asus ExpertBook\\\\Desktop\\\\Desarrollo_MBT\\\\Dizor\\\\dizor\\\\frontend\" -Filter \"*.env*\" -Force)",
       "Bash(node -e \"require\\('xss'\\); console.log\\('OK'\\)\")",
       "Bash(node -e ' *)",
-      "Bash(node -e \"const xss = require\\('xss'\\); console.log\\(xss\\('test&password<>123'\\)\\); console.log\\(xss\\('normalpassword123!'\\)\\);\")"
+      "Bash(node -e \"const xss = require\\('xss'\\); console.log\\(xss\\('test&password<>123'\\)\\); console.log\\(xss\\('normalpassword123!'\\)\\);\")",
+      "Bash(xargs grep -l \"og:image\\\\|twitter:image\\\\|imageUrl\")",
+      "Bash(node --input-type=module --experimental-vm-modules)"
     ]
   }
 }

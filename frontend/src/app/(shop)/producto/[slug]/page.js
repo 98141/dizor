@@ -47,15 +47,15 @@ export async function generateMetadata({ params }) {
       title: p.name,
       description,
       type: "website",
-      images: p.mainImage
-        ? [{ url: p.mainImage, width: 800, height: 1000, alt: p.name }]
-        : [],
+      ...(p.mainImage && {
+        images: [{ url: p.mainImage, width: 800, height: 1000, alt: p.name }],
+      }),
     },
     twitter: {
       card: "summary_large_image",
       title: p.name,
       description,
-      images: p.mainImage ? [p.mainImage] : [],
+      ...(p.mainImage && { images: [p.mainImage] }),
     },
     alternates: {
       canonical: `/producto/${encodeURIComponent(slug)}`,
@@ -90,7 +90,9 @@ export default async function ProductoPage({ params }) {
             "@type": "Offer",
             priceCurrency: "COP",
             price: minPrice,
-            availability: "https://schema.org/InStock",
+            availability: (p.variants || []).some((v) => (v.stock || 0) > 0)
+              ? "https://schema.org/InStock"
+              : "https://schema.org/OutOfStock",
             url: `${SITE}/producto/${encodeURIComponent(slug)}`,
             seller: { "@type": "Organization", name: "Dizor" },
           },

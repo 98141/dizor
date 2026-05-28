@@ -6,9 +6,28 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   const data = await getContentPage(slug);
   if (!data?.page) return { title: "Página" };
+
+  const { page } = data;
+  const title = page.seoTitle || page.title;
+  const description = page.seoDescription || page.excerpt || "";
+
   return {
-    title: data.page.seoTitle || data.page.title,
-    description: data.page.seoDescription || data.page.excerpt,
+    title,
+    description,
+    ...(description && {
+      keywords: [page.title, "Dizor", "sombreros artesanales", "Sandoná", "Nariño"].filter(Boolean),
+    }),
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      ...(page.imageUrl && {
+        images: [{ url: page.imageUrl, alt: page.imageAlt || page.title }],
+      }),
+    },
+    alternates: {
+      canonical: `/pagina/${slug}`,
+    },
   };
 }
 
