@@ -3,6 +3,7 @@ const Banner = require("../models/banner");
 const HomeContent = require("../models/homeContent");
 const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/catchAsync");
+const { logAuditEvent, safeLog } = require("../services/auditService");
 const {
   getOrCreateHomeContent,
   formatHome,
@@ -22,6 +23,7 @@ exports.getHomeContent = catchAsync(async (req, res) => {
 
 exports.updateHomeContent = catchAsync(async (req, res) => {
   const doc = await getOrCreateHomeContent();
+  const previousData = formatHome(doc);
 
   if (req.body.hero) Object.assign(doc.hero, req.body.hero);
   if (req.body.features) doc.features = req.body.features;
@@ -33,6 +35,20 @@ exports.updateHomeContent = catchAsync(async (req, res) => {
   }
 
   await doc.save();
+
+  safeLog(
+    logAuditEvent({
+      req,
+      action: "cms_home_updated",
+      module: "cms",
+      user: req.user,
+      entityId: doc._id,
+      entityType: "home_content",
+      summary: "Contenido del inicio actualizado",
+      previousData,
+      newData: formatHome(doc),
+    })
+  );
 
   res.status(200).json({
     status: "success",
@@ -66,6 +82,19 @@ exports.getPage = catchAsync(async (req, res, next) => {
 exports.createPage = catchAsync(async (req, res) => {
   const page = await ContentPage.create(req.body);
 
+  safeLog(
+    logAuditEvent({
+      req,
+      action: "cms_page_created",
+      module: "cms",
+      user: req.user,
+      entityId: page._id,
+      entityType: "content_page",
+      summary: `Página CMS creada · ${page.title}`,
+      newData: { title: page.title, slug: page.slug, isPublished: page.isPublished },
+    })
+  );
+
   res.status(201).json({
     status: "success",
     page: formatPage(page),
@@ -73,14 +102,27 @@ exports.createPage = catchAsync(async (req, res) => {
 });
 
 exports.updatePage = catchAsync(async (req, res, next) => {
+  const previous = await ContentPage.findById(req.params.id).lean();
+  if (!previous) return next(new AppError("Página no encontrada", 404));
+
   const page = await ContentPage.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
   });
 
-  if (!page) {
-    return next(new AppError("Página no encontrada", 404));
-  }
+  safeLog(
+    logAuditEvent({
+      req,
+      action: "cms_page_updated",
+      module: "cms",
+      user: req.user,
+      entityId: page._id,
+      entityType: "content_page",
+      summary: `Página CMS editada · ${page.title}`,
+      previousData: { title: previous.title, slug: previous.slug, isPublished: previous.isPublished },
+      newData: { title: page.title, slug: page.slug, isPublished: page.isPublished },
+    })
+  );
 
   res.status(200).json({
     status: "success",
@@ -94,6 +136,19 @@ exports.deletePage = catchAsync(async (req, res, next) => {
   if (!page) {
     return next(new AppError("Página no encontrada", 404));
   }
+
+  safeLog(
+    logAuditEvent({
+      req,
+      action: "cms_page_deleted",
+      module: "cms",
+      user: req.user,
+      entityId: page._id,
+      entityType: "content_page",
+      summary: `Página CMS eliminada · ${page.title}`,
+      previousData: { title: page.title, slug: page.slug },
+    })
+  );
 
   res.status(200).json({
     status: "success",
@@ -117,6 +172,19 @@ exports.getBanners = catchAsync(async (req, res) => {
 exports.createBanner = catchAsync(async (req, res) => {
   const banner = await Banner.create(req.body);
 
+  safeLog(
+    logAuditEvent({
+      req,
+      action: "cms_banner_created",
+      module: "cms",
+      user: req.user,
+      entityId: banner._id,
+      entityType: "banner",
+      summary: `Banner creado · ${banner.placement}`,
+      newData: { placement: banner.placement, isActive: banner.isActive },
+    })
+  );
+
   res.status(201).json({
     status: "success",
     banner: formatBanner(banner),
@@ -124,14 +192,27 @@ exports.createBanner = catchAsync(async (req, res) => {
 });
 
 exports.updateBanner = catchAsync(async (req, res, next) => {
+  const previous = await Banner.findById(req.params.id).lean();
+  if (!previous) return next(new AppError("Banner no encontrado", 404));
+
   const banner = await Banner.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
   });
 
-  if (!banner) {
-    return next(new AppError("Banner no encontrado", 404));
-  }
+  safeLog(
+    logAuditEvent({
+      req,
+      action: "cms_banner_updated",
+      module: "cms",
+      user: req.user,
+      entityId: banner._id,
+      entityType: "banner",
+      summary: `Banner editado · ${banner.placement}`,
+      previousData: { placement: previous.placement, isActive: previous.isActive },
+      newData: { placement: banner.placement, isActive: banner.isActive },
+    })
+  );
 
   res.status(200).json({
     status: "success",
@@ -145,6 +226,19 @@ exports.deleteBanner = catchAsync(async (req, res, next) => {
   if (!banner) {
     return next(new AppError("Banner no encontrado", 404));
   }
+
+  safeLog(
+    logAuditEvent({
+      req,
+      action: "cms_banner_deleted",
+      module: "cms",
+      user: req.user,
+      entityId: banner._id,
+      entityType: "banner",
+      summary: `Banner eliminado · ${banner.placement}`,
+      previousData: { placement: banner.placement },
+    })
+  );
 
   res.status(200).json({
     status: "success",
