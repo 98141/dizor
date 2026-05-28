@@ -2,6 +2,7 @@ const PosOrder = require("../models/posOrder");
 const Product = require("../models/product");
 const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/catchAsync");
+const { logAuditEvent, safeLog } = require("../services/auditService");
 const {
   logPosSale,
   logPosVoidReturn,
@@ -205,6 +206,24 @@ exports.createPosSale = catchAsync(async (req, res, next) => {
     );
   }
 
+  safeLog(
+    logAuditEvent({
+      req,
+      action: "pos_sale_created",
+      module: "pos",
+      user: req.user,
+      entityId: sale._id,
+      entityType: "pos_order",
+      summary: `Venta POS registrada · ${sale.posOrderNumber} · ${formatMoney(sale.total)}`,
+      newData: {
+        posOrderNumber: sale.posOrderNumber,
+        total: sale.total,
+        paymentMethod: sale.paymentMethod,
+        itemCount: safeItems.reduce((s, i) => s + i.quantity, 0),
+      },
+    })
+  );
+
   res.status(201).json({ sale });
 });
 
@@ -293,6 +312,20 @@ exports.voidPosSale = catchAsync(async (req, res, next) => {
       })
     );
   }
+
+  safeLog(
+    logAuditEvent({
+      req,
+      action: "pos_sale_voided",
+      module: "pos",
+      user: req.user,
+      entityId: sale._id,
+      entityType: "pos_order",
+      summary: `Venta POS anulada · ${sale.posOrderNumber} · Motivo: ${sale.voidReason || "sin motivo"}`,
+      previousData: { posOrderNumber: sale.posOrderNumber, total: sale.total, isVoided: false },
+      newData: { isVoided: true, voidReason: sale.voidReason, voidedAt: sale.voidedAt },
+    })
+  );
 
   res.json({ sale });
 });
