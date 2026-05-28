@@ -124,7 +124,7 @@ const orderSchema = new mongoose.Schema(
       reference: { type: String, default: "" },
       status: { type: String, default: "" },
     },
-    stockDeducted: { type: Boolean, default: true },
+    stockDeducted: { type: Boolean, default: false },
     idempotencyKey: { type: String, default: null },
     couponCode: { type: String, default: "" },
     couponConsumed: { type: Boolean, default: false },
