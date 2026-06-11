@@ -166,9 +166,22 @@ export default function CheckoutPage() {
         return;
       }
 
-      router.push(
-        `/pedido/confirmacion?order=${data.order.orderNumber}&total=${data.order.total}&payment=${data.order.paymentMethod}&email=${encodeURIComponent(buyer.email)}&name=${encodeURIComponent(buyer.name)}`
-      );
+      const couponDiscount = appliedCoupon?.discountAmount || 0;
+      const params = new URLSearchParams({
+        order: data.order.orderNumber,
+        total: data.order.total,
+        payment: data.order.paymentMethod,
+        email: buyer.email,
+        name: buyer.name,
+        subtotal: totals?.subtotal ?? 0,
+        discount: couponDiscount,
+        couponCode: appliedCoupon?.code || "",
+        iva: totals?.taxTotal ?? 0,
+        ivaPercent: totals?.ivaPercent ?? 0,
+        shipping: totals?.shippingCost ?? 0,
+        freeShipping: totals?.freeShippingApplied ? "1" : "0",
+      });
+      router.push(`/pedido/confirmacion?${params.toString()}`);
     } catch (err) {
       setError(err.response?.data?.message || "No se pudo crear el pedido");
       submittingRef.current = false; // Permitir reintentar solo si hubo error
@@ -419,35 +432,38 @@ export default function CheckoutPage() {
                 <span>Subtotal</span>
                 <span>{formatCOP(totals.subtotal)}</span>
               </div>
-              <div className="checkout-review-item">
-                <span>Envío</span>
-                <span>
-                  {totals.shippingCost === 0
-                    ? "Gratis"
-                    : formatCOP(totals.shippingCost)}
-                </span>
-              </div>
-              {totals.taxTotal > 0 && (
-                <div className="checkout-review-item">
-                  <span>Impuestos</span>
-                  <span>{formatCOP(totals.taxTotal)}</span>
-                </div>
-              )}
               {appliedCoupon && (
                 <div className="checkout-review-item" style={{ color: "var(--color-success)" }}>
                   <span>Cupón ({appliedCoupon.code})</span>
                   <span>−{formatCOP(appliedCoupon.discountAmount)}</span>
                 </div>
               )}
+              {totals.ivaEnabled && totals.taxTotal > 0 && (
+                <div className="checkout-review-item">
+                  <span>IVA ({totals.ivaPercent}%)</span>
+                  <span>{formatCOP(totals.taxTotal)}</span>
+                </div>
+              )}
+              <div className="checkout-review-item">
+                <span>
+                  Envío
+                  {totals.freeShippingApplied && (
+                    <span style={{ fontSize: "0.75rem", color: "var(--color-success)", marginLeft: "0.4rem" }}>
+                      (gratis ≥ {formatCOP(totals.freeShippingThreshold)})
+                    </span>
+                  )}
+                </span>
+                <span>
+                  {totals.shippingCost === 0 ? "Gratis" : formatCOP(totals.shippingCost)}
+                </span>
+              </div>
               <div
                 className="checkout-review-item"
                 style={{ fontWeight: 600, fontSize: "1.1rem" }}
               >
                 <span>Total</span>
                 <span>
-                  {formatCOP(
-                    totals.total - (appliedCoupon?.discountAmount || 0)
-                  )}
+                  {formatCOP(totals.total - (appliedCoupon?.discountAmount || 0))}
                 </span>
               </div>
             </>

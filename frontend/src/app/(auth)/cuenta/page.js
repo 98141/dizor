@@ -17,6 +17,7 @@ import {
   REQUEST_TYPE_LABELS,
 } from "@/lib/specialRequestLabels";
 import ProtectedRoute from "@/guards/ProtectedRoute";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 import AuthFormField from "@/components/auth/AuthFormField";
 import AuthSubmitButton from "@/components/auth/AuthSubmitButton";
 import AuthErrorAlert from "@/components/auth/AuthErrorAlert";
@@ -313,6 +314,8 @@ function CuentaContent() {
 
   // Estado para detalle expandible de pedidos
   const [expandedOrderId, setExpandedOrderId] = useState(null);
+  const [confirmModal, setConfirmModal] = useState(null);
+  const [cancelError, setCancelError] = useState("");
 
   useEffect(() => {
     if (user) {
@@ -336,18 +339,25 @@ function CuentaContent() {
     setExpandedOrderId((prev) => (prev === orderId ? null : orderId));
   };
 
-  const handleCancelOrder = async (orderId) => {
-    if (!confirm("¿Cancelar este pedido?")) return;
-    try {
-      await cancelOrder(orderId);
-      setOrders((prev) =>
-        prev.map((o) =>
-          o._id === orderId ? { ...o, orderStatus: "cancelado" } : o
-        )
-      );
-    } catch {
-      alert("No se pudo cancelar el pedido");
-    }
+  const handleCancelOrder = (orderId) => {
+    setCancelError("");
+    setConfirmModal({
+      message: "¿Estás seguro de que deseas cancelar este pedido? Esta acción no se puede deshacer.",
+      confirmLabel: "Cancelar pedido",
+      onConfirm: async () => {
+        setConfirmModal(null);
+        try {
+          await cancelOrder(orderId);
+          setOrders((prev) =>
+            prev.map((o) =>
+              o._id === orderId ? { ...o, orderStatus: "cancelado" } : o
+            )
+          );
+        } catch {
+          setCancelError("No se pudo cancelar el pedido. Inténtalo de nuevo.");
+        }
+      },
+    });
   };
 
   const handleLogout = async () => {
@@ -448,6 +458,13 @@ function CuentaContent() {
 
   return (
     <div className="auth-page">
+      <ConfirmModal
+        isOpen={!!confirmModal}
+        message={confirmModal?.message}
+        confirmLabel={confirmModal?.confirmLabel}
+        onConfirm={confirmModal?.onConfirm}
+        onCancel={() => setConfirmModal(null)}
+      />
       <div className="cuenta-page">
         <Link href="/catalogo" className="cuenta-back">
           ← Volver a la tienda
@@ -567,6 +584,9 @@ function CuentaContent() {
         {tab === "pedidos" && (
           <div className="cuenta-card">
             <h2 className="cuenta-card__title">Mis pedidos</h2>
+            {cancelError && (
+              <p style={{ color: "var(--color-error)", marginBottom: "0.75rem", fontSize: "0.9rem" }}>{cancelError}</p>
+            )}
             {ordersLoading ? (
               <p className="cuenta-muted">Cargando pedidos...</p>
             ) : orders.length === 0 ? (

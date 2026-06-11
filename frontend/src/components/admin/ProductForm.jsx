@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   createAdminProduct,
   getCatalogMeta,
@@ -20,6 +20,26 @@ const emptyVariant = () => ({
   price: "",
   isActive: true,
 });
+
+const DIACRITICS_RE = new RegExp("[\\u0300-\\u036f]", "g");
+
+const generateSeed = () =>
+  Math.random().toString(36).substring(2, 6).toUpperCase();
+
+const extractSeedFromSku = (sku) => {
+  const match = /^[A-Z0-9]{1,4}-([A-Z0-9]{4})-\d{2}$/i.exec(sku || "");
+  return match ? match[1].toUpperCase() : null;
+};
+
+const generateSkuForVariant = (productName, seed, index) => {
+  const prefix = (productName || "")
+    .normalize("NFD")
+    .replace(DIACRITICS_RE, "")
+    .replace(/[^a-zA-Z0-9]/g, "")
+    .substring(0, 3)
+    .toUpperCase();
+  return `${prefix || "PRD"}-${seed}-${String(index + 1).padStart(2, "0")}`;
+};
 
 const defaultForm = () => ({
   name: "",
@@ -47,6 +67,8 @@ const defaultForm = () => ({
 export default function ProductForm({ productId }) {
   const router = useRouter();
   const isEdit = Boolean(productId);
+
+  const skuSeedRef = useRef(generateSeed());
 
   const [meta, setMeta] = useState(null);
   const [form, setForm] = useState(defaultForm);
@@ -115,6 +137,9 @@ export default function ProductForm({ productId }) {
                   }))
                 : [emptyVariant()],
           });
+          const firstSku = product.variants?.[0]?.sku;
+          const extracted = extractSeedFromSku(firstSku);
+          if (extracted) skuSeedRef.current = extracted;
         }
       } catch (err) {
         setError(err.response?.data?.message || "Error al cargar datos");
@@ -137,10 +162,29 @@ export default function ProductForm({ productId }) {
     });
   };
 
+  const handleNameChange = (value) => {
+    setForm((prev) => ({
+      ...prev,
+      name: value,
+      variants: isEdit
+        ? prev.variants
+        : prev.variants.map((v, i) => ({
+            ...v,
+            sku: generateSkuForVariant(value, skuSeedRef.current, i),
+          })),
+    }));
+  };
+
   const addVariant = () => {
     setForm((prev) => ({
       ...prev,
-      variants: [...prev.variants, emptyVariant()],
+      variants: [
+        ...prev.variants,
+        {
+          ...emptyVariant(),
+          sku: generateSkuForVariant(prev.name, skuSeedRef.current, prev.variants.length),
+        },
+      ],
     }));
   };
 
@@ -345,7 +389,7 @@ export default function ProductForm({ productId }) {
             <input
               id="name"
               value={form.name}
-              onChange={(e) => setField("name", e.target.value)}
+              onChange={(e) => handleNameChange(e.target.value)}
               required
             />
           </div>
@@ -507,10 +551,11 @@ export default function ProductForm({ productId }) {
               ))}
             </select>
             <input
-              placeholder="SKU"
+              readOnly
               value={variant.sku}
-              onChange={(e) => setVariant(index, "sku", e.target.value)}
-              required
+              aria-label={`SKU variante ${index + 1}`}
+              title="SKU generado automáticamente"
+              style={{ background: "var(--color-bg)", cursor: "default", color: "var(--color-text-muted)", minWidth: 0 }}
             />
             <input
               type="number"

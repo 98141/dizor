@@ -37,21 +37,18 @@ exports.validateCoupon = catchAsync(async (req, res, next) => {
     return next(new AppError("Ingresa un código de cupón", 400));
   }
 
-  const coupon = await Coupon.findOne({
-    code: code.trim().toUpperCase(),
-    isActive: true,
-  });
+  const coupon = await Coupon.findOne({ code: code.trim().toUpperCase() });
 
-  if (!coupon) {
-    return next(new AppError("Cupón no válido o no existe", 400));
+  if (!coupon || !coupon.isActive) {
+    return next(new AppError("Este cupón no está disponible o ha expirado", 400));
   }
 
   if (coupon.expiresAt && coupon.expiresAt < new Date()) {
-    return next(new AppError("Este cupón ha expirado", 400));
+    return next(new AppError("Este cupón no está disponible o ha expirado", 400));
   }
 
   if (coupon.maxUses !== null && coupon.usedCount >= coupon.maxUses) {
-    return next(new AppError("Este cupón ya alcanzó el límite de usos", 400));
+    return next(new AppError("Este cupón no está disponible o ha expirado", 400));
   }
 
   const orderSubtotal = Number(subtotal) || 0;

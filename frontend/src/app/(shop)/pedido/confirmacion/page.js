@@ -145,6 +145,35 @@ function RegistroPrompt({ email, name }) {
   );
 }
 
+function buildWhatsAppMessage({ orderNumber, subtotal, discount, couponCode, iva, ivaPercent, shipping, total, freeShipping }) {
+  const fmt = (n) =>
+    Number(n).toLocaleString("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 });
+
+  const lines = [
+    `Hola! Quiero enviar mi comprobante de pago para el pedido *${orderNumber}*`,
+    "",
+    "📋 Resumen:",
+    `Subtotal: ${fmt(subtotal)}`,
+  ];
+
+  if (Number(discount) > 0) {
+    lines.push(`Descuento${couponCode ? ` (${couponCode})` : ""}: -${fmt(discount)}`);
+  }
+
+  if (Number(iva) > 0) {
+    lines.push(`IVA${ivaPercent > 0 ? ` (${ivaPercent}%)` : ""}: ${fmt(iva)}`);
+  }
+
+  if (freeShipping === "1") {
+    lines.push("Envío: Gratis");
+  } else {
+    lines.push(`Envío: ${fmt(shipping)}`);
+  }
+
+  lines.push(`*Total a pagar: ${fmt(total)}*`, "", "Adjunto el comprobante Nequi.");
+  return lines.join("\n");
+}
+
 function ConfirmacionContent() {
   const sp = useSearchParams();
   const { isAuthenticated } = useAuth();
@@ -154,6 +183,14 @@ function ConfirmacionContent() {
   const payment = sp.get("payment");
   const guestEmail = sp.get("email") || "";
   const guestName = sp.get("name") || "";
+
+  const subtotal = sp.get("subtotal") || "0";
+  const discount = sp.get("discount") || "0";
+  const couponCode = sp.get("couponCode") || "";
+  const iva = sp.get("iva") || "0";
+  const ivaPercent = Number(sp.get("ivaPercent") || "0");
+  const shipping = sp.get("shipping") || "0";
+  const freeShipping = sp.get("freeShipping") || "0";
 
   if (!orderNumber) {
     return (
@@ -182,6 +219,34 @@ function ConfirmacionContent() {
           <span>Número de pedido</span>
           <strong className="checkout-confirm-highlight">{orderNumber}</strong>
         </div>
+        {Number(subtotal) > 0 && (
+          <>
+            <div className="checkout-confirm-row">
+              <span>Subtotal</span>
+              <span>{formatCOP(Number(subtotal))}</span>
+            </div>
+            {Number(discount) > 0 && (
+              <div className="checkout-confirm-row" style={{ color: "var(--color-success)" }}>
+                <span>Descuento{couponCode ? ` (${couponCode})` : ""}</span>
+                <span>−{formatCOP(Number(discount))}</span>
+              </div>
+            )}
+            {Number(iva) > 0 && (
+              <div className="checkout-confirm-row">
+                <span>IVA{ivaPercent > 0 ? ` (${ivaPercent}%)` : ""}</span>
+                <span>{formatCOP(Number(iva))}</span>
+              </div>
+            )}
+            <div className="checkout-confirm-row">
+              <span>Envío</span>
+              <span>
+                {freeShipping === "1" || Number(shipping) === 0
+                  ? "Gratis"
+                  : formatCOP(Number(shipping))}
+              </span>
+            </div>
+          </>
+        )}
         <div className="checkout-confirm-row">
           <span>Total pagado</span>
           <strong>{formatCOP(Number(total))}</strong>
@@ -201,7 +266,9 @@ function ConfirmacionContent() {
             número de atención de Dizor para confirmar tu pago.
           </p>
           <a
-            href="https://wa.me/573000000000"
+            href={`https://wa.me/573000000000?text=${encodeURIComponent(
+              buildWhatsAppMessage({ orderNumber, subtotal, discount, couponCode, iva, ivaPercent, shipping, total, freeShipping })
+            )}`}
             target="_blank"
             rel="noreferrer"
             className="checkout-btn checkout-btn--primary"

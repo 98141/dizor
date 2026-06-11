@@ -1,7 +1,9 @@
 const express = require("express");
 const contentAdminController = require("../controllers/contentAdminController");
+const productAdminController = require("../controllers/productAdminController");
 const { protect } = require("../middlewares/authMiddleware");
 const { authorizeRoles } = require("../middlewares/roleMiddleware");
+const { uploadProductImages, requireCloudinary } = require("../middlewares/uploadMiddleware");
 
 const router = express.Router();
 
@@ -9,6 +11,8 @@ const adminRoles = ["superadmin", "admin"];
 
 router.use(protect);
 router.use(authorizeRoles(...adminRoles));
+
+router.post("/upload", requireCloudinary, uploadProductImages, productAdminController.uploadTempImages);
 
 router.get("/home", contentAdminController.getHomeContent);
 router.patch("/home", contentAdminController.updateHomeContent);

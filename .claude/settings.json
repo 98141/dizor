@@ -13,7 +13,9 @@
       "Bash(node -e ' *)",
       "Bash(node -e \"const xss = require\\('xss'\\); console.log\\(xss\\('test&password<>123'\\)\\); console.log\\(xss\\('normalpassword123!'\\)\\);\")",
       "Bash(xargs grep -l \"og:image\\\\|twitter:image\\\\|imageUrl\")",
-      "Bash(node --input-type=module --experimental-vm-modules)"
+      "Bash(node --input-type=module --experimental-vm-modules)",
+      "Bash(xargs grep -l \"3159162520\\\\|573159162520\")",
+      "Bash(grep -E \"\\\\.\\(ts|tsx|js\\)$\")"
     ]
   }
 }

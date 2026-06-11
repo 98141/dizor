@@ -9,6 +9,7 @@ import {
 import AuthFormField from "@/components/auth/AuthFormField";
 import AuthSubmitButton from "@/components/auth/AuthSubmitButton";
 import AuthErrorAlert from "@/components/auth/AuthErrorAlert";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 
 const emptyForm = () => ({
   label: "Casa",
@@ -26,6 +27,7 @@ export default function AddressBook({ addresses = [], onChange }) {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
+  const [confirmModal, setConfirmModal] = useState(null);
 
   const resetForm = () => {
     setForm(emptyForm());
@@ -66,18 +68,30 @@ export default function AddressBook({ addresses = [], onChange }) {
     setShowForm(true);
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("¿Eliminar esta dirección?")) return;
-    try {
-      const data = await deleteAddress(id);
-      onChange(data.addresses);
-    } catch (err) {
-      alert(err.response?.data?.message || "No se pudo eliminar");
-    }
+  const handleDelete = (id) => {
+    setConfirmModal({
+      message: "¿Estás seguro de que deseas eliminar esta dirección? Esta acción no se puede deshacer.",
+      onConfirm: async () => {
+        setConfirmModal(null);
+        try {
+          const data = await deleteAddress(id);
+          onChange(data.addresses);
+        } catch (err) {
+          setMessage(err.response?.data?.message || "No se pudo eliminar la dirección");
+          setError(true);
+        }
+      },
+    });
   };
 
   return (
     <div className="address-book">
+      <ConfirmModal
+        isOpen={!!confirmModal}
+        message={confirmModal?.message}
+        onConfirm={confirmModal?.onConfirm}
+        onCancel={() => setConfirmModal(null)}
+      />
       {addresses.length === 0 && !showForm && (
         <p className="address-book__empty">No tienes direcciones guardadas.</p>
       )}

@@ -54,3 +54,12 @@ export const deleteAdminBanner = async (id) => {
   const res = await api.delete(`/admin/content/banners/${id}`);
   return res.data;
 };
+
+export const uploadCmsImage = async (file) => {
+  const formData = new FormData();
+  formData.append("images", file);
+  const res = await api.post("/admin/content/upload", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return res.data.images[0];
+};
