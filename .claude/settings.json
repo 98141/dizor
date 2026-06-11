@@ -16,7 +16,9 @@
       "Bash(node --input-type=module --experimental-vm-modules)",
       "Bash(xargs grep -l \"3159162520\\\\|573159162520\")",
       "Bash(grep -E \"\\\\.\\(ts|tsx|js\\)$\")",
-      "Bash(findstr /i order)"
+      "Bash(findstr /i order)",
+      "Bash(ls \"c:\\\\Users\\\\Asus ExpertBook\\\\.claude\\\\projects\\\\c--Users-Asus-ExpertBook-Desktop-Desarrollo-MBT-Dizor-dizor\\\\memory\\\\\" 2>/dev/null || echo \"EMPTY\")",
+      "Read(//c/Users/Asus ExpertBook/.claude/projects/c--Users-Asus-ExpertBook-Desktop-Desarrollo-MBT-Dizor-dizor/memory\" 2>/dev/**)"
     ]
   }
 }

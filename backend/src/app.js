@@ -31,7 +31,8 @@ const adminAuditRoutes = require("./routes/adminAuditRoutes");
 const adminInventoryRoutes = require("./routes/adminInventoryRoutes");
 const adminFinanceRoutes = require("./routes/adminFinanceRoutes");
 const wompiWebhookRoutes = require("./routes/wompiWebhookRoutes");
-const adminCouponRoutes = require("./routes/adminCouponRoutes");
+const nequiRoutes        = require("./routes/nequiRoutes");
+const adminCouponRoutes  = require("./routes/adminCouponRoutes");
 const adminPosRoutes = require("./routes/adminPosRoutes");
 const adminAlertRoutes = require("./routes/adminAlertRoutes");
 
@@ -87,7 +88,11 @@ const adminLimiter = rateLimit({
 app.use("/api", globalLimiter);
 app.use("/api/admin", adminLimiter);
 
-app.use(express.json({ limit: "1mb" }));
+// Capturar rawBody antes del parseo: necesario para verificar firmas de webhooks
+app.use(express.json({
+  limit: "1mb",
+  verify: (req, _res, buf) => { req.rawBody = buf; },
+}));
 app.use(express.urlencoded({ extended: true, limit: "1mb" }));
 app.use(cookieParser());
 
@@ -163,6 +168,7 @@ app.use("/api/admin/audit", adminAuditRoutes);
 app.use("/api/admin/inventory", adminInventoryRoutes);
 app.use("/api/admin/finance", adminFinanceRoutes);
 app.use("/api/webhooks", wompiWebhookRoutes);
+app.use("/api/payments/nequi", nequiRoutes);
 app.use("/api/admin/coupons", adminCouponRoutes);
 app.use("/api/admin/pos", adminPosRoutes);
 app.use("/api/admin/alerts", adminAlertRoutes);

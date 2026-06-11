@@ -36,3 +36,13 @@ export const getMyOrder = async (orderId) => {
   const res = await api.get(`/checkout/orders/${orderId}`);
   return res.data;
 };
+
+export const getNequiStatus = async (orderId) => {
+  const res = await api.get(`/payments/nequi/status/${orderId}`);
+  return res.data;
+};
+
+export const retryNequiPayment = async (orderId, phoneNumber) => {
+  const res = await api.post("/payments/nequi/create", { orderId, phoneNumber });
+  return res.data;
+};

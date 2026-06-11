@@ -10,6 +10,11 @@ const {
 const { getStoreSettings } = require("../services/settingsService");
 const { createOrder, restoreOrderStock } = require("../services/orderService");
 const { isWompiConfigured, createPaymentLink } = require("../services/wompiService");
+const {
+  isNequiConfigured,
+  createNequiCharge,
+  normalizePhone,
+} = require("../services/nequiPaymentService");
 const { markAbandonedCartRecovered } = require("../services/marketingService");
 
 // DTO seguro: nunca expone unitCost, internalCost ni datos administrativos al cliente
@@ -72,6 +77,15 @@ exports.getCheckoutConfig = catchAsync(async (req, res) => {
                 id: "wompi",
                 label: "Tarjeta / PSE (Wompi)",
                 description: "Pago en línea seguro",
+              },
+            ]
+          : []),
+        ...(isNequiConfigured()
+          ? [
+              {
+                id: "nequi_api",
+                label: "Nequi (pago directo)",
+                description: "Recibe una notificación en tu app Nequi y aprueba el pago",
               },
             ]
           : []),
@@ -148,6 +162,7 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
     customerNotes,
     couponCode,
     idempotencyKey,
+    nequiPhone,
   } = req.body;
 
   if (!buyer?.name || !buyer?.email || !buyer?.phone) {
@@ -162,9 +177,20 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
     return next(new AppError("Dirección de envío incompleta", 400));
   }
 
-  const validPayments = ["wompi", "nequi_manual", "contra_entrega"];
+  const validPayments = ["wompi", "nequi_api", "nequi_manual", "contra_entrega"];
   if (!validPayments.includes(paymentMethod)) {
     return next(new AppError("Método de pago inválido", 400));
+  }
+
+  // Validar número Nequi antes de crear la orden para no dejar órdenes huérfanas
+  if (paymentMethod === "nequi_api") {
+    const normalizedNequiPhone = normalizePhone(nequiPhone);
+    if (!normalizedNequiPhone || !/^3\d{9}$/.test(normalizedNequiPhone)) {
+      return next(new AppError("Número de teléfono Nequi inválido (10 dígitos empezando en 3)", 400));
+    }
+    if (!isNequiConfigured()) {
+      return next(new AppError("Nequi no está configurado en el servidor", 503));
+    }
   }
 
   const resolved = await resolveCartItems(items);
@@ -240,8 +266,8 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
   }
 
   const isGuest = !req.user;
-  // Para Wompi diferimos el descuento de stock hasta que el webhook confirme el pago
-  const deductStock = paymentMethod !== "wompi";
+  // Wompi y Nequi API difieren el descuento de stock hasta que el webhook confirme el pago
+  const deductStock = paymentMethod !== "wompi" && paymentMethod !== "nequi_api";
 
   let order;
   try {
@@ -324,23 +350,51 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
     }
   }
 
+  if (paymentMethod === "nequi_api") {
+    const normalizedNequiPhone = normalizePhone(nequiPhone);
+    try {
+      const charge = await createNequiCharge(order, normalizedNequiPhone);
+      order.nequi = {
+        paymentToken:      charge.paymentToken,
+        reference:         order.orderNumber,
+        phoneNumber:       normalizedNequiPhone,
+        status:            "PENDING",
+        chargeInitiatedAt: new Date(),
+      };
+      order.orderStatus = "pago_pendiente";
+      order.statusHistory.push({
+        status:    "pago_pendiente",
+        note:      "Cobro Nequi enviado. Esperando aprobación del cliente.",
+        changedAt: new Date(),
+      });
+      await order.save();
+    } catch (err) {
+      await Order.findByIdAndDelete(order._id).catch(() => {});
+      return next(
+        new AppError(err.message || "No se pudo iniciar el pago con Nequi", 502)
+      );
+    }
+  }
+
   res.status(201).json({
     status: "success",
     order: {
-      id: order._id,
-      orderNumber: order.orderNumber,
-      total: order.total,
+      id:            order._id,
+      orderNumber:   order.orderNumber,
+      total:         order.total,
       paymentMethod: order.paymentMethod,
-      orderStatus: order.orderStatus,
+      orderStatus:   order.orderStatus,
       paymentStatus: order.paymentStatus,
     },
     paymentUrl,
     message:
       paymentMethod === "wompi"
         ? "Pedido creado. Serás redirigido a Wompi para completar el pago."
-        : paymentMethod === "nequi_manual"
-          ? "Pedido creado. Envía tu comprobante Nequi por WhatsApp."
-          : "Pedido creado. Pagarás al recibir tu pedido.",
+        : paymentMethod === "nequi_api"
+          ? "Pedido creado. Aprueba el pago en tu app Nequi."
+          : paymentMethod === "nequi_manual"
+            ? "Pedido creado. Envía tu comprobante Nequi por WhatsApp."
+            : "Pedido creado. Pagarás al recibir tu pedido.",
   });
 });
 

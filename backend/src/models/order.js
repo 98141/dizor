@@ -73,7 +73,7 @@ const orderSchema = new mongoose.Schema(
     total: { type: Number, required: true },
     paymentMethod: {
       type: String,
-      enum: ["wompi", "nequi_manual", "contra_entrega", "efectivo", "nequi_presencial", "tarjeta", "transferencia"],
+      enum: ["wompi", "nequi_manual", "nequi_api", "contra_entrega", "efectivo", "nequi_presencial", "tarjeta", "transferencia"],
       required: true,
     },
     paymentStatus: {
@@ -123,6 +123,13 @@ const orderSchema = new mongoose.Schema(
       transactionId: { type: String, default: "" },
       reference: { type: String, default: "" },
       status: { type: String, default: "" },
+    },
+    nequi: {
+      paymentToken:      { type: String, default: "" },
+      reference:         { type: String, default: "" },
+      phoneNumber:       { type: String, default: "" },
+      status:            { type: String, default: "" }, // PENDING | USER_APPROVED | USER_DECLINED | EXPIRED
+      chargeInitiatedAt: { type: Date,   default: null },
     },
     stockDeducted: { type: Boolean, default: false },
     idempotencyKey: { type: String, default: null },
