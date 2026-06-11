@@ -162,6 +162,11 @@ export default function CheckoutPage() {
       setSuccess(data.order);
 
       if (data.paymentUrl) {
+        // Guardar datos del comprador para mostrar el prompt de registro al volver de Wompi
+        try {
+          sessionStorage.setItem("dizor_guest_email", buyer.email);
+          sessionStorage.setItem("dizor_guest_name", buyer.name);
+        } catch {}
         window.location.href = data.paymentUrl;
         return;
       }

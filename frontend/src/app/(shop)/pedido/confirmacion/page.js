@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
@@ -14,24 +14,43 @@ const PAYMENT_LABELS = {
   contra_entrega: "Pago contra entrega",
 };
 
-function RegistroPrompt({ email, name }) {
+function RegistroPromptModal({ email, name, isOpen, onClose }) {
   const { register } = useAuth();
   const [regName, setRegName] = useState(name || "");
   const [regPassword, setRegPassword] = useState("");
   const [regError, setRegError] = useState("");
   const [regSuccess, setRegSuccess] = useState(false);
   const [regLoading, setRegLoading] = useState(false);
-  const [dismissed, setDismissed] = useState(false);
 
-  if (dismissed) return null;
+  if (!isOpen) return null;
 
   if (regSuccess) {
     return (
-      <div className="checkout-register-prompt checkout-register-prompt--success">
-        <p>
-          ¡Cuenta creada! Tus pedidos quedan guardados en tu perfil.{" "}
-          <Link href="/cuenta">Ver mi cuenta →</Link>
-        </p>
+      <div className="confirm-modal-overlay">
+        <div
+          className="confirm-modal"
+          role="dialog"
+          aria-modal="true"
+          style={{ maxWidth: "480px", textAlign: "center" }}
+        >
+          <p style={{ fontSize: "2rem", margin: "0 0 0.5rem" }}>✓</p>
+          <h2 className="guest-modal__title">¡Cuenta creada!</h2>
+          <p className="confirm-modal__message">
+            Tus pedidos quedan guardados en tu perfil.
+          </p>
+          <div className="confirm-modal__actions" style={{ justifyContent: "center" }}>
+            <Link
+              href="/cuenta"
+              className="modal-action-btn modal-action-btn--primary"
+              onClick={onClose}
+            >
+              Ver mi cuenta
+            </Link>
+            <button type="button" className="modal-action-btn" onClick={onClose}>
+              Cerrar
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
@@ -58,7 +77,10 @@ function RegistroPrompt({ email, name }) {
       setRegSuccess(true);
     } catch (err) {
       const msg = err.response?.data?.message || "";
-      if (msg.toLowerCase().includes("ya está registrado") || msg.toLowerCase().includes("already")) {
+      if (
+        msg.toLowerCase().includes("ya está registrado") ||
+        msg.toLowerCase().includes("already")
+      ) {
         setRegError(
           <>
             Ese correo ya tiene cuenta.{" "}
@@ -76,71 +98,75 @@ function RegistroPrompt({ email, name }) {
   };
 
   return (
-    <div className="checkout-register-prompt">
-      <div className="checkout-register-prompt__header">
-        <h3 className="checkout-register-prompt__title">
+    <div className="confirm-modal-overlay" onClick={onClose}>
+      <div
+        className="confirm-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="registro-modal-title"
+        onClick={(e) => e.stopPropagation()}
+        style={{ maxWidth: "480px" }}
+      >
+        <h2 id="registro-modal-title" className="guest-modal__title">
           ¿Guardar tus datos para próximas compras?
-        </h3>
-        <p className="checkout-register-prompt__desc">
+        </h2>
+        <p className="confirm-modal__message">
           Crea una cuenta en segundos y consulta tus pedidos en cualquier
           momento.
         </p>
-      </div>
-      <form
-        className="checkout-register-prompt__form"
-        onSubmit={handleSubmit}
-        noValidate
-      >
-        <AuthFormField
-          label="Nombre completo"
-          name="regName"
-          value={regName}
-          onChange={(e) => {
-            setRegName(e.target.value);
-            setRegError("");
-          }}
-          autoComplete="name"
-        />
-        <div className="auth-field">
-          <label className="auth-field__label">Correo electrónico</label>
-          <input
-            className="auth-field__input"
-            type="email"
-            value={email}
-            disabled
+        <form onSubmit={handleSubmit} noValidate>
+          <AuthFormField
+            label="Nombre completo"
+            name="regName"
+            value={regName}
+            onChange={(e) => {
+              setRegName(e.target.value);
+              setRegError("");
+            }}
+            autoComplete="name"
           />
-        </div>
-        <AuthFormField
-          label="Contraseña (mín. 8 caracteres)"
-          name="regPassword"
-          type="password"
-          value={regPassword}
-          onChange={(e) => {
-            setRegPassword(e.target.value);
-            setRegError("");
-          }}
-          autoComplete="new-password"
-        />
-        {regError && (
-          <AuthErrorAlert message={regError} />
-        )}
-        <div className="checkout-register-prompt__actions">
-          <button
-            type="submit"
-            className="checkout-btn checkout-btn--primary"
-            disabled={regLoading}
+          <div className="auth-field">
+            <label className="auth-field__label">Correo electrónico</label>
+            <input
+              className="auth-field__input"
+              type="email"
+              value={email}
+              disabled
+            />
+          </div>
+          <AuthFormField
+            label="Contraseña (mín. 8 caracteres)"
+            name="regPassword"
+            type="password"
+            value={regPassword}
+            onChange={(e) => {
+              setRegPassword(e.target.value);
+              setRegError("");
+            }}
+            autoComplete="new-password"
+          />
+          {regError && <AuthErrorAlert message={regError} />}
+          <div
+            className="confirm-modal__actions"
+            style={{ marginTop: "1rem" }}
           >
-            {regLoading ? "Creando cuenta..." : "Crear cuenta"}
-          </button>
-          <button
-            type="button"
-            className="checkout-btn"
-            onClick={() => setDismissed(true)}
-          >
-            Ahora no
-          </button>
-        </div>
-      </form>
+            <button
+              type="button"
+              className="modal-action-btn"
+              onClick={onClose}
+            >
+              Ahora no
+            </button>
+            <button
+              type="submit"
+              className="modal-action-btn modal-action-btn--primary"
+              disabled={regLoading}
+            >
+              {regLoading ? "Creando cuenta..." : "Crear cuenta"}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
@@ -181,8 +207,6 @@ function ConfirmacionContent() {
   const orderNumber = sp.get("order");
   const total = sp.get("total");
   const payment = sp.get("payment");
-  const guestEmail = sp.get("email") || "";
-  const guestName = sp.get("name") || "";
 
   const subtotal = sp.get("subtotal") || "0";
   const discount = sp.get("discount") || "0";
@@ -191,6 +215,48 @@ function ConfirmacionContent() {
   const ivaPercent = Number(sp.get("ivaPercent") || "0");
   const shipping = sp.get("shipping") || "0";
   const freeShipping = sp.get("freeShipping") || "0";
+
+  // Para Wompi: el redirect externo no incluye email/nombre en la URL,
+  // por lo que se recuperan del sessionStorage guardado antes de la redirección.
+  const urlEmail = sp.get("email") || "";
+  const urlName = sp.get("name") || "";
+  const [guestEmail, setGuestEmail] = useState(urlEmail);
+  const [guestName, setGuestName] = useState(urlName);
+
+  const [showRegistroModal, setShowRegistroModal] = useState(false);
+
+  useEffect(() => {
+    if (!urlEmail) {
+      try {
+        const storedEmail = sessionStorage.getItem("dizor_guest_email") || "";
+        const storedName = sessionStorage.getItem("dizor_guest_name") || "";
+        if (storedEmail) {
+          setGuestEmail(storedEmail);
+          setGuestName(storedName);
+        }
+      } catch {}
+    }
+  }, [urlEmail]);
+
+  // Abrir el modal automáticamente 1.5 s después de llegar a la confirmación
+  useEffect(() => {
+    if (isAuthenticated) return;
+    const resolvedEmail = urlEmail || (() => {
+      try { return sessionStorage.getItem("dizor_guest_email") || ""; } catch { return ""; }
+    })();
+    if (!resolvedEmail) return;
+
+    const timer = setTimeout(() => setShowRegistroModal(true), 1500);
+    return () => clearTimeout(timer);
+  }, [isAuthenticated, urlEmail]);
+
+  const handleCloseModal = () => {
+    setShowRegistroModal(false);
+    try {
+      sessionStorage.removeItem("dizor_guest_email");
+      sessionStorage.removeItem("dizor_guest_name");
+    } catch {}
+  };
 
   if (!orderNumber) {
     return (
@@ -203,6 +269,13 @@ function ConfirmacionContent() {
 
   return (
     <div className="checkout-page">
+      <RegistroPromptModal
+        email={guestEmail}
+        name={guestName}
+        isOpen={showRegistroModal && !isAuthenticated && !!guestEmail}
+        onClose={handleCloseModal}
+      />
+
       {/* ── Icono de éxito ── */}
       <div className="checkout-success-icon" aria-hidden="true">✓</div>
 
@@ -297,11 +370,6 @@ function ConfirmacionContent() {
             en efectivo o con tu método acordado.
           </p>
         </div>
-      )}
-
-      {/* ── Prompt de registro para invitados ── */}
-      {!isAuthenticated && guestEmail && (
-        <RegistroPrompt email={guestEmail} name={guestName} />
       )}
 
       {/* ── Acciones ── */}
