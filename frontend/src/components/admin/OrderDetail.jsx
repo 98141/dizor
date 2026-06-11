@@ -86,6 +86,44 @@ export default function OrderDetail({ orderId, backHref }) {
         note: statusNote,
       });
       setMessage("Estado actualizado");
+
+      const rawPhone = order?.buyer?.phone?.replace(/\D/g, "");
+      if (rawPhone) {
+        const statusLabel = ORDER_STATUS_LABELS[newStatus] || newStatus;
+
+        const productLines = (order.items || []).map((item) => {
+          const variant = [item.sizeName, item.colorName].filter(Boolean).join(" / ");
+          return `• ${item.productName}${variant ? ` (${variant})` : ""} x${item.quantity}`;
+        });
+
+        const lines = [
+          `Hola ${order.buyer.name},`,
+          ``,
+          `Tu pedido *${order.orderNumber}* en ${siteName} ha cambiado de estado:`,
+          `*${statusLabel}*`,
+          ``,
+          `📦 Productos:`,
+          ...productLines,
+          ``,
+          `Total: ${formatCOP(order.total)}`,
+        ];
+
+        if (newStatus === "enviado" && carrier && trackingNumber) {
+          lines.push(
+            ``,
+            `🚚 Transportadora: ${CARRIER_LABELS[carrier] || carrier}`,
+            `📋 Guía: ${trackingNumber}`
+          );
+        }
+
+        lines.push(``, `Gracias por tu compra.`);
+        window.open(
+          `https://wa.me/57${rawPhone}?text=${encodeURIComponent(lines.join("\n"))}`,
+          "_blank",
+          "noopener,noreferrer"
+        );
+      }
+
       load();
     } catch (err) {
       setError(err.response?.data?.message || "Error al actualizar estado");
@@ -235,13 +273,21 @@ export default function OrderDetail({ orderId, backHref }) {
 
           <div className="order-detail-card">
             <h2>Cambiar estado</h2>
-            <select value={newStatus} onChange={(e) => setNewStatus(e.target.value)}>
+            <select
+              value={newStatus}
+              onChange={(e) => setNewStatus(e.target.value)}
+            >
               {allowedStatuses.map((k) => (
                 <option key={k} value={k}>
                   {ORDER_STATUS_LABELS[k]}
                 </option>
               ))}
             </select>
+            {newStatus === "enviado" && (!order.carrier || !order.trackingNumber) && (
+              <p style={{ fontSize: "0.82rem", color: "var(--color-error)", marginTop: "0.4rem" }}>
+                Para enviar debes guardar primero transportadora y número de guía.
+              </p>
+            )}
             <textarea
               rows={2}
               placeholder="Nota interna"

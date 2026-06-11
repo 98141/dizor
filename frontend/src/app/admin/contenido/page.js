@@ -7,6 +7,7 @@ import AdminShell from "@/components/admin/AdminShell";
 import AuthFormField from "@/components/auth/AuthFormField";
 import AuthSubmitButton from "@/components/auth/AuthSubmitButton";
 import AuthErrorAlert from "@/components/auth/AuthErrorAlert";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 import {
   getAdminHomeContent,
   updateAdminHomeContent,
@@ -19,6 +20,7 @@ import {
   createAdminBanner,
   updateAdminBanner,
   deleteAdminBanner,
+  uploadCmsImage,
 } from "@/services/adminCmsService";
 import {
   getMarketingSettings,
@@ -141,6 +143,76 @@ function ColorField({ label, value, onChange }) {
   );
 }
 
+function CmsImageField({ label, value, onChange, placeholder = "https://res.cloudinary.com/…" }) {
+  const [uploading, setUploading] = useState(false);
+  const [uploadErr, setUploadErr] = useState("");
+
+  const handleFile = async (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    if (file.size > 10 * 1024 * 1024) {
+      setUploadErr("La imagen supera el límite de 10 MB");
+      return;
+    }
+    setUploading(true);
+    setUploadErr("");
+    try {
+      const data = await uploadCmsImage(file);
+      onChange(data.url);
+    } catch (err) {
+      setUploadErr(err.response?.data?.message || "Error al subir imagen");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div className="auth-field">
+      <label className="auth-field__label">{label}</label>
+      <div className="image-upload-block">
+        <label className={`admin-btn admin-btn--sm image-upload-label${uploading ? " is-uploading" : ""}`}>
+          {uploading ? (
+            <><span className="upload-spinner" aria-hidden="true" /> Subiendo…</>
+          ) : (
+            "Subir desde equipo"
+          )}
+          <input
+            type="file"
+            accept="image/*"
+            hidden
+            disabled={uploading}
+            onChange={handleFile}
+          />
+        </label>
+        <span className="image-upload-hint">JPG, PNG, WebP · máx. 10 MB</span>
+      </div>
+      <div className="image-section-divider"><span>o usa URL</span></div>
+      <input
+        className="auth-field__input"
+        type="url"
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => { setUploadErr(""); onChange(e.target.value); }}
+      />
+      {uploadErr && (
+        <p style={{ color: "var(--color-error)", fontSize: "0.82rem", marginTop: "0.25rem" }}>
+          {uploadErr}
+        </p>
+      )}
+      {value && (
+        <div style={{ marginTop: "0.5rem" }}>
+          <img
+            src={value}
+            alt="Vista previa"
+            style={{ maxWidth: "100%", maxHeight: 160, objectFit: "cover", borderRadius: 6, border: "1px solid var(--color-border)" }}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ContenidoAdminContent() {
   const [tab, setTab] = useState("home");
 
@@ -165,6 +237,7 @@ function ContenidoAdminContent() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
+  const [confirmModal, setConfirmModal] = useState(null);
 
   const showMsg = (text, isError = false) => {
     setMessage(text);
@@ -285,11 +358,16 @@ function ContenidoAdminContent() {
     }
   };
 
-  const removePage = async (id) => {
-    if (!window.confirm("¿Eliminar esta página?")) return;
-    await deleteAdminPage(id);
-    if (editingPageId === id) startEditPage(null);
-    await load();
+  const removePage = (id) => {
+    setConfirmModal({
+      message: "¿Estás seguro de que deseas eliminar esta página? Esta acción no se puede deshacer.",
+      onConfirm: async () => {
+        setConfirmModal(null);
+        await deleteAdminPage(id);
+        if (editingPageId === id) startEditPage(null);
+        await load();
+      },
+    });
   };
 
   const startEditBanner = (banner) => {
@@ -316,11 +394,16 @@ function ContenidoAdminContent() {
     }
   };
 
-  const removeBanner = async (id) => {
-    if (!window.confirm("¿Eliminar banner?")) return;
-    await deleteAdminBanner(id);
-    if (editingBannerId === id) startEditBanner(null);
-    await load();
+  const removeBanner = (id) => {
+    setConfirmModal({
+      message: "¿Estás seguro de que deseas eliminar este banner? Esta acción no se puede deshacer.",
+      onConfirm: async () => {
+        setConfirmModal(null);
+        await deleteAdminBanner(id);
+        if (editingBannerId === id) startEditBanner(null);
+        await load();
+      },
+    });
   };
 
   // ── Marketing handlers ────────────────────────────────
@@ -405,6 +488,12 @@ function ContenidoAdminContent() {
         ))}
       </nav>
 
+      <ConfirmModal
+        isOpen={!!confirmModal}
+        message={confirmModal?.message}
+        onConfirm={confirmModal?.onConfirm}
+        onCancel={() => setConfirmModal(null)}
+      />
       <AuthErrorAlert message={message} variant={error ? "error" : "success"} />
 
       {/* ── INICIO ── */}
@@ -422,8 +511,11 @@ function ContenidoAdminContent() {
             onChange={(e) => setHome((h) => ({ ...h, hero: { ...h.hero, ctaLabel: e.target.value } }))} />
           <AuthFormField label="Enlace botón" name="ctaHref" value={home.hero.ctaHref}
             onChange={(e) => setHome((h) => ({ ...h, hero: { ...h.hero, ctaHref: e.target.value } }))} />
-          <AuthFormField label="Imagen de fondo (URL)" name="heroImage" value={home.hero.imageUrl || ""}
-            onChange={(e) => setHome((h) => ({ ...h, hero: { ...h.hero, imageUrl: e.target.value } }))} />
+          <CmsImageField
+            label="Imagen de fondo"
+            value={home.hero.imageUrl || ""}
+            onChange={(url) => setHome((h) => ({ ...h, hero: { ...h.hero, imageUrl: url } }))}
+          />
 
           <h2>Barra de anuncio</h2>
           <label className="admin-checkbox">
@@ -466,8 +558,11 @@ function ContenidoAdminContent() {
                 onChange={(e) => setBannerForm((p) => ({ ...p, title: e.target.value }))} />
               <AuthFormField label="Subtítulo" name="bSub" value={bannerForm.subtitle}
                 onChange={(e) => setBannerForm((p) => ({ ...p, subtitle: e.target.value }))} />
-              <AuthFormField label="Imagen URL" name="bImg" value={bannerForm.imageUrl}
-                onChange={(e) => setBannerForm((p) => ({ ...p, imageUrl: e.target.value }))} />
+              <CmsImageField
+                label="Imagen"
+                value={bannerForm.imageUrl}
+                onChange={(url) => setBannerForm((p) => ({ ...p, imageUrl: url }))}
+              />
               <AuthFormField label="Enlace" name="bLink" value={bannerForm.linkHref}
                 onChange={(e) => setBannerForm((p) => ({ ...p, linkHref: e.target.value }))} />
               <div className="admin-form__group">
@@ -516,19 +611,11 @@ function ContenidoAdminContent() {
               <AuthFormField label="Extracto (subtítulo visible)" name="pExcerpt" value={pageForm.excerpt}
                 onChange={(e) => setPageForm((p) => ({ ...p, excerpt: e.target.value }))} />
 
-              <div className="auth-field">
-                <label className="auth-field__label">Imagen destacada (URL)</label>
-                <input className="auth-field__input" type="url"
-                  placeholder="https://res.cloudinary.com/…"
-                  value={pageForm.imageUrl}
-                  onChange={(e) => setPageForm((p) => ({ ...p, imageUrl: e.target.value }))} />
-              </div>
-              {pageForm.imageUrl && (
-                <div style={{ marginBottom: "0.75rem" }}>
-                  <img src={pageForm.imageUrl} alt={pageForm.imageAlt || "Vista previa"}
-                    style={{ maxWidth: "100%", maxHeight: 180, objectFit: "cover", borderRadius: 6, border: "1px solid var(--color-border)" }} />
-                </div>
-              )}
+              <CmsImageField
+                label="Imagen destacada"
+                value={pageForm.imageUrl}
+                onChange={(url) => setPageForm((p) => ({ ...p, imageUrl: url }))}
+              />
               <AuthFormField label="Texto alternativo de la imagen (accesibilidad)" name="pImageAlt"
                 value={pageForm.imageAlt}
                 onChange={(e) => setPageForm((p) => ({ ...p, imageAlt: e.target.value }))} />
@@ -618,6 +705,11 @@ function ContenidoAdminContent() {
           <AuthFormField label="Retraso (segundos)" name="delay" type="number"
             value={marketing.popup?.delaySeconds ?? 4}
             onChange={(e) => setPopup("delaySeconds", Number(e.target.value))} />
+          <CmsImageField
+            label="Imagen del popup (opcional)"
+            value={marketing.popup?.imageUrl || ""}
+            onChange={(url) => setPopup("imageUrl", url)}
+          />
 
           <h2 style={{ marginTop: "1.5rem" }}>Newsletter (footer)</h2>
           <AuthFormField label="Título footer" name="nlTitle" value={marketing.newsletter?.footerTitle || ""}
@@ -746,15 +838,14 @@ function ContenidoAdminContent() {
           />
 
           <h2 style={{ marginTop: "1.5rem" }}>Favicon</h2>
-          <AuthFormField
-            label="URL del favicon"
-            name="faviconUrl"
+          <CmsImageField
+            label="Favicon"
             value={appearance.faviconUrl}
+            onChange={(url) => setAppearanceField("faviconUrl", url)}
             placeholder="https://tudominio.com/favicon.ico"
-            onChange={(e) => setAppearanceField("faviconUrl", e.target.value)}
           />
           <p className="admin-muted" style={{ marginTop: "-0.5rem" }}>
-            URL completa de tu ícono (.ico, .png). Se aplica al abrir una nueva pestaña.
+            Sube un PNG o ICO (16×16 a 64×64 px recomendado). Se aplica al abrir una nueva pestaña.
           </p>
 
           <AuthSubmitButton loading={saving}>Guardar apariencia</AuthSubmitButton>

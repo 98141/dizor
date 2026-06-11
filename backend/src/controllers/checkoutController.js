@@ -206,27 +206,37 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
   // Validar y aplicar cupón (sin consumirlo todavía)
   let appliedCoupon = null;
   if (couponCode) {
-    const coupon = await Coupon.findOne({
-      code: couponCode.trim().toUpperCase(),
-      isActive: true,
-    });
+    const coupon = await Coupon.findOne({ code: couponCode.trim().toUpperCase() });
 
-    if (coupon) {
-      const notExpired = !coupon.expiresAt || coupon.expiresAt > new Date();
-      const hasUses = coupon.maxUses === null || coupon.usedCount < coupon.maxUses;
-      const meetsMin = totals.subtotal >= coupon.minOrderAmount;
-
-      if (notExpired && hasUses && meetsMin) {
-        const discount =
-          coupon.type === "percentage"
-            ? Math.round(totals.subtotal * (coupon.value / 100))
-            : Math.min(coupon.value, totals.subtotal);
-
-        totals.discountTotal = discount;
-        totals.total = totals.subtotal - discount + totals.taxTotal + totals.shippingCost;
-        appliedCoupon = coupon;
-      }
+    if (!coupon || !coupon.isActive) {
+      return next(new AppError("Este cupón no está disponible o ha expirado", 400));
     }
+
+    if (coupon.expiresAt && coupon.expiresAt < new Date()) {
+      return next(new AppError("Este cupón no está disponible o ha expirado", 400));
+    }
+
+    if (coupon.maxUses !== null && coupon.usedCount >= coupon.maxUses) {
+      return next(new AppError("Este cupón no está disponible o ha expirado", 400));
+    }
+
+    if (totals.subtotal < coupon.minOrderAmount) {
+      return next(
+        new AppError(
+          `El pedido mínimo para este cupón es $${coupon.minOrderAmount.toLocaleString("es-CO")}`,
+          400
+        )
+      );
+    }
+
+    const discount =
+      coupon.type === "percentage"
+        ? Math.round(totals.subtotal * (coupon.value / 100))
+        : Math.min(coupon.value, totals.subtotal);
+
+    totals.discountTotal = discount;
+    totals.total = totals.subtotal - discount + totals.taxTotal + totals.shippingCost;
+    appliedCoupon = coupon;
   }
 
   const isGuest = !req.user;

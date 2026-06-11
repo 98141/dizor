@@ -128,6 +128,10 @@ const orderSchema = new mongoose.Schema(
     idempotencyKey: { type: String, default: null },
     couponCode: { type: String, default: "" },
     couponConsumed: { type: Boolean, default: false },
+    ivaEnabled: { type: Boolean, default: false },
+    ivaPercent: { type: Number, default: 0 },
+    freeShippingApplied: { type: Boolean, default: false },
+    freeShippingThreshold: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

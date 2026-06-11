@@ -7,6 +7,7 @@ import {
   getTaxonomy,
   updateTaxonomyItem,
 } from "@/services/adminCatalogService";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 
 const TABS = [
   {
@@ -24,7 +25,7 @@ const TABS = [
     label: "Colores",
     fields: [
       { key: "name", label: "Nombre", required: true },
-      { key: "hexCode", label: "HEX", placeholder: "#8B4513" },
+      { key: "hexCode", label: "Color", type: "color", placeholder: "#8B4513" },
       { key: "sortOrder", label: "Orden", type: "number" },
       { key: "isActive", label: "Activo", type: "checkbox" },
     ],
@@ -81,6 +82,8 @@ export default function TaxonomyManager({ initialTab = "categories" }) {
   const [editingId, setEditingId] = useState(null);
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [savedMsg, setSavedMsg] = useState("");
+  const [confirmModal, setConfirmModal] = useState(null);
 
   const currentTab = TABS.find((t) => t.type === activeType) || TABS[0];
 
@@ -102,6 +105,7 @@ export default function TaxonomyManager({ initialTab = "categories" }) {
     loadItems();
     setForm(emptyForm(currentTab.fields));
     setEditingId(null);
+    setSavedMsg("");
   }, [activeType, loadItems, currentTab.fields]);
 
   const handleChange = (key, value) => {
@@ -149,6 +153,7 @@ export default function TaxonomyManager({ initialTab = "categories" }) {
       } else {
         await createTaxonomyItem(activeType, payload);
       }
+      setSavedMsg(editingId ? "Guardado correctamente" : "Creado correctamente");
       cancelEdit();
       await loadItems();
     } catch (err) {
@@ -158,20 +163,31 @@ export default function TaxonomyManager({ initialTab = "categories" }) {
     }
   };
 
-  const handleDelete = async (id, name) => {
-    if (!window.confirm(`¿Eliminar "${name}"?`)) return;
-    setError("");
-    try {
-      await deleteTaxonomyItem(activeType, id);
-      if (editingId === id) cancelEdit();
-      await loadItems();
-    } catch (err) {
-      setError(err.response?.data?.message || "No se pudo eliminar");
-    }
+  const handleDelete = (id, name) => {
+    setConfirmModal({
+      message: `¿Estás seguro de que deseas eliminar "${name}"? Esta acción no se puede deshacer.`,
+      onConfirm: async () => {
+        setConfirmModal(null);
+        setError("");
+        try {
+          await deleteTaxonomyItem(activeType, id);
+          if (editingId === id) cancelEdit();
+          await loadItems();
+        } catch (err) {
+          setError(err.response?.data?.message || "No se pudo eliminar");
+        }
+      },
+    });
   };
 
   return (
     <div className="taxonomy-manager">
+      <ConfirmModal
+        isOpen={!!confirmModal}
+        message={confirmModal?.message}
+        onConfirm={confirmModal?.onConfirm}
+        onCancel={() => setConfirmModal(null)}
+      />
       <nav className="taxonomy-tabs" aria-label="Tipos de catálogo">
         {TABS.map((tab) => (
           <button
@@ -188,6 +204,7 @@ export default function TaxonomyManager({ initialTab = "categories" }) {
       <div className="taxonomy-grid">
         <section className="taxonomy-form-card">
           <h2>{editingId ? "Editar" : "Nuevo"} — {currentTab.label}</h2>
+          {savedMsg && <p style={{ color: "var(--color-success)", marginBottom: "0.5rem", fontSize: "0.88rem" }}>{savedMsg}</p>}
           {error && <p className="admin-form-error">{error}</p>}
           <form onSubmit={handleSubmit} className="admin-form">
             {currentTab.fields.map((field) => (
@@ -213,6 +230,23 @@ export default function TaxonomyManager({ initialTab = "categories" }) {
                       handleChange(field.key, e.target.checked)
                     }
                   />
+                ) : field.type === "color" ? (
+                  <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                    <input
+                      type="color"
+                      value={form[field.key] || "#000000"}
+                      onChange={(e) => handleChange(field.key, e.target.value)}
+                      style={{ width: "48px", height: "38px", cursor: "pointer", padding: "2px", border: "1px solid var(--color-border)", borderRadius: "var(--radius-sm)", flexShrink: 0 }}
+                      title="Selecciona un color"
+                    />
+                    <input
+                      id={`tax-${field.key}`}
+                      type="text"
+                      value={form[field.key]}
+                      placeholder={field.placeholder || "#000000"}
+                      onChange={(e) => handleChange(field.key, e.target.value)}
+                    />
+                  </div>
                 ) : (
                   <input
                     id={`tax-${field.key}`}

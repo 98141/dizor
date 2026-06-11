@@ -161,6 +161,18 @@ exports.updateOrderStatus = catchAsync(async (req, res, next) => {
 
   const previousStatus = order.orderStatus;
 
+  // Para marcar como enviado se requieren transportadora y número de guía
+  if (orderStatus === "enviado") {
+    if (!order.carrier?.trim() || !order.trackingNumber?.trim()) {
+      return next(
+        new AppError(
+          "Para marcar este pedido como enviado debes ingresar transportadora y número de guía.",
+          400
+        )
+      );
+    }
+  }
+
   // Restaurar stock al cancelar o marcar como devuelto
   if (["cancelado", "devuelto"].includes(orderStatus) && order.stockDeducted) {
     await restoreOrderStock(order.items);

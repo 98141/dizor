@@ -66,13 +66,21 @@ exports.calculateTotals = (resolvedItems, settings, department) => {
   const subtotal = resolvedItems.reduce((sum, i) => sum + i.lineTotal, 0);
   const discountTotal = 0;
 
+  const ivaEnabled = !!settings.taxEnabled;
+  const ivaPercent = ivaEnabled ? (settings.taxRate || 0) : 0;
   const taxable = subtotal - discountTotal;
-  const taxTotal = settings.taxEnabled
-    ? Math.round(taxable * (settings.taxRate / 100))
-    : 0;
+  const taxTotal = ivaEnabled ? Math.round(taxable * (ivaPercent / 100)) : 0;
 
   const { getShippingCost } = require("./settingsService");
   const shippingCost = getShippingCost(settings, subtotal, department);
+
+  const freeShippingApplied =
+    settings.shippingMode === "free_threshold" &&
+    subtotal >= settings.freeShippingMinAmount;
+  const freeShippingThreshold =
+    settings.shippingMode === "free_threshold"
+      ? (settings.freeShippingMinAmount || 0)
+      : 0;
 
   const total = subtotal - discountTotal + taxTotal + shippingCost;
 
@@ -82,5 +90,9 @@ exports.calculateTotals = (resolvedItems, settings, department) => {
     taxTotal,
     shippingCost,
     total,
+    ivaEnabled,
+    ivaPercent,
+    freeShippingApplied,
+    freeShippingThreshold,
   };
 };

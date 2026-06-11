@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import RoleRoute from "@/guards/RoleRoute";
 import AdminShell from "@/components/admin/AdminShell";
 import { useAuth } from "@/context/AuthContext";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 import {
   deleteAdminProduct,
   getAdminProducts,
@@ -179,6 +180,8 @@ function AdminProductosContent() {
   const [inventory, setInventory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState("list");
+  const [confirmModal, setConfirmModal] = useState(null);
+  const [pageError, setPageError] = useState("");
 
   const isAdmin = ["superadmin", "admin"].includes(user?.role);
   const canViewCosts = isAdmin;
@@ -204,14 +207,20 @@ function AdminProductosContent() {
     load();
   }, []);
 
-  const handleDelete = async (id, name) => {
-    if (!window.confirm(`¿Eliminar "${name}"? Esta acción no se puede deshacer.`)) return;
-    try {
-      await deleteAdminProduct(id);
-      await load();
-    } catch (err) {
-      alert(err.response?.data?.message || "No se pudo eliminar");
-    }
+  const handleDelete = (id, name) => {
+    setConfirmModal({
+      message: `¿Estás seguro de que deseas eliminar "${name}"? Esta acción no se puede deshacer.`,
+      onConfirm: async () => {
+        setConfirmModal(null);
+        setPageError("");
+        try {
+          await deleteAdminProduct(id);
+          await load();
+        } catch (err) {
+          setPageError(err.response?.data?.message || "No se pudo eliminar el producto");
+        }
+      },
+    });
   };
 
   const handleToggleActive = async (id, newValue) => {
@@ -226,6 +235,15 @@ function AdminProductosContent() {
 
   return (
     <div className="admin-page">
+      <ConfirmModal
+        isOpen={!!confirmModal}
+        message={confirmModal?.message}
+        onConfirm={confirmModal?.onConfirm}
+        onCancel={() => setConfirmModal(null)}
+      />
+      {pageError && (
+        <p style={{ color: "var(--color-error)", marginBottom: "1rem" }}>{pageError}</p>
+      )}
       <div className="admin-page__header">
         <h1 className="admin-page__title">Productos</h1>
         {isAdmin && (

@@ -127,6 +127,20 @@ exports.createProduct = catchAsync(async (req, res, next) => {
     delete req.body.internalCost;
   }
 
+  const incomingSkus = (req.body.variants || [])
+    .map((v) => String(v.sku || "").trim().toUpperCase())
+    .filter(Boolean);
+  if (incomingSkus.length > 0) {
+    if (new Set(incomingSkus).size !== incomingSkus.length) {
+      return next(new AppError("El producto tiene SKUs duplicados entre sus variantes", 400));
+    }
+    const conflict = await Product.findOne({ "variants.sku": { $in: incomingSkus } });
+    if (conflict) {
+      const dup = conflict.variants.find((v) => incomingSkus.includes(v.sku));
+      return next(new AppError(`El SKU "${dup?.sku}" ya está en uso por otro producto`, 400));
+    }
+  }
+
   const product = await Product.create(req.body);
   await product.populate(populateAll);
 
@@ -168,6 +182,23 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
 
   if (!product) {
     return next(new AppError("Producto no encontrado", 404));
+  }
+
+  const incomingSkus = (req.body.variants || [])
+    .map((v) => String(v.sku || "").trim().toUpperCase())
+    .filter(Boolean);
+  if (incomingSkus.length > 0) {
+    if (new Set(incomingSkus).size !== incomingSkus.length) {
+      return next(new AppError("El producto tiene SKUs duplicados entre sus variantes", 400));
+    }
+    const conflict = await Product.findOne({
+      _id: { $ne: product._id },
+      "variants.sku": { $in: incomingSkus },
+    });
+    if (conflict) {
+      const dup = conflict.variants.find((v) => incomingSkus.includes(v.sku));
+      return next(new AppError(`El SKU "${dup?.sku}" ya está en uso por otro producto`, 400));
+    }
   }
 
   await product.populate(populateAll);
