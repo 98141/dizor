@@ -224,17 +224,85 @@ export default function OrderDetail({ orderId, backHref }) {
 
           <div className="order-detail-card">
             <h2>Productos</h2>
-            {order.items.map((item) => (
-              <div key={item._id} className="order-detail-row">
-                <span>
-                  {item.productName} ({item.sizeName}/{item.colorName}) x
-                  {item.quantity}
-                </span>
-                <span>{formatCOP(item.lineTotal)}</span>
+            <div className="order-items-list">
+              {order.items.map((item) => (
+                <div key={item._id} className="order-item">
+                  <div className="order-item__img-wrap">
+                    {item.productImage ? (
+                      <img
+                        src={item.productImage}
+                        alt={item.productName}
+                        className="order-item__img"
+                      />
+                    ) : (
+                      <div className="order-item__img-placeholder" />
+                    )}
+                  </div>
+                  <div className="order-item__body">
+                    <p className="order-item__name">{item.productName}</p>
+                    {item.sku && (
+                      <p className="order-item__sku">SKU: {item.sku}</p>
+                    )}
+                    <div className="order-item__meta">
+                      {item.sizeName && (
+                        <span>Talla: {item.sizeName}</span>
+                      )}
+                      {item.colorName && (
+                        <span>Color: {item.colorName}</span>
+                      )}
+                      <span>x{item.quantity}</span>
+                      {(item.unitPrice ?? 0) > 0 && (
+                        <span>{formatCOP(item.unitPrice)} / u</span>
+                      )}
+                    </div>
+                  </div>
+                  <p className="order-item__total">
+                    {formatCOP(item.lineTotal ?? 0)}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="order-detail-card">
+            <h2>Resumen de precios</h2>
+            {(order.subtotal ?? 0) > 0 && (
+              <div className="order-detail-row">
+                <span>Subtotal</span>
+                <span>{formatCOP(order.subtotal)}</span>
               </div>
-            ))}
-            <div className="order-detail-row" style={{ fontWeight: 600 }}>
-              <span>Total</span>
+            )}
+            {order.ivaEnabled && (order.taxTotal ?? 0) > 0 && (
+              <div className="order-detail-row">
+                <span>
+                  IVA
+                  {(order.ivaPercent ?? 0) > 0
+                    ? ` (${order.ivaPercent}%)`
+                    : ""}
+                </span>
+                <span>{formatCOP(order.taxTotal)}</span>
+              </div>
+            )}
+            <div className="order-detail-row">
+              <span>Envío</span>
+              <span>
+                {order.freeShippingApplied
+                  ? "Gratis"
+                  : formatCOP(order.shippingCost ?? 0)}
+              </span>
+            </div>
+            <div className="order-detail-row">
+              <span>Cupón</span>
+              <span>
+                {order.couponCode
+                  ? `${order.couponCode} — −${formatCOP(
+                      order.discountTotal ?? 0
+                    )}`
+                  : "Sin cupón"}
+              </span>
+            </div>
+            <div className="order-detail-row order-pricing__total">
+              <span>Total pagado</span>
               <span>{formatCOP(order.total)}</span>
             </div>
           </div>
