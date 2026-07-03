@@ -1,9 +1,6 @@
 // frontend/next.config.mjs
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    turbo: false,
-  },
   images: {
     remotePatterns: [
       {
