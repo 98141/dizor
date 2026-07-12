@@ -32,7 +32,8 @@
       "Bash(npm install *)",
       "Bash(dir \"c:\\\\Users\\\\Asus ExpertBook\\\\Desktop\\\\Desarrollo_MBT\\\\Dizor\\\\dizor\\\\backend\\\\logs\")",
       "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\Asus ExpertBook\\\\Desktop\\\\Desarrollo_MBT\\\\Dizor\\\\dizor\\\\frontend\\\\src\\\\app\\\\\\(shop\\)\\\\pagina\" -Recurse -ErrorAction SilentlyContinue)",
-      "Bash(node -e \"require\\('dotenv'\\).config\\(\\); const mongoose = require\\('mongoose'\\); mongoose.connect\\(process.env.MONGO_URI\\).then\\(async \\(\\) => { const ContentPage = require\\('./src/models/contentPage'\\); const pages = await ContentPage.find\\({}, 'title slug isPublished'\\).lean\\(\\); console.log\\(JSON.stringify\\(pages, null, 2\\)\\); process.exit\\(0\\); }\\).catch\\(e => { console.error\\(e.message\\); process.exit\\(1\\); }\\);\")"
+      "Bash(node -e \"require\\('dotenv'\\).config\\(\\); const mongoose = require\\('mongoose'\\); mongoose.connect\\(process.env.MONGO_URI\\).then\\(async \\(\\) => { const ContentPage = require\\('./src/models/contentPage'\\); const pages = await ContentPage.find\\({}, 'title slug isPublished'\\).lean\\(\\); console.log\\(JSON.stringify\\(pages, null, 2\\)\\); process.exit\\(0\\); }\\).catch\\(e => { console.error\\(e.message\\); process.exit\\(1\\); }\\);\")",
+      "Bash(node -e \"console.log\\(require\\('mongoose/package.json'\\).version\\)\")"
     ]
   }
 }

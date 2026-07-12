@@ -33,11 +33,10 @@ const weaveTypeSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-weaveTypeSchema.pre("save", function (next) {
+weaveTypeSchema.pre("save", function () {
   if (this.isModified("name") || !this.slug) {
     this.slug = slugifyText(this.name);
   }
-  next();
 });
 
 module.exports = mongoose.model("WeaveType", weaveTypeSchema);
