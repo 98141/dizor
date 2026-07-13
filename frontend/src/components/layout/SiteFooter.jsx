@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { getContentPages } from "@/services/cmsService";
 import { fetchAppearance, getSiteName } from "@/lib/fetchAppearance";
+import { getVisitCount } from "@/services/visitService";
+import VisitCounter from "./VisitCounter";
 
 export default async function SiteFooter() {
   let pages = [];
@@ -14,6 +16,7 @@ export default async function SiteFooter() {
 
   const appearance = await fetchAppearance();
   const siteName = getSiteName(appearance);
+  const visitTotal = await getVisitCount();
 
   return (
     <footer className="site-footer">
@@ -38,7 +41,11 @@ export default async function SiteFooter() {
             <Link href="/cuenta">Mi cuenta</Link>
             <Link href="/seguimiento">Seguimiento de pedido</Link>
             <Link href="/solicitud/seguimiento">Mis solicitudes</Link>
-            <a href="https://wa.me/573000000000" target="_blank" rel="noreferrer">
+            <a
+              href="https://wa.me/573000000000"
+              target="_blank"
+              rel="noreferrer"
+            >
               WhatsApp
             </a>
           </div>
@@ -55,9 +62,20 @@ export default async function SiteFooter() {
           </div>
         </div>
 
-        <p className="site-footer__copy">
-          © {new Date().getFullYear()} Armando Mora. Todos los derechos reservados.
-        </p>
+        <div className="site-footer__bottom">
+          <p className="site-footer__copy">
+            © {new Date().getFullYear()} Diseño y desarrollo.{" "}
+            <a
+              href="https://armandomora.com.co/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-link"
+            >
+              Armando Mora. Todos los derechos reservados.
+            </a>
+          </p>
+          <VisitCounter initialTotal={visitTotal} />
+        </div>
       </div>
     </footer>
   );

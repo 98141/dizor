@@ -35,6 +35,7 @@ const nequiRoutes        = require("./routes/nequiRoutes");
 const adminCouponRoutes  = require("./routes/adminCouponRoutes");
 const adminPosRoutes = require("./routes/adminPosRoutes");
 const adminAlertRoutes = require("./routes/adminAlertRoutes");
+const visitRoutes = require("./routes/visitRoutes");
 
 const app = express();
 
@@ -172,6 +173,7 @@ app.use("/api/payments/nequi", nequiRoutes);
 app.use("/api/admin/coupons", adminCouponRoutes);
 app.use("/api/admin/pos", adminPosRoutes);
 app.use("/api/admin/alerts", adminAlertRoutes);
+app.use("/api/visits", visitRoutes);
 
 app.use((req, res, next) => {
   next(new AppError(`Ruta no encontrada: ${req.originalUrl}`, 404));
