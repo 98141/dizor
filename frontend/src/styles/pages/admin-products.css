@@ -121,6 +121,7 @@
 
 .admin-view-tabs {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--space-sm);
   margin-bottom: var(--space-lg);
 }
@@ -325,6 +326,7 @@
 
 .taxonomy-grid {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-xl);
 }
 
@@ -487,6 +489,7 @@
 
 .admin-grid-2 {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-xl);
 }
 
@@ -502,7 +505,7 @@
 @media (min-width: 900px) {
   .taxonomy-grid,
   .admin-grid-2 {
-    grid-template-columns: 1fr 1.2fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
     align-items: start;
   }
 

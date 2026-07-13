@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useSiteConfig } from "@/context/SiteConfigContext";
 import AlertBell from "./AlertBell";
@@ -34,45 +35,43 @@ export default function AdminShell({ children, variant = "admin" }) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
   const { siteName } = useSiteConfig();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const links = variant === "vendedor" ? vendorLinks : adminLinks;
   const visibleLinks = links.filter((l) => l.roles.includes(user?.role));
   const showBell = ["superadmin", "admin"].includes(user?.role);
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
 
   const isActive = (href) => {
     if (href === "/admin" || href === "/vendedor") return pathname === href;
     return pathname.startsWith(href);
   };
 
-  const NavLinks = ({ className }) => (
+  const handleLogout = async () => {
+    await logout();
+    window.location.href = "/login";
+  };
+
+  const NavLinks = ({ className, onNavigate }) => (
     <nav className={className}>
       {visibleLinks.map((link) => (
         <Link
           key={link.href}
           href={link.href}
           className={isActive(link.href) ? "active" : ""}
+          onClick={onNavigate}
         >
           {link.label}
         </Link>
       ))}
-      <Link href="/">Ver tienda</Link>
+      <Link href="/" onClick={onNavigate}>Ver tienda</Link>
       <button
         type="button"
-        onClick={async () => {
-          await logout();
-          window.location.href = "/login";
-        }}
-        style={{
-          marginTop: "1rem",
-          background: "transparent",
-          border: "1px solid rgba(255,255,255,0.3)",
-          color: "inherit",
-          padding: "0.5rem",
-          borderRadius: "4px",
-          cursor: "pointer",
-          width: "100%",
-          textAlign: "left",
-        }}
+        className="admin-nav__logout"
+        onClick={handleLogout}
       >
         Cerrar sesión
       </button>
@@ -90,12 +89,27 @@ export default function AdminShell({ children, variant = "admin" }) {
       </aside>
 
       <div className="admin-main">
-        {showBell && (
-          <div className="admin-topbar">
-            <AlertBell />
-          </div>
-        )}
-        <NavLinks className="admin-mobile-nav" />
+        <div className="admin-topbar">
+          <button
+            type="button"
+            className="admin-topbar__menu-btn"
+            aria-label="Menú"
+            aria-expanded={mobileOpen}
+            onClick={() => setMobileOpen((o) => !o)}
+          >
+            ☰
+          </button>
+          <p className="admin-topbar__brand">{siteName} {variant}</p>
+          {showBell && <AlertBell />}
+        </div>
+        <nav
+          className={`admin-mobile-nav${mobileOpen ? " admin-mobile-nav--open" : ""}`}
+        >
+          <NavLinks
+            className="admin-mobile-nav__links"
+            onNavigate={() => setMobileOpen(false)}
+          />
+        </nav>
         {children}
       </div>
     </div>

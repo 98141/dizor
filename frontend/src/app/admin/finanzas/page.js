@@ -407,7 +407,7 @@ function FinanceHistoryPanel() {
             </button>
           ))}
         </div>
-        <div style={{ display: "flex", gap: "var(--space-xs)", alignItems: "center", fontSize: "0.85rem" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-xs)", alignItems: "center", fontSize: "0.85rem" }}>
           <label style={{ color: "var(--color-text-muted)" }}>Desde</label>
           <input
             type="date"
