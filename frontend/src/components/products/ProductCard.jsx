@@ -1,6 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { formatCOP } from "@/lib/formatCurrency";
+import { trackSelectItem } from "@/lib/analytics/events";
+import { mapProductToItem } from "@/lib/analytics/productMapper";
 
 const MAX_SWATCHES = 5;
 
@@ -20,7 +24,13 @@ function getUniqueColors(variants = []) {
   return colors;
 }
 
-export default function ProductCard({ product }) {
+export default function ProductCard({
+  product,
+  priority = false,
+  itemListId,
+  itemListName,
+  index,
+}) {
   const hasPromo =
     product.onPromotion &&
     product.discountPercent > 0 &&
@@ -34,9 +44,23 @@ export default function ProductCard({ product }) {
   const visibleColors = uniqueColors.slice(0, MAX_SWATCHES);
   const extraColors = uniqueColors.length - visibleColors.length;
 
+  // No bloquea la navegación aunque el evento falle: solo reporta la
+  // selección, nunca hace preventDefault().
+  const handleSelect = () => {
+    trackSelectItem({
+      items: [mapProductToItem(product, { itemListId, itemListName, index })].filter(Boolean),
+      itemListId,
+      itemListName,
+    });
+  };
+
   return (
     <article className={`product-card${!product.inStock ? " product-card--out" : ""}`}>
-      <Link href={productHref} className="product-card__image-wrap">
+      <Link
+        href={productHref}
+        className="product-card__image-wrap"
+        onClick={handleSelect}
+      >
         <Image
           src={product.mainImage}
           alt={product.images?.[0]?.alt || product.name}
@@ -44,6 +68,7 @@ export default function ProductCard({ product }) {
           height={500}
           className="product-card__image"
           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          priority={priority}
         />
         <div className="product-card__badges">
           {!product.inStock && (
@@ -71,7 +96,9 @@ export default function ProductCard({ product }) {
         </p>
 
         <h2 className="product-card__title">
-          <Link href={productHref}>{product.name}</Link>
+          <Link href={productHref} onClick={handleSelect}>
+            {product.name}
+          </Link>
         </h2>
 
         {visibleColors.length > 0 && (

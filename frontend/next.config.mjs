@@ -26,17 +26,26 @@ const nextConfig = {
 
     const isDev = process.env.NODE_ENV !== "production";
 
-    // Content-Security-Policy: ajustada para Next.js + Cloudinary + Wompi
+    // Content-Security-Policy: ajustada para Next.js + Cloudinary + Wompi + GA4
     // En desarrollo, unsafe-eval es requerido por React para source maps y HMR
+    //
+    // Dominios de Google Analytics 4 agregados (Sprint 3, solo si GA4 se
+    // integra — la CSP sigue siendo válida aunque NEXT_PUBLIC_GA_MEASUREMENT_ID
+    // esté vacío, ya que sin ID no se monta ningún script):
+    //   - script-src: googletagmanager.com → sirve el script gtag.js
+    //   - connect-src: google-analytics.com/analytics.google.com/googletagmanager.com
+    //     → destinos reales donde gtag.js envía los eventos (beacon/fetch)
+    //   - img-src: google-analytics.com/googletagmanager.com → fallback de
+    //     imagen/pixel que gtag.js puede usar cuando beacon/fetch no están disponibles
     const csp = [
       "default-src 'self'",
       isDev
-        ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
-        : "script-src 'self' 'unsafe-inline'",
+        ? "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com"
+        : "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com",
       "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: blob: https://res.cloudinary.com https://images.unsplash.com",
+      "img-src 'self' data: blob: https://res.cloudinary.com https://images.unsplash.com https://www.google-analytics.com https://www.googletagmanager.com",
       "font-src 'self'",
-      `connect-src 'self' ${apiOrigin} https://checkout.wompi.co https://sandbox.wompi.co https://production.wompi.co`,
+      `connect-src 'self' ${apiOrigin} https://checkout.wompi.co https://sandbox.wompi.co https://production.wompi.co https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com`,
       // Wompi checkout se abre en un frame/redirect
       "frame-src https://checkout.wompi.co",
       "object-src 'none'",

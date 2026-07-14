@@ -3,6 +3,7 @@ import Image from "next/image";
 import ProductCard from "@/components/products/ProductCard";
 import PromoBanner from "@/components/cms/PromoBanner";
 import NewsletterSignup from "@/components/marketing/NewsletterSignup";
+import ViewItemListTracker from "@/components/analytics/ViewItemListTracker";
 import { getHomeContent } from "@/services/cmsService";
 import { fetchAppearance, getSiteName } from "@/lib/fetchAppearance";
 
@@ -193,9 +194,16 @@ export default async function HomePage() {
               {newSection?.linkLabel || "Ver novedades"}
             </Link>
           </div>
+          <ViewItemListTracker products={newProducts} listId="home_new" listName="Novedades" />
           <div className="products-grid">
-            {newProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+            {newProducts.map((product, i) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                itemListId="home_new"
+                itemListName="Novedades"
+                index={i}
+              />
             ))}
           </div>
         </section>
@@ -215,11 +223,21 @@ export default async function HomePage() {
           </Link>
         </div>
         {featured.length > 0 ? (
-          <div className="products-grid">
-            {featured.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+          <>
+            <ViewItemListTracker products={featured} listId="home_featured" listName="Destacados" />
+            <div className="products-grid">
+              {featured.map((product, i) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  priority={i === 0}
+                  itemListId="home_featured"
+                  itemListName="Destacados"
+                  index={i}
+                />
+              ))}
+            </div>
+          </>
         ) : (
           <p className="catalog-empty">
             Pronto tendremos productos destacados.{" "}
@@ -322,9 +340,20 @@ export default async function HomePage() {
               {bestsellerSection?.linkLabel || "Ver todos"}
             </Link>
           </div>
+          <ViewItemListTracker
+            products={bestsellers}
+            listId="home_bestsellers"
+            listName="Más vendidos"
+          />
           <div className="products-grid">
-            {bestsellers.map((product) => (
-              <ProductCard key={product.id} product={product} />
+            {bestsellers.map((product, i) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                itemListId="home_bestsellers"
+                itemListName="Más vendidos"
+                index={i}
+              />
             ))}
           </div>
         </section>

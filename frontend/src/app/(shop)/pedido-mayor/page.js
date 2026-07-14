@@ -9,6 +9,7 @@ import AuthSubmitButton from "@/components/auth/AuthSubmitButton";
 import AuthErrorAlert from "@/components/auth/AuthErrorAlert";
 import { createSpecialRequest } from "@/services/specialRequestService";
 import { getCheckoutConfig } from "@/services/checkoutService";
+import { trackWholesaleRequest } from "@/lib/analytics/events";
 
 export default function PedidoMayorPage() {
   const router = useRouter();
@@ -56,6 +57,10 @@ export default function PedidoMayorPage() {
         ...form,
         estimatedBudget:
           form.estimatedBudget === "" ? null : Number(form.estimatedBudget),
+      });
+      trackWholesaleRequest({
+        sourcePage: "pedido-mayor",
+        quantityRange: String(form.estimatedQuantity || ""),
       });
       router.push(
         `/solicitud/confirmacion?ref=${data.request.requestNumber}&tipo=wholesale`

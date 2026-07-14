@@ -1,0 +1,250 @@
+/* ─── Enlace "Configurar cookies" del footer ───
+   Replica .site-footer a (public-footer.css) para un <button>, ya que ahí
+   no navega a ninguna URL, solo abre el panel de preferencias. */
+.site-footer__link-btn {
+  color: #e8e2d9;
+  font-size: 0.9rem;
+  display: block;
+  margin-bottom: var(--space-xs);
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.site-footer__link-btn:hover {
+  color: #fff;
+}
+
+/* ─── Banner de consentimiento ─── */
+.cookie-banner {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1300;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--color-bg-card);
+  border-top: 1px solid var(--color-border);
+  box-shadow: var(--shadow-card);
+}
+
+.cookie-banner__text {
+  flex: 1 1 320px;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.cookie-banner__text a {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.cookie-banner__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.cookie-banner__btn {
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--color-border);
+  background: #fff;
+  color: var(--color-text);
+  font-family: inherit;
+}
+
+.cookie-banner__btn:hover {
+  background: var(--color-bg);
+}
+
+.cookie-banner__btn--primary {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+.cookie-banner__btn--primary:hover {
+  background: var(--color-primary-hover);
+}
+
+/* ─── Panel de preferencias ─── */
+.cookie-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 1400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+}
+
+.cookie-panel__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  border: none;
+  cursor: pointer;
+}
+
+.cookie-panel__panel {
+  position: relative;
+  z-index: 1;
+  background: var(--color-bg-card);
+  color: var(--color-text);
+  max-width: 480px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: var(--space-lg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+}
+
+.cookie-panel__close {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-md);
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+  color: var(--color-text-muted);
+}
+
+.cookie-panel__title {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  font-weight: 400;
+  margin: 0 0 var(--space-sm);
+}
+
+.cookie-panel__intro {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-lg);
+  line-height: 1.5;
+}
+
+.cookie-category {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-md) 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.cookie-category:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+
+.cookie-category__info {
+  flex: 1;
+}
+
+.cookie-category__title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+}
+
+.cookie-category__desc {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.cookie-category__note {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  font-style: italic;
+  margin: 0.35rem 0 0;
+}
+
+/* Toggle switch simple, sin librería externa */
+.cookie-toggle {
+  position: relative;
+  display: inline-block;
+  width: 42px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.cookie-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.cookie-toggle__track {
+  position: absolute;
+  inset: 0;
+  background: var(--color-border);
+  border-radius: 999px;
+  transition: background 0.15s;
+}
+
+.cookie-toggle__track::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.15s;
+}
+
+.cookie-toggle input:checked + .cookie-toggle__track {
+  background: var(--color-primary);
+}
+
+.cookie-toggle input:checked + .cookie-toggle__track::before {
+  transform: translateX(18px);
+}
+
+.cookie-toggle input:disabled + .cookie-toggle__track {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cookie-panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+@media (max-width: 480px) {
+  .cookie-banner {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .cookie-banner__actions {
+    justify-content: stretch;
+  }
+
+  .cookie-banner__btn {
+    flex: 1;
+  }
+}

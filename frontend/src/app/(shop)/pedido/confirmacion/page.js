@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { formatCOP } from "@/lib/formatCurrency";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
+import { trackWhatsAppClick } from "@/lib/analytics/events";
 import AuthFormField from "@/components/auth/AuthFormField";
 import AuthErrorAlert from "@/components/auth/AuthErrorAlert";
 
@@ -347,6 +348,9 @@ function ConfirmacionContent() {
             rel="noreferrer"
             className="checkout-btn checkout-btn--primary"
             style={{ display: "inline-block", marginTop: "0.75rem" }}
+            onClick={() =>
+              trackWhatsAppClick({ linkLocation: "order_confirmation", purpose: "payment_proof" })
+            }
           >
             Enviar comprobante por WhatsApp
           </a>

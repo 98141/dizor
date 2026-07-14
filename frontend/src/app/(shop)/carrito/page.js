@@ -7,6 +7,8 @@ import { useCart } from "@/context/CartContext";
 import { validateCart, validateCoupon } from "@/services/cartService";
 import AbandonedCartCapture from "@/components/marketing/AbandonedCartCapture";
 import { formatCOP } from "@/lib/formatCurrency";
+import { trackRemoveFromCart, trackViewCart } from "@/lib/analytics/events";
+import { mapCartItemToItem } from "@/lib/analytics/productMapper";
 
 export default function CarritoPage() {
   const {
@@ -56,6 +58,21 @@ export default function CarritoPage() {
 
     run();
   }, [items, hydrated, toApiItems]);
+
+  // view_cart una sola vez por visita, cuando el carrito termina de
+  // hidratarse y cargar sus totales (no se repite en cada recálculo por
+  // cambio de cantidad, ver viewCartFiredRef).
+  const viewCartFiredRef = useRef(false);
+  useEffect(() => {
+    if (viewCartFiredRef.current || !totals) return;
+    viewCartFiredRef.current = true;
+    const discountValue = appliedCoupon?.discountAmount || 0;
+    const value = totals.subtotal + (totals.taxTotal || 0) + totals.shippingCost - discountValue;
+    const mappedItems = (totals.items || items)
+      .map((item) => mapCartItemToItem(item))
+      .filter(Boolean);
+    trackViewCart({ items: mappedItems, value });
+  }, [totals, items, appliedCoupon]);
 
   const handleApplyCoupon = async (e) => {
     e.preventDefault();
@@ -171,7 +188,13 @@ export default function CarritoPage() {
                   <button
                     type="button"
                     className="cart-item__remove"
-                    onClick={() => removeItem(item.productId, item.variantId)}
+                    onClick={() => {
+                      trackRemoveFromCart({
+                        items: [mapCartItemToItem({ ...item, quantity: qty })].filter(Boolean),
+                        value: item.unitPrice * qty,
+                      });
+                      removeItem(item.productId, item.variantId);
+                    }}
                   >
                     Eliminar
                   </button>

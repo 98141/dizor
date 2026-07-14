@@ -9,6 +9,7 @@ import AuthSubmitButton from "@/components/auth/AuthSubmitButton";
 import AuthErrorAlert from "@/components/auth/AuthErrorAlert";
 import { createSpecialRequest } from "@/services/specialRequestService";
 import { getProductBySlug } from "@/services/productService";
+import { trackCustomizationRequest } from "@/lib/analytics/events";
 
 function PersonalizarForm() {
   const router = useRouter();
@@ -78,6 +79,10 @@ function PersonalizarForm() {
         productId: product?.id,
         productName: product?.name,
         productSlug: product?.slug,
+      });
+      trackCustomizationRequest({
+        productId: product?.id,
+        sourcePage: "personalizar",
       });
       router.push(
         `/solicitud/confirmacion?ref=${data.request.requestNumber}&tipo=customization`

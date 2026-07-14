@@ -38,6 +38,14 @@ Variables de entorno relevantes para SEO (ver `.env.example`):
 
 El número de contacto de WhatsApp tiene un único origen en `src/lib/whatsapp.js` (`WHATSAPP_NUMBER` / `getWhatsAppUrl()`); no debe hardcodearse en otros componentes.
 
+## Analítica (Google Analytics 4)
+
+Toda la instrumentación vive en `src/lib/analytics/` (nunca llamar `window.gtag(...)` directamente desde un componente — usar las funciones `trackXxx` de `src/lib/analytics/events.js`).
+
+- `NEXT_PUBLIC_GA_MEASUREMENT_ID` (ver `.env.example`): pública, vacía por defecto. Sin ID configurado, no se carga ningún script ni se envía ningún evento. Requiere `next build` para tomar efecto.
+- El consentimiento (`src/lib/analytics/consent.js`) es **denegado por defecto** — aunque haya un ID configurado, no se activa nada hasta que exista consentimiento explícito otorgado vía `grantAnalyticsConsent()`. El banner/UI de consentimiento se construye en el Sprint 4; este sprint solo deja el adaptador técnico listo.
+- `NEXT_PUBLIC_ANALYTICS_DEBUG=true` (opcional, solo desarrollo) registra en consola los eventos que se intentarían enviar, sin requerir consentimiento otorgado.
+
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.

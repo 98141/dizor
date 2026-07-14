@@ -3,6 +3,7 @@ import { CartProvider } from "@/context/CartContext";
 import { SiteConfigProvider } from "@/context/SiteConfigContext";
 import { fetchAppearance, getSiteName } from "@/lib/fetchAppearance";
 import { WHATSAPP_NUMBER } from "@/lib/whatsapp";
+import AnalyticsTracker from "@/components/analytics/AnalyticsTracker";
 import "@/styles/base/variables.css";
 import "@/styles/base/globals.css";
 import "@/styles/components/auth-card.css";
@@ -29,6 +30,7 @@ import "@/styles/pages/admin-finanzas.css";
 import "@/styles/pages/not-found.css";
 import "@/styles/pages/admin-pos.css";
 import "@/styles/pages/admin-alertas.css";
+import "@/styles/components/cookie-consent.css";
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://sombrerosdizor.com.co").replace(/\/$/, "");
 
@@ -141,6 +143,7 @@ export default async function RootLayout({ children }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
+        <AnalyticsTracker />
         <SiteConfigProvider siteName={siteName}>
           <AuthProvider>
             <CartProvider>{children}</CartProvider>

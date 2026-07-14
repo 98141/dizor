@@ -1,13 +1,18 @@
+import { cache } from "react";
 import { notFound } from "next/navigation";
 import ProductoClient from "@/components/products/ProductoClient";
+import ProductCard from "@/components/products/ProductCard";
 import { BreadcrumbJsonLd } from "@/components/seo/Breadcrumbs";
+import ViewItemListTracker from "@/components/analytics/ViewItemListTracker";
 
 const BASE_API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 // Fallback cuando el producto no tiene imagen propia: usa el ícono real del
 // sitio (ya existente en /public) en vez de dejar Open Graph/Twitter sin imagen.
 const DEFAULT_OG_IMAGE = "/icon-512.png";
 
-async function fetchProductMeta(slug) {
+// cache() dedupea la llamada entre generateMetadata y el componente de
+// página dentro del mismo request (mismo patrón que fetchAppearance.js).
+const fetchProductMeta = cache(async (slug) => {
   try {
     const res = await fetch(
       `${BASE_API}/products/${encodeURIComponent(slug)}`,
@@ -18,7 +23,7 @@ async function fetchProductMeta(slug) {
   } catch {
     return null;
   }
-}
+});
 
 export async function generateMetadata({ params }) {
   const { slug: slugParam } = await params;
@@ -145,7 +150,47 @@ export default async function ProductoPage({ params }) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
       />
       <BreadcrumbJsonLd items={breadcrumbItems} siteUrl={SITE} />
-      <ProductoClient slug={slug} />
+      <article className="product-detail">
+        {data.preview && (
+          <p className="product-detail__preview-banner" role="status">
+            Vista previa: este producto está inactivo y no es visible en el
+            catálogo público.
+          </p>
+        )}
+
+        <ProductoClient product={p} />
+
+        {p.fullDescription && (
+          <div className="product-detail__description">
+            <h2>Descripción</h2>
+            <p>{p.fullDescription}</p>
+          </div>
+        )}
+
+        {data.related?.length > 0 && (
+          <section className="product-detail__related">
+            <h2 className="product-detail__related-title">
+              También te puede gustar
+            </h2>
+            <ViewItemListTracker
+              products={data.related}
+              listId="related_products"
+              listName="También te puede gustar"
+            />
+            <div className="products-grid">
+              {data.related.map((related, i) => (
+                <ProductCard
+                  key={related.id}
+                  product={related}
+                  itemListId="related_products"
+                  itemListName="También te puede gustar"
+                  index={i}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+      </article>
     </>
   );
 }
