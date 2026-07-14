@@ -2,7 +2,10 @@ import Link from "next/link";
 import { getContentPages } from "@/services/cmsService";
 import { fetchAppearance, getSiteName } from "@/lib/fetchAppearance";
 import { getVisitCount } from "@/services/visitService";
+import { getWhatsAppUrl } from "@/lib/whatsapp";
 import VisitCounter from "./VisitCounter";
+import TrackedWhatsAppLink from "./TrackedWhatsAppLink";
+import CookieSettingsLink from "./CookieSettingsLink";
 
 export default async function SiteFooter() {
   let pages = [];
@@ -41,13 +44,14 @@ export default async function SiteFooter() {
             <Link href="/cuenta">Mi cuenta</Link>
             <Link href="/seguimiento">Seguimiento de pedido</Link>
             <Link href="/solicitud/seguimiento">Mis solicitudes</Link>
-            <a
-              href="https://wa.me/573000000000"
-              target="_blank"
-              rel="noreferrer"
+            <TrackedWhatsAppLink
+              href={getWhatsAppUrl()}
+              linkLocation="footer"
+              purpose="general_inquiry"
             >
               WhatsApp
-            </a>
+            </TrackedWhatsAppLink>
+            <CookieSettingsLink />
           </div>
           <div>
             <strong className="site-footer__heading">Información</strong>
@@ -56,6 +60,8 @@ export default async function SiteFooter() {
                 {p.title}
               </Link>
             ))}
+            <Link href="/politica-de-privacidad">Política de privacidad</Link>
+            <Link href="/politica-de-cookies">Política de cookies</Link>
             {pages.length === 0 && (
               <span className="site-footer__muted">Próximamente</span>
             )}

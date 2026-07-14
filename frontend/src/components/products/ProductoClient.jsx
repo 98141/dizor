@@ -4,12 +4,16 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import ProductCard from "@/components/products/ProductCard";
 import { useCart } from "@/context/CartContext";
-import { getProductBySlug } from "@/services/productService";
 import { formatCOP } from "@/lib/formatCurrency";
+import { trackAddToCart, trackViewItem } from "@/lib/analytics/events";
+import { mapProductToItem } from "@/lib/analytics/productMapper";
 
 const LOW_STOCK_THRESHOLD = 5;
+
+function findFirstAvailableVariant(product) {
+  return product.variants?.find((v) => v.isActive && v.stock > 0) || null;
+}
 
 function StockAlert({ stock }) {
   if (!stock || stock > LOW_STOCK_THRESHOLD) return null;
@@ -22,15 +26,25 @@ function StockAlert({ stock }) {
   );
 }
 
-export default function ProductoClient({ slug }) {
+// Recibe `product` ya resuelto por el Server Component (page.js) — sin
+// fetch propio, sin estado de carga inicial: el contenido llega listo en
+// el HTML servido por el servidor.
+export default function ProductoClient({ product }) {
   const router = useRouter();
   const { addItem } = useCart();
-  const [data, setData] = useState(null);
-  const [loadError, setLoadError] = useState("");
-  const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState(0);
-  const [selectedSize, setSelectedSize] = useState(null);
-  const [selectedColor, setSelectedColor] = useState(null);
+  const [selectedSize, setSelectedSize] = useState(
+    () => {
+      const first = findFirstAvailableVariant(product);
+      return first ? first.size?._id || first.size : null;
+    }
+  );
+  const [selectedColor, setSelectedColor] = useState(
+    () => {
+      const first = findFirstAvailableVariant(product);
+      return first ? first.color?._id || first.color : null;
+    }
+  );
   const [quantity, setQuantity] = useState(1);
   const [addedMsg, setAddedMsg] = useState("");
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -38,41 +52,16 @@ export default function ProductoClient({ slug }) {
 
   const closeLightbox = () => setLightboxOpen(false);
 
-  const resolvedSlug = useMemo(() => {
-    const raw = Array.isArray(slug) ? slug[0] : slug;
-    if (!raw) return "";
-    try {
-      return decodeURIComponent(raw).trim();
-    } catch {
-      return String(raw).trim();
-    }
-  }, [slug]);
-
+  // Dispara view_item una sola vez por producto visto (depende de
+  // product.id, no de la variante seleccionada — cambiar talla/color no
+  // debe repetir este evento).
   useEffect(() => {
-    if (!resolvedSlug) return;
-    setLoading(true);
-    setLoadError("");
-    getProductBySlug(resolvedSlug)
-      .then((res) => {
-        setData(res);
-        const product = res.product;
-        if (product.variants?.length) {
-          const first = product.variants.find((v) => v.isActive && v.stock > 0);
-          if (first) {
-            setSelectedSize(first.size?._id || first.size);
-            setSelectedColor(first.color?._id || first.color);
-          }
-        }
-      })
-      .catch((err) => {
-        setData(null);
-        setLoadError(
-          err.response?.data?.message ||
-            "No se pudo cargar el producto. Verifica que esté activo en la tienda."
-        );
-      })
-      .finally(() => setLoading(false));
-  }, [resolvedSlug]);
+    trackViewItem({
+      items: [mapProductToItem(product)].filter(Boolean),
+      value: product.effectivePrice,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product.id]);
 
   useEffect(() => {
     setQuantity(1);
@@ -98,8 +87,6 @@ export default function ProductoClient({ slug }) {
       document.body.style.overflow = "";
     };
   }, [lightboxOpen]);
-
-  const product = data?.product;
 
   const selectedVariant = useMemo(() => {
     if (!product?.variants) return null;
@@ -138,19 +125,6 @@ export default function ProductoClient({ slug }) {
     return [...map.values()];
   }, [product, selectedSize]);
 
-  if (loading) {
-    return <p className="auth-loading">Cargando producto...</p>;
-  }
-
-  if (!product) {
-    return (
-      <div className="catalog-empty">
-        <p>{loadError || "Producto no encontrado."}</p>
-        <Link href="/catalogo">Volver al catálogo</Link>
-      </div>
-    );
-  }
-
   const hasPromo =
     product.onPromotion &&
     product.discountPercent > 0 &&
@@ -181,6 +155,13 @@ export default function ProductoClient({ slug }) {
       maxStock: selectedVariant.stock,
     });
 
+    trackAddToCart({
+      items: [
+        mapProductToItem(product, { variant: selectedVariant, quantity }),
+      ].filter(Boolean),
+      value: variantPrice * quantity,
+    });
+
     setAddedMsg("Producto agregado al carrito");
     setTimeout(() => setAddedMsg(""), 3000);
   };
@@ -188,13 +169,7 @@ export default function ProductoClient({ slug }) {
   const isOutOfStock = !selectedVariant || selectedVariant.stock < 1;
 
   return (
-    <article className="product-detail">
-      {data?.preview && (
-        <p className="product-detail__preview-banner" role="status">
-          Vista previa: este producto está inactivo y no es visible en el
-          catálogo público.
-        </p>
-      )}
+    <>
       <div className="product-detail__grid">
         {/* ─── GALERÍA ─── */}
         <div className="product-detail__gallery">
@@ -226,7 +201,7 @@ export default function ProductoClient({ slug }) {
                 >
                   <Image
                     src={img.url}
-                    alt={img.alt || ""}
+                    alt={img.alt || product.name}
                     width={72}
                     height={72}
                     style={{ objectFit: "cover" }}
@@ -454,28 +429,6 @@ export default function ProductoClient({ slug }) {
         </div>
       </div>
 
-      {/* ─── DESCRIPCIÓN COMPLETA ─── */}
-      {product.fullDescription && (
-        <div className="product-detail__description">
-          <h2>Descripción</h2>
-          <p>{product.fullDescription}</p>
-        </div>
-      )}
-
-      {/* ─── RELACIONADOS ─── */}
-      {data.related?.length > 0 && (
-        <section className="product-detail__related">
-          <h2 className="product-detail__related-title">
-            También te puede gustar
-          </h2>
-          <div className="products-grid">
-            {data.related.map((p) => (
-              <ProductCard key={p.id} product={p} />
-            ))}
-          </div>
-        </section>
-      )}
-
       {/* ─── LIGHTBOX ─── */}
       {lightboxOpen && (
         <div
@@ -532,6 +485,6 @@ export default function ProductoClient({ slug }) {
           )}
         </div>
       )}
-    </article>
+    </>
   );
 }

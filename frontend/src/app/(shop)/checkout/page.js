@@ -23,6 +23,14 @@ import {
   retryNequiPayment,
 } from "@/services/checkoutService";
 import { formatCOP } from "@/lib/formatCurrency";
+import {
+  trackAddPaymentInfo,
+  trackAddShippingInfo,
+  trackBeginCheckout,
+  trackPurchase,
+} from "@/lib/analytics/events";
+import { mapCartItemToItem } from "@/lib/analytics/productMapper";
+import { hasPurchaseBeenTracked, markPurchaseTracked } from "@/lib/analytics/purchaseDedup";
 
 const STEPS = ["Datos", "Envío", "Entrega", "Pago", "Confirmar"];
 
@@ -110,6 +118,21 @@ export default function CheckoutPage() {
     }
   }, [hydrated, items, router, success, nequiPending]);
 
+  // begin_checkout una sola vez por visita, cuando el carrito ya hidrató y
+  // tiene contenido válido (el mismo guard que decide si redirigir a
+  // /carrito, pero en sentido contrario).
+  const beginCheckoutFiredRef = useRef(false);
+  useEffect(() => {
+    if (!hydrated || items.length === 0 || beginCheckoutFiredRef.current) return;
+    beginCheckoutFiredRef.current = true;
+    trackBeginCheckout({
+      items: items.map((item) => mapCartItemToItem(item)).filter(Boolean),
+      value: items.reduce((s, i) => s + (i.unitPrice || 0) * i.quantity, 0),
+      coupon: appliedCoupon?.code,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hydrated, items]);
+
   const recalculate = async (department) => {
     if (items.length === 0) return;
     try {
@@ -148,6 +171,19 @@ export default function CheckoutPage() {
 
         if (data.orderStatus === "pagado") {
           clearInterval(interval);
+
+          if (!hasPurchaseBeenTracked(nequiPending.orderNumber)) {
+            trackPurchase({
+              transactionId: nequiPending.orderNumber,
+              value: nequiPending.total,
+              items: nequiPending.trackedItems,
+              coupon: nequiPending.couponCode || undefined,
+              shipping: nequiPending.shipping,
+              tax: nequiPending.iva,
+            });
+            markPurchaseTracked(nequiPending.orderNumber);
+          }
+
           const params = new URLSearchParams({
             order:       nequiPending.orderNumber,
             total:       nequiPending.total,
@@ -199,11 +235,41 @@ export default function CheckoutPage() {
     return true;
   };
 
+  // add_shipping_info se dispara al salir del paso 2 (Entrega, donde se
+  // elige el transportador = shipping_tier); add_payment_info al salir del
+  // paso 3 (Pago, donde ya está seleccionado el método real).
+  const handleContinue = () => {
+    const checkoutItems = items.map((item) => mapCartItemToItem(item)).filter(Boolean);
+    const checkoutValue = totals
+      ? totals.total - (appliedCoupon?.discountAmount || 0)
+      : undefined;
+
+    if (step === 2) {
+      trackAddShippingInfo({
+        items: checkoutItems,
+        value: checkoutValue,
+        shippingTier: carrier,
+      });
+    }
+    if (step === 3) {
+      trackAddPaymentInfo({
+        items: checkoutItems,
+        value: checkoutValue,
+        paymentType: paymentMethod,
+      });
+    }
+    setStep((s) => s + 1);
+  };
+
   const handleSubmit = async () => {
     if (submittingRef.current) return;
     submittingRef.current = true;
     setLoading(true);
     setError("");
+    // Capturado antes de clearCart() — se usa para construir los items del
+    // evento purchase (el carrito se vacía justo después de crear el pedido,
+    // antes de llegar a la pantalla de confirmación).
+    const cartItemsSnapshot = items.map((item) => mapCartItemToItem(item)).filter(Boolean);
     try {
       const data = await createOrder({
         items:           toApiItems(),
@@ -247,12 +313,34 @@ export default function CheckoutPage() {
           ivaPercent:  totals?.ivaPercent ?? 0,
           shipping:    totals?.shippingCost ?? 0,
           freeShipping: totals?.freeShippingApplied ? "1" : "0",
+          trackedItems: cartItemsSnapshot,
         });
         return;
       }
 
       // Otros métodos: ir directo a confirmación
       const couponDiscount = appliedCoupon?.discountAmount || 0;
+
+      // purchase solo para contra_entrega: el pedido queda confirmado y
+      // comprometido de inmediato (stock descontado) aunque el cobro sea
+      // después, en la entrega. nequi_manual NO dispara purchase aquí: el
+      // pago ni siquiera se ha intentado (orderStatus queda "pago_pendiente"
+      // hasta que el cliente envíe comprobante y un admin lo apruebe).
+      if (
+        data.order.paymentMethod === "contra_entrega" &&
+        !hasPurchaseBeenTracked(data.order.orderNumber)
+      ) {
+        trackPurchase({
+          transactionId: data.order.orderNumber,
+          value: data.order.total,
+          items: cartItemsSnapshot,
+          coupon: appliedCoupon?.code,
+          shipping: totals?.shippingCost,
+          tax: totals?.taxTotal,
+        });
+        markPurchaseTracked(data.order.orderNumber);
+      }
+
       const params = new URLSearchParams({
         order:        data.order.orderNumber,
         total:        data.order.total,
@@ -690,7 +778,7 @@ export default function CheckoutPage() {
             type="button"
             className="checkout-btn checkout-btn--primary"
             disabled={!canNext()}
-            onClick={() => setStep((s) => s + 1)}
+            onClick={handleContinue}
           >
             Continuar
           </button>

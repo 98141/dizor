@@ -3,13 +3,20 @@ import Image from "next/image";
 import ProductCard from "@/components/products/ProductCard";
 import PromoBanner from "@/components/cms/PromoBanner";
 import NewsletterSignup from "@/components/marketing/NewsletterSignup";
+import ViewItemListTracker from "@/components/analytics/ViewItemListTracker";
 import { getHomeContent } from "@/services/cmsService";
 import { fetchAppearance, getSiteName } from "@/lib/fetchAppearance";
 
+const HOME_TITLE = "Sombreros artesanales de Sandoná";
+const HOME_DESCRIPTION =
+  "Sombreros artesanales en palma de iraca de Sandoná, Nariño. Tejidos Brisa, Común y Súper fino. Envíos a todo Colombia.";
+// Sin imagen de marketing dedicada (1200x630) en el repo: se reutiliza el
+// ícono real del sitio para que OpenGraph/Twitter nunca queden sin imagen.
+const DEFAULT_OG_IMAGE = "/icon-512.png";
+
 export const metadata = {
-  title: "Sombreros artesanales de Sandoná",
-  description:
-    "Sombreros artesanales en palma de iraca de Sandoná, Nariño. Tejidos Brisa, Común y Súper fino. Envíos a todo Colombia.",
+  title: HOME_TITLE,
+  description: HOME_DESCRIPTION,
   keywords: [
     "sombreros artesanales Colombia",
     "sombrero palma de iraca",
@@ -18,10 +25,17 @@ export const metadata = {
     "sombreros tejidos a mano",
   ],
   openGraph: {
-    title: "Sombreros artesanales de Sandoná",
+    title: HOME_TITLE,
     description:
       "Sombreros artesanales en palma de iraca de Sandoná, Nariño. Tejidos Brisa, Común y Súper fino.",
     type: "website",
+    images: [{ url: DEFAULT_OG_IMAGE, width: 512, height: 512, alt: HOME_TITLE }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
+    images: [DEFAULT_OG_IMAGE],
   },
   alternates: {
     canonical: "/",
@@ -116,16 +130,27 @@ export default async function HomePage() {
   const homePageSchema = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "@id": `${process.env.NEXT_PUBLIC_SITE_URL || "https://dizor.com.co"}/#homepage`,
+    "@id": `${process.env.NEXT_PUBLIC_SITE_URL || "https://sombrerosdizor.com.co"}/#homepage`,
     name: `${siteName} | Sombreros artesanales de Sandoná`,
-    description: "Sombreros artesanales en palma de iraca de Sandoná, Nariño, Colombia.",
-    url: process.env.NEXT_PUBLIC_SITE_URL || "https://dizor.com.co",
-    isPartOf: { "@id": `${process.env.NEXT_PUBLIC_SITE_URL || "https://dizor.com.co"}/#website` },
-    about: { "@id": `${process.env.NEXT_PUBLIC_SITE_URL || "https://dizor.com.co"}/#organization` },
+    description:
+      "Sombreros artesanales en palma de iraca de Sandoná, Nariño, Colombia.",
+    url: process.env.NEXT_PUBLIC_SITE_URL || "https://sombrerosdizor.com.co",
+    isPartOf: {
+      "@id": `${process.env.NEXT_PUBLIC_SITE_URL || "https://sombrerosdizor.com.co"}/#website`,
+    },
+    about: {
+      "@id": `${process.env.NEXT_PUBLIC_SITE_URL || "https://sombrerosdizor.com.co"}/#organization`,
+    },
     breadcrumb: {
       "@type": "BreadcrumbList",
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Inicio", item: process.env.NEXT_PUBLIC_SITE_URL || "https://dizor.com.co" },
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Inicio",
+          item:
+            process.env.NEXT_PUBLIC_SITE_URL || "https://sombrerosdizor.com.co",
+        },
       ],
     },
   };
@@ -169,9 +194,16 @@ export default async function HomePage() {
               {newSection?.linkLabel || "Ver novedades"}
             </Link>
           </div>
+          <ViewItemListTracker products={newProducts} listId="home_new" listName="Novedades" />
           <div className="products-grid">
-            {newProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+            {newProducts.map((product, i) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                itemListId="home_new"
+                itemListName="Novedades"
+                index={i}
+              />
             ))}
           </div>
         </section>
@@ -191,11 +223,21 @@ export default async function HomePage() {
           </Link>
         </div>
         {featured.length > 0 ? (
-          <div className="products-grid">
-            {featured.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+          <>
+            <ViewItemListTracker products={featured} listId="home_featured" listName="Destacados" />
+            <div className="products-grid">
+              {featured.map((product, i) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  priority={i === 0}
+                  itemListId="home_featured"
+                  itemListName="Destacados"
+                  index={i}
+                />
+              ))}
+            </div>
+          </>
         ) : (
           <p className="catalog-empty">
             Pronto tendremos productos destacados.{" "}
@@ -211,8 +253,7 @@ export default async function HomePage() {
             <h2 className="home-craft__title">
               {craftSection?.title || "Nuestros tejidos"}
             </h2>
-            {(craftSection?.subtitle ||
-              !craftSection) && (
+            {(craftSection?.subtitle || !craftSection) && (
               <p className="home-craft__subtitle">
                 {craftSection?.subtitle ||
                   "Cada tipo de tejido tiene su propio carácter, finura y tiempo de elaboración."}
@@ -228,7 +269,9 @@ export default async function HomePage() {
               >
                 <span className="home-craft-card__name">{wt.name}</span>
                 {wt.description && (
-                  <span className="home-craft-card__desc">{wt.description}</span>
+                  <span className="home-craft-card__desc">
+                    {wt.description}
+                  </span>
                 )}
                 <span className="home-craft-card__cta">
                   {craftSection?.linkLabel || "Explorar"} →
@@ -297,9 +340,20 @@ export default async function HomePage() {
               {bestsellerSection?.linkLabel || "Ver todos"}
             </Link>
           </div>
+          <ViewItemListTracker
+            products={bestsellers}
+            listId="home_bestsellers"
+            listName="Más vendidos"
+          />
           <div className="products-grid">
-            {bestsellers.map((product) => (
-              <ProductCard key={product.id} product={product} />
+            {bestsellers.map((product, i) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                itemListId="home_bestsellers"
+                itemListName="Más vendidos"
+                index={i}
+              />
             ))}
           </div>
         </section>

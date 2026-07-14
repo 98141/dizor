@@ -2,6 +2,8 @@ import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
 import { SiteConfigProvider } from "@/context/SiteConfigContext";
 import { fetchAppearance, getSiteName } from "@/lib/fetchAppearance";
+import { WHATSAPP_NUMBER } from "@/lib/whatsapp";
+import AnalyticsTracker from "@/components/analytics/AnalyticsTracker";
 import "@/styles/base/variables.css";
 import "@/styles/base/globals.css";
 import "@/styles/components/auth-card.css";
@@ -28,8 +30,9 @@ import "@/styles/pages/admin-finanzas.css";
 import "@/styles/pages/not-found.css";
 import "@/styles/pages/admin-pos.css";
 import "@/styles/pages/admin-alertas.css";
+import "@/styles/components/cookie-consent.css";
 
-const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://dizor.com.co").replace(/\/$/, "");
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://sombrerosdizor.com.co").replace(/\/$/, "");
 
 export async function generateMetadata() {
   const appearance = await fetchAppearance();
@@ -98,6 +101,14 @@ export default async function RootLayout({ children }) {
       addressRegion: "Nariño",
       addressCountry: "CO",
     },
+    ...(appearance?.faviconUrl && { logo: appearance.faviconUrl }),
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: `+${WHATSAPP_NUMBER}`,
+      contactType: "customer service",
+      areaServed: "CO",
+      availableLanguage: "Spanish",
+    },
   };
 
   const websiteSchema = {
@@ -110,7 +121,7 @@ export default async function RootLayout({ children }) {
     publisher: { "@id": `${SITE_URL}/#organization` },
     potentialAction: {
       "@type": "SearchAction",
-      target: { "@type": "EntryPoint", urlTemplate: `${SITE_URL}/catalogo?q={search_term_string}` },
+      target: { "@type": "EntryPoint", urlTemplate: `${SITE_URL}/catalogo?term={search_term_string}` },
       "query-input": "required name=search_term_string",
     },
   };
@@ -132,6 +143,7 @@ export default async function RootLayout({ children }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
+        <AnalyticsTracker />
         <SiteConfigProvider siteName={siteName}>
           <AuthProvider>
             <CartProvider>{children}</CartProvider>

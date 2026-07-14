@@ -16,7 +16,7 @@ export const fetchAppearance = cache(async () => {
   }
 });
 
-export const DEFAULT_SITE_NAME = "MBT";
+export const DEFAULT_SITE_NAME = "Dizor";
 
 export function getSiteName(appearance) {
   return appearance?.siteName || DEFAULT_SITE_NAME;

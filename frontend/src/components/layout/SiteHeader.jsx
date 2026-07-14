@@ -6,6 +6,7 @@ import { Suspense, useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { useSiteConfig } from "@/context/SiteConfigContext";
+import { trackSearch } from "@/lib/analytics/events";
 
 const MIN_SEARCH_CHARS = 1;
 const SEARCH_DEBOUNCE_MS = 300;
@@ -58,6 +59,9 @@ function useHeaderSearch() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Solo la búsqueda confirmada (submit del formulario) dispara `search`;
+    // el debounce automático de arriba (cada tecla) nunca lo hace.
+    trackSearch(search.trim());
     pushSearch(search);
   };
 
