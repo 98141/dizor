@@ -3,7 +3,7 @@ const BASE_API =
   "http://localhost:5000/api";
 
 const SITE_URL =
-  (process.env.NEXT_PUBLIC_SITE_URL || "https://dizor.com.co").replace(
+  (process.env.NEXT_PUBLIC_SITE_URL || "https://sombrerosdizor.com.co").replace(
     /\/$/,
     ""
   );
