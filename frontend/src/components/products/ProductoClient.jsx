@@ -226,7 +226,7 @@ export default function ProductoClient({ slug }) {
                 >
                   <Image
                     src={img.url}
-                    alt={img.alt || ""}
+                    alt={img.alt || product.name}
                     width={72}
                     height={72}
                     style={{ objectFit: "cover" }}

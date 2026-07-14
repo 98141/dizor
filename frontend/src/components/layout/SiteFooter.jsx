@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getContentPages } from "@/services/cmsService";
 import { fetchAppearance, getSiteName } from "@/lib/fetchAppearance";
 import { getVisitCount } from "@/services/visitService";
+import { getWhatsAppUrl } from "@/lib/whatsapp";
 import VisitCounter from "./VisitCounter";
 
 export default async function SiteFooter() {
@@ -41,11 +42,7 @@ export default async function SiteFooter() {
             <Link href="/cuenta">Mi cuenta</Link>
             <Link href="/seguimiento">Seguimiento de pedido</Link>
             <Link href="/solicitud/seguimiento">Mis solicitudes</Link>
-            <a
-              href="https://wa.me/573000000000"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a href={getWhatsAppUrl()} target="_blank" rel="noreferrer">
               WhatsApp
             </a>
           </div>

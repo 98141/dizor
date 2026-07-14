@@ -1,10 +1,11 @@
-const WA_NUMBER = "573159162520";
+import { getWhatsAppUrl } from "@/lib/whatsapp";
+
 const WA_MESSAGE = "Hola! Tengo una pregunta sobre sus sombreros artesanales.";
 
 export default function WhatsAppFloatingButton() {
   return (
     <a
-      href={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE)}`}
+      href={getWhatsAppUrl(WA_MESSAGE)}
       target="_blank"
       rel="noopener noreferrer"
       className="whatsapp-float"

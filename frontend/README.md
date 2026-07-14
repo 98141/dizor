@@ -29,6 +29,15 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
+## Configuración de SEO / entorno
+
+Variables de entorno relevantes para SEO (ver `.env.example`):
+
+- `NEXT_PUBLIC_SITE_URL`: dominio público del sitio, usado por `robots.js`, `sitemap.js`, `metadataBase` y todo el JSON-LD. Debe apuntar siempre al dominio de producción con `https://` (sin backend).
+- `NEXT_PUBLIC_API_URL`: base de la API, usada solo para obtener datos (nunca se expone como URL pública/canonical).
+
+El número de contacto de WhatsApp tiene un único origen en `src/lib/whatsapp.js` (`WHATSAPP_NUMBER` / `getWhatsAppUrl()`); no debe hardcodearse en otros componentes.
+
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.

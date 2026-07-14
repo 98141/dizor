@@ -42,7 +42,11 @@
       "Bash(npx --yes playwright@1.61.1 install chromium --with-deps)",
       "Bash(curl -sf http://localhost:3000)",
       "Bash(break)",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000)"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000)",
+      "Bash(node -e ' *)",
+      "Bash(npx eslint *)",
+      "Bash(git status *)",
+      "Bash(npm run *)"
     ]
   }
 }

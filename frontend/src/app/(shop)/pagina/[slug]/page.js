@@ -1,6 +1,27 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getContentPage } from "@/services/cmsService";
+import { Breadcrumbs, BreadcrumbJsonLd } from "@/components/seo/Breadcrumbs";
+
+// Sin imagen de marketing dedicada en el repo: se reutiliza el ícono real
+// del sitio para que OpenGraph/Twitter nunca queden sin imagen.
+const DEFAULT_OG_IMAGE = "/icon-512.png";
+const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL || "https://sombrerosdizor.com.co"
+).replace(/\/$/, "");
+
+// Detecta el tipo de página CMS a partir del slug, sin asumir su contenido.
+// Solo se usan tipos que realmente aplican con la información disponible
+// (no se genera FAQPage: requeriría pares pregunta/respuesta estructurados
+// que el CMS no provee, el body es texto libre).
+const ABOUT_SLUGS = ["nosotros", "sobre-nosotros", "quienes-somos", "acerca-de"];
+const CONTACT_SLUGS = ["contacto"];
+
+function detectPageType(slug) {
+  if (ABOUT_SLUGS.includes(slug)) return "AboutPage";
+  if (CONTACT_SLUGS.includes(slug)) return "ContactPage";
+  return "WebPage";
+}
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
@@ -10,6 +31,7 @@ export async function generateMetadata({ params }) {
   const { page } = data;
   const title = page.seoTitle || page.title;
   const description = page.seoDescription || page.excerpt || "";
+  const ogImage = page.imageUrl || DEFAULT_OG_IMAGE;
 
   return {
     title,
@@ -21,9 +43,13 @@ export async function generateMetadata({ params }) {
       title,
       description,
       type: "article",
-      ...(page.imageUrl && {
-        images: [{ url: page.imageUrl, alt: page.imageAlt || page.title }],
-      }),
+      images: [{ url: ogImage, alt: page.imageAlt || page.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImage],
     },
     alternates: {
       canonical: `/pagina/${slug}`,
@@ -94,11 +120,35 @@ export default async function ContentPageRoute({ params }) {
   const { page } = data;
   const blocks = (page.body || "").split("\n\n");
 
+  const pageSchema = {
+    "@context": "https://schema.org",
+    "@type": detectPageType(slug),
+    "@id": `${SITE_URL}/pagina/${slug}#page`,
+    name: page.title,
+    url: `${SITE_URL}/pagina/${slug}`,
+    ...(page.seoDescription || page.excerpt
+      ? { description: page.seoDescription || page.excerpt }
+      : {}),
+    isPartOf: { "@id": `${SITE_URL}/#website` },
+  };
+
+  const breadcrumbItems = [
+    { name: "Inicio", href: "/" },
+    { name: page.title },
+  ];
+
   return (
     <article className="content-page">
-      <nav className="content-page__breadcrumb">
-        <Link href="/">Inicio</Link> / {page.title}
-      </nav>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(pageSchema) }}
+      />
+      <BreadcrumbJsonLd items={breadcrumbItems} siteUrl={SITE_URL} />
+      <Breadcrumbs
+        items={breadcrumbItems}
+        as="nav"
+        className="content-page__breadcrumb"
+      />
 
       <div className="content-page__header">
         <div className="content-page__header-text">
