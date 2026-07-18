@@ -6,18 +6,38 @@
 }
 
 .cms-tabs button {
-  padding: 0.45rem 0.85rem;
+  padding: 0.5rem 0.95rem;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   background: var(--color-bg-card);
+  color: var(--color-text-muted);
   cursor: pointer;
   font-size: 0.85rem;
+  font-weight: 500;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.cms-tabs button:hover {
+  border-color: #cfc7ba;
+  color: var(--color-text);
+  background: #f7f3ec;
 }
 
 .cms-tabs button.active {
   border-color: var(--color-primary);
-  color: var(--color-primary);
+  background: var(--color-primary);
+  color: #fff;
   font-weight: 600;
+  box-shadow: 0 1px 3px rgba(45, 58, 42, 0.2);
+}
+
+.cms-tabs button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .cms-feature-row {
@@ -25,8 +45,63 @@
   gap: var(--space-sm);
   padding: var(--space-md);
   margin-bottom: var(--space-sm);
-  border: 1px dashed var(--color-border);
-  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-card);
+}
+
+.cms-feature-row__actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: var(--space-xs);
+}
+
+.cms-section-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+  align-items: center;
+}
+
+.cms-section-actions--end {
+  margin-top: var(--space-md);
+}
+
+/* En formularios flex, los botones no deben estirarse a todo el ancho */
+.admin-form > .admin-btn:not(.admin-btn--block),
+.admin-form > .cms-section-actions {
+  align-self: flex-start;
+}
+
+.admin-form > .cms-section-actions:has(.admin-btn--block) {
+  align-self: stretch;
+}
+
+.admin-form > .cms-section-actions:has(.admin-btn--block) .admin-btn--block {
+  width: 100%;
+}
+
+.admin-form .auth-submit {
+  width: auto;
+  min-width: 9.5rem;
+  align-self: flex-start;
+  padding: 0.55rem 1.25rem;
+  margin-top: var(--space-md);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  box-shadow: 0 1px 3px rgba(45, 58, 42, 0.18);
+}
+
+.admin-form .auth-submit:hover:not(:disabled) {
+  box-shadow: 0 3px 10px rgba(45, 58, 42, 0.22);
+}
+
+.admin-form .auth-submit:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 .cms-banner-card {

@@ -10,13 +10,13 @@ import {
   updateStoreSettings,
 } from "@/services/adminSettingsService";
 import { formatCOP } from "@/lib/formatCurrency";
+import { useFlashMessage } from "@/hooks/useFlashMessage";
 
 function AdminConfigContent() {
   const [form, setForm] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState(false);
+  const { message, error, flashKey, showMsg, clearMsg } = useFlashMessage();
 
   useEffect(() => {
     getStoreSettings()
@@ -32,8 +32,7 @@ function AdminConfigContent() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
-    setMessage("");
-    setError(false);
+    clearMsg();
     try {
       const data = await updateStoreSettings({
         taxEnabled: form.taxEnabled,
@@ -44,10 +43,9 @@ function AdminConfigContent() {
         carriers: form.carriers,
       });
       setForm(data.settings);
-      setMessage("Configuración guardada");
+      showMsg("Configuración guardada");
     } catch (err) {
-      setMessage(err.response?.data?.message || "No se pudo guardar");
-      setError(true);
+      showMsg(err.response?.data?.message || "No se pudo guardar", true);
     } finally {
       setSaving(false);
     }
@@ -145,7 +143,11 @@ function AdminConfigContent() {
           </p>
         </section>
 
-        <AuthErrorAlert message={message} variant={error ? "error" : "success"} />
+        <AuthErrorAlert
+          key={flashKey}
+          message={message}
+          variant={error ? "error" : "success"}
+        />
         <AuthSubmitButton loading={saving}>Guardar configuración</AuthSubmitButton>
       </form>
     </div>

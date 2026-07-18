@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import RoleRoute from "@/guards/RoleRoute";
 import AdminShell from "@/components/admin/AdminShell";
 import AuthFormField from "@/components/auth/AuthFormField";
@@ -37,9 +38,15 @@ import {
   updateStoreSettings,
 } from "@/services/adminSettingsService";
 import { formatCOP } from "@/lib/formatCurrency";
+import HomeImagesTab from "@/components/admin/HomeImagesTab";
+import HomeTextsTab from "@/components/admin/HomeTextsTab";
+import ReviewsTab from "@/components/admin/ReviewsTab";
+import { useFlashMessage } from "@/hooks/useFlashMessage";
 
 const TABS = [
   { id: "home", label: "Inicio" },
+  { id: "imagenes", label: "Imágenes" },
+  { id: "resenas", label: "Reseñas" },
   { id: "banners", label: "Banners" },
   { id: "pages", label: "Páginas" },
   { id: "popup", label: "Popup" },
@@ -48,6 +55,8 @@ const TABS = [
   { id: "exports", label: "Exportar" },
   { id: "appearance", label: "Apariencia" },
 ];
+
+const VALID_TABS = new Set(TABS.map((t) => t.id));
 
 const emptyPage = () => ({
   title: "",
@@ -214,10 +223,19 @@ function CmsImageField({ label, value, onChange, placeholder = "https://res.clou
 }
 
 function ContenidoAdminContent() {
-  const [tab, setTab] = useState("home");
+  const searchParams = useSearchParams();
+  const tabFromUrl = searchParams.get("tab");
+  const [tab, setTab] = useState(
+    VALID_TABS.has(tabFromUrl) ? tabFromUrl : "home"
+  );
+
+  useEffect(() => {
+    if (VALID_TABS.has(tabFromUrl)) setTab(tabFromUrl);
+  }, [tabFromUrl]);
 
   // CMS state
   const [home, setHome] = useState(null);
+
   const [pages, setPages] = useState([]);
   const [banners, setBanners] = useState([]);
   const [pageForm, setPageForm] = useState(emptyPage());
@@ -235,19 +253,12 @@ function ContenidoAdminContent() {
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState(false);
   const [confirmModal, setConfirmModal] = useState(null);
-
-  const showMsg = (text, isError = false) => {
-    setMessage(text);
-    setError(isError);
-  };
+  const { message, error, flashKey, showMsg, clearMsg } = useFlashMessage();
 
   const load = async () => {
     setLoading(true);
-    setMessage("");
-    setError(false);
+    clearMsg();
     try {
       const [homeRes, pagesRes, bannersRes] = await Promise.all([
         getAdminHomeContent(),
@@ -292,13 +303,29 @@ function ContenidoAdminContent() {
   useEffect(() => { load(); }, []);
 
   // ── CMS handlers ──────────────────────────────────────
+  const cleanBullets = (bullets) =>
+    (bullets || [])
+      .map((line) => String(line).trim())
+      .filter(Boolean)
+      .slice(0, 5);
+
   const saveHome = async (e) => {
     e.preventDefault();
     setSaving(true);
-    setMessage("");
-    setError(false);
+    clearMsg();
     try {
-      const data = await updateAdminHomeContent(home);
+      const payload = {
+        ...home,
+        personalizacion: {
+          ...(home.personalizacion || {}),
+          bullets: cleanBullets(home.personalizacion?.bullets),
+        },
+        porMayor: {
+          ...(home.porMayor || {}),
+          bullets: cleanBullets(home.porMayor?.bullets),
+        },
+      };
+      const data = await updateAdminHomeContent(payload);
       setHome(data.home);
       showMsg("Inicio guardado");
     } catch (err) {
@@ -309,7 +336,14 @@ function ContenidoAdminContent() {
   };
 
   const addFeature = () =>
-    setHome((h) => ({ ...h, features: [...(h.features || []), { title: "", text: "" }] }));
+    setHome((h) => {
+      const current = h.features || [];
+      if (current.length >= 4) return h;
+      return {
+        ...h,
+        features: [...current, { title: "", text: "" }],
+      };
+    });
 
   const updateFeature = (i, key, value) =>
     setHome((h) => {
@@ -342,8 +376,7 @@ function ContenidoAdminContent() {
   const savePage = async (e) => {
     e.preventDefault();
     setSaving(true);
-    setMessage("");
-    setError(false);
+    clearMsg();
     try {
       if (editingPageId) await updateAdminPage(editingPageId, pageForm);
       else await createAdminPage(pageForm);
@@ -379,8 +412,7 @@ function ContenidoAdminContent() {
   const saveBanner = async (e) => {
     e.preventDefault();
     setSaving(true);
-    setMessage("");
-    setError(false);
+    clearMsg();
     try {
       if (editingBannerId) await updateAdminBanner(editingBannerId, bannerForm);
       else await createAdminBanner(bannerForm);
@@ -417,8 +449,7 @@ function ContenidoAdminContent() {
   const saveMarketing = async (e) => {
     e.preventDefault();
     setSaving(true);
-    setMessage("");
-    setError(false);
+    clearMsg();
     try {
       const data = await updateMarketingSettings({
         popup: marketing.popup,
@@ -451,8 +482,7 @@ function ContenidoAdminContent() {
   const saveAppearance = async (e) => {
     e.preventDefault();
     setSaving(true);
-    setMessage("");
-    setError(false);
+    clearMsg();
     try {
       await updateStoreSettings({ appearance });
       showMsg("Apariencia guardada — recarga la tienda para ver los cambios");
@@ -472,7 +502,7 @@ function ContenidoAdminContent() {
     <div className="admin-page">
       <h1 className="admin-page__title">Contenido & Marketing</h1>
       <p className="admin-page__subtitle">
-        CMS, banners, páginas, marketing y apariencia del sitio.
+        CMS, banners, páginas, imágenes del home, reseñas, marketing y apariencia del sitio.
       </p>
 
       <nav className="cms-tabs">
@@ -481,7 +511,7 @@ function ContenidoAdminContent() {
             key={t.id}
             type="button"
             className={tab === t.id ? "active" : ""}
-            onClick={() => { setTab(t.id); setMessage(""); }}
+            onClick={() => { setTab(t.id); clearMsg(); }}
           >
             {t.label}
           </button>
@@ -494,59 +524,30 @@ function ContenidoAdminContent() {
         onConfirm={confirmModal?.onConfirm}
         onCancel={() => setConfirmModal(null)}
       />
-      <AuthErrorAlert message={message} variant={error ? "error" : "success"} />
+      <AuthErrorAlert
+        key={flashKey}
+        message={message}
+        variant={error ? "error" : "success"}
+      />
 
       {/* ── INICIO ── */}
       {tab === "home" && home && (
-        <form className="admin-form product-form__section" onSubmit={saveHome}>
-          <h2>Hero</h2>
-          <AuthFormField label="Título" name="heroTitle" value={home.hero.title}
-            onChange={(e) => setHome((h) => ({ ...h, hero: { ...h.hero, title: e.target.value } }))} />
-          <div className="auth-field">
-            <label className="auth-field__label">Subtítulo</label>
-            <textarea className="auth-field__input" rows={3} value={home.hero.subtitle}
-              onChange={(e) => setHome((h) => ({ ...h, hero: { ...h.hero, subtitle: e.target.value } }))} />
-          </div>
-          <AuthFormField label="Texto botón" name="ctaLabel" value={home.hero.ctaLabel}
-            onChange={(e) => setHome((h) => ({ ...h, hero: { ...h.hero, ctaLabel: e.target.value } }))} />
-          <AuthFormField label="Enlace botón" name="ctaHref" value={home.hero.ctaHref}
-            onChange={(e) => setHome((h) => ({ ...h, hero: { ...h.hero, ctaHref: e.target.value } }))} />
-          <CmsImageField
-            label="Imagen de fondo"
-            value={home.hero.imageUrl || ""}
-            onChange={(url) => setHome((h) => ({ ...h, hero: { ...h.hero, imageUrl: url } }))}
-          />
-
-          <h2>Barra de anuncio</h2>
-          <label className="admin-checkbox">
-            <input type="checkbox" checked={home.announcement.isActive}
-              onChange={(e) => setHome((h) => ({ ...h, announcement: { ...h.announcement, isActive: e.target.checked } }))} />
-            Mostrar barra superior
-          </label>
-          <AuthFormField label="Texto anuncio" name="announceText" value={home.announcement.text}
-            onChange={(e) => setHome((h) => ({ ...h, announcement: { ...h.announcement, text: e.target.value } }))} />
-          <AuthFormField label="Enlace anuncio" name="announceLink" value={home.announcement.linkHref}
-            onChange={(e) => setHome((h) => ({ ...h, announcement: { ...h.announcement, linkHref: e.target.value } }))} />
-
-          <h2>Sección destacados</h2>
-          <AuthFormField label="Título" name="featTitle" value={home.featuredSection.title}
-            onChange={(e) => setHome((h) => ({ ...h, featuredSection: { ...h.featuredSection, title: e.target.value } }))} />
-
-          <h2>Bloques informativos</h2>
-          {home.features.map((f, i) => (
-            <div key={i} className="cms-feature-row">
-              <AuthFormField label="Título" name={`ft-${i}`} value={f.title}
-                onChange={(e) => updateFeature(i, "title", e.target.value)} />
-              <AuthFormField label="Texto" name={`fx-${i}`} value={f.text}
-                onChange={(e) => updateFeature(i, "text", e.target.value)} />
-              <button type="button" className="admin-btn admin-btn--sm admin-btn--danger"
-                onClick={() => removeFeature(i)}>Quitar</button>
-            </div>
-          ))}
-          <button type="button" className="admin-btn" onClick={addFeature}>+ Bloque</button>
-          <AuthSubmitButton loading={saving}>Guardar inicio</AuthSubmitButton>
-        </form>
+        <HomeTextsTab
+          home={home}
+          setHome={setHome}
+          saving={saving}
+          onSave={saveHome}
+          addFeature={addFeature}
+          updateFeature={updateFeature}
+          removeFeature={removeFeature}
+        />
       )}
+
+      {/* ── IMÁGENES HOME ── */}
+      {tab === "imagenes" && <HomeImagesTab />}
+
+      {/* ── RESEÑAS ── */}
+      {tab === "resenas" && <ReviewsTab />}
 
       {/* ── BANNERS ── */}
       {tab === "banners" && (
@@ -859,7 +860,9 @@ export default function AdminContenidoPage() {
   return (
     <RoleRoute allowedRoles={["superadmin", "admin"]}>
       <AdminShell variant="admin">
-        <ContenidoAdminContent />
+        <Suspense fallback={<p className="auth-loading">Cargando…</p>}>
+          <ContenidoAdminContent />
+        </Suspense>
       </AdminShell>
     </RoleRoute>
   );

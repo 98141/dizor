@@ -150,6 +150,20 @@ exports.getFeaturedProducts = catchAsync(async (req, res) => {
   });
 });
 
+/** Selección aleatoria cacheada 24h (día America/Bogota). */
+exports.getDailyRandomProducts = catchAsync(async (req, res) => {
+  const { getOrCreateDailyPicks } = require("../services/dailyProductService");
+  const limit = Math.min(10, parseInt(req.query.limit, 10) || 10);
+  const { dateKey, products } = await getOrCreateDailyPicks(limit);
+
+  res.status(200).json({
+    status: "success",
+    dateKey,
+    results: products.length,
+    products,
+  });
+});
+
 exports.getProductBySlug = catchAsync(async (req, res, next) => {
   const slug = normalizeSlugParam(req.params.slug);
 

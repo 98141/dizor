@@ -8,15 +8,50 @@ const {
   formatPage,
   formatBanner,
 } = require("../services/cmsService");
+const {
+  getActiveHomeImages,
+  groupHomeImagesBySection,
+  primaryImageUrl,
+} = require("../services/homeImageService");
 const { getStoreSettings } = require("../services/settingsService");
 
 exports.getHomeContent = catchAsync(async (req, res) => {
   const doc = await getOrCreateHomeContent();
   const banners = await getActiveBanners("home_mid");
+  const images = await getActiveHomeImages();
+  const homeImages = groupHomeImagesBySection(images);
+  const home = formatHome(doc);
+
+  // Las imágenes del CMS HomeImage tienen prioridad sobre imageUrl legacy
+  if (home.hero) {
+    home.hero.imageUrl = primaryImageUrl(homeImages, "hero", home.hero.imageUrl);
+  }
+  if (home.historia) {
+    home.historia.imageUrl = primaryImageUrl(
+      homeImages,
+      "historia",
+      home.historia.imageUrl
+    );
+  }
+  if (home.personalizacion) {
+    home.personalizacion.imageUrl = primaryImageUrl(
+      homeImages,
+      "personalizacion",
+      home.personalizacion.imageUrl
+    );
+  }
+  if (home.porMayor) {
+    home.porMayor.imageUrl = primaryImageUrl(
+      homeImages,
+      "pormayor",
+      home.porMayor.imageUrl
+    );
+  }
 
   res.status(200).json({
     status: "success",
-    home: formatHome(doc),
+    home,
+    homeImages,
     banners: banners.map(formatBanner),
   });
 });

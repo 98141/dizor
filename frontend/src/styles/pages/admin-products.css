@@ -73,18 +73,75 @@
 }
 
 .admin-btn {
-  padding: 0.6rem 1.2rem;
-  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.15rem;
+  border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
   background: var(--color-bg-card);
+  color: var(--color-text);
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.15s ease;
+}
+
+.admin-btn:hover:not(:disabled) {
+  border-color: #cfc7ba;
+  background: #f7f3ec;
+  color: var(--color-text);
+}
+
+.admin-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.admin-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.admin-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 .admin-btn--primary {
   background: var(--color-primary);
   color: #fff;
   border-color: var(--color-primary);
+  box-shadow: 0 1px 2px rgba(45, 58, 42, 0.18);
+}
+
+.admin-btn--primary:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(45, 58, 42, 0.22);
+}
+
+.admin-btn--secondary {
+  background: transparent;
+  border-style: dashed;
+  border-color: #cfc7ba;
+  color: var(--color-text-muted);
+}
+
+.admin-btn--secondary:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  border-style: solid;
+  background: rgba(61, 79, 58, 0.06);
+  color: var(--color-primary);
 }
 
 .admin-nav {
@@ -134,17 +191,25 @@
 }
 
 .admin-btn--sm {
-  padding: 0.35rem 0.65rem;
+  padding: 0.4rem 0.8rem;
   font-size: 0.8rem;
+  border-radius: var(--radius-sm);
 }
 
 .admin-btn--danger {
-  border-color: #fecaca;
-  color: #b91c1c;
+  border-color: #e8b4b4;
+  background: #fff8f8;
+  color: var(--color-error);
 }
 
-.admin-btn--danger:hover {
-  background: #fee2e2;
+.admin-btn--danger:hover:not(:disabled) {
+  background: var(--color-error-bg);
+  border-color: #d48a8a;
+  color: var(--color-error);
+}
+
+.admin-btn--block {
+  width: 100%;
 }
 
 .admin-empty {

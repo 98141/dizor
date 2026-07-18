@@ -1,17 +1,15 @@
 import Link from "next/link";
 import Image from "next/image";
-import ProductCard from "@/components/products/ProductCard";
-import PromoBanner from "@/components/cms/PromoBanner";
+import ProductCarousel from "@/components/home/ProductCarousel";
 import NewsletterSignup from "@/components/marketing/NewsletterSignup";
 import ViewItemListTracker from "@/components/analytics/ViewItemListTracker";
 import { getHomeContent } from "@/services/cmsService";
 import { fetchAppearance, getSiteName } from "@/lib/fetchAppearance";
+import { getWhatsAppUrl } from "@/lib/whatsapp";
 
 const HOME_TITLE = "Sombreros artesanales de Sandoná";
 const HOME_DESCRIPTION =
   "Sombreros artesanales en palma de iraca de Sandoná, Nariño. Tejidos Brisa, Común y Súper fino. Envíos a todo Colombia.";
-// Sin imagen de marketing dedicada (1200x630) en el repo: se reutiliza el
-// ícono real del sitio para que OpenGraph/Twitter nunca queden sin imagen.
 const DEFAULT_OG_IMAGE = "/icon-512.png";
 
 export const metadata = {
@@ -44,88 +42,76 @@ export const metadata = {
 
 const BASE = process.env.NEXT_PUBLIC_API_URL;
 
-async function fetchFeatured() {
+async function fetchJson(url, revalidate = 60) {
   try {
-    const res = await fetch(`${BASE}/products/featured?limit=8`, {
-      next: { revalidate: 60 },
-    });
-    if (!res.ok) return [];
-    const data = await res.json();
-    return data.products || [];
+    const res = await fetch(url, { next: { revalidate } });
+    if (!res.ok) return null;
+    return res.json();
   } catch {
-    return [];
+    return null;
   }
 }
 
-async function fetchNewProducts() {
-  try {
-    const res = await fetch(`${BASE}/products?isNew=true&limit=8`, {
-      next: { revalidate: 60 },
-    });
-    if (!res.ok) return [];
-    const data = await res.json();
-    return data.products || [];
-  } catch {
-    return [];
-  }
+function MediaPlaceholder({ label = "Imagen próximamente" }) {
+  return (
+    <div className="home-media-fallback" role="img" aria-label={label}>
+      <span>{label}</span>
+    </div>
+  );
 }
 
-async function fetchBestsellers() {
-  try {
-    const res = await fetch(`${BASE}/products?sort=popular&limit=8`, {
-      next: { revalidate: 120 },
-    });
-    if (!res.ok) return [];
-    const data = await res.json();
-    return data.products || [];
-  } catch {
-    return [];
-  }
-}
-
-async function fetchCraftTypes() {
-  try {
-    const res = await fetch(`${BASE}/products/filters`, {
-      next: { revalidate: 300 },
-    });
-    if (!res.ok) return [];
-    const data = await res.json();
-    return data.filters?.weaveTypes || [];
-  } catch {
-    return [];
-  }
+function Stars({ rating = 5 }) {
+  const n = Math.max(1, Math.min(5, Number(rating) || 5));
+  return (
+    <span className="home-voices__stars" aria-label={`${n} de 5 estrellas`}>
+      {"★".repeat(n)}
+      <span className="home-voices__stars-empty">{"★".repeat(5 - n)}</span>
+    </span>
+  );
 }
 
 export default async function HomePage() {
-  const [cmsData, featured, newProducts, bestsellers, craftTypes, appearance] =
+  const [cmsData, dailyData, reviewsData, filtersData, appearance] =
     await Promise.all([
       getHomeContent().catch(() => null),
-      fetchFeatured(),
-      fetchNewProducts(),
-      fetchBestsellers(),
-      fetchCraftTypes(),
+      fetchJson(`${BASE}/products/daily-random?limit=10`, 300),
+      fetchJson(`${BASE}/reviews?limit=4`, 60),
+      fetchJson(`${BASE}/products/filters`, 300),
       fetchAppearance(),
     ]);
 
   const siteName = getSiteName(appearance);
+  const home = cmsData?.home || {};
+  const homeImages = cmsData?.homeImages || {};
+  const hero = home.hero || {};
+  const features = home.features?.length ? home.features : [];
+  const craftSection = home.craftSection || {};
+  const historia = home.historia || {};
+  const personalizacion = home.personalizacion || {};
+  const porMayor = home.porMayor || {};
+  const inspiracion = home.inspiracion || {};
+  const reseñasSection = home.reseñasSection || {};
+  const randomSection = home.randomProductsSection || {};
+  const newsletterSection = home.newsletterSection || {};
 
-  const home = cmsData?.home;
-  const hero = home?.hero;
-  const features = home?.features?.length ? home.features : [];
-  const featuredSection = home?.featuredSection;
-  const newSection = home?.newSection;
-  const craftSection = home?.craftSection;
-  const historia = home?.historia;
-  const bestsellerSection = home?.bestsellerSection;
-  const midBanner = cmsData?.banners?.[0];
+  const craftTypes = filtersData?.filters?.weaveTypes || [];
+  const coleccionImages = homeImages.coleccion || [];
+  const inspiracionImages = homeImages.inspiracion || [];
+  const dailyProducts = dailyData?.products || [];
+  const reviews = reviewsData?.reviews || [];
 
-  const heroStyle = hero?.imageUrl
-    ? {
-        backgroundImage: `linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url(${hero.imageUrl})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }
-    : undefined;
+  const heroImage =
+    homeImages.hero?.[0]?.url || hero.imageUrl || "";
+  const historiaImage =
+    homeImages.historia?.[0]?.url || historia.imageUrl || "";
+  const personalizacionImage =
+    homeImages.personalizacion?.[0]?.url || personalizacion.imageUrl || "";
+  const porMayorImage =
+    homeImages.pormayor?.[0]?.url || porMayor.imageUrl || "";
+
+  const waPersonalizar = getWhatsAppUrl(
+    "Hola Dizor, quiero personalizar un sombrero."
+  );
 
   const homePageSchema = {
     "@context": "https://schema.org",
@@ -141,18 +127,6 @@ export default async function HomePage() {
     about: {
       "@id": `${process.env.NEXT_PUBLIC_SITE_URL || "https://sombrerosdizor.com.co"}/#organization`,
     },
-    breadcrumb: {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Inicio",
-          item:
-            process.env.NEXT_PUBLIC_SITE_URL || "https://sombrerosdizor.com.co",
-        },
-      ],
-    },
   };
 
   return (
@@ -161,224 +135,474 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homePageSchema) }}
       />
-      {/* ─── HERO ─── */}
-      <section className="home-hero" style={heroStyle}>
+
+      {/* 1. HERO full-bleed */}
+      <section
+        className={`home-hero${heroImage ? " home-hero--has-image" : ""}`}
+        style={
+          heroImage
+            ? { backgroundImage: `url(${heroImage})` }
+            : undefined
+        }
+      >
+        <div className="home-hero__overlay" aria-hidden="true" />
         <div className="home-hero__inner">
-          <h1 className="home-hero__title">
-            {hero?.title || "Sombreros artesanales de Sandoná"}
-          </h1>
-          <p className="home-hero__text">
-            {hero?.subtitle ||
-              "Palma de iraca tejida a mano en Nariño, Colombia. Tradición, elegancia y calidad en cada pieza."}
+          <p className="home-hero__brand home-anim home-anim--1">
+            {hero.brandClaim || siteName || "DIZOR"}
           </p>
-          <Link href={hero?.ctaHref || "/catalogo"} className="home-hero__cta">
-            {hero?.ctaLabel || "Ver catálogo"}
-          </Link>
+          <h1 className="home-hero__title home-anim home-anim--2">
+            {hero.title || "Oficio colombiano, piezas que perduran"}
+          </h1>
+          <p className="home-hero__text home-anim home-anim--3">
+            {hero.subtitle ||
+              "Sombreros de palma de iraca tejidos a mano en Sandoná, Nariño."}
+          </p>
+          <div className="home-hero__ctas home-anim home-anim--4">
+            <Link
+              href={hero.ctaHref || "/catalogo"}
+              className="home-btn home-btn--primary"
+            >
+              {hero.ctaLabel || "Ver catálogo"}
+            </Link>
+            {(hero.secondaryCtaLabel || hero.secondaryCtaHref) && (
+              <Link
+                href={hero.secondaryCtaHref || "/pagina/sobre-dizor"}
+                className="home-btn home-btn--ghost"
+              >
+                {hero.secondaryCtaLabel || "Conoce nuestra historia"}
+              </Link>
+            )}
+          </div>
         </div>
       </section>
 
-      {/* ─── BANNER PROMOCIONAL ─── */}
-      {midBanner && <PromoBanner banner={midBanner} />}
-
-      {/* ─── NOVEDADES ─── */}
-      {newSection?.isActive !== false && newProducts.length > 0 && (
-        <section className="home-section">
-          <div className="home-section__header">
-            <h2 className="home-section__title">
-              {newSection?.title || "Novedades"}
-            </h2>
-            <Link
-              href={newSection?.linkHref || "/catalogo?isNew=true"}
-              className="home-section__link"
-            >
-              {newSection?.linkLabel || "Ver novedades"}
-            </Link>
-          </div>
-          <ViewItemListTracker products={newProducts} listId="home_new" listName="Novedades" />
-          <div className="products-grid">
-            {newProducts.map((product, i) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                itemListId="home_new"
-                itemListName="Novedades"
-                index={i}
-              />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* ─── DESTACADOS ─── */}
-      <section className="home-section">
-        <div className="home-section__header">
-          <h2 className="home-section__title">
-            {featuredSection?.title || "Destacados"}
-          </h2>
-          <Link
-            href={featuredSection?.linkHref || "/catalogo?featured=true"}
-            className="home-section__link"
-          >
-            {featuredSection?.linkLabel || "Ver todos"}
-          </Link>
-        </div>
-        {featured.length > 0 ? (
-          <>
-            <ViewItemListTracker products={featured} listId="home_featured" listName="Destacados" />
-            <div className="products-grid">
-              {featured.map((product, i) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  priority={i === 0}
-                  itemListId="home_featured"
-                  itemListName="Destacados"
-                  index={i}
-                />
+      {/* 2. Beneficios */}
+      {features.length > 0 && (
+        <section className="home-benefits">
+          <div className="home-container">
+            <div className="home-benefits__grid">
+              {features.slice(0, 4).map((feature) => (
+                <div key={feature.title} className="home-benefit">
+                  {feature.icon ? (
+                    <span className="home-benefit__icon" aria-hidden="true">
+                      {feature.icon}
+                    </span>
+                  ) : null}
+                  <h3 className="home-benefit__title">{feature.title}</h3>
+                  <p className="home-benefit__text">{feature.text}</p>
+                </div>
               ))}
             </div>
-          </>
-        ) : (
-          <p className="catalog-empty">
-            Pronto tendremos productos destacados.{" "}
-            <Link href="/catalogo">Explorar catálogo</Link>
-          </p>
-        )}
-      </section>
-
-      {/* ─── TIPOS DE TEJIDO ─── */}
-      {craftTypes.length > 0 && (
-        <section className="home-craft">
-          <div className="home-craft__header">
-            <h2 className="home-craft__title">
-              {craftSection?.title || "Nuestros tejidos"}
-            </h2>
-            {(craftSection?.subtitle || !craftSection) && (
-              <p className="home-craft__subtitle">
-                {craftSection?.subtitle ||
-                  "Cada tipo de tejido tiene su propio carácter, finura y tiempo de elaboración."}
-              </p>
-            )}
-          </div>
-          <div className="home-craft__grid">
-            {craftTypes.map((wt, idx) => (
-              <Link
-                key={wt._id}
-                href={`/catalogo?weaveType=${wt._id}`}
-                className={`home-craft-card home-craft-card--${(idx % 3) + 1}`}
-              >
-                <span className="home-craft-card__name">{wt.name}</span>
-                {wt.description && (
-                  <span className="home-craft-card__desc">
-                    {wt.description}
-                  </span>
-                )}
-                <span className="home-craft-card__cta">
-                  {craftSection?.linkLabel || "Explorar"} →
-                </span>
-              </Link>
-            ))}
           </div>
         </section>
       )}
 
-      {/* ─── HISTORIA DE DIZOR ─── */}
-      {(historia?.title || historia?.body) && (
-        <section
-          className={`home-story${historia?.imageUrl ? " home-story--with-image" : ""}`}
-        >
-          <div className="home-story__inner">
-            {historia?.imageUrl && (
-              <div className="home-story__image-wrap">
-                <Image
-                  src={historia.imageUrl}
-                  alt="Historia Dizor"
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  style={{ objectFit: "cover" }}
-                />
-              </div>
-            )}
+      {/* 3. Colecciones / tejidos */}
+      <section className="home-section home-section--craft">
+        <div className="home-container">
+          <header className="home-section__intro">
+            <p className="home-eyebrow">
+              {craftSection.eyebrow || "COLECCIÓN"}
+            </p>
+            <h2 className="home-section__heading">
+              {craftSection.title || "Nuestros tejidos"}
+            </h2>
+            <p className="home-section__lead">
+              {craftSection.subtitle ||
+                "Explora cada línea de Dizor: carácter, finura y tiempo de elaboración."}
+            </p>
+          </header>
+
+          {coleccionImages.length > 0 ? (
+            <div className="home-collection__grid">
+              {coleccionImages.map((img) => (
+                <Link
+                  key={img.id}
+                  href={img.linkHref || "/catalogo"}
+                  className="home-collection-card"
+                >
+                  <div className="home-collection-card__media">
+                    {img.url ? (
+                      <Image
+                        src={img.url}
+                        alt={img.altText || img.titulo || "Colección Dizor"}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        style={{ objectFit: "cover" }}
+                      />
+                    ) : (
+                      <MediaPlaceholder />
+                    )}
+                  </div>
+                  <div className="home-collection-card__meta">
+                    <span className="home-collection-card__name">
+                      {img.titulo || "Explorar"}
+                    </span>
+                    <span className="home-collection-card__cta">
+                      {craftSection.linkLabel || "Ver"}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : craftTypes.length > 0 ? (
+            <div className="home-collection__grid">
+              {craftTypes.map((wt) => (
+                <Link
+                  key={wt._id}
+                  href={`/catalogo?weaveType=${wt._id}`}
+                  className="home-collection-card home-collection-card--text"
+                >
+                  <div className="home-collection-card__media home-collection-card__media--fallback">
+                    <MediaPlaceholder label={wt.name} />
+                  </div>
+                  <div className="home-collection-card__meta">
+                    <span className="home-collection-card__name">{wt.name}</span>
+                    <span className="home-collection-card__cta">
+                      {craftSection.linkLabel || "Ver"}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <p className="home-section__empty">
+              Pronto verás nuestras colecciones.{" "}
+              <Link href="/catalogo">Ir al catálogo</Link>
+            </p>
+          )}
+        </div>
+      </section>
+
+      {/* 4. Historia */}
+      <section className="home-section home-section--story">
+        <div className="home-container">
+          <div
+            className={`home-story${historiaImage ? " home-story--with-image" : ""}`}
+          >
+            <div className="home-story__media">
+              {historiaImage ? (
+                <div className="home-story__image-wrap">
+                  <Image
+                    src={historiaImage}
+                    alt={
+                      homeImages.historia?.[0]?.altText ||
+                      "Historia Dizor"
+                    }
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    style={{ objectFit: "cover" }}
+                  />
+                </div>
+              ) : (
+                <MediaPlaceholder />
+              )}
+            </div>
             <div className="home-story__content">
-              <h2 className="home-story__title">
-                {historia?.title || "Nuestra historia"}
+              <p className="home-eyebrow">
+                {historia.eyebrow || "ORIGEN"}
+              </p>
+              <h2 className="home-section__heading">
+                {historia.title || "Del oficio a tu cotidianidad"}
               </h2>
               <p className="home-story__body">
-                {historia?.body ||
-                  "Desde las manos de las artesanas de Sandoná, Nariño, nace cada sombrero Dizor."}
+                {historia.body ||
+                  "Desde las manos de las artesanas de Sandoná nace cada sombrero Dizor."}
               </p>
-              {historia?.ctaLabel && historia?.ctaHref && (
-                <Link href={historia.ctaHref} className="home-story__cta">
+              {historia.ctaLabel && (
+                <Link
+                  href={historia.ctaHref || "/pagina/sobre-dizor"}
+                  className="home-text-link"
+                >
                   {historia.ctaLabel}
                 </Link>
               )}
             </div>
           </div>
-        </section>
-      )}
+        </div>
+      </section>
 
-      {/* ═══════════════════════════════════════════════════════════════
-          MÁS VENDIDOS
-          Activar cuando el catálogo tenga historial de ventas suficiente.
-          Pasos para activar:
-            1. Ir al admin → CMS → Inicio
-            2. Cambiar "bestsellerSection.isActive" a true
-            La sección se mostrará automáticamente cuando haya productos
-            con salesCount > 0. Si no hay ventas aún, no aparece aunque
-            isActive esté en true (bestsellers.length === 0).
-          ═══════════════════════════════════════════════════════════════ */}
-      {bestsellerSection?.isActive && bestsellers.length > 0 && (
-        <section className="home-section">
-          <div className="home-section__header">
-            <h2 className="home-section__title">
-              {bestsellerSection?.title || "Más vendidos"}
-            </h2>
-            <Link
-              href={bestsellerSection?.linkHref || "/catalogo?sort=popular"}
-              className="home-section__link"
-            >
-              {bestsellerSection?.linkLabel || "Ver todos"}
-            </Link>
-          </div>
-          <ViewItemListTracker
-            products={bestsellers}
-            listId="home_bestsellers"
-            listName="Más vendidos"
-          />
-          <div className="products-grid">
-            {bestsellers.map((product, i) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                itemListId="home_bestsellers"
-                itemListName="Más vendidos"
-                index={i}
-              />
-            ))}
+      {/* 5. Productos aleatorios 24h */}
+      {randomSection.isActive !== false && dailyProducts.length > 0 && (
+        <section className="home-section home-section--border">
+          <div className="home-container">
+            <header className="home-section__intro">
+              <p className="home-eyebrow">
+                {randomSection.eyebrow || "DESCUBRE"}
+              </p>
+              <h2 className="home-section__heading">
+                {randomSection.title || "Piezas para explorar hoy"}
+              </h2>
+              <p className="home-section__lead">
+                {randomSection.subtitle ||
+                  "Una selección renovada cada día desde nuestro catálogo."}
+              </p>
+            </header>
+            <ViewItemListTracker
+              products={dailyProducts}
+              listId="home_daily"
+              listName="Selección del día"
+            />
+            <ProductCarousel products={dailyProducts} />
           </div>
         </section>
       )}
 
-      {/* ─── CARACTERÍSTICAS / PROPUESTA DE VALOR ─── */}
-      {features.length > 0 && (
-        <section className="home-section">
-          <div className="home-features">
-            {features.map((feature) => (
-              <div key={feature.title} className="home-feature">
-                <h3 className="home-feature__title">{feature.title}</h3>
-                <p className="home-feature__text">{feature.text}</p>
+      {/* 6. Personalización */}
+      <section className="home-section home-section--border">
+        <div className="home-container">
+          <div
+            className={`home-personalize${
+              personalizacion.imageOnLeft !== false
+                ? " home-personalize--image-left"
+                : ""
+            }`}
+          >
+            <div className="home-personalize__content">
+              <p className="home-eyebrow">
+                {personalizacion.eyebrow || "A TU MEDIDA"}
+              </p>
+              <h2 className="home-section__heading">
+                {personalizacion.title || "Personaliza tu sombrero"}
+              </h2>
+              <p className="home-section__lead">
+                {personalizacion.body ||
+                  "Iniciales, monogramas y detalles que hacen única tu pieza."}
+              </p>
+              {Array.isArray(personalizacion.bullets) &&
+                personalizacion.bullets.length > 0 && (
+                  <ul className="home-personalize__list">
+                    {personalizacion.bullets.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                )}
+              <div className="home-personalize__actions">
+                <Link
+                  href={personalizacion.ctaHref || "/personalizar"}
+                  className="home-btn home-btn--primary home-btn--solid"
+                >
+                  {personalizacion.ctaLabel || "Personalizar"}
+                </Link>
+                <a
+                  href={waPersonalizar}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="home-personalize__wa-hint"
+                >
+                  {personalizacion.whatsappHint ||
+                    "También puedes escribirnos por WhatsApp"}
+                </a>
               </div>
-            ))}
+            </div>
+            <div className="home-personalize__media">
+              {personalizacionImage ? (
+                <div className="home-personalize__image-wrap">
+                  <Image
+                    src={personalizacionImage}
+                    alt={
+                      homeImages.personalizacion?.[0]?.altText ||
+                      "Personalización Dizor"
+                    }
+                    fill
+                    sizes="(max-width: 768px) 100vw, 40vw"
+                    style={{ objectFit: "cover" }}
+                  />
+                </div>
+              ) : (
+                <MediaPlaceholder />
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 7. Voces / reseñas */}
+      {reseñasSection.isActive !== false && reviews.length > 0 && (
+        <section className="home-section home-section--border">
+          <div className="home-container">
+            <header className="home-section__intro">
+              <p className="home-eyebrow">
+                {reseñasSection.eyebrow || "VOCES"}
+              </p>
+              <h2 className="home-section__heading">
+                {reseñasSection.title || "Quienes ya eligieron Dizor"}
+              </h2>
+            </header>
+            <div className="home-voices__grid">
+              {reviews.map((review) => (
+                <blockquote key={review.id} className="home-voice">
+                  <Stars rating={review.rating} />
+                  <p className="home-voice__quote">
+                    &ldquo;{review.comment}&rdquo;
+                  </p>
+                  <footer className="home-voice__author">
+                    <strong>{review.authorName}</strong>
+                    {review.city ? (
+                      <span className="home-voice__city">
+                        {review.city.toUpperCase()}
+                      </span>
+                    ) : null}
+                  </footer>
+                </blockquote>
+              ))}
+            </div>
           </div>
         </section>
       )}
 
-      {/* ─── NEWSLETTER ─── */}
+      {/* 8. Inspiración */}
+      <section className="home-section home-section--border">
+        <div className="home-container">
+          <div className="home-inspire__header">
+            <div>
+              <p className="home-eyebrow">
+                {inspiracion.eyebrow || "INSPIRACIÓN"}
+              </p>
+              <h2 className="home-section__heading">
+                {inspiracion.title || "La pieza en la vida real"}
+              </h2>
+              <p className="home-section__lead">
+                {inspiracion.subtitle ||
+                  "Una selección visual del universo Dizor."}
+              </p>
+            </div>
+            {inspiracion.instagramUrl ? (
+              <a
+                href={inspiracion.instagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="home-btn home-btn--outline"
+              >
+                {inspiracion.ctaLabel || "Síguenos en Instagram"}
+              </a>
+            ) : null}
+          </div>
+
+          <div className="home-inspire__mosaic">
+            {Array.from({ length: 5 }, (_, idx) => {
+              const img = inspiracionImages[idx];
+              const href =
+                img?.linkHref ||
+                inspiracion.instagramUrl ||
+                undefined;
+              const className = `home-inspire__cell home-inspire__cell--${idx + 1}`;
+
+              if (img?.url) {
+                const Tag = href ? "a" : "div";
+                const linkProps = href
+                  ? {
+                      href,
+                      target: "_blank",
+                      rel: "noopener noreferrer",
+                    }
+                  : {};
+                return (
+                  <Tag
+                    key={img.id || `inspire-${idx}`}
+                    className={className}
+                    {...linkProps}
+                  >
+                    <Image
+                      src={img.url}
+                      alt={img.altText || "Inspiración Dizor"}
+                      fill
+                      sizes="(max-width: 768px) 50vw, 40vw"
+                      style={{ objectFit: "cover" }}
+                    />
+                  </Tag>
+                );
+              }
+
+              return (
+                <div
+                  key={`inspire-slot-${idx}`}
+                  className={`${className} home-inspire__cell--empty`}
+                  aria-label="Imagen próximamente"
+                >
+                  <MediaPlaceholder label="Imagen próximamente" />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* 9. Pedido al por mayor (debajo del mosaico) */}
+      <section className="home-section home-section--border">
+        <div className="home-container">
+          <div
+            className={`home-personalize${
+              porMayor.imageOnLeft !== false
+                ? " home-personalize--image-left"
+                : ""
+            }`}
+          >
+            <div className="home-personalize__content">
+              <p className="home-eyebrow">
+                {porMayor.eyebrow || "POR VOLUMEN"}
+              </p>
+              <h2 className="home-section__heading">
+                {porMayor.title || "Pedidos al por mayor"}
+              </h2>
+              <p className="home-section__lead">
+                {porMayor.body ||
+                  "Para tiendas, eventos o distribución. Cotizamos según cantidades y referencias."}
+              </p>
+              {Array.isArray(porMayor.bullets) && porMayor.bullets.length > 0 && (
+                <ul className="home-personalize__list">
+                  {porMayor.bullets.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              )}
+              <div className="home-personalize__actions">
+                <Link
+                  href={porMayor.ctaHref || "/pedido-mayor"}
+                  className="home-btn home-btn--primary home-btn--solid"
+                >
+                  {porMayor.ctaLabel || "Solicitar cotización"}
+                </Link>
+              </div>
+            </div>
+            <div className="home-personalize__media">
+              {porMayorImage ? (
+                <div className="home-personalize__image-wrap">
+                  <Image
+                    src={porMayorImage}
+                    alt={
+                      homeImages.pormayor?.[0]?.altText ||
+                      "Pedido al por mayor Dizor"
+                    }
+                    fill
+                    sizes="(max-width: 768px) 100vw, 40vw"
+                    style={{ objectFit: "cover" }}
+                  />
+                </div>
+              ) : (
+                <MediaPlaceholder />
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 10. Newsletter */}
       <section className="home-newsletter">
-        <div className="home-newsletter__inner">
+        <div className="home-container home-newsletter__inner">
+          <p className="home-eyebrow">
+            {newsletterSection.eyebrow || "NOVEDADES"}
+          </p>
+          <h2 className="home-section__heading">
+            {newsletterSection.title || "Entérate de las piezas nuevas"}
+          </h2>
+          <p className="home-section__lead">
+            {newsletterSection.subtitle ||
+              "Avisos puntuales de colecciones, personalización y el oficio detrás de cada trama."}
+          </p>
           <NewsletterSignup
-            title="Únete a la comunidad Dizor"
-            description="Recibe primero los nuevos lanzamientos, ofertas exclusivas e historias de nuestros artesanos."
+            title=""
+            description=""
             source="home"
           />
         </div>

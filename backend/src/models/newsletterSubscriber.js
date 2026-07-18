@@ -14,7 +14,7 @@ const newsletterSubscriberSchema = new mongoose.Schema(
     name: { type: String, trim: true, default: "" },
     source: {
       type: String,
-      enum: ["footer", "popup", "checkout", "admin", "other"],
+      enum: ["footer", "popup", "checkout", "admin", "home", "other"],
       default: "footer",
     },
     isActive: { type: Boolean, default: true },

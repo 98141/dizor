@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.get("/filters", productPublicController.getCatalogFilters);
 router.get("/featured", productPublicController.getFeaturedProducts);
+router.get("/daily-random", productPublicController.getDailyRandomProducts);
 router.get("/", productPublicController.getProducts);
 
 router.get(

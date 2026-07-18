@@ -2,6 +2,7 @@ import { cache } from "react";
 import { notFound } from "next/navigation";
 import ProductoClient from "@/components/products/ProductoClient";
 import ProductCard from "@/components/products/ProductCard";
+import ProductReviews from "@/components/products/ProductReviews";
 import { BreadcrumbJsonLd } from "@/components/seo/Breadcrumbs";
 import ViewItemListTracker from "@/components/analytics/ViewItemListTracker";
 
@@ -166,6 +167,8 @@ export default async function ProductoPage({ params }) {
             <p>{p.fullDescription}</p>
           </div>
         )}
+
+        <ProductReviews productId={p.id} productName={p.name} />
 
         {data.related?.length > 0 && (
           <section className="product-detail__related">

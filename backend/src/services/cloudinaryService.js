@@ -16,14 +16,14 @@ const uploadFromBuffer = (buffer, folder = "dizor/products") =>
     stream.end(buffer);
   });
 
-exports.uploadProductImages = async (files) => {
+exports.uploadProductImages = async (files, folder = "dizor/products") => {
   if (!isCloudinaryConfigured()) {
     throw new Error("Cloudinary no configurado");
   }
 
   const uploads = await Promise.all(
     files.map(async (file) => {
-      const result = await uploadFromBuffer(file.buffer);
+      const result = await uploadFromBuffer(file.buffer, folder);
       return {
         url: result.secure_url,
         publicId: result.public_id,
@@ -34,6 +34,9 @@ exports.uploadProductImages = async (files) => {
 
   return uploads;
 };
+
+exports.uploadHomeImages = async (files) =>
+  exports.uploadProductImages(files, "dizor/home");
 
 exports.deleteImage = async (publicId) => {
   if (!publicId || !isCloudinaryConfigured()) return;

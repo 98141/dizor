@@ -33,6 +33,26 @@ exports.updateHomeContent = catchAsync(async (req, res) => {
   if (req.body.announcement) {
     Object.assign(doc.announcement, req.body.announcement);
   }
+  if (req.body.newSection) Object.assign(doc.newSection, req.body.newSection);
+  if (req.body.craftSection) Object.assign(doc.craftSection, req.body.craftSection);
+  if (req.body.historia) Object.assign(doc.historia, req.body.historia);
+  if (req.body.personalizacion) {
+    Object.assign(doc.personalizacion, req.body.personalizacion);
+  }
+  if (req.body.porMayor) Object.assign(doc.porMayor, req.body.porMayor);
+  if (req.body.inspiracion) Object.assign(doc.inspiracion, req.body.inspiracion);
+  if (req.body.reseñasSection) {
+    Object.assign(doc.reseñasSection, req.body.reseñasSection);
+  }
+  if (req.body.randomProductsSection) {
+    Object.assign(doc.randomProductsSection, req.body.randomProductsSection);
+  }
+  if (req.body.newsletterSection) {
+    Object.assign(doc.newsletterSection, req.body.newsletterSection);
+  }
+  if (req.body.bestsellerSection) {
+    Object.assign(doc.bestsellerSection, req.body.bestsellerSection);
+  }
 
   await doc.save();
 

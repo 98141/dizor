@@ -4,6 +4,7 @@ const featureSchema = new mongoose.Schema(
   {
     title: { type: String, trim: true, required: true },
     text: { type: String, trim: true, default: "" },
+    icon: { type: String, trim: true, default: "" },
   },
   { _id: false }
 );
@@ -16,19 +17,34 @@ const homeContentSchema = new mongoose.Schema(
       default: "default",
     },
     hero: {
+      brandClaim: {
+        type: String,
+        trim: true,
+        default: "DIZOR",
+      },
       title: {
         type: String,
         trim: true,
-        default: "Sombreros artesanales de Sandoná",
+        default: "Oficio colombiano, piezas que perduran",
       },
       subtitle: {
         type: String,
         trim: true,
         default:
-          "Palma de iraca tejida a mano en Nariño, Colombia. Tradición, elegancia y calidad en cada pieza.",
+          "Sombreros de palma de iraca tejidos a mano en Sandoná, Nariño. Tradición, elegancia y calidad en cada pieza.",
       },
       ctaLabel: { type: String, trim: true, default: "Ver catálogo" },
       ctaHref: { type: String, trim: true, default: "/catalogo" },
+      secondaryCtaLabel: {
+        type: String,
+        trim: true,
+        default: "Conoce nuestra historia",
+      },
+      secondaryCtaHref: {
+        type: String,
+        trim: true,
+        default: "/pagina/sobre-dizor",
+      },
       imageUrl: { type: String, trim: true, default: "" },
     },
     features: {
@@ -52,19 +68,22 @@ const homeContentSchema = new mongoose.Schema(
       isActive: { type: Boolean, default: true },
     },
     craftSection: {
+      eyebrow: { type: String, trim: true, default: "COLECCIÓN" },
       title: { type: String, trim: true, default: "Nuestros tejidos" },
       subtitle: {
         type: String,
         trim: true,
-        default: "Cada tipo de tejido tiene su propio carácter, finura y tiempo de elaboración.",
+        default:
+          "Explora cada línea de Dizor: Brisa, Común y Súper fino — carácter, finura y tiempo de elaboración.",
       },
-      linkLabel: { type: String, trim: true, default: "Explorar" },
+      linkLabel: { type: String, trim: true, default: "Ver" },
     },
     historia: {
+      eyebrow: { type: String, trim: true, default: "ORIGEN" },
       title: {
         type: String,
         trim: true,
-        default: "Tejidos de Sandoná, historia en cada puntada",
+        default: "Del páramo a la fibra, de la fibra a la pieza",
       },
       body: {
         type: String,
@@ -76,11 +95,137 @@ const homeContentSchema = new mongoose.Schema(
       ctaLabel: { type: String, trim: true, default: "Sobre Dizor" },
       ctaHref: { type: String, trim: true, default: "/pagina/sobre-dizor" },
     },
+    personalizacion: {
+      eyebrow: { type: String, trim: true, default: "A TU MEDIDA" },
+      title: {
+        type: String,
+        trim: true,
+        default: "Personaliza tu sombrero",
+      },
+      body: {
+        type: String,
+        trim: true,
+        default:
+          "Iniciales, monogramas, ajustes de horma y detalles que hacen única tu pieza. Te acompañamos por WhatsApp para definir cada detalle.",
+      },
+      bullets: {
+        type: [String],
+        default: [
+          "Iniciales y monogramas",
+          "Ajustes de horma y acabado",
+          "Pedidos especiales bajo consulta",
+        ],
+        validate: {
+          validator: (arr) => !arr || arr.length <= 5,
+          message: "Máximo 5 bullets",
+        },
+      },
+      ctaLabel: { type: String, trim: true, default: "Personalizar" },
+      ctaHref: { type: String, trim: true, default: "/personalizar" },
+      whatsappHint: {
+        type: String,
+        trim: true,
+        default: "También puedes escribirnos por WhatsApp",
+      },
+      imageUrl: { type: String, trim: true, default: "" },
+      /** true = imagen izquierda / texto derecha */
+      imageOnLeft: { type: Boolean, default: true },
+    },
+    porMayor: {
+      eyebrow: { type: String, trim: true, default: "POR VOLUMEN" },
+      title: {
+        type: String,
+        trim: true,
+        default: "Pedidos al por mayor",
+      },
+      body: {
+        type: String,
+        trim: true,
+        default:
+          "Para tiendas, eventos o distribución. Cotizamos según cantidades y referencias, con atención directa desde Dizor.",
+      },
+      bullets: {
+        type: [String],
+        default: [
+          "Mínimo 5 unidades",
+          "Cotización personalizada por referencias",
+          "Ideal para tiendas, eventos y distribución",
+        ],
+        validate: {
+          validator: (arr) => !arr || arr.length <= 5,
+          message: "Máximo 5 bullets",
+        },
+      },
+      ctaLabel: { type: String, trim: true, default: "Solicitar cotización" },
+      ctaHref: { type: String, trim: true, default: "/pedido-mayor" },
+      imageUrl: { type: String, trim: true, default: "" },
+      imageOnLeft: { type: Boolean, default: true },
+    },
+    inspiracion: {
+      eyebrow: { type: String, trim: true, default: "INSPIRACIÓN" },
+      title: {
+        type: String,
+        trim: true,
+        default: "La pieza en la vida real",
+      },
+      subtitle: {
+        type: String,
+        trim: true,
+        default:
+          "Una selección visual del universo Dizor: fotografías curadas del oficio y de nuestras piezas.",
+      },
+      ctaLabel: {
+        type: String,
+        trim: true,
+        default: "Síguenos en Instagram",
+      },
+      instagramUrl: {
+        type: String,
+        trim: true,
+        default: "https://www.instagram.com/",
+      },
+    },
+    reseñasSection: {
+      eyebrow: { type: String, trim: true, default: "VOCES" },
+      title: {
+        type: String,
+        trim: true,
+        default: "Quienes ya eligieron Dizor",
+      },
+      isActive: { type: Boolean, default: true },
+    },
+    randomProductsSection: {
+      eyebrow: { type: String, trim: true, default: "DESCUBRE" },
+      title: {
+        type: String,
+        trim: true,
+        default: "Piezas para explorar hoy",
+      },
+      subtitle: {
+        type: String,
+        trim: true,
+        default: "Una selección renovada cada día desde nuestro catálogo.",
+      },
+      isActive: { type: Boolean, default: true },
+    },
+    newsletterSection: {
+      eyebrow: { type: String, trim: true, default: "NOVEDADES" },
+      title: {
+        type: String,
+        trim: true,
+        default: "Entérate de las piezas nuevas",
+      },
+      subtitle: {
+        type: String,
+        trim: true,
+        default:
+          "Avisos puntuales de colecciones, personalización y el oficio detrás de cada trama.",
+      },
+    },
     bestsellerSection: {
       title: { type: String, trim: true, default: "Más vendidos" },
       linkLabel: { type: String, trim: true, default: "Ver todos" },
       linkHref: { type: String, trim: true, default: "/catalogo?sort=popular" },
-      // Mantener en false hasta tener suficiente historial de ventas
       isActive: { type: Boolean, default: false },
     },
   },
