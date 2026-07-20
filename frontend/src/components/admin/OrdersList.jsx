@@ -546,10 +546,19 @@ export default function OrdersList({ basePath = "/admin/pedidos" }) {
               {orders.map((order) => (
                 <tr key={order.id}>
                   <td>
-                    <Link href={`${basePath}/${order.id}`}>{order.orderNumber}</Link>
-                    <div style={{ marginTop: "0.15rem" }}>
+                    <div style={{ fontFamily: "monospace", fontSize: "0.8rem" }}>
+                      {order.orderNumber}
+                    </div>
+                    <div style={{ marginTop: "0.3rem" }}>
                       <SourceBadge source={order.source} channelOrigin={order.channelOrigin} />
                     </div>
+                    <Link
+                      href={`${basePath}/${order.id}`}
+                      className="admin-btn admin-btn--sm admin-btn--primary"
+                      style={{ marginTop: "0.4rem" }}
+                    >
+                      Ver pedido
+                    </Link>
                   </td>
                   <td>
                     {order.buyer?.name}

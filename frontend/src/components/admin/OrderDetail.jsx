@@ -223,44 +223,58 @@ export default function OrderDetail({ orderId, backHref }) {
           </div>
 
           <div className="order-detail-card">
-            <h2>Productos</h2>
-            <div className="order-items-list">
-              {order.items.map((item) => (
-                <div key={item._id} className="order-item">
-                  <div className="order-item__img-wrap">
-                    {item.productImage ? (
-                      <img
-                        src={item.productImage}
-                        alt={item.productName}
-                        className="order-item__img"
-                      />
-                    ) : (
-                      <div className="order-item__img-placeholder" />
-                    )}
-                  </div>
-                  <div className="order-item__body">
-                    <p className="order-item__name">{item.productName}</p>
-                    {item.sku && (
-                      <p className="order-item__sku">SKU: {item.sku}</p>
-                    )}
-                    <div className="order-item__meta">
-                      {item.sizeName && (
-                        <span>Talla: {item.sizeName}</span>
-                      )}
-                      {item.colorName && (
-                        <span>Color: {item.colorName}</span>
-                      )}
-                      <span>x{item.quantity}</span>
-                      {(item.unitPrice ?? 0) > 0 && (
-                        <span>{formatCOP(item.unitPrice)} / u</span>
-                      )}
-                    </div>
-                  </div>
-                  <p className="order-item__total">
-                    {formatCOP(item.lineTotal ?? 0)}
-                  </p>
-                </div>
-              ))}
+            <h2>Productos ({order.items.length})</h2>
+            <div className="admin-table-wrap">
+              <table className="admin-table order-items-table">
+                <thead>
+                  <tr>
+                    <th>Producto</th>
+                    <th>Talla</th>
+                    <th>Color</th>
+                    <th>Cant.</th>
+                    <th>Precio unit.</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {order.items.map((item) => (
+                    <tr key={item._id}>
+                      <td>
+                        <div className="order-item-cell">
+                          <div className="order-item__img-wrap">
+                            {item.productImage ? (
+                              <img
+                                src={item.productImage}
+                                alt={item.productName}
+                                className="order-item__img"
+                              />
+                            ) : (
+                              <div className="order-item__img-placeholder" />
+                            )}
+                          </div>
+                          <div>
+                            <p className="order-item__name">{item.productName}</p>
+                            {item.sku && (
+                              <p className="order-item__sku">SKU: {item.sku}</p>
+                            )}
+                          </div>
+                        </div>
+                      </td>
+                      <td>{item.sizeName || "—"}</td>
+                      <td>{item.colorName || "—"}</td>
+                      <td>{item.quantity}</td>
+                      <td>
+                        {(item.unitPrice ?? 0) > 0
+                          ? formatCOP(item.unitPrice)
+                          : "—"}
+                      </td>
+                      <td className="order-item__total-cell">
+                        {formatCOP(item.lineTotal ?? 0)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
 
