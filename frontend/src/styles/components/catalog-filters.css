@@ -136,8 +136,14 @@
 
 .products-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-lg);
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.85rem;
+}
+
+@media (min-width: 640px) {
+  .products-grid {
+    gap: var(--space-lg);
+  }
 }
 
 .catalog-sort select {

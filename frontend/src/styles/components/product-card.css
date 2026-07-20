@@ -155,3 +155,33 @@
   color: var(--color-error);
   font-weight: 500;
 }
+
+@media (max-width: 767px) {
+  .product-card__body {
+    padding: var(--space-sm);
+    gap: 0.3rem;
+  }
+
+  .product-card__meta {
+    font-size: 0.65rem;
+  }
+
+  .product-card__title {
+    font-size: 0.9rem;
+    line-height: 1.25;
+  }
+
+  .product-card__price-current {
+    font-size: 0.9rem;
+  }
+
+  .product-card__price-old {
+    font-size: 0.75rem;
+  }
+
+  .product-card__color-dot,
+  .product-card__color-dot--text {
+    width: 12px;
+    height: 12px;
+  }
+}

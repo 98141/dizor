@@ -32,14 +32,14 @@ export default async function SiteFooter() {
         </div>
 
         <div className="site-footer__grid">
-          <div>
+          <div className="site-footer__col">
             <strong className="site-footer__heading">Tienda</strong>
             <Link href="/catalogo">Catálogo</Link>
             <Link href="/catalogo?featured=true">Destacados</Link>
             <Link href="/personalizar">Personalizar</Link>
             <Link href="/pedido-mayor">Por mayor</Link>
           </div>
-          <div>
+          <div className="site-footer__col">
             <strong className="site-footer__heading">Ayuda</strong>
             <Link href="/cuenta">Mi cuenta</Link>
             <Link href="/seguimiento">Seguimiento de pedido</Link>
@@ -53,7 +53,7 @@ export default async function SiteFooter() {
             </TrackedWhatsAppLink>
             <CookieSettingsLink />
           </div>
-          <div>
+          <div className="site-footer__col">
             <strong className="site-footer__heading">Información</strong>
             {pages.map((p) => (
               <Link key={p.slug} href={`/pagina/${p.slug}`}>

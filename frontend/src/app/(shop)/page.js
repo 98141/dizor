@@ -97,8 +97,10 @@ export default async function HomePage() {
   const newsletterSection = home.newsletterSection || {};
 
   const craftTypes = filtersData?.filters?.weaveTypes || [];
-  const coleccionImages = homeImages.coleccion || [];
-  const inspiracionImages = homeImages.inspiracion || [];
+  const coleccionImages = (homeImages.coleccion || []).filter((img) => img?.url);
+  const inspiracionImages = (homeImages.inspiracion || []).filter(
+    (img) => img?.url
+  );
   const dailyProducts = dailyData?.products || [];
   const newProducts = newProductsData?.products || [];
   const reviews = reviewsData?.reviews || [];
@@ -265,17 +267,13 @@ export default async function HomePage() {
                   className="home-collection-card"
                 >
                   <div className="home-collection-card__media">
-                    {img.url ? (
-                      <Image
-                        src={img.url}
-                        alt={img.altText || img.titulo || "Colección Dizor"}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 33vw"
-                        style={{ objectFit: "cover" }}
-                      />
-                    ) : (
-                      <MediaPlaceholder />
-                    )}
+                    <Image
+                      src={img.url}
+                      alt={img.altText || img.titulo || "Colección Dizor"}
+                      fill
+                      sizes="(max-width: 768px) 50vw, 33vw"
+                      style={{ objectFit: "cover" }}
+                    />
                   </div>
                   <div className="home-collection-card__meta">
                     <span className="home-collection-card__name">
@@ -323,8 +321,8 @@ export default async function HomePage() {
           <div
             className={`home-story${historiaImage ? " home-story--with-image" : ""}`}
           >
-            <div className="home-story__media">
-              {historiaImage ? (
+            {historiaImage && (
+              <div className="home-story__media">
                 <div className="home-story__image-wrap">
                   <Image
                     src={historiaImage}
@@ -337,10 +335,8 @@ export default async function HomePage() {
                     style={{ objectFit: "cover" }}
                   />
                 </div>
-              ) : (
-                <MediaPlaceholder />
-              )}
-            </div>
+              </div>
+            )}
             <div className="home-story__content">
               <p className="home-eyebrow">
                 {historia.eyebrow || "ORIGEN"}
@@ -399,7 +395,7 @@ export default async function HomePage() {
               personalizacion.imageOnLeft !== false
                 ? " home-personalize--image-left"
                 : ""
-            }`}
+            }${!personalizacionImage ? " home-personalize--no-media" : ""}`}
           >
             <div className="home-personalize__content">
               <p className="home-eyebrow">
@@ -438,8 +434,8 @@ export default async function HomePage() {
                 </a>
               </div>
             </div>
-            <div className="home-personalize__media">
-              {personalizacionImage ? (
+            {personalizacionImage && (
+              <div className="home-personalize__media">
                 <div className="home-personalize__image-wrap">
                   <Image
                     src={personalizacionImage}
@@ -452,10 +448,8 @@ export default async function HomePage() {
                     style={{ objectFit: "cover" }}
                   />
                 </div>
-              ) : (
-                <MediaPlaceholder />
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -495,55 +489,45 @@ export default async function HomePage() {
       )}
 
       {/* 8. Inspiración */}
-      <section className="home-section home-section--border">
-        <div className="home-container">
-          <div className="home-inspire__header">
-            <div>
-              <p className="home-eyebrow">
-                {inspiracion.eyebrow || "INSPIRACIÓN"}
-              </p>
-              <h2 className="home-section__heading">
-                {inspiracion.title || "La pieza en la vida real"}
-              </h2>
-              <p className="home-section__lead">
-                {inspiracion.subtitle ||
-                  "Una selección visual del universo Dizor."}
-              </p>
+      {inspiracionImages.length > 0 && (
+        <section className="home-section home-section--border">
+          <div className="home-container">
+            <div className="home-inspire__header">
+              <div>
+                <p className="home-eyebrow">
+                  {inspiracion.eyebrow || "INSPIRACIÓN"}
+                </p>
+                <h2 className="home-section__heading">
+                  {inspiracion.title || "La pieza en la vida real"}
+                </h2>
+                <p className="home-section__lead">
+                  {inspiracion.subtitle ||
+                    "Una selección visual del universo Dizor."}
+                </p>
+              </div>
+              {inspiracion.instagramUrl ? (
+                <a
+                  href={inspiracion.instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="home-btn home-btn--outline"
+                >
+                  {inspiracion.ctaLabel || "Síguenos en Instagram"}
+                </a>
+              ) : null}
             </div>
-            {inspiracion.instagramUrl ? (
-              <a
-                href={inspiracion.instagramUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="home-btn home-btn--outline"
-              >
-                {inspiracion.ctaLabel || "Síguenos en Instagram"}
-              </a>
-            ) : null}
-          </div>
 
-          <div className="home-inspire__mosaic">
-            {Array.from({ length: 5 }, (_, idx) => {
-              const img = inspiracionImages[idx];
-              const href =
-                img?.linkHref ||
-                inspiracion.instagramUrl ||
-                undefined;
-              const className = `home-inspire__cell home-inspire__cell--${idx + 1}`;
-
-              if (img?.url) {
+            <div className="home-inspire__mosaic">
+              {inspiracionImages.slice(0, 5).map((img, idx) => {
+                const href = img.linkHref || inspiracion.instagramUrl || undefined;
                 const Tag = href ? "a" : "div";
                 const linkProps = href
-                  ? {
-                      href,
-                      target: "_blank",
-                      rel: "noopener noreferrer",
-                    }
+                  ? { href, target: "_blank", rel: "noopener noreferrer" }
                   : {};
                 return (
                   <Tag
                     key={img.id || `inspire-${idx}`}
-                    className={className}
+                    className={`home-inspire__cell home-inspire__cell--${idx + 1}`}
                     {...linkProps}
                   >
                     <Image
@@ -551,25 +535,15 @@ export default async function HomePage() {
                       alt={img.altText || "Inspiración Dizor"}
                       fill
                       sizes="(max-width: 768px) 50vw, 40vw"
-                      style={{ objectFit: "contain" }}
+                      style={{ objectFit: "cover" }}
                     />
                   </Tag>
                 );
-              }
-
-              return (
-                <div
-                  key={`inspire-slot-${idx}`}
-                  className={`${className} home-inspire__cell--empty`}
-                  aria-label="Imagen próximamente"
-                >
-                  <MediaPlaceholder label="Imagen próximamente" />
-                </div>
-              );
-            })}
+              })}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* 9. Pedido al por mayor (debajo del mosaico) */}
       <section className="home-section home-section--border">
@@ -579,7 +553,7 @@ export default async function HomePage() {
               porMayor.imageOnLeft !== false
                 ? " home-personalize--image-left"
                 : ""
-            }`}
+            }${!porMayorImage ? " home-personalize--no-media" : ""}`}
           >
             <div className="home-personalize__content">
               <p className="home-eyebrow">
@@ -608,8 +582,8 @@ export default async function HomePage() {
                 </Link>
               </div>
             </div>
-            <div className="home-personalize__media">
-              {porMayorImage ? (
+            {porMayorImage && (
+              <div className="home-personalize__media">
                 <div className="home-personalize__image-wrap">
                   <Image
                     src={porMayorImage}
@@ -622,10 +596,8 @@ export default async function HomePage() {
                     style={{ objectFit: "cover" }}
                   />
                 </div>
-              ) : (
-                <MediaPlaceholder />
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
