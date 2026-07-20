@@ -505,7 +505,7 @@ function ContenidoAdminContent() {
         CMS, banners, páginas, imágenes del home, reseñas, marketing y apariencia del sitio.
       </p>
 
-      <nav className="cms-tabs">
+      <nav className="cms-tabs" aria-label="Secciones de contenido">
         {TABS.map((t) => (
           <button
             key={t.id}
@@ -606,6 +606,12 @@ function ContenidoAdminContent() {
         <div className="admin-grid-2">
           <section className="taxonomy-form-card">
             <h2>{editingPageId ? "Editar página" : "Nueva página"}</h2>
+            <p className="image-upload-hint" style={{ marginBottom: "1rem" }}>
+              Puedes crear varias páginas (guía de tallas, nosotros, envíos…).
+              La URL se genera sola desde el título:{" "}
+              <code>/pagina/tu-titulo</code>. Márcala como publicada y, si
+              quieres, “Mostrar en footer”.
+            </p>
             <form className="admin-form" onSubmit={savePage}>
               <AuthFormField label="Título" name="pTitle" value={pageForm.title} required
                 onChange={(e) => setPageForm((p) => ({ ...p, title: e.target.value }))} />

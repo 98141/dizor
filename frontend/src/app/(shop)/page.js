@@ -71,10 +71,11 @@ function Stars({ rating = 5 }) {
 }
 
 export default async function HomePage() {
-  const [cmsData, dailyData, reviewsData, filtersData, appearance] =
+  const [cmsData, dailyData, newProductsData, reviewsData, filtersData, appearance] =
     await Promise.all([
       getHomeContent().catch(() => null),
       fetchJson(`${BASE}/products/daily-random?limit=10`, 300),
+      fetchJson(`${BASE}/products?isNew=true&limit=12`, 60),
       fetchJson(`${BASE}/reviews?limit=4`, 60),
       fetchJson(`${BASE}/products/filters`, 300),
       fetchAppearance(),
@@ -85,6 +86,7 @@ export default async function HomePage() {
   const homeImages = cmsData?.homeImages || {};
   const hero = home.hero || {};
   const features = home.features?.length ? home.features : [];
+  const newSection = home.newSection || {};
   const craftSection = home.craftSection || {};
   const historia = home.historia || {};
   const personalizacion = home.personalizacion || {};
@@ -98,6 +100,7 @@ export default async function HomePage() {
   const coleccionImages = homeImages.coleccion || [];
   const inspiracionImages = homeImages.inspiracion || [];
   const dailyProducts = dailyData?.products || [];
+  const newProducts = newProductsData?.products || [];
   const reviews = reviewsData?.reviews || [];
 
   const heroImage =
@@ -197,7 +200,47 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* 3. Colecciones / tejidos */}
+      {/* 3. Novedades (productos isNew) */}
+      {newSection.isActive !== false && newProducts.length > 0 && (
+        <section className="home-section home-section--border">
+          <div className="home-container">
+            <header className="home-section__intro">
+              <p className="home-eyebrow">
+                {newSection.eyebrow || "LO NUEVO"}
+              </p>
+              <h2 className="home-section__heading">
+                {newSection.title || "Novedades"}
+              </h2>
+              <p className="home-section__lead">
+                {newSection.subtitle ||
+                  "Las piezas recién marcadas como nuevas en nuestro catálogo."}
+              </p>
+            </header>
+            <ViewItemListTracker
+              products={newProducts}
+              listId="home_new"
+              listName="Novedades"
+            />
+            <ProductCarousel
+              products={newProducts}
+              listId="home_new"
+              listName="Novedades"
+            />
+            {(newSection.linkLabel || newSection.linkHref) && (
+              <p className="home-section__more">
+                <Link
+                  href={newSection.linkHref || "/catalogo?isNew=true"}
+                  className="home-text-link"
+                >
+                  {newSection.linkLabel || "Ver novedades"}
+                </Link>
+              </p>
+            )}
+          </div>
+        </section>
+      )}
+
+      {/* 4. Colecciones / tejidos */}
       <section className="home-section home-section--craft">
         <div className="home-container">
           <header className="home-section__intro">

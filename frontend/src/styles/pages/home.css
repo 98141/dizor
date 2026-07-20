@@ -95,6 +95,15 @@
   text-underline-offset: 3px;
 }
 
+.home-section__more {
+  margin: 1.5rem 0 0;
+  text-align: left;
+}
+
+.home-section__more .home-text-link {
+  margin-top: 0;
+}
+
 .home-text-link {
   display: inline-block;
   margin-top: 1.25rem;

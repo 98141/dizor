@@ -191,7 +191,7 @@ export default function HomeImagesTab() {
         variant={error ? "error" : "success"}
       />
 
-      <nav className="cms-tabs" style={{ marginBottom: "1rem" }}>
+      <nav className="cms-tabs cms-tabs--sub" aria-label="Secciones de imágenes">
         {SECTIONS.map((s) => (
           <button
             key={s.id}

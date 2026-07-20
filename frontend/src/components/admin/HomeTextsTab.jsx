@@ -30,6 +30,11 @@ const SECTIONS = [
     hint: `Bloques de valor bajo el hero. Máximo ${MAX_FEATURES} ítems (título + texto corto).`,
   },
   {
+    id: "novedades",
+    label: "Novedades",
+    hint: "Carrusel antes de Tejidos. Solo productos marcados como «Nuevo» en el admin del producto.",
+  },
+  {
     id: "colecciones",
     label: "Colecciones",
     hint: "Textos de la sección tejidos/colecciones. Imágenes de tarjetas: pestaña Imágenes → Colecciones.",
@@ -90,7 +95,7 @@ export default function HomeTextsTab({
         la pestaña <strong>Imágenes</strong>.
       </p>
 
-      <nav className="cms-tabs" style={{ marginBottom: "1rem" }}>
+      <nav className="cms-tabs cms-tabs--sub" aria-label="Secciones del inicio">
         {SECTIONS.map((s) => (
           <button
             key={s.id}
@@ -277,6 +282,101 @@ export default function HomeTextsTab({
               + Agregar bloque
             </button>
           </div>
+        </>
+      )}
+
+      {section === "novedades" && (
+        <>
+          <h2>Novedades</h2>
+          <label className="admin-checkbox">
+            <input
+              type="checkbox"
+              checked={home.newSection?.isActive !== false}
+              onChange={(e) =>
+                setHome((h) => ({
+                  ...h,
+                  newSection: {
+                    ...(h.newSection || {}),
+                    isActive: e.target.checked,
+                  },
+                }))
+              }
+            />
+            Mostrar sección en el inicio
+          </label>
+          <AuthFormField
+            label="Eyebrow"
+            name="newEyebrow"
+            value={home.newSection?.eyebrow || ""}
+            onChange={(e) =>
+              setHome((h) => ({
+                ...h,
+                newSection: {
+                  ...(h.newSection || {}),
+                  eyebrow: e.target.value,
+                },
+              }))
+            }
+          />
+          <AuthFormField
+            label="Título"
+            name="newTitle"
+            value={home.newSection?.title || ""}
+            onChange={(e) =>
+              setHome((h) => ({
+                ...h,
+                newSection: {
+                  ...(h.newSection || {}),
+                  title: e.target.value,
+                },
+              }))
+            }
+          />
+          <div className="auth-field">
+            <label className="auth-field__label">Subtítulo</label>
+            <textarea
+              className="auth-field__input"
+              rows={2}
+              value={home.newSection?.subtitle || ""}
+              onChange={(e) =>
+                setHome((h) => ({
+                  ...h,
+                  newSection: {
+                    ...(h.newSection || {}),
+                    subtitle: e.target.value,
+                  },
+                }))
+              }
+            />
+          </div>
+          <AuthFormField
+            label="Texto enlace"
+            name="newLinkLabel"
+            value={home.newSection?.linkLabel || ""}
+            onChange={(e) =>
+              setHome((h) => ({
+                ...h,
+                newSection: {
+                  ...(h.newSection || {}),
+                  linkLabel: e.target.value,
+                },
+              }))
+            }
+          />
+          <AuthFormField
+            label="URL enlace"
+            name="newLinkHref"
+            value={home.newSection?.linkHref || "/catalogo?isNew=true"}
+            onChange={(e) =>
+              setHome((h) => ({
+                ...h,
+                newSection: {
+                  ...(h.newSection || {}),
+                  linkHref: e.target.value,
+                },
+              }))
+            }
+          />
         </>
       )}
 

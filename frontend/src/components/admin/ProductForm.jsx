@@ -416,10 +416,32 @@ export default function ProductForm({ productId }) {
           <label htmlFor="fullDescription">Descripción completa</label>
           <textarea
             id="fullDescription"
-            rows={5}
+            rows={12}
             value={form.fullDescription}
             onChange={(e) => setField("fullDescription", e.target.value)}
+            placeholder={`Ejemplo:
+
+Sombrero tejido a mano en palma de iraca.
+
+# Material y origen
+Fibra natural de Sandoná, Nariño.
+
+# Detalles
+- Ala flexible
+- Acabado a mano
+- Ideal para clima cálido
+
+![Detalle del tejido](https://res.cloudinary.com/.../detalle.jpg)`}
           />
+          <p className="image-upload-hint">
+            Formato: línea en blanco = nuevo bloque.{" "}
+            <code># Título</code> o <code>#Título</code> se muestra en
+            mayúsculas y negrita (sin el #).{" "}
+            <code>- texto</code> = viñeta con sangría. Enter = salto de línea.{" "}
+            <code>![texto alt](url)</code> = imagen (el texto entre{" "}
+            <code>[]</code> no se ve en pantalla, solo ayuda a accesibilidad).
+            Las fotos principales van en la galería del producto.
+          </p>
         </div>
 
         <div className="admin-form__row">

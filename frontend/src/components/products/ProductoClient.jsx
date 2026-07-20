@@ -8,6 +8,7 @@ import { useCart } from "@/context/CartContext";
 import { formatCOP } from "@/lib/formatCurrency";
 import { trackAddToCart, trackViewItem } from "@/lib/analytics/events";
 import { mapProductToItem } from "@/lib/analytics/productMapper";
+import SimpleRichText from "@/components/content/SimpleRichText";
 
 const LOW_STOCK_THRESHOLD = 5;
 
@@ -29,7 +30,7 @@ function StockAlert({ stock }) {
 // Recibe `product` ya resuelto por el Server Component (page.js) — sin
 // fetch propio, sin estado de carga inicial: el contenido llega listo en
 // el HTML servido por el servidor.
-export default function ProductoClient({ product }) {
+export default function ProductoClient({ product, sizeGuide = null }) {
   const router = useRouter();
   const { addItem } = useCart();
   const [activeImage, setActiveImage] = useState(0);
@@ -48,6 +49,8 @@ export default function ProductoClient({ product }) {
   const [quantity, setQuantity] = useState(1);
   const [addedMsg, setAddedMsg] = useState("");
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
+  const sizeGuideRef = useRef(null);
   const imagesLengthRef = useRef(0);
 
   const closeLightbox = () => setLightboxOpen(false);
@@ -238,9 +241,11 @@ export default function ProductoClient({ product }) {
             )}
           </div>
 
-          <p className="product-detail__short-desc">
-            {product.shortDescription}
-          </p>
+          {product.shortDescription ? (
+            <p className="product-detail__short-desc">
+              {product.shortDescription}
+            </p>
+          ) : null}
 
           <div className="product-detail__attrs">
             {product.weaveType?.name && (
@@ -279,13 +284,28 @@ export default function ProductoClient({ product }) {
                     </span>
                   )}
                 </label>
-                <Link
-                  href="/pagina/guia-de-tallas"
-                  className="product-detail__size-guide"
-                  target="_blank"
+                <button
+                  type="button"
+                  className={`product-detail__size-guide${sizeGuideOpen ? " product-detail__size-guide--open" : ""}`}
+                  onClick={() => {
+                    setSizeGuideOpen((open) => {
+                      const next = !open;
+                      if (next) {
+                        requestAnimationFrame(() => {
+                          sizeGuideRef.current?.scrollIntoView({
+                            behavior: "smooth",
+                            block: "nearest",
+                          });
+                        });
+                      }
+                      return next;
+                    });
+                  }}
+                  aria-expanded={sizeGuideOpen}
+                  aria-controls="product-size-guide"
                 >
                   Guía de tallas
-                </Link>
+                </button>
               </div>
               <div className="product-detail__variant-options">
                 {availableSizes.map((size) => {
@@ -391,28 +411,30 @@ export default function ProductoClient({ product }) {
             </div>
           )}
 
-          {/* ─── BOTÓN AGREGAR ─── */}
-          <button
-            type="button"
-            className="product-detail__add-btn"
-            disabled={isOutOfStock}
-            onClick={handleAddToCart}
-          >
-            {isOutOfStock
-              ? selectedVariant
-                ? "Sin stock"
-                : "Selecciona talla y color"
-              : "Agregar al carrito"}
-          </button>
-
-          {product.allowsCustomization && (
-            <Link
-              href={`/personalizar?producto=${encodeURIComponent(product.slug)}`}
-              className="product-detail__custom-btn"
+          {/* ─── ACCIONES ─── */}
+          <div className="product-detail__actions">
+            <button
+              type="button"
+              className="product-detail__add-btn"
+              disabled={isOutOfStock}
+              onClick={handleAddToCart}
             >
-              Solicitar personalización
-            </Link>
-          )}
+              {isOutOfStock
+                ? selectedVariant
+                  ? "Sin stock"
+                  : "Selecciona talla y color"
+                : "Agregar al carrito"}
+            </button>
+
+            {product.allowsCustomization && (
+              <Link
+                href={`/personalizar?producto=${encodeURIComponent(product.slug)}`}
+                className="product-detail__custom-btn"
+              >
+                Solicitar personalización
+              </Link>
+            )}
+          </div>
 
           {addedMsg && (
             <p className="product-detail__added-msg">
@@ -428,6 +450,69 @@ export default function ProductoClient({ product }) {
           )}
         </div>
       </div>
+
+      {sizeGuideOpen && (
+        <section
+          id="product-size-guide"
+          ref={sizeGuideRef}
+          className="product-detail__size-guide-panel"
+          aria-label="Guía de tallas"
+        >
+          <div className="product-detail__size-guide-panel-head">
+            <h2>{sizeGuide?.title || "Guía de tallas"}</h2>
+            <button
+              type="button"
+              className="product-detail__size-guide-close"
+              onClick={() => setSizeGuideOpen(false)}
+            >
+              Cerrar
+            </button>
+          </div>
+
+          {sizeGuide?.excerpt ? (
+            <p className="product-detail__size-guide-excerpt">
+              {sizeGuide.excerpt}
+            </p>
+          ) : null}
+
+          <div className="product-detail__size-guide-layout">
+            {sizeGuide?.imageUrl ? (
+              <div className="product-detail__size-guide-media">
+                <Image
+                  src={sizeGuide.imageUrl}
+                  alt={
+                    sizeGuide.imageAlt ||
+                    "Cómo medir la cabeza para elegir la talla"
+                  }
+                  width={480}
+                  height={480}
+                  className="product-detail__size-guide-img"
+                />
+              </div>
+            ) : null}
+
+            <div className="product-detail__size-guide-copy">
+              {sizeGuide?.body ? (
+                <SimpleRichText
+                  text={sizeGuide.body}
+                  className="simple-content product-detail__size-guide-body"
+                />
+              ) : (
+                <p className="product-detail__size-guide-excerpt">
+                  Mide tu cabeza con una cinta métrica flexible por encima de
+                  las orejas y unos 1 cm sobre las cejas. Esa medida en
+                  centímetros es tu talla.
+                </p>
+              )}
+              <p className="product-detail__size-guide-footer">
+                <Link href="/pagina/guia-de-tallas" className="home-text-link">
+                  Ver guía completa
+                </Link>
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ─── LIGHTBOX ─── */}
       {lightboxOpen && (

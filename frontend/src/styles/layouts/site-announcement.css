@@ -102,7 +102,8 @@
 }
 
 .content-page__excerpt {
-  color: var(--color-text-muted);
+  color: var(--color-text);
+  opacity: 0.82;
   font-size: 1rem;
   line-height: 1.65;
   margin: 0;
@@ -135,14 +136,14 @@
 .content-page__body-p {
   line-height: 1.8;
   margin: 0;
-  color: var(--color-text-muted);
+  color: var(--color-text);
 }
 
 /* Compatibilidad con páginas antiguas que usan <p> directo */
 .content-page__body p {
   line-height: 1.8;
   margin: 0;
-  color: var(--color-text-muted);
+  color: var(--color-text);
 }
 
 .content-page__section-title {
@@ -166,7 +167,7 @@
 
 .content-page__list li {
   line-height: 1.7;
-  color: var(--color-text-muted);
+  color: var(--color-text);
 }
 
 /* ── Tabla de tallas ── */

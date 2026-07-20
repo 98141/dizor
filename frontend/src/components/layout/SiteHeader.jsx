@@ -11,6 +11,33 @@ import { trackSearch } from "@/lib/analytics/events";
 const MIN_SEARCH_CHARS = 1;
 const SEARCH_DEBOUNCE_MS = 300;
 
+const NAV_LINKS = [
+  { href: "/catalogo", label: "Catálogo" },
+  { href: "/catalogo?featured=true", label: "Destacados" },
+  { href: "/catalogo?isNew=true", label: "Novedades" },
+  { href: "/personalizar", label: "Personalizar" },
+  { href: "/pedido-mayor", label: "Por mayor" },
+];
+
+function isNavActive(href, pathname, searchParams) {
+  const url = new URL(href, "https://example.com");
+  const path = url.pathname;
+  const wantsFeatured = url.searchParams.get("featured") === "true";
+  const wantsNew = url.searchParams.get("isNew") === "true";
+  const featured = searchParams.get("featured") === "true";
+  const isNew = searchParams.get("isNew") === "true";
+
+  if (path === "/catalogo") {
+    if (wantsFeatured) return pathname === "/catalogo" && featured;
+    if (wantsNew) return pathname === "/catalogo" && isNew;
+    // Catálogo general: listado sin esos filtros, o ficha de producto
+    if (pathname.startsWith("/producto/")) return true;
+    return pathname === "/catalogo" && !featured && !isNew;
+  }
+
+  return pathname === path || pathname.startsWith(`${path}/`);
+}
+
 function useHeaderSearch() {
   const router = useRouter();
   const pathname = usePathname();
@@ -73,6 +100,7 @@ function SiteHeaderInner() {
   const { itemCount, hydrated } = useCart();
   const { siteName } = useSiteConfig();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const { search, setSearch, handleSubmit } = useHeaderSearch();
@@ -89,6 +117,12 @@ function SiteHeaderInner() {
   };
 
   const accountHref = isAuthenticated ? "/cuenta" : "/login";
+  const homeActive = pathname === "/";
+  const accountActive =
+    pathname.startsWith("/cuenta") ||
+    pathname === "/login" ||
+    pathname === "/register";
+  const cartActive = pathname.startsWith("/carrito");
 
   return (
     <header className="site-header">
@@ -102,16 +136,28 @@ function SiteHeaderInner() {
           ☰
         </button>
 
-        <Link href="/" className="site-header__logo">
+        <Link
+          href="/"
+          className={`site-header__logo${homeActive ? " is-active" : ""}`}
+          aria-current={homeActive ? "page" : undefined}
+        >
           {siteName}
         </Link>
 
         <nav className="site-header__nav" aria-label="Principal">
-          <Link href="/catalogo">Catálogo</Link>
-          <Link href="/catalogo?featured=true">Destacados</Link>
-          <Link href="/catalogo?isNew=true">Novedades</Link>
-          <Link href="/personalizar">Personalizar</Link>
-          <Link href="/pedido-mayor">Por mayor</Link>
+          {NAV_LINKS.map((item) => {
+            const active = isNavActive(item.href, pathname, searchParams);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={active ? "is-active" : undefined}
+                aria-current={active ? "page" : undefined}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
 
         <form className="site-header__search" onSubmit={onSubmit}>
@@ -144,16 +190,18 @@ function SiteHeaderInner() {
           </button>
           <Link
             href={accountHref}
-            className="site-header__icon-btn"
+            className={`site-header__icon-btn${accountActive ? " is-active" : ""}`}
             aria-label="Mi cuenta"
+            aria-current={accountActive ? "page" : undefined}
             title={isAuthenticated ? user?.name : "Iniciar sesión"}
           >
             👤
           </Link>
           <Link
             href="/carrito"
-            className="site-header__icon-btn site-header__cart-btn"
+            className={`site-header__icon-btn site-header__cart-btn${cartActive ? " is-active" : ""}`}
             aria-label="Carrito"
+            aria-current={cartActive ? "page" : undefined}
             title="Carrito"
           >
             🛒
@@ -194,22 +242,26 @@ function SiteHeaderInner() {
         className={`site-header__mobile-nav${mobileOpen ? " site-header__mobile-nav--open" : ""}`}
         aria-label="Menú móvil"
       >
-        <Link href="/catalogo" onClick={() => setMobileOpen(false)}>
-          Catálogo
-        </Link>
-        <Link href="/catalogo?featured=true" onClick={() => setMobileOpen(false)}>
-          Destacados
-        </Link>
-        <Link href="/catalogo?isNew=true" onClick={() => setMobileOpen(false)}>
-          Novedades
-        </Link>
-        <Link href="/personalizar" onClick={() => setMobileOpen(false)}>
-          Personalizar
-        </Link>
-        <Link href="/pedido-mayor" onClick={() => setMobileOpen(false)}>
-          Por mayor
-        </Link>
-        <Link href={accountHref} onClick={() => setMobileOpen(false)}>
+        {NAV_LINKS.map((item) => {
+          const active = isNavActive(item.href, pathname, searchParams);
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={active ? "is-active" : undefined}
+              aria-current={active ? "page" : undefined}
+              onClick={() => setMobileOpen(false)}
+            >
+              {item.label}
+            </Link>
+          );
+        })}
+        <Link
+          href={accountHref}
+          className={accountActive ? "is-active" : undefined}
+          aria-current={accountActive ? "page" : undefined}
+          onClick={() => setMobileOpen(false)}
+        >
           {isAuthenticated ? "Mi cuenta" : "Iniciar sesión"}
         </Link>
       </nav>

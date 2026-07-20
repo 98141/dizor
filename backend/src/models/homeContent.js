@@ -62,7 +62,13 @@ const homeContentSchema = new mongoose.Schema(
       isActive: { type: Boolean, default: false },
     },
     newSection: {
+      eyebrow: { type: String, trim: true, default: "LO NUEVO" },
       title: { type: String, trim: true, default: "Novedades" },
+      subtitle: {
+        type: String,
+        trim: true,
+        default: "Las piezas recién marcadas como nuevas en nuestro catálogo.",
+      },
       linkLabel: { type: String, trim: true, default: "Ver novedades" },
       linkHref: { type: String, trim: true, default: "/catalogo?isNew=true" },
       isActive: { type: Boolean, default: true },

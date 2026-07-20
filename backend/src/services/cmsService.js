@@ -43,7 +43,9 @@ const DEFAULT_HOME = {
     linkHref: "/catalogo?featured=true",
   },
   newSection: {
+    eyebrow: "LO NUEVO",
     title: "Novedades",
+    subtitle: "Las piezas recién marcadas como nuevas en nuestro catálogo.",
     linkLabel: "Ver novedades",
     linkHref: "/catalogo?isNew=true",
     isActive: true,
@@ -177,6 +179,10 @@ exports.getOrCreateHomeContent = async () => {
     doc.randomProductsSection = DEFAULT_HOME.randomProductsSection;
     dirty = true;
   }
+  if (!doc.newSection || typeof doc.newSection !== "object") {
+    doc.newSection = DEFAULT_HOME.newSection;
+    dirty = true;
+  }
   if (!doc.newsletterSection || typeof doc.newsletterSection !== "object") {
     doc.newsletterSection = DEFAULT_HOME.newsletterSection;
     dirty = true;
@@ -187,6 +193,8 @@ exports.getOrCreateHomeContent = async () => {
   ensure("hero.secondaryCtaHref", DEFAULT_HOME.hero.secondaryCtaHref);
   ensure("craftSection.eyebrow", DEFAULT_HOME.craftSection.eyebrow);
   ensure("historia.eyebrow", DEFAULT_HOME.historia.eyebrow);
+  ensure("newSection.eyebrow", DEFAULT_HOME.newSection.eyebrow);
+  ensure("newSection.subtitle", DEFAULT_HOME.newSection.subtitle);
 
   if (!doc.features?.length) {
     doc.features = DEFAULT_HOME.features;

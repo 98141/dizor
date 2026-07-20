@@ -1,19 +1,39 @@
 .cms-tabs {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-xs);
+  flex-wrap: nowrap;
+  gap: 0.45rem;
   margin-bottom: var(--space-lg);
+  padding: 0.15rem 0 0.35rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  scrollbar-color: #cfc7ba transparent;
+}
+
+.cms-tabs::-webkit-scrollbar {
+  height: 4px;
+}
+
+.cms-tabs::-webkit-scrollbar-thumb {
+  background: #cfc7ba;
+  border-radius: 999px;
 }
 
 .cms-tabs button {
-  padding: 0.5rem 0.95rem;
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  padding: 0.55rem 0.95rem;
+  min-height: 2.5rem;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: 999px;
   background: var(--color-bg-card);
   color: var(--color-text-muted);
   cursor: pointer;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 500;
+  white-space: nowrap;
   transition:
     background 0.18s ease,
     border-color 0.18s ease,
@@ -38,6 +58,38 @@
 .cms-tabs button:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
+}
+
+/* Subpestañas (Inicio → Hero, Anuncio…) */
+.cms-tabs--sub {
+  margin-bottom: var(--space-md);
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.cms-tabs--sub button {
+  padding: 0.45rem 0.85rem;
+  min-height: 2.25rem;
+  font-size: 0.8rem;
+  border-radius: var(--radius-md);
+}
+
+/* En pantallas anchas pueden envolver si hay espacio */
+@media (min-width: 900px) {
+  .cms-tabs {
+    flex-wrap: wrap;
+    overflow: visible;
+    padding-bottom: 0;
+    scrollbar-width: none;
+  }
+
+  .cms-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cms-tabs button {
+    border-radius: var(--radius-md);
+  }
 }
 
 .cms-feature-row {
@@ -141,4 +193,34 @@
   cursor: pointer;
   background: var(--color-bg-card);
   flex-shrink: 0;
+}
+
+/* Contenedor del formulario Inicio en móvil */
+@media (max-width: 899px) {
+  .admin-page .product-form__section {
+    padding: var(--space-md);
+  }
+
+  .admin-page__title {
+    font-size: 1.45rem;
+  }
+
+  .admin-page__subtitle {
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  .cms-tabs {
+    margin-left: -0.15rem;
+    margin-right: -0.15rem;
+    padding-left: 0.15rem;
+    padding-right: 0.15rem;
+    /* Fade hint: hay más pestañas a la derecha */
+    mask-image: linear-gradient(
+      to right,
+      #000 0%,
+      #000 calc(100% - 1.5rem),
+      transparent 100%
+    );
+  }
 }

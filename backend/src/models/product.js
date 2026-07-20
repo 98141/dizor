@@ -60,7 +60,7 @@ const productSchema = new mongoose.Schema(
     fullDescription: {
       type: String,
       trim: true,
-      maxlength: [5000, "Máximo 5000 caracteres"],
+      maxlength: [8000, "Máximo 8000 caracteres"],
     },
     category: {
       type: mongoose.Schema.Types.ObjectId,
