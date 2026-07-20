@@ -355,6 +355,35 @@ function ContenidoAdminContent() {
   const removeFeature = (i) =>
     setHome((h) => ({ ...h, features: h.features.filter((_, idx) => idx !== i) }));
 
+  const addAnnouncement = () =>
+    setHome((h) => {
+      const current = h.announcement?.items || [];
+      if (current.length >= 3) return h;
+      return {
+        ...h,
+        announcement: {
+          ...h.announcement,
+          items: [...current, { text: "", linkHref: "" }],
+        },
+      };
+    });
+
+  const updateAnnouncement = (i, key, value) =>
+    setHome((h) => {
+      const items = [...(h.announcement?.items || [])];
+      items[i] = { ...items[i], [key]: value };
+      return { ...h, announcement: { ...h.announcement, items } };
+    });
+
+  const removeAnnouncement = (i) =>
+    setHome((h) => ({
+      ...h,
+      announcement: {
+        ...h.announcement,
+        items: (h.announcement?.items || []).filter((_, idx) => idx !== i),
+      },
+    }));
+
   const startEditPage = async (id) => {
     if (!id) { setEditingPageId(null); setPageForm(emptyPage()); return; }
     const data = await getAdminPage(id);
@@ -540,6 +569,9 @@ function ContenidoAdminContent() {
           addFeature={addFeature}
           updateFeature={updateFeature}
           removeFeature={removeFeature}
+          addAnnouncement={addAnnouncement}
+          updateAnnouncement={updateAnnouncement}
+          removeAnnouncement={removeAnnouncement}
         />
       )}
 

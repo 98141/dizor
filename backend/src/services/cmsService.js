@@ -126,11 +126,12 @@ const DEFAULT_HOME = {
     isActive: false,
   },
   announcement: {
-    text: "",
-    linkHref: "",
     isActive: false,
+    items: [],
   },
 };
+
+const MAX_ANNOUNCEMENTS = 3;
 
 exports.getOrCreateHomeContent = async () => {
   let doc = await HomeContent.findOne({ key: "default" });
@@ -199,6 +200,17 @@ exports.getOrCreateHomeContent = async () => {
   if (!doc.features?.length) {
     doc.features = DEFAULT_HOME.features;
     dirty = true;
+  }
+
+  // Migración: anuncio único (text/linkHref) -> lista de hasta 3 anuncios
+  if (!Array.isArray(doc.announcement?.items) || doc.announcement.items.length === 0) {
+    const legacyText = doc.announcement?.text?.trim();
+    if (legacyText) {
+      doc.announcement.items = [
+        { text: legacyText, linkHref: doc.announcement.linkHref || "" },
+      ];
+      dirty = true;
+    }
   }
 
   if (dirty) await doc.save();
@@ -281,3 +293,4 @@ exports.formatBanner = (banner) => ({
 });
 
 exports.DEFAULT_HOME = DEFAULT_HOME;
+exports.MAX_ANNOUNCEMENTS = MAX_ANNOUNCEMENTS;

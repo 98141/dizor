@@ -4,6 +4,16 @@
   text-align: center;
   padding: 0.5rem var(--space-md);
   font-size: 0.85rem;
+  overflow: hidden;
+}
+
+.site-announcement__track {
+  position: relative;
+}
+
+.site-announcement__item {
+  position: static;
+  opacity: 1;
 }
 
 .site-announcement__link {
@@ -14,6 +24,73 @@
 
 .site-announcement__link:hover {
   text-decoration: underline;
+}
+
+/* Móvil: un solo anuncio visible; si hay más de uno, rotan con fundido */
+@media (max-width: 767px) {
+  .site-announcement__track--rotating {
+    height: 1.4em;
+  }
+
+  .site-announcement__track--rotating .site-announcement__item {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    animation: site-announcement-fade
+      calc(var(--announcement-count, 1) * 4.5s) ease-in-out infinite;
+    animation-delay: calc(var(--announcement-index, 0) * 4.5s);
+  }
+}
+
+@keyframes site-announcement-fade {
+  0%,
+  3% {
+    opacity: 0;
+  }
+  8%,
+  28% {
+    opacity: 1;
+  }
+  33%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 767px) and (prefers-reduced-motion: reduce) {
+  .site-announcement__track--rotating .site-announcement__item {
+    animation: none;
+    opacity: 0;
+  }
+
+  .site-announcement__track--rotating .site-announcement__item:first-child {
+    opacity: 1;
+    position: static;
+  }
+}
+
+/* Tablet y escritorio: todos los anuncios visibles a la vez, repartidos en
+   columnas de ancho igual (en vez de agrupados al centro) */
+@media (min-width: 768px) {
+  .site-announcement__track {
+    display: flex;
+    align-items: stretch;
+    flex-wrap: wrap;
+    row-gap: 0.25rem;
+  }
+
+  .site-announcement__item {
+    flex: 1 1 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1.25rem;
+    border-right: 1px solid rgba(31, 31, 31, 0.18);
+  }
+
+  .site-announcement__item:last-child {
+    border-right: none;
+  }
 }
 
 .site-footer__tagline {

@@ -551,7 +551,7 @@ export default async function HomePage() {
                       alt={img.altText || "Inspiración Dizor"}
                       fill
                       sizes="(max-width: 768px) 50vw, 40vw"
-                      style={{ objectFit: "cover" }}
+                      style={{ objectFit: "contain" }}
                     />
                   </Tag>
                 );

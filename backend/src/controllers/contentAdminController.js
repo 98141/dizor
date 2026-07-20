@@ -10,6 +10,7 @@ const {
   formatPage,
   formatPageList,
   formatBanner,
+  MAX_ANNOUNCEMENTS,
 } = require("../services/cmsService");
 
 exports.getHomeContent = catchAsync(async (req, res) => {
@@ -31,7 +32,17 @@ exports.updateHomeContent = catchAsync(async (req, res) => {
     Object.assign(doc.featuredSection, req.body.featuredSection);
   }
   if (req.body.announcement) {
-    Object.assign(doc.announcement, req.body.announcement);
+    const { isActive, items } = req.body.announcement;
+    if (typeof isActive === "boolean") doc.announcement.isActive = isActive;
+    if (Array.isArray(items)) {
+      doc.announcement.items = items
+        .filter((item) => item && String(item.text || "").trim())
+        .slice(0, MAX_ANNOUNCEMENTS)
+        .map((item) => ({
+          text: String(item.text).trim(),
+          linkHref: String(item.linkHref || "").trim(),
+        }));
+    }
   }
   if (req.body.newSection) Object.assign(doc.newSection, req.body.newSection);
   if (req.body.craftSection) Object.assign(doc.craftSection, req.body.craftSection);

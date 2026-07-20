@@ -694,7 +694,7 @@
   position: relative;
   overflow: hidden;
   display: block;
-  background: var(--color-border);
+  background: #f4f1ea;
   min-height: 0;
 }
 
@@ -711,10 +711,11 @@
 
 .home-inspire__cell img {
   transition: transform 0.45s ease;
+  padding: 0.5rem;
 }
 
 .home-inspire__cell:hover img {
-  transform: scale(1.04);
+  transform: scale(1.02);
 }
 
 .home-inspire__cell:not(.home-inspire__cell--empty):hover {

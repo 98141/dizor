@@ -6,6 +6,7 @@ import AuthSubmitButton from "@/components/auth/AuthSubmitButton";
 
 const MAX_BULLETS = 5;
 const MAX_FEATURES = 4;
+const MAX_ANNOUNCEMENTS = 3;
 
 /** Keep empty lines while typing so Enter can open a new bullet line. */
 const parseBullets = (raw) => String(raw ?? "").split("\n").slice(0, MAX_BULLETS);
@@ -22,7 +23,7 @@ const SECTIONS = [
   {
     id: "anuncio",
     label: "Anuncio",
-    hint: "Barra superior opcional del sitio (texto + enlace).",
+    hint: `Barra superior opcional del sitio. Hasta ${MAX_ANNOUNCEMENTS} anuncios: en escritorio y tablet se muestran juntos; en móvil rotan uno a la vez.`,
   },
   {
     id: "beneficios",
@@ -84,6 +85,9 @@ export default function HomeTextsTab({
   addFeature,
   updateFeature,
   removeFeature,
+  addAnnouncement,
+  updateAnnouncement,
+  removeAnnouncement,
 }) {
   const [section, setSection] = useState("hero");
   const meta = SECTIONS.find((s) => s.id === section);
@@ -200,7 +204,10 @@ export default function HomeTextsTab({
 
       {section === "anuncio" && (
         <>
-          <h2>Barra de anuncio</h2>
+          <h2>
+            Barra de anuncio (
+            {(home.announcement?.items || []).length}/{MAX_ANNOUNCEMENTS})
+          </h2>
           <label className="admin-checkbox">
             <input
               type="checkbox"
@@ -217,28 +224,47 @@ export default function HomeTextsTab({
             />
             Mostrar barra superior
           </label>
-          <AuthFormField
-            label="Texto anuncio"
-            name="announceText"
-            value={home.announcement?.text || ""}
-            onChange={(e) =>
-              setHome((h) => ({
-                ...h,
-                announcement: { ...h.announcement, text: e.target.value },
-              }))
-            }
-          />
-          <AuthFormField
-            label="Enlace anuncio"
-            name="announceLink"
-            value={home.announcement?.linkHref || ""}
-            onChange={(e) =>
-              setHome((h) => ({
-                ...h,
-                announcement: { ...h.announcement, linkHref: e.target.value },
-              }))
-            }
-          />
+          {(home.announcement?.items || []).map((item, i) => (
+            <div key={i} className="cms-feature-row">
+              <AuthFormField
+                label={`Texto anuncio ${i + 1}`}
+                name={`announceText-${i}`}
+                value={item.text || ""}
+                onChange={(e) =>
+                  updateAnnouncement(i, "text", e.target.value)
+                }
+              />
+              <AuthFormField
+                label="Enlace (opcional)"
+                name={`announceLink-${i}`}
+                value={item.linkHref || ""}
+                onChange={(e) =>
+                  updateAnnouncement(i, "linkHref", e.target.value)
+                }
+              />
+              <div className="cms-feature-row__actions">
+                <button
+                  type="button"
+                  className="admin-btn admin-btn--sm admin-btn--danger"
+                  onClick={() => removeAnnouncement(i)}
+                >
+                  Quitar
+                </button>
+              </div>
+            </div>
+          ))}
+          <div className="cms-section-actions">
+            <button
+              type="button"
+              className="admin-btn admin-btn--secondary admin-btn--block"
+              onClick={addAnnouncement}
+              disabled={
+                (home.announcement?.items || []).length >= MAX_ANNOUNCEMENTS
+              }
+            >
+              + Agregar anuncio
+            </button>
+          </div>
         </>
       )}
 

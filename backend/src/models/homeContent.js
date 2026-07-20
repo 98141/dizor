@@ -9,6 +9,14 @@ const featureSchema = new mongoose.Schema(
   { _id: false }
 );
 
+const announcementItemSchema = new mongoose.Schema(
+  {
+    text: { type: String, trim: true, default: "" },
+    linkHref: { type: String, trim: true, default: "" },
+  },
+  { _id: false }
+);
+
 const homeContentSchema = new mongoose.Schema(
   {
     key: {
@@ -57,9 +65,11 @@ const homeContentSchema = new mongoose.Schema(
       linkHref: { type: String, trim: true, default: "/catalogo?featured=true" },
     },
     announcement: {
+      // legacy, se conservan solo para migrar datos previos a "items"
       text: { type: String, trim: true, default: "" },
       linkHref: { type: String, trim: true, default: "" },
       isActive: { type: Boolean, default: false },
+      items: { type: [announcementItemSchema], default: [] },
     },
     newSection: {
       eyebrow: { type: String, trim: true, default: "LO NUEVO" },
