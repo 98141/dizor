@@ -80,13 +80,12 @@ npm run dev
 | 9 | Marketing: newsletter, popup, carritos abandonados, export CSV |
 | 10 | Pagos: Wompi payment links + webhook, Nequi manual, contra entrega |
 | 11 | Finanzas: reporte de ventas, gráficas, filtros por período |
-| 12 | POS: ventas manuales desde panel (sin checkout público) |
-| 13 | Alertas: notificaciones en tiempo real para nuevos pedidos |
-| 14 | Inventario: historial de movimientos, ajustes de stock |
-| 15 | Auditoría: registro de todas las acciones admin con filtros y stats |
-| 16 | **Branding dinámico**: nombre del sitio, colores y favicon desde admin |
-| 17 | **SEO completo**: robots.txt, noindex en rutas privadas, sitemap, manifest PWA |
-| 18 | **Logging estructurado**: Winston + rotación diaria de logs en producción |
+| 12 | Alertas: notificaciones en tiempo real para nuevos pedidos |
+| 13 | Inventario: historial de movimientos, ajustes de stock |
+| 14 | Auditoría: registro de todas las acciones admin con filtros y stats |
+| 15 | **Branding dinámico**: nombre del sitio, colores y favicon desde admin |
+| 16 | **SEO completo**: robots.txt, noindex en rutas privadas, sitemap, manifest PWA |
+| 17 | **Logging estructurado**: Winston + rotación diaria de logs en producción |
 
 ---
 
@@ -148,7 +147,7 @@ La plataforma implementa múltiples capas de protección en backend y frontend.
 | **DTO de pedidos** | `formatOrderForClient` nunca expone `unitCost` ni campos internos al cliente |
 | **Idempotencia de órdenes** | Una misma `idempotencyKey` devuelve la orden existente solo si pertenece al mismo actor |
 | **Validación de entorno** | El servidor no arranca si `JWT_SECRET` < 32 chars. En producción falla si `WOMPI_ENV !== "production"` |
-| **Auditoría completa** | Todas las acciones de staff (pedidos, catálogo, cupones, CMS, POS, usuarios) quedan en `AuditLog` |
+| **Auditoría completa** | Todas las acciones de staff (pedidos, catálogo, cupones, CMS, usuarios) quedan en `AuditLog` |
 
 ### Frontend (Next.js)
 
@@ -171,7 +170,7 @@ La plataforma implementa múltiples capas de protección en backend y frontend.
 | Rol | Acceso |
 |-----|--------|
 | `cliente` | Tienda pública, carrito, checkout, mis pedidos, mi perfil |
-| `vendedor` | Panel `/vendedor`: gestión de pedidos, POS, solicitudes especiales |
+| `vendedor` | Panel `/vendedor`: gestión de pedidos, solicitudes especiales |
 | `admin` | Todo lo del vendedor + catálogo, contenido CMS, cupones, marketing, inventario, auditoría |
 | `superadmin` | Todo lo del admin + gestión de usuarios staff, finanzas, configuración de tienda |
 
@@ -231,25 +230,7 @@ Los cupones se crean desde `/admin/cupones` y se aplican en el checkout.
 
 ---
 
-## 10. Panel POS (Punto de venta)
-
-Disponible en `/vendedor` y `/admin`. Permite registrar ventas presenciales sin pasar por el checkout público.
-
-**Flujo:**
-1. Buscar producto por nombre o SKU.
-2. Agregar cantidad.
-3. Aplicar descuento manual opcional (en COP).
-4. Seleccionar método de pago: efectivo, tarjeta, Nequi o transferencia.
-5. Para efectivo: ingresar monto recibido → calcula el cambio.
-6. Confirmar → genera número `POS-AAAAMMDD-NNN`, descuenta stock atómicamente y registra en historial de inventario.
-
-**Anulación:** cualquier venta POS puede anularse con un motivo. El stock se restaura automáticamente y queda registrado en historial.
-
-**Cierre de caja:** `/admin/pos` → Cierre muestra totales por método de pago del día, ventas POS + pedidos online pagados. Exportable a PDF.
-
----
-
-## 11. SEO
+## 10. SEO
 
 | Recurso | Comportamiento |
 |---------|---------------|
@@ -264,7 +245,7 @@ Disponible en `/vendedor` y `/admin`. Permite registrar ventas presenciales sin 
 
 ---
 
-## 12. Sistema de logging
+## 11. Sistema de logging
 
 Los logs se escriben en `backend/logs/` con rotación diaria automática.
 
@@ -304,7 +285,7 @@ Select-String '"warn"' "backend\logs\combined-2026-05-21.log"
 
 ---
 
-## 13. Auditoría
+## 12. Auditoría
 
 Registra acciones de staff en MongoDB (`AuditLog`). Cada entrada incluye:
 `userId`, `userEmail`, `role`, `action`, `module`, `entityId`, `ip`, `userAgent`, **`method`**, **`path`**, `previousData`, `newData`, `success`, `createdAt`.
@@ -317,7 +298,7 @@ Registra acciones de staff en MongoDB (`AuditLog`). Cada entrada incluye:
 
 ---
 
-## 14. Cloudinary — imágenes
+## 13. Cloudinary — imágenes
 
 Variables requeridas en `.env` del backend: `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`.
 
@@ -327,7 +308,7 @@ Flujo actual: editar producto → campo URL de imagen → guardar URL pública d
 
 ---
 
-## 15. Wompi — pagos
+## 14. Wompi — pagos
 
 1. Cuenta en [comercios.wompi.co](https://comercios.wompi.co) (sandbox disponible).
 2. Copiar `WOMPI_PRIVATE_KEY`, `WOMPI_EVENTS_SECRET` al `.env`.
@@ -339,7 +320,7 @@ Métodos alternativos sin integración bancaria: **Nequi manual** (cliente sube 
 
 ---
 
-## 16. Rutas del API — resumen de acceso
+## 15. Rutas del API — resumen de acceso
 
 | Ruta | Acceso |
 |------|--------|
@@ -353,13 +334,13 @@ Métodos alternativos sin integración bancaria: **Nequi manual** (cliente sube 
 | `/api/admin/users` | Solo superadmin |
 | `/api/admin/finance` | Solo superadmin |
 | `/api/admin/catalog`, `/api/admin/orders` | Admin + superadmin |
-| `/api/admin/pos`, `/api/admin/solicitudes` | Admin + superadmin + vendedor |
+| `/api/admin/solicitudes` | Admin + superadmin + vendedor |
 | `/api/admin/audit` | Admin + superadmin |
 | `/api/webhooks/wompi` | Validado por HMAC (sin auth JWT) |
 
 ---
 
-## 17. Scripts útiles
+## 16. Scripts útiles
 
 ```bash
 # Seeders (backend)
@@ -376,7 +357,7 @@ npm run fix:slugs           # corrige slugs de productos existentes
 
 ---
 
-## 18. Build producción
+## 17. Build producción
 
 ```powershell
 # Frontend
@@ -393,7 +374,7 @@ En producción, el logger cambia automáticamente a formato JSON sin colores ANS
 
 ---
 
-## 19. Favicon e íconos PWA — pendiente
+## 18. Favicon e íconos PWA — pendiente
 
 Los archivos de imagen deben colocarse en estas rutas:
 
@@ -411,7 +392,7 @@ Next.js detecta `favicon.ico` e `icon.png` en `app/` automáticamente y los aña
 
 ---
 
-## 20. Mejoras futuras planificadas
+## 19. Mejoras futuras planificadas
 
 ### Alta prioridad
 
@@ -452,7 +433,7 @@ Next.js detecta `favicon.ico` e `icon.png` en `app/` automáticamente y los aña
 
 ---
 
-## 21. Arquitectura resumida
+## 20. Arquitectura resumida
 
 ```
 dizor/

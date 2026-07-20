@@ -483,11 +483,8 @@ function FinanceHistoryPanel() {
               <thead>
                 <tr>
                   <th>Período</th>
-                  <th>Pedidos web</th>
-                  <th>Ventas POS</th>
-                  <th>Ingreso web</th>
-                  <th>Ingreso POS</th>
-                  <th>Ingreso total</th>
+                  <th>Pedidos</th>
+                  <th>Ingresos</th>
                   <th>COGS</th>
                   <th>Ganancia bruta</th>
                   <th>Margen</th>
@@ -499,9 +496,6 @@ function FinanceHistoryPanel() {
                   <tr key={row.periodKey}>
                     <td style={{ fontWeight: 600 }}>{row.label}</td>
                     <td>{row.ordersCount}</td>
-                    <td>{row.posOrdersCount}</td>
-                    <td>{formatCOP(row.onlineRevenue)}</td>
-                    <td>{formatCOP(row.posRevenue)}</td>
                     <td style={{ fontWeight: 600 }}>{formatCOP(row.totalRevenue)}</td>
                     <td>{formatCOP(row.cogs)}</td>
                     <td style={{ color: row.grossProfit >= 0 ? "#065f46" : "#b91c1c", fontWeight: 600 }}>

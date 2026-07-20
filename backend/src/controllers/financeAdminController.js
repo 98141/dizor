@@ -6,7 +6,6 @@ const {
   buildFinancePdf,
 } = require("../utils/financeExport");
 const Product = require("../models/product");
-const PosOrder = require("../models/posOrder");
 const Order = require("../models/order");
 const AppError = require("../utils/AppError");
 
@@ -232,12 +231,9 @@ exports.getFinanceHistory = catchAsync(async (req, res) => {
     start.setHours(0, 0, 0, 0);
   }
 
-  const [products, orders, posOrders] = await Promise.all([
+  const [products, orders] = await Promise.all([
     Product.find().select("+internalCost _id").lean(),
     Order.find({ paymentStatus: "pagado", createdAt: { $gte: start, $lte: end } })
-      .select("items total subtotal createdAt")
-      .lean(),
-    PosOrder.find({ isVoided: false, createdAt: { $gte: start, $lte: end } })
       .select("items total subtotal createdAt")
       .lean(),
   ]);
@@ -254,9 +250,7 @@ exports.getFinanceHistory = catchAsync(async (req, res) => {
         periodKey: key,
         label: getPeriodLabel(key, groupBy),
         ordersCount: 0,
-        posOrdersCount: 0,
         onlineRevenue: 0,
-        posRevenue: 0,
         totalRevenue: 0,
         cogs: 0,
         grossProfit: 0,
@@ -280,23 +274,10 @@ exports.getFinanceHistory = catchAsync(async (req, res) => {
     }
   }
 
-  for (const posOrder of posOrders) {
-    const row = getOrCreate(getPeriodKey(posOrder.createdAt, groupBy));
-    row.posOrdersCount += 1;
-    for (const item of posOrder.items || []) {
-      const qty = item.quantity || 0;
-      row.posRevenue += item.lineTotal != null ? item.lineTotal : (item.unitPrice || 0) * qty;
-      row.unitsSold += qty;
-      const unitCost = costMap.get(String(item.productId)) ?? null;
-      if (unitCost != null) row.cogs += unitCost * qty;
-    }
-  }
-
   const rows = [...periodMap.values()]
     .map((row) => {
       row.onlineRevenue = round(row.onlineRevenue);
-      row.posRevenue = round(row.posRevenue);
-      row.totalRevenue = row.onlineRevenue + row.posRevenue;
+      row.totalRevenue = row.onlineRevenue;
       row.cogs = round(row.cogs);
       row.grossProfit = row.totalRevenue - row.cogs;
       row.grossMarginPct =
@@ -309,7 +290,7 @@ exports.getFinanceHistory = catchAsync(async (req, res) => {
 
   const totalRevenue = rows.reduce((s, r) => s + r.totalRevenue, 0);
   const totalProfit = rows.reduce((s, r) => s + r.grossProfit, 0);
-  const totalOrders = rows.reduce((s, r) => s + r.ordersCount + r.posOrdersCount, 0);
+  const totalOrders = rows.reduce((s, r) => s + r.ordersCount, 0);
 
   res.json({
     groupBy,

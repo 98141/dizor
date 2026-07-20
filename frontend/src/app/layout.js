@@ -28,7 +28,6 @@ import "@/styles/pages/admin-marketing.css";
 import "@/styles/pages/admin-dashboard.css";
 import "@/styles/pages/admin-finanzas.css";
 import "@/styles/pages/not-found.css";
-import "@/styles/pages/admin-pos.css";
 import "@/styles/pages/admin-alertas.css";
 import "@/styles/components/cookie-consent.css";
 

@@ -36,7 +36,6 @@ const adminFinanceRoutes = require("./routes/adminFinanceRoutes");
 const wompiWebhookRoutes = require("./routes/wompiWebhookRoutes");
 const nequiRoutes        = require("./routes/nequiRoutes");
 const adminCouponRoutes  = require("./routes/adminCouponRoutes");
-const adminPosRoutes = require("./routes/adminPosRoutes");
 const adminAlertRoutes = require("./routes/adminAlertRoutes");
 const visitRoutes = require("./routes/visitRoutes");
 
@@ -177,7 +176,6 @@ app.use("/api/admin/finance", adminFinanceRoutes);
 app.use("/api/webhooks", wompiWebhookRoutes);
 app.use("/api/payments/nequi", nequiRoutes);
 app.use("/api/admin/coupons", adminCouponRoutes);
-app.use("/api/admin/pos", adminPosRoutes);
 app.use("/api/admin/alerts", adminAlertRoutes);
 app.use("/api/visits", visitRoutes);
 

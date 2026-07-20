@@ -30,11 +30,6 @@ export const updateOrderShipping = async (id, data) => {
   return res.data;
 };
 
-export const createManualOrder = async (data) => {
-  const res = await api.post("/admin/orders/manual", data);
-  return res.data;
-};
-
 export const exportOrdersPdf = async (params = {}) => {
   const res = await api.get("/admin/orders/export/pdf", {
     params,

@@ -16,7 +16,6 @@ const adminLinks = [
   { href: "/admin/productos", label: "Productos", roles: ["superadmin", "admin"] },
   { href: "/admin/catalogo", label: "Catálogo", roles: ["superadmin", "admin"] },
   { href: "/admin/contenido", label: "Contenido", roles: ["superadmin", "admin"] },
-  { href: "/admin/pos", label: "POS", roles: ["superadmin", "admin", "vendedor"] },
   { href: "/admin/cupones", label: "Cupones", roles: ["superadmin", "admin"] },
   { href: "/admin/alertas", label: "Alertas", roles: ["superadmin", "admin"] },
   { href: "/admin/configuracion", label: "Configuración", roles: ["superadmin", "admin"] },
@@ -27,7 +26,6 @@ const adminLinks = [
 const vendorLinks = [
   { href: "/vendedor", label: "Dashboard", roles: ["superadmin", "admin", "vendedor"] },
   { href: "/vendedor/pedidos", label: "Pedidos", roles: ["superadmin", "admin", "vendedor"] },
-  { href: "/admin/pos", label: "POS", roles: ["superadmin", "admin", "vendedor"] },
   { href: "/admin/solicitudes", label: "Solicitudes", roles: ["superadmin", "admin", "vendedor"] },
 ];
 
