@@ -28,11 +28,17 @@ exports.deductOrderStock = async (orderItems, context = {}) => {
   const deducted = [];
   for (const item of orderItems) {
     const productId = item.product || item.productId;
+    // $elemMatch is required here: "variants._id" and "variants.stock" as
+    // separate top-level conditions can each match a DIFFERENT array element
+    // (e.g. _id from variant A, stock>=qty from variant B), and the "$"
+    // positional operator below then updates whichever element MongoDB
+    // resolves the match to — silently decrementing the wrong variant when
+    // an order has multiple items of the same product. $elemMatch forces
+    // both conditions onto the same element.
     const updated = await Product.findOneAndUpdate(
       {
         _id: productId,
-        "variants._id": item.variantId,
-        "variants.stock": { $gte: item.quantity },
+        variants: { $elemMatch: { _id: item.variantId, stock: { $gte: item.quantity } } },
       },
       { $inc: { "variants.$.stock": -item.quantity, salesCount: item.quantity } },
       { new: true }
@@ -159,17 +165,24 @@ exports.createOrder = async ({
     const deducted = [];
     try {
       for (const item of items) {
+        // $elemMatch: ver comentario en deductOrderStock — sin él, un pedido
+        // con varios ítems del mismo producto puede descontar la variante
+        // equivocada.
         const updated = await Product.findOneAndUpdate(
           {
             _id: item.productId,
-            "variants._id": item.variantId,
-            "variants.stock": { $gte: item.quantity },
+            variants: { $elemMatch: { _id: item.variantId, stock: { $gte: item.quantity } } },
           },
           { $inc: { "variants.$.stock": -item.quantity, salesCount: item.quantity } },
           { new: true }
         );
         if (!updated) throw new Error(`Stock insuficiente: ${item.productName}`);
-        deducted.push({ productId: item.productId, variantId: item.variantId, quantity: item.quantity });
+        deducted.push({
+          productId: item.productId,
+          variantId: item.variantId,
+          quantity: item.quantity,
+          product: updated,
+        });
       }
     } catch (err) {
       // Roll back partial deductions
@@ -187,10 +200,11 @@ exports.createOrder = async ({
     await order.save({ validateBeforeSave: false });
 
     for (const item of items) {
+      const record = deducted.find((d) => String(d.variantId) === String(item.variantId));
       safeLogProductHistory(
         logProductSale({
-          product: { _id: item.productId, name: item.productName, slug: item.productSlug },
-          variant: { _id: item.variantId, stock: 0 },
+          product: record.product,
+          variant: record.product.variants.id(item.variantId),
           quantity: item.quantity,
           orderId: order._id,
           orderNumber,

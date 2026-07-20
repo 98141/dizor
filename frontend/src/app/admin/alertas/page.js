@@ -230,7 +230,7 @@ export default function AlertasPage() {
                     {alerts.newOrders.items.map((o) => (
                       <tr key={o._id}>
                         <td>
-                          <Link href="/admin/pedidos" className="alert-link">
+                          <Link href={`/admin/pedidos/${o._id}`} className="alert-link">
                             #{o.orderNumber}
                           </Link>
                         </td>
@@ -279,7 +279,7 @@ export default function AlertasPage() {
                       return (
                         <tr key={o._id}>
                           <td>
-                            <Link href="/admin/pedidos" className="alert-link">
+                            <Link href={`/admin/pedidos/${o._id}`} className="alert-link">
                               #{o.orderNumber}
                             </Link>
                           </td>

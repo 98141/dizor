@@ -497,11 +497,13 @@ exports.createManualOrder = catchAsync(async (req, res, next) => {
   // Descontar stock atómicamente (con check de disponibilidad)
   const deducted = [];
   for (const item of safeItems) {
+    // $elemMatch evita que "variants._id" y "variants.stock" se evalúen
+    // contra elementos distintos del array cuando el pedido tiene varios
+    // ítems del mismo producto (ver orderService.deductOrderStock).
     const updated = await Product.findOneAndUpdate(
       {
         _id: item.product,
-        "variants._id": item.variantId,
-        "variants.stock": { $gte: item.quantity },
+        variants: { $elemMatch: { _id: item.variantId, stock: { $gte: item.quantity } } },
       },
       { $inc: { "variants.$.stock": -item.quantity } }
     );

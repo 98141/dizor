@@ -293,7 +293,7 @@ export default function AdminDashboard() {
                 {recentOrders.map((o) => (
                   <tr key={o.id}>
                     <td>
-                      <Link href="/admin/pedidos" className="dash-order-link">
+                      <Link href={`/admin/pedidos/${o.id}`} className="dash-order-link">
                         #{o.orderNumber}
                       </Link>
                     </td>

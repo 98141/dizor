@@ -13,6 +13,7 @@ import {
 } from "@/services/adminCatalogService";
 
 const emptyVariant = () => ({
+  id: null,
   size: "",
   color: "",
   sku: "",
@@ -128,6 +129,7 @@ export default function ProductForm({ productId }) {
             variants:
               product.variants?.length > 0
                 ? product.variants.map((v) => ({
+                    id: v.id || v._id || null,
                     size: v.size?.toString?.() || v.size || "",
                     color: v.color?.toString?.() || v.color || "",
                     sku: v.sku || "",
@@ -315,6 +317,7 @@ export default function ProductForm({ productId }) {
     })),
     mainImage: form.mainImage || form.images[0]?.url,
     variants: form.variants.map((v) => ({
+      ...(v.id ? { id: v.id } : {}),
       size: v.size,
       color: v.color,
       sku: String(v.sku).trim().toUpperCase(),

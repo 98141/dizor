@@ -204,6 +204,51 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
   await product.populate(populateAll);
   const productBefore = snapshotProductForHistory(product);
 
+  // Actualizar variantes por su _id en vez de reemplazar el array completo:
+  // si se reasigna con Object.assign, Mongoose trata cada entrada entrante
+  // (sin _id) como un subdocumento nuevo y le genera un _id distinto, aunque
+  // sea la misma variante — eso rompe cualquier referencia existente
+  // (carritos, pedidos en curso) y hace que el historial de inventario la
+  // registre como "variante nueva" en vez de un ajuste de stock.
+  if (Array.isArray(req.body.variants)) {
+    const keepIds = [];
+
+    for (const incoming of req.body.variants) {
+      const vid = incoming.id || incoming._id;
+      const existing = vid ? product.variants.id(vid) : null;
+
+      if (existing) {
+        existing.set({
+          size: incoming.size,
+          color: incoming.color,
+          sku: incoming.sku,
+          stock: incoming.stock,
+          price: incoming.price,
+          isActive: incoming.isActive,
+        });
+        keepIds.push(String(existing._id));
+      } else {
+        product.variants.push({
+          size: incoming.size,
+          color: incoming.color,
+          sku: incoming.sku,
+          stock: incoming.stock,
+          price: incoming.price,
+          isActive: incoming.isActive,
+        });
+        keepIds.push(String(product.variants[product.variants.length - 1]._id));
+      }
+    }
+
+    for (const v of [...product.variants]) {
+      if (!keepIds.includes(String(v._id))) {
+        product.variants.pull(v._id);
+      }
+    }
+
+    delete req.body.variants;
+  }
+
   Object.assign(product, req.body);
   await product.save();
   await product.populate(populateAll);

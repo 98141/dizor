@@ -145,7 +145,7 @@ export default function AlertBell() {
                     {key === "newOrders" && group.items.slice(0, 3).map((o) => (
                       <Link
                         key={o._id}
-                        href="/admin/pedidos"
+                        href={`/admin/pedidos/${o._id}`}
                         className="alert-bell__item"
                         onClick={() => { dismissItem(key, o._id); setOpen(false); }}
                       >
@@ -157,7 +157,7 @@ export default function AlertBell() {
                     {key === "pendingPayments" && group.items.slice(0, 3).map((o) => (
                       <Link
                         key={o._id}
-                        href="/admin/pedidos"
+                        href={`/admin/pedidos/${o._id}`}
                         className="alert-bell__item"
                         onClick={() => { dismissItem(key, o._id); setOpen(false); }}
                       >
