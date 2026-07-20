@@ -52,10 +52,30 @@ exports.handleWompiEvent = catchAsync(async (req, res) => {
   };
 
   if (transaction.status === "APPROVED") {
+    // Defensa en profundidad: el monto pagado debe coincidir con el total de la orden.
+    // El link de pago se crea con amount_in_cents = order.total * 100 (ver
+    // wompiService.createPaymentLink), así que aquí debe cuadrar exactamente.
+    const expectedCents = Math.round(order.total * 100);
+    const paidCents = Number(transaction.amount_in_cents);
+    if (!Number.isFinite(paidCents) || paidCents !== expectedCents) {
+      pushStatusHistory(
+        order,
+        order.orderStatus,
+        `ALERTA: monto pagado (${paidCents} cts) no coincide con el total esperado (${expectedCents} cts). Revisión manual requerida.`
+      );
+      order.customerNotes = (order.customerNotes || "") +
+        `\n[SISTEMA] Pago Wompi con monto ${paidCents} cts distinto al total esperado ${expectedCents} cts. No se confirmó automáticamente.`;
+      await order.save();
+      return res.status(200).send("OK");
+    }
+
     // Descontar stock si aún no se hizo (órdenes Wompi siempre llegan aquí con stockDeducted=false)
     if (!order.stockDeducted) {
       try {
-        await deductOrderStock(order.items);
+        await deductOrderStock(order.items, {
+          orderId: order._id,
+          orderNumber: order.orderNumber,
+        });
         order.stockDeducted = true;
       } catch {
         // Stock agotado mientras esperaba el pago → marcar para revisión manual

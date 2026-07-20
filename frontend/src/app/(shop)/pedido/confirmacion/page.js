@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { trackOrder } from "@/services/checkoutService";
 import { formatCOP } from "@/lib/formatCurrency";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
 import { trackWhatsAppClick } from "@/lib/analytics/events";
@@ -227,6 +228,10 @@ function ConfirmacionContent() {
 
   const [showRegistroModal, setShowRegistroModal] = useState(false);
 
+  // Wompi redirige de vuelta sin el monto en la URL (ver wompiService.createPaymentLink),
+  // así que el total real se recupera del backend con el número de pedido + email.
+  const [resolvedTotal, setResolvedTotal] = useState(total);
+
   useEffect(() => {
     if (!urlEmail) {
       try {
@@ -239,6 +244,24 @@ function ConfirmacionContent() {
       } catch {}
     }
   }, [urlEmail]);
+
+  useEffect(() => {
+    if (payment !== "wompi") return;
+    if (total && Number(total) > 0) return;
+    if (!orderNumber || !guestEmail) return;
+
+    let cancelled = false;
+    trackOrder(orderNumber, guestEmail)
+      .then((data) => {
+        if (!cancelled && data?.order?.total != null) {
+          setResolvedTotal(String(data.order.total));
+        }
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [payment, total, orderNumber, guestEmail]);
 
   // Abrir el modal automáticamente 1.5 s después de llegar a la confirmación
   useEffect(() => {
@@ -324,7 +347,7 @@ function ConfirmacionContent() {
         )}
         <div className="checkout-confirm-row">
           <span>Total pagado</span>
-          <strong>{formatCOP(Number(total))}</strong>
+          <strong>{formatCOP(Number(resolvedTotal))}</strong>
         </div>
         <div className="checkout-confirm-row">
           <span>Método de pago</span>

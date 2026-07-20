@@ -20,7 +20,11 @@ const generateOrderNumber = async () => {
 // Atomically deduct stock for each order item.
 // orderItems uses { product (ObjectId), variantId, quantity, productName }
 // Rolls back partial deductions and throws if any item has insufficient stock.
-exports.deductOrderStock = async (orderItems) => {
+// `context` (orderId/orderNumber/user) is optional but needed to log each
+// sale in el historial de inventario — sin él el stock baja pero la venta
+// no queda registrada como movimiento (ver deducciones vía webhook Wompi/Nequi).
+exports.deductOrderStock = async (orderItems, context = {}) => {
+  const { orderId = null, orderNumber = "", user = null } = context;
   const deducted = [];
   for (const item of orderItems) {
     const productId = item.product || item.productId;
@@ -44,6 +48,21 @@ exports.deductOrderStock = async (orderItems) => {
       throw new Error(`Stock insuficiente: ${item.productName}`);
     }
     deducted.push(item);
+
+    if (orderNumber) {
+      safeLogProductHistory(
+        logProductSale({
+          product: updated,
+          variant: updated.variants.id(item.variantId),
+          quantity: item.quantity,
+          orderId,
+          orderNumber,
+          user,
+          sizeName: item.sizeName,
+          colorName: item.colorName,
+        })
+      );
+    }
   }
 };
 

@@ -28,7 +28,10 @@ const approveOrder = async (order, source) => {
 
   if (!order.stockDeducted) {
     try {
-      await deductOrderStock(order.items);
+      await deductOrderStock(order.items, {
+        orderId: order._id,
+        orderNumber: order.orderNumber,
+      });
       order.stockDeducted = true;
     } catch {
       pushStatusHistory(

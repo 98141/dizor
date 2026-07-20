@@ -12,7 +12,7 @@ const {
   logPosSale,
   safeLogProductHistory,
 } = require("../services/productHistoryService");
-const { restoreOrderStock } = require("../services/orderService");
+const { restoreOrderStock, deductOrderStock } = require("../services/orderService");
 
 const generateManualOrderNumber = async () => {
   const today = new Date();
@@ -223,6 +223,27 @@ exports.confirmPayment = catchAsync(async (req, res, next) => {
 
   if (order.paymentStatus === "pagado") {
     return next(new AppError("El pago ya fue confirmado", 400));
+  }
+
+  // Pedidos Wompi/Nequi API llegan aquí con stockDeducted=false (solo se
+  // descuenta automáticamente vía webhook); si un admin confirma el pago a
+  // mano hay que descontar el stock aquí también para no dejarlo sin ajustar.
+  if (!order.stockDeducted) {
+    try {
+      await deductOrderStock(order.items, {
+        orderId: order._id,
+        orderNumber: order.orderNumber,
+        user: req.user,
+      });
+      order.stockDeducted = true;
+    } catch (err) {
+      return next(
+        new AppError(
+          err.message || "No se pudo confirmar el pago: stock insuficiente",
+          400
+        )
+      );
+    }
   }
 
   order.paymentStatus = "pagado";

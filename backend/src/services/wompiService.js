@@ -91,5 +91,13 @@ exports.verifyEventChecksum = (eventBody, checksumHeader) => {
   chain += secret;
 
   const calculated = crypto.createHash("sha256").update(chain).digest("hex").toUpperCase();
-  return calculated === String(checksumHeader).toUpperCase();
+  const received = String(checksumHeader).toUpperCase();
+
+  // Comparación en tiempo constante: evita un canal lateral de temporización
+  // (timing attack) al comparar el checksum. timingSafeEqual exige buffers de
+  // igual longitud, por eso se valida el tamaño antes.
+  const a = Buffer.from(calculated, "utf8");
+  const b = Buffer.from(received, "utf8");
+  if (a.length !== b.length) return false;
+  return crypto.timingSafeEqual(a, b);
 };
