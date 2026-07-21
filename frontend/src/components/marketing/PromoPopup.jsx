@@ -3,12 +3,14 @@
 import { useEffect, useState } from "react";
 import { getMarketingConfig } from "@/services/marketingService";
 import NewsletterSignup from "./NewsletterSignup";
+import { PENDING_POPUP_COUPON_KEY } from "@/context/CartContext";
 
 const STORAGE_KEY = "dizor_promo_popup_seen";
 
 export default function PromoPopup() {
   const [config, setConfig] = useState(null);
   const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     getMarketingConfig()
@@ -26,9 +28,28 @@ export default function PromoPopup() {
     return () => clearTimeout(timer);
   }, [config]);
 
+  // El código se deja "pendiente" en cuanto el popup con cupón se muestra,
+  // para que el carrito lo aplique automáticamente al validarlo contra el backend.
+  useEffect(() => {
+    if (!open) return;
+    if (config?.popup?.variant !== "coupon" || !config?.popup?.couponCode) return;
+    if (typeof window === "undefined") return;
+    localStorage.setItem(PENDING_POPUP_COUPON_KEY, config.popup.couponCode);
+  }, [open, config]);
+
   const close = () => {
     sessionStorage.setItem(STORAGE_KEY, "1");
     setOpen(false);
+  };
+
+  const copyCoupon = async (code) => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      /* clipboard no disponible, el código sigue visible para copiar a mano */
+    }
   };
 
   if (!open || !config?.popup?.enabled) return null;
@@ -56,7 +77,29 @@ export default function PromoPopup() {
         )}
         <h2 className="promo-popup__title">{popup.title}</h2>
         <p className="promo-popup__text">{popup.text}</p>
-        {popup.showNewsletterForm !== false ? (
+        {popup.variant === "coupon" && popup.couponCode ? (
+          <>
+            <div className="promo-popup__coupon">
+              <span className="promo-popup__coupon-code">{popup.couponCode}</span>
+              <button
+                type="button"
+                className="promo-popup__coupon-copy"
+                onClick={() => copyCoupon(popup.couponCode)}
+              >
+                {copied ? "¡Copiado!" : "Copiar código"}
+              </button>
+            </div>
+            <p className="promo-popup__coupon-hint">
+              Se aplicará solo al llegar al carrito, o puedes pegarlo ahí manualmente.
+            </p>
+          </>
+        ) : popup.variant === "info" ? (
+          popup.ctaHref ? (
+            <a href={popup.ctaHref} className="promo-popup__cta" onClick={close}>
+              {popup.ctaLabel || "Ver más"}
+            </a>
+          ) : null
+        ) : popup.showNewsletterForm !== false ? (
           <NewsletterSignup
             source="popup"
             compact

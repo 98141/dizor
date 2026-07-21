@@ -282,6 +282,30 @@
   margin: 0;
 }
 
+.admin-radio-group {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md, 8px);
+  padding: var(--space-sm) var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.admin-radio-group legend {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  padding: 0 var(--space-xs);
+}
+
+.admin-radio {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
 .product-form__hint {
   font-size: 0.9rem;
   color: var(--color-text-muted);

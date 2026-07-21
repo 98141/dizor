@@ -145,6 +145,40 @@
   border-radius: 4px;
 }
 
+.promo-popup__coupon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px dashed var(--color-primary, #3d4f3a);
+  border-radius: 4px;
+  background: var(--color-surface-muted, #f5f3ef);
+}
+
+.promo-popup__coupon-code {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.promo-popup__coupon-copy {
+  padding: 0.5rem 0.9rem;
+  background: var(--color-primary, #3d4f3a);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font: inherit;
+  white-space: nowrap;
+}
+
+.promo-popup__coupon-hint {
+  font-size: 0.78rem;
+  color: var(--color-text-muted, #666);
+  margin: 0.5rem 0 0;
+}
+
 .abandoned-cart-capture {
   margin: 1.25rem 0;
   padding: 1rem;

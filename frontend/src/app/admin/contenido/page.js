@@ -37,6 +37,7 @@ import {
   getStoreSettings,
   updateStoreSettings,
 } from "@/services/adminSettingsService";
+import { getCoupons } from "@/services/adminCouponService";
 import { formatCOP } from "@/lib/formatCurrency";
 import HomeImagesTab from "@/components/admin/HomeImagesTab";
 import HomeTextsTab from "@/components/admin/HomeTextsTab";
@@ -88,6 +89,8 @@ const normalizeMarketing = (raw) => ({
     enabled: false,
     delaySeconds: 4,
     showNewsletterForm: true,
+    variant: "newsletter",
+    couponCode: "",
     title: "",
     text: "",
     ctaLabel: "Suscribirme",
@@ -247,6 +250,7 @@ function ContenidoAdminContent() {
   const [marketing, setMarketing] = useState(null);
   const [subscribers, setSubscribers] = useState([]);
   const [carts, setCarts] = useState([]);
+  const [coupons, setCoupons] = useState([]);
 
   // Appearance state
   const [appearance, setAppearance] = useState(normalizeAppearance(null));
@@ -277,6 +281,13 @@ function ContenidoAdminContent() {
       setMarketing(normalizeMarketing(mRes.settings));
     } catch {
       setMarketing(normalizeMarketing({}));
+    }
+
+    try {
+      const cRes = await getCoupons();
+      setCoupons(cRes.coupons || []);
+    } catch {
+      /* non-fatal */
     }
 
     try {
@@ -737,10 +748,63 @@ function ContenidoAdminContent() {
               onChange={(e) => setPopup("enabled", e.target.checked)} />
             Activar popup
           </label>
+
+          <fieldset className="admin-radio-group" style={{ margin: "1rem 0" }}>
+            <legend>Contenido del popup (solo uno se publica)</legend>
+            <label className="admin-radio">
+              <input type="radio" name="popupVariant" value="newsletter"
+                checked={(marketing.popup?.variant || "newsletter") === "newsletter"}
+                onChange={() => setPopup("variant", "newsletter")} />
+              Suscripción por correo
+            </label>
+            <label className="admin-radio">
+              <input type="radio" name="popupVariant" value="coupon"
+                checked={marketing.popup?.variant === "coupon"}
+                onChange={() => setPopup("variant", "coupon")} />
+              Cupón de descuento
+            </label>
+            <label className="admin-radio">
+              <input type="radio" name="popupVariant" value="info"
+                checked={marketing.popup?.variant === "info"}
+                onChange={() => setPopup("variant", "info")} />
+              Información / anuncio
+            </label>
+          </fieldset>
+
           <AuthFormField label="Título" name="popupTitle" value={marketing.popup?.title || ""}
             onChange={(e) => setPopup("title", e.target.value)} />
           <AuthFormField label="Texto" name="popupText" value={marketing.popup?.text || ""}
             onChange={(e) => setPopup("text", e.target.value)} />
+
+          {marketing.popup?.variant === "coupon" && (
+            <div className="admin-form-field">
+              <label htmlFor="popupCoupon">Cupón a mostrar</label>
+              <select id="popupCoupon" value={marketing.popup?.couponCode || ""}
+                onChange={(e) => setPopup("couponCode", e.target.value)}>
+                <option value="">— Selecciona un cupón —</option>
+                {coupons.filter((c) => c.isActive).map((c) => (
+                  <option key={c._id} value={c.code}>
+                    {c.code} ({c.type === "percentage" ? `${c.value}%` : formatCOP(c.value)})
+                  </option>
+                ))}
+              </select>
+              {coupons.filter((c) => c.isActive).length === 0 && (
+                <p className="admin-muted">No hay cupones activos. Crea uno en la sección Cupones.</p>
+              )}
+            </div>
+          )}
+
+          {marketing.popup?.variant === "info" && (
+            <>
+              <AuthFormField label="Texto del botón (opcional)" name="popupCtaLabel"
+                value={marketing.popup?.ctaLabel || ""}
+                onChange={(e) => setPopup("ctaLabel", e.target.value)} />
+              <AuthFormField label="Enlace del botón (opcional)" name="popupCtaHref"
+                value={marketing.popup?.ctaHref || ""}
+                onChange={(e) => setPopup("ctaHref", e.target.value)} />
+            </>
+          )}
+
           <AuthFormField label="Retraso (segundos)" name="delay" type="number"
             value={marketing.popup?.delaySeconds ?? 4}
             onChange={(e) => setPopup("delaySeconds", Number(e.target.value))} />

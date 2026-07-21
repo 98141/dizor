@@ -9,10 +9,14 @@ import {
   useState,
 } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { syncCart } from "@/services/cartService";
+import { syncCart, validateCoupon } from "@/services/cartService";
 
 const STORAGE_KEY   = "dizor_cart_v1";
 const COUPON_KEY    = "dizor_coupon_v1";
+
+// Código de cupón dejado por PromoPopup para aplicarlo apenas el carrito
+// tenga ítems, validado siempre contra el backend igual que el campo manual.
+export const PENDING_POPUP_COUPON_KEY = "dizor_pending_popup_coupon";
 
 const CartContext = createContext(null);
 
@@ -62,6 +66,29 @@ export const CartProvider = ({ children }) => {
       localStorage.removeItem(COUPON_KEY);
     }
   }, [appliedCoupon, hydrated]);
+
+  // Aplicar automáticamente un cupón dejado pendiente por el popup, apenas
+  // haya ítems en el carrito. Se valida contra el backend igual que si el
+  // cliente lo hubiera escrito a mano; si es inválido/expirado se descarta
+  // en silencio y no se vuelve a intentar.
+  useEffect(() => {
+    if (!hydrated || appliedCoupon || items.length === 0) return;
+    if (typeof window === "undefined") return;
+
+    const pendingCode = localStorage.getItem(PENDING_POPUP_COUPON_KEY);
+    if (!pendingCode) return;
+
+    localStorage.removeItem(PENDING_POPUP_COUPON_KEY);
+
+    const subtotal = items.reduce(
+      (s, i) => s + (i.unitPrice || 0) * i.quantity,
+      0
+    );
+
+    validateCoupon(pendingCode, subtotal)
+      .then((data) => setAppliedCoupon(data.coupon))
+      .catch(() => {});
+  }, [hydrated, items, appliedCoupon]);
 
   // Sync to server when authenticated
   useEffect(() => {

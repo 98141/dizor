@@ -8,6 +8,8 @@ const DEFAULTS = {
     imageUrl: "",
     delaySeconds: 4,
     showNewsletterForm: true,
+    variant: "newsletter",
+    couponCode: "",
   },
   newsletter: {
     footerTitle: "Newsletter Dizor",

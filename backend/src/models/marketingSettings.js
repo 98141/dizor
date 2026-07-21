@@ -20,6 +20,12 @@ const marketingSettingsSchema = new mongoose.Schema(
       imageUrl: { type: String, trim: true, default: "" },
       delaySeconds: { type: Number, default: 4, min: 0, max: 60 },
       showNewsletterForm: { type: Boolean, default: true },
+      variant: {
+        type: String,
+        enum: ["newsletter", "coupon", "info"],
+        default: "newsletter",
+      },
+      couponCode: { type: String, trim: true, uppercase: true, default: "" },
     },
     newsletter: {
       footerTitle: { type: String, trim: true, default: "Newsletter Dizor" },
