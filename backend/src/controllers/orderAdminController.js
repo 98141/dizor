@@ -8,6 +8,7 @@ const {
   canConfirmPayment,
 } = require("../utils/orderPermissions");
 const { restoreOrderStock, deductOrderStock } = require("../services/orderService");
+const { sendOrderShippedEmail } = require("../services/emailService");
 
 const formatOrderList = (order) => ({
   id: order._id,
@@ -174,6 +175,14 @@ exports.updateOrderStatus = catchAsync(async (req, res, next) => {
 
   await order.save();
 
+  if (orderStatus === "enviado" && previousStatus !== "enviado") {
+    try {
+      await sendOrderShippedEmail(order);
+    } catch (err) {
+      console.error("[Dizor] No se pudo enviar el correo de pedido enviado:", err.message);
+    }
+  }
+
   safeLog(
     logAuditEvent({
       req,
@@ -287,7 +296,9 @@ exports.updateShipping = catchAsync(async (req, res, next) => {
   if (trackingNumber !== undefined) order.trackingNumber = trackingNumber;
   if (shippingNotes !== undefined) order.shippingNotes = shippingNotes;
 
-  if (trackingNumber && order.orderStatus === "en_preparacion") {
+  const justShipped = trackingNumber && order.orderStatus === "en_preparacion";
+
+  if (justShipped) {
     order.orderStatus = "enviado";
     pushStatusHistory(
       order,
@@ -298,6 +309,14 @@ exports.updateShipping = catchAsync(async (req, res, next) => {
   }
 
   await order.save();
+
+  if (justShipped) {
+    try {
+      await sendOrderShippedEmail(order);
+    } catch (err) {
+      console.error("[Dizor] No se pudo enviar el correo de pedido enviado:", err.message);
+    }
+  }
 
   safeLog(
     logAuditEvent({

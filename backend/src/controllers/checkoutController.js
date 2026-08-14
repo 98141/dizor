@@ -16,6 +16,7 @@ const {
   normalizePhone,
 } = require("../services/nequiPaymentService");
 const { markAbandonedCartRecovered } = require("../services/marketingService");
+const { sendNewOrderAdminEmail } = require("../services/emailService");
 
 // DTO seguro: nunca expone unitCost, internalCost ni datos administrativos al cliente
 const formatOrderForClient = (order) => ({
@@ -374,6 +375,12 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
         new AppError(err.message || "No se pudo iniciar el pago con Nequi", 502)
       );
     }
+  }
+
+  try {
+    await sendNewOrderAdminEmail(order);
+  } catch (err) {
+    console.error("[Dizor] No se pudo enviar el correo de notificación de pedido:", err.message);
   }
 
   res.status(201).json({

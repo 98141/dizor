@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { validateCart, validateCoupon } from "@/services/cartService";
 import AbandonedCartCapture from "@/components/marketing/AbandonedCartCapture";
@@ -23,11 +24,13 @@ export default function CarritoPage() {
     clearCoupon,
   } = useCart();
 
+  const router = useRouter();
   const [totals, setTotals] = useState(null);
   const [loading, setLoading] = useState(false);
   const [couponInput, setCouponInput] = useState("");
   const [couponLoading, setCouponLoading] = useState(false);
   const [couponError, setCouponError] = useState("");
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
   const couponRef = useRef(null);
 
   useEffect(() => {
@@ -94,6 +97,32 @@ export default function CarritoPage() {
     clearCoupon();
     setCouponError("");
     setTimeout(() => couponRef.current?.focus(), 50);
+  };
+
+  // Revalida el cupón contra el backend justo antes de pasar al checkout,
+  // para no dejar que el cliente llene todo el formulario y recién al
+  // confirmar el pedido se entere de que el cupón ya venció o se agotó.
+  const handleGoToCheckout = async () => {
+    if (!appliedCoupon) {
+      router.push("/checkout");
+      return;
+    }
+
+    setCheckoutLoading(true);
+    setCouponError("");
+    try {
+      const data = await validateCoupon(appliedCoupon.code, totals?.subtotal || 0);
+      applyCoupon(data.coupon);
+      router.push("/checkout");
+    } catch (err) {
+      clearCoupon();
+      setCouponError(
+        err.response?.data?.message ||
+          "Tu cupón ya no está disponible y fue eliminado del carrito."
+      );
+    } finally {
+      setCheckoutLoading(false);
+    }
   };
 
   if (!hydrated) {
@@ -301,9 +330,14 @@ export default function CarritoPage() {
 
               <AbandonedCartCapture />
 
-              <Link href="/checkout" className="cart-summary__cta">
-                Ir a checkout
-              </Link>
+              <button
+                type="button"
+                className="cart-summary__cta"
+                onClick={handleGoToCheckout}
+                disabled={checkoutLoading}
+              >
+                {checkoutLoading ? "Verificando cupón..." : "Ir a checkout"}
+              </button>
               <Link
                 href="/catalogo"
                 className="cart-summary__cta cart-summary__cta--secondary"

@@ -39,12 +39,16 @@ exports.sendPasswordResetEmail = async ({ to, name, resetUrl }) => {
     return { devMode: true };
   }
 
-  await client.emails.send({
+  const { error } = await client.emails.send({
     from,
     to,
     subject,
     html,
   });
+
+  if (error) {
+    throw new Error(`Resend error: ${error.message || JSON.stringify(error)}`);
+  }
 
   return { devMode: false };
 };
@@ -80,12 +84,126 @@ exports.sendSpecialRequestEmail = async (request) => {
     return { devMode: true };
   }
 
-  await client.emails.send({
+  const { error } = await client.emails.send({
     from,
     to: adminEmail,
     subject: `[Dizor] Nueva solicitud ${request.requestNumber}`,
     html,
   });
+
+  if (error) {
+    throw new Error(`Resend error: ${error.message || JSON.stringify(error)}`);
+  }
+
+  return { devMode: false };
+};
+
+const STATUS_LABELS = {
+  wompi: "Wompi",
+  nequi_manual: "Nequi",
+  nequi_api: "Nequi",
+  contra_entrega: "Contraentrega",
+  efectivo: "Efectivo",
+  nequi_presencial: "Nequi presencial",
+  tarjeta: "Tarjeta",
+  transferencia: "Transferencia",
+};
+
+const CARRIER_LABELS = {
+  interrapidisimo: "Inter Rapidísimo",
+  envia: "Envía",
+  coordinadora: "Coordinadora",
+};
+
+exports.sendNewOrderAdminEmail = async (order) => {
+  const client = getResendClient();
+  const from = process.env.EMAIL_FROM || "Dizor <onboarding@resend.dev>";
+  const adminEmail = process.env.ADMIN_NOTIFY_EMAIL || process.env.EMAIL_FROM;
+
+  const itemsHtml = (order.items || [])
+    .map(
+      (i) =>
+        `<li>${i.productName || "Producto"}${i.sizeName ? ` · ${i.sizeName}` : ""}${i.colorName ? ` · ${i.colorName}` : ""} × ${i.quantity} — $${Number(i.lineTotal || 0).toLocaleString("es-CO")} COP</li>`
+    )
+    .join("");
+
+  const html = `
+    <div style="font-family: Georgia, serif; max-width: 560px; margin: 0 auto; color: #1f1f1f;">
+      <h1 style="font-size: 20px; font-weight: 500;">Nuevo pedido — ${order.orderNumber}</h1>
+      <p>${order.buyer?.name || ""} · ${order.buyer?.email || ""} · ${order.buyer?.phone || ""}</p>
+      <p>${order.shippingAddress?.address || ""}, ${order.shippingAddress?.city || ""}, ${order.shippingAddress?.department || ""}</p>
+      <ul style="padding-left: 1.2rem; line-height: 1.6;">${itemsHtml}</ul>
+      <p style="font-weight: 600;">Total: $${Number(order.total || 0).toLocaleString("es-CO")} COP</p>
+      <p style="font-size: 14px; color: #666;">Método de pago: ${STATUS_LABELS[order.paymentMethod] || order.paymentMethod}</p>
+      <p style="font-size: 12px; color: #999;">Revisa el panel admin de Dizor.</p>
+    </div>
+  `;
+
+  if (!client || !adminEmail) {
+    console.log("[Dizor] Nuevo pedido:", order.orderNumber);
+    return { devMode: true };
+  }
+
+  const { error } = await client.emails.send({
+    from,
+    to: adminEmail,
+    subject: `[Dizor] Nuevo pedido ${order.orderNumber}`,
+    html,
+  });
+
+  if (error) {
+    throw new Error(`Resend error: ${error.message || JSON.stringify(error)}`);
+  }
+
+  return { devMode: false };
+};
+
+exports.sendOrderShippedEmail = async (order) => {
+  const client = getResendClient();
+  const from = process.env.EMAIL_FROM || "Dizor <onboarding@resend.dev>";
+
+  if (!order.buyer?.email) {
+    return { devMode: true, skipped: true };
+  }
+
+  const itemsHtml = (order.items || [])
+    .map(
+      (i) =>
+        `<li>${i.productName || "Producto"}${i.sizeName ? ` · ${i.sizeName}` : ""}${i.colorName ? ` · ${i.colorName}` : ""} × ${i.quantity}</li>`
+    )
+    .join("");
+
+  const carrierLabel = CARRIER_LABELS[order.carrier] || order.carrier || "";
+
+  const html = `
+    <div style="font-family: Georgia, serif; max-width: 560px; margin: 0 auto; color: #1f1f1f;">
+      <h1 style="font-size: 22px; font-weight: 500;">Hola${order.buyer?.name ? `, ${order.buyer.name}` : ""}</h1>
+      <p>Tu pedido <strong>${order.orderNumber}</strong> ya está en camino.</p>
+      <p>
+        ${carrierLabel ? `<strong>Transportadora:</strong> ${carrierLabel}<br/>` : ""}
+        ${order.trackingNumber ? `<strong>Número de guía:</strong> ${order.trackingNumber}` : ""}
+      </p>
+      <ul style="padding-left: 1.2rem; line-height: 1.6;">${itemsHtml}</ul>
+      <p style="font-size: 14px; color: #666;">Lo recibirás pronto en: ${order.shippingAddress?.address || ""}, ${order.shippingAddress?.city || ""}</p>
+      <p style="font-size: 12px; color: #999;">Sombreros artesanales — Sandoná, Nariño</p>
+    </div>
+  `;
+
+  if (!client) {
+    console.log("[Dizor] Pedido enviado:", order.orderNumber, "→", order.buyer.email);
+    return { devMode: true };
+  }
+
+  const { error } = await client.emails.send({
+    from,
+    to: order.buyer.email,
+    subject: `Tu pedido ${order.orderNumber} fue enviado — Dizor`,
+    html,
+  });
+
+  if (error) {
+    throw new Error(`Resend error: ${error.message || JSON.stringify(error)}`);
+  }
 
   return { devMode: false };
 };
@@ -129,12 +247,16 @@ exports.sendAbandonedCartEmail = async ({
     return { devMode: true };
   }
 
-  await client.emails.send({
+  const { error } = await client.emails.send({
     from,
     to,
     subject: subject || "Tu carrito te espera — Dizor",
     html,
   });
+
+  if (error) {
+    throw new Error(`Resend error: ${error.message || JSON.stringify(error)}`);
+  }
 
   return { devMode: false };
 };
