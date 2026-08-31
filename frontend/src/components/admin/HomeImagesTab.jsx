@@ -280,6 +280,8 @@ export default function HomeImagesTab() {
                 <img
                   src={img.url}
                   alt={img.altText || img.titulo || "Home"}
+                  loading="lazy"
+                  decoding="async"
                   style={{
                     width: "100%",
                     height: 160,

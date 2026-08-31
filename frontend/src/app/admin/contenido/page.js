@@ -217,6 +217,8 @@ function CmsImageField({ label, value, onChange, placeholder = "https://res.clou
           <img
             src={value}
             alt="Vista previa"
+            loading="lazy"
+            decoding="async"
             style={{ maxWidth: "100%", maxHeight: 160, objectFit: "cover", borderRadius: 6, border: "1px solid var(--color-border)" }}
           />
         </div>

@@ -4,16 +4,21 @@ import Image from "next/image";
 export default function PromoBanner({ banner }) {
   if (!banner) return null;
 
-  const style = banner.imageUrl
-    ? {
-        backgroundImage: `linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url(${banner.imageUrl})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }
-    : undefined;
-
   return (
-    <section className="promo-banner" style={style}>
+    <section className="promo-banner">
+      {banner.imageUrl && (
+        <>
+          <Image
+            src={banner.imageUrl}
+            alt=""
+            fill
+            sizes="(max-width: 768px) 100vw, 1200px"
+            style={{ objectFit: "cover" }}
+            className="promo-banner__bg-image"
+          />
+          <div className="promo-banner__overlay" aria-hidden="true" />
+        </>
+      )}
       <div className="promo-banner__inner">
         <h2 className="promo-banner__title">{banner.title}</h2>
         {banner.subtitle && (

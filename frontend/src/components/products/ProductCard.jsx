@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { formatCOP } from "@/lib/formatCurrency";
+import { SHIMMER_BLUR_DATA_URL } from "@/lib/imagePlaceholder";
 import { trackSelectItem } from "@/lib/analytics/events";
 import { mapProductToItem } from "@/lib/analytics/productMapper";
 
@@ -69,6 +70,8 @@ export default function ProductCard({
           className="product-card__image"
           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
           priority={priority}
+          placeholder="blur"
+          blurDataURL={SHIMMER_BLUR_DATA_URL}
         />
         <div className="product-card__badges">
           {!product.inStock && (

@@ -16,6 +16,9 @@ const nextConfig = {
       },
       // Wildcard eliminado: solo se permiten dominios confiables explícitos
     ],
+    // AVIF primero: navegadores compatibles reciben archivos ~20-30% más
+    // livianos que WebP; Next negocia el formato vía Accept del navegador.
+    formats: ["image/avif", "image/webp"],
   },
 
   async headers() {

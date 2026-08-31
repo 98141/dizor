@@ -77,7 +77,13 @@ function ProductRow({ p, isAdmin, canViewCosts, onDelete, onToggleActive }) {
       <tr>
         <td className="product-thumb-cell">
           {p.mainImage ? (
-            <img src={p.mainImage} alt={p.name} className="product-thumb" />
+            <img
+              src={p.mainImage}
+              alt={p.name}
+              className="product-thumb"
+              loading="lazy"
+              decoding="async"
+            />
           ) : (
             <div className="product-thumb product-thumb--empty" />
           )}

@@ -22,6 +22,7 @@ import AuthFormField from "@/components/auth/AuthFormField";
 import AuthSubmitButton from "@/components/auth/AuthSubmitButton";
 import AuthErrorAlert from "@/components/auth/AuthErrorAlert";
 import AddressBook from "@/components/cuenta/AddressBook";
+import { SHIMMER_BLUR_DATA_URL } from "@/lib/imagePlaceholder";
 import {
   validatePassword,
   validatePasswordConfirm,
@@ -144,6 +145,8 @@ function OrderDetail({ orderId }) {
                     width={56}
                     height={70}
                     style={{ objectFit: "cover", borderRadius: "var(--radius-sm)" }}
+                    placeholder="blur"
+                    blurDataURL={SHIMMER_BLUR_DATA_URL}
                   />
                 </div>
               )}

@@ -9,6 +9,7 @@ import { formatCOP } from "@/lib/formatCurrency";
 import { trackAddToCart, trackViewItem } from "@/lib/analytics/events";
 import { mapProductToItem } from "@/lib/analytics/productMapper";
 import SimpleRichText from "@/components/content/SimpleRichText";
+import { SHIMMER_BLUR_DATA_URL } from "@/lib/imagePlaceholder";
 
 const LOW_STOCK_THRESHOLD = 5;
 
@@ -191,6 +192,8 @@ export default function ProductoClient({ product, sizeGuide = null }) {
               sizes="(max-width: 768px) 100vw, 50vw"
               style={{ objectFit: "cover" }}
               priority
+              placeholder="blur"
+              blurDataURL={SHIMMER_BLUR_DATA_URL}
             />
           </div>
           {images.length > 1 && (
@@ -208,6 +211,8 @@ export default function ProductoClient({ product, sizeGuide = null }) {
                     width={72}
                     height={72}
                     style={{ objectFit: "cover" }}
+                    placeholder="blur"
+                    blurDataURL={SHIMMER_BLUR_DATA_URL}
                   />
                 </button>
               ))}

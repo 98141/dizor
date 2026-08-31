@@ -235,9 +235,14 @@
   background-color: #2a3828;
 }
 
+.home-hero__bg-image {
+  z-index: 0;
+}
+
 .home-hero__overlay {
   position: absolute;
   inset: 0;
+  z-index: 1;
   background: linear-gradient(
     90deg,
     rgba(0, 0, 0, 0.62) 0%,

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getContentPage } from "@/services/cmsService";
 import { Breadcrumbs, BreadcrumbJsonLd } from "@/components/seo/Breadcrumbs";
@@ -159,10 +160,12 @@ export default async function ContentPageRoute({ params }) {
         </div>
         {page.imageUrl && (
           <div className="content-page__header-image">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src={page.imageUrl}
               alt={page.imageAlt || page.title}
+              fill
+              sizes="(max-width: 768px) 100vw, 300px"
+              style={{ objectFit: "cover" }}
               className="content-page__image"
             />
           </div>

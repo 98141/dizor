@@ -700,7 +700,14 @@ Fibra natural de Sandoná, Nariño.
           <ul className="image-list">
             {form.images.map((img, index) => (
               <li key={`${img.url}-${index}`}>
-                <img src={img.url} alt={img.alt} width={72} height={72} />
+                <img
+                  src={img.url}
+                  alt={img.alt}
+                  width={72}
+                  height={72}
+                  loading="lazy"
+                  decoding="async"
+                />
                 <div className="image-list__meta">
                   <button
                     type="button"

@@ -144,12 +144,18 @@ export default async function HomePage() {
       {/* 1. HERO full-bleed */}
       <section
         className={`home-hero${heroImage ? " home-hero--has-image" : ""}`}
-        style={
-          heroImage
-            ? { backgroundImage: `url(${heroImage})` }
-            : undefined
-        }
       >
+        {heroImage && (
+          <Image
+            src={heroImage}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            style={{ objectFit: "cover" }}
+            className="home-hero__bg-image"
+          />
+        )}
         <div className="home-hero__overlay" aria-hidden="true" />
         <div className="home-hero__inner">
           <p className="home-hero__brand home-anim home-anim--1">

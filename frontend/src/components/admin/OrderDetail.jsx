@@ -247,6 +247,8 @@ export default function OrderDetail({ orderId, backHref }) {
                                 src={item.productImage}
                                 alt={item.productName}
                                 className="order-item__img"
+                                loading="lazy"
+                                decoding="async"
                               />
                             ) : (
                               <div className="order-item__img-placeholder" />

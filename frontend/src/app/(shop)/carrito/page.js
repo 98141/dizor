@@ -10,6 +10,7 @@ import AbandonedCartCapture from "@/components/marketing/AbandonedCartCapture";
 import { formatCOP } from "@/lib/formatCurrency";
 import { trackRemoveFromCart, trackViewCart } from "@/lib/analytics/events";
 import { mapCartItemToItem } from "@/lib/analytics/productMapper";
+import { SHIMMER_BLUR_DATA_URL } from "@/lib/imagePlaceholder";
 
 export default function CarritoPage() {
   const {
@@ -175,6 +176,8 @@ export default function CarritoPage() {
                     fill
                     sizes="120px"
                     style={{ objectFit: "cover" }}
+                    placeholder="blur"
+                    blurDataURL={SHIMMER_BLUR_DATA_URL}
                   />
                 </Link>
                 <div>
