@@ -307,13 +307,33 @@
 
 /* ── Buttons ──────────────────────────────────────────── */
 .cuenta-logout {
-  padding: 0.75rem 1.5rem;
+  align-self: flex-start;
+  width: auto;
+  padding: 0.6rem 1.25rem;
   background: transparent;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   transition: border-color 0.18s, color 0.18s, background 0.18s;
+}
+
+/* Fila de acciones compartida (p. ej. Guardar cambios + Cerrar sesión en Perfil) */
+.cuenta-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.cuenta-form-actions .auth-submit {
+  margin-top: 0;
+  align-self: center;
+}
+
+.cuenta-form-actions .cuenta-logout {
+  align-self: center;
 }
 .cuenta-logout:hover {
   border-color: var(--color-primary);
@@ -330,8 +350,8 @@
 }
 
 .cuenta-logout--full {
-  width: 100%;
-  margin-top: var(--space-sm);
+  width: auto;
+  margin-top: var(--space-lg);
 }
 
 /* ── Security tab ─────────────────────────────────────── */

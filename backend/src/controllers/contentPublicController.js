@@ -95,6 +95,7 @@ exports.getAppearance = catchAsync(async (req, res) => {
       accentColor: a.accentColor || "",
       bgColor: a.bgColor || "",
       faviconUrl: a.faviconUrl || "",
+      logoUrl: a.logoUrl || "",
     },
   });
 });

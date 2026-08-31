@@ -43,6 +43,13 @@ export default function AdminShell({ children, variant = "admin" }) {
     setMobileOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
+
   const isActive = (href) => {
     if (href === "/admin" || href === "/vendedor") return pathname === href;
     return pathname.startsWith(href);
@@ -55,6 +62,16 @@ export default function AdminShell({ children, variant = "admin" }) {
 
   const NavLinks = ({ className, onNavigate }) => (
     <nav className={className}>
+      {onNavigate && (
+        <button
+          type="button"
+          className="admin-mobile-nav__close"
+          aria-label="Cerrar menú"
+          onClick={onNavigate}
+        >
+          ✕
+        </button>
+      )}
       {visibleLinks.map((link) => (
         <Link
           key={link.href}
@@ -103,6 +120,14 @@ export default function AdminShell({ children, variant = "admin" }) {
         <nav
           className={`admin-mobile-nav${mobileOpen ? " admin-mobile-nav--open" : ""}`}
         >
+          {mobileOpen && (
+            <button
+              type="button"
+              className="admin-mobile-nav__backdrop"
+              aria-label="Cerrar menú"
+              onClick={() => setMobileOpen(false)}
+            />
+          )}
           <NavLinks
             className="admin-mobile-nav__links"
             onNavigate={() => setMobileOpen(false)}

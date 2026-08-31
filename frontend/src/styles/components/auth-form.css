@@ -90,8 +90,11 @@
 }
 
 .auth-submit {
-  width: 100%;
-  padding: 0.875rem 1.5rem;
+  align-self: flex-start;
+  width: auto;
+  min-width: 180px;
+  max-width: 100%;
+  padding: 0.75rem 1.75rem;
   margin-top: var(--space-sm);
   background: var(--color-primary);
   color: #fff;

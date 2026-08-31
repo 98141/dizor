@@ -3,11 +3,14 @@
 import { createContext, useContext } from "react";
 import { DEFAULT_SITE_NAME } from "@/lib/fetchAppearance";
 
-const SiteConfigContext = createContext({ siteName: DEFAULT_SITE_NAME });
+const SiteConfigContext = createContext({
+  siteName: DEFAULT_SITE_NAME,
+  logoUrl: "",
+});
 
-export function SiteConfigProvider({ siteName, children }) {
+export function SiteConfigProvider({ siteName, logoUrl = "", children }) {
   return (
-    <SiteConfigContext.Provider value={{ siteName }}>
+    <SiteConfigContext.Provider value={{ siteName, logoUrl }}>
       {children}
     </SiteConfigContext.Provider>
   );

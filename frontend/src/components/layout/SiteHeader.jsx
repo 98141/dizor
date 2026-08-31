@@ -5,8 +5,8 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
-import { useSiteConfig } from "@/context/SiteConfigContext";
 import { trackSearch } from "@/lib/analytics/events";
+import SiteLogo from "./SiteLogo";
 
 const MIN_SEARCH_CHARS = 1;
 const SEARCH_DEBOUNCE_MS = 300;
@@ -98,17 +98,33 @@ function useHeaderSearch() {
 function SiteHeaderInner() {
   const { user, isAuthenticated } = useAuth();
   const { itemCount, hydrated } = useCart();
-  const { siteName } = useSiteConfig();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { search, setSearch, handleSubmit } = useHeaderSearch();
 
   useEffect(() => {
     setMobileOpen(false);
     setMobileSearchOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Bloquea el scroll del fondo mientras el menú/búsqueda móvil está abierto
+  useEffect(() => {
+    const open = mobileOpen || mobileSearchOpen;
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen, mobileSearchOpen]);
 
   const onSubmit = (e) => {
     handleSubmit(e);
@@ -125,7 +141,7 @@ function SiteHeaderInner() {
   const cartActive = pathname.startsWith("/carrito");
 
   return (
-    <header className="site-header">
+    <header className={`site-header${scrolled ? " is-scrolled" : ""}`}>
       <div className="site-header__inner">
         <button
           type="button"
@@ -136,13 +152,7 @@ function SiteHeaderInner() {
           ☰
         </button>
 
-        <Link
-          href="/"
-          className={`site-header__logo${homeActive ? " is-active" : ""}`}
-          aria-current={homeActive ? "page" : undefined}
-        >
-          {siteName}
-        </Link>
+        <SiteLogo active={homeActive} />
 
         <nav className="site-header__nav" aria-label="Principal">
           {NAV_LINKS.map((item) => {
@@ -211,6 +221,18 @@ function SiteHeaderInner() {
           </Link>
         </div>
       </div>
+
+      {(mobileOpen || mobileSearchOpen) && (
+        <button
+          type="button"
+          className="site-header__backdrop"
+          aria-label="Cerrar menú"
+          onClick={() => {
+            setMobileOpen(false);
+            setMobileSearchOpen(false);
+          }}
+        />
+      )}
 
       {mobileSearchOpen && (
         <div className="site-header__search-overlay">

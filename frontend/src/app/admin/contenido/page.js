@@ -119,6 +119,7 @@ const normalizeAppearance = (raw) => ({
   accentColor: "",
   bgColor: "",
   faviconUrl: "",
+  logoUrl: "",
   ...(raw || {}),
 });
 
@@ -921,6 +922,21 @@ function ContenidoAdminContent() {
           />
           <p className="admin-muted" style={{ marginTop: "-0.5rem" }}>
             Aparece en el título del navegador y en los resultados de Google.
+            También se usa como texto de respaldo del navbar si el logo no carga.
+          </p>
+
+          <h2 style={{ marginTop: "1.5rem" }}>Logo del navbar</h2>
+          <CmsImageField
+            label="Logo horizontal"
+            value={appearance.logoUrl}
+            onChange={(url) => setAppearanceField("logoUrl", url)}
+            placeholder="https://res.cloudinary.com/…/logo-dizor-horizontal.png"
+          />
+          <p className="admin-muted" style={{ marginTop: "-0.5rem" }}>
+            PNG horizontal con fondo transparente, legible sobre fondo oscuro
+            (versión clara). Vacío = usa el archivo{" "}
+            <code>/images/logo-dizor-horizontal.png</code> del proyecto y, si
+            tampoco existe, muestra el nombre del sitio en texto.
           </p>
 
           <h2 style={{ marginTop: "1.5rem" }}>Colores</h2>

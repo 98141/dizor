@@ -33,6 +33,10 @@ import "@/styles/components/cookie-consent.css";
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://sombrerosdizor.com.co").replace(/\/$/, "");
 
+// Assets estáticos de respaldo (se usan si la BBDD no trae una URL propia).
+// Pegar los archivos en: frontend/public/images/
+const DEFAULT_FAVICON = "/images/favicon-dizor.png";
+
 export async function generateMetadata() {
   const appearance = await fetchAppearance();
   const siteName = getSiteName(appearance);
@@ -69,9 +73,11 @@ export async function generateMetadata() {
     },
     twitter: { card: "summary_large_image" },
     robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
-    ...(appearance?.faviconUrl
-      ? { icons: { icon: appearance.faviconUrl, shortcut: appearance.faviconUrl } }
-      : {}),
+    icons: {
+      icon: appearance?.faviconUrl || DEFAULT_FAVICON,
+      shortcut: appearance?.faviconUrl || DEFAULT_FAVICON,
+      apple: appearance?.faviconUrl || DEFAULT_FAVICON,
+    },
   };
 }
 
@@ -143,7 +149,7 @@ export default async function RootLayout({ children }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
         <AnalyticsTracker />
-        <SiteConfigProvider siteName={siteName}>
+        <SiteConfigProvider siteName={siteName} logoUrl={appearance?.logoUrl || ""}>
           <AuthProvider>
             <CartProvider>{children}</CartProvider>
           </AuthProvider>

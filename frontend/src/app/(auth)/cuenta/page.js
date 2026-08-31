@@ -576,9 +576,18 @@ function CuentaContent() {
                 message={profileMsg}
                 variant={profileError ? "error" : "success"}
               />
-              <AuthSubmitButton loading={profileLoading}>
-                Guardar cambios
-              </AuthSubmitButton>
+              <div className="cuenta-form-actions">
+                <AuthSubmitButton loading={profileLoading}>
+                  Guardar cambios
+                </AuthSubmitButton>
+                <button
+                  type="button"
+                  className="cuenta-logout cuenta-logout--danger"
+                  onClick={handleLogout}
+                >
+                  Cerrar sesión
+                </button>
+              </div>
             </form>
           </div>
         )}
@@ -819,13 +828,15 @@ function CuentaContent() {
           </div>
         )}
 
-        <button
-          type="button"
-          className="cuenta-logout cuenta-logout--danger cuenta-logout--full"
-          onClick={handleLogout}
-        >
-          Cerrar sesión
-        </button>
+        {tab !== "perfil" && (
+          <button
+            type="button"
+            className="cuenta-logout cuenta-logout--danger cuenta-logout--full"
+            onClick={handleLogout}
+          >
+            Cerrar sesión
+          </button>
+        )}
       </div>
     </div>
   );

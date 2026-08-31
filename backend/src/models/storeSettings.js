@@ -32,6 +32,7 @@ const storeSettingsSchema = new mongoose.Schema(
       accentColor: { type: String, default: "" },
       bgColor: { type: String, default: "" },
       faviconUrl: { type: String, default: "" },
+      logoUrl: { type: String, default: "" },
     },
   },
   { timestamps: true }
