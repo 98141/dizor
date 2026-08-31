@@ -1,22 +1,72 @@
+/* ============================================================
+   DIZOR — Sistema de color
+   Fuente: Manual de Identidad Visual Dizor (Paleta de Color, 02)
+   Negro Dizor  #1A1A1A  ·  Arena Dizor #F5C37B  ·  Oro Dizor #B87305
+   Blanco       #FFFFFF  ·  Gris claro  #E6E6E6
+   ============================================================ */
+
 :root {
-  --color-bg: #faf7f2;
+  /* ── Colores de marca (crudos, no usar directo en componentes) ── */
+  --dizor-negro: #1a1a1a;
+  --dizor-arena: #f5c37b;
+  --dizor-oro: #b87305;
+  --dizor-blanco: #ffffff;
+  --dizor-gris: #e6e6e6;
+
+  /* ── Superficies ── */
+  --color-bg: #ffffff;
   --color-bg-card: #ffffff;
-  --color-text: #1f1f1f;
+  --color-bg-hover: #f7f7f7;
+  --color-surface-muted: #f7f7f7; /* fondos de sección neutros */
+  --color-surface-sand: #fdf3e3; /* arena diluida: tarjetas cálidas */
+  --color-surface-dark: #1a1a1a; /* footer, header admin, franjas */
+
+  /* ── Texto ── */
+  --color-text: #1a1a1a;
   --color-text-muted: #5c5c5c;
-  --color-primary: #3d4f3a;
-  --color-primary-hover: #2f3d2d;
-  --color-accent: #c4a574;
-  --color-border: #e8e2d9;
+  --color-text-inverse: #ffffff;
+  --color-text-inverse-muted: #b3b3b3; /* texto secundario sobre negro */
+  --color-text-inverse-subtle: #8a8a8a;
+
+  /* ── Primario: Negro Dizor ── */
+  --color-primary: #1a1a1a;
+  --color-primary-hover: #000000;
+  --color-primary-soft: #2e2e2e; /* segundo tono de gradientes */
+  --color-primary-contrast: #ffffff;
+
+  /* ── Acento: Oro / Arena Dizor ── */
+  --color-accent: #b87305; /* Oro: precios, links, badges, iconos */
+  --color-accent-hover: #965c04;
+  --color-accent-text: #9e6104; /* Oro oscurecido: AA 5.0:1 para texto pequeño sobre blanco */
+  --color-accent-soft: #f5c37b; /* Arena: fondos, hovers, subrayados */
+  --color-accent-soft-bg: #fdf1de; /* Arena al ~20% */
+  --color-accent-contrast: #1a1a1a; /* texto sobre Arena */
+
+  /* ── Bordes ── */
+  --color-border: #e6e6e6;
+  --color-border-strong: #cccccc;
+  --color-border-accent: #f5c37b;
+
+  /* ── Estados funcionales (no son colores de marca) ── */
   --color-error: #9b2c2c;
   --color-error-bg: #fef2f2;
   --color-success: #2f5d3a;
+  --color-success-bg: #f0fdf4;
+  --color-warning: #b87305;
+  --color-warning-bg: #fdf1de;
 
-  --font-serif: "Georgia", "Times New Roman", serif;
-  --font-sans: "Segoe UI", system-ui, sans-serif;
+  /* ── Tipografía ──
+     Manual: TT Tsars C Trial Regular (principal) + Verdana Regular (secundaria).
+     TT Tsars C es de licencia; hasta cargarla, cae en el fallback serif. */
+  --font-serif: "TT Tsars C", "Playfair Display", Georgia, "Times New Roman",
+    serif;
+  --font-sans: Verdana, "Segoe UI", system-ui, sans-serif;
+  --font-body: Arial, Helvetica, sans-serif; /* body actual, sin cambio de métrica */
 
+  /* ── Radios, sombras, espaciado ── */
   --radius-sm: 4px;
   --radius-md: 8px;
-  --shadow-card: 0 4px 24px rgba(31, 31, 31, 0.08);
+  --shadow-card: 0 4px 24px rgba(26, 26, 26, 0.08);
   --space-xs: 0.5rem;
   --space-sm: 0.75rem;
   --space-md: 1rem;
@@ -24,6 +74,7 @@
   --space-xl: 2rem;
   --space-2xl: 3rem;
 
+  /* ── Layout ── */
   --container-max: 1200px;
   --header-height: 72px;
   --bp-sm: 480px;

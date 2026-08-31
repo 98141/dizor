@@ -7,7 +7,7 @@
 
 .marketing-admin__tabs button {
   padding: 0.45rem 0.9rem;
-  border: 1px solid var(--color-border, #ddd);
+  border: 1px solid var(--color-border, #e6e6e6);
   background: #fff;
   border-radius: 4px;
   cursor: pointer;
@@ -15,14 +15,14 @@
 }
 
 .marketing-admin__tabs button.active {
-  background: var(--color-primary, #3d4f3a);
+  background: var(--color-primary, #1a1a1a);
   color: #fff;
-  border-color: var(--color-primary, #3d4f3a);
+  border-color: var(--color-primary, #1a1a1a);
 }
 
 .marketing-admin__card {
   background: #fff;
-  border: 1px solid var(--color-border, #e8e4dc);
+  border: 1px solid var(--color-border, #e6e6e6);
   border-radius: 6px;
   padding: 1.25rem;
   margin-bottom: 1rem;

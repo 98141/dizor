@@ -9,7 +9,7 @@
   -webkit-overflow-scrolling: touch;
   scroll-snap-type: x proximity;
   scrollbar-width: thin;
-  scrollbar-color: #cfc7ba transparent;
+  scrollbar-color: var(--color-border-strong, #cccccc) transparent;
 }
 
 .cms-tabs::-webkit-scrollbar {
@@ -17,7 +17,7 @@
 }
 
 .cms-tabs::-webkit-scrollbar-thumb {
-  background: #cfc7ba;
+  background: var(--color-border-strong, #cccccc);
   border-radius: 999px;
 }
 
@@ -42,9 +42,9 @@
 }
 
 .cms-tabs button:hover {
-  border-color: #cfc7ba;
+  border-color: var(--color-border-strong, #cccccc);
   color: var(--color-text);
-  background: #f7f3ec;
+  background: var(--color-surface-muted, #f7f7f7);
 }
 
 .cms-tabs button.active {

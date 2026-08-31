@@ -3,8 +3,8 @@ import { fetchAppearance, getSiteName } from "@/lib/fetchAppearance";
 export default async function manifest() {
   const appearance = await fetchAppearance();
   const siteName = getSiteName(appearance);
-  const themeColor = appearance?.primaryColor || "#3d4f3a";
-  const bgColor = appearance?.bgColor || "#f5f3ef";
+  const themeColor = appearance?.primaryColor || "#1A1A1A";
+  const bgColor = appearance?.bgColor || "#FFFFFF";
 
   return {
     name: `${siteName} — Sombreros artesanales`,

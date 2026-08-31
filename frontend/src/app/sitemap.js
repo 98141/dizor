@@ -65,6 +65,12 @@ export default async function sitemap() {
       changeFrequency: "monthly",
       priority: 0.5,
     },
+    {
+      url: `${SITE_URL}/guia-de-tallas`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.6,
+    },
   ];
 
   const productRoutes = products.map((p) => ({
@@ -75,7 +81,7 @@ export default async function sitemap() {
   }));
 
   const pageRoutes = cmsPages
-    .filter((p) => p.isPublished && p.slug)
+    .filter((p) => p.isPublished && p.slug && p.slug !== "guia-de-tallas")
     .map((p) => ({
       url: `${SITE_URL}/pagina/${p.slug}`,
       lastModified: new Date(p.updatedAt || Date.now()),

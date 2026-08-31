@@ -12,7 +12,9 @@ export default async function SiteFooter() {
 
   try {
     const data = await getContentPages();
-    pages = (data.pages || []).filter((p) => p.showInFooter !== false);
+            pages = (data.pages || []).filter(
+              (p) => p.showInFooter !== false && p.slug !== "guia-de-tallas"
+            );
   } catch {
     pages = [];
   }
@@ -42,6 +44,7 @@ export default async function SiteFooter() {
           <div className="site-footer__col">
             <strong className="site-footer__heading">Ayuda</strong>
             <Link href="/cuenta">Mi cuenta</Link>
+            <Link href="/guia-de-tallas">Guía de tallas</Link>
             <Link href="/seguimiento">Seguimiento de pedido</Link>
             <Link href="/solicitud/seguimiento">Mis solicitudes</Link>
             <TrackedWhatsAppLink

@@ -31,14 +31,14 @@
   flex: 1;
   min-width: 0;
   padding: 0.55rem 0.75rem;
-  border: 1px solid var(--color-border, #ddd);
+  border: 1px solid var(--color-border, #e6e6e6);
   border-radius: 4px;
   font: inherit;
 }
 
 .newsletter__btn {
   padding: 0.55rem 1rem;
-  background: var(--color-primary, #3d4f3a);
+  background: var(--color-primary, #1a1a1a);
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -47,8 +47,8 @@
 }
 
 .site-footer .newsletter__btn {
-  background: #f5f3ef;
-  color: var(--color-primary, #3d4f3a);
+  background: var(--color-surface-muted, #f7f7f7);
+  color: var(--color-primary, #1a1a1a);
   font-weight: 600;
 }
 
@@ -59,7 +59,7 @@
 .site-footer .newsletter__input {
   background: #fff;
   border-color: rgba(255, 255, 255, 0.35);
-  color: var(--color-text, #1f1f1f);
+  color: var(--color-text, #1a1a1a);
 }
 
 .newsletter__btn:disabled {
@@ -98,7 +98,7 @@
   position: relative;
   z-index: 1;
   background: #fff;
-  color: var(--color-text, #1f1f1f);
+  color: var(--color-text, #1a1a1a);
   max-width: 420px;
   width: 100%;
   padding: 1.5rem;
@@ -139,7 +139,7 @@
 .promo-popup__cta {
   display: inline-block;
   padding: 0.65rem 1.25rem;
-  background: var(--color-primary, #3d4f3a);
+  background: var(--color-primary, #1a1a1a);
   color: #fff;
   text-decoration: none;
   border-radius: 4px;
@@ -151,9 +151,9 @@
   justify-content: space-between;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
-  border: 1px dashed var(--color-primary, #3d4f3a);
+  border: 1px dashed var(--color-primary, #1a1a1a);
   border-radius: 4px;
-  background: var(--color-surface-muted, #f5f3ef);
+  background: var(--color-surface-muted, #f7f7f7);
 }
 
 .promo-popup__coupon-code {
@@ -164,7 +164,7 @@
 
 .promo-popup__coupon-copy {
   padding: 0.5rem 0.9rem;
-  background: var(--color-primary, #3d4f3a);
+  background: var(--color-primary, #1a1a1a);
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -182,7 +182,7 @@
 .abandoned-cart-capture {
   margin: 1.25rem 0;
   padding: 1rem;
-  background: var(--color-surface-muted, #f5f3ef);
+  background: var(--color-surface-muted, #f7f7f7);
   border-radius: 6px;
 }
 
@@ -201,13 +201,13 @@
   flex: 1;
   min-width: 180px;
   padding: 0.5rem 0.75rem;
-  border: 1px solid var(--color-border, #ddd);
+  border: 1px solid var(--color-border, #e6e6e6);
   border-radius: 4px;
 }
 
 .abandoned-cart-capture__btn {
   padding: 0.5rem 1rem;
-  background: var(--color-primary, #3d4f3a);
+  background: var(--color-primary, #1a1a1a);
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -217,7 +217,7 @@
 .abandoned-cart-capture__msg {
   font-size: 0.8rem;
   margin: 0.5rem 0 0;
-  color: var(--color-primary, #3d4f3a);
+  color: var(--color-primary, #1a1a1a);
 }
 
 .abandoned-cart-capture__msg--error {

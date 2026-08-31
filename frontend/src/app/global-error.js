@@ -21,7 +21,7 @@ export default function GlobalError({ reset }) {
           <h1 style={{ fontSize: "1.5rem", fontWeight: 400, margin: "0 0 1rem" }}>
             Algo salió mal
           </h1>
-          <p style={{ color: "#5c5c5c", margin: "0 0 1.5rem" }}>
+          <p style={{ color: "#5C5C5C", margin: "0 0 1.5rem" }}>
             Ocurrió un error inesperado. Por favor intenta de nuevo.
           </p>
           <button
@@ -29,7 +29,7 @@ export default function GlobalError({ reset }) {
             onClick={() => reset()}
             style={{
               padding: "0.75rem 1.5rem",
-              background: "#3d4f3a",
+              background: "#1A1A1A",
               color: "#fff",
               border: "none",
               borderRadius: 4,

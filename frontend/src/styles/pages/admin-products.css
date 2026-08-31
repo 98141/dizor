@@ -97,8 +97,8 @@
 }
 
 .admin-btn:hover:not(:disabled) {
-  border-color: #cfc7ba;
-  background: #f7f3ec;
+  border-color: var(--color-border-strong, #cccccc);
+  background: var(--color-surface-muted, #f7f7f7);
   color: var(--color-text);
 }
 
@@ -133,7 +133,7 @@
 .admin-btn--secondary {
   background: transparent;
   border-style: dashed;
-  border-color: #cfc7ba;
+  border-color: var(--color-border-strong, #cccccc);
   color: var(--color-text-muted);
 }
 
@@ -333,15 +333,109 @@
   margin-bottom: var(--space-md);
 }
 
+.product-form__hint--tight {
+  margin: -0.35rem 0 0.75rem;
+  font-size: 0.78rem;
+}
+
+.variant-table-wrap {
+  overflow-x: auto;
+  margin-bottom: var(--space-sm);
+  -webkit-overflow-scrolling: touch;
+}
+
+.variant-table {
+  min-width: 38rem;
+}
+
+.variant-table__head,
 .variant-row {
   display: grid;
-  gap: var(--space-sm);
-  grid-template-columns: 1fr;
-  padding: var(--space-md);
-  margin-bottom: var(--space-sm);
-  border: 1px dashed var(--color-border);
+  grid-template-columns:
+    minmax(5.25rem, 0.75fr)
+    minmax(7rem, 1.1fr)
+    minmax(7.75rem, 1fr)
+    4.5rem
+    5.75rem
+    4.15rem
+    3.4rem;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.variant-table__head {
+  padding: 0 0 0.35rem;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.variant-row {
+  padding: 0.35rem 0;
+  margin: 0;
+  border: none;
+  border-bottom: 1px solid var(--color-border);
+  border-radius: 0;
+}
+
+.variant-row--error {
+  background: var(--color-error-bg);
+  margin-inline: -0.35rem;
+  padding-inline: 0.35rem;
   border-radius: var(--radius-sm);
-  align-items: end;
+}
+
+.variant-row input,
+.variant-row select {
+  width: 100%;
+  min-width: 0;
+  padding: 0.32rem 0.4rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  background: var(--color-bg-card);
+}
+
+.variant-row__sku {
+  background: var(--color-bg) !important;
+  color: var(--color-text-muted);
+  cursor: default;
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.01em;
+}
+
+.variant-row .admin-checkbox--inline {
+  justify-content: center;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.variant-row__remove {
+  border: none;
+  background: transparent;
+  color: var(--color-error);
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.2rem 0.15rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.variant-row__remove:hover {
+  text-decoration: underline;
+}
+
+.variant-row__remove-placeholder {
+  display: block;
+}
+
+.variant-table__alert {
+  margin: 0 0 var(--space-sm);
 }
 
 .image-url-add {
@@ -569,10 +663,6 @@
 @media (min-width: 640px) {
   .admin-form__row {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  .variant-row {
-    grid-template-columns: repeat(3, 1fr) auto auto;
   }
 }
 

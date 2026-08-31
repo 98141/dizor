@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import {
   getProductReviews,
@@ -9,7 +8,7 @@ import {
 } from "@/services/reviewService";
 
 export default function ProductReviews({ productId, productName }) {
-  const { user } = useAuth();
+  const { user, loadingAuth } = useAuth();
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({
@@ -68,6 +67,8 @@ export default function ProductReviews({ productId, productName }) {
     }
   };
 
+  if (loadingAuth || !user) return null;
+
   return (
     <section className="product-reviews">
       <h2 className="product-reviews__title">Reseñas</h2>
@@ -76,7 +77,7 @@ export default function ProductReviews({ productId, productName }) {
         <p className="product-reviews__empty">Cargando reseñas…</p>
       ) : reviews.length === 0 ? (
         <p className="product-reviews__empty">
-          Aún no hay reseñas públicas para este producto.
+          Aún no hay reseñas públicas para {productName || "este producto"}.
         </p>
       ) : (
         <ul className="product-reviews__list">
@@ -97,66 +98,59 @@ export default function ProductReviews({ productId, productName }) {
 
       <div className="product-reviews__form-wrap">
         <h3>Escribe tu reseña</h3>
-        {!user ? (
-          <p>
-            <Link href="/login">Inicia sesión</Link> para reseñar{" "}
-            {productName || "este producto"} (solo con compra verificada).
-          </p>
-        ) : (
-          <form className="product-reviews__form" onSubmit={submit}>
-            <label>
-              Estrellas
-              <select
-                value={form.rating}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, rating: e.target.value }))
-                }
-              >
-                {[5, 4, 3, 2, 1].map((n) => (
-                  <option key={n} value={n}>
-                    {n}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label>
-              Ciudad (opcional)
-              <input
-                type="text"
-                value={form.city}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, city: e.target.value }))
-                }
-              />
-            </label>
-            <label>
-              Comentario
-              <textarea
-                required
-                minLength={10}
-                rows={4}
-                value={form.comment}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, comment: e.target.value }))
-                }
-              />
-            </label>
-            <button type="submit" disabled={status === "loading"}>
-              {status === "loading" ? "Enviando…" : "Enviar reseña"}
-            </button>
-            {message ? (
-              <p
-                className={
-                  status === "error"
-                    ? "product-reviews__msg product-reviews__msg--error"
-                    : "product-reviews__msg"
-                }
-              >
-                {message}
-              </p>
-            ) : null}
-          </form>
-        )}
+        <form className="product-reviews__form" onSubmit={submit}>
+          <label>
+            Estrellas
+            <select
+              value={form.rating}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, rating: e.target.value }))
+              }
+            >
+              {[5, 4, 3, 2, 1].map((n) => (
+                <option key={n} value={n}>
+                  {n}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Ciudad (opcional)
+            <input
+              type="text"
+              value={form.city}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, city: e.target.value }))
+              }
+            />
+          </label>
+          <label>
+            Comentario
+            <textarea
+              required
+              minLength={10}
+              rows={4}
+              value={form.comment}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, comment: e.target.value }))
+              }
+            />
+          </label>
+          <button type="submit" disabled={status === "loading"}>
+            {status === "loading" ? "Enviando…" : "Enviar reseña"}
+          </button>
+          {message ? (
+            <p
+              className={
+                status === "error"
+                  ? "product-reviews__msg product-reviews__msg--error"
+                  : "product-reviews__msg"
+              }
+            >
+              {message}
+            </p>
+          ) : null}
+        </form>
       </div>
     </section>
   );

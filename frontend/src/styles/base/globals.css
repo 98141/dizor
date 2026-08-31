@@ -7,8 +7,8 @@ body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
-  background: #faf7f2;
-  color: #1f1f1f;
+  background: var(--color-bg, #ffffff);
+  color: var(--color-text, #1a1a1a);
 }
 
 a {
@@ -45,7 +45,7 @@ input {
 .confirm-modal__message {
   margin: 0 0 1.25rem;
   line-height: 1.55;
-  color: var(--color-text, #1f1f1f);
+  color: var(--color-text, #1a1a1a);
   font-size: 0.95rem;
 }
 
@@ -60,33 +60,33 @@ input {
   margin: 0 0 0.75rem;
   font-size: 1.05rem;
   font-weight: 600;
-  color: var(--color-text, #1f1f1f);
+  color: var(--color-text, #1a1a1a);
 }
 
 .modal-action-btn {
   padding: 0.55rem 1.1rem;
   border-radius: var(--radius-sm, 6px);
-  border: 1.5px solid var(--color-border, #ddd);
+  border: 1.5px solid var(--color-border, #e6e6e6);
   background: transparent;
   cursor: pointer;
   font-size: 0.9rem;
   font-weight: 500;
-  color: var(--color-text, #1f1f1f);
+  color: var(--color-text, #1a1a1a);
   font-family: inherit;
   transition: background 0.15s, border-color 0.15s;
 }
 
 .modal-action-btn:hover {
-  background: var(--color-bg-hover, #f5f0ea);
+  background: var(--color-bg-hover, #f7f7f7);
 }
 
 .modal-action-btn--primary {
-  background: var(--color-primary, #8b4513);
+  background: var(--color-primary, #1a1a1a);
   color: #fff;
-  border-color: var(--color-primary, #8b4513);
+  border-color: var(--color-primary, #1a1a1a);
 }
 
 .modal-action-btn--primary:hover {
   opacity: 0.88;
-  background: var(--color-primary, #8b4513);
+  background: var(--color-primary, #1a1a1a);
 }

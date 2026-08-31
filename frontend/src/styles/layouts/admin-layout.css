@@ -8,7 +8,7 @@
 .admin-sidebar {
   display: none;
   background: var(--color-primary);
-  color: #f5f3ef;
+  color: var(--color-text-inverse, #ffffff);
   padding: var(--space-xl) var(--space-md);
 }
 
@@ -30,7 +30,7 @@
   padding: 0.6rem 0.75rem;
   border-radius: var(--radius-sm);
   font-size: 0.9rem;
-  color: #e8e2d9;
+  color: var(--color-text-inverse-muted, #b3b3b3);
 }
 
 .admin-sidebar__nav a:hover,

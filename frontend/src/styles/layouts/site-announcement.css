@@ -115,8 +115,8 @@
   max-width: var(--container-max);
   padding: var(--space-2xl) var(--space-md);
   border-radius: var(--radius-md);
-  background: linear-gradient(135deg, #3d4f3a 0%, #2a3828 100%);
-  color: #f5f3ef;
+  background: linear-gradient(135deg, var(--color-primary, #1a1a1a) 0%, var(--color-primary-soft, #2e2e2e) 100%);
+  color: var(--color-text-inverse, #ffffff);
   text-align: center;
   overflow: hidden;
 }
@@ -255,6 +255,41 @@
 .content-page__list li {
   line-height: 1.7;
   color: var(--color-text);
+}
+
+.content-page__steps {
+  list-style: none;
+  margin: 0.35rem 0 0.75rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  counter-reset: measure-step;
+}
+
+.content-page__steps li {
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: start;
+  line-height: 1.6;
+  color: var(--color-text);
+  counter-increment: measure-step;
+}
+
+.content-page__steps li::before {
+  content: counter(measure-step);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  background: var(--color-accent-soft-bg);
+  color: var(--color-accent-text);
+  font-size: 0.78rem;
+  font-weight: 700;
+  flex-shrink: 0;
 }
 
 /* ── Tabla de tallas ── */

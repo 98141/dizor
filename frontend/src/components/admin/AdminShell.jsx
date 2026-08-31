@@ -9,15 +9,15 @@ import AlertBell from "./AlertBell";
 
 const adminLinks = [
   { href: "/admin", label: "Dashboard", roles: ["superadmin", "admin"] },
-  { href: "/admin/auditoria", label: "Auditoría", roles: ["superadmin", "admin"] },
+  //{ href: "/admin/auditoria", label: "Auditoría", roles: ["superadmin", "admin"] },
   { href: "/admin/inventario", label: "Inventario", roles: ["superadmin", "admin"] },
   { href: "/admin/pedidos", label: "Pedidos", roles: ["superadmin", "admin"] },
+  { href: "/admin/alertas", label: "Alertas", roles: ["superadmin", "admin"] },
   { href: "/admin/solicitudes", label: "Solicitudes", roles: ["superadmin", "admin", "vendedor"] },
   { href: "/admin/productos", label: "Productos", roles: ["superadmin", "admin"] },
   { href: "/admin/catalogo", label: "Catálogo", roles: ["superadmin", "admin"] },
   { href: "/admin/contenido", label: "Contenido", roles: ["superadmin", "admin"] },
   { href: "/admin/cupones", label: "Cupones", roles: ["superadmin", "admin"] },
-  { href: "/admin/alertas", label: "Alertas", roles: ["superadmin", "admin"] },
   { href: "/admin/configuracion", label: "Configuración", roles: ["superadmin", "admin"] },
   { href: "/admin/usuarios", label: "Usuarios", roles: ["superadmin"] },
   { href: "/admin/finanzas", label: "Finanzas", roles: ["superadmin"] },

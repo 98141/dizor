@@ -25,7 +25,7 @@ const TABS = [
     label: "Colores",
     fields: [
       { key: "name", label: "Nombre", required: true },
-      { key: "hexCode", label: "Color", type: "color", placeholder: "#8B4513" },
+      { key: "hexCode", label: "Color", type: "color", placeholder: "#1A1A1A" },
       { key: "sortOrder", label: "Orden", type: "number" },
       { key: "isActive", label: "Activo", type: "checkbox" },
     ],

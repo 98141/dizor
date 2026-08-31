@@ -6,7 +6,6 @@ import ProductReviews from "@/components/products/ProductReviews";
 import SimpleRichText from "@/components/content/SimpleRichText";
 import { BreadcrumbJsonLd } from "@/components/seo/Breadcrumbs";
 import ViewItemListTracker from "@/components/analytics/ViewItemListTracker";
-import { getContentPage } from "@/services/cmsService";
 
 const BASE_API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 // Fallback cuando el producto no tiene imagen propia: usa el ícono real del
@@ -90,15 +89,10 @@ export default async function ProductoPage({ params }) {
   const SITE = (
     process.env.NEXT_PUBLIC_SITE_URL || "https://sombrerosdizor.com.co"
   ).replace(/\/$/, "");
-  const [data, sizeGuideRes] = await Promise.all([
-    fetchProductMeta(slug),
-    getContentPage("guia-de-tallas").catch(() => null),
-  ]);
+  const data = await fetchProductMeta(slug);
   const p = data?.product;
 
   if (!p) notFound();
-
-  const sizeGuide = sizeGuideRes?.page || null;
 
   const activeVariants = (p.variants || []).filter((v) => v.isActive);
   const prices = activeVariants.map((v) => v.price).filter(Boolean);
@@ -166,7 +160,7 @@ export default async function ProductoPage({ params }) {
           </p>
         )}
 
-        <ProductoClient product={p} sizeGuide={sizeGuide} />
+        <ProductoClient product={p} />
 
         {p.fullDescription && (
           <div className="product-detail__description">

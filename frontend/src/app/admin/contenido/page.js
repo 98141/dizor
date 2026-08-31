@@ -129,7 +129,7 @@ function ColorField({ label, value, onChange }) {
       <div className="appearance-color-row">
         <input
           type="color"
-          value={value || "#3d4f3a"}
+          value={value || "#1A1A1A"}
           onChange={(e) => onChange(e.target.value)}
           className="appearance-color-picker"
         />
@@ -652,10 +652,11 @@ function ContenidoAdminContent() {
           <section className="taxonomy-form-card">
             <h2>{editingPageId ? "Editar página" : "Nueva página"}</h2>
             <p className="image-upload-hint" style={{ marginBottom: "1rem" }}>
-              Puedes crear varias páginas (guía de tallas, nosotros, envíos…).
+              Puedes crear varias páginas (nosotros, envíos, cambios…).
               La URL se genera sola desde el título:{" "}
               <code>/pagina/tu-titulo</code>. Márcala como publicada y, si
-              quieres, “Mostrar en footer”.
+              quieres, “Mostrar en footer”. La guía de tallas se edita en el
+              código, no aquí.
             </p>
             <form className="admin-form" onSubmit={savePage}>
               <AuthFormField label="Título" name="pTitle" value={pageForm.title} required
@@ -676,7 +677,7 @@ function ContenidoAdminContent() {
                 <label className="auth-field__label">
                   Contenido
                   <span style={{ fontWeight: 400, color: "var(--color-text-muted)", marginLeft: "0.5rem", fontSize: "0.78rem" }}>
-                    Usa # para títulos de sección · Talla X — NN cm para tabla de tallas · - para listas
+                    Usa # para títulos de sección · Talla X — NN cm para tabla · - para listas
                   </span>
                 </label>
                 <textarea className="auth-field__input" rows={10} value={pageForm.body}

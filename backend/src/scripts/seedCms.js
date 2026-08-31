@@ -48,41 +48,6 @@ const seedCms = async () => {
     },
   ];
 
-  const sizeGuidePage = {
-    title: "Guía de tallas",
-    slug: "guia-de-tallas",
-    excerpt: "Aprende a medir tu cabeza en dos pasos y encuentra la talla perfecta para tu sombrero artesanal.",
-    imageUrl: "",
-    imageAlt: "Cómo medir la cabeza para elegir la talla de sombrero",
-    body:
-      "# ¿Cómo medir tu cabeza?\n\n" +
-      "Necesitas una cinta métrica flexible (o una tira de papel). Rodea tu cabeza por la parte más ancha: por encima de las orejas y aproximadamente 1 cm sobre las cejas. Mantén la cinta nivelada, ajustada pero sin apretar. Ese número en centímetros es tu talla.\n\n" +
-      "# Tabla de tallas\n\n" +
-      "Talla XS — 52 a 53 cm\n" +
-      "Talla S — 54 a 55 cm\n" +
-      "Talla M — 56 a 57 cm\n" +
-      "Talla L — 58 a 59 cm\n" +
-      "Talla XL — 60 a 61 cm\n" +
-      "Talla XXL — 62 cm o más\n\n" +
-      "# Consejos para elegir bien\n\n" +
-      "- Si tu medida cae entre dos tallas, elige la mayor. Los sombreros de palma de iraca tienen una ligera flexibilidad natural.\n" +
-      "- Mide al final del día, cuando la cabeza está en su tamaño máximo.\n" +
-      "- Para pedidos personalizados ajustamos la copa exactamente a tu medida sin costo adicional.\n\n" +
-      "# ¿Tienes dudas?\n\n" +
-      "Escríbenos por WhatsApp o usa el formulario de solicitud personalizada. Con gusto te asesoramos para que tu sombrero quede perfecto.",
-    isPublished: true,
-    showInFooter: true,
-    sortOrder: 0,
-    seoTitle: "Guía de tallas — Sombreros artesanales Dizor",
-    seoDescription: "Aprende a medir tu cabeza y elige la talla correcta para tu sombrero de palma de iraca. Tabla de tallas XS a XXL.",
-  };
-
-  await ContentPage.findOneAndUpdate({ slug: sizeGuidePage.slug }, sizeGuidePage, {
-    upsert: true,
-    new: true,
-  });
-  console.log(`✓ Página: ${sizeGuidePage.title}`);
-
   for (const page of pages) {
     await ContentPage.findOneAndUpdate({ slug: page.slug }, page, {
       upsert: true,

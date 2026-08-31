@@ -12,7 +12,11 @@ import {
   uploadTempImages,
 } from "@/services/adminCatalogService";
 
+const newClientKey = () =>
+  `v-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+
 const emptyVariant = () => ({
+  clientKey: newClientKey(),
   id: null,
   size: "",
   color: "",
@@ -28,18 +32,47 @@ const generateSeed = () =>
   Math.random().toString(36).substring(2, 6).toUpperCase();
 
 const extractSeedFromSku = (sku) => {
-  const match = /^[A-Z0-9]{1,4}-([A-Z0-9]{4})-\d{2}$/i.exec(sku || "");
+  const match = /^[A-Z0-9]{1,4}-([A-Z0-9]{4})-\d{2,}$/i.exec(sku || "");
   return match ? match[1].toUpperCase() : null;
 };
 
-const generateSkuForVariant = (productName, seed, index) => {
-  const prefix = (productName || "")
+const skuPrefixFromName = (productName) =>
+  (productName || "")
     .normalize("NFD")
     .replace(DIACRITICS_RE, "")
     .replace(/[^a-zA-Z0-9]/g, "")
     .substring(0, 3)
-    .toUpperCase();
-  return `${prefix || "PRD"}-${seed}-${String(index + 1).padStart(2, "0")}`;
+    .toUpperCase() || "PRD";
+
+const parseSkuSeq = (sku, seed) => {
+  const match = new RegExp(`^[A-Z0-9]{1,4}-${seed}-(\\d{2,})$`, "i").exec(
+    sku || ""
+  );
+  return match ? Number.parseInt(match[1], 10) : null;
+};
+
+const usedSkuSet = (variants) =>
+  new Set(
+    (variants || [])
+      .map((v) => String(v.sku || "").trim().toUpperCase())
+      .filter(Boolean)
+  );
+
+const generateUniqueSku = (productName, seed, variants) => {
+  const prefix = skuPrefixFromName(productName);
+  const existing = usedSkuSet(variants);
+  let seq = 0;
+  for (const v of variants || []) {
+    const n = parseSkuSeq(v.sku, seed);
+    if (n != null && n > seq) seq = n;
+  }
+  seq += 1;
+  let sku = `${prefix}-${seed}-${String(seq).padStart(2, "0")}`;
+  while (existing.has(sku)) {
+    seq += 1;
+    sku = `${prefix}-${seed}-${String(seq).padStart(2, "0")}`;
+  }
+  return sku;
 };
 
 const defaultForm = () => ({
@@ -72,7 +105,15 @@ export default function ProductForm({ productId }) {
   const skuSeedRef = useRef(generateSeed());
 
   const [meta, setMeta] = useState(null);
-  const [form, setForm] = useState(defaultForm);
+  const [form, setForm] = useState(() => {
+    const initial = defaultForm();
+    initial.variants[0].sku = generateUniqueSku(
+      "",
+      skuSeedRef.current,
+      []
+    );
+    return initial;
+  });
   const [newImageUrl, setNewImageUrl] = useState("");
   const [loading, setLoading] = useState(isEdit);
   const [saving, setSaving] = useState(false);
@@ -129,6 +170,7 @@ export default function ProductForm({ productId }) {
             variants:
               product.variants?.length > 0
                 ? product.variants.map((v) => ({
+                    clientKey: String(v.id || v._id || newClientKey()),
                     id: v.id || v._id || null,
                     size: v.size?.toString?.() || v.size || "",
                     color: v.color?.toString?.() || v.color || "",
@@ -137,7 +179,16 @@ export default function ProductForm({ productId }) {
                     price: v.price ?? "",
                     isActive: v.isActive !== false,
                   }))
-                : [emptyVariant()],
+                : [
+                    {
+                      ...emptyVariant(),
+                      sku: generateUniqueSku(
+                        product.name || "",
+                        skuSeedRef.current,
+                        []
+                      ),
+                    },
+                  ],
           });
           const firstSku = product.variants?.[0]?.sku;
           const extracted = extractSeedFromSku(firstSku);
@@ -165,29 +216,30 @@ export default function ProductForm({ productId }) {
   };
 
   const handleNameChange = (value) => {
-    setForm((prev) => ({
-      ...prev,
-      name: value,
-      variants: isEdit
-        ? prev.variants
-        : prev.variants.map((v, i) => ({
-            ...v,
-            sku: generateSkuForVariant(value, skuSeedRef.current, i),
-          })),
-    }));
+    setForm((prev) => {
+      if (isEdit) return { ...prev, name: value };
+      const seed = skuSeedRef.current;
+      const assigned = [];
+      const variants = prev.variants.map((v) => {
+        const next = {
+          ...v,
+          sku: generateUniqueSku(value, seed, assigned),
+        };
+        assigned.push(next);
+        return next;
+      });
+      return { ...prev, name: value, variants };
+    });
   };
 
   const addVariant = () => {
-    setForm((prev) => ({
-      ...prev,
-      variants: [
-        ...prev.variants,
-        {
-          ...emptyVariant(),
-          sku: generateSkuForVariant(prev.name, skuSeedRef.current, prev.variants.length),
-        },
-      ],
-    }));
+    setForm((prev) => {
+      const next = {
+        ...emptyVariant(),
+        sku: generateUniqueSku(prev.name, skuSeedRef.current, prev.variants),
+      };
+      return { ...prev, variants: [...prev.variants, next] };
+    });
   };
 
   const removeVariant = (index) => {
@@ -345,6 +397,26 @@ export default function ProductForm({ productId }) {
       return;
     }
 
+    const skus = form.variants.map((v) =>
+      String(v.sku || "").trim().toUpperCase()
+    );
+    if (skus.some((sku) => !sku)) {
+      setError("Cada variante necesita un SKU");
+      setSaving(false);
+      return;
+    }
+    if (new Set(skus).size !== skus.length) {
+      setError("Hay SKUs duplicados. Cada variante debe tener un código único.");
+      setSaving(false);
+      return;
+    }
+    const combos = form.variants.map((v) => `${v.size}|${v.color}`);
+    if (new Set(combos).size !== combos.length) {
+      setError("Hay variantes con la misma talla y color");
+      setSaving(false);
+      return;
+    }
+
     try {
       const payload = buildPayload();
       if (isEdit) {
@@ -374,6 +446,27 @@ export default function ProductForm({ productId }) {
   const sizes = meta?.sizes || [];
   const weaveTypes = meta?.weaveTypes || [];
   const styles = meta?.styles || [];
+
+  const skuDupSet = new Set();
+  const comboDupSet = new Set();
+  {
+    const skuCount = {};
+    const comboCount = {};
+    form.variants.forEach((v) => {
+      const sku = String(v.sku || "").trim().toUpperCase();
+      if (sku) skuCount[sku] = (skuCount[sku] || 0) + 1;
+      if (v.size && v.color) {
+        const combo = `${v.size}|${v.color}`;
+        comboCount[combo] = (comboCount[combo] || 0) + 1;
+      }
+    });
+    Object.entries(skuCount).forEach(([sku, n]) => {
+      if (n > 1) skuDupSet.add(sku);
+    });
+    Object.entries(comboCount).forEach(([combo, n]) => {
+      if (n > 1) comboDupSet.add(combo);
+    });
+  }
 
   return (
     <form className="product-form admin-form" onSubmit={handleSubmit}>
@@ -547,78 +640,119 @@ Fibra natural de Sandoná, Nariño.
 
       <section className="product-form__section">
         <h2>Variantes (talla + color)</h2>
-        {form.variants.map((variant, index) => (
-          <div key={index} className="variant-row">
-            <select
-              value={variant.size}
-              onChange={(e) => setVariant(index, "size", e.target.value)}
-              required
-              aria-label={`Talla variante ${index + 1}`}
-            >
-              <option value="">Talla</option>
-              {sizes.map((s) => (
-                <option key={s._id} value={s._id}>
-                  {s.name}
-                </option>
-              ))}
-            </select>
-            <select
-              value={variant.color}
-              onChange={(e) => setVariant(index, "color", e.target.value)}
-              required
-              aria-label={`Color variante ${index + 1}`}
-            >
-              <option value="">Color</option>
-              {colors.map((c) => (
-                <option key={c._id} value={c._id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
-            <input
-              readOnly
-              value={variant.sku}
-              aria-label={`SKU variante ${index + 1}`}
-              title="SKU generado automáticamente"
-              style={{ background: "var(--color-bg)", cursor: "default", color: "var(--color-text-muted)", minWidth: 0 }}
-            />
-            <input
-              type="number"
-              min="0"
-              placeholder="Stock"
-              value={variant.stock}
-              onChange={(e) => setVariant(index, "stock", e.target.value)}
-              required
-            />
-            <input
-              type="number"
-              min="0"
-              placeholder="Precio opcional"
-              value={variant.price}
-              onChange={(e) => setVariant(index, "price", e.target.value)}
-            />
-            <label className="admin-checkbox admin-checkbox--inline">
-              <input
-                type="checkbox"
-                checked={variant.isActive}
-                onChange={(e) =>
-                  setVariant(index, "isActive", e.target.checked)
-                }
-              />
-              Activa
-            </label>
-            {form.variants.length > 1 && (
-              <button
-                type="button"
-                className="admin-btn admin-btn--sm admin-btn--danger"
-                onClick={() => removeVariant(index)}
-              >
-                Quitar
-              </button>
-            )}
+        <p className="product-form__hint product-form__hint--tight">
+          El SKU se genera solo y no se reutiliza al agregar una variante.
+        </p>
+        <div className="variant-table-wrap">
+          <div className="variant-table">
+            <div className="variant-table__head" aria-hidden="true">
+              <span>Talla</span>
+              <span>Color</span>
+              <span>SKU</span>
+              <span>Stock</span>
+              <span>Precio</span>
+              <span>Activa</span>
+              <span />
+            </div>
+            {form.variants.map((variant, index) => {
+              const skuKey = String(variant.sku || "").trim().toUpperCase();
+              const comboKey =
+                variant.size && variant.color
+                  ? `${variant.size}|${variant.color}`
+                  : "";
+              const hasError =
+                skuDupSet.has(skuKey) || comboDupSet.has(comboKey);
+              return (
+                <div
+                  key={variant.clientKey || variant.id || `variant-${index}`}
+                  className={`variant-row${hasError ? " variant-row--error" : ""}`}
+                >
+                  <select
+                    value={variant.size}
+                    onChange={(e) => setVariant(index, "size", e.target.value)}
+                    required
+                    aria-label={`Talla variante ${index + 1}`}
+                  >
+                    <option value="">Talla</option>
+                    {sizes.map((s) => (
+                      <option key={s._id} value={s._id}>
+                        {s.name}
+                      </option>
+                    ))}
+                  </select>
+                  <select
+                    value={variant.color}
+                    onChange={(e) => setVariant(index, "color", e.target.value)}
+                    required
+                    aria-label={`Color variante ${index + 1}`}
+                  >
+                    <option value="">Color</option>
+                    {colors.map((c) => (
+                      <option key={c._id} value={c._id}>
+                        {c.name}
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    className="variant-row__sku"
+                    readOnly
+                    value={variant.sku}
+                    aria-label={`SKU variante ${index + 1}`}
+                    title="SKU generado automáticamente"
+                    autoComplete="off"
+                  />
+                  <input
+                    type="number"
+                    min="0"
+                    placeholder="0"
+                    value={variant.stock}
+                    onChange={(e) => setVariant(index, "stock", e.target.value)}
+                    required
+                    aria-label={`Stock variante ${index + 1}`}
+                  />
+                  <input
+                    type="number"
+                    min="0"
+                    placeholder="Opcional"
+                    value={variant.price}
+                    onChange={(e) => setVariant(index, "price", e.target.value)}
+                    aria-label={`Precio variante ${index + 1}`}
+                  />
+                  <label className="admin-checkbox admin-checkbox--inline">
+                    <input
+                      type="checkbox"
+                      checked={variant.isActive}
+                      onChange={(e) =>
+                        setVariant(index, "isActive", e.target.checked)
+                      }
+                    />
+                    <span className="variant-row__active-label">Activa</span>
+                  </label>
+                  {form.variants.length > 1 ? (
+                    <button
+                      type="button"
+                      className="variant-row__remove"
+                      onClick={() => removeVariant(index)}
+                      aria-label={`Quitar variante ${index + 1}`}
+                    >
+                      Quitar
+                    </button>
+                  ) : (
+                    <span className="variant-row__remove-placeholder" />
+                  )}
+                </div>
+              );
+            })}
           </div>
-        ))}
-        <button type="button" className="admin-btn" onClick={addVariant}>
+        </div>
+        {(skuDupSet.size > 0 || comboDupSet.size > 0) && (
+          <p className="admin-form-error variant-table__alert">
+            {skuDupSet.size > 0
+              ? "Hay SKUs duplicados. Quita la variante repetida o recarga para generar uno nuevo."
+              : "Hay variantes con la misma talla y color."}
+          </p>
+        )}
+        <button type="button" className="admin-btn admin-btn--sm" onClick={addVariant}>
           + Variante
         </button>
       </section>

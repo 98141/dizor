@@ -7,6 +7,12 @@
  * - Resto → párrafo (saltos simples → <br />)
  */
 
+function isOrderedListBlock(lines) {
+  return (
+    lines.length > 0 && lines.every((l) => /^\d+[.)]\s+/.test(l.trim()))
+  );
+}
+
 function isListBlock(lines) {
   return lines.length > 0 && lines.every((l) => l.trimStart().startsWith("- "));
 }
@@ -102,6 +108,16 @@ export function renderSimpleContentBlock(block, index) {
           );
         })}
       </div>
+    );
+  }
+
+  if (isOrderedListBlock(nonEmpty)) {
+    return (
+      <ol key={index} className="simple-content__steps">
+        {nonEmpty.map((l, li) => (
+          <li key={li}>{l.trim().replace(/^\d+[.)]\s+/, "")}</li>
+        ))}
+      </ol>
     );
   }
 

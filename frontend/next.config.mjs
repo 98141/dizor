@@ -96,6 +96,16 @@ const nextConfig = {
       },
     ];
   },
+
+  async redirects() {
+    return [
+      {
+        source: "/pagina/guia-de-tallas",
+        destination: "/guia-de-tallas",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

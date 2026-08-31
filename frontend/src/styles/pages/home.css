@@ -46,7 +46,7 @@
   font-weight: 500;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
 }
 
 .home-section {
@@ -223,16 +223,16 @@
   background: linear-gradient(
     135deg,
     var(--color-primary) 0%,
-    #2a3828 100%
+    var(--color-primary-soft, #2e2e2e) 100%
   );
   background-size: cover;
   background-position: center;
-  color: #f5f3ef;
+  color: var(--color-text-inverse, #ffffff);
   overflow: hidden;
 }
 
 .home-hero--has-image {
-  background-color: #2a3828;
+  background-color: var(--color-primary-soft, #2e2e2e);
 }
 
 .home-hero__bg-image {
@@ -334,11 +334,28 @@
 
 @media (max-width: 767px) {
   .home-benefits {
-    padding: 2rem 0;
+    padding: 1.75rem 0;
+  }
+
+  .home-benefits .home-container {
+    padding-inline: 0;
   }
 
   .home-benefits__grid {
-    gap: 1.25rem 1rem;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.85rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    padding: 0 1.25rem 0.45rem;
+    overscroll-behavior-x: contain;
+  }
+
+  .home-benefit {
+    flex: 0 0 min(72vw, 15.5rem);
+    scroll-snap-align: start;
   }
 
   .home-benefit__icon {
@@ -378,10 +395,10 @@
   color: var(--color-text-muted);
 }
 
-/* ─── Colecciones (fondo Dizor #f2ede5 como “tejidos”) ─── */
+/* ─── Colecciones (fondo Arena Dizor diluido, "tejidos") ─── */
 
 .home-section--craft {
-  background: #f2ede5;
+  background: var(--color-accent-soft-bg, #fdf1de);
   border-top: none;
 }
 
@@ -479,20 +496,20 @@
 
 .home-section--story {
   background: var(--color-primary);
-  color: #f5f3ef;
+  color: var(--color-text-inverse, #ffffff);
   border-top: none;
 }
 
 .home-section--story .home-eyebrow {
-  color: var(--color-accent);
+  color: var(--color-accent-soft);
 }
 
 .home-section--story .home-section__heading {
-  color: #f5f3ef;
+  color: var(--color-text-inverse, #ffffff);
 }
 
 .home-section--story .home-text-link {
-  color: #f5f3ef;
+  color: var(--color-text-inverse, #ffffff);
 }
 
 .home-section--story .home-text-link:hover {
@@ -522,7 +539,7 @@
   margin: 0;
   font-size: 0.875rem;
   line-height: 1.75;
-  color: #c9c4bc;
+  color: var(--color-text-inverse-muted, #b3b3b3);
   white-space: pre-line;
 }
 

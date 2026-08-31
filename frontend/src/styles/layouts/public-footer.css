@@ -1,6 +1,6 @@
 .site-footer {
   background: var(--color-primary);
-  color: #f5f3ef;
+  color: var(--color-text-inverse, #ffffff);
   margin-top: var(--space-2xl);
   padding: var(--space-2xl) var(--space-md) var(--space-lg);
 }
@@ -32,7 +32,7 @@
 }
 
 .site-footer a {
-  color: #e8e2d9;
+  color: var(--color-text-inverse-muted, #b3b3b3);
   font-size: 0.9rem;
   display: block;
   margin-bottom: var(--space-xs);
@@ -55,7 +55,7 @@
 
 .site-footer__tagline {
   font-size: 0.85rem;
-  color: #c9c4bc;
+  color: var(--color-text-inverse-muted, #b3b3b3);
   margin: var(--space-xs) 0 0;
   line-height: 1.5;
 }
@@ -65,13 +65,13 @@
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #a09a92;
+  color: var(--color-text-inverse-subtle, #8a8a8a);
   margin-bottom: var(--space-sm);
 }
 
 .site-footer__muted {
   font-size: 0.85rem;
-  color: #a09a92;
+  color: var(--color-text-inverse-subtle, #8a8a8a);
 }
 
 .site-footer__bottom {
@@ -86,13 +86,13 @@
 
 .site-footer__copy {
   font-size: 0.8rem;
-  color: #c9c4bc;
+  color: var(--color-text-inverse-muted, #b3b3b3);
   margin: 0;
 }
 
 .site-footer__visits {
   font-size: 0.8rem;
-  color: #a09a92;
+  color: var(--color-text-inverse-subtle, #8a8a8a);
   margin: 0;
 }
 

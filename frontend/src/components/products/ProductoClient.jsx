@@ -8,10 +8,20 @@ import { useCart } from "@/context/CartContext";
 import { formatCOP } from "@/lib/formatCurrency";
 import { trackAddToCart, trackViewItem } from "@/lib/analytics/events";
 import { mapProductToItem } from "@/lib/analytics/productMapper";
-import SimpleRichText from "@/components/content/SimpleRichText";
+import SizeGuide from "@/components/products/SizeGuide";
 import { SHIMMER_BLUR_DATA_URL } from "@/lib/imagePlaceholder";
 
 const LOW_STOCK_THRESHOLD = 5;
+
+function isHatCategory(category) {
+  const haystack = [category?.slug, category?.name]
+    .filter(Boolean)
+    .join(" ")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+  return haystack.includes("sombrero");
+}
 
 function findFirstAvailableVariant(product) {
   return product.variants?.find((v) => v.isActive && v.stock > 0) || null;
@@ -31,7 +41,7 @@ function StockAlert({ stock }) {
 // Recibe `product` ya resuelto por el Server Component (page.js) — sin
 // fetch propio, sin estado de carga inicial: el contenido llega listo en
 // el HTML servido por el servidor.
-export default function ProductoClient({ product, sizeGuide = null }) {
+export default function ProductoClient({ product }) {
   const router = useRouter();
   const { addItem } = useCart();
   const [activeImage, setActiveImage] = useState(0);
@@ -171,6 +181,7 @@ export default function ProductoClient({ product, sizeGuide = null }) {
   };
 
   const isOutOfStock = !selectedVariant || selectedVariant.stock < 1;
+  const showSizeGuide = isHatCategory(product.category);
 
   return (
     <>
@@ -289,28 +300,30 @@ export default function ProductoClient({ product, sizeGuide = null }) {
                     </span>
                   )}
                 </label>
-                <button
-                  type="button"
-                  className={`product-detail__size-guide${sizeGuideOpen ? " product-detail__size-guide--open" : ""}`}
-                  onClick={() => {
-                    setSizeGuideOpen((open) => {
-                      const next = !open;
-                      if (next) {
-                        requestAnimationFrame(() => {
-                          sizeGuideRef.current?.scrollIntoView({
-                            behavior: "smooth",
-                            block: "nearest",
+                {showSizeGuide ? (
+                  <button
+                    type="button"
+                    className={`product-detail__size-guide${sizeGuideOpen ? " product-detail__size-guide--open" : ""}`}
+                    onClick={() => {
+                      setSizeGuideOpen((open) => {
+                        const next = !open;
+                        if (next) {
+                          requestAnimationFrame(() => {
+                            sizeGuideRef.current?.scrollIntoView({
+                              behavior: "smooth",
+                              block: "nearest",
+                            });
                           });
-                        });
-                      }
-                      return next;
-                    });
-                  }}
-                  aria-expanded={sizeGuideOpen}
-                  aria-controls="product-size-guide"
-                >
-                  Guía de tallas
-                </button>
+                        }
+                        return next;
+                      });
+                    }}
+                    aria-expanded={sizeGuideOpen}
+                    aria-controls="product-size-guide"
+                  >
+                    Guía de tallas
+                  </button>
+                ) : null}
               </div>
               <div className="product-detail__variant-options">
                 {availableSizes.map((size) => {
@@ -456,67 +469,13 @@ export default function ProductoClient({ product, sizeGuide = null }) {
         </div>
       </div>
 
-      {sizeGuideOpen && (
-        <section
-          id="product-size-guide"
-          ref={sizeGuideRef}
-          className="product-detail__size-guide-panel"
-          aria-label="Guía de tallas"
-        >
-          <div className="product-detail__size-guide-panel-head">
-            <h2>{sizeGuide?.title || "Guía de tallas"}</h2>
-            <button
-              type="button"
-              className="product-detail__size-guide-close"
-              onClick={() => setSizeGuideOpen(false)}
-            >
-              Cerrar
-            </button>
-          </div>
-
-          {sizeGuide?.excerpt ? (
-            <p className="product-detail__size-guide-excerpt">
-              {sizeGuide.excerpt}
-            </p>
-          ) : null}
-
-          <div className="product-detail__size-guide-layout">
-            {sizeGuide?.imageUrl ? (
-              <div className="product-detail__size-guide-media">
-                <Image
-                  src={sizeGuide.imageUrl}
-                  alt={
-                    sizeGuide.imageAlt ||
-                    "Cómo medir la cabeza para elegir la talla"
-                  }
-                  width={480}
-                  height={480}
-                  className="product-detail__size-guide-img"
-                />
-              </div>
-            ) : null}
-
-            <div className="product-detail__size-guide-copy">
-              {sizeGuide?.body ? (
-                <SimpleRichText
-                  text={sizeGuide.body}
-                  className="simple-content product-detail__size-guide-body"
-                />
-              ) : (
-                <p className="product-detail__size-guide-excerpt">
-                  Mide tu cabeza con una cinta métrica flexible por encima de
-                  las orejas y unos 1 cm sobre las cejas. Esa medida en
-                  centímetros es tu talla.
-                </p>
-              )}
-              <p className="product-detail__size-guide-footer">
-                <Link href="/pagina/guia-de-tallas" className="home-text-link">
-                  Ver guía completa
-                </Link>
-              </p>
-            </div>
-          </div>
-        </section>
+      {showSizeGuide && sizeGuideOpen && (
+        <div id="product-size-guide" ref={sizeGuideRef}>
+          <SizeGuide
+            variant="panel"
+            onClose={() => setSizeGuideOpen(false)}
+          />
+        </div>
       )}
 
       {/* ─── LIGHTBOX ─── */}

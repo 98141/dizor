@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getContentPage } from "@/services/cmsService";
 import { Breadcrumbs, BreadcrumbJsonLd } from "@/components/seo/Breadcrumbs";
 
@@ -26,6 +26,9 @@ function detectPageType(slug) {
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
+  if (slug === "guia-de-tallas") {
+    redirect("/guia-de-tallas");
+  }
   const data = await getContentPage(slug);
   if (!data?.page) return { title: "Página" };
 
@@ -104,6 +107,17 @@ function renderBlock(block, index) {
     );
   }
 
+  // Numbered steps: "1. ..."
+  if (lines.every((l) => /^\d+[.)]\s+/.test(l.trim()))) {
+    return (
+      <ol key={index} className="content-page__steps">
+        {lines.map((l) => (
+          <li key={l}>{l.trim().replace(/^\d+[.)]\s+/, "")}</li>
+        ))}
+      </ol>
+    );
+  }
+
   // Default paragraph
   return (
     <p key={index} className="content-page__body-p">
@@ -114,6 +128,9 @@ function renderBlock(block, index) {
 
 export default async function ContentPageRoute({ params }) {
   const { slug } = await params;
+  if (slug === "guia-de-tallas") {
+    redirect("/guia-de-tallas");
+  }
   const data = await getContentPage(slug);
 
   if (!data?.page) notFound();
@@ -165,7 +182,9 @@ export default async function ContentPageRoute({ params }) {
               alt={page.imageAlt || page.title}
               fill
               sizes="(max-width: 768px) 100vw, 300px"
-              style={{ objectFit: "cover" }}
+              style={{
+                objectFit: "cover",
+              }}
               className="content-page__image"
             />
           </div>

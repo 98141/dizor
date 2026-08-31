@@ -2,7 +2,7 @@
    Replica .site-footer a (public-footer.css) para un <button>, ya que ahí
    no navega a ninguna URL, solo abre el panel de preferencias. */
 .site-footer__link-btn {
-  color: #e8e2d9;
+  color: var(--color-text-inverse-muted, #b3b3b3);
   font-size: 0.9rem;
   display: block;
   margin-bottom: var(--space-xs);
