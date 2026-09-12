@@ -86,6 +86,26 @@
   margin: 0;
 }
 
+.product-detail__title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.product-detail__favorite {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-top: 0.15rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-card, #fff);
+}
+
+.product-detail__favorite.is-active {
+  border-color: rgba(184, 115, 5, 0.35);
+}
+
 .product-detail__price-row {
   display: flex;
   align-items: baseline;

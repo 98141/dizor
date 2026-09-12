@@ -130,6 +130,22 @@ export function trackRemoveFromCart({ items, value, currency = "COP" }) {
   trackEvent("remove_from_cart", { currency, value: toSafeNumber(value), items });
 }
 
+export function trackAddToWishlist({ items, value, currency = "COP" }) {
+  trackEvent("add_to_wishlist", {
+    currency,
+    value: toSafeNumber(value),
+    items,
+  });
+}
+
+export function trackRemoveFromWishlist({ items, value, currency = "COP" }) {
+  trackEvent("remove_from_wishlist", {
+    currency,
+    value: toSafeNumber(value),
+    items,
+  });
+}
+
 export function trackViewCart({ items, value, currency = "COP" }) {
   trackEvent("view_cart", { currency, value: toSafeNumber(value), items });
 }

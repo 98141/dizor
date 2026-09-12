@@ -25,6 +25,24 @@ const assignObjectIdFilter = (filter, key, rawValue) => {
 const buildProductFilter = (query) => {
   const filter = { isActive: true };
 
+  const idsRaw = pickQueryValue(query, "ids");
+  if (idsRaw) {
+    const idList = String(idsRaw)
+      .split(",")
+      .map((s) => s.trim())
+      .filter((id) => isValidObjectId(id))
+      .slice(0, 48)
+      .map((id) => toObjectId(id))
+      .filter(Boolean);
+    if (idList.length > 0) {
+      filter._id = { $in: idList };
+    } else {
+      // ids inválidos → ningún resultado
+      filter._id = { $in: [] };
+    }
+    return filter;
+  }
+
   assignObjectIdFilter(filter, "category", query.category);
   assignObjectIdFilter(filter, "weaveType", query.weaveType);
   assignObjectIdFilter(filter, "style", query.style);

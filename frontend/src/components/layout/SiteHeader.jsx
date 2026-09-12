@@ -13,6 +13,7 @@ import {
 } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
+import { useFavorites } from "@/context/FavoritesContext";
 import { trackSearch } from "@/lib/analytics/events";
 import { categoryHref, taxonomyId } from "@/lib/catalogTaxonomy";
 import SiteLogo from "./SiteLogo";
@@ -22,6 +23,7 @@ import {
   IconChevronDown,
   IconClose,
   IconFavorites,
+  IconFavoritesFilled,
   IconMenu,
   IconSearch,
 } from "./HeaderIcons";
@@ -67,11 +69,6 @@ function isNavActive(href, pathname, searchParams) {
   }
 
   return pathname === path || pathname.startsWith(`${path}/`);
-}
-
-function weaveHref(wt) {
-  const id = wt._id || wt.id;
-  return `/catalogo?weaveType=${encodeURIComponent(String(id))}`;
 }
 
 function useHeaderSearch() {
@@ -131,21 +128,18 @@ function useHeaderSearch() {
   return { search, setSearch, handleSubmit };
 }
 
-function SiteHeaderInner({ categories = [], weaveTypes = [] }) {
+function SiteHeaderInner({ categories = [] }) {
   const { user, isAuthenticated } = useAuth();
   const { itemCount, hydrated } = useCart();
+  const { favoriteCount, hydrated: favoritesHydrated } = useFavorites();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [tejidosOpen, setTejidosOpen] = useState(false);
   const [masOpen, setMasOpen] = useState(false);
-  const [mobileTejidosOpen, setMobileTejidosOpen] = useState(false);
   const { search, setSearch, handleSubmit } = useHeaderSearch();
-  const tejidosPanelId = useId();
   const masPanelId = useId();
-  const tejidosWrapRef = useRef(null);
   const masWrapRef = useRef(null);
 
   const { visibleCategories, overflowCategories } = useMemo(() => {
@@ -164,9 +158,7 @@ function SiteHeaderInner({ categories = [], weaveTypes = [] }) {
     /* eslint-disable react-hooks/set-state-in-effect -- reset UI on navigation */
     setMobileOpen(false);
     setMobileSearchOpen(false);
-    setTejidosOpen(false);
     setMasOpen(false);
-    setMobileTejidosOpen(false);
     /* eslint-enable react-hooks/set-state-in-effect */
   }, [pathname, searchParams]);
 
@@ -186,18 +178,12 @@ function SiteHeaderInner({ categories = [], weaveTypes = [] }) {
   }, [mobileOpen, mobileSearchOpen]);
 
   useEffect(() => {
-    if (!tejidosOpen && !masOpen) return undefined;
+    if (!masOpen) return undefined;
 
     const onKey = (e) => {
-      if (e.key === "Escape") {
-        setTejidosOpen(false);
-        setMasOpen(false);
-      }
+      if (e.key === "Escape") setMasOpen(false);
     };
     const onPointer = (e) => {
-      if (tejidosOpen && !tejidosWrapRef.current?.contains(e.target)) {
-        setTejidosOpen(false);
-      }
       if (masOpen && !masWrapRef.current?.contains(e.target)) {
         setMasOpen(false);
       }
@@ -208,7 +194,7 @@ function SiteHeaderInner({ categories = [], weaveTypes = [] }) {
       document.removeEventListener("keydown", onKey);
       document.removeEventListener("pointerdown", onPointer);
     };
-  }, [tejidosOpen, masOpen]);
+  }, [masOpen]);
 
   const onSubmit = (e) => {
     handleSubmit(e);
@@ -223,8 +209,8 @@ function SiteHeaderInner({ categories = [], weaveTypes = [] }) {
     pathname === "/login" ||
     pathname === "/register";
   const cartActive = pathname.startsWith("/carrito");
-  const tejidosActive =
-    pathname === "/catalogo" && Boolean(searchParams.get("weaveType"));
+  const favoritesActive = pathname.startsWith("/favoritos");
+  const showFavoriteBadge = favoritesHydrated && favoriteCount > 0;
   const masActive = overflowCategories.some((cat) =>
     isNavActive(categoryHref(cat), pathname, searchParams)
   );
@@ -293,15 +279,28 @@ function SiteHeaderInner({ categories = [], weaveTypes = [] }) {
         <IconAccount aria-hidden />
       </Link>
 
-      <button
-        type="button"
-        className="site-header__icon-btn site-header__favorites-btn"
-        aria-label="Favoritos (próximamente)"
-        title="Favoritos — próximamente"
-        disabled
+      <Link
+        href="/favoritos"
+        className={`site-header__icon-btn site-header__favorites-btn${
+          favoritesActive ? " is-active" : ""
+        }`}
+        aria-label={
+          showFavoriteBadge
+            ? `Favoritos, ${favoriteCount} guardados`
+            : "Favoritos"
+        }
+        aria-current={favoritesActive ? "page" : undefined}
+        title="Favoritos"
       >
-        <IconFavorites aria-hidden />
-      </button>
+        {showFavoriteBadge || favoritesActive ? (
+          <IconFavoritesFilled aria-hidden />
+        ) : (
+          <IconFavorites aria-hidden />
+        )}
+        {showFavoriteBadge && (
+          <span className="site-header__favorites-badge">{favoriteCount}</span>
+        )}
+      </Link>
 
       <Link
         href="/carrito"
@@ -371,7 +370,6 @@ function SiteHeaderInner({ categories = [], weaveTypes = [] }) {
                   aria-haspopup="true"
                   onClick={() => {
                     setMasOpen((o) => !o);
-                    setTejidosOpen(false);
                   }}
                 >
                   Más
@@ -414,75 +412,6 @@ function SiteHeaderInner({ categories = [], weaveTypes = [] }) {
                 </Link>
               );
             })}
-
-            {weaveTypes.length > 0 && (
-              <div className="site-header__tejidos" ref={tejidosWrapRef}>
-                <button
-                  type="button"
-                  className={`site-header__tejidos-trigger${
-                    tejidosOpen || tejidosActive ? " is-active" : ""
-                  }`}
-                  aria-expanded={tejidosOpen}
-                  aria-controls={tejidosPanelId}
-                  aria-haspopup="true"
-                  onClick={() => {
-                    setTejidosOpen((o) => !o);
-                    setMasOpen(false);
-                  }}
-                >
-                  Tejidos
-                  <IconChevronDown
-                    className={`site-header__chevron${
-                      tejidosOpen ? " is-open" : ""
-                    }`}
-                    aria-hidden
-                  />
-                </button>
-                <div
-                  id={tejidosPanelId}
-                  className={`site-header__tejidos-panel${
-                    tejidosOpen ? " is-open" : ""
-                  }`}
-                  hidden={!tejidosOpen}
-                >
-                  <p className="site-header__tejidos-label">
-                    Explorar por tejido
-                  </p>
-                  <ul className="site-header__tejidos-list">
-                    {weaveTypes.map((wt) => {
-                      const href = weaveHref(wt);
-                      const active = isNavActive(
-                        href,
-                        pathname,
-                        searchParams
-                      );
-                      return (
-                        <li key={taxonomyId(wt)}>
-                          <Link
-                            href={href}
-                            className={active ? "is-active" : undefined}
-                            aria-current={active ? "page" : undefined}
-                            onClick={() => setTejidosOpen(false)}
-                          >
-                            <span>{wt.name}</span>
-                            {wt.description ? (
-                              <small>{wt.description}</small>
-                            ) : null}
-                          </Link>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                  <Link
-                    href="/catalogo"
-                    className="site-header__tejidos-all"
-                    onClick={() => setTejidosOpen(false)}
-                  >
-                    Ver todo el catálogo
-                  </Link>
-                </div>
-              </div>
-            )}
           </nav>
         </div>
       </div>
@@ -577,46 +506,6 @@ function SiteHeaderInner({ categories = [], weaveTypes = [] }) {
           );
         })}
 
-        {weaveTypes.length > 0 && (
-          <div className="site-header__mobile-accordion">
-            <button
-              type="button"
-              className={`site-header__mobile-accordion-trigger${
-                mobileTejidosOpen || tejidosActive ? " is-active" : ""
-              }`}
-              aria-expanded={mobileTejidosOpen}
-              onClick={() => setMobileTejidosOpen((o) => !o)}
-            >
-              Tejidos
-              <IconChevronDown
-                className={`site-header__chevron${
-                  mobileTejidosOpen ? " is-open" : ""
-                }`}
-                aria-hidden
-              />
-            </button>
-            {mobileTejidosOpen && (
-              <div className="site-header__mobile-accordion-panel">
-                {weaveTypes.map((wt) => {
-                  const href = weaveHref(wt);
-                  const active = isNavActive(href, pathname, searchParams);
-                  return (
-                    <Link
-                      key={taxonomyId(wt)}
-                      href={href}
-                      className={active ? "is-active" : undefined}
-                      aria-current={active ? "page" : undefined}
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      {wt.name}
-                    </Link>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        )}
-
         <Link
           href={accountHref}
           className={accountActive ? "is-active" : undefined}
@@ -630,10 +519,10 @@ function SiteHeaderInner({ categories = [], weaveTypes = [] }) {
   );
 }
 
-export default function SiteHeader({ categories = [], weaveTypes = [] }) {
+export default function SiteHeader({ categories = [] }) {
   return (
     <Suspense fallback={<header className="site-header" />}>
-      <SiteHeaderInner categories={categories} weaveTypes={weaveTypes} />
+      <SiteHeaderInner categories={categories} />
     </Suspense>
   );
 }

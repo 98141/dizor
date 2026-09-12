@@ -9,6 +9,7 @@ import { formatCOP } from "@/lib/formatCurrency";
 import { trackAddToCart, trackViewItem } from "@/lib/analytics/events";
 import { mapProductToItem } from "@/lib/analytics/productMapper";
 import SizeGuide from "@/components/products/SizeGuide";
+import FavoriteButton from "@/components/products/FavoriteButton";
 import { SHIMMER_BLUR_DATA_URL } from "@/lib/imagePlaceholder";
 
 const LOW_STOCK_THRESHOLD = 5;
@@ -78,6 +79,8 @@ export default function ProductoClient({ product }) {
   }, [product.id]);
 
   useEffect(() => {
+    // Reset cantidad al cambiar variante (comportamiento PDP previo).
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- variant change resets qty
     setQuantity(1);
   }, [selectedSize, selectedColor]);
 
@@ -147,7 +150,10 @@ export default function ProductoClient({ product }) {
   const images = product.images?.length
     ? product.images
     : [{ url: product.mainImage, alt: product.name }];
-  imagesLengthRef.current = images.length;
+
+  useEffect(() => {
+    imagesLengthRef.current = images.length;
+  }, [images.length]);
 
   const variantPrice = selectedVariant?.price || product.effectivePrice;
   const maxQty = selectedVariant?.stock || 1;
@@ -239,7 +245,14 @@ export default function ProductoClient({ product }) {
             {product.name}
           </p>
 
-          <h1 className="product-detail__title">{product.name}</h1>
+          <div className="product-detail__title-row">
+            <h1 className="product-detail__title">{product.name}</h1>
+            <FavoriteButton
+              product={product}
+              className="product-detail__favorite"
+              size={24}
+            />
+          </div>
 
           <div className="product-detail__price-row">
             <span className="product-detail__price">

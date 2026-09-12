@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import AuthCard from "@/components/auth/AuthCard";
 import AuthFormField from "@/components/auth/AuthFormField";
@@ -12,8 +12,9 @@ import { validateEmail, validatePassword } from "@/lib/validators/authSchemas";
 import { getAuthRedirect } from "@/lib/auth/getAuthRedirect";
 import { useSiteConfig } from "@/context/SiteConfigContext";
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { login } = useAuth();
   const { siteName } = useSiteConfig();
 
@@ -47,7 +48,8 @@ export default function LoginPage() {
 
     try {
       const data = await login(form);
-      router.push(getAuthRedirect(data.user.role));
+      const next = searchParams.get("next") || searchParams.get("redirect");
+      router.push(getAuthRedirect(data.user.role, next));
     } catch (error) {
       setMessage(
         error.response?.data?.message || "Error al iniciar sesión."
@@ -104,5 +106,13 @@ export default function LoginPage() {
         <AuthSubmitButton loading={loading}>Entrar</AuthSubmitButton>
       </form>
     </AuthCard>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<p className="auth-loading">Cargando…</p>}>
+      <LoginForm />
+    </Suspense>
   );
 }

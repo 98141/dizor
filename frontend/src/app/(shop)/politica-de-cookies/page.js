@@ -43,6 +43,7 @@ export default function PoliticaCookiesPage() {
         <ul className="content-page__list">
           <li><code>accessToken</code> / <code>refreshToken</code> — mantienen tu sesión iniciada.</li>
           <li><code>dizor_cart_v1</code> / <code>dizor_coupon_v1</code> — recuerdan el contenido de tu carrito y el cupón aplicado.</li>
+          <li><code>dizor_favorites_v1</code> — guarda tus favoritos cuando navegas como invitado (se fusionan a tu cuenta al iniciar sesión).</li>
           <li><code>dizor_guest_email</code> / <code>dizor_guest_name</code> — solo durante el checkout como invitado, para prellenar datos si creas una cuenta después.</li>
           <li><code>dizor_analytics_consent</code> / <code>dizor_cookie_preferences</code> — recuerdan tu decisión sobre esta misma política de cookies.</li>
           <li><code>dizor_visit_day</code> / <code>dizor_last_visit_day</code> — evitan contar tu visita más de una vez por día en el contador del pie de página.</li>

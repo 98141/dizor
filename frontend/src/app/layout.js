@@ -1,5 +1,6 @@
 import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
+import { FavoritesProvider } from "@/context/FavoritesContext";
 import { SiteConfigProvider } from "@/context/SiteConfigContext";
 import { fetchAppearance, getSiteName } from "@/lib/fetchAppearance";
 import { WHATSAPP_NUMBER } from "@/lib/whatsapp";
@@ -128,7 +129,9 @@ export default async function RootLayout({ children }) {
         <AnalyticsTracker />
         <SiteConfigProvider siteName={siteName} logoUrl={appearance?.logoUrl || ""}>
           <AuthProvider>
-            <CartProvider>{children}</CartProvider>
+            <CartProvider>
+              <FavoritesProvider>{children}</FavoritesProvider>
+            </CartProvider>
           </AuthProvider>
         </SiteConfigProvider>
       </body>

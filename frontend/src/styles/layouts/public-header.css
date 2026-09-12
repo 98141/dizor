@@ -193,8 +193,7 @@
   background: rgba(26, 26, 26, 0.05);
 }
 
-.site-header__icon-btn:disabled,
-.site-header__favorites-btn:disabled {
+.site-header__icon-btn:disabled {
   opacity: 0.55;
   cursor: not-allowed;
 }
@@ -204,8 +203,26 @@
   display: none;
 }
 
-.site-header__cart-btn {
+.site-header__cart-btn,
+.site-header__favorites-btn {
   position: relative;
+}
+
+.site-header__favorites-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
+  background: var(--color-primary);
+  color: var(--color-text-inverse, #ffffff);
+  font-size: 0.62rem;
+  font-weight: 600;
+  line-height: 16px;
+  text-align: center;
+  border-radius: 999px;
+  pointer-events: none;
 }
 
 .site-header__cart-badge {

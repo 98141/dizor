@@ -1,5 +1,5 @@
 // Rutas privadas/administrativas: nunca se reporta page_view para ellas.
-const EXCLUDED_PREFIXES = ["/admin", "/vendedor", "/restablecer"];
+const EXCLUDED_PREFIXES = ["/admin", "/vendedor", "/restablecer", "/favoritos"];
 
 // Solo estos query params aportan valor analítico real (coinciden con el
 // allowlist de filtros del catálogo). Cualquier otro param se descarta.

@@ -6,6 +6,7 @@ export {
   HiOutlineMagnifyingGlass as IconSearch,
   HiOutlineUser as IconAccount,
   HiOutlineHeart as IconFavorites,
+  HiHeart as IconFavoritesFilled,
   HiOutlineShoppingBag as IconCart,
   HiOutlineChevronDown as IconChevronDown,
 } from "react-icons/hi2";

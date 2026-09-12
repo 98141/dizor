@@ -7,6 +7,7 @@ import { formatCOP } from "@/lib/formatCurrency";
 import { SHIMMER_BLUR_DATA_URL } from "@/lib/imagePlaceholder";
 import { trackSelectItem } from "@/lib/analytics/events";
 import { mapProductToItem } from "@/lib/analytics/productMapper";
+import FavoriteButton from "@/components/products/FavoriteButton";
 
 const MAX_SWATCHES = 4;
 
@@ -174,6 +175,14 @@ export default function ProductCard({
           </div>
         ) : null}
       </Link>
+
+      <FavoriteButton
+        product={product}
+        className={`product-card__favorite${
+          isEditorial ? " product-card__favorite--editorial" : ""
+        }`}
+        size={isEditorial ? 18 : 20}
+      />
 
       <div className="product-card__body">
         {metaParts.length > 0 ? (

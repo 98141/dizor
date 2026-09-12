@@ -92,6 +92,17 @@ const userSchema = new mongoose.Schema(
       ],
       default: [],
     },
+
+    /** Wishlist: refs a Product. Sin duplicar nombre/precio/imagen. */
+    favorites: {
+      type: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
+        },
+      ],
+      default: [],
+    },
   },
   { timestamps: true }
 );

@@ -1,6 +1,7 @@
 .product-card {
   display: flex;
   flex-direction: column;
+  position: relative;
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
   border-radius: 0;
@@ -76,6 +77,62 @@
   align-items: flex-start;
   gap: 0.3rem;
   pointer-events: none;
+}
+
+.favorite-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+  line-height: 0;
+  transition: color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+}
+
+.favorite-btn:hover {
+  color: var(--color-accent, #b87305);
+}
+
+.favorite-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+.favorite-btn.is-active {
+  color: var(--color-accent, #b87305);
+}
+
+.favorite-btn:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.product-card__favorite {
+  position: absolute;
+  top: 0.55rem;
+  right: 0.55rem;
+  z-index: 3;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--color-text);
+  box-shadow: 0 1px 4px rgba(26, 26, 26, 0.08);
+}
+
+.product-card__favorite:hover {
+  background: #fff;
+  color: var(--color-accent, #b87305);
+}
+
+.product-card__favorite--editorial {
+  width: 2rem;
+  height: 2rem;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: none;
 }
 
 .product-card__badge {

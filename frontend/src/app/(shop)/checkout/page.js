@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
+import { useFavorites } from "@/context/FavoritesContext";
 
 const STAFF_ROLES = ["superadmin", "admin", "vendedor"];
 
@@ -47,6 +48,7 @@ export default function CheckoutPage() {
   const router = useRouter();
   const { items, hydrated, toApiItems, clearCart, appliedCoupon, clearCoupon } = useCart();
   const { user, isAuthenticated } = useAuth();
+  const { removePurchasedFromFavorites } = useFavorites();
 
   // Clave única por sesión de checkout — evita órdenes duplicadas por doble clic o reenvío
   const [idempotencyKey] = useState(() =>
@@ -270,6 +272,9 @@ export default function CheckoutPage() {
     // evento purchase (el carrito se vacía justo después de crear el pedido,
     // antes de llegar a la pantalla de confirmación).
     const cartItemsSnapshot = items.map((item) => mapCartItemToItem(item)).filter(Boolean);
+    const purchasedProductIds = [
+      ...new Set(items.map((item) => String(item.productId || "")).filter(Boolean)),
+    ];
     try {
       const data = await createOrder({
         items:           toApiItems(),
@@ -285,6 +290,7 @@ export default function CheckoutPage() {
 
       clearCart();
       clearCoupon();
+      removePurchasedFromFavorites(purchasedProductIds);
       setSuccess(data.order);
 
       // Wompi: redirigir al checkout externo
