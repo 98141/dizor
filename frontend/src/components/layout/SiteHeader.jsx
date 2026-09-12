@@ -383,7 +383,7 @@ function SiteHeaderInner({ categories = [] }) {
                   className={`site-header__tejidos-panel${
                     masOpen ? " is-open" : ""
                   }`}
-                  hidden={!masOpen}
+                  aria-hidden={!masOpen}
                 >
                   <p className="site-header__tejidos-label">Más categorías</p>
                   <ul className="site-header__tejidos-list">

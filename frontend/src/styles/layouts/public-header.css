@@ -5,8 +5,11 @@
   background: var(--color-bg-card);
   border-bottom: 1px solid var(--color-border);
   color: var(--color-text);
-  transition: background 0.28s ease, backdrop-filter 0.28s ease,
-    border-color 0.28s ease, box-shadow 0.28s ease;
+  transition:
+    background var(--motion-normal) var(--ease-standard),
+    backdrop-filter var(--motion-normal) var(--ease-standard),
+    border-color var(--motion-normal) var(--ease-standard),
+    box-shadow var(--motion-normal) var(--ease-standard);
 }
 
 .site-header.is-scrolled {
@@ -72,7 +75,9 @@
   width: auto;
   max-width: 160px;
   object-fit: contain;
-  transition: height 0.28s ease, max-width 0.28s ease;
+  transition:
+    height var(--motion-normal) var(--ease-out),
+    max-width var(--motion-normal) var(--ease-out);
 }
 
 .site-header.is-scrolled .site-header__logo-img {
@@ -357,6 +362,18 @@
 
 .site-header__mobile-nav--open {
   display: flex;
+  animation: site-mobile-nav-in var(--motion-normal) var(--ease-out);
+}
+
+@keyframes site-mobile-nav-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .site-header__mobile-section {
@@ -512,7 +529,7 @@
     position: relative;
     color: var(--color-text);
     padding: 0.35rem 0;
-    transition: color 0.15s ease;
+    transition: color var(--motion-fast) var(--ease-standard);
     white-space: nowrap;
   }
 
@@ -520,24 +537,46 @@
     color: var(--color-primary);
   }
 
-  .site-header__nav > a:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 4px;
-  }
-
-  .site-header__nav > a.is-active {
-    color: var(--color-primary);
-    font-weight: 600;
-  }
-
-  .site-header__nav > a.is-active::after {
+  .site-header__nav > a.is-active::after,
+  .site-header__nav > a[aria-current="page"]::after {
     content: "";
     position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
-    height: 1.5px;
-    background: var(--color-primary);
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(1);
+    transform-origin: center;
+    transition: transform var(--motion-fast) var(--ease-out);
+  }
+
+  .site-header__nav > a:not(.is-active):not([aria-current="page"])::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform var(--motion-fast) var(--ease-out);
+  }
+
+  .site-header__nav > a:not(.is-active):not([aria-current="page"]):hover::after {
+    transform: scaleX(1);
+  }
+
+  .site-header__nav > a:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 4px;
+  }
+
+  .site-header__nav > a.is-active,
+  .site-header__nav > a[aria-current="page"] {
+    color: var(--color-primary);
+    font-weight: var(--weight-medium);
   }
 
   .site-header__tejidos {
@@ -573,7 +612,6 @@
     position: absolute;
     top: calc(100% + 0.85rem);
     left: 50%;
-    transform: translateX(-50%);
     min-width: 280px;
     max-width: 360px;
     padding: 1.15rem 1.25rem 1.25rem;
@@ -581,10 +619,21 @@
     border: 1px solid var(--color-border);
     box-shadow: 0 16px 40px rgba(26, 26, 26, 0.1);
     z-index: 20;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateX(-50%) translateY(-4px);
+    transition:
+      opacity var(--motion-fast) var(--ease-out),
+      transform var(--motion-fast) var(--ease-out),
+      visibility var(--motion-fast) var(--ease-out);
   }
 
-  .site-header__tejidos-panel[hidden] {
-    display: none !important;
+  .site-header__tejidos-panel.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
   }
 
   .site-header__tejidos-label {
@@ -727,7 +776,25 @@
   .site-header,
   .site-header__logo-img,
   .site-header__chevron,
+  .site-header__tejidos-panel,
+  .site-header__nav > a,
+  .site-header__nav > a::after,
   .whatsapp-float {
-    transition: none;
+    transition: none !important;
+  }
+
+  .site-header__mobile-nav--open,
+  .catalog-filters--open {
+    animation: none !important;
+  }
+
+  .site-header__tejidos-panel {
+    transform: translateX(-50%);
+  }
+
+  .site-header__tejidos-panel.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
   }
 }

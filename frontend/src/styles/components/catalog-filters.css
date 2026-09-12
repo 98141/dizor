@@ -105,7 +105,9 @@
   font-size: 0.78rem;
   color: var(--color-text);
   cursor: pointer;
-  transition: border-color 0.15s ease, color 0.15s ease;
+  transition:
+    border-color var(--motion-fast) var(--ease-standard),
+    color var(--motion-fast) var(--ease-standard);
 }
 
 .catalog-chips__chip:hover,
@@ -155,6 +157,18 @@
 
 .catalog-filters--open {
   display: flex;
+  animation: catalog-filters-in var(--motion-normal) var(--ease-out);
+}
+
+@keyframes catalog-filters-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .catalog-filters__group-title {

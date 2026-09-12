@@ -1,0 +1,105 @@
+/* ============================================================
+   DIZOR — Motion utilities (Fase 10)
+   CSS-first. Preferir transform/opacity. Sin bounce/spring.
+   ============================================================ */
+
+/* Reveal TIPO A — editorial copy (opacity + 8px) */
+.motion-reveal--editorial {
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity var(--motion-slow) var(--ease-out),
+    transform var(--motion-slow) var(--ease-out);
+}
+
+.motion-reveal--editorial.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Reveal TIPO B — fotografía (opacity + scale sutil) */
+.motion-reveal--photo {
+  opacity: 0;
+  transform: scale(1.015);
+  transition:
+    opacity var(--motion-image) var(--ease-image),
+    transform var(--motion-image) var(--ease-image);
+  will-change: opacity, transform;
+}
+
+.motion-reveal--photo.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.motion-reveal--photo.is-visible {
+  will-change: auto;
+}
+
+/* Links editoriales — underline discreto */
+.home-text-link {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition:
+    color var(--motion-fast) var(--ease-standard),
+    background-size var(--motion-normal) var(--ease-out);
+}
+
+.home-text-link:hover,
+.home-text-link:focus-visible {
+  background-size: 100% 1px;
+}
+
+/* Favorito — pulso mínimo al activar */
+.favorite-btn {
+  transition:
+    color var(--motion-fast) var(--ease-standard),
+    transform var(--motion-fast) var(--ease-out),
+    opacity var(--motion-fast) var(--ease-standard),
+    background var(--motion-fast) var(--ease-standard);
+}
+
+.favorite-btn.is-active {
+  animation: favorite-pop var(--motion-fast) var(--ease-out);
+}
+
+@keyframes favorite-pop {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.favorite-btn:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-reveal--editorial,
+  .motion-reveal--photo {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    will-change: auto !important;
+  }
+
+  .favorite-btn.is-active {
+    animation: none;
+  }
+
+  .favorite-btn:active:not(:disabled) {
+    transform: none;
+  }
+
+  .home-text-link {
+    background-size: 100% 1px;
+    transition: color 0.01ms linear;
+  }
+}

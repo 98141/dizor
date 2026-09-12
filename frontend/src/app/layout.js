@@ -7,6 +7,7 @@ import { WHATSAPP_NUMBER } from "@/lib/whatsapp";
 import AnalyticsTracker from "@/components/analytics/AnalyticsTracker";
 import "@/styles/base/variables.css";
 import "@/styles/base/globals.css";
+import "@/styles/base/motion.css";
 import "@/styles/pages/not-found.css";
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://sombrerosdizor.com.co").replace(/\/$/, "");

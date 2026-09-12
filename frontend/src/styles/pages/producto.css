@@ -56,6 +56,7 @@
   cursor: pointer;
   padding: 0;
   background: none;
+  transition: border-color var(--motion-fast) var(--ease-standard);
 }
 
 .product-detail__thumb--active {
@@ -717,11 +718,17 @@
   letter-spacing: var(--tracking-normal);
   text-transform: none;
   cursor: pointer;
-  transition: background 0.18s ease;
+  transition:
+    background var(--motion-fast) var(--ease-standard),
+    transform var(--motion-fast) var(--ease-out);
 }
 
 .product-detail__add-btn:hover:not(:disabled) {
   background: var(--color-primary-hover);
+}
+
+.product-detail__add-btn:active:not(:disabled) {
+  transform: translateY(1px);
 }
 
 .product-detail__add-btn:disabled {
@@ -1004,7 +1011,18 @@
     var(--color-border) 75%
   );
   background-size: 800px 100%;
-  animation: skel-shimmer 1.4s ease-in-out infinite;
+  animation: skel-shimmer 1.8s var(--ease-standard) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skel-box {
+    animation: none;
+    background: var(--color-border);
+  }
+
+  .product-detail__add-btn:active:not(:disabled) {
+    transform: none;
+  }
 }
 
 /* ─── Reseñas de producto ─── */

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { getHomeContent } from "@/services/cmsService";
+import MotionReveal from "@/components/motion/MotionReveal";
 
 const SLOTS = {
   editorial1: {
@@ -15,7 +16,6 @@ const SLOTS = {
 /**
  * Pausa visual Home — solo fotografía (sin título / CTA / overlay).
  * slot: "editorial1" | "editorial2"
- * Renderiza null si el CMS no tiene imágenes activas.
  */
 export default async function HomeEditorialBreak({ slot = "editorial1" }) {
   const meta = SLOTS[slot];
@@ -37,7 +37,7 @@ export default async function HomeEditorialBreak({ slot = "editorial1" }) {
       data-slot={slot}
       data-count={count}
     >
-      <div className="home-editorial__frame">
+      <MotionReveal variant="photo" className="home-editorial__frame">
         {images.map((img, idx) => (
           <div
             key={img.id || `${slot}-${idx}`}
@@ -56,7 +56,7 @@ export default async function HomeEditorialBreak({ slot = "editorial1" }) {
             />
           </div>
         ))}
-      </div>
+      </MotionReveal>
     </section>
   );
 }

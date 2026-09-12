@@ -3,7 +3,7 @@
 @keyframes homeFadeRise {
   from {
     opacity: 0;
-    transform: translateY(18px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -13,13 +13,13 @@
 
 .home-anim {
   opacity: 0;
-  animation: homeFadeRise 0.75s ease forwards;
+  animation: homeFadeRise var(--motion-slow) var(--ease-out) forwards;
 }
 
-.home-anim--1 { animation-delay: 0.1s; }
-.home-anim--2 { animation-delay: 0.28s; }
-.home-anim--3 { animation-delay: 0.46s; }
-.home-anim--4 { animation-delay: 0.64s; }
+.home-anim--1 { animation-delay: 0.08s; }
+.home-anim--2 { animation-delay: 0.2s; }
+.home-anim--3 { animation-delay: 0.34s; }
+.home-anim--4 { animation-delay: 0.48s; }
 
 .home-container {
   max-width: var(--container-max);
@@ -204,7 +204,7 @@
   margin-top: 1.25rem;
   color: var(--color-text);
   font-size: 0.9rem;
-  text-decoration: underline;
+  text-decoration: none;
   text-underline-offset: 4px;
 }
 
@@ -327,7 +327,7 @@
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 1.4s ease;
+  transition: opacity var(--motion-hero-crossfade) var(--ease-image);
   will-change: opacity;
 }
 
@@ -340,11 +340,11 @@
   object-fit: cover;
   object-position: center 35%;
   transform: scale(1.04);
-  transition: transform 8s ease-out;
+  transition: transform var(--motion-hero-ken) var(--ease-image);
 }
 
 .home-hero__slide.is-active .home-hero__bg-image {
-  transform: scale(1.1);
+  transform: scale(1.08);
 }
 
 .home-hero--reduced .home-hero__bg-image,
@@ -453,8 +453,11 @@
 }
 
 .home-hero .home-btn--primary {
-  transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease,
-    border-color 0.25s ease;
+  transition:
+    background var(--motion-normal) var(--ease-standard),
+    color var(--motion-normal) var(--ease-standard),
+    transform var(--motion-fast) var(--ease-out),
+    border-color var(--motion-normal) var(--ease-standard);
 }
 
 .home-hero .home-btn--primary:hover {
@@ -464,7 +467,10 @@
 }
 
 .home-hero .home-btn--ghost {
-  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+  transition:
+    background var(--motion-normal) var(--ease-standard),
+    border-color var(--motion-normal) var(--ease-standard),
+    color var(--motion-normal) var(--ease-standard);
 }
 
 .home-hero .home-btn--ghost:hover {
@@ -823,7 +829,7 @@
 }
 
 .home-collection-card:hover .home-collection-card__media img {
-  transform: scale(1.03);
+  transform: scale(1.02);
 }
 
 .home-collection-card__meta {
@@ -1323,11 +1329,11 @@
 
 .home-discover__image {
   object-fit: cover;
-  transition: transform 0.55s ease;
+  transition: transform var(--motion-image) var(--ease-image);
 }
 
 .home-discover__card:hover .home-discover__image {
-  transform: scale(1.04);
+  transform: scale(1.02);
 }
 
 .home-discover__meta {
@@ -1939,11 +1945,11 @@
 }
 
 .home-inspire__cell img {
-  transition: transform 0.45s ease;
+  transition: transform var(--motion-image) var(--ease-image);
 }
 
 .home-inspire__cell:hover img {
-  transform: scale(1.03);
+  transform: scale(1.015);
 }
 
 /* Móvil: scroll horizontal de imágenes grandes (preservar Fase 4) */
@@ -2291,6 +2297,12 @@
   .home-inspire__cell img,
   .home-discover__image {
     transition: none;
+  }
+
+  .home-collection-card:hover .home-collection-card__media img,
+  .home-inspire__cell:hover img,
+  .home-discover__card:hover .home-discover__image {
+    transform: none;
   }
 
   .home-hero__slide,

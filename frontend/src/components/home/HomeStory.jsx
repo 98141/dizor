@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getHomeContent } from "@/services/cmsService";
+import MotionReveal from "@/components/motion/MotionReveal";
 
 /** Historia / origen — bloque editorial fuerte. */
 export default async function HomeStory() {
@@ -19,7 +20,7 @@ export default async function HomeStory() {
           className={`home-story${hasImage ? " home-story--with-image" : ""}`}
         >
           {hasImage ? (
-            <div className="home-story__media">
+            <MotionReveal variant="photo" className="home-story__media">
               <div className="home-story__image-wrap">
                 <Image
                   src={historiaImage}
@@ -29,9 +30,9 @@ export default async function HomeStory() {
                   style={{ objectFit: "cover" }}
                 />
               </div>
-            </div>
+            </MotionReveal>
           ) : null}
-          <div className="home-story__content">
+          <MotionReveal variant="editorial" className="home-story__content">
             <p className="home-eyebrow">{historia.eyebrow || "ORIGEN"}</p>
             <h2 className="home-section__heading">
               {historia.title || "Del oficio a tu cotidianidad"}
@@ -48,7 +49,7 @@ export default async function HomeStory() {
                 {historia.ctaLabel}
               </Link>
             ) : null}
-          </div>
+          </MotionReveal>
         </div>
       </div>
     </section>
