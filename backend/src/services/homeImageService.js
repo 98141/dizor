@@ -10,6 +10,7 @@ exports.formatHomeImage = (doc) => ({
   activo: doc.activo !== false,
   titulo: doc.titulo || "",
   linkHref: doc.linkHref || "",
+  weaveTypeId: doc.weaveType ? String(doc.weaveType) : null,
   createdAt: doc.createdAt,
   updatedAt: doc.updatedAt,
 });

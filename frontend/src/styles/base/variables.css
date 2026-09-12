@@ -76,8 +76,13 @@
 
   /* ── Layout ── */
   --container-max: 1200px;
-  --header-height: 72px;
+  /* Móvil / tablet: una sola fila. Desktop (≥1024): dos niveles. */
+  --header-height: 64px;
+  --header-height-desktop: 118px;
+  --header-row-top: 72px;
+  --header-row-bottom: 46px;
   --bp-sm: 480px;
   --bp-md: 768px;
   --bp-lg: 1024px;
+  --bp-header: 1024px;
 }

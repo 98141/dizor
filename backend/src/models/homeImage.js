@@ -53,11 +53,22 @@ const homeImageSchema = new mongoose.Schema(
       trim: true,
       default: "",
     },
+    /**
+     * Asociación explícita tejido ↔ imagen (sección coleccion).
+     * Preferida frente a matching por título/linkHref.
+     * Varias imágenes pueden compartir el mismo weaveType (orden define la secuencia).
+     */
+    weaveType: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "WeaveType",
+      default: null,
+    },
   },
   { timestamps: true }
 );
 
 homeImageSchema.index({ seccion: 1, activo: 1, orden: 1 });
+homeImageSchema.index({ seccion: 1, weaveType: 1, activo: 1, orden: 1 });
 
 module.exports = mongoose.model("HomeImage", homeImageSchema);
 module.exports.HOME_IMAGE_SECTIONS = HOME_IMAGE_SECTIONS;

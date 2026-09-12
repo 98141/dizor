@@ -38,7 +38,7 @@ const SECTIONS = [
   {
     id: "colecciones",
     label: "Colecciones",
-    hint: "Nuestros tejidos: cada medianoche se eligen 3 tejidos al azar (1 grande + 2). Imágenes CMS: título = nombre del tejido o enlace con weaveType.",
+    hint: "Nuestros tejidos: muestra todos los tejidos activos del catálogo. Asocia imágenes en Home → Imágenes → Colecciones (selector de tejido; varias fotos por tejido permitidas).",
   },
   {
     id: "historia",

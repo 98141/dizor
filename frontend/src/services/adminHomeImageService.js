@@ -7,13 +7,22 @@ export const getAdminHomeImages = async (seccion) => {
   return res.data;
 };
 
-export const createAdminHomeImage = async ({ file, seccion, altText, titulo, linkHref, activo }) => {
+export const createAdminHomeImage = async ({
+  file,
+  seccion,
+  altText,
+  titulo,
+  linkHref,
+  weaveType,
+  activo,
+}) => {
   const formData = new FormData();
   formData.append("images", file);
   formData.append("seccion", seccion);
   if (altText) formData.append("altText", altText);
   if (titulo) formData.append("titulo", titulo);
   if (linkHref) formData.append("linkHref", linkHref);
+  if (weaveType) formData.append("weaveType", weaveType);
   if (activo !== undefined) formData.append("activo", String(activo));
 
   const res = await api.post("/admin/home-images", formData, {

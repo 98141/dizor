@@ -2,10 +2,12 @@ import Link from "next/link";
 import Image from "next/image";
 import ProductCarousel from "@/components/home/ProductCarousel";
 import DailyDiscoverGrid from "@/components/home/DailyDiscoverGrid";
+import HomeCraftSection from "@/components/home/HomeCraftSection";
 import NewsletterSignup from "@/components/marketing/NewsletterSignup";
 import ViewItemListTracker from "@/components/analytics/ViewItemListTracker";
 import { getHomeContent } from "@/services/cmsService";
 import { fetchAppearance, getSiteName } from "@/lib/fetchAppearance";
+import { buildWeaveCards } from "@/lib/coleccionImages";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
 
 const HOME_TITLE = "Sombreros artesanales de Sandoná";
@@ -53,14 +55,6 @@ async function fetchJson(url, revalidate = 60) {
   }
 }
 
-function MediaPlaceholder({ label = "Imagen próximamente" }) {
-  return (
-    <div className="home-media-fallback" role="img" aria-label={label}>
-      <span>{label}</span>
-    </div>
-  );
-}
-
 function Stars({ rating = 5 }) {
   const n = Math.max(1, Math.min(5, Number(rating) || 5));
   return (
@@ -97,33 +91,15 @@ export default async function HomePage() {
   const randomSection = home.randomProductsSection || {};
   const newsletterSection = home.newsletterSection || {};
 
+  // Colección: exactamente 3 tejidos del sample diario (medianoche America/Bogota).
+  // Fallback solo si la API no trae weaveTypes aún.
   const craftTypes = filtersData?.filters?.weaveTypes || [];
   const dailyWeaves =
-    Array.isArray(dailyData?.weaveTypes) && dailyData.weaveTypes.length
-      ? dailyData.weaveTypes
+    Array.isArray(dailyData?.weaveTypes) && dailyData.weaveTypes.length > 0
+      ? dailyData.weaveTypes.slice(0, 3)
       : craftTypes.slice(0, 3);
   const coleccionImages = (homeImages.coleccion || []).filter((img) => img?.url);
-  const matchColeccionImage = (wt) => {
-    const id = String(wt._id || wt.id || "");
-    const name = String(wt.name || "")
-      .trim()
-      .toLowerCase();
-    return (
-      coleccionImages.find((img) => {
-        const href = String(img.linkHref || "");
-        const titulo = String(img.titulo || "")
-          .trim()
-          .toLowerCase();
-        if (id && href.includes(`weaveType=${id}`)) return true;
-        if (name && titulo === name) return true;
-        return false;
-      }) || null
-    );
-  };
-  const weaveCards = dailyWeaves.slice(0, 3).map((wt) => ({
-    wt,
-    img: matchColeccionImage(wt),
-  }));
+  const weaveCards = buildWeaveCards(dailyWeaves, coleccionImages);
   const inspiracionImages = (homeImages.inspiracion || []).filter(
     (img) => img?.url
   );
@@ -275,65 +251,7 @@ export default async function HomePage() {
       )}
 
       {/* 4. Colecciones / tejidos */}
-      <section className="home-section home-section--craft">
-        <div className="home-container">
-          <header className="home-section__intro">
-            <p className="home-eyebrow">
-              {craftSection.eyebrow || "COLECCIÓN"}
-            </p>
-            <h2 className="home-section__heading">
-              {craftSection.title || "Nuestros tejidos"}
-            </h2>
-            <p className="home-section__lead">
-              {craftSection.subtitle ||
-                "Explora cada línea de Dizor: carácter, finura y tiempo de elaboración."}
-            </p>
-          </header>
-
-          {weaveCards.length > 0 ? (
-            <div className="home-collection__grid home-collection__grid--editorial">
-              {weaveCards.map(({ wt, img }, index) => (
-                <Link
-                  key={wt._id || wt.id}
-                  href={`/catalogo?weaveType=${wt._id || wt.id}`}
-                  className={`home-collection-card${img ? "" : " home-collection-card--text"}${index === 0 ? " home-collection-card--featured" : ""}`}
-                >
-                  <div
-                    className={`home-collection-card__media${img ? "" : " home-collection-card__media--fallback"}`}
-                  >
-                    {img ? (
-                      <Image
-                        src={img.url}
-                        alt={img.altText || wt.name || "Colección Dizor"}
-                        fill
-                        sizes={
-                          index === 0
-                            ? "(max-width: 767px) 33vw, 50vw"
-                            : "(max-width: 767px) 33vw, 25vw"
-                        }
-                        style={{ objectFit: "cover" }}
-                      />
-                    ) : (
-                      <MediaPlaceholder label={wt.name} />
-                    )}
-                  </div>
-                  <div className="home-collection-card__meta">
-                    <span className="home-collection-card__name">{wt.name}</span>
-                    <span className="home-collection-card__cta">
-                      {craftSection.linkLabel || "Ver"}
-                    </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          ) : (
-            <p className="home-section__empty">
-              Pronto verás nuestras colecciones.{" "}
-              <Link href="/catalogo">Ir al catálogo</Link>
-            </p>
-          )}
-        </div>
-      </section>
+      <HomeCraftSection craftSection={craftSection} cards={weaveCards} />
 
       {/* 4. Historia */}
       <section className="home-section home-section--story">

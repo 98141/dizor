@@ -1,4 +1,4 @@
-import SiteHeader from "@/components/layout/SiteHeader";
+import SiteHeaderServer from "@/components/layout/SiteHeaderServer";
 import SiteFooter from "@/components/layout/SiteFooter";
 import SiteAnnouncement from "@/components/layout/SiteAnnouncement";
 import PromoPopup from "@/components/marketing/PromoPopup";
@@ -11,7 +11,7 @@ export default function ShopLayout({ children }) {
     <>
       <PromoPopup />
       <SiteAnnouncement />
-      <SiteHeader />
+      <SiteHeaderServer />
       <main>{children}</main>
       <SiteFooter />
       <WhatsAppFloatingButton />

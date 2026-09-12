@@ -12,21 +12,31 @@ import {
   reorderAdminHomeImages,
   deleteAdminHomeImage,
 } from "@/services/adminHomeImageService";
+import { getCatalogFilters } from "@/services/productService";
 
 const SECTIONS = [
   { id: "hero", label: "Hero", hint: "Una imagen principal full-bleed (la de menor orden)" },
   { id: "historia", label: "Historia", hint: "Imagen del bloque origen / historia" },
   { id: "personalizacion", label: "Personalización", hint: "Imagen vertical del bloque a tu medida" },
   { id: "pormayor", label: "Por mayor", hint: "Imagen del bloque pedidos al por mayor" },
-  { id: "coleccion", label: "Colecciones", hint: "Tarjetas de tejidos/colecciones (título + enlace)" },
+  {
+    id: "coleccion",
+    label: "Colecciones",
+    hint: "Asocia cada imagen a un tejido. Puedes subir varias por tejido (orden = secuencia del carrusel).",
+  },
   { id: "inspiracion", label: "Inspiración", hint: "Mosaico 1 grande + 4 pequeñas · máximo 5 imágenes" },
 ];
 
 const INSPIRACION_MAX = 5;
 
+function weaveOptionId(wt) {
+  return String(wt._id || wt.id || "");
+}
+
 export default function HomeImagesTab() {
   const [section, setSection] = useState("hero");
   const [images, setImages] = useState([]);
+  const [weaveTypes, setWeaveTypes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [confirmModal, setConfirmModal] = useState(null);
@@ -36,13 +46,18 @@ export default function HomeImagesTab() {
   const [altText, setAltText] = useState("");
   const [titulo, setTitulo] = useState("");
   const [linkHref, setLinkHref] = useState("");
+  const [weaveType, setWeaveType] = useState("");
 
   const load = useCallback(async () => {
     setLoading(true);
     clearMsg();
     try {
-      const data = await getAdminHomeImages();
-      setImages(data.images || []);
+      const [imagesData, filtersData] = await Promise.all([
+        getAdminHomeImages(),
+        getCatalogFilters().catch(() => null),
+      ]);
+      setImages(imagesData.images || []);
+      setWeaveTypes(filtersData?.filters?.weaveTypes || []);
     } catch (err) {
       showMsg(err.response?.data?.message || "Error al cargar imágenes", true);
     } finally {
@@ -72,6 +87,16 @@ export default function HomeImagesTab() {
     setAltText("");
     setTitulo("");
     setLinkHref("");
+    setWeaveType("");
+  };
+
+  const applyWeaveSelection = (id, setTitle, setLink, setWeave) => {
+    setWeave(id);
+    const wt = weaveTypes.find((w) => weaveOptionId(w) === id);
+    if (wt) {
+      setTitle(wt.name || "");
+      setLink(id ? `/catalogo?weaveType=${id}` : "");
+    }
   };
 
   const handleUpload = async (e) => {
@@ -84,6 +109,10 @@ export default function HomeImagesTab() {
       showMsg(`Inspiración admite máximo ${INSPIRACION_MAX} imágenes`, true);
       return;
     }
+    if (section === "coleccion" && !weaveType) {
+      showMsg("Selecciona el tejido al que pertenece esta imagen", true);
+      return;
+    }
     setSaving(true);
     clearMsg();
     try {
@@ -93,6 +122,7 @@ export default function HomeImagesTab() {
         altText,
         titulo,
         linkHref,
+        weaveType: section === "coleccion" ? weaveType : undefined,
         activo: true,
       });
       showMsg("Imagen subida");
@@ -153,7 +183,8 @@ export default function HomeImagesTab() {
 
   const remove = (id) => {
     setConfirmModal({
-      message: "¿Eliminar esta imagen? También se borrará de Cloudinary si tiene publicId.",
+      message:
+        "¿Eliminar esta imagen? También se borrará de Cloudinary si tiene publicId.",
       onConfirm: async () => {
         setConfirmModal(null);
         setSaving(true);
@@ -175,8 +206,8 @@ export default function HomeImagesTab() {
   return (
     <div>
       <p className="admin-page__subtitle" style={{ marginTop: 0 }}>
-        Sube, reordena y elimina las imágenes de cada sección del inicio (Cloudinary).
-        Los textos se editan en la pestaña Inicio.
+        Sube, reordena y elimina las imágenes de cada sección del inicio
+        (Cloudinary). Los textos se editan en la pestaña Inicio.
       </p>
 
       <ConfirmModal
@@ -237,6 +268,35 @@ export default function HomeImagesTab() {
           value={altText}
           onChange={(e) => setAltText(e.target.value)}
         />
+        {section === "coleccion" && (
+          <div className="auth-field">
+            <label className="auth-field__label" htmlFor="coleccion-weaveType">
+              Tejido (obligatorio)
+            </label>
+            <select
+              id="coleccion-weaveType"
+              className="auth-field__input"
+              value={weaveType}
+              disabled={saving}
+              onChange={(e) =>
+                applyWeaveSelection(
+                  e.target.value,
+                  setTitulo,
+                  setLinkHref,
+                  setWeaveType
+                )
+              }
+              required
+            >
+              <option value="">Selecciona un tejido…</option>
+              {weaveTypes.map((wt) => (
+                <option key={weaveOptionId(wt)} value={weaveOptionId(wt)}>
+                  {wt.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
         {(section === "coleccion" || section === "inspiracion") && (
           <>
             <AuthFormField
@@ -272,7 +332,9 @@ export default function HomeImagesTab() {
       <section className="product-form__section" style={{ marginTop: "1.5rem" }}>
         <h2>Imágenes ({sectionImages.length})</h2>
         {sectionImages.length === 0 ? (
-          <p className="admin-page__subtitle">Aún no hay imágenes en esta sección.</p>
+          <p className="admin-page__subtitle">
+            Aún no hay imágenes en esta sección.
+          </p>
         ) : (
           <div className="admin-grid-2">
             {sectionImages.map((img, idx) => (
@@ -290,8 +352,20 @@ export default function HomeImagesTab() {
                     border: "1px solid var(--color-border)",
                   }}
                 />
-                <p style={{ fontSize: "0.8rem", color: "var(--color-text-muted)" }}>
+                <p
+                  style={{
+                    fontSize: "0.8rem",
+                    color: "var(--color-text-muted)",
+                  }}
+                >
                   Orden {img.orden} · {img.activo ? "Activa" : "Inactiva"}
+                  {img.weaveTypeId
+                    ? ` · tejido ${
+                        weaveTypes.find(
+                          (w) => weaveOptionId(w) === img.weaveTypeId
+                        )?.name || img.weaveTypeId
+                      }`
+                    : ""}
                 </p>
                 <div className="auth-field">
                   <label className="auth-field__label">Alt</label>
@@ -301,12 +375,53 @@ export default function HomeImagesTab() {
                     onChange={(e) =>
                       setImages((prev) =>
                         prev.map((x) =>
-                          x.id === img.id ? { ...x, altText: e.target.value } : x
+                          x.id === img.id
+                            ? { ...x, altText: e.target.value }
+                            : x
                         )
                       )
                     }
                   />
                 </div>
+                {section === "coleccion" && (
+                  <div className="auth-field">
+                    <label className="auth-field__label">Tejido</label>
+                    <select
+                      className="auth-field__input"
+                      value={img.weaveTypeId || ""}
+                      onChange={(e) => {
+                        const id = e.target.value;
+                        const wt = weaveTypes.find(
+                          (w) => weaveOptionId(w) === id
+                        );
+                        setImages((prev) =>
+                          prev.map((x) =>
+                            x.id === img.id
+                              ? {
+                                  ...x,
+                                  weaveTypeId: id || null,
+                                  titulo: wt?.name || x.titulo,
+                                  linkHref: id
+                                    ? `/catalogo?weaveType=${id}`
+                                    : x.linkHref,
+                                }
+                              : x
+                          )
+                        );
+                      }}
+                    >
+                      <option value="">Sin asociar…</option>
+                      {weaveTypes.map((wt) => (
+                        <option
+                          key={weaveOptionId(wt)}
+                          value={weaveOptionId(wt)}
+                        >
+                          {wt.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
                 {(section === "coleccion" || section === "inspiracion") && (
                   <>
                     <div className="auth-field">
@@ -317,7 +432,9 @@ export default function HomeImagesTab() {
                         onChange={(e) =>
                           setImages((prev) =>
                             prev.map((x) =>
-                              x.id === img.id ? { ...x, titulo: e.target.value } : x
+                              x.id === img.id
+                                ? { ...x, titulo: e.target.value }
+                                : x
                             )
                           )
                         }
@@ -351,6 +468,10 @@ export default function HomeImagesTab() {
                         altText: img.altText || "",
                         titulo: img.titulo || "",
                         linkHref: img.linkHref || "",
+                        weaveType:
+                          section === "coleccion"
+                            ? img.weaveTypeId || null
+                            : undefined,
                       })
                     }
                   >

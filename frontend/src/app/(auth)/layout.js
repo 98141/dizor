@@ -1,4 +1,4 @@
-import SiteHeader from "@/components/layout/SiteHeader";
+import SiteHeaderServer from "@/components/layout/SiteHeaderServer";
 import SiteFooter from "@/components/layout/SiteFooter";
 import CookieConsentBanner from "@/components/consent/CookieConsentBanner";
 import CookiePreferencesPanel from "@/components/consent/CookiePreferencesPanel";
@@ -10,7 +10,7 @@ export const metadata = {
 export default function AuthLayout({ children }) {
   return (
     <>
-      <SiteHeader />
+      <SiteHeaderServer />
       <main>{children}</main>
       <SiteFooter />
       <CookieConsentBanner />

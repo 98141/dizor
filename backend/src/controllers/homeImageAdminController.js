@@ -1,10 +1,31 @@
+const mongoose = require("mongoose");
 const HomeImage = require("../models/homeImage");
 const { HOME_IMAGE_SECTIONS: SECTIONS } = require("../models/homeImage");
+const WeaveType = require("../models/weaveType");
 const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/catchAsync");
 const { uploadHomeImages, deleteImage } = require("../services/cloudinaryService");
 const { formatHomeImage } = require("../services/homeImageService");
 const { logAuditEvent, safeLog } = require("../services/auditService");
+
+async function resolveWeaveTypeId(raw) {
+  if (raw === null || raw === undefined || raw === "" || raw === "null") {
+    return null;
+  }
+  const id = String(raw).trim();
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    throw new AppError("weaveType inválido", 400);
+  }
+  const exists = await WeaveType.exists({ _id: id });
+  if (!exists) {
+    throw new AppError("El tejido indicado no existe", 400);
+  }
+  return id;
+}
+
+function catalogHrefForWeave(id) {
+  return `/catalogo?weaveType=${id}`;
+}
 
 exports.listHomeImages = catchAsync(async (req, res) => {
   const filter = {};
@@ -60,6 +81,19 @@ exports.createHomeImage = catchAsync(async (req, res, next) => {
     .select("orden")
     .lean();
 
+  let weaveTypeId = null;
+  if (seccion === "coleccion" && req.body.weaveType !== undefined) {
+    try {
+      weaveTypeId = await resolveWeaveTypeId(req.body.weaveType);
+    } catch (err) {
+      return next(err);
+    }
+  }
+
+  const linkHref =
+    req.body.linkHref ||
+    (weaveTypeId ? catalogHrefForWeave(weaveTypeId) : "");
+
   const image = await HomeImage.create({
     url: uploaded.url,
     publicId: uploaded.publicId,
@@ -68,7 +102,8 @@ exports.createHomeImage = catchAsync(async (req, res, next) => {
     orden: typeof maxOrden?.orden === "number" ? maxOrden.orden + 1 : 0,
     activo: req.body.activo !== "false" && req.body.activo !== false,
     titulo: req.body.titulo || "",
-    linkHref: req.body.linkHref || "",
+    linkHref,
+    weaveType: weaveTypeId,
   });
 
   safeLog(
@@ -101,6 +136,20 @@ exports.updateHomeImage = catchAsync(async (req, res, next) => {
   if (req.body.altText !== undefined) image.altText = String(req.body.altText);
   if (req.body.titulo !== undefined) image.titulo = String(req.body.titulo);
   if (req.body.linkHref !== undefined) image.linkHref = String(req.body.linkHref);
+  if (req.body.weaveType !== undefined) {
+    try {
+      const weaveTypeId = await resolveWeaveTypeId(req.body.weaveType);
+      image.weaveType = weaveTypeId;
+      if (
+        weaveTypeId &&
+        (!image.linkHref || !String(image.linkHref).includes("weaveType="))
+      ) {
+        image.linkHref = catalogHrefForWeave(weaveTypeId);
+      }
+    } catch (err) {
+      return next(err);
+    }
+  }
   if (req.body.activo !== undefined) {
     image.activo =
       req.body.activo === true ||
