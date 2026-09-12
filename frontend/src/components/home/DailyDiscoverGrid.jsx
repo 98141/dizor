@@ -85,7 +85,6 @@ export default function DailyDiscoverGrid({
                 className="home-discover__image"
                 placeholder="blur"
                 blurDataURL={SHIMMER_BLUR_DATA_URL}
-                priority={featured}
               />
             </Link>
             <div className="home-discover__meta">

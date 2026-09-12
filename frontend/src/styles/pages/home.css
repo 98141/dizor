@@ -27,6 +27,12 @@
   padding-inline: 1.25rem;
 }
 
+/* Reserva discreta para Suspense (sin skeleton brillante) */
+.home-section-fallback {
+  width: 100%;
+  background: transparent;
+}
+
 @media (min-width: 640px) {
   .home-container {
     padding-inline: 1.5rem;
