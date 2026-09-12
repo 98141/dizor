@@ -186,7 +186,10 @@ export default async function ProductoPage({ params }) {
               listId="related_products"
               listName="También te puede gustar"
             />
-            <div className="products-grid">
+            <div
+              className={`products-grid products-grid--related products-grid--n${Math.min(data.related.length, 4)}`}
+              data-count={data.related.length}
+            >
               {data.related.map((related, i) => (
                 <ProductCard
                   key={related.id}

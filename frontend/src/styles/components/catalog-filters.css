@@ -136,13 +136,21 @@
 
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.85rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 0.75rem;
 }
 
 @media (min-width: 640px) {
   .products-grid {
-    gap: var(--space-lg);
+    gap: 1.35rem 1.15rem;
+  }
+}
+
+@media (max-width: 379px) {
+  /* 360px: 2 columnas siguen siendo legibles con tipografía compacta;
+     si el nombre es largo, line-clamp de la card lo contiene. */
+  .products-grid {
+    gap: 0.85rem 0.55rem;
   }
 }
 
@@ -211,13 +219,14 @@
   }
 
   .products-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.35rem 1.15rem;
   }
 }
 
 @media (min-width: 1024px) {
   .products-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 

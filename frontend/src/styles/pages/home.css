@@ -1109,28 +1109,17 @@
 
 .home-carousel__item .product-card {
   height: 100%;
-  border: none;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-}
-
-.home-carousel__item .product-card:hover {
-  transform: none;
-  box-shadow: none;
-}
-
-.home-carousel__item .product-card__image {
-  transition: transform 0.45s ease;
-}
-
-.home-carousel__item .product-card:hover .product-card__image {
-  transform: scale(1.04);
 }
 
 .home-carousel__item .product-card__body {
   padding-inline: 0;
   padding-bottom: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-carousel__item .product-card__image {
+    transition: none;
+  }
 }
 
 @media (max-width: 767px) {
@@ -1232,12 +1221,6 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .home-carousel__item .product-card__image {
-    transition: none;
-  }
-}
-
 /* ─── Descubre hoy ─── */
 
 .home-section--discover {
@@ -1294,6 +1277,30 @@
   aspect-ratio: 4 / 5;
   overflow: hidden;
   background: var(--color-border);
+}
+
+.home-discover__badge {
+  position: absolute;
+  top: 0.65rem;
+  left: 0.65rem;
+  z-index: 1;
+  padding: 0.28rem 0.5rem;
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--color-text);
+  pointer-events: none;
+}
+
+.home-discover__badge--out {
+  background: rgba(26, 26, 26, 0.82);
+  color: #fff;
+}
+
+.home-discover__card--out .home-discover__image {
+  opacity: 0.62;
 }
 
 .home-discover__card--featured .home-discover__media {

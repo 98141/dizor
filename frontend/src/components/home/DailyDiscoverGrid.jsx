@@ -70,7 +70,9 @@ export default function DailyDiscoverGrid({
         return (
           <article
             key={product.id || product.slug || index}
-            className={`home-discover__card${featured ? " home-discover__card--featured" : ""}`}
+            className={`home-discover__card${featured ? " home-discover__card--featured" : ""}${
+              !product.inStock ? " home-discover__card--out" : ""
+            }`}
           >
             <Link
               href={href}
@@ -91,6 +93,13 @@ export default function DailyDiscoverGrid({
                 placeholder="blur"
                 blurDataURL={SHIMMER_BLUR_DATA_URL}
               />
+              {!product.inStock ? (
+                <span className="home-discover__badge home-discover__badge--out">
+                  Agotado
+                </span>
+              ) : product.isNew ? (
+                <span className="home-discover__badge">Nuevo</span>
+              ) : null}
             </Link>
             <div className="home-discover__meta">
               <div className="home-discover__copy">

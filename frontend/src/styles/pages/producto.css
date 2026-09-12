@@ -779,6 +779,60 @@
   margin: 0 0 var(--space-lg);
 }
 
+/* Recomendaciones por cantidad (sin inventar productos) */
+.product-detail__related .products-grid--n1 {
+  grid-template-columns: minmax(0, 17.5rem);
+  justify-content: center;
+  margin-inline: auto;
+  max-width: 20rem;
+}
+
+.product-detail__related .products-grid--n2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 36rem;
+  margin-inline: auto;
+  gap: 1rem 0.85rem;
+}
+
+.product-detail__related .products-grid--n3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: 52rem;
+  margin-inline: auto;
+}
+
+@media (min-width: 768px) {
+  .product-detail__related .products-grid--n1 {
+    grid-template-columns: minmax(0, 18.5rem);
+    max-width: 22rem;
+  }
+
+  .product-detail__related .products-grid--n2 {
+    max-width: 40rem;
+    gap: 1.35rem 1.15rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  /* 4+: grid habitual; no forzar 4 cols si hay menos */
+  .product-detail__related .products-grid--n4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    max-width: none;
+    margin-inline: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .product-detail__related .products-grid--n1 {
+    grid-template-columns: minmax(0, 16.5rem);
+    max-width: 18rem;
+  }
+
+  .product-detail__related .products-grid--n3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: none;
+  }
+}
+
 @media (min-width: 768px) {
   .product-detail__grid {
     grid-template-columns: 1fr 1fr;

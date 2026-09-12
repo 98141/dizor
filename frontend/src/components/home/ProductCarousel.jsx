@@ -64,6 +64,7 @@ export default function ProductCarousel({
           <div key={product.id} className="home-carousel__item">
             <ProductCard
               product={product}
+              presentation="editorial"
               itemListId={listId}
               itemListName={listName}
               index={i}
