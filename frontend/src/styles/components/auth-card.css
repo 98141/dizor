@@ -23,10 +23,10 @@
 }
 
 .auth-brand__logo {
-  font-family: var(--font-serif);
-  font-size: 2rem;
-  font-weight: 400;
-  letter-spacing: 0.12em;
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-regular);
+  letter-spacing: var(--tracking-brand);
   text-transform: uppercase;
   color: var(--color-primary);
   margin: 0 0 var(--space-xs);
@@ -47,9 +47,10 @@
 }
 
 .auth-card__title {
-  font-family: var(--font-serif);
-  font-size: 1.5rem;
-  font-weight: 400;
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-regular);
+  letter-spacing: var(--tracking-tight);
   margin: 0 0 var(--space-xs);
   color: var(--color-text);
 }

@@ -1,12 +1,11 @@
 /* ============================================================
-   DIZOR — Sistema de color
-   Fuente: Manual de Identidad Visual Dizor (Paleta de Color, 02)
-   Negro Dizor  #1A1A1A  ·  Arena Dizor #F5C37B  ·  Oro Dizor #B87305
-   Blanco       #FFFFFF  ·  Gris claro  #E6E6E6
+   DIZOR — Tokens de color + tipografía
+   Fuente: Manual de Identidad Visual Dizor
+   Negro #1A1A1A · Arena #F5C37B · Oro #B87305
    ============================================================ */
 
 :root {
-  /* ── Colores de marca (crudos, no usar directo en componentes) ── */
+  /* ── Colores de marca (crudos) ── */
   --dizor-negro: #1a1a1a;
   --dizor-arena: #f5c37b;
   --dizor-oro: #b87305;
@@ -17,37 +16,37 @@
   --color-bg: #ffffff;
   --color-bg-card: #ffffff;
   --color-bg-hover: #f7f7f7;
-  --color-surface-muted: #f7f7f7; /* fondos de sección neutros */
-  --color-surface-sand: #fdf3e3; /* arena diluida: tarjetas cálidas */
-  --color-surface-dark: #1a1a1a; /* footer, header admin, franjas */
+  --color-surface-muted: #f7f7f7;
+  --color-surface-sand: #fdf3e3;
+  --color-surface-dark: #1a1a1a;
 
   /* ── Texto ── */
   --color-text: #1a1a1a;
   --color-text-muted: #5c5c5c;
   --color-text-inverse: #ffffff;
-  --color-text-inverse-muted: #b3b3b3; /* texto secundario sobre negro */
+  --color-text-inverse-muted: #b3b3b3;
   --color-text-inverse-subtle: #8a8a8a;
 
-  /* ── Primario: Negro Dizor ── */
+  /* ── Primario ── */
   --color-primary: #1a1a1a;
   --color-primary-hover: #000000;
-  --color-primary-soft: #2e2e2e; /* segundo tono de gradientes */
+  --color-primary-soft: #2e2e2e;
   --color-primary-contrast: #ffffff;
 
-  /* ── Acento: Oro / Arena Dizor ── */
-  --color-accent: #b87305; /* Oro: precios, links, badges, iconos */
+  /* ── Acento ── */
+  --color-accent: #b87305;
   --color-accent-hover: #965c04;
-  --color-accent-text: #9e6104; /* Oro oscurecido: AA 5.0:1 para texto pequeño sobre blanco */
-  --color-accent-soft: #f5c37b; /* Arena: fondos, hovers, subrayados */
-  --color-accent-soft-bg: #fdf1de; /* Arena al ~20% */
-  --color-accent-contrast: #1a1a1a; /* texto sobre Arena */
+  --color-accent-text: #9e6104;
+  --color-accent-soft: #f5c37b;
+  --color-accent-soft-bg: #fdf1de;
+  --color-accent-contrast: #1a1a1a;
 
   /* ── Bordes ── */
   --color-border: #e6e6e6;
   --color-border-strong: #cccccc;
   --color-border-accent: #f5c37b;
 
-  /* ── Estados funcionales (no son colores de marca) ── */
+  /* ── Estados ── */
   --color-error: #9b2c2c;
   --color-error-bg: #fef2f2;
   --color-success: #2f5d3a;
@@ -55,18 +54,72 @@
   --color-warning: #b87305;
   --color-warning-bg: #fdf1de;
 
-  /* ── Tipografía ──
-     Manual: TT Tsars C Trial Regular (principal) + Verdana Regular (secundaria).
-     TT Tsars C es de licencia; hasta cargarla, cae en el fallback serif. */
-  --font-serif: "TT Tsars C", "Playfair Display", Georgia, "Times New Roman",
-    serif;
-  --font-sans: Verdana, "Segoe UI", system-ui, sans-serif;
-  --font-body: Arial, Helvetica, sans-serif; /* body actual, sin cambio de métrica */
+  /* ═══════════════════════════════════════════════════════════
+     TIPOGRAFÍA — Sistema Dizor (Fase 9)
 
-  /* ── Radios, sombras, espaciado ── */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --shadow-card: 0 4px 24px rgba(26, 26, 26, 0.08);
+     Manual: TT Tsars C (display) + Verdana (body/UI).
+     TT Tsars C: PENDIENTE de archivo/licencia local.
+     Interim display: Georgia / Palatino (editorial, no “lujo genérico”).
+     NO Playfair / Cormorant / Inter / Poppins / Montserrat.
+     Cuando exista TT Tsars C (.woff2): next/font/local → sustituye
+     el primer nombre de --font-display sin tocar componentes.
+     ═══════════════════════════════════════════════════════════ */
+
+  --font-display:
+    "TT Tsars C", Georgia, "Palatino Linotype", "Book Antiqua",
+    "Times New Roman", serif;
+
+  /* Secundaria de marca (manual): Verdana — humana, legible, no geométrica */
+  --font-body:
+    Verdana, "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont,
+    sans-serif;
+
+  --font-ui: var(--font-body);
+
+  /* Alias legacy (código existente) */
+  --font-serif: var(--font-display);
+  --font-sans: var(--font-body);
+
+  /* Escala tipográfica */
+  --text-xs: 0.75rem; /* 12 */
+  --text-sm: 0.8125rem; /* 13 */
+  --text-base: 0.9375rem; /* 15 — cuerpo */
+  --text-md: 1rem; /* 16 — inputs / UI */
+  --text-lg: 1.0625rem; /* 17 */
+  --text-xl: 1.25rem; /* 20 */
+  --text-2xl: clamp(1.35rem, 1.15rem + 1vw, 1.75rem);
+  --text-3xl: clamp(1.6rem, 1.25rem + 1.6vw, 2.15rem);
+  --text-display-sm: clamp(1.7rem, 1.35rem + 1.8vw, 2.4rem);
+  --text-display-md: clamp(1.95rem, 1.4rem + 2.6vw, 3.1rem);
+  --text-display-lg: clamp(2.15rem, 1.45rem + 3.2vw, 3.55rem);
+
+  /* Ritmo */
+  --leading-tight: 1.12;
+  --leading-snug: 1.28;
+  --leading-normal: 1.55;
+  --leading-relaxed: 1.68;
+
+  /* Tracking — moderado (evitar look IA uppercase+0.28em) */
+  --tracking-tight: -0.012em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.03em;
+  --tracking-label: 0.08em;
+  --tracking-brand: 0.12em;
+
+  /* Pesos — set reducido */
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* Medida de lectura */
+  --measure: 36rem;
+  --measure-narrow: 28rem;
+
+  /* ── Radios / sombras / espacio ── */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --shadow-card: 0 4px 20px rgba(26, 26, 26, 0.06);
   --space-xs: 0.5rem;
   --space-sm: 0.75rem;
   --space-md: 1rem;
@@ -76,7 +129,6 @@
 
   /* ── Layout ── */
   --container-max: 1200px;
-  /* Móvil / tablet: una sola fila. Desktop (≥1024): dos niveles. */
   --header-height: 64px;
   --header-height-desktop: 118px;
   --header-row-top: 72px;

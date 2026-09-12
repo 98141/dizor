@@ -75,15 +75,20 @@
 }
 
 .product-detail__breadcrumb {
-  font-size: 0.8rem;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
   color: var(--color-text-muted);
+  letter-spacing: var(--tracking-normal);
 }
 
 .product-detail__title {
-  font-family: var(--font-serif);
-  font-size: clamp(1.5rem, 4vw, 2rem);
-  font-weight: 400;
+  font-family: var(--font-display);
+  font-size: var(--text-display-sm);
+  font-weight: var(--weight-regular);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-snug);
   margin: 0;
+  text-wrap: balance;
 }
 
 .product-detail__title-row {
@@ -114,8 +119,11 @@
 }
 
 .product-detail__price {
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-regular);
+  letter-spacing: var(--tracking-normal);
+  font-variant-numeric: tabular-nums;
   color: var(--color-primary);
 }
 
@@ -155,8 +163,11 @@
 }
 
 .product-detail__attr-label {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
   color: var(--color-text-muted);
   min-width: 100px;
+  letter-spacing: var(--tracking-normal);
 }
 
 .product-detail__variants {
@@ -700,8 +711,11 @@
   color: #fff;
   border: none;
   border-radius: var(--radius-md);
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-normal);
+  text-transform: none;
   cursor: pointer;
   transition: background 0.18s ease;
 }
@@ -718,14 +732,18 @@
 .product-detail__description {
   border-top: 1px solid var(--color-border);
   padding-top: var(--space-lg);
-  line-height: 1.7;
+  font-family: var(--font-body);
+  line-height: var(--leading-relaxed);
+  max-width: var(--measure);
   color: var(--color-text);
 }
 
 .product-detail__description > h2 {
   margin: 0 0 var(--space-md);
   color: var(--color-text);
-  font-size: 1.25rem;
+  font-size: var(--text-xl);
+  font-family: var(--font-display);
+  font-weight: var(--weight-regular);
 }
 
 .simple-content {

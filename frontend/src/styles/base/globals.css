@@ -2,13 +2,51 @@
   box-sizing: border-box;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 html,
 body {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-normal);
+  letter-spacing: var(--tracking-normal);
   background: var(--color-bg, #ffffff);
   color: var(--color-text, #1a1a1a);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--text-display-md);
+}
+
+h2 {
+  font-size: var(--text-3xl);
+}
+
+h3 {
+  font-size: var(--text-2xl);
+}
+
+p {
+  line-height: var(--leading-normal);
 }
 
 a {
@@ -17,8 +55,11 @@ a {
 }
 
 button,
-input {
-  font-family: inherit;
+input,
+select,
+textarea {
+  font-family: var(--font-ui);
+  font-size: var(--text-md);
 }
 
 .sr-only {
@@ -47,7 +88,7 @@ input {
 
 .confirm-modal {
   background: var(--color-bg-card, #fff);
-  border-radius: var(--radius-md, 8px);
+  border-radius: var(--radius-md, 4px);
   padding: 1.5rem;
   max-width: 420px;
   width: 100%;
@@ -56,9 +97,10 @@ input {
 
 .confirm-modal__message {
   margin: 0 0 1.25rem;
-  line-height: 1.55;
+  line-height: var(--leading-relaxed);
   color: var(--color-text, #1a1a1a);
-  font-size: 0.95rem;
+  font-size: var(--text-base);
+  max-width: none;
 }
 
 .confirm-modal__actions {
@@ -70,21 +112,25 @@ input {
 /* ── Guest checkout modal ── */
 .guest-modal__title {
   margin: 0 0 0.75rem;
-  font-size: 1.05rem;
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
   color: var(--color-text, #1a1a1a);
+  letter-spacing: var(--tracking-normal);
 }
 
 .modal-action-btn {
   padding: 0.55rem 1.1rem;
-  border-radius: var(--radius-sm, 6px);
+  border-radius: var(--radius-sm);
   border: 1.5px solid var(--color-border, #e6e6e6);
   background: transparent;
   cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
   color: var(--color-text, #1a1a1a);
-  font-family: inherit;
+  font-family: var(--font-ui);
+  letter-spacing: var(--tracking-normal);
+  text-transform: none;
   transition: background 0.15s, border-color 0.15s;
 }
 
