@@ -14,6 +14,7 @@ export default function robots() {
           "/api/",
           "/checkout",
           "/carrito",
+          "/favoritos",
           "/pedido/",
           "/solicitud/",
           "/seguimiento",

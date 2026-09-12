@@ -109,13 +109,13 @@ export default function FavoritosContent() {
     <div className="favorites-page">
       <header className="favorites-page__header">
         <h1 className="favorites-page__title">Favoritos</h1>
-        <p className="favorites-page__subtitle">
-          {loading && !loadedOnce
-            ? "Cargando…"
-            : favoriteCount === 0
-              ? "Aún no has guardado ninguna pieza."
+        {(loading && !loadedOnce) || favoriteCount > 0 ? (
+          <p className="favorites-page__subtitle">
+            {loading && !loadedOnce
+              ? "Cargando…"
               : `${favoriteCount} pieza${favoriteCount === 1 ? "" : "s"} guardada${favoriteCount === 1 ? "" : "s"}`}
-        </p>
+          </p>
+        ) : null}
         {!isAuthenticated && favoriteCount > 0 ? (
           <p className="favorites-page__hint">
             Guardados en este dispositivo.{" "}

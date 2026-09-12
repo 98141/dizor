@@ -2243,7 +2243,7 @@
   border-radius: 0;
   color: var(--color-text);
   padding: 0.85rem 1.1rem;
-  font-size: 0.95rem;
+  font-size: 1rem;
 }
 
 .home-newsletter .newsletter__input:focus {
@@ -2274,7 +2274,7 @@
   .home-newsletter .newsletter__input,
   .home-newsletter .newsletter__btn {
     padding: 0.8rem 1rem;
-    font-size: 0.9rem;
+    font-size: 1rem;
     min-height: 2.85rem;
   }
 }

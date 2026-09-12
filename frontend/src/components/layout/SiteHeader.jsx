@@ -178,10 +178,13 @@ function SiteHeaderInner({ categories = [] }) {
   }, [mobileOpen, mobileSearchOpen]);
 
   useEffect(() => {
-    if (!masOpen) return undefined;
+    if (!masOpen && !mobileOpen && !mobileSearchOpen) return undefined;
 
     const onKey = (e) => {
-      if (e.key === "Escape") setMasOpen(false);
+      if (e.key !== "Escape") return;
+      if (masOpen) setMasOpen(false);
+      if (mobileOpen) setMobileOpen(false);
+      if (mobileSearchOpen) setMobileSearchOpen(false);
     };
     const onPointer = (e) => {
       if (masOpen && !masWrapRef.current?.contains(e.target)) {
@@ -194,7 +197,7 @@ function SiteHeaderInner({ categories = [] }) {
       document.removeEventListener("keydown", onKey);
       document.removeEventListener("pointerdown", onPointer);
     };
-  }, [masOpen]);
+  }, [masOpen, mobileOpen, mobileSearchOpen]);
 
   const onSubmit = (e) => {
     handleSubmit(e);

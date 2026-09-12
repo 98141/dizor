@@ -36,7 +36,7 @@ export async function generateMetadata({ params }) {
   const data = await fetchProductMeta(slug);
 
   if (!data?.product) {
-    return { title: "Producto no encontrado" };
+    notFound();
   }
 
   const p = data.product;

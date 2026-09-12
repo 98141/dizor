@@ -4,19 +4,16 @@ import Link from "next/link";
 import { useState } from "react";
 import { useSiteConfig } from "@/context/SiteConfigContext";
 
-// Logo horizontal por defecto. Pegar el archivo en: frontend/public/images/
-const DEFAULT_LOGO = "/images/logo-dizor-horizontal.png";
-
 /**
- * Logo del navbar: muestra la imagen (URL de la BBDD o el asset por defecto).
- * Si la imagen no carga (BBDD vacía, archivo faltante o error de red),
- * cae de forma automática al nombre del sitio en texto.
+ * Logo del navbar: imagen de BBDD/CMS si existe.
+ * Sin URL (o si falla la carga) → nombre del sitio en texto.
+ * No pedir /images/logo-dizor-horizontal.png si el archivo no está en el repo.
  */
 export default function SiteLogo({ active = false }) {
   const { siteName, logoUrl } = useSiteConfig();
   const [imgFailed, setImgFailed] = useState(false);
 
-  const src = logoUrl || DEFAULT_LOGO;
+  const src = (logoUrl || "").trim();
   const showImg = Boolean(src) && !imgFailed;
 
   return (
@@ -29,6 +26,8 @@ export default function SiteLogo({ active = false }) {
       aria-label={siteName}
     >
       {showImg ? (
+        // CMS puede servir cualquier host; <img> + onError evita 404 de asset local.
+        // eslint-disable-next-line @next/next/no-img-element -- remote/CMS logo fallback
         <img
           src={src}
           alt={siteName}

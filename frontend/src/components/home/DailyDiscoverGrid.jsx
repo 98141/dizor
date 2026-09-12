@@ -78,7 +78,6 @@ export default function DailyDiscoverGrid({
               href={href}
               className="home-discover__media"
               onClick={() => handleSelect(product, index)}
-              aria-label={product.name}
             >
               <Image
                 src={product.mainImage}
@@ -94,11 +93,16 @@ export default function DailyDiscoverGrid({
                 blurDataURL={SHIMMER_BLUR_DATA_URL}
               />
               {!product.inStock ? (
-                <span className="home-discover__badge home-discover__badge--out">
+                <span
+                  className="home-discover__badge home-discover__badge--out"
+                  aria-hidden="true"
+                >
                   Agotado
                 </span>
               ) : product.isNew ? (
-                <span className="home-discover__badge">Nuevo</span>
+                <span className="home-discover__badge" aria-hidden="true">
+                  Nuevo
+                </span>
               ) : null}
             </Link>
             <div className="home-discover__meta">
@@ -122,6 +126,7 @@ export default function DailyDiscoverGrid({
                           className="home-discover__color-dot"
                           style={{ backgroundColor: color.hexCode }}
                           title={color.name}
+                          role="img"
                           aria-label={color.name}
                         />
                       ) : (

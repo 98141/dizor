@@ -138,7 +138,6 @@ export default function ProductCard({
         href={productHref}
         className="product-card__image-wrap"
         onClick={handleSelect}
-        aria-label={product.name}
       >
         <Image
           src={primarySrc}
@@ -163,7 +162,7 @@ export default function ProductCard({
           />
         ) : null}
         {badges.length > 0 ? (
-          <div className="product-card__badges">
+          <div className="product-card__badges" aria-hidden="true">
             {badges.map((b) => (
               <span
                 key={b.key}
@@ -207,6 +206,7 @@ export default function ProductCard({
                   className="product-card__color-dot"
                   style={{ backgroundColor: color.hexCode }}
                   title={color.name}
+                  role="img"
                   aria-label={color.name}
                 />
               ) : (

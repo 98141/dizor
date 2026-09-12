@@ -21,7 +21,7 @@ export default function CookieConsentBanner() {
       <p className="cookie-banner__text">
         Usamos cookies necesarias para que la tienda funcione y, solo con tu
         permiso, cookies analíticas para entender cómo se usa el sitio.{" "}
-        <a href="/politica-de-cookies">Más información</a>
+        <a href="/politica-de-cookies">Política de cookies</a>
       </p>
       <div className="cookie-banner__actions">
         <button

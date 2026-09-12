@@ -81,6 +81,15 @@
   transform: scale(0.96);
 }
 
+/* Sin JS: no dejar contenido oculto esperando IntersectionObserver */
+@media (scripting: none) {
+  .motion-reveal--editorial,
+  .motion-reveal--photo {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .motion-reveal--editorial,
   .motion-reveal--photo {

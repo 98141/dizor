@@ -14,7 +14,7 @@ const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://sombrerosdizor.co
 
 // Assets estáticos de respaldo (se usan si la BBDD no trae una URL propia).
 // Pegar los archivos en: frontend/public/images/
-const DEFAULT_FAVICON = "/images/favicon-dizor.png";
+const DEFAULT_FAVICON = "/icon-512.png";
 
 export async function generateMetadata() {
   const appearance = await fetchAppearance();

@@ -19,7 +19,7 @@ export default function HomeBenefits({ features = [] }) {
                   {feature.icon}
                 </span>
               ) : null}
-              <h3 className="home-benefit__title">{feature.title}</h3>
+              <h2 className="home-benefit__title">{feature.title}</h2>
               <p className="home-benefit__text">{feature.text}</p>
             </div>
           ))}
