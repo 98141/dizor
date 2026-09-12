@@ -25,9 +25,20 @@ const SECTIONS = [
     hint: "Asocia cada imagen a un tejido. Puedes subir varias por tejido (orden = secuencia del carrusel).",
   },
   { id: "inspiracion", label: "Inspiración", hint: "Mosaico 1 grande + 4 pequeñas · máximo 5 imágenes" },
+  {
+    id: "editorial1",
+    label: "Pausa editorial 1",
+    hint: "Solo fotografía entre Descubre hoy y Personalización. 1 imagen (panorámica) o 2 (composición). Sin título ni CTA. Máx. 2.",
+  },
+  {
+    id: "editorial2",
+    label: "Pausa editorial 2",
+    hint: "Solo fotografía entre Reseñas e Inspiración. 1 imagen (panorámica) o 2 (composición). Sin título ni CTA. Máx. 2.",
+  },
 ];
 
 const INSPIRACION_MAX = 5;
+const EDITORIAL_MAX = 2;
 
 function weaveOptionId(wt) {
   return String(wt._id || wt.id || "");
@@ -79,6 +90,10 @@ export default function HomeImagesTab() {
 
   const inspiracionFull =
     section === "inspiracion" && sectionImages.length >= INSPIRACION_MAX;
+  const editorialFull =
+    (section === "editorial1" || section === "editorial2") &&
+    sectionImages.length >= EDITORIAL_MAX;
+  const sectionFull = inspiracionFull || editorialFull;
 
   const sectionMeta = SECTIONS.find((s) => s.id === section);
 
@@ -107,6 +122,16 @@ export default function HomeImagesTab() {
     }
     if (section === "inspiracion" && sectionImages.length >= INSPIRACION_MAX) {
       showMsg(`Inspiración admite máximo ${INSPIRACION_MAX} imágenes`, true);
+      return;
+    }
+    if (
+      (section === "editorial1" || section === "editorial2") &&
+      sectionImages.length >= EDITORIAL_MAX
+    ) {
+      showMsg(
+        `Las pausas editoriales admiten máximo ${EDITORIAL_MAX} imágenes`,
+        true
+      );
       return;
     }
     if (section === "coleccion" && !weaveType) {
@@ -244,6 +269,9 @@ export default function HomeImagesTab() {
         {section === "inspiracion"
           ? ` · ${sectionImages.length}/${INSPIRACION_MAX}`
           : ""}
+        {section === "editorial1" || section === "editorial2"
+          ? ` · ${sectionImages.length}/${EDITORIAL_MAX}`
+          : ""}
         {section === "hero" && sectionImages.length > 0
           ? ` · ${sectionImages.length} foto${sectionImages.length === 1 ? "" : "s"} · la primera del orden es la principal`
           : ""}
@@ -256,12 +284,18 @@ export default function HomeImagesTab() {
             Ya hay {INSPIRACION_MAX} imágenes. Elimina una para subir otra.
           </p>
         ) : null}
+        {editorialFull ? (
+          <p className="admin-page__subtitle">
+            Ya hay {EDITORIAL_MAX} imágenes en esta pausa. Elimina una para
+            subir otra.
+          </p>
+        ) : null}
         <div className="auth-field">
           <label className="auth-field__label">Archivo (obligatorio)</label>
           <input
             type="file"
             accept="image/*"
-            disabled={inspiracionFull || saving}
+            disabled={sectionFull || saving}
             onChange={(e) => setFile(e.target.files?.[0] || null)}
           />
         </div>
@@ -325,7 +359,7 @@ export default function HomeImagesTab() {
           <button
             type="submit"
             className="admin-btn admin-btn--primary"
-            disabled={saving || inspiracionFull}
+            disabled={saving || sectionFull}
           >
             {saving ? "Subiendo…" : "Subir a Cloudinary"}
           </button>

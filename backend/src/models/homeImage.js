@@ -7,6 +7,9 @@ const HOME_IMAGE_SECTIONS = [
   "pormayor",
   "inspiracion",
   "coleccion",
+  /** Pausas visuales Home (solo fotografía, sin copy) */
+  "editorial1",
+  "editorial2",
 ];
 
 const homeImageSchema = new mongoose.Schema(

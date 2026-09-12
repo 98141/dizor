@@ -74,6 +74,18 @@ exports.createHomeImage = catchAsync(async (req, res, next) => {
     }
   }
 
+  if (seccion === "editorial1" || seccion === "editorial2") {
+    const count = await HomeImage.countDocuments({ seccion });
+    if (count >= 2) {
+      return next(
+        new AppError(
+          "Las pausas editoriales admiten máximo 2 imágenes. Elimina una para subir otra.",
+          400
+        )
+      );
+    }
+  }
+
   const [uploaded] = await uploadHomeImages(req.files);
 
   const maxOrden = await HomeImage.findOne({ seccion })

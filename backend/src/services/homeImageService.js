@@ -31,6 +31,8 @@ exports.groupHomeImagesBySection = (images) => {
     pormayor: [],
     inspiracion: [],
     coleccion: [],
+    editorial1: [],
+    editorial2: [],
   };
 
   for (const img of images) {

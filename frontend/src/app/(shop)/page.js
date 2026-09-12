@@ -10,6 +10,7 @@ import HomeReviews from "@/components/home/HomeReviews";
 import HomeInspiration from "@/components/home/HomeInspiration";
 import HomeWholesale from "@/components/home/HomeWholesale";
 import HomeNewsletter from "@/components/home/HomeNewsletter";
+import HomeEditorialBreak from "@/components/home/HomeEditorialBreak";
 import HomeSectionFallback from "@/components/home/HomeSectionFallback";
 import { getHomeContent } from "@/services/cmsService";
 import { fetchAppearance, getSiteName } from "@/lib/fetchAppearance";
@@ -117,12 +118,22 @@ export default async function HomePage() {
         <HomeDiscover />
       </Suspense>
 
+      {/* Pausa visual: Descubre hoy → Personalización (null si CMS vacío) */}
+      <Suspense fallback={null}>
+        <HomeEditorialBreak slot="editorial1" />
+      </Suspense>
+
       <Suspense fallback={<HomeSectionFallback minHeight={460} />}>
         <HomePersonalization />
       </Suspense>
 
       <Suspense fallback={<HomeSectionFallback minHeight={240} />}>
         <HomeReviews />
+      </Suspense>
+
+      {/* Pausa visual: Reseñas → Inspiración (null si CMS vacío) */}
+      <Suspense fallback={null}>
+        <HomeEditorialBreak slot="editorial2" />
       </Suspense>
 
       <Suspense fallback={<HomeSectionFallback minHeight={440} />}>
