@@ -133,7 +133,11 @@ export default function CatalogFilters({
   onClear,
   isOpen,
   onToggle,
+  activeFilterCount = 0,
 }) {
+  const label =
+    activeFilterCount > 0 ? `Filtros (${activeFilterCount})` : "Filtros";
+
   return (
     <>
       <button
@@ -142,7 +146,7 @@ export default function CatalogFilters({
         onClick={onToggle}
         aria-expanded={isOpen}
       >
-        ☰ Filtros
+        {label}
       </button>
 
       <FilterPanel

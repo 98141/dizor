@@ -1,18 +1,115 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import ProductCard from "@/components/products/ProductCard";
-import CatalogFilters, { CatalogFiltersSidebar } from "@/components/catalog/CatalogFilters";
+import CatalogFilters, {
+  CatalogFiltersSidebar,
+} from "@/components/catalog/CatalogFilters";
 import CatalogPromo from "@/components/cms/CatalogPromo";
 import { getCatalogFilters, getProducts } from "@/services/productService";
 import { trackCatalogFilter, trackViewItemList } from "@/lib/analytics/events";
 import { mapProductToItem } from "@/lib/analytics/productMapper";
+import { taxonomyId } from "@/lib/catalogTaxonomy";
 
-// Recibe datos ya resueltos por el Server Component (page.js) para la
-// primera carga; los `useEffect` de abajo solo vuelven a pedir al backend
-// cuando el usuario cambia filtros/página/orden después del montaje, o
-// como fallback si el fetch del servidor falló (initialProducts === null).
+const FILTER_PARAM_KEYS = [
+  "term",
+  "category",
+  "weaveType",
+  "style",
+  "size",
+  "color",
+  "minPrice",
+  "maxPrice",
+  "inStock",
+  "onPromotion",
+  "featured",
+  "isNew",
+];
+
+/** Dimensiones que cuentan para “Filtros (N)” — no incluye sort ni page. */
+const ACTIVE_FILTER_KEYS = FILTER_PARAM_KEYS;
+
+function lookupName(list, id) {
+  if (!id || !Array.isArray(list)) return null;
+  const found = list.find((item) => taxonomyId(item) === String(id));
+  return found?.name || null;
+}
+
+function buildActiveChips(searchParams, filterOptions) {
+  const chips = [];
+  const cat = searchParams.get("category");
+  if (cat) {
+    chips.push({
+      key: "category",
+      label: lookupName(filterOptions?.categories, cat) || "Categoría",
+    });
+  }
+  const weave = searchParams.get("weaveType");
+  if (weave) {
+    chips.push({
+      key: "weaveType",
+      label: lookupName(filterOptions?.weaveTypes, weave) || "Tejido",
+    });
+  }
+  const style = searchParams.get("style");
+  if (style) {
+    chips.push({
+      key: "style",
+      label: lookupName(filterOptions?.styles, style) || "Horma",
+    });
+  }
+  const size = searchParams.get("size");
+  if (size) {
+    chips.push({
+      key: "size",
+      label: lookupName(filterOptions?.sizes, size) || "Talla",
+    });
+  }
+  const color = searchParams.get("color");
+  if (color) {
+    chips.push({
+      key: "color",
+      label: lookupName(filterOptions?.colors, color) || "Color",
+    });
+  }
+  const minPrice = searchParams.get("minPrice");
+  const maxPrice = searchParams.get("maxPrice");
+  if (minPrice || maxPrice) {
+    const parts = [];
+    if (minPrice) parts.push(`desde ${minPrice}`);
+    if (maxPrice) parts.push(`hasta ${maxPrice}`);
+    chips.push({ key: "price", label: `Precio ${parts.join(" ")}` });
+  }
+  if (searchParams.get("inStock") === "true") {
+    chips.push({ key: "inStock", label: "Disponibles" });
+  }
+  if (searchParams.get("onPromotion") === "true") {
+    chips.push({ key: "onPromotion", label: "En promoción" });
+  }
+  if (searchParams.get("featured") === "true") {
+    chips.push({ key: "featured", label: "Destacados" });
+  }
+  if (searchParams.get("isNew") === "true") {
+    chips.push({ key: "isNew", label: "Novedades" });
+  }
+  const term = searchParams.get("term")?.trim();
+  if (term) {
+    chips.push({ key: "term", label: `“${term}”` });
+  }
+  return chips;
+}
+
+function countActiveFilters(searchParams) {
+  let n = 0;
+  for (const key of ACTIVE_FILTER_KEYS) {
+    if (key === "minPrice" || key === "maxPrice") continue;
+    if (searchParams.get(key)) n += 1;
+  }
+  if (searchParams.get("minPrice") || searchParams.get("maxPrice")) n += 1;
+  return n;
+}
+
 export default function CatalogoContent({
   initialProducts,
   initialTotal,
@@ -26,7 +123,9 @@ export default function CatalogoContent({
 
   const hasServerProducts = initialProducts != null;
 
-  const [filterOptions, setFilterOptions] = useState(initialFilterOptions || null);
+  const [filterOptions, setFilterOptions] = useState(
+    initialFilterOptions || null
+  );
   const [products, setProducts] = useState(initialProducts || []);
   const [loading, setLoading] = useState(!hasServerProducts);
   const [total, setTotal] = useState(initialTotal ?? 0);
@@ -41,21 +140,7 @@ export default function CatalogoContent({
 
   const buildParamsFromUrl = useCallback(() => {
     const params = {};
-    [
-      "term",
-      "category",
-      "weaveType",
-      "style",
-      "size",
-      "color",
-      "minPrice",
-      "maxPrice",
-      "inStock",
-      "onPromotion",
-      "featured",
-      "isNew",
-      "sort",
-    ].forEach((key) => {
+    [...FILTER_PARAM_KEYS, "sort"].forEach((key) => {
       const val = searchParams.get(key);
       if (val) params[key] = val;
     });
@@ -109,6 +194,8 @@ export default function CatalogoContent({
   }, [searchParams, router]);
 
   useEffect(() => {
+    // Draft del panel sigue la URL (fuente de estado de filtros).
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- URL drives filter draft
     setDraftFilters(buildParamsFromUrl());
     if (isInitialProductsLoad.current) {
       isInitialProductsLoad.current = false;
@@ -118,35 +205,68 @@ export default function CatalogoContent({
   }, [searchParams, loadProducts, buildParamsFromUrl]);
 
   const searchQuery = searchParams.get("term")?.trim();
+  const categoryId = searchParams.get("category");
+  const categoryName = lookupName(filterOptions?.categories, categoryId);
 
   const pageTitle = searchQuery
     ? `Resultados: "${searchQuery}"`
-    : searchParams.get("featured")
-      ? "Destacados"
-      : searchParams.get("isNew")
-        ? "Novedades"
-        : "Catálogo";
+    : categoryName
+      ? categoryName
+      : searchParams.get("featured") === "true"
+        ? "Destacados"
+        : searchParams.get("isNew") === "true"
+          ? "Novedades"
+          : "Catálogo";
 
-  // Un evento por carga real de listado (inicial o tras cambio de
-  // filtro/página/orden) — `products` solo cambia de referencia cuando
-  // llegan datos nuevos, nunca en re-renders sin datos nuevos.
+  const pageSubtitle = categoryName
+    ? `${total} producto${total === 1 ? "" : "s"}`
+    : searchQuery
+      ? `${total} resultado${total === 1 ? "" : "s"}`
+      : `Sombreros artesanales en palma de iraca · ${total} productos`;
+
+  const activeFilterCount = useMemo(
+    () => countActiveFilters(searchParams),
+    [searchParams]
+  );
+
+  const activeChips = useMemo(
+    () => buildActiveChips(searchParams, filterOptions),
+    [searchParams, filterOptions]
+  );
+
   useEffect(() => {
     if (loading || !products.length) return;
     const items = products
-      .map((p, i) => mapProductToItem(p, { index: i, itemListId: "catalog", itemListName: pageTitle }))
+      .map((p, i) =>
+        mapProductToItem(p, {
+          index: i,
+          itemListId: "catalog",
+          itemListName: pageTitle,
+        })
+      )
       .filter(Boolean);
-    trackViewItemList({ items, itemListId: "catalog", itemListName: pageTitle });
+    trackViewItemList({
+      items,
+      itemListId: "catalog",
+      itemListName: pageTitle,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [products, loading]);
 
   const pushFiltersToUrl = (source) => {
     const current = buildParamsFromUrl();
-    const changedKeys = new Set([...Object.keys(current), ...Object.keys(source)]);
+    const changedKeys = new Set([
+      ...Object.keys(current),
+      ...Object.keys(source),
+    ]);
     changedKeys.forEach((key) => {
       const prevValue = current[key] || "";
       const nextValue = source[key] || "";
       if (prevValue !== nextValue) {
-        trackCatalogFilter({ filterName: key, filterValue: nextValue || "(cleared)" });
+        trackCatalogFilter({
+          filterName: key,
+          filterValue: nextValue || "(cleared)",
+        });
       }
     });
 
@@ -158,6 +278,26 @@ export default function CatalogoContent({
     setFiltersOpen(false);
   };
 
+  const clearFilters = () => {
+    const sort = searchParams.get("sort");
+    setDraftFilters(sort ? { sort } : {});
+    router.push(sort ? `/catalogo?sort=${encodeURIComponent(sort)}` : "/catalogo");
+    setFiltersOpen(false);
+  };
+
+  const removeChip = (chipKey) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (chipKey === "price") {
+      params.delete("minPrice");
+      params.delete("maxPrice");
+    } else {
+      params.delete(chipKey);
+    }
+    params.delete("page");
+    trackCatalogFilter({ filterName: chipKey, filterValue: "(cleared)" });
+    router.push(`/catalogo?${params.toString()}`);
+  };
+
   const filterProps = {
     filters: filterOptions,
     values: draftFilters,
@@ -165,15 +305,15 @@ export default function CatalogoContent({
     onApply: (nextFilters) => {
       pushFiltersToUrl(nextFilters || draftFilters);
     },
-    onClear: () => {
-      setDraftFilters({});
-      router.push("/catalogo");
-      setFiltersOpen(false);
-    },
+    onClear: clearFilters,
+    activeFilterCount,
   };
 
   const changeSort = (sort) => {
-    trackCatalogFilter({ filterName: "sort", filterValue: sort || "(default)" });
+    trackCatalogFilter({
+      filterName: "sort",
+      filterValue: sort || "(default)",
+    });
     const params = new URLSearchParams(searchParams.toString());
     if (sort) params.set("sort", sort);
     else params.delete("sort");
@@ -192,9 +332,7 @@ export default function CatalogoContent({
     <div className="catalog-layout">
       <header className="catalog-layout__header">
         <h1 className="catalog-layout__title">{pageTitle}</h1>
-        <p className="catalog-layout__subtitle">
-          Sombreros artesanales en palma de iraca · {total} productos
-        </p>
+        <p className="catalog-layout__subtitle">{pageSubtitle}</p>
       </header>
 
       <CatalogPromo banner={initialBanner} />
@@ -221,6 +359,32 @@ export default function CatalogoContent({
         </div>
       </div>
 
+      {activeChips.length > 0 && (
+        <div className="catalog-chips" aria-label="Filtros activos">
+          {activeChips.map((chip) => (
+            <button
+              key={chip.key}
+              type="button"
+              className="catalog-chips__chip"
+              onClick={() => removeChip(chip.key)}
+              aria-label={`Quitar filtro ${chip.label}`}
+            >
+              <span>{chip.label}</span>
+              <span className="catalog-chips__remove" aria-hidden="true">
+                ×
+              </span>
+            </button>
+          ))}
+          <button
+            type="button"
+            className="catalog-chips__clear"
+            onClick={clearFilters}
+          >
+            Limpiar todo
+          </button>
+        </div>
+      )}
+
       <div className="catalog-layout__grid-wrap">
         <div className="catalog-sidebar-desktop">
           <CatalogFiltersSidebar {...filterProps} />
@@ -234,11 +398,23 @@ export default function CatalogoContent({
           ) : loading ? (
             <p className="auth-loading">Cargando catálogo...</p>
           ) : products.length === 0 ? (
-            <p className="catalog-empty">
-              {searchQuery
-                ? `No hay resultados para "${searchQuery}".`
-                : "No encontramos productos con estos filtros."}
-            </p>
+            <div className="catalog-empty">
+              <p>
+                {searchQuery
+                  ? `No hay resultados para "${searchQuery}".`
+                  : "No encontramos productos con estos filtros."}
+              </p>
+              {activeFilterCount > 0 && (
+                <button
+                  type="button"
+                  className="catalog-filters__btn catalog-filters__btn--primary"
+                  onClick={clearFilters}
+                  style={{ marginTop: "1rem" }}
+                >
+                  Limpiar filtros
+                </button>
+              )}
+            </div>
           ) : (
             <div className="products-grid">
               {products.map((product, i) => (

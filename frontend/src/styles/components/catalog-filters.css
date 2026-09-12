@@ -73,7 +73,65 @@
   border-radius: var(--radius-sm);
   background: var(--color-bg-card);
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.catalog-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1.25rem;
+}
+
+.catalog-chips__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-card);
+  font-size: 0.78rem;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.catalog-chips__chip:hover,
+.catalog-chips__chip:focus-visible {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.catalog-chips__chip:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.catalog-chips__remove {
+  font-size: 1rem;
+  line-height: 1;
+  opacity: 0.7;
+}
+
+.catalog-chips__clear {
+  border: none;
+  background: transparent;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 0.25rem 0.15rem;
+}
+
+.catalog-chips__clear:hover,
+.catalog-chips__clear:focus-visible {
+  color: var(--color-primary);
 }
 
 .catalog-filters {

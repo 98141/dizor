@@ -341,7 +341,26 @@
   display: flex;
 }
 
+.site-header__mobile-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding-bottom: 0.65rem;
+  margin-bottom: 0.35rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.site-header__mobile-section-label {
+  margin: 0.35rem 0.75rem 0.25rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-accent-text);
+}
+
 .site-header__mobile-nav > a,
+.site-header__mobile-section > a,
 .site-header__mobile-accordion-trigger {
   display: flex;
   align-items: center;
@@ -360,6 +379,7 @@
 }
 
 .site-header__mobile-nav > a.is-active,
+.site-header__mobile-section > a.is-active,
 .site-header__mobile-accordion-trigger.is-active,
 .site-header__mobile-accordion-panel a.is-active {
   background: rgba(26, 26, 26, 0.06);

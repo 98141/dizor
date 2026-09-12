@@ -7,12 +7,14 @@ import {
   useCallback,
   useEffect,
   useId,
+  useMemo,
   useRef,
   useState,
 } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { trackSearch } from "@/lib/analytics/events";
+import { categoryHref, taxonomyId } from "@/lib/catalogTaxonomy";
 import SiteLogo from "./SiteLogo";
 import {
   IconAccount,
@@ -26,9 +28,10 @@ import {
 
 const MIN_SEARCH_CHARS = 1;
 const SEARCH_DEBOUNCE_MS = 300;
+/** Categorías visibles en desktop antes de “Más”. */
+const MAX_VISIBLE_CATEGORIES = 5;
 
-const PRIMARY_NAV = [
-  { href: "/catalogo", label: "Sombreros", id: "catalog" },
+const STATIC_NAV = [
   { href: "/catalogo?isNew=true", label: "Novedades", id: "new" },
   { href: "/personalizar", label: "Personaliza", id: "custom" },
   { href: "/pedido-mayor", label: "Por mayor", id: "wholesale" },
@@ -37,21 +40,30 @@ const PRIMARY_NAV = [
 function isNavActive(href, pathname, searchParams) {
   const url = new URL(href, "https://example.com");
   const path = url.pathname;
-  const wantsFeatured = url.searchParams.get("featured") === "true";
-  const wantsNew = url.searchParams.get("isNew") === "true";
-  const wantsWeave = url.searchParams.get("weaveType");
-  const featured = searchParams.get("featured") === "true";
-  const isNew = searchParams.get("isNew") === "true";
-  const weaveType = searchParams.get("weaveType");
 
   if (path === "/catalogo") {
-    if (wantsWeave) {
-      return pathname === "/catalogo" && weaveType === wantsWeave;
+    if (pathname !== "/catalogo") return false;
+
+    const wantsCategory = url.searchParams.get("category");
+    const wantsWeave = url.searchParams.get("weaveType");
+    const wantsFeatured = url.searchParams.get("featured") === "true";
+    const wantsNew = url.searchParams.get("isNew") === "true";
+
+    if (wantsCategory) {
+      return searchParams.get("category") === wantsCategory;
     }
-    if (wantsFeatured) return pathname === "/catalogo" && featured;
-    if (wantsNew) return pathname === "/catalogo" && isNew;
-    if (pathname.startsWith("/producto/")) return true;
-    return pathname === "/catalogo" && !featured && !isNew && !weaveType;
+    if (wantsWeave) {
+      return searchParams.get("weaveType") === wantsWeave;
+    }
+    if (wantsFeatured) return searchParams.get("featured") === "true";
+    if (wantsNew) return searchParams.get("isNew") === "true";
+
+    return (
+      !searchParams.get("category") &&
+      !searchParams.get("weaveType") &&
+      searchParams.get("featured") !== "true" &&
+      searchParams.get("isNew") !== "true"
+    );
   }
 
   return pathname === path || pathname.startsWith(`${path}/`);
@@ -69,6 +81,8 @@ function useHeaderSearch() {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
+    // Sync input con URL (back/forward / navegación externa).
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- URL is source of truth
     setSearch(searchParams.get("term") || "");
   }, [searchParams]);
 
@@ -117,7 +131,7 @@ function useHeaderSearch() {
   return { search, setSearch, handleSubmit };
 }
 
-function SiteHeaderInner({ weaveTypes = [] }) {
+function SiteHeaderInner({ categories = [], weaveTypes = [] }) {
   const { user, isAuthenticated } = useAuth();
   const { itemCount, hydrated } = useCart();
   const pathname = usePathname();
@@ -126,16 +140,34 @@ function SiteHeaderInner({ weaveTypes = [] }) {
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [tejidosOpen, setTejidosOpen] = useState(false);
+  const [masOpen, setMasOpen] = useState(false);
   const [mobileTejidosOpen, setMobileTejidosOpen] = useState(false);
   const { search, setSearch, handleSubmit } = useHeaderSearch();
   const tejidosPanelId = useId();
+  const masPanelId = useId();
   const tejidosWrapRef = useRef(null);
+  const masWrapRef = useRef(null);
+
+  const { visibleCategories, overflowCategories } = useMemo(() => {
+    const list = Array.isArray(categories) ? categories : [];
+    if (list.length <= MAX_VISIBLE_CATEGORIES) {
+      return { visibleCategories: list, overflowCategories: [] };
+    }
+    return {
+      visibleCategories: list.slice(0, MAX_VISIBLE_CATEGORIES),
+      overflowCategories: list.slice(MAX_VISIBLE_CATEGORIES),
+    };
+  }, [categories]);
 
   useEffect(() => {
+    /* Reset overlays al navegar (categoría, filtros, rutas). */
+    /* eslint-disable react-hooks/set-state-in-effect -- reset UI on navigation */
     setMobileOpen(false);
     setMobileSearchOpen(false);
     setTejidosOpen(false);
+    setMasOpen(false);
     setMobileTejidosOpen(false);
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [pathname, searchParams]);
 
   useEffect(() => {
@@ -154,14 +186,20 @@ function SiteHeaderInner({ weaveTypes = [] }) {
   }, [mobileOpen, mobileSearchOpen]);
 
   useEffect(() => {
-    if (!tejidosOpen) return undefined;
+    if (!tejidosOpen && !masOpen) return undefined;
 
     const onKey = (e) => {
-      if (e.key === "Escape") setTejidosOpen(false);
+      if (e.key === "Escape") {
+        setTejidosOpen(false);
+        setMasOpen(false);
+      }
     };
     const onPointer = (e) => {
-      if (!tejidosWrapRef.current?.contains(e.target)) {
+      if (tejidosOpen && !tejidosWrapRef.current?.contains(e.target)) {
         setTejidosOpen(false);
+      }
+      if (masOpen && !masWrapRef.current?.contains(e.target)) {
+        setMasOpen(false);
       }
     };
     document.addEventListener("keydown", onKey);
@@ -170,7 +208,7 @@ function SiteHeaderInner({ weaveTypes = [] }) {
       document.removeEventListener("keydown", onKey);
       document.removeEventListener("pointerdown", onPointer);
     };
-  }, [tejidosOpen]);
+  }, [tejidosOpen, masOpen]);
 
   const onSubmit = (e) => {
     handleSubmit(e);
@@ -187,13 +225,32 @@ function SiteHeaderInner({ weaveTypes = [] }) {
   const cartActive = pathname.startsWith("/carrito");
   const tejidosActive =
     pathname === "/catalogo" && Boolean(searchParams.get("weaveType"));
+  const masActive = overflowCategories.some((cat) =>
+    isNavActive(categoryHref(cat), pathname, searchParams)
+  );
+
+  const renderCategoryLink = (cat, { onClick, className = "" } = {}) => {
+    const href = categoryHref(cat);
+    const active = isNavActive(href, pathname, searchParams);
+    return (
+      <Link
+        key={taxonomyId(cat)}
+        href={href}
+        className={[active ? "is-active" : "", className].filter(Boolean).join(" ") || undefined}
+        aria-current={active ? "page" : undefined}
+        onClick={onClick}
+      >
+        {cat.name}
+      </Link>
+    );
+  };
 
   const searchForm = (
     <form className="site-header__search" onSubmit={onSubmit} role="search">
       <IconSearch className="site-header__search-icon" aria-hidden />
       <input
         type="search"
-        placeholder="Buscar sombreros..."
+        placeholder="Buscar productos..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         aria-label="Buscar productos"
@@ -236,7 +293,6 @@ function SiteHeaderInner({ weaveTypes = [] }) {
         <IconAccount aria-hidden />
       </Link>
 
-      {/* Slot visual: favoritos aún sin backend — no inventar estado/API */}
       <button
         type="button"
         className="site-header__icon-btn site-header__favorites-btn"
@@ -301,7 +357,51 @@ function SiteHeaderInner({ weaveTypes = [] }) {
       <div className="site-header__bottom">
         <div className="site-header__inner site-header__inner--bottom">
           <nav className="site-header__nav" aria-label="Principal">
-            {PRIMARY_NAV.map((item) => {
+            {visibleCategories.map((cat) => renderCategoryLink(cat))}
+
+            {overflowCategories.length > 0 && (
+              <div className="site-header__tejidos" ref={masWrapRef}>
+                <button
+                  type="button"
+                  className={`site-header__tejidos-trigger${
+                    masOpen || masActive ? " is-active" : ""
+                  }`}
+                  aria-expanded={masOpen}
+                  aria-controls={masPanelId}
+                  aria-haspopup="true"
+                  onClick={() => {
+                    setMasOpen((o) => !o);
+                    setTejidosOpen(false);
+                  }}
+                >
+                  Más
+                  <IconChevronDown
+                    className={`site-header__chevron${masOpen ? " is-open" : ""}`}
+                    aria-hidden
+                  />
+                </button>
+                <div
+                  id={masPanelId}
+                  className={`site-header__tejidos-panel${
+                    masOpen ? " is-open" : ""
+                  }`}
+                  hidden={!masOpen}
+                >
+                  <p className="site-header__tejidos-label">Más categorías</p>
+                  <ul className="site-header__tejidos-list">
+                    {overflowCategories.map((cat) => (
+                      <li key={taxonomyId(cat)}>
+                        {renderCategoryLink(cat, {
+                          onClick: () => setMasOpen(false),
+                        })}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+
+            {STATIC_NAV.map((item) => {
               const active = isNavActive(item.href, pathname, searchParams);
               return (
                 <Link
@@ -325,7 +425,10 @@ function SiteHeaderInner({ weaveTypes = [] }) {
                   aria-expanded={tejidosOpen}
                   aria-controls={tejidosPanelId}
                   aria-haspopup="true"
-                  onClick={() => setTejidosOpen((o) => !o)}
+                  onClick={() => {
+                    setTejidosOpen((o) => !o);
+                    setMasOpen(false);
+                  }}
                 >
                   Tejidos
                   <IconChevronDown
@@ -342,7 +445,9 @@ function SiteHeaderInner({ weaveTypes = [] }) {
                   }`}
                   hidden={!tejidosOpen}
                 >
-                  <p className="site-header__tejidos-label">Explorar por tejido</p>
+                  <p className="site-header__tejidos-label">
+                    Explorar por tejido
+                  </p>
                   <ul className="site-header__tejidos-list">
                     {weaveTypes.map((wt) => {
                       const href = weaveHref(wt);
@@ -352,7 +457,7 @@ function SiteHeaderInner({ weaveTypes = [] }) {
                         searchParams
                       );
                       return (
-                        <li key={wt._id || wt.id}>
+                        <li key={taxonomyId(wt)}>
                           <Link
                             href={href}
                             className={active ? "is-active" : undefined}
@@ -397,10 +502,13 @@ function SiteHeaderInner({ weaveTypes = [] }) {
       {mobileSearchOpen && (
         <div className="site-header__search-overlay">
           <form onSubmit={onSubmit} role="search">
-            <IconSearch className="site-header__search-overlay-icon" aria-hidden />
+            <IconSearch
+              className="site-header__search-overlay-icon"
+              aria-hidden
+            />
             <input
               type="search"
-              placeholder="¿Qué sombrero buscas?"
+              placeholder="¿Qué buscas?"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               autoFocus
@@ -429,7 +537,32 @@ function SiteHeaderInner({ weaveTypes = [] }) {
         aria-label="Menú móvil"
         hidden={!mobileOpen}
       >
-        {PRIMARY_NAV.map((item) => {
+        {categories.length > 0 && (
+          <div className="site-header__mobile-section">
+            <p className="site-header__mobile-section-label">Catálogo</p>
+            {categories.map((cat) =>
+              renderCategoryLink(cat, { onClick: () => setMobileOpen(false) })
+            )}
+            <Link
+              href="/catalogo"
+              className={
+                isNavActive("/catalogo", pathname, searchParams)
+                  ? "is-active"
+                  : undefined
+              }
+              aria-current={
+                isNavActive("/catalogo", pathname, searchParams)
+                  ? "page"
+                  : undefined
+              }
+              onClick={() => setMobileOpen(false)}
+            >
+              Todo el catálogo
+            </Link>
+          </div>
+        )}
+
+        {STATIC_NAV.map((item) => {
           const active = isNavActive(item.href, pathname, searchParams);
           return (
             <Link
@@ -469,7 +602,7 @@ function SiteHeaderInner({ weaveTypes = [] }) {
                   const active = isNavActive(href, pathname, searchParams);
                   return (
                     <Link
-                      key={wt._id || wt.id}
+                      key={taxonomyId(wt)}
                       href={href}
                       className={active ? "is-active" : undefined}
                       aria-current={active ? "page" : undefined}
@@ -497,10 +630,10 @@ function SiteHeaderInner({ weaveTypes = [] }) {
   );
 }
 
-export default function SiteHeader({ weaveTypes = [] }) {
+export default function SiteHeader({ categories = [], weaveTypes = [] }) {
   return (
     <Suspense fallback={<header className="site-header" />}>
-      <SiteHeaderInner weaveTypes={weaveTypes} />
+      <SiteHeaderInner categories={categories} weaveTypes={weaveTypes} />
     </Suspense>
   );
 }

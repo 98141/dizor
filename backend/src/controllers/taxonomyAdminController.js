@@ -56,6 +56,21 @@ const createTaxonomyHandlers = (type) => {
 
   const remove = catchAsync(async (req, res, next) => {
     const Model = getModel(type);
+
+    // Categorías: no eliminar si hay productos asociados (evitar refs rotas).
+    if (type === "categories") {
+      const Product = require("../models/product");
+      const linked = await Product.countDocuments({ category: req.params.id });
+      if (linked > 0) {
+        return next(
+          new AppError(
+            `No se puede eliminar: hay ${linked} producto(s) en esta categoría. Desactívala o reasigna los productos primero.`,
+            400
+          )
+        );
+      }
+    }
+
     const item = await Model.findByIdAndDelete(req.params.id);
 
     if (!item) {

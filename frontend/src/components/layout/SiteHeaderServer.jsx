@@ -1,12 +1,14 @@
 import SiteHeader from "@/components/layout/SiteHeader";
 import {
   fetchCatalogFilters,
+  getActiveCategories,
   getActiveWeaveTypes,
 } from "@/lib/fetchCatalogFilters";
 
-/** Carga tejidos en el servidor y los pasa al header cliente. */
+/** Carga categorías + tejidos (misma fuente cacheada) para el header. */
 export default async function SiteHeaderServer() {
   const filtersData = await fetchCatalogFilters();
+  const categories = getActiveCategories(filtersData);
   const weaveTypes = getActiveWeaveTypes(filtersData);
-  return <SiteHeader weaveTypes={weaveTypes} />;
+  return <SiteHeader categories={categories} weaveTypes={weaveTypes} />;
 }
