@@ -47,8 +47,13 @@ export default function DailyDiscoverGrid({
     });
   };
 
+  const count = items.length;
+
   return (
-    <div className="home-discover__grid">
+    <div
+      className={`home-discover__grid home-discover__grid--n${count}`}
+      data-count={count}
+    >
       {items.map((product, index) => {
         const href = product.slug
           ? `/producto/${encodeURIComponent(product.slug)}`

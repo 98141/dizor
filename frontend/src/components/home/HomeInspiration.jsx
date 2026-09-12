@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { getHomeContent } from "@/services/cmsService";
 
-/** Inspiración / mosaico — Server Component. */
+/** Inspiración / mosaico editorial — adapta a 1–5 imágenes. */
 export default async function HomeInspiration() {
   const cmsData = await getHomeContent().catch(() => null);
   const inspiracion = cmsData?.home?.inspiracion || {};
@@ -11,9 +11,11 @@ export default async function HomeInspiration() {
 
   if (!inspiracionImages.length) return null;
 
+  const count = Math.min(inspiracionImages.length, 5);
+
   return (
-    <section className="home-section home-section--border">
-      <div className="home-container">
+    <section className="home-section home-section--inspire">
+      <div className="home-container home-container--wide">
         <div className="home-inspire__header">
           <div>
             <p className="home-eyebrow">
@@ -39,7 +41,10 @@ export default async function HomeInspiration() {
           ) : null}
         </div>
 
-        <div className="home-inspire__mosaic">
+        <div
+          className={`home-inspire__mosaic home-inspire__mosaic--n${count}`}
+          data-count={count}
+        >
           {inspiracionImages.slice(0, 5).map((img, idx) => {
             const href =
               img.linkHref || inspiracion.instagramUrl || undefined;
@@ -57,7 +62,11 @@ export default async function HomeInspiration() {
                   src={img.url}
                   alt={img.altText || "Inspiración Dizor"}
                   fill
-                  sizes="(max-width: 768px) 50vw, 40vw"
+                  sizes={
+                    idx === 0
+                      ? "(max-width: 767px) 85vw, 50vw"
+                      : "(max-width: 767px) 70vw, 25vw"
+                  }
                   style={{ objectFit: "cover" }}
                 />
               </Tag>

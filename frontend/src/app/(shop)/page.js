@@ -101,15 +101,15 @@ export default async function HomePage() {
       <HomeBenefits features={features} />
 
       {/* P2 — below the fold: streaming por sección */}
-      <Suspense fallback={<HomeSectionFallback minHeight={420} />}>
+      <Suspense fallback={<HomeSectionFallback minHeight={500} />}>
         <HomeNewArrivals />
       </Suspense>
 
-      <Suspense fallback={<HomeSectionFallback minHeight={480} />}>
+      <Suspense fallback={<HomeSectionFallback minHeight={520} />}>
         <HomeCraftBlock />
       </Suspense>
 
-      <Suspense fallback={<HomeSectionFallback minHeight={360} />}>
+      <Suspense fallback={<HomeSectionFallback minHeight={440} />}>
         <HomeStory />
       </Suspense>
 
@@ -117,23 +117,23 @@ export default async function HomePage() {
         <HomeDiscover />
       </Suspense>
 
-      <Suspense fallback={<HomeSectionFallback minHeight={400} />}>
+      <Suspense fallback={<HomeSectionFallback minHeight={460} />}>
         <HomePersonalization />
       </Suspense>
 
-      <Suspense fallback={<HomeSectionFallback minHeight={320} />}>
+      <Suspense fallback={<HomeSectionFallback minHeight={240} />}>
         <HomeReviews />
       </Suspense>
 
-      <Suspense fallback={<HomeSectionFallback minHeight={420} />}>
+      <Suspense fallback={<HomeSectionFallback minHeight={440} />}>
         <HomeInspiration />
       </Suspense>
 
-      <Suspense fallback={<HomeSectionFallback minHeight={400} />}>
+      <Suspense fallback={<HomeSectionFallback minHeight={460} />}>
         <HomeWholesale />
       </Suspense>
 
-      <Suspense fallback={<HomeSectionFallback minHeight={280} />}>
+      <Suspense fallback={<HomeSectionFallback minHeight={260} />}>
         <HomeNewsletter />
       </Suspense>
     </>

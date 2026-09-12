@@ -21,9 +21,9 @@ export default async function HomeNewArrivals() {
   if (newSection.isActive === false || newProducts.length === 0) return null;
 
   return (
-    <section className="home-section home-section--border">
+    <section className="home-section home-section--arrivals home-section--border">
       <div className="home-container">
-        <header className="home-section__intro">
+        <header className="home-section__intro home-section__intro--compact">
           <p className="home-eyebrow">{newSection.eyebrow || "LO NUEVO"}</p>
           <h2 className="home-section__heading">
             {newSection.title || "Novedades"}

@@ -11,10 +11,10 @@ export default async function HomeWholesale() {
     homeImages.pormayor?.[0]?.url || porMayor.imageUrl || "";
 
   return (
-    <section className="home-section home-section--border">
-      <div className="home-container">
+    <section className="home-section home-section--wholesale home-section--border">
+      <div className="home-container home-container--wide">
         <div
-          className={`home-personalize${
+          className={`home-personalize home-wholesale${
             porMayor.imageOnLeft !== false
               ? " home-personalize--image-left"
               : ""

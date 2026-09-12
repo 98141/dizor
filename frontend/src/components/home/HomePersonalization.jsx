@@ -15,8 +15,8 @@ export default async function HomePersonalization() {
   );
 
   return (
-    <section className="home-section home-section--border">
-      <div className="home-container">
+    <section className="home-section home-section--personalize home-section--border">
+      <div className="home-container home-container--wide">
         <div
           className={`home-personalize${
             personalizacion.imageOnLeft !== false

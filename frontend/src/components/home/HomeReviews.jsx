@@ -11,7 +11,7 @@ function Stars({ rating = 5 }) {
   );
 }
 
-/** Voces / reseñas — Server Component. */
+/** Voces / reseñas — layout adaptativo según cantidad. */
 export default async function HomeReviews() {
   const [cmsData, reviewsData] = await Promise.all([
     getHomeContent().catch(() => null),
@@ -23,23 +23,35 @@ export default async function HomeReviews() {
 
   if (reseñasSection.isActive === false || reviews.length === 0) return null;
 
+  const n = Math.min(reviews.length, 4);
+  const single = n === 1;
+
   return (
-    <section className="home-section home-section--border">
+    <section
+      className={`home-section home-section--voices${
+        single ? " home-section--voices-single" : ""
+      }`}
+    >
       <div className="home-container">
-        <header className="home-section__intro">
-          <p className="home-eyebrow">
-            {reseñasSection.eyebrow || "VOCES"}
-          </p>
+        <header
+          className={`home-section__intro${
+            single ? " home-section__intro--compact" : ""
+          }`}
+        >
+          <p className="home-eyebrow">{reseñasSection.eyebrow || "VOCES"}</p>
           <h2 className="home-section__heading">
             {reseñasSection.title || "Quienes ya eligieron Dizor"}
           </h2>
         </header>
-        <div className="home-voices__grid">
+        <div
+          className={`home-voices__grid home-voices__grid--n${n}`}
+          data-count={reviews.length}
+        >
           {reviews.map((review) => (
             <blockquote key={review.id} className="home-voice">
               <Stars rating={review.rating} />
               <p className="home-voice__quote">
-                &ldquo;{review.comment}&rdquo;
+                {single ? review.comment : `\u201C${review.comment}\u201D`}
               </p>
               <footer className="home-voice__author">
                 <strong>{review.authorName}</strong>

@@ -9,46 +9,53 @@ function MediaPlaceholder({ label = "Imagen próximamente" }) {
   );
 }
 
+/**
+ * Una imagen base siempre (mobile).
+ * Galería multi-imagen solo visible en desktop (≥900px) vía CSS
+ * para evitar scroll horizontal anidado en móvil.
+ */
 function CraftCardMedia({ images, name, featured }) {
   const list = (images || []).filter((img) => img?.url);
   if (!list.length) {
     return <MediaPlaceholder label={name} />;
   }
 
-  if (list.length === 1) {
-    return (
+  const sizes = featured
+    ? "(max-width: 899px) 78vw, 50vw"
+    : "(max-width: 899px) 78vw, 25vw";
+
+  return (
+    <>
       <Image
         src={list[0].url}
         alt={list[0].altText || name || "Colección Dizor"}
         fill
-        sizes={
-          featured
-            ? "(max-width: 899px) 78vw, 50vw"
-            : "(max-width: 899px) 78vw, 25vw"
-        }
+        sizes={sizes}
+        className="home-collection-card__primary"
         style={{ objectFit: "cover" }}
       />
-    );
-  }
-
-  return (
-    <div className="home-collection-card__gallery" aria-label={`${name}: galería`}>
-      {list.map((img, i) => (
-        <div key={img.id || `craft-img-${i}`} className="home-collection-card__slide">
-          <Image
-            src={img.url}
-            alt={img.altText || `${name} ${i + 1}`}
-            fill
-            sizes={
-              featured
-                ? "(max-width: 899px) 78vw, 50vw"
-                : "(max-width: 899px) 78vw, 25vw"
-            }
-            style={{ objectFit: "cover" }}
-          />
+      {list.length > 1 ? (
+        <div
+          className="home-collection-card__gallery"
+          aria-label={`${name}: galería`}
+        >
+          {list.map((img, i) => (
+            <div
+              key={img.id || `craft-img-${i}`}
+              className="home-collection-card__slide"
+            >
+              <Image
+                src={img.url}
+                alt={img.altText || `${name} ${i + 1}`}
+                fill
+                sizes={sizes}
+                style={{ objectFit: "cover" }}
+              />
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
+      ) : null}
+    </>
   );
 }
 
@@ -67,22 +74,27 @@ export default function HomeCraftSection({
     craftSection.subtitle ||
     "Explora cada línea de Dizor: carácter, finura y tiempo de elaboración.";
   const cta = craftSection.linkLabel || linkLabel;
+  const count = cards.length;
 
   return (
     <section className="home-section home-section--craft">
-      <div className="home-container">
+      <div className="home-container home-container--wide">
         <header className="home-section__intro">
           <p className="home-eyebrow">{eyebrow}</p>
           <h2 className="home-section__heading">{title}</h2>
           <p className="home-section__lead">{subtitle}</p>
         </header>
 
-        {cards.length > 0 ? (
-          <div className="home-collection__track" role="list">
+        {count > 0 ? (
+          <div
+            className={`home-collection__track home-collection__track--n${Math.min(count, 4)}`}
+            data-count={count}
+            role="list"
+          >
             {cards.map(({ wt, img, images, href }, index) => {
               const name = wt.name || "Tejido";
               const media = images?.length ? images : img ? [img] : [];
-              const featured = index === 0;
+              const featured = index === 0 && count === 3;
               return (
                 <Link
                   key={wt._id || wt.id || href}
@@ -100,10 +112,13 @@ export default function HomeCraftSection({
                     <CraftCardMedia
                       images={media}
                       name={name}
-                      featured={featured}
+                      featured={featured || index === 0}
                     />
                     {media.length > 1 ? (
-                      <span className="home-collection-card__count" aria-hidden="true">
+                      <span
+                        className="home-collection-card__count"
+                        aria-hidden="true"
+                      >
                         {media.length} fotos
                       </span>
                     ) : null}

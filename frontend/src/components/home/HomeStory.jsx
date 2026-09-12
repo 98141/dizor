@@ -2,33 +2,35 @@ import Link from "next/link";
 import Image from "next/image";
 import { getHomeContent } from "@/services/cmsService";
 
-/** Historia / origen — Server Component. */
+/** Historia / origen — bloque editorial fuerte. */
 export default async function HomeStory() {
   const cmsData = await getHomeContent().catch(() => null);
   const historia = cmsData?.home?.historia || {};
   const homeImages = cmsData?.homeImages || {};
-  const historiaImage =
-    homeImages.historia?.[0]?.url || historia.imageUrl || "";
+  const historiaImages = (homeImages.historia || []).filter((img) => img?.url);
+  const primary = historiaImages[0];
+  const historiaImage = primary?.url || historia.imageUrl || "";
+  const hasImage = Boolean(historiaImage);
 
   return (
     <section className="home-section home-section--story">
-      <div className="home-container">
+      <div className="home-container home-container--wide">
         <div
-          className={`home-story${historiaImage ? " home-story--with-image" : ""}`}
+          className={`home-story${hasImage ? " home-story--with-image" : ""}`}
         >
-          {historiaImage && (
+          {hasImage ? (
             <div className="home-story__media">
               <div className="home-story__image-wrap">
                 <Image
                   src={historiaImage}
-                  alt={homeImages.historia?.[0]?.altText || "Historia Dizor"}
+                  alt={primary?.altText || "Historia Dizor"}
                   fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  sizes="(max-width: 899px) 100vw, 55vw"
                   style={{ objectFit: "cover" }}
                 />
               </div>
             </div>
-          )}
+          ) : null}
           <div className="home-story__content">
             <p className="home-eyebrow">{historia.eyebrow || "ORIGEN"}</p>
             <h2 className="home-section__heading">
@@ -38,14 +40,14 @@ export default async function HomeStory() {
               {historia.body ||
                 "Desde las manos de las artesanas de Sandoná nace cada sombrero Dizor."}
             </p>
-            {historia.ctaLabel && (
+            {historia.ctaLabel ? (
               <Link
                 href={historia.ctaHref || "/pagina/sobre-dizor"}
                 className="home-text-link"
               >
                 {historia.ctaLabel}
               </Link>
-            )}
+            ) : null}
           </div>
         </div>
       </div>

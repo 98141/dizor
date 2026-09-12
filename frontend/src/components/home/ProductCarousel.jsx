@@ -10,6 +10,8 @@ export default function ProductCarousel({
 }) {
   const trackRef = useRef(null);
   const [canScroll, setCanScroll] = useState(false);
+  const count = products.length;
+  const countClass = `home-carousel--count-${Math.min(Math.max(count, 1), 5)}`;
 
   useEffect(() => {
     const el = trackRef.current;
@@ -29,14 +31,14 @@ export default function ProductCarousel({
   const scrollBy = (dir) => {
     const el = trackRef.current;
     if (!el) return;
-    const amount = Math.min(320, el.clientWidth * 0.8);
+    const amount = Math.min(360, el.clientWidth * 0.85);
     el.scrollBy({ left: dir * amount, behavior: "smooth" });
   };
 
   if (!products.length) return null;
 
   return (
-    <div className="home-carousel">
+    <div className={`home-carousel ${countClass}`} data-count={count}>
       {canScroll && (
         <div className="home-carousel__controls">
           <button
@@ -57,7 +59,7 @@ export default function ProductCarousel({
           </button>
         </div>
       )}
-      <div className="home-carousel__track" ref={trackRef}>
+      <div className="home-carousel__track" ref={trackRef} tabIndex={0}>
         {products.map((product, i) => (
           <div key={product.id} className="home-carousel__item">
             <ProductCard
