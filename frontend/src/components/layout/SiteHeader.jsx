@@ -35,6 +35,7 @@ const MAX_VISIBLE_CATEGORIES = 5;
 
 const STATIC_NAV = [
   { href: "/catalogo?isNew=true", label: "Novedades", id: "new" },
+  { href: "/catalogo?featured=true", label: "Destacados", id: "featured" },
   { href: "/personalizar", label: "Personaliza", id: "custom" },
   { href: "/pedido-mayor", label: "Por mayor", id: "wholesale" },
 ];
@@ -289,7 +290,7 @@ function SiteHeaderInner({ categories = [] }) {
         }`}
         aria-label={
           showFavoriteBadge
-            ? `Favoritos, ${favoriteCount} guardados`
+            ? `Favoritos, ${favoriteCount} guardado${favoriteCount === 1 ? "" : "s"}`
             : "Favoritos"
         }
         aria-current={favoritesActive ? "page" : undefined}
@@ -312,7 +313,7 @@ function SiteHeaderInner({ categories = [] }) {
         }`}
         aria-label={
           hydrated && itemCount > 0
-            ? `Carrito, ${itemCount} productos`
+            ? `Carrito, ${itemCount} producto${itemCount === 1 ? "" : "s"}`
             : "Carrito"
         }
         aria-current={cartActive ? "page" : undefined}

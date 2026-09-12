@@ -5,8 +5,10 @@ const { formatProductPublic } = require("../utils/productFormatter");
 
 const populateList = "category weaveType style variants.size variants.color";
 
-/** Descubre hoy: 1 grande + 2×2 (hasta 5 piezas). */
+/** Descubre hoy (grilla): 1 grande + 2×2 (hasta 5 piezas). */
 const PRODUCT_SLOT_COUNT = 5;
+/** Carrusel catálogo: hasta 10 sin isNew / isFeatured. */
+const EXPLORE_SLOT_COUNT = 10;
 /** Diversidad: hasta 3 categorías al armar la selección de productos. */
 const CATEGORY_SAMPLE = 3;
 /** Colección / tejidos: 1 grande + 2 medias. */
@@ -29,9 +31,27 @@ exports.getBogotaDateKey = (date = new Date()) => {
 };
 
 exports.PRODUCT_SLOT_COUNT = PRODUCT_SLOT_COUNT;
+exports.EXPLORE_SLOT_COUNT = EXPLORE_SLOT_COUNT;
 exports.WEAVE_SLOT_COUNT = WEAVE_SLOT_COUNT;
 /** @deprecated alias */
 exports.SLOT_COUNT = PRODUCT_SLOT_COUNT;
+
+const unmarkedMatch = {
+  isActive: true,
+  isNew: { $ne: true },
+  isFeatured: { $ne: true },
+};
+
+async function sampleProductIds(match, size) {
+  const capped = Math.max(0, Number(size) || 0);
+  if (capped <= 0) return [];
+  const sampled = await Product.aggregate([
+    { $match: match },
+    { $sample: { size: capped } },
+    { $project: { _id: 1 } },
+  ]);
+  return sampled.map((d) => d._id).filter(Boolean);
+}
 
 async function pickCategoriesAndProducts(limit = PRODUCT_SLOT_COUNT) {
   const capped = Math.min(
@@ -77,6 +97,51 @@ async function pickCategoriesAndProducts(limit = PRODUCT_SLOT_COUNT) {
   return { categoryIds, productIds: productIds.slice(0, capped) };
 }
 
+/**
+ * Hasta `limit` productos sin nuevo/destacado.
+ * Prefiere no repetir la grilla del día; si no alcanza el cupo, rellena
+ * con el resto de no marcados (así un catálogo chico muestra todos).
+ */
+async function pickExploreProductIds(
+  limit = EXPLORE_SLOT_COUNT,
+  softExcludeIds = []
+) {
+  const capped = Math.min(
+    EXPLORE_SLOT_COUNT,
+    Math.max(1, Number(limit) || EXPLORE_SLOT_COUNT)
+  );
+  const softExclude = (softExcludeIds || []).filter(Boolean);
+
+  const preferredMatch = {
+    ...unmarkedMatch,
+    ...(softExclude.length ? { _id: { $nin: softExclude } } : {}),
+  };
+
+  const preferred = await sampleProductIds(preferredMatch, capped);
+  if (preferred.length >= capped) {
+    return preferred.slice(0, capped);
+  }
+
+  const already = new Set(preferred.map((id) => String(id)));
+  const filler = await sampleProductIds(
+    {
+      ...unmarkedMatch,
+      ...(preferred.length ? { _id: { $nin: preferred } } : {}),
+    },
+    capped - preferred.length
+  );
+
+  for (const id of filler) {
+    const key = String(id);
+    if (already.has(key)) continue;
+    preferred.push(id);
+    already.add(key);
+    if (preferred.length >= capped) break;
+  }
+
+  return preferred.slice(0, capped);
+}
+
 async function pickRandomWeaveIds(limit = WEAVE_SLOT_COUNT) {
   const capped = Math.min(
     WEAVE_SLOT_COUNT,
@@ -109,6 +174,21 @@ async function loadWeaveTypes(ids = []) {
     }));
 }
 
+async function loadOrderedProducts(ids = [], limit) {
+  if (!ids.length) return [];
+  const products = await Product.find({
+    _id: { $in: ids },
+    isActive: true,
+  }).populate(populateList);
+
+  const byId = new Map(products.map((p) => [String(p._id), p]));
+  return ids
+    .map((id) => byId.get(String(id)))
+    .filter(Boolean)
+    .slice(0, limit)
+    .map(formatProductPublic);
+}
+
 exports.getOrCreateDailyPicks = async (limit = PRODUCT_SLOT_COUNT) => {
   const capped = Math.min(
     PRODUCT_SLOT_COUNT,
@@ -121,12 +201,17 @@ exports.getOrCreateDailyPicks = async (limit = PRODUCT_SLOT_COUNT) => {
   if (!pick) {
     const { categoryIds, productIds } = await pickCategoriesAndProducts(capped);
     const weaveTypeIds = await pickRandomWeaveIds(WEAVE_SLOT_COUNT);
+    const exploreProductIds = await pickExploreProductIds(
+      EXPLORE_SLOT_COUNT,
+      productIds
+    );
     try {
       pick = await DailyProductPick.create({
         dateKey,
         productIds,
         categoryIds,
         weaveTypeIds,
+        exploreProductIds,
       });
     } catch (err) {
       if (err?.code === 11000) {
@@ -148,21 +233,52 @@ exports.getOrCreateDailyPicks = async (limit = PRODUCT_SLOT_COUNT) => {
     return { dateKey, categoryIds: [], weaveTypes, products: [] };
   }
 
-  const products = await Product.find({
-    _id: { $in: pick.productIds },
-    isActive: true,
-  }).populate(populateList);
-
-  const byId = new Map(products.map((p) => [String(p._id), p]));
-  const ordered = pick.productIds
-    .map((id) => byId.get(String(id)))
-    .filter(Boolean)
-    .slice(0, capped);
+  const products = await loadOrderedProducts(pick.productIds, capped);
 
   return {
     dateKey,
     categoryIds: (pick.categoryIds || []).map((id) => String(id)),
     weaveTypes,
-    products: ordered.map(formatProductPublic),
+    products,
+  };
+};
+
+/**
+ * Carrusel «Descubre hoy» del final: hasta 10 no marcados,
+ * estable hasta medianoche America/Bogota.
+ */
+exports.getOrCreateExplorePicks = async (limit = EXPLORE_SLOT_COUNT) => {
+  const capped = Math.min(
+    EXPLORE_SLOT_COUNT,
+    Math.max(1, Number(limit) || EXPLORE_SLOT_COUNT)
+  );
+  const dateKey = exports.getBogotaDateKey();
+
+  // Asegura el doc del día (grilla + tejidos) para soft-exclude.
+  await exports.getOrCreateDailyPicks(PRODUCT_SLOT_COUNT);
+  let pick = await DailyProductPick.findOne({ dateKey });
+
+  const unmarkedCount = await Product.countDocuments(unmarkedMatch);
+  const target = Math.min(capped, unmarkedCount);
+  const currentLen = pick?.exploreProductIds?.length || 0;
+
+  // Vacío o incompleto vs catálogo actual → (re)armar selección del día.
+  if (pick && currentLen < target) {
+    pick.exploreProductIds = await pickExploreProductIds(
+      capped,
+      pick.productIds || []
+    );
+    await pick.save();
+  }
+
+  const products = await loadOrderedProducts(
+    pick?.exploreProductIds || [],
+    capped
+  );
+
+  return {
+    dateKey,
+    results: products.length,
+    products,
   };
 };

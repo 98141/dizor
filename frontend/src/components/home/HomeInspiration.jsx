@@ -65,9 +65,9 @@ export default async function HomeInspiration() {
                   sizes={
                     idx === 0
                       ? "(max-width: 767px) 85vw, 50vw"
-                      : "(max-width: 767px) 70vw, 25vw"
+                      : "(max-width: 767px) 82vw, 25vw"
                   }
-                  style={{ objectFit: "cover" }}
+                  className="home-inspire__img"
                 />
               </Tag>
             );

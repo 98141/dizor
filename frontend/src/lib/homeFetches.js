@@ -27,3 +27,11 @@ export const fetchNewProducts = cache(async (limit = 12) =>
 export const fetchHomeReviews = cache(async (limit = 4) =>
   fetchJson(`${BASE}/reviews?limit=${limit}`, 60)
 );
+
+/**
+ * Carrusel «Descubre hoy» — hasta 10 sin nuevo/destacado.
+ * Caché diaria en backend (medianoche America/Bogota).
+ */
+export const fetchDailyExplore = cache(async (limit = 10) =>
+  fetchJson(`${BASE}/products/random-sample?limit=${limit}`, 300)
+);

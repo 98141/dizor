@@ -7,6 +7,7 @@ import HomeStory from "@/components/home/HomeStory";
 import HomeDiscover from "@/components/home/HomeDiscover";
 import HomePersonalization from "@/components/home/HomePersonalization";
 import HomeReviews from "@/components/home/HomeReviews";
+import HomeExploreScroll from "@/components/home/HomeExploreScroll";
 import HomeInspiration from "@/components/home/HomeInspiration";
 import HomeWholesale from "@/components/home/HomeWholesale";
 import HomeNewsletter from "@/components/home/HomeNewsletter";
@@ -127,11 +128,12 @@ export default async function HomePage() {
         <HomePersonalization />
       </Suspense>
 
-      <Suspense fallback={<HomeSectionFallback minHeight={240} />}>
-        <HomeReviews />
+      {/* Descubre hoy (carrusel): catálogo sin nuevos/destacados */}
+      <Suspense fallback={<HomeSectionFallback minHeight={500} />}>
+        <HomeExploreScroll />
       </Suspense>
 
-      {/* Pausa visual: Reseñas → Inspiración (null si CMS vacío) */}
+      {/* Pausa visual: Descubre hoy → Inspiración (null si CMS vacío) */}
       <Suspense fallback={null}>
         <HomeEditorialBreak slot="editorial2" />
       </Suspense>
@@ -142,6 +144,11 @@ export default async function HomePage() {
 
       <Suspense fallback={<HomeSectionFallback minHeight={460} />}>
         <HomeWholesale />
+      </Suspense>
+
+      {/* Voces: después de Inspiración / mayor, antes del newsletter */}
+      <Suspense fallback={<HomeSectionFallback minHeight={240} />}>
+        <HomeReviews />
       </Suspense>
 
       <Suspense fallback={<HomeSectionFallback minHeight={260} />}>

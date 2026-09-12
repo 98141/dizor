@@ -81,20 +81,6 @@ exports.getCheckoutConfig = catchAsync(async (req, res) => {
               },
             ]
           : []),
-        ...(isNequiConfigured()
-          ? [
-              {
-                id: "nequi_api",
-                label: "Nequi (pago directo)",
-                description: "Recibe una notificación en tu app Nequi y aprueba el pago",
-              },
-            ]
-          : []),
-        {
-          id: "nequi_manual",
-          label: "Nequi (transferencia manual)",
-          description: "Envía comprobante por WhatsApp",
-        },
         {
           id: "contra_entrega",
           label: "Pago contra entrega",

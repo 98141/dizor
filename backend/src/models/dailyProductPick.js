@@ -2,7 +2,8 @@ const mongoose = require("mongoose");
 
 /**
  * Curaduría diaria del home (America/Bogota, dateKey YYYY-MM-DD).
- * - productIds: hasta 5 piezas para «Descubre hoy»
+ * - productIds: hasta 5 piezas para la grilla «Descubre hoy»
+ * - exploreProductIds: hasta 10 piezas del carrusel catálogo (sin nuevo/destacado)
  * - categoryIds: categorías usadas al armar esa selección
  * - weaveTypeIds: hasta 3 tejidos para «Colección / Nuestros tejidos»
  */
@@ -27,6 +28,12 @@ const dailyProductPickSchema = new mongoose.Schema(
       },
     ],
     productIds: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
+    exploreProductIds: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product",

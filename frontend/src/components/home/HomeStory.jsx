@@ -26,8 +26,8 @@ export default async function HomeStory() {
                   src={historiaImage}
                   alt={primary?.altText || "Historia Dizor"}
                   fill
-                  sizes="(max-width: 899px) 100vw, 55vw"
-                  style={{ objectFit: "cover" }}
+                  sizes="(max-width: 899px) 100vw, 50vw"
+                  className="home-story__img"
                 />
               </div>
             </MotionReveal>

@@ -168,6 +168,30 @@ exports.getFeaturedProducts = catchAsync(async (req, res) => {
   });
 });
 
+/**
+ * Carrusel catálogo del home (hasta 10, sin nuevo/destacado).
+ * Selección estable 24h — medianoche America/Bogota.
+ * Query: limit (1–10).
+ */
+exports.getRandomSampleProducts = catchAsync(async (req, res) => {
+  const {
+    getOrCreateExplorePicks,
+    EXPLORE_SLOT_COUNT,
+  } = require("../services/dailyProductService");
+  const limit = Math.min(
+    EXPLORE_SLOT_COUNT,
+    Math.max(1, parseInt(req.query.limit, 10) || EXPLORE_SLOT_COUNT)
+  );
+  const { dateKey, products } = await getOrCreateExplorePicks(limit);
+
+  res.status(200).json({
+    status: "success",
+    dateKey,
+    results: products.length,
+    products,
+  });
+});
+
 /** Selección aleatoria cacheada 24h (día America/Bogota). */
 exports.getDailyRandomProducts = catchAsync(async (req, res) => {
   const {

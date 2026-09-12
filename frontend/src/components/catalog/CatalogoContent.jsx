@@ -222,7 +222,7 @@ export default function CatalogoContent({
     ? `${total} producto${total === 1 ? "" : "s"}`
     : searchQuery
       ? `${total} resultado${total === 1 ? "" : "s"}`
-      : `Sombreros artesanales en palma de iraca · ${total} productos`;
+      : `Sombreros artesanales en palma de iraca · ${total} producto${total === 1 ? "" : "s"}`;
 
   const activeFilterCount = useMemo(
     () => countActiveFilters(searchParams),

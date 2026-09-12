@@ -71,8 +71,8 @@ export default async function HomePersonalization() {
                     "Personalización Dizor"
                   }
                   fill
-                  sizes="(max-width: 768px) 100vw, 40vw"
-                  style={{ objectFit: "cover" }}
+                  sizes="(max-width: 899px) 100vw, 42vw"
+                  className="home-personalize__img"
                 />
               </div>
             </div>

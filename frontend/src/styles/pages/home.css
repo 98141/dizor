@@ -85,12 +85,12 @@
   }
 
   .home-section--story {
-    padding: 5rem 0;
+    padding: 4rem 0;
   }
 
   /* Inspiración: visual denso, menos aire “vacío” */
   .home-section--inspire {
-    padding: 3.75rem 0;
+    padding: 3.25rem 0;
   }
 
   .home-section--craft {
@@ -99,7 +99,7 @@
 
   .home-section--personalize,
   .home-section--wholesale {
-    padding: 3.5rem 0;
+    padding: 3.25rem 0;
   }
 
   .home-section--voices {
@@ -1013,7 +1013,7 @@
 
 @media (max-width: 899px) {
   .home-story--with-image {
-    gap: 1.75rem;
+    gap: 1.5rem;
   }
 
   .home-story__content {
@@ -1023,28 +1023,39 @@
 
 @media (min-width: 900px) {
   .home-story--with-image {
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.95fr);
-    gap: clamp(2.5rem, 5vw, 5rem);
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    gap: clamp(2rem, 4vw, 3.75rem);
     align-items: center;
+    max-width: 1280px;
+    margin-inline: auto;
   }
 
   .home-story__content {
     max-width: 28rem;
-    padding-block: 1rem;
+    padding-block: 0.5rem;
   }
 }
 
 .home-story__image-wrap {
   position: relative;
   aspect-ratio: 5 / 4;
+  max-height: min(22rem, 58vw);
   overflow: hidden;
+  background: rgba(0, 0, 0, 0.28);
 }
 
 @media (min-width: 900px) {
   .home-story__image-wrap {
-    aspect-ratio: 4 / 5;
-    min-height: 28rem;
+    aspect-ratio: 5 / 4;
+    min-height: 0;
+    max-height: min(24rem, 42vh);
   }
+}
+
+.home-story__image-wrap img,
+.home-story__img {
+  object-fit: contain;
+  object-position: center 40%;
 }
 
 .home-story__body {
@@ -1064,7 +1075,7 @@
 }
 
 .home-story__media .home-media-fallback {
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 5 / 4;
   min-height: 0;
   background: var(--color-primary-hover);
   color: rgba(245, 243, 239, 0.7);
@@ -1595,15 +1606,100 @@
 
 /* ─── Personalización / Por mayor ─── */
 
+.home-section--personalize,
+.home-section--wholesale {
+  position: relative;
+  overflow: hidden;
+}
+
+.home-section--personalize .home-container--wide,
+.home-section--wholesale .home-container--wide {
+  position: relative;
+  z-index: 1;
+  max-width: min(1200px, 100%);
+}
+
+/* Trama artesanal sutil — líneas verticales tipo urdimbre */
+.home-section--personalize::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.55;
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 13px,
+      rgba(26, 26, 26, 0.028) 13px,
+      rgba(26, 26, 26, 0.028) 14px
+    ),
+    radial-gradient(
+      ellipse 55% 70% at 92% 18%,
+      rgba(245, 195, 123, 0.11),
+      transparent 70%
+    );
+}
+
+.home-section--personalize::after {
+  content: "";
+  position: absolute;
+  width: min(14rem, 28vw);
+  height: min(14rem, 28vw);
+  right: -3rem;
+  bottom: -4rem;
+  border: 1px solid rgba(184, 115, 5, 0.14);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Variación wholesale: arco + trama horizontal suave */
+.home-section--wholesale::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 17px,
+      rgba(26, 26, 26, 0.022) 17px,
+      rgba(26, 26, 26, 0.022) 18px
+    ),
+    radial-gradient(
+      ellipse 50% 60% at 8% 80%,
+      rgba(245, 195, 123, 0.1),
+      transparent 68%
+    );
+}
+
+.home-section--wholesale::after {
+  content: "";
+  position: absolute;
+  width: min(18rem, 36vw);
+  height: min(9rem, 18vw);
+  left: -4rem;
+  top: 18%;
+  border: 1px solid rgba(26, 26, 26, 0.07);
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
 .home-personalize {
   display: grid;
-  gap: 2rem;
+  gap: 1.75rem;
   align-items: center;
 }
 
 @media (max-width: 899px) {
   .home-personalize {
-    gap: 1.75rem;
+    gap: 1.5rem;
   }
 
   .home-personalize__content {
@@ -1621,12 +1717,13 @@
 
 @media (min-width: 900px) {
   .home-personalize {
-    grid-template-columns: 1fr 0.95fr;
-    gap: clamp(2.5rem, 5vw, 4.5rem);
+    /* ~55/45 — imagen protagonista sin dominar */
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: clamp(2rem, 4vw, 3.5rem);
   }
 
   .home-personalize--image-left {
-    grid-template-columns: 0.95fr 1fr;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
   }
 
   .home-personalize--image-left .home-personalize__media {
@@ -1700,18 +1797,39 @@
 
 .home-personalize__image-wrap {
   position: relative;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 4 / 3;
+  max-height: min(20rem, 70vw);
   overflow: hidden;
+  background: var(--color-bg);
+  border: none;
 }
 
 @media (min-width: 900px) {
   .home-personalize__image-wrap {
-    min-height: 26rem;
+    aspect-ratio: 4 / 3;
+    min-height: 0;
+    max-height: min(22rem, 40vh);
+  }
+
+  .home-wholesale .home-personalize__image-wrap {
+    aspect-ratio: 3 / 2;
+    max-height: min(20rem, 38vh);
   }
 }
 
+.home-personalize__image-wrap img,
+.home-personalize__img {
+  object-fit: contain;
+  object-position: center;
+}
+
+.home-wholesale .home-personalize__image-wrap img,
+.home-wholesale .home-personalize__img {
+  object-position: center;
+}
+
 .home-personalize__media .home-media-fallback {
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 5 / 4;
   min-height: 0;
 }
 
@@ -1896,17 +2014,18 @@
   }
 }
 
-/* ─── Inspiración (mosaico editorial — solo celdas reales) ─── */
+/* ─── Inspiración (mosaico editorial — contain, fondo página) ─── */
 
 .home-section--inspire {
   border-top: 1px solid var(--color-border);
+  --inspiration-matte: var(--color-bg);
 }
 
 .home-inspire__header {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.35rem;
 }
 
 @media (min-width: 768px) {
@@ -1914,7 +2033,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-end;
-    margin-bottom: 1.75rem;
+    margin-bottom: 1.5rem;
   }
 
   .home-inspire__header > div {
@@ -1924,16 +2043,19 @@
 
 .home-inspire__mosaic {
   display: grid;
-  gap: 0.65rem;
+  gap: 0.7rem;
 }
 
 .home-inspire__cell {
   position: relative;
   overflow: hidden;
   display: block;
-  aspect-ratio: 4 / 5;
-  /* Fondo discreto solo mientras carga; no beige “placeholder editorial” */
-  background: rgba(31, 31, 31, 0.04);
+  aspect-ratio: 4 / 3;
+  background: var(--inspiration-matte);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
   min-height: 0;
   color: inherit;
   text-decoration: none;
@@ -1944,22 +2066,26 @@
   outline-offset: 3px;
 }
 
-.home-inspire__cell img {
+.home-inspire__cell img,
+.home-inspire__img {
+  object-fit: contain;
+  object-position: center center;
   transition: transform var(--motion-image) var(--ease-image);
 }
 
-.home-inspire__cell:hover img {
-  transform: scale(1.015);
+.home-inspire__cell:hover img,
+.home-inspire__cell:hover .home-inspire__img {
+  transform: scale(1.012);
 }
 
-/* Móvil: scroll horizontal de imágenes grandes (preservar Fase 4) */
+/* Móvil: scroll horizontal — matte sin marcos enormes */
 @media (max-width: 767px) {
   .home-inspire__mosaic {
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    gap: 0.75rem;
+    gap: 0.65rem;
     margin-inline: -1.25rem;
     padding-inline: 1.25rem;
     overscroll-behavior-x: contain;
@@ -1967,20 +2093,21 @@
   }
 
   .home-inspire__cell {
-    flex: 0 0 min(78vw, 18rem);
+    flex: 0 0 min(82vw, 20.5rem);
     scroll-snap-align: start;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 5 / 4;
   }
 
   .home-inspire__mosaic--n1 .home-inspire__cell {
-    flex: 0 0 min(92vw, 24rem);
+    flex: 0 0 min(90vw, 24rem);
+    aspect-ratio: 3 / 2;
   }
 }
 
 @media (min-width: 768px) {
   .home-inspire__mosaic--n1 {
     grid-template-columns: minmax(0, 1fr);
-    max-width: 52rem;
+    max-width: 48rem;
     margin-inline: auto;
   }
 
@@ -1993,14 +2120,14 @@
   }
 
   .home-inspire__mosaic--n2 .home-inspire__cell {
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 4 / 3;
   }
 
-  /* 3: grande + dos apiladas — sin huecos */
+  /* Geometría n3 conservada; min-height moderado → menos letterbox forzado */
   .home-inspire__mosaic--n3 {
-    grid-template-columns: 1.4fr 1fr;
+    grid-template-columns: 1.35fr 1fr;
     grid-template-rows: repeat(2, minmax(0, 1fr));
-    min-height: min(28rem, 58vw);
+    min-height: min(20rem, 44vw);
   }
 
   .home-inspire__mosaic--n3 .home-inspire__cell--1 {
@@ -2018,7 +2145,6 @@
     height: 100%;
   }
 
-  /* 4: mosaico 2×2 completo (evita celda vacía del 3×2 + featured) */
   .home-inspire__mosaic--n4 {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto;
@@ -2026,7 +2152,7 @@
   }
 
   .home-inspire__mosaic--n4 .home-inspire__cell {
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 4 / 3;
   }
 
   .home-inspire__mosaic--n4 .home-inspire__cell--1 {
@@ -2034,12 +2160,12 @@
     grid-column: auto;
   }
 
-  /* 5: featured + 4 (todas las pistas ocupadas) */
+  /* Protagonista izq + 4 — misma geometría; altura mosaico moderada */
   .home-inspire__mosaic--n5 {
     grid-template-columns: 2fr 1fr 1fr;
     grid-template-rows: repeat(2, minmax(0, 1fr));
-    gap: 0.85rem;
-    min-height: min(30rem, 55vw);
+    gap: 0.7rem;
+    min-height: min(22rem, 40vw);
   }
 
   .home-inspire__mosaic--n5 .home-inspire__cell--1 {
@@ -2058,11 +2184,15 @@
 
 @media (min-width: 1024px) {
   .home-inspire__mosaic--n3 {
-    min-height: 32rem;
+    min-height: 22rem;
   }
 
   .home-inspire__mosaic--n5 {
-    min-height: 34rem;
+    min-height: 24rem;
+  }
+
+  .home-section--inspire .home-container--wide {
+    max-width: min(1280px, 100%);
   }
 }
 
@@ -2071,6 +2201,7 @@
   inset: 0;
   min-height: 0;
   height: 100%;
+  background: var(--inspiration-matte);
 }
 
 /* ─── Pausas visuales editoriales (solo fotografía) ─── */
@@ -2091,31 +2222,33 @@
 .home-editorial__cell {
   position: relative;
   overflow: hidden;
-  background: rgba(31, 31, 31, 0.04);
+  background: #f3efe8;
   min-height: 0;
 }
 
-.home-editorial__cell img {
+.home-editorial__cell img,
+.home-editorial__img {
   object-fit: cover;
-  object-position: center;
+  object-position: center 35%;
 }
 
-/* 1 imagen: panorámica full-bleed */
+/* 1 imagen: panorámica full-bleed (menos portrait agresivo en mobile) */
 .home-editorial--n1 .home-editorial__cell {
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 3 / 4;
+  max-height: min(28rem, 78vw);
 }
 
 @media (min-width: 768px) {
   .home-editorial--n1 .home-editorial__cell {
     aspect-ratio: 21 / 9;
-    max-height: min(52vh, 28rem);
+    max-height: min(44vh, 24rem);
   }
 }
 
 @media (min-width: 1200px) {
   .home-editorial--n1 .home-editorial__cell {
     aspect-ratio: 2.6 / 1;
-    max-height: min(48vh, 30rem);
+    max-height: min(42vh, 26rem);
   }
 }
 
@@ -2134,28 +2267,28 @@
   }
 
   .home-editorial--n2 .home-editorial__cell {
-    flex: 0 0 min(86vw, 20rem);
+    flex: 0 0 min(82vw, 20rem);
     scroll-snap-align: start;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 4 / 3;
   }
 }
 
 @media (min-width: 768px) {
   .home-editorial--n2 .home-editorial__frame {
-    grid-template-columns: 1.35fr 1fr;
+    grid-template-columns: 1.25fr 1fr;
     gap: 0.65rem;
-    min-height: min(26rem, 48vw);
+    min-height: min(20rem, 40vw);
     align-items: stretch;
   }
 
   .home-editorial--n2 .home-editorial__cell {
     aspect-ratio: auto;
     height: 100%;
-    min-height: min(26rem, 48vw);
+    min-height: min(20rem, 40vw);
   }
 
   .home-editorial--n2 .home-editorial__cell--2 {
-    min-height: min(26rem, 48vw);
+    min-height: min(20rem, 40vw);
   }
 }
 

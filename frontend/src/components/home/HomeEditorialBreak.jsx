@@ -52,7 +52,7 @@ export default async function HomeEditorialBreak({ slot = "editorial1" }) {
                   ? "100vw"
                   : "(max-width: 767px) 85vw, 50vw"
               }
-              style={{ objectFit: "cover", objectPosition: "center" }}
+              className="home-editorial__img"
             />
           </div>
         ))}
