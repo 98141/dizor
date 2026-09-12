@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import ProductCarousel from "@/components/home/ProductCarousel";
+import DailyDiscoverGrid from "@/components/home/DailyDiscoverGrid";
 import NewsletterSignup from "@/components/marketing/NewsletterSignup";
 import ViewItemListTracker from "@/components/analytics/ViewItemListTracker";
 import { getHomeContent } from "@/services/cmsService";
@@ -74,7 +75,7 @@ export default async function HomePage() {
   const [cmsData, dailyData, newProductsData, reviewsData, filtersData, appearance] =
     await Promise.all([
       getHomeContent().catch(() => null),
-      fetchJson(`${BASE}/products/daily-random?limit=10`, 300),
+      fetchJson(`${BASE}/products/daily-random?limit=5`, 60),
       fetchJson(`${BASE}/products?isNew=true&limit=12`, 60),
       fetchJson(`${BASE}/reviews?limit=4`, 60),
       fetchJson(`${BASE}/products/filters`, 300),
@@ -97,7 +98,32 @@ export default async function HomePage() {
   const newsletterSection = home.newsletterSection || {};
 
   const craftTypes = filtersData?.filters?.weaveTypes || [];
+  const dailyWeaves =
+    Array.isArray(dailyData?.weaveTypes) && dailyData.weaveTypes.length
+      ? dailyData.weaveTypes
+      : craftTypes.slice(0, 3);
   const coleccionImages = (homeImages.coleccion || []).filter((img) => img?.url);
+  const matchColeccionImage = (wt) => {
+    const id = String(wt._id || wt.id || "");
+    const name = String(wt.name || "")
+      .trim()
+      .toLowerCase();
+    return (
+      coleccionImages.find((img) => {
+        const href = String(img.linkHref || "");
+        const titulo = String(img.titulo || "")
+          .trim()
+          .toLowerCase();
+        if (id && href.includes(`weaveType=${id}`)) return true;
+        if (name && titulo === name) return true;
+        return false;
+      }) || null
+    );
+  };
+  const weaveCards = dailyWeaves.slice(0, 3).map((wt) => ({
+    wt,
+    img: matchColeccionImage(wt),
+  }));
   const inspiracionImages = (homeImages.inspiracion || []).filter(
     (img) => img?.url
   );
@@ -264,44 +290,32 @@ export default async function HomePage() {
             </p>
           </header>
 
-          {coleccionImages.length > 0 ? (
-            <div className="home-collection__grid">
-              {coleccionImages.map((img) => (
+          {weaveCards.length > 0 ? (
+            <div className="home-collection__grid home-collection__grid--editorial">
+              {weaveCards.map(({ wt, img }, index) => (
                 <Link
-                  key={img.id}
-                  href={img.linkHref || "/catalogo"}
-                  className="home-collection-card"
+                  key={wt._id || wt.id}
+                  href={`/catalogo?weaveType=${wt._id || wt.id}`}
+                  className={`home-collection-card${img ? "" : " home-collection-card--text"}${index === 0 ? " home-collection-card--featured" : ""}`}
                 >
-                  <div className="home-collection-card__media">
-                    <Image
-                      src={img.url}
-                      alt={img.altText || img.titulo || "Colección Dizor"}
-                      fill
-                      sizes="(max-width: 768px) 50vw, 33vw"
-                      style={{ objectFit: "cover" }}
-                    />
-                  </div>
-                  <div className="home-collection-card__meta">
-                    <span className="home-collection-card__name">
-                      {img.titulo || "Explorar"}
-                    </span>
-                    <span className="home-collection-card__cta">
-                      {craftSection.linkLabel || "Ver"}
-                    </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          ) : craftTypes.length > 0 ? (
-            <div className="home-collection__grid">
-              {craftTypes.map((wt) => (
-                <Link
-                  key={wt._id}
-                  href={`/catalogo?weaveType=${wt._id}`}
-                  className="home-collection-card home-collection-card--text"
-                >
-                  <div className="home-collection-card__media home-collection-card__media--fallback">
-                    <MediaPlaceholder label={wt.name} />
+                  <div
+                    className={`home-collection-card__media${img ? "" : " home-collection-card__media--fallback"}`}
+                  >
+                    {img ? (
+                      <Image
+                        src={img.url}
+                        alt={img.altText || wt.name || "Colección Dizor"}
+                        fill
+                        sizes={
+                          index === 0
+                            ? "(max-width: 767px) 33vw, 50vw"
+                            : "(max-width: 767px) 33vw, 25vw"
+                        }
+                        style={{ objectFit: "cover" }}
+                      />
+                    ) : (
+                      <MediaPlaceholder label={wt.name} />
+                    )}
                   </div>
                   <div className="home-collection-card__meta">
                     <span className="home-collection-card__name">{wt.name}</span>
@@ -367,28 +381,39 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 5. Productos aleatorios 24h */}
+      {/* 5. Curaduría diaria — hasta 5 cupos (1 grande + 2×2) */}
       {randomSection.isActive !== false && dailyProducts.length > 0 && (
-        <section className="home-section home-section--border">
+        <section className="home-section home-section--discover">
           <div className="home-container">
-            <header className="home-section__intro">
-              <p className="home-eyebrow">
-                {randomSection.eyebrow || "DESCUBRE"}
-              </p>
-              <h2 className="home-section__heading">
-                {randomSection.title || "Piezas para explorar hoy"}
-              </h2>
-              <p className="home-section__lead">
-                {randomSection.subtitle ||
-                  "Una selección renovada cada día desde nuestro catálogo."}
-              </p>
-            </header>
+            <div className="home-discover__header">
+              <header className="home-section__intro">
+                <p className="home-eyebrow">
+                  {randomSection.eyebrow || "CURADURÍA"}
+                </p>
+                <h2 className="home-section__heading">
+                  {randomSection.title || "Descubre hoy"}
+                </h2>
+                {randomSection.subtitle ? (
+                  <p className="home-section__lead">{randomSection.subtitle}</p>
+                ) : null}
+              </header>
+              <Link
+                href={randomSection.linkHref || "/catalogo"}
+                className="home-discover__more"
+              >
+                {randomSection.linkLabel || "Ver más"}
+              </Link>
+            </div>
             <ViewItemListTracker
               products={dailyProducts}
               listId="home_daily"
-              listName="Selección del día"
+              listName={randomSection.title || "Descubre hoy"}
             />
-            <ProductCarousel products={dailyProducts} />
+            <DailyDiscoverGrid
+              products={dailyProducts}
+              listId="home_daily"
+              listName={randomSection.title || "Descubre hoy"}
+            />
           </div>
         </section>
       )}

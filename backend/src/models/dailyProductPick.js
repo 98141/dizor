@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
 
 /**
- * Selección diaria de productos aleatorios para el home.
- * Una fila por día (dateKey = YYYY-MM-DD en America/Bogota).
- * Todos los visitantes ven la misma lista hasta que cambia el día.
+ * Curaduría diaria del home (America/Bogota, dateKey YYYY-MM-DD).
+ * - productIds: hasta 5 piezas para «Descubre hoy»
+ * - categoryIds: categorías usadas al armar esa selección
+ * - weaveTypeIds: hasta 3 tejidos para «Colección / Nuestros tejidos»
  */
 const dailyProductPickSchema = new mongoose.Schema(
   {
@@ -13,6 +14,18 @@ const dailyProductPickSchema = new mongoose.Schema(
       unique: true,
       trim: true,
     },
+    categoryIds: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Category",
+      },
+    ],
+    weaveTypeIds: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "WeaveType",
+      },
+    ],
     productIds: [
       {
         type: mongoose.Schema.Types.ObjectId,

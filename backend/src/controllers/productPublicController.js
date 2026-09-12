@@ -152,13 +152,22 @@ exports.getFeaturedProducts = catchAsync(async (req, res) => {
 
 /** Selección aleatoria cacheada 24h (día America/Bogota). */
 exports.getDailyRandomProducts = catchAsync(async (req, res) => {
-  const { getOrCreateDailyPicks } = require("../services/dailyProductService");
-  const limit = Math.min(10, parseInt(req.query.limit, 10) || 10);
-  const { dateKey, products } = await getOrCreateDailyPicks(limit);
+  const {
+    getOrCreateDailyPicks,
+    PRODUCT_SLOT_COUNT,
+  } = require("../services/dailyProductService");
+  const limit = Math.min(
+    PRODUCT_SLOT_COUNT,
+    Math.max(1, parseInt(req.query.limit, 10) || PRODUCT_SLOT_COUNT)
+  );
+  const { dateKey, categoryIds, weaveTypes, products } =
+    await getOrCreateDailyPicks(limit);
 
   res.status(200).json({
     status: "success",
     dateKey,
+    categoryIds,
+    weaveTypes,
     results: products.length,
     products,
   });

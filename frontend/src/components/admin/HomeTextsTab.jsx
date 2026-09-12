@@ -38,7 +38,7 @@ const SECTIONS = [
   {
     id: "colecciones",
     label: "Colecciones",
-    hint: "Textos de la sección tejidos/colecciones. Imágenes de tarjetas: pestaña Imágenes → Colecciones.",
+    hint: "Nuestros tejidos: cada medianoche se eligen 3 tejidos al azar (1 grande + 2). Imágenes CMS: título = nombre del tejido o enlace con weaveType.",
   },
   {
     id: "historia",
@@ -63,7 +63,7 @@ const SECTIONS = [
   {
     id: "seleccion",
     label: "Selección",
-    hint: "Textos del carrusel de productos aleatorios (máx. 10, renovados cada 24 h).",
+    hint: "Descubre hoy: hasta 5 productos (1 grande + 2×2), nombre, precio y colores. Se renueva a medianoche (Bogotá).",
   },
   {
     id: "inspiracion",
@@ -845,6 +845,50 @@ export default function HomeTextsTab({
               }
             />
           </div>
+          <AuthFormField
+            label="Texto enlace «Ver más»"
+            name="randLinkLabel"
+            value={home.randomProductsSection?.linkLabel || ""}
+            onChange={(e) =>
+              setHome((h) => ({
+                ...h,
+                randomProductsSection: {
+                  ...(h.randomProductsSection || {}),
+                  linkLabel: e.target.value,
+                },
+              }))
+            }
+          />
+          <AuthFormField
+            label="URL «Ver más»"
+            name="randLinkHref"
+            value={home.randomProductsSection?.linkHref || ""}
+            placeholder="/catalogo"
+            onChange={(e) =>
+              setHome((h) => ({
+                ...h,
+                randomProductsSection: {
+                  ...(h.randomProductsSection || {}),
+                  linkHref: e.target.value,
+                },
+              }))
+            }
+          />
+          <AuthFormField
+            label="Botón en cada pieza"
+            name="randItemLinkLabel"
+            value={home.randomProductsSection?.itemLinkLabel || ""}
+            placeholder="Ver"
+            onChange={(e) =>
+              setHome((h) => ({
+                ...h,
+                randomProductsSection: {
+                  ...(h.randomProductsSection || {}),
+                  itemLinkLabel: e.target.value,
+                },
+              }))
+            }
+          />
         </>
       )}
 

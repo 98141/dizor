@@ -16,9 +16,11 @@ const DEFAULT_OG_IMAGE = "/icon-512.png";
 // página dentro del mismo request (mismo patrón que fetchAppearance.js).
 const fetchProductMeta = cache(async (slug) => {
   try {
+    // Sin cache de Data Cache: evita fichas “fantasma” tras borrar un producto
+    // en admin (p. ej. ISR/hosting sirviendo HTML antiguo con revalidate).
     const res = await fetch(
       `${BASE_API}/products/${encodeURIComponent(slug)}`,
-      { next: { revalidate: 60 } },
+      { cache: "no-store" },
     );
     if (!res.ok) return null;
     return res.json();

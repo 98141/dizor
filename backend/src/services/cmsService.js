@@ -108,9 +108,12 @@ const DEFAULT_HOME = {
     isActive: true,
   },
   randomProductsSection: {
-    eyebrow: "DESCUBRE",
-    title: "Piezas para explorar hoy",
+    eyebrow: "CURADURÍA",
+    title: "Descubre hoy",
     subtitle: "Una selección renovada cada día desde nuestro catálogo.",
+    linkLabel: "Ver más",
+    linkHref: "/catalogo",
+    itemLinkLabel: "Ver",
     isActive: true,
   },
   newsletterSection: {
@@ -196,6 +199,18 @@ exports.getOrCreateHomeContent = async () => {
   ensure("historia.eyebrow", DEFAULT_HOME.historia.eyebrow);
   ensure("newSection.eyebrow", DEFAULT_HOME.newSection.eyebrow);
   ensure("newSection.subtitle", DEFAULT_HOME.newSection.subtitle);
+  ensure(
+    "randomProductsSection.linkLabel",
+    DEFAULT_HOME.randomProductsSection.linkLabel
+  );
+  ensure(
+    "randomProductsSection.linkHref",
+    DEFAULT_HOME.randomProductsSection.linkHref
+  );
+  ensure(
+    "randomProductsSection.itemLinkLabel",
+    DEFAULT_HOME.randomProductsSection.itemLinkLabel
+  );
 
   if (!doc.features?.length) {
     doc.features = DEFAULT_HOME.features;

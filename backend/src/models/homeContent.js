@@ -211,17 +211,20 @@ const homeContentSchema = new mongoose.Schema(
       isActive: { type: Boolean, default: true },
     },
     randomProductsSection: {
-      eyebrow: { type: String, trim: true, default: "DESCUBRE" },
+      eyebrow: { type: String, trim: true, default: "CURADURÍA" },
       title: {
         type: String,
         trim: true,
-        default: "Piezas para explorar hoy",
+        default: "Descubre hoy",
       },
       subtitle: {
         type: String,
         trim: true,
         default: "Una selección renovada cada día desde nuestro catálogo.",
       },
+      linkLabel: { type: String, trim: true, default: "Ver más" },
+      linkHref: { type: String, trim: true, default: "/catalogo" },
+      itemLinkLabel: { type: String, trim: true, default: "Ver" },
       isActive: { type: Boolean, default: true },
     },
     newsletterSection: {
