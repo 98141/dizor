@@ -2,9 +2,10 @@
   background: var(--color-accent);
   color: var(--color-text);
   text-align: center;
-  padding: 0.5rem var(--space-md);
-  font-size: 0.85rem;
+  padding: 0.4rem var(--space-md);
+  font-size: 0.82rem;
   overflow: hidden;
+  line-height: 1.35;
 }
 
 .site-announcement__track {

@@ -3,6 +3,7 @@ import Image from "next/image";
 import ProductCarousel from "@/components/home/ProductCarousel";
 import DailyDiscoverGrid from "@/components/home/DailyDiscoverGrid";
 import HomeCraftSection from "@/components/home/HomeCraftSection";
+import HomeHero from "@/components/home/HomeHero";
 import NewsletterSignup from "@/components/marketing/NewsletterSignup";
 import ViewItemListTracker from "@/components/analytics/ViewItemListTracker";
 import { getHomeContent } from "@/services/cmsService";
@@ -107,8 +108,8 @@ export default async function HomePage() {
   const newProducts = newProductsData?.products || [];
   const reviews = reviewsData?.reviews || [];
 
-  const heroImage =
-    homeImages.hero?.[0]?.url || hero.imageUrl || "";
+  const heroImages = (homeImages.hero || []).filter((img) => img?.url);
+  const heroFallbackUrl = hero.imageUrl || "";
   const historiaImage =
     homeImages.historia?.[0]?.url || historia.imageUrl || "";
   const personalizacionImage =
@@ -144,50 +145,12 @@ export default async function HomePage() {
       />
 
       {/* 1. HERO full-bleed */}
-      <section
-        className={`home-hero${heroImage ? " home-hero--has-image" : ""}`}
-      >
-        {heroImage && (
-          <Image
-            src={heroImage}
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            style={{ objectFit: "cover" }}
-            className="home-hero__bg-image"
-          />
-        )}
-        <div className="home-hero__overlay" aria-hidden="true" />
-        <div className="home-hero__inner">
-          <p className="home-hero__brand home-anim home-anim--1">
-            {hero.brandClaim || siteName || "DIZOR"}
-          </p>
-          <h1 className="home-hero__title home-anim home-anim--2">
-            {hero.title || "Oficio colombiano, piezas que perduran"}
-          </h1>
-          <p className="home-hero__text home-anim home-anim--3">
-            {hero.subtitle ||
-              "Sombreros de palma de iraca tejidos a mano en Sandoná, Nariño."}
-          </p>
-          <div className="home-hero__ctas home-anim home-anim--4">
-            <Link
-              href={hero.ctaHref || "/catalogo"}
-              className="home-btn home-btn--primary"
-            >
-              {hero.ctaLabel || "Ver catálogo"}
-            </Link>
-            {(hero.secondaryCtaLabel || hero.secondaryCtaHref) && (
-              <Link
-                href={hero.secondaryCtaHref || "/pagina/sobre-dizor"}
-                className="home-btn home-btn--ghost"
-              >
-                {hero.secondaryCtaLabel || "Conoce nuestra historia"}
-              </Link>
-            )}
-          </div>
-        </div>
-      </section>
+      <HomeHero
+        hero={hero}
+        images={heroImages}
+        siteName={siteName}
+        fallbackImageUrl={heroFallbackUrl}
+      />
 
       {/* 2. Beneficios */}
       {features.length > 0 && (

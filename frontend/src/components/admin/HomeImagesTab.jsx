@@ -15,7 +15,7 @@ import {
 import { getCatalogFilters } from "@/services/productService";
 
 const SECTIONS = [
-  { id: "hero", label: "Hero", hint: "Una imagen principal full-bleed (la de menor orden)" },
+  { id: "hero", label: "Hero", hint: "Varias fotografías full-bleed ordenables. La de menor orden es la principal (LCP). Se muestran en crossfade en el inicio." },
   { id: "historia", label: "Historia", hint: "Imagen del bloque origen / historia" },
   { id: "personalizacion", label: "Personalización", hint: "Imagen vertical del bloque a tu medida" },
   { id: "pormayor", label: "Por mayor", hint: "Imagen del bloque pedidos al por mayor" },
@@ -244,6 +244,9 @@ export default function HomeImagesTab() {
         {section === "inspiracion"
           ? ` · ${sectionImages.length}/${INSPIRACION_MAX}`
           : ""}
+        {section === "hero" && sectionImages.length > 0
+          ? ` · ${sectionImages.length} foto${sectionImages.length === 1 ? "" : "s"} · la primera del orden es la principal`
+          : ""}
       </p>
 
       <form className="admin-form product-form__section" onSubmit={handleUpload}>
@@ -358,6 +361,14 @@ export default function HomeImagesTab() {
                     color: "var(--color-text-muted)",
                   }}
                 >
+                  {section === "hero" ? (
+                    <>
+                      <strong style={{ color: "var(--color-text)" }}>
+                        {String(idx + 1).padStart(2, "0")}
+                      </strong>
+                      {idx === 0 ? " · Principal (LCP) · " : " · "}
+                    </>
+                  ) : null}
                   Orden {img.orden} · {img.activo ? "Activa" : "Inactiva"}
                   {img.weaveTypeId
                     ? ` · tejido ${
