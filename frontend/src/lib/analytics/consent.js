@@ -1,47 +1,75 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { readValidRecord, removeLegacyKey } from "../consentRecord";
 
-// Adaptador técnico mínimo de consentimiento para analítica. El Sprint 4
-// construirá el banner/modal visual; ese banner debe llamar únicamente a
-// grantAnalyticsConsent() / denyAnalyticsConsent() de este archivo — no debe
-// gestionar su propio estado de consentimiento en paralelo.
+// Adaptador técnico de consentimiento para analítica.
 //
-// Estado por defecto: DENEGADO. Mientras no exista una llamada explícita a
-// grantAnalyticsConsent() (persistida), ninguna función de este módulo
-// reporta consentimiento otorgado, y por lo tanto ni el script de GA4 se
-// monta ni se envía ningún evento (ver AnalyticsTracker.jsx y events.js).
+// Estado por defecto: DENEGADO. El consentimiento se DERIVA del registro
+// versionado de preferencias (lib/consentRecord.js); este módulo ya no
+// persiste ninguna clave propia (H-07).
+//
+// Al pasar de concedido a denegado (rechazo posterior o retirada) se
+// eliminan las cookies `_ga*` y, si gtag.js llegó a cargarse en esta página,
+// se recarga para descargarlo (H-08).
 
-const STORAGE_KEY = "dizor_analytics_consent";
+const PURCHASE_KEY_PREFIX = "dizor_ga_purchase_fired_";
 
 let consentState = false;
 const listeners = new Set();
 
-function loadStoredConsent() {
-  if (typeof window === "undefined") return false;
+if (typeof window !== "undefined") {
+  removeLegacyKey();
+  consentState = Boolean(readValidRecord()?.analytics);
+}
+
+// Borra las cookies de Google Analytics en el host actual y en sus dominios
+// padre (gtag suele escribirlas en el dominio de nivel superior).
+export function clearAnalyticsCookies() {
+  if (typeof document === "undefined") return [];
+  const names = document.cookie
+    .split(";")
+    .map((c) => c.split("=")[0].trim())
+    .filter((name) => name === "_ga" || name.startsWith("_ga_") || name === "_gid");
+  if (names.length === 0) return [];
+
+  const host = window.location.hostname;
+  const parts = host.split(".");
+  const domains = [""];
+  for (let i = 0; i < parts.length - 1; i += 1) {
+    domains.push(`.${parts.slice(i).join(".")}`);
+  }
+  const expired = "Thu, 01 Jan 1970 00:00:00 GMT";
+  names.forEach((name) => {
+    domains.forEach((domain) => {
+      document.cookie = `${name}=; expires=${expired}; path=/${domain ? `; domain=${domain}` : ""}`;
+    });
+  });
+  return names;
+}
+
+// Marcas locales que solo existen para la analítica de compras.
+function clearAnalyticsLocalMarks() {
   try {
-    return window.localStorage.getItem(STORAGE_KEY) === "granted";
+    const keys = [];
+    for (let i = 0; i < window.localStorage.length; i += 1) {
+      const k = window.localStorage.key(i);
+      if (k && k.startsWith(PURCHASE_KEY_PREFIX)) keys.push(k);
+    }
+    keys.forEach((k) => window.localStorage.removeItem(k));
   } catch {
-    return false;
+    // ignorar
   }
 }
 
-function persistConsent(granted) {
-  if (typeof window === "undefined") return;
-  try {
-    if (granted) {
-      window.localStorage.setItem(STORAGE_KEY, "granted");
-    } else {
-      window.localStorage.removeItem(STORAGE_KEY);
-    }
-  } catch {
-    // localStorage no disponible (modo privado, cuotas, etc.) — no bloquear
-  }
+function isGtagScriptLoaded() {
+  if (typeof document === "undefined") return false;
+  return Boolean(document.querySelector('script[src*="googletagmanager.com/gtag/js"]'));
 }
 
 function setConsentState(granted) {
+  const wasGranted = consentState;
   consentState = granted;
-  persistConsent(granted);
   listeners.forEach((cb) => {
     try {
       cb(consentState);
@@ -49,12 +77,16 @@ function setConsentState(granted) {
       // un listener roto no debe afectar a los demás
     }
   });
-}
 
-// Hidratar el estado en memoria desde localStorage la primera vez que se
-// importa este módulo en el navegador.
-if (typeof window !== "undefined") {
-  consentState = loadStoredConsent();
+  if (wasGranted && !granted && typeof window !== "undefined") {
+    clearAnalyticsCookies();
+    clearAnalyticsLocalMarks();
+    // gtag.js no se puede "descargar" de una página ya cargada: se recarga
+    // para garantizar que deje de ejecutarse.
+    if (isGtagScriptLoaded()) {
+      window.location.reload();
+    }
+  }
 }
 
 export function hasAnalyticsConsent() {
@@ -74,11 +106,6 @@ export function subscribeToConsentChanges(callback) {
   return () => listeners.delete(callback);
 }
 
-// Hook reactivo para componentes cliente (ej. AnalyticsTracker) que deben
-// volver a renderizar cuando el consentimiento cambie (p. ej. cuando el
-// Sprint 4 conecte el banner a grantAnalyticsConsent()). Se suscribe a un
-// store externo a React (este módulo), por eso usa useSyncExternalStore en
-// vez de useState+useEffect.
 export function useAnalyticsConsent() {
   return useSyncExternalStore(
     subscribeToConsentChanges,

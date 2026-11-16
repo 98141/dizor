@@ -34,8 +34,9 @@ exports.sendPasswordResetEmail = async ({ to, name, resetUrl }) => {
   `;
 
   if (!client) {
-    console.log("[Dizor Auth] RESEND_API_KEY no configurada. Enlace de recuperación:");
-    console.log(resetUrl);
+    console.log("[Dizor Auth] RESEND_API_KEY no configurada. Correo de recuperación no enviado.");
+    // El enlace contiene un token de un solo uso: nunca en logs de producción.
+    if (process.env.NODE_ENV !== "production") console.log(resetUrl);
     return { devMode: true };
   }
 
@@ -190,7 +191,7 @@ exports.sendOrderShippedEmail = async (order) => {
   `;
 
   if (!client) {
-    console.log("[Dizor] Pedido enviado:", order.orderNumber, "→", order.buyer.email);
+    console.log("[Dizor] (sin RESEND_API_KEY) Correo de despacho no enviado:", order.orderNumber);
     return { devMode: true };
   }
 
@@ -214,8 +215,13 @@ exports.sendAbandonedCartEmail = async ({
   items,
   subtotal,
   cartUrl,
+  unsubscribeUrl,
   subject,
 }) => {
+  // Mensaje comercial: sin enlace de baja no se envía (H-05).
+  if (!unsubscribeUrl) {
+    throw new Error("Recordatorio comercial sin enlace de baja");
+  }
   const client = getResendClient();
   const from = process.env.EMAIL_FROM || "Dizor <onboarding@resend.dev>";
 
@@ -238,12 +244,14 @@ exports.sendAbandonedCartEmail = async ({
           Volver al carrito
         </a>
       </p>
+      <p style="font-size: 12px; color: #999;">Recibes este correo porque pediste un recordatorio de tu carrito.
+        <a href="${unsubscribeUrl}" style="color: #999;">Darme de baja de estos recordatorios</a>.</p>
       <p style="font-size: 12px; color: #999;">Sombreros artesanales — Sandoná, Nariño</p>
     </div>
   `;
 
   if (!client) {
-    console.log("[Dizor] Recordatorio carrito abandonado para:", to);
+    console.log("[Dizor] (sin RESEND_API_KEY) Recordatorio de carrito no enviado");
     return { devMode: true };
   }
 
@@ -252,6 +260,7 @@ exports.sendAbandonedCartEmail = async ({
     to,
     subject: subject || "Tu carrito te espera — Dizor",
     html,
+    headers: { "List-Unsubscribe": `<${unsubscribeUrl}>` },
   });
 
   if (error) {

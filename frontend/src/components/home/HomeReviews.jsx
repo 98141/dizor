@@ -55,6 +55,9 @@ export default async function HomeReviews() {
               </p>
               <footer className="home-voice__author">
                 <strong>{review.authorName}</strong>
+                {review.isBrandReview ? (
+                  <span className="review-brand-label">Publicada por la tienda</span>
+                ) : null}
                 {review.city ? (
                   <span className="home-voice__city">
                     {review.city.toUpperCase()}

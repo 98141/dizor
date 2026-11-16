@@ -9,6 +9,15 @@ const taxonomyModels = {
   styles: () => require("../models/style"),
 };
 
+/** Campo del producto que referencia cada taxonomía. */
+const PRODUCT_USAGE = {
+  categories: { field: "category", label: "en esta categoría" },
+  "weave-types": { field: "weaveType", label: "con este tejido" },
+  styles: { field: "style", label: "con esta horma" },
+  sizes: { field: "variants.size", label: "con variantes en esta talla" },
+  colors: { field: "variants.color", label: "con variantes en este color" },
+};
+
 const getModel = (type) => {
   const factory = taxonomyModels[type];
   if (!factory) return null;
@@ -39,14 +48,17 @@ const createTaxonomyHandlers = (type) => {
 
   const update = catchAsync(async (req, res, next) => {
     const Model = getModel(type);
-    const item = await Model.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const item = await Model.findById(req.params.id);
 
     if (!item) {
       return next(new AppError("Registro no encontrado", 404));
     }
+
+    // save() (no findByIdAndUpdate) para que el hook regenere el slug al
+    // renombrar: el slug es la URL pública del filtro (?weaveType=fino).
+    const { _id, slug, createdAt, updatedAt, ...changes } = req.body || {};
+    item.set(changes);
+    await item.save();
 
     res.status(200).json({
       status: "success",
@@ -57,14 +69,17 @@ const createTaxonomyHandlers = (type) => {
   const remove = catchAsync(async (req, res, next) => {
     const Model = getModel(type);
 
-    // Categorías: no eliminar si hay productos asociados (evitar refs rotas).
-    if (type === "categories") {
+    // No eliminar si hay productos asociados (evitar referencias rotas).
+    const usage = PRODUCT_USAGE[type];
+    if (usage) {
       const Product = require("../models/product");
-      const linked = await Product.countDocuments({ category: req.params.id });
+      const linked = await Product.countDocuments({
+        [usage.field]: req.params.id,
+      });
       if (linked > 0) {
         return next(
           new AppError(
-            `No se puede eliminar: hay ${linked} producto(s) en esta categoría. Desactívala o reasigna los productos primero.`,
+            `No se puede eliminar: hay ${linked} producto(s) ${usage.label}. Desactívalo o reasigna los productos primero.`,
             400
           )
         );

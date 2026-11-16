@@ -14,6 +14,7 @@ import "@/styles/components/product-card.css";
 import "@/styles/components/catalog-filters.css";
 import "@/styles/components/marketing.css";
 import "@/styles/components/cookie-consent.css";
+import "@/styles/components/consent-check.css";
 import "@/styles/pages/special-requests.css";
 import "@/styles/components/auth-form.css";
 

@@ -1,5 +1,6 @@
 const AppError = require("../utils/AppError");
 const logger = require("../lib/logger");
+const { redactUrl } = require("../utils/redactUrl");
 
 const handleCastErrorDB = () => {
   return new AppError("ID inválido", 400);
@@ -70,7 +71,7 @@ const globalErrorHandler = (err, req, res, next) => {
   if (statusCode >= 500) {
     logger.error("Server error", {
       method: req.method,
-      url: req.originalUrl,
+      url: redactUrl(req.originalUrl),
       statusCode,
       userId: req.user?.id || null,
       ip: req.ip,
@@ -80,7 +81,7 @@ const globalErrorHandler = (err, req, res, next) => {
   } else if (statusCode === 401 || statusCode === 403) {
     logger.warn("Auth failure", {
       method: req.method,
-      url: req.originalUrl,
+      url: redactUrl(req.originalUrl),
       statusCode,
       ip: req.ip,
       message: error.message,

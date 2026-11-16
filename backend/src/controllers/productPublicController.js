@@ -16,13 +16,14 @@ const {
 const populateList = "category weaveType style variants.size variants.color";
 const populateDetail = "category weaveType style variants.size variants.color";
 
-const assignObjectIdFilter = (filter, key, rawValue) => {
-  const value = pickQueryValue({ [key]: rawValue }, key);
-  if (!value || !isValidObjectId(value)) return;
-  filter[key] = toObjectId(value);
-};
+const {
+  parseCatalogQuery,
+  buildCatalogFilter,
+  effectivePriceExpr,
+  getCatalogFacets,
+} = require("../services/catalogFilterService");
 
-const buildProductFilter = (query) => {
+const buildProductFilter = async (query) => {
   const filter = { isActive: true };
 
   const idsRaw = pickQueryValue(query, "ids");
@@ -43,63 +44,27 @@ const buildProductFilter = (query) => {
     return filter;
   }
 
-  assignObjectIdFilter(filter, "category", query.category);
-  assignObjectIdFilter(filter, "weaveType", query.weaveType);
-  assignObjectIdFilter(filter, "style", query.style);
-
-  if (query.onPromotion === "true") filter.onPromotion = true;
-  if (query.featured === "true") filter.isFeatured = true;
-  if (query.isNew === "true") filter.isNew = true;
-
-  if (query.minPrice || query.maxPrice) {
-    filter.salePrice = {};
-    if (query.minPrice) filter.salePrice.$gte = Number(query.minPrice);
-    if (query.maxPrice) filter.salePrice.$lte = Number(query.maxPrice);
-  }
-
-  const searchTerm = pickQueryValue(query, "term");
-  if (searchTerm) {
-    const escaped = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const regex = new RegExp(escaped, "i");
-    filter.$or = [
-      { name: regex },
-      { shortDescription: regex },
-      { material: regex },
-      { slug: regex },
-    ];
-  }
-
-  const sizeId = pickQueryValue(query, "size");
-  const colorId = pickQueryValue(query, "color");
-  const variantMatch = { isActive: true };
-  const sizeOid = toObjectId(sizeId);
-  const colorOid = toObjectId(colorId);
-
-  if (sizeOid) variantMatch.size = sizeOid;
-  if (colorOid) variantMatch.color = colorOid;
-  if (query.inStock === "true") variantMatch.stock = { $gt: 0 };
-
-  if (sizeOid || colorOid || query.inStock === "true") {
-    filter.variants = { $elemMatch: variantMatch };
-  }
-
-  return filter;
+  // Alcance + refinamientos (slugs o ids; precio efectivo, promo vigente, variantes).
+  return buildCatalogFilter(await parseCatalogQuery(query));
 };
 
+/** Orden del listado; `_id` desempata para paginación estable. */
 const getSort = (sort) => {
   switch (sort) {
     case "price_asc":
-      return { salePrice: 1 };
+      return { _effectivePrice: 1, _id: 1 };
     case "price_desc":
-      return { salePrice: -1 };
+      return { _effectivePrice: -1, _id: -1 };
     case "popular":
-      return { salesCount: -1, viewsCount: -1 };
+      return { salesCount: -1, viewsCount: -1, _id: -1 };
     case "name_asc":
-      return { name: 1 };
+      return { name: 1, _id: 1 };
     default:
-      return { createdAt: -1 };
+      return { createdAt: -1, _id: -1 };
   }
 };
+
+const isPriceSort = (sort) => sort === "price_asc" || sort === "price_desc";
 
 const normalizeSlugParam = (raw) =>
   decodeURIComponent(String(raw || ""))
@@ -108,18 +73,26 @@ const normalizeSlugParam = (raw) =>
 
 const canPreviewInactive = (role) => ["superadmin", "admin"].includes(role);
 
+/**
+ * Taxonomía completa (navbar, home, admin) + `facets` contextuales:
+ * opciones con conteo según lo que se está mirando (mismos query params
+ * que GET /products).
+ */
 exports.getCatalogFilters = catchAsync(async (req, res) => {
-  const [categories, colors, sizes, weaveTypes, styles] = await Promise.all([
-    Category.find({ isActive: true }).sort("sortOrder name"),
-    Color.find({ isActive: true }).sort("sortOrder name"),
-    Size.find({ isActive: true }).sort("sortOrder name"),
-    WeaveType.find({ isActive: true }).sort("sortOrder name"),
-    Style.find({ isActive: true }).sort("sortOrder name"),
-  ]);
+  const [categories, colors, sizes, weaveTypes, styles, facets] =
+    await Promise.all([
+      Category.find({ isActive: true }).sort("sortOrder name"),
+      Color.find({ isActive: true }).sort("sortOrder name"),
+      Size.find({ isActive: true }).sort("sortOrder name"),
+      WeaveType.find({ isActive: true }).sort("sortOrder name"),
+      Style.find({ isActive: true }).sort("sortOrder name"),
+      parseCatalogQuery(req.query).then((parsed) => getCatalogFacets(parsed)),
+    ]);
 
   res.status(200).json({
     status: "success",
     filters: { categories, colors, sizes, weaveTypes, styles },
+    facets,
   });
 });
 
@@ -128,15 +101,31 @@ exports.getProducts = catchAsync(async (req, res) => {
   const limit = Math.min(48, Math.max(1, parseInt(req.query.limit, 10) || 12));
   const skip = (page - 1) * limit;
 
-  const filter = buildProductFilter(req.query);
+  const filter = await buildProductFilter(req.query);
   const sort = getSort(req.query.sort);
 
+  // Orden por precio efectivo (con descuento vigente) requiere agregación.
+  const listQuery = isPriceSort(req.query.sort)
+    ? Product.aggregate([
+        { $match: filter },
+        { $addFields: { _effectivePrice: effectivePriceExpr(new Date()) } },
+        { $sort: sort },
+        { $skip: skip },
+        { $limit: limit },
+        { $unset: "_effectivePrice" },
+      ]).then(async (docs) => {
+        const hydrated = docs.map((d) => Product.hydrate(d));
+        await Product.populate(hydrated, populateList);
+        return hydrated;
+      })
+    : Product.find(filter)
+        .populate(populateList)
+        .sort(sort)
+        .skip(skip)
+        .limit(limit);
+
   const [products, total] = await Promise.all([
-    Product.find(filter)
-      .populate(populateList)
-      .sort(sort)
-      .skip(skip)
-      .limit(limit),
+    listQuery,
     Product.countDocuments(filter),
   ]);
 

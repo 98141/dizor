@@ -15,6 +15,8 @@ import {
 } from "@/lib/validators/authSchemas";
 import { getAuthRedirect } from "@/lib/auth/getAuthRedirect";
 import { useSiteConfig } from "@/context/SiteConfigContext";
+import ConsentCheckbox, { isNoticeReady } from "@/components/legal/ConsentCheckbox";
+import { useLegalNotices } from "@/lib/legalNotices";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -30,6 +32,9 @@ export default function RegisterPage() {
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  // Autorización de tratamiento para la cuenta (H-03). Nunca premarcada.
+  const [privacyAuthorization, setPrivacyAuthorization] = useState(false);
+  const { notices, error: noticesError } = useLegalNotices();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -56,7 +61,7 @@ export default function RegisterPage() {
     setMessage("");
 
     try {
-      const data = await register(form);
+      const data = await register({ ...form, privacyAuthorization: privacyAuthorization === true });
       router.push(getAuthRedirect(data.user.role));
     } catch (error) {
       setMessage(error.response?.data?.message || "Error al registrarse.");
@@ -116,8 +121,21 @@ export default function RegisterPage() {
           autoComplete="tel"
         />
 
+        <ConsentCheckbox
+          notices={notices}
+          noticesError={noticesError}
+          purpose="account"
+          checked={privacyAuthorization}
+          onChange={setPrivacyAuthorization}
+        />
+
         <AuthErrorAlert message={message} />
-        <AuthSubmitButton loading={loading}>Registrarme</AuthSubmitButton>
+        <AuthSubmitButton
+          loading={loading}
+          disabled={!isNoticeReady(notices, "account") || !privacyAuthorization}
+        >
+          Registrarme
+        </AuthSubmitButton>
       </form>
     </AuthCard>
   );

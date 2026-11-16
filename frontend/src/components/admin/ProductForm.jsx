@@ -349,8 +349,8 @@ export default function ProductForm({ productId }) {
     shortDescription: form.shortDescription.trim(),
     fullDescription: form.fullDescription.trim(),
     category: form.category,
-    weaveType: form.weaveType,
-    style: form.style,
+    weaveType: form.weaveType || null,
+    style: form.style || null,
     material: form.material.trim() || "Palma de iraca",
     salePrice: Number(form.salePrice),
     internalCost:
@@ -391,8 +391,8 @@ export default function ProductForm({ productId }) {
       return;
     }
 
-    if (!form.category || !form.weaveType || !form.style) {
-      setError("Selecciona categoría, tejido y estilo");
+    if (!form.category) {
+      setError("Selecciona la categoría");
       setSaving(false);
       return;
     }
@@ -444,8 +444,11 @@ export default function ProductForm({ productId }) {
   const categories = meta?.categories || [];
   const colors = meta?.colors || [];
   const sizes = meta?.sizes || [];
-  const weaveTypes = meta?.weaveTypes || [];
-  const styles = meta?.styles || [];
+  // Solo opciones activas (más la ya asignada, para no perderla al editar).
+  const usable = (list, current) =>
+    (list || []).filter((i) => i.isActive !== false || i._id === current);
+  const weaveTypes = usable(meta?.weaveTypes, form.weaveType);
+  const styles = usable(meta?.styles, form.style);
 
   const skuDupSet = new Set();
   const comboDupSet = new Set();
@@ -558,14 +561,13 @@ Fibra natural de Sandoná, Nariño.
             </select>
           </div>
           <div className="admin-form__group">
-            <label htmlFor="weaveType">Tejido *</label>
+            <label htmlFor="weaveType">Tejido</label>
             <select
               id="weaveType"
               value={form.weaveType}
               onChange={(e) => setField("weaveType", e.target.value)}
-              required
             >
-              <option value="">Seleccionar…</option>
+              <option value="">No aplica</option>
               {weaveTypes.map((w) => (
                 <option key={w._id} value={w._id}>
                   {w.name}
@@ -574,14 +576,13 @@ Fibra natural de Sandoná, Nariño.
             </select>
           </div>
           <div className="admin-form__group">
-            <label htmlFor="style">Estilo / horma *</label>
+            <label htmlFor="style">Estilo / horma</label>
             <select
               id="style"
               value={form.style}
               onChange={(e) => setField("style", e.target.value)}
-              required
             >
-              <option value="">Seleccionar…</option>
+              <option value="">No aplica</option>
               {styles.map((s) => (
                 <option key={s._id} value={s._id}>
                   {s.name}
@@ -590,6 +591,12 @@ Fibra natural de Sandoná, Nariño.
             </select>
           </div>
         </div>
+        <p className="image-upload-hint">
+          Tejido y horma describen sombreros: en bolsos o accesorios deja
+          «No aplica» en lo que no corresponda (no uses el nombre de la
+          categoría como horma). Así los filtros del catálogo muestran solo
+          opciones reales.
+        </p>
       </section>
 
       <section className="product-form__section">

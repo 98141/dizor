@@ -67,15 +67,17 @@ const productSchema = new mongoose.Schema(
       ref: "Category",
       required: [true, "La categoría es obligatoria"],
     },
+    // Tejido y horma describen sombreros; en bolsos/accesorios pueden no
+    // aplicar (null) — así no se inventan valores como horma "Bolsos".
     weaveType: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "WeaveType",
-      required: [true, "El tipo de tejido es obligatorio"],
+      default: null,
     },
     style: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Style",
-      required: [true, "El estilo/horma es obligatorio"],
+      default: null,
     },
     material: {
       type: String,

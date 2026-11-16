@@ -6,6 +6,7 @@ import {
   rejectAllPreferences,
   usePreferences,
 } from "@/lib/consentPreferences";
+import { isAnalyticsConfigured } from "@/lib/analytics/config";
 
 // Franja discreta, no un modal a pantalla completa. Desaparece en cuanto
 // existe una decisión guardada (aceptar, rechazar o configurar) y no vuelve
@@ -15,6 +16,10 @@ export default function CookieConsentBanner() {
   const preferences = usePreferences();
 
   if (preferences != null) return null;
+  // Sin ninguna tecnología opcional configurada no hay nada que aceptar ni
+  // rechazar: no se muestra un banner "por costumbre" (H-09). El almacenamiento
+  // necesario se informa en la Política de Cookies.
+  if (!isAnalyticsConfigured()) return null;
 
   return (
     <div className="cookie-banner" role="region" aria-label="Aviso de cookies">

@@ -26,3 +26,9 @@ export const saveAbandonedCart = async (data) => {
   const res = await api.post("/marketing/abandoned-cart", data);
   return res.data;
 };
+
+// Baja pública por token firmado (H-04, H-05).
+export const unsubscribeMarketing = async (token) => {
+  const res = await api.post("/marketing/unsubscribe", { token });
+  return res.data;
+};

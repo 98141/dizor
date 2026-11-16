@@ -5,10 +5,9 @@ export const createSpecialRequest = async (data) => {
   return res.data;
 };
 
+// POST: el correo viaja en el cuerpo, no en la URL (H-06).
 export const trackSpecialRequest = async (requestNumber, email) => {
-  const res = await api.get("/special-requests/track", {
-    params: { requestNumber, email },
-  });
+  const res = await api.post("/special-requests/track", { requestNumber, email });
   return res.data;
 };
 

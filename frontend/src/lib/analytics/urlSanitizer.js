@@ -1,5 +1,15 @@
-// Rutas privadas/administrativas: nunca se reporta page_view para ellas.
-const EXCLUDED_PREFIXES = ["/admin", "/vendedor", "/restablecer", "/favoritos"];
+// Rutas privadas/administrativas o con identificadores sensibles: nunca se
+// envía ningún evento de analítica desde ellas (H-08).
+const EXCLUDED_PREFIXES = [
+  "/admin",
+  "/vendedor",
+  "/restablecer",
+  "/favoritos",
+  "/cuenta",
+  "/pedido",
+  "/baja",
+  "/pqr",
+];
 
 // Solo estos query params aportan valor analítico real (coinciden con el
 // allowlist de filtros del catálogo). Cualquier otro param se descarta.
@@ -31,6 +41,16 @@ export function isExcludedPath(pathname) {
 
 // Devuelve null si la ruta no debe reportarse (privada/administrativa), o
 // la ruta+query saneada lista para enviar como page_path.
+// URL completa saneada para `page_location` (H-06, H-08). gtag.js envía por
+// defecto document.location completo; se sustituye por esta versión sin
+// parámetros no permitidos. Devuelve null en rutas excluidas.
+export function sanitizedPageLocation() {
+  if (typeof window === "undefined") return null;
+  const { origin, pathname, search } = window.location;
+  const path = sanitizePageView(pathname, new URLSearchParams(search));
+  return path ? `${origin}${path}` : null;
+}
+
 export function sanitizePageView(pathname, searchParams) {
   if (isExcludedPath(pathname)) return null;
 

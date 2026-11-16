@@ -3,7 +3,6 @@ const Coupon = require("../models/coupon");
 const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/catchAsync");
 const { resolveCartItems } = require("../services/cartService");
-const { trackAbandonedCart } = require("../services/marketingService");
 const { getStoreSettings, getShippingCost } = require("../services/settingsService");
 
 exports.validateCart = catchAsync(async (req, res) => {
@@ -123,14 +122,9 @@ exports.syncCart = catchAsync(async (req, res, next) => {
     { upsert: true, new: true, setDefaultsOnInsert: true }
   );
 
-  if (items?.length && req.user?.email) {
-    trackAbandonedCart({
-      email: req.user.email,
-      name: req.user.name,
-      items,
-      userId: req.user.id,
-    }).catch(() => {});
-  }
+  // Antes: cada sincronización inscribía al usuario en recordatorios de
+  // carrito abandonado sin que lo pidiera (H-05). Ahora el recordatorio solo
+  // se guarda con autorización expresa desde POST /api/marketing/abandoned-cart.
 
   res.status(200).json({
     status: "success",

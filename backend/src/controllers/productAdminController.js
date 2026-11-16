@@ -19,6 +19,14 @@ const cloudinaryConfigured = () => isCloudinaryConfigured();
 const populateAll =
   "category weaveType style variants.size variants.color";
 
+/** Tejido / horma opcionales: "" (No aplica) → null. */
+function normalizeOptionalRefs(body) {
+  if (!body) return;
+  for (const key of ["weaveType", "style"]) {
+    if (key in body && !body[key]) body[key] = null;
+  }
+}
+
 const canDelete = (role) => ["superadmin", "admin"].includes(role);
 const canViewCosts = (role) => ["superadmin", "admin"].includes(role);
 
@@ -171,6 +179,7 @@ exports.createProduct = catchAsync(async (req, res, next) => {
   if (!canViewCosts(req.user.role)) {
     delete req.body.internalCost;
   }
+  normalizeOptionalRefs(req.body);
 
   await assertUniqueVariantSkus(req.body.variants);
 
@@ -204,6 +213,7 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
   if (!canViewCosts(req.user.role)) {
     delete req.body.internalCost;
   }
+  normalizeOptionalRefs(req.body);
 
   let query = Product.findById(req.params.id);
 

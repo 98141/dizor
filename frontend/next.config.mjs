@@ -46,9 +46,11 @@ const nextConfig = {
         ? "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com"
         : "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com",
       "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: blob: https://res.cloudinary.com https://images.unsplash.com https://www.google-analytics.com https://www.googletagmanager.com",
+      // GA4 envía a subdominios regionales (*.google-analytics.com). Pendiente
+      // de validar contra la documentación de Google al activar GA (H-09, E-9).
+      "img-src 'self' data: blob: https://res.cloudinary.com https://images.unsplash.com https://*.google-analytics.com https://*.googletagmanager.com",
       "font-src 'self'",
-      `connect-src 'self' ${apiOrigin} https://checkout.wompi.co https://sandbox.wompi.co https://production.wompi.co https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com`,
+      `connect-src 'self' ${apiOrigin} https://checkout.wompi.co https://sandbox.wompi.co https://production.wompi.co https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com`,
       // Wompi checkout se abre en un frame/redirect
       "frame-src https://checkout.wompi.co",
       "object-src 'none'",

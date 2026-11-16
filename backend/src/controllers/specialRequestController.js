@@ -6,10 +6,23 @@ const {
   formatRequestPublic,
 } = require("../services/specialRequestService");
 const { sendSpecialRequestEmail } = require("../services/emailService");
+const { requireAuthorization, recordConsent } = require("../services/consentService");
+const { PURPOSES } = require("../config/legalTexts");
 
 exports.createRequest = catchAsync(async (req, res, next) => {
+  // Autorización de tratamiento validada en el servidor (H-03).
+  requireAuthorization(req.body?.privacyAuthorization, PURPOSES.SPECIAL_REQUEST);
+
   try {
     const doc = await createRequest({ body: req.body, user: req.user });
+    await recordConsent({
+      purpose: PURPOSES.SPECIAL_REQUEST,
+      subjectEmail: doc.contact.email,
+      userId: req.user?.id || null,
+      source: `special_request:${doc.type}`,
+      referenceType: "SpecialRequest",
+      referenceId: doc._id,
+    });
     await sendSpecialRequestEmail(doc);
 
     res.status(201).json({
@@ -24,9 +37,12 @@ exports.createRequest = catchAsync(async (req, res, next) => {
   }
 });
 
+// Seguimiento por número + correo en el CUERPO (H-06).
 exports.trackRequest = catchAsync(async (req, res, next) => {
-  const requestNumber = req.query.requestNumber?.trim().toUpperCase();
-  const email = req.query.email?.trim().toLowerCase();
+  const requestNumber =
+    typeof req.body?.requestNumber === "string" ? req.body.requestNumber.trim().toUpperCase() : "";
+  const email =
+    typeof req.body?.email === "string" ? req.body.email.trim().toLowerCase() : "";
 
   if (!requestNumber || !email) {
     return next(
@@ -48,6 +64,14 @@ exports.trackRequest = catchAsync(async (req, res, next) => {
     request: formatRequestPublic(doc),
   });
 });
+
+// Ruta antigua con el correo en la URL: no se procesa (H-06).
+exports.trackRequestLegacy = (req, res) => {
+  res.status(410).json({
+    status: "fail",
+    message: "Esta forma de consulta ya no está disponible. Usa el formulario de seguimiento.",
+  });
+};
 
 exports.getMyRequests = catchAsync(async (req, res) => {
   const filter = {

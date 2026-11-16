@@ -10,6 +10,8 @@ import AuthErrorAlert from "@/components/auth/AuthErrorAlert";
 import { createSpecialRequest } from "@/services/specialRequestService";
 import { getProductBySlug } from "@/services/productService";
 import { trackCustomizationRequest } from "@/lib/analytics/events";
+import ConsentCheckbox, { isNoticeReady } from "@/components/legal/ConsentCheckbox";
+import { useLegalNotices } from "@/lib/legalNotices";
 
 function PersonalizarForm() {
   const router = useRouter();
@@ -30,6 +32,9 @@ function PersonalizarForm() {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  // Autorización de tratamiento de la solicitud (H-03). Nunca premarcada.
+  const [privacyAuthorization, setPrivacyAuthorization] = useState(false);
+  const { notices, error: noticesError } = useLegalNotices();
 
   useEffect(() => {
     if (user) {
@@ -79,6 +84,7 @@ function PersonalizarForm() {
         productId: product?.id,
         productName: product?.name,
         productSlug: product?.slug,
+        privacyAuthorization: privacyAuthorization === true,
       });
       trackCustomizationRequest({
         productId: product?.id,
@@ -208,8 +214,20 @@ function PersonalizarForm() {
             }
           />
 
+          <ConsentCheckbox
+            notices={notices}
+            noticesError={noticesError}
+            purpose="special_request"
+            checked={privacyAuthorization}
+            onChange={setPrivacyAuthorization}
+          />
           <AuthErrorAlert message={error} />
-          <AuthSubmitButton loading={loading}>Enviar solicitud</AuthSubmitButton>
+          <AuthSubmitButton
+            loading={loading}
+            disabled={!isNoticeReady(notices, "special_request") || !privacyAuthorization}
+          >
+            Enviar solicitud
+          </AuthSubmitButton>
         </form>
       </div>
 

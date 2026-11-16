@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AuthFormField from "@/components/auth/AuthFormField";
 import AuthSubmitButton from "@/components/auth/AuthSubmitButton";
 import AuthErrorAlert from "@/components/auth/AuthErrorAlert";
@@ -25,6 +25,20 @@ export default function SeguimientoPage() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Enlaces desde la confirmación traen solo ?order=. Enlaces antiguos podían
+  // traer también el correo: se ignora y se elimina de la barra de
+  // direcciones (H-06). Esto no borra el historial ya existente.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const fromUrl = (params.get("order") || "").trim();
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- prellenado desde la URL tras hidratar
+    if (fromUrl) setOrderNumber(fromUrl);
+    if ([...params.keys()].some((k) => k !== "order")) {
+      const clean = fromUrl ? `/seguimiento?order=${encodeURIComponent(fromUrl)}` : "/seguimiento";
+      window.history.replaceState(window.history.state, "", clean);
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

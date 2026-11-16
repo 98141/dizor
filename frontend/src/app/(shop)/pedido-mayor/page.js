@@ -10,6 +10,8 @@ import AuthErrorAlert from "@/components/auth/AuthErrorAlert";
 import { createSpecialRequest } from "@/services/specialRequestService";
 import { getCheckoutConfig } from "@/services/checkoutService";
 import { trackWholesaleRequest } from "@/lib/analytics/events";
+import ConsentCheckbox, { isNoticeReady } from "@/components/legal/ConsentCheckbox";
+import { useLegalNotices } from "@/lib/legalNotices";
 
 export default function PedidoMayorPage() {
   const router = useRouter();
@@ -29,6 +31,9 @@ export default function PedidoMayorPage() {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  // Autorización de tratamiento de la solicitud (H-03). Nunca premarcada.
+  const [privacyAuthorization, setPrivacyAuthorization] = useState(false);
+  const { notices, error: noticesError } = useLegalNotices();
 
   useEffect(() => {
     if (user) {
@@ -57,6 +62,7 @@ export default function PedidoMayorPage() {
         ...form,
         estimatedBudget:
           form.estimatedBudget === "" ? null : Number(form.estimatedBudget),
+        privacyAuthorization: privacyAuthorization === true,
       });
       trackWholesaleRequest({
         sourcePage: "pedido-mayor",
@@ -188,8 +194,20 @@ export default function PedidoMayorPage() {
             }
           />
 
+          <ConsentCheckbox
+            notices={notices}
+            noticesError={noticesError}
+            purpose="special_request"
+            checked={privacyAuthorization}
+            onChange={setPrivacyAuthorization}
+          />
           <AuthErrorAlert message={error} />
-          <AuthSubmitButton loading={loading}>Solicitar cotización</AuthSubmitButton>
+          <AuthSubmitButton
+            loading={loading}
+            disabled={!isNoticeReady(notices, "special_request") || !privacyAuthorization}
+          >
+            Solicitar cotización
+          </AuthSubmitButton>
         </form>
       </div>
 

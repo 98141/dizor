@@ -9,6 +9,7 @@ import {
   useConsentPanelOpen,
   usePreferences,
 } from "@/lib/consentPreferences";
+import { isAnalyticsConfigured } from "@/lib/analytics/config";
 
 export default function CookiePreferencesPanel() {
   const isOpen = useConsentPanelOpen();
@@ -37,6 +38,8 @@ export default function CookiePreferencesPanel() {
   }, [isOpen]);
 
   if (!isOpen) return null;
+
+  const analyticsAvailable = isAnalyticsConfigured();
 
   const handleSave = () => {
     savePreferences({ analytics: analyticsDraft });
@@ -102,15 +105,20 @@ export default function CookiePreferencesPanel() {
           <div className="cookie-category__info">
             <p className="cookie-category__title">Analíticas</p>
             <p className="cookie-category__desc">
-              Nos ayudan a entender cómo se usa el sitio (páginas vistas,
-              productos populares) mediante Google Analytics. No identifican
-              a personas.
+              Medirían cómo se usa el sitio (páginas vistas, productos
+              populares) mediante Google Analytics, solo con tu permiso.
             </p>
+            {!analyticsAvailable && (
+              <p className="cookie-category__note">
+                Actualmente no utilizamos cookies analíticas.
+              </p>
+            )}
           </div>
           <label className="cookie-toggle">
             <input
               type="checkbox"
-              checked={analyticsDraft}
+              checked={analyticsAvailable && analyticsDraft}
+              disabled={!analyticsAvailable}
               onChange={(e) => setAnalyticsDraft(e.target.checked)}
             />
             <span className="cookie-toggle__track" />

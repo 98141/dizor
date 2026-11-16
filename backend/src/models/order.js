@@ -139,6 +139,31 @@ const orderSchema = new mongoose.Schema(
     ivaPercent: { type: Number, default: 0 },
     freeShippingApplied: { type: Boolean, default: false },
     freeShippingThreshold: { type: Number, default: 0 },
+
+    // Acceso limitado del comprador a la confirmación de SU pedido (H-06).
+    // Solo se guarda el hash; el token en claro se entrega una vez al crear
+    // el pedido y caduca. Sustituye al correo en la URL como "credencial".
+    guestAccess: {
+      tokenHash: { type: String, default: null, select: false },
+      expiresAt: { type: Date, default: null, select: false },
+    },
+
+    // Evidencia de lo aceptado al confirmar (H-19). Versiones fijadas por el
+    // servidor (config/legalTexts.js), nunca por el cliente.
+    legal: {
+      privacyNoticeVersion: { type: String, default: null },
+      privacyNoticeStatus: { type: String, default: null },
+      termsVersion: { type: String, default: null },
+      acceptedAt: { type: Date, default: null },
+    },
+
+    // Estado del acuse de recibo al comprador (H-20).
+    buyerReceipt: {
+      claimedAt: { type: Date, default: null },
+      sentAt: { type: Date, default: null },
+      attempts: { type: Number, default: 0 },
+      lastError: { type: String, default: "" },
+    },
   },
   { timestamps: true }
 );

@@ -15,10 +15,16 @@ export const createOrder = async (payload) => {
   return res.data;
 };
 
+// POST: el correo viaja en el cuerpo, no en la URL (H-06).
 export const trackOrder = async (orderNumber, email) => {
-  const res = await api.get("/checkout/track", {
-    params: { orderNumber, email },
-  });
+  const res = await api.post("/checkout/track", { orderNumber, email });
+  return res.data;
+};
+
+// Confirmación protegida: dueño autenticado o token de acceso emitido al
+// crear el pedido (H-06).
+export const lookupOrderConfirmation = async (orderNumber, accessToken) => {
+  const res = await api.post("/checkout/orders/lookup", { orderNumber, accessToken });
   return res.data;
 };
 

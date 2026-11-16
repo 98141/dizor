@@ -19,6 +19,14 @@ const newsletterSubscriberSchema = new mongoose.Schema(
     },
     isActive: { type: Boolean, default: true },
     unsubscribedAt: { type: Date, default: null },
+    // Última evidencia de autorización comercial (ConsentRecord). Los
+    // suscriptores anteriores a esta corrección no la tienen: se conservan,
+    // pero quedan excluidos de exportaciones/envíos (H-04).
+    lastConsentRecord: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ConsentRecord",
+      default: null,
+    },
   },
   { timestamps: true }
 );

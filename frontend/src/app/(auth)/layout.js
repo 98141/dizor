@@ -10,6 +10,7 @@ import "@/styles/components/auth-card.css";
 import "@/styles/components/auth-form.css";
 import "@/styles/pages/cuenta.css";
 import "@/styles/components/cookie-consent.css";
+import "@/styles/components/consent-check.css";
 
 export const metadata = {
   robots: { index: false, follow: false },

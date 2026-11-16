@@ -32,6 +32,9 @@ import {
 } from "@/lib/analytics/events";
 import { mapCartItemToItem } from "@/lib/analytics/productMapper";
 import { hasPurchaseBeenTracked, markPurchaseTracked } from "@/lib/analytics/purchaseDedup";
+import ConsentCheckbox, { isNoticeReady } from "@/components/legal/ConsentCheckbox";
+import { useLegalNotices } from "@/lib/legalNotices";
+import { saveOrderAccess, confirmationPath } from "@/lib/orderAccess";
 
 const STEPS = ["Datos", "Envío", "Entrega", "Pago", "Confirmar"];
 
@@ -78,10 +81,19 @@ export default function CheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState("contra_entrega");
   const [customerNotes, setCustomerNotes] = useState("");
 
+  // Autorización de tratamiento para gestionar el pedido (H-03). Nunca
+  // preseleccionada; el servidor la valida de nuevo.
+  const [privacyAuthorization, setPrivacyAuthorization] = useState(false);
+  const { notices, error: noticesError } = useLegalNotices();
+  const privacyNoticeReady = isNoticeReady(notices, "order_processing");
+
+  // Líneas del pedido con precios calculados por el servidor (H-19).
+  const [quoteItems, setQuoteItems] = useState([]);
+
   // ─── Estado Nequi API ──────────────────────────────────────────────────────
   const [nequiPhone, setNequiPhone] = useState("");
 
-  // nequiPending: { orderId, orderNumber, total, phone, buyerEmail, buyerName }
+  // nequiPending: { orderId, orderNumber, total, phone, … } (sin correo ni nombre)
   const [nequiPending, setNequiPending]   = useState(null);
   const [nequiError, setNequiError]       = useState("");
   const [nequiRetrying, setNequiRetrying] = useState(false);
@@ -140,8 +152,10 @@ export default function CheckoutPage() {
     try {
       const data = await calculateCheckout(toApiItems(), department);
       setTotals(data.totals);
+      setQuoteItems(Array.isArray(data.items) ? data.items : []);
     } catch {
       setTotals(null);
+      setQuoteItems([]);
     }
   };
 
@@ -186,21 +200,9 @@ export default function CheckoutPage() {
             markPurchaseTracked(nequiPending.orderNumber);
           }
 
-          const params = new URLSearchParams({
-            order:       nequiPending.orderNumber,
-            total:       nequiPending.total,
-            payment:     "nequi_api",
-            email:       nequiPending.buyerEmail,
-            name:        nequiPending.buyerName,
-            subtotal:    nequiPending.subtotal ?? nequiPending.total,
-            discount:    nequiPending.discount ?? 0,
-            couponCode:  nequiPending.couponCode ?? "",
-            iva:         nequiPending.iva ?? 0,
-            ivaPercent:  nequiPending.ivaPercent ?? 0,
-            shipping:    nequiPending.shipping ?? 0,
-            freeShipping: nequiPending.freeShipping ?? "0",
-          });
-          router.push(`/pedido/confirmacion?${params.toString()}`);
+          // Sin datos personales en la URL (H-06): la confirmación consulta
+          // el pedido al servidor con el token de acceso.
+          router.push(confirmationPath(nequiPending.orderNumber));
         } else if (data.orderStatus === "cancelado") {
           clearInterval(interval);
           setNequiError("El pago fue rechazado o expiró en la app Nequi.");
@@ -286,7 +288,12 @@ export default function CheckoutPage() {
         couponCode:      appliedCoupon?.code || null,
         idempotencyKey,
         nequiPhone:      paymentMethod === "nequi_api" ? normalizeNequiPhone(nequiPhone) : undefined,
+        privacyAuthorization: privacyAuthorization === true,
       });
+
+      // Token de acceso a la confirmación (H-06). Se guarda antes de
+      // cualquier redirección, incluida la de Wompi.
+      saveOrderAccess(data.order.orderNumber, data.accessToken);
 
       clearCart();
       clearCoupon();
@@ -295,10 +302,6 @@ export default function CheckoutPage() {
 
       // Wompi: redirigir al checkout externo
       if (data.paymentUrl) {
-        try {
-          sessionStorage.setItem("dizor_guest_email", buyer.email);
-          sessionStorage.setItem("dizor_guest_name", buyer.name);
-        } catch {}
         window.location.href = data.paymentUrl;
         return;
       }
@@ -310,8 +313,6 @@ export default function CheckoutPage() {
           orderNumber: data.order.orderNumber,
           total:       data.order.total,
           phone:       normalizeNequiPhone(nequiPhone),
-          buyerEmail:  buyer.email,
-          buyerName:   buyer.name,
           subtotal:    totals?.subtotal ?? data.order.total,
           discount:    appliedCoupon?.discountAmount || 0,
           couponCode:  appliedCoupon?.code || "",
@@ -325,7 +326,6 @@ export default function CheckoutPage() {
       }
 
       // Otros métodos: ir directo a confirmación
-      const couponDiscount = appliedCoupon?.discountAmount || 0;
 
       // purchase solo para contra_entrega: el pedido queda confirmado y
       // comprometido de inmediato (stock descontado) aunque el cobro sea
@@ -347,21 +347,9 @@ export default function CheckoutPage() {
         markPurchaseTracked(data.order.orderNumber);
       }
 
-      const params = new URLSearchParams({
-        order:        data.order.orderNumber,
-        total:        data.order.total,
-        payment:      data.order.paymentMethod,
-        email:        buyer.email,
-        name:         buyer.name,
-        subtotal:     totals?.subtotal ?? 0,
-        discount:     couponDiscount,
-        couponCode:   appliedCoupon?.code || "",
-        iva:          totals?.taxTotal ?? 0,
-        ivaPercent:   totals?.ivaPercent ?? 0,
-        shipping:     totals?.shippingCost ?? 0,
-        freeShipping: totals?.freeShippingApplied ? "1" : "0",
-      });
-      router.push(`/pedido/confirmacion?${params.toString()}`);
+      // Solo el número de pedido en la URL (H-06); el resto lo devuelve el
+      // servidor a quien tenga el token o sea el dueño autenticado.
+      router.push(confirmationPath(data.order.orderNumber));
     } catch (err) {
       setError(err.response?.data?.message || "No se pudo crear el pedido");
       submittingRef.current = false;
@@ -679,6 +667,47 @@ export default function CheckoutPage() {
       {step === 4 && (
         <div className="checkout-card">
           <h2>Revisión y confirmación</h2>
+
+          {/* Resumen del pedido antes de confirmar (H-19): productos,
+              cantidades, precio unitario y subtotal por línea, calculados
+              por el servidor. Se puede corregir volviendo atrás o al carrito. */}
+          <table className="checkout-summary-table">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th className="num">Cant.</th>
+                <th className="num">Precio unitario</th>
+                <th className="num">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {quoteItems.map((it) => (
+                <tr key={`${it.productId}-${it.variantId}`}>
+                  <td>
+                    {it.productName}
+                    {[it.sizeName, it.colorName].filter(Boolean).length > 0 && (
+                      <> · {[it.sizeName, it.colorName].filter(Boolean).join(" · ")}</>
+                    )}
+                  </td>
+                  <td className="num">{it.quantity}</td>
+                  <td className="num">{formatCOP(it.unitPrice)}</td>
+                  <td className="num">{formatCOP(it.lineTotal)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p className="no-print" style={{ fontSize: "0.85rem", margin: "0 0 1rem" }}>
+            ¿Algo no está bien? Usa el botón Atrás o{" "}
+            <Link href="/carrito">vuelve al carrito</Link> para corregir.{" "}
+            <button
+              type="button"
+              className="checkout-btn"
+              style={{ padding: "0.25rem 0.75rem", fontSize: "0.8rem" }}
+              onClick={() => window.print()}
+            >
+              Imprimir resumen
+            </button>
+          </p>
           <div className="checkout-review-item">
             <span>Cliente</span>
             <span>{buyer.name}</span>
@@ -760,6 +789,13 @@ export default function CheckoutPage() {
               onChange={(e) => setCustomerNotes(e.target.value)}
             />
           </div>
+          <ConsentCheckbox
+            notices={notices}
+            noticesError={noticesError}
+            purpose="order_processing"
+            checked={privacyAuthorization}
+            onChange={setPrivacyAuthorization}
+          />
           <AuthErrorAlert message={error} />
         </div>
       )}
@@ -792,7 +828,7 @@ export default function CheckoutPage() {
           <button
             type="button"
             className="checkout-btn checkout-btn--primary"
-            disabled={loading || !totals}
+            disabled={loading || !totals || !privacyNoticeReady || !privacyAuthorization}
             onClick={handleSubmit}
           >
             {loading ? "Procesando..." : "Confirmar pedido"}

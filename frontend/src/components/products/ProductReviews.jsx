@@ -6,6 +6,8 @@ import {
   getProductReviews,
   createCustomerReview,
 } from "@/services/reviewService";
+import ConsentCheckbox, { isNoticeReady } from "@/components/legal/ConsentCheckbox";
+import { useLegalNotices } from "@/lib/legalNotices";
 
 export default function ProductReviews({ productId, productName }) {
   const { user, loadingAuth } = useAuth();
@@ -19,6 +21,9 @@ export default function ProductReviews({ productId, productName }) {
   });
   const [status, setStatus] = useState("idle");
   const [message, setMessage] = useState("");
+  // Autorización para publicar nombre y ciudad (H-14, H-03). Nunca premarcada.
+  const [publicationAuthorization, setPublicationAuthorization] = useState(false);
+  const { notices, error: noticesError } = useLegalNotices();
 
   useEffect(() => {
     if (!productId) return;
@@ -55,10 +60,12 @@ export default function ProductReviews({ productId, productName }) {
         comment: form.comment,
         city: form.city,
         authorName: form.authorName || user?.name,
+        publicationAuthorization: publicationAuthorization === true,
       });
       setStatus("success");
       setMessage("Reseña enviada. Se publicará cuando sea aprobada.");
       setForm((f) => ({ ...f, comment: "", city: "" }));
+      setPublicationAuthorization(false);
     } catch (err) {
       setStatus("error");
       setMessage(
@@ -90,6 +97,9 @@ export default function ProductReviews({ productId, productName }) {
               <footer>
                 <strong>{r.authorName}</strong>
                 {r.city ? ` · ${r.city}` : ""}
+                {r.isBrandReview ? (
+                  <span className="review-brand-label">Publicada por la tienda</span>
+                ) : null}
               </footer>
             </li>
           ))}
@@ -115,7 +125,7 @@ export default function ProductReviews({ productId, productName }) {
             </select>
           </label>
           <label>
-            Ciudad (opcional)
+            Ciudad (opcional; se mostrará públicamente)
             <input
               type="text"
               value={form.city}
@@ -136,7 +146,22 @@ export default function ProductReviews({ productId, productName }) {
               }
             />
           </label>
-          <button type="submit" disabled={status === "loading"}>
+          <ConsentCheckbox
+            notices={notices}
+            noticesError={noticesError}
+            purpose="review_publication"
+            checked={publicationAuthorization}
+            onChange={setPublicationAuthorization}
+            compact
+          />
+          <button
+            type="submit"
+            disabled={
+              status === "loading" ||
+              !isNoticeReady(notices, "review_publication") ||
+              !publicationAuthorization
+            }
+          >
             {status === "loading" ? "Enviando…" : "Enviar reseña"}
           </button>
           {message ? (

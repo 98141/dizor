@@ -5,6 +5,8 @@ import {
   subscribeNewsletter,
   marketingError,
 } from "@/services/marketingService";
+import ConsentCheckbox, { isNoticeReady } from "@/components/legal/ConsentCheckbox";
+import { useLegalNotices } from "@/lib/legalNotices";
 
 export default function NewsletterSignup({
   title = "Newsletter Dizor prueba",
@@ -16,19 +18,34 @@ export default function NewsletterSignup({
 }) {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  // Autorización comercial expresa (H-04): desmarcada por defecto y
+  // obligatoria solo para este formulario, cuyo único fin es la suscripción.
+  const [marketingConsent, setMarketingConsent] = useState(false);
+  const { notices, error: noticesError } = useLegalNotices();
   const [status, setStatus] = useState("idle");
   const [message, setMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!marketingConsent) {
+      setStatus("error");
+      setMessage("Marca la casilla para confirmar que quieres recibir correos.");
+      return;
+    }
     setStatus("loading");
     setMessage("");
     try {
-      const data = await subscribeNewsletter({ email, name, source });
+      const data = await subscribeNewsletter({
+        email,
+        name,
+        source,
+        marketingConsent: marketingConsent === true,
+      });
       setStatus("success");
       setMessage(data.message || successMessage);
       setEmail("");
       setName("");
+      setMarketingConsent(false);
       onSuccess?.();
     } catch (err) {
       setStatus("error");
@@ -63,11 +80,24 @@ export default function NewsletterSignup({
         <button
           type="submit"
           className="newsletter__btn"
-          disabled={status === "loading"}
+          disabled={
+            status === "loading" ||
+            !isNoticeReady(notices, "marketing_newsletter") ||
+            !marketingConsent
+          }
         >
           {status === "loading" ? "Enviando…" : "Suscribirme"}
         </button>
       </form>
+      <ConsentCheckbox
+        notices={notices}
+        noticesError={noticesError}
+        purpose="marketing_newsletter"
+        checked={marketingConsent}
+        onChange={setMarketingConsent}
+        id={`consent-newsletter-${source}`}
+        compact
+      />
       {message && (
         <p
           className={`newsletter__feedback${status === "error" ? " newsletter__feedback--error" : ""}`}

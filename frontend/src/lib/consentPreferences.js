@@ -2,53 +2,24 @@
 
 import { useSyncExternalStore } from "react";
 import { grantAnalyticsConsent, denyAnalyticsConsent } from "@/lib/analytics/consent";
+import { CONSENT_VERSION, readValidRecord, writeRecord } from "@/lib/consentRecord";
+import { isAnalyticsConfigured } from "@/lib/analytics/config";
 
-// Registro estructurado de preferencias de cookies (Sprint 4). No reemplaza
-// el adaptador técnico de analítica del Sprint 3 (src/lib/analytics/consent.js)
-// — lo orquesta: guardar preferencias aquí llama a
-// grantAnalyticsConsent()/denyAnalyticsConsent() para que Analytics
-// reaccione (Sprint 3 sigue siendo el único lugar que sabe de gtag).
+// Registro estructurado de preferencias de cookies. Orquesta el adaptador
+// técnico de analítica (src/lib/analytics/consent.js), que deriva su estado
+// de este mismo registro versionado (H-07): una sola fuente de verdad.
 //
 // Solo se guarda: la decisión (por categoría), fecha y versión de la
 // política. Nunca datos personales.
 
-const STORAGE_KEY = "dizor_cookie_preferences";
-// Subir este valor si cambia sustancialmente la política de cookies:
-// invalida las decisiones ya guardadas y vuelve a mostrar el banner.
-export const CONSENT_VERSION = "1";
+export { CONSENT_VERSION };
 
 let preferences = null; // null = todavía sin decisión guardada (o versión obsoleta)
 const listeners = new Set();
 
-function loadStoredPreferences() {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    if (parsed?.version !== CONSENT_VERSION) return null;
-    return parsed;
-  } catch {
-    return null;
-  }
-}
-
-function persist(record) {
-  if (typeof window === "undefined") return;
-  try {
-    if (record) {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(record));
-    } else {
-      window.localStorage.removeItem(STORAGE_KEY);
-    }
-  } catch {
-    // localStorage no disponible (modo privado, cuotas, etc.) — no bloquear
-  }
-}
-
 function setPreferences(record) {
   preferences = record;
-  persist(record);
+  writeRecord(record);
   listeners.forEach((cb) => {
     try {
       cb(preferences);
@@ -59,7 +30,7 @@ function setPreferences(record) {
 }
 
 if (typeof window !== "undefined") {
-  preferences = loadStoredPreferences();
+  preferences = readValidRecord();
 }
 
 export function getStoredPreferences() {
@@ -83,7 +54,9 @@ export function usePreferences() {
 // todavía, así que nunca se persiste como aceptado bajo ninguna circunstancia.
 export function savePreferences({ analytics }) {
   const record = {
-    analytics: Boolean(analytics),
+    // Sin un servicio de analítica configurado no hay nada que aceptar
+    // (H-09): la categoría se guarda siempre como no aceptada.
+    analytics: Boolean(analytics) && isAnalyticsConfigured(),
     marketing: false,
     timestamp: new Date().toISOString(),
     version: CONSENT_VERSION,

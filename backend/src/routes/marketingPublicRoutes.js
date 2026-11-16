@@ -17,6 +17,7 @@ router.post(
   subscribeLimiter,
   marketingPublicController.subscribe
 );
+router.post("/unsubscribe", subscribeLimiter, marketingPublicController.unsubscribe);
 router.post(
   "/abandoned-cart",
   subscribeLimiter,

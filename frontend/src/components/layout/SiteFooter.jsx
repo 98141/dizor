@@ -65,6 +65,19 @@ export default async function SiteFooter() {
             ))}
             <Link href="/politica-de-privacidad">Política de privacidad</Link>
             <Link href="/politica-de-cookies">Política de cookies</Link>
+            {/* Canal PQR: visible solo cuando el propietario lo habilite (E-2). */}
+            {process.env.NEXT_PUBLIC_PQR_ENABLED === "true" && (
+              <Link href="/pqr">Peticiones, quejas y reclamos</Link>
+            )}
+            {/* Enlace a la autoridad de protección al consumidor (Ley 1480,
+                art. 50, parágrafo — H-16). Informativo: no implica aval. */}
+            <a
+              href="https://www.sic.gov.co/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Superintendencia de Industria y Comercio (SIC)
+            </a>
             {pages.length === 0 && (
               <span className="site-footer__muted">Próximamente</span>
             )}

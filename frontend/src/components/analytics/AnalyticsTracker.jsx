@@ -64,10 +64,17 @@ function ConsentModeSync({ consentGranted }) {
 // consentimiento otorgado (ver lib/analytics/consent.js) — mientras el
 // banner del Sprint 4 no registre una decisión, el consentimiento por
 // defecto es denegado y esa parte permanece inactiva.
+// Paneles de personal: sin banner ni analítica (H-08).
+const STAFF_PREFIXES = ["/admin", "/vendedor"];
+
 export default function AnalyticsTracker() {
   const consentGranted = useAnalyticsConsent();
+  const pathname = usePathname() || "";
 
   if (!isAnalyticsConfigured()) return null;
+  if (STAFF_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`))) {
+    return null;
+  }
 
   return (
     <>

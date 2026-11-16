@@ -5,12 +5,15 @@ import { useSearchParams, useRouter } from "next/navigation";
 import ProductCard from "@/components/products/ProductCard";
 import CatalogFilters, {
   CatalogFiltersSidebar,
+  REFINE_KEYS,
+  getVisibleFilters,
 } from "@/components/catalog/CatalogFilters";
 import CatalogPromo from "@/components/cms/CatalogPromo";
 import { getCatalogFilters, getProducts } from "@/services/productService";
 import { trackCatalogFilter, trackViewItemList } from "@/lib/analytics/events";
 import { mapProductToItem } from "@/lib/analytics/productMapper";
-import { taxonomyId } from "@/lib/catalogTaxonomy";
+import { matchesTaxonomy, parseValueList } from "@/lib/catalogTaxonomy";
+import { formatCOP } from "@/lib/formatCurrency";
 
 const FILTER_PARAM_KEYS = [
   "term",
@@ -27,84 +30,78 @@ const FILTER_PARAM_KEYS = [
   "isNew",
 ];
 
-/** Dimensiones que cuentan para “Filtros (N)” — no incluye sort ni page. */
-const ACTIVE_FILTER_KEYS = FILTER_PARAM_KEYS;
+/**
+ * Alcance de la página (navbar / búsqueda): se conserva al limpiar filtros y
+ * no se muestra como chip ni cuenta como filtro.
+ */
+const SCOPE_KEYS = ["term", "category", "featured", "isNew"];
 
-function lookupName(list, id) {
-  if (!id || !Array.isArray(list)) return null;
-  const found = list.find((item) => taxonomyId(item) === String(id));
-  return found?.name || null;
+/** URL del catálogo con comas legibles en multiselección (`size=s,m`). */
+function catalogUrl(params) {
+  const qs = params.toString().replace(/%2C/gi, ",");
+  return qs ? `/catalogo?${qs}` : "/catalogo";
 }
 
-function buildActiveChips(searchParams, filterOptions) {
+/** Nombre de una opción por slug o id. */
+function lookupName(list, value) {
+  if (!value || !Array.isArray(list)) return null;
+  return list.find((item) => matchesTaxonomy(item, value))?.name || null;
+}
+
+/** Nombre desde facetas (contextuales) o, si no está, desde la taxonomía. */
+function facetName(facets, filterOptions, key, value) {
+  return (
+    lookupName(facets?.[key], value) || lookupName(filterOptions?.[key], value)
+  );
+}
+
+/** Grupos multiselección: parámetro, lista en facetas y formato del chip. */
+const MULTI_GROUPS = [
+  { param: "weaveType", facet: "weaveTypes", label: (n) => n || "Tejido" },
+  { param: "style", facet: "styles", label: (n) => n || "Horma" },
+  { param: "size", facet: "sizes", label: (n) => `Talla ${n || ""}`.trim() },
+  { param: "color", facet: "colors", label: (n) => n || "Color" },
+];
+
+/**
+ * Chips solo de refinamientos (la categoría ya es el título de la página):
+ * uno por cada valor seleccionado, para quitarlos de a uno.
+ */
+function buildActiveChips(searchParams, filterOptions, facets) {
   const chips = [];
-  const cat = searchParams.get("category");
-  if (cat) {
-    chips.push({
-      key: "category",
-      label: lookupName(filterOptions?.categories, cat) || "Categoría",
-    });
-  }
-  const weave = searchParams.get("weaveType");
-  if (weave) {
-    chips.push({
-      key: "weaveType",
-      label: lookupName(filterOptions?.weaveTypes, weave) || "Tejido",
-    });
-  }
-  const style = searchParams.get("style");
-  if (style) {
-    chips.push({
-      key: "style",
-      label: lookupName(filterOptions?.styles, style) || "Horma",
-    });
-  }
-  const size = searchParams.get("size");
-  if (size) {
-    chips.push({
-      key: "size",
-      label: lookupName(filterOptions?.sizes, size) || "Talla",
-    });
-  }
-  const color = searchParams.get("color");
-  if (color) {
-    chips.push({
-      key: "color",
-      label: lookupName(filterOptions?.colors, color) || "Color",
-    });
+  for (const group of MULTI_GROUPS) {
+    for (const value of parseValueList(searchParams.get(group.param))) {
+      chips.push({
+        key: `${group.param}:${value}`,
+        param: group.param,
+        value,
+        label: group.label(facetName(facets, filterOptions, group.facet, value)),
+      });
+    }
   }
   const minPrice = searchParams.get("minPrice");
   const maxPrice = searchParams.get("maxPrice");
   if (minPrice || maxPrice) {
     const parts = [];
-    if (minPrice) parts.push(`desde ${minPrice}`);
-    if (maxPrice) parts.push(`hasta ${maxPrice}`);
-    chips.push({ key: "price", label: `Precio ${parts.join(" ")}` });
+    if (minPrice) parts.push(`desde ${formatCOP(Number(minPrice))}`);
+    if (maxPrice) parts.push(`hasta ${formatCOP(Number(maxPrice))}`);
+    chips.push({ key: "price", param: "price", label: `Precio ${parts.join(" ")}` });
   }
   if (searchParams.get("inStock") === "true") {
-    chips.push({ key: "inStock", label: "Disponibles" });
+    chips.push({ key: "inStock", param: "inStock", label: "Disponibles" });
   }
   if (searchParams.get("onPromotion") === "true") {
-    chips.push({ key: "onPromotion", label: "En promoción" });
-  }
-  if (searchParams.get("featured") === "true") {
-    chips.push({ key: "featured", label: "Destacados" });
-  }
-  if (searchParams.get("isNew") === "true") {
-    chips.push({ key: "isNew", label: "Novedades" });
-  }
-  const term = searchParams.get("term")?.trim();
-  if (term) {
-    chips.push({ key: "term", label: `“${term}”` });
+    chips.push({ key: "onPromotion", param: "onPromotion", label: "En promoción" });
   }
   return chips;
 }
 
+/** Filtros activos: cada valor de un grupo multiselección cuenta como uno. */
 function countActiveFilters(searchParams) {
   let n = 0;
-  for (const key of ACTIVE_FILTER_KEYS) {
+  for (const key of REFINE_KEYS) {
     if (key === "minPrice" || key === "maxPrice") continue;
-    if (searchParams.get(key)) n += 1;
+    n += parseValueList(searchParams.get(key)).length;
   }
   if (searchParams.get("minPrice") || searchParams.get("maxPrice")) n += 1;
   return n;
@@ -116,6 +113,7 @@ export default function CatalogoContent({
   initialPage,
   initialTotalPages,
   initialFilterOptions,
+  initialFacets,
   initialBanner,
 }) {
   const searchParams = useSearchParams();
@@ -126,6 +124,7 @@ export default function CatalogoContent({
   const [filterOptions, setFilterOptions] = useState(
     initialFilterOptions || null
   );
+  const [facets, setFacets] = useState(initialFacets || null);
   const [products, setProducts] = useState(initialProducts || []);
   const [loading, setLoading] = useState(!hasServerProducts);
   const [total, setTotal] = useState(initialTotal ?? 0);
@@ -136,7 +135,8 @@ export default function CatalogoContent({
   const [loadError, setLoadError] = useState("");
 
   const isInitialProductsLoad = useRef(hasServerProducts);
-  const isInitialFiltersLoad = useRef(Boolean(initialFilterOptions));
+  const isInitialFiltersLoad = useRef(Boolean(initialFacets));
+  const facetsRequestId = useRef(0);
 
   const buildParamsFromUrl = useCallback(() => {
     const params = {};
@@ -173,13 +173,24 @@ export default function CatalogoContent({
     }
   }, [buildParamsFromUrl, searchParams]);
 
+  // Facetas contextuales: se recalculan con cada cambio de alcance/filtros.
   useEffect(() => {
     if (isInitialFiltersLoad.current) {
       isInitialFiltersLoad.current = false;
       return;
     }
-    getCatalogFilters().then((data) => setFilterOptions(data.filters));
-  }, []);
+    const requestId = ++facetsRequestId.current;
+    const { sort: _sort, ...params } = buildParamsFromUrl();
+    getCatalogFilters(params)
+      .then((data) => {
+        if (requestId !== facetsRequestId.current) return; // respuesta vieja
+        if (data.filters) setFilterOptions(data.filters);
+        setFacets(data.facets || null);
+      })
+      .catch(() => {
+        if (requestId === facetsRequestId.current) setFacets(null);
+      });
+  }, [buildParamsFromUrl]);
 
   useEffect(() => {
     const legacy =
@@ -190,7 +201,7 @@ export default function CatalogoContent({
     params.delete("search");
     params.set("term", legacy);
     params.delete("page");
-    router.replace(`/catalogo?${params.toString()}`);
+    router.replace(catalogUrl(params));
   }, [searchParams, router]);
 
   useEffect(() => {
@@ -205,8 +216,8 @@ export default function CatalogoContent({
   }, [searchParams, loadProducts, buildParamsFromUrl]);
 
   const searchQuery = searchParams.get("term")?.trim();
-  const categoryId = searchParams.get("category");
-  const categoryName = lookupName(filterOptions?.categories, categoryId);
+  const categoryValue = searchParams.get("category");
+  const categoryName = lookupName(filterOptions?.categories, categoryValue);
 
   const pageTitle = searchQuery
     ? `Resultados: "${searchQuery}"`
@@ -230,9 +241,14 @@ export default function CatalogoContent({
   );
 
   const activeChips = useMemo(
-    () => buildActiveChips(searchParams, filterOptions),
-    [searchParams, filterOptions]
+    () => buildActiveChips(searchParams, filterOptions, facets),
+    [searchParams, filterOptions, facets]
   );
+
+  const showFilters = useMemo(() => {
+    if (activeFilterCount > 0) return true;
+    return getVisibleFilters(facets, draftFilters, filterOptions).any;
+  }, [activeFilterCount, facets, draftFilters, filterOptions]);
 
   useEffect(() => {
     if (loading || !products.length) return;
@@ -274,32 +290,50 @@ export default function CatalogoContent({
     Object.entries(source).forEach(([k, v]) => {
       if (v) params.set(k, String(v));
     });
-    router.push(`/catalogo?${params.toString()}`);
+    router.push(catalogUrl(params));
     setFiltersOpen(false);
   };
 
+  /** Quita refinamientos; conserva alcance (categoría, búsqueda…) y orden. */
   const clearFilters = () => {
-    const sort = searchParams.get("sort");
-    setDraftFilters(sort ? { sort } : {});
-    router.push(sort ? `/catalogo?sort=${encodeURIComponent(sort)}` : "/catalogo");
+    const params = new URLSearchParams();
+    [...SCOPE_KEYS, "sort"].forEach((key) => {
+      const val = searchParams.get(key);
+      if (val) params.set(key, val);
+    });
+    REFINE_KEYS.forEach((key) => {
+      if (searchParams.get(key)) {
+        trackCatalogFilter({ filterName: key, filterValue: "(cleared)" });
+      }
+    });
+    setDraftFilters(Object.fromEntries(params.entries()));
+    router.push(catalogUrl(params));
     setFiltersOpen(false);
   };
 
-  const removeChip = (chipKey) => {
+  const removeChip = (chip) => {
     const params = new URLSearchParams(searchParams.toString());
-    if (chipKey === "price") {
+    if (chip.param === "price") {
       params.delete("minPrice");
       params.delete("maxPrice");
+    } else if (chip.value) {
+      // Multiselección: quitar solo ese valor del grupo.
+      const rest = parseValueList(params.get(chip.param)).filter(
+        (v) => v !== chip.value
+      );
+      if (rest.length) params.set(chip.param, rest.join(","));
+      else params.delete(chip.param);
     } else {
-      params.delete(chipKey);
+      params.delete(chip.param);
     }
     params.delete("page");
-    trackCatalogFilter({ filterName: chipKey, filterValue: "(cleared)" });
-    router.push(`/catalogo?${params.toString()}`);
+    trackCatalogFilter({ filterName: chip.param, filterValue: "(cleared)" });
+    router.push(catalogUrl(params));
   };
 
   const filterProps = {
-    filters: filterOptions,
+    facets,
+    allFilters: filterOptions,
     values: draftFilters,
     onChange: (next) => setDraftFilters(next),
     onApply: (nextFilters) => {
@@ -318,13 +352,13 @@ export default function CatalogoContent({
     if (sort) params.set("sort", sort);
     else params.delete("sort");
     params.delete("page");
-    router.push(`/catalogo?${params.toString()}`);
+    router.push(catalogUrl(params));
   };
 
   const changePage = (newPage) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", String(newPage));
-    router.push(`/catalogo?${params.toString()}`);
+    router.push(catalogUrl(params));
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -338,11 +372,13 @@ export default function CatalogoContent({
       <CatalogPromo banner={initialBanner} />
 
       <div className="catalog-layout__toolbar">
-        <CatalogFilters
-          {...filterProps}
-          isOpen={filtersOpen}
-          onToggle={() => setFiltersOpen((o) => !o)}
-        />
+        {showFilters ? (
+          <CatalogFilters
+            {...filterProps}
+            isOpen={filtersOpen}
+            onToggle={() => setFiltersOpen((o) => !o)}
+          />
+        ) : null}
 
         <div className="catalog-sort">
           <select
@@ -366,7 +402,7 @@ export default function CatalogoContent({
               key={chip.key}
               type="button"
               className="catalog-chips__chip"
-              onClick={() => removeChip(chip.key)}
+              onClick={() => removeChip(chip)}
               aria-label={`Quitar filtro ${chip.label}`}
             >
               <span>{chip.label}</span>
@@ -380,15 +416,21 @@ export default function CatalogoContent({
             className="catalog-chips__clear"
             onClick={clearFilters}
           >
-            Limpiar todo
+            Limpiar filtros
           </button>
         </div>
       )}
 
-      <div className="catalog-layout__grid-wrap">
-        <div className="catalog-sidebar-desktop">
-          <CatalogFiltersSidebar {...filterProps} />
-        </div>
+      <div
+        className={`catalog-layout__grid-wrap${
+          showFilters ? "" : " catalog-layout__grid-wrap--full"
+        }`}
+      >
+        {showFilters ? (
+          <div className="catalog-sidebar-desktop">
+            <CatalogFiltersSidebar {...filterProps} />
+          </div>
+        ) : null}
 
         <div>
           {loadError ? (

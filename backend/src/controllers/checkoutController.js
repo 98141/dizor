@@ -17,6 +17,59 @@ const {
 } = require("../services/nequiPaymentService");
 const { markAbandonedCartRecovered } = require("../services/marketingService");
 const { sendNewOrderAdminEmail } = require("../services/emailService");
+const { sendOrderReceiptOnce } = require("../services/orderReceiptService");
+const { requireAuthorization, recordConsent } = require("../services/consentService");
+const { PURPOSES, getText } = require("../config/legalTexts");
+const { issueAccessToken, matchesHash } = require("../utils/opaqueTokens");
+
+// Vigencia del token de acceso del comprador a la confirmación de su pedido
+// (H-06). Cubre el retorno desde la pasarela y la consulta inmediata; después,
+// el seguimiento se hace con número de pedido + correo o desde la cuenta.
+const ORDER_ACCESS_TTL_MS = 72 * 60 * 60 * 1000;
+
+const grantOrderAccess = async (orderId) => {
+  const { token, tokenHash } = issueAccessToken();
+  await Order.updateOne(
+    { _id: orderId },
+    {
+      $set: {
+        "guestAccess.tokenHash": tokenHash,
+        "guestAccess.expiresAt": new Date(Date.now() + ORDER_ACCESS_TTL_MS),
+      },
+    }
+  );
+  return token;
+};
+
+// Resumen para la página de confirmación: solo lo que el comprador necesita.
+// No incluye dirección completa, teléfono, costos internos ni notas de staff.
+const formatOrderConfirmation = (order) => ({
+  orderNumber: order.orderNumber,
+  createdAt: order.createdAt,
+  orderStatus: order.orderStatus,
+  paymentStatus: order.paymentStatus,
+  paymentMethod: order.paymentMethod,
+  items: (order.items || []).map((i) => ({
+    productName: i.productName,
+    sizeName: i.sizeName,
+    colorName: i.colorName,
+    quantity: i.quantity,
+    unitPrice: i.unitPrice,
+    lineTotal: i.lineTotal,
+  })),
+  subtotal: order.subtotal,
+  discountTotal: order.discountTotal,
+  couponCode: order.couponCode,
+  taxTotal: order.taxTotal,
+  ivaPercent: order.ivaPercent,
+  shippingCost: order.shippingCost,
+  freeShippingApplied: order.freeShippingApplied,
+  total: order.total,
+  // Se devuelve al titular del token para prellenar el registro opcional
+  // (sustituye a guardar el correo en la URL o en sessionStorage).
+  buyer: { name: order.buyer?.name || "", email: order.buyer?.email || "" },
+  receiptSent: Boolean(order.buyerReceipt?.sentAt),
+});
 
 // DTO seguro: nunca expone unitCost, internalCost ni datos administrativos al cliente
 const formatOrderForClient = (order) => ({
@@ -156,6 +209,10 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
     return next(new AppError("Datos del comprador incompletos", 400));
   }
 
+  // Autorización de tratamiento para gestionar el pedido (H-03). Validada en
+  // el servidor: solo `true` cuenta.
+  requireAuthorization(req.body.privacyAuthorization, PURPOSES.ORDER_PROCESSING);
+
   if (
     !shippingAddress?.address ||
     !shippingAddress?.city ||
@@ -198,7 +255,11 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
       const sameEmail = !ownerUserId && existing.buyer?.email === ownerEmail;
 
       if (sameUser || sameEmail) {
+        // Reintento del mismo pedido: no se crea otro ni se reenvía el acuse;
+        // se rota el token de acceso (el anterior deja de servir).
+        const accessToken = await grantOrderAccess(existing._id);
         return res.status(200).json({
+          accessToken,
           status: "success",
           order: {
             id: existing._id,
@@ -363,6 +424,32 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
     }
   }
 
+  // Evidencia de lo aceptado (H-19) y autorización de tratamiento (H-03).
+  const privacyText = getText(PURPOSES.ORDER_PROCESSING);
+  const termsText = getText(PURPOSES.TERMS);
+  order.legal = {
+    privacyNoticeVersion: privacyText.version,
+    privacyNoticeStatus: privacyText.status,
+    // Sin términos aprobados no se registra aceptación de términos (H-17).
+    termsVersion: termsText.status === "approved" ? termsText.version : null,
+    acceptedAt: new Date(),
+  };
+  await order.save({ validateBeforeSave: false });
+  await recordConsent({
+    purpose: PURPOSES.ORDER_PROCESSING,
+    subjectEmail: buyer.email,
+    userId: req.user?.id || null,
+    source: "checkout",
+    referenceType: "Order",
+    referenceId: order._id,
+  });
+
+  const accessToken = await grantOrderAccess(order._id);
+
+  // Acuse de recibo al comprador (H-20): idempotente; un fallo no bloquea el
+  // pedido y queda registrado en order.buyerReceipt para reintento.
+  await sendOrderReceiptOnce(order._id);
+
   try {
     await sendNewOrderAdminEmail(order);
   } catch (err) {
@@ -370,6 +457,7 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
   }
 
   res.status(201).json({
+    accessToken,
     status: "success",
     order: {
       id:            order._id,
@@ -391,8 +479,11 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
   });
 });
 
+// Seguimiento por número de pedido + correo. Ahora por POST con cuerpo para
+// que el correo no quede en URLs, historial ni logs de acceso (H-06).
 exports.trackGuestOrder = catchAsync(async (req, res, next) => {
-  const { orderNumber, email } = req.query;
+  const orderNumber = typeof req.body?.orderNumber === "string" ? req.body.orderNumber.trim() : "";
+  const email = typeof req.body?.email === "string" ? req.body.email.trim() : "";
 
   if (!orderNumber || !email) {
     return next(
@@ -430,6 +521,46 @@ exports.trackGuestOrder = catchAsync(async (req, res, next) => {
       department: order.shippingAddress?.department,
     },
   });
+});
+
+// Ruta antigua GET /track?orderNumber=…&email=…: ya no se procesa para no
+// seguir aceptando el correo en la URL. Responde 410 sin leer los parámetros.
+exports.trackGuestOrderLegacy = (req, res) => {
+  res.status(410).json({
+    status: "fail",
+    message: "Esta forma de consulta ya no está disponible. Usa el formulario de seguimiento.",
+  });
+};
+
+/**
+ * Confirmación del pedido (H-06, H-20). Acceso permitido solo a:
+ *  - el usuario autenticado dueño del pedido, o
+ *  - quien presente el token de acceso vigente emitido al crear el pedido.
+ * Cualquier otro caso responde 404 genérico (no revela si el pedido existe).
+ */
+exports.lookupOrderConfirmation = catchAsync(async (req, res, next) => {
+  const orderNumber =
+    typeof req.body?.orderNumber === "string" ? req.body.orderNumber.trim().toUpperCase() : "";
+  const accessToken = typeof req.body?.accessToken === "string" ? req.body.accessToken : "";
+
+  const notFound = () => next(new AppError("Pedido no encontrado", 404));
+  if (!orderNumber) return notFound();
+
+  const order = await Order.findOne({ orderNumber }).select(
+    "+guestAccess.tokenHash +guestAccess.expiresAt"
+  );
+  if (!order) return notFound();
+
+  const isOwner = Boolean(req.user?.id) && order.user?.toString() === String(req.user.id);
+  const tokenValid =
+    Boolean(accessToken) &&
+    order.guestAccess?.expiresAt instanceof Date &&
+    order.guestAccess.expiresAt > new Date() &&
+    matchesHash(accessToken, order.guestAccess.tokenHash);
+
+  if (!isOwner && !tokenValid) return notFound();
+
+  res.status(200).json({ status: "success", order: formatOrderConfirmation(order) });
 });
 
 exports.getMyOrders = catchAsync(async (req, res, next) => {

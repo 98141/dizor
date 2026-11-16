@@ -39,6 +39,10 @@ const nequiRoutes        = require("./routes/nequiRoutes");
 const adminCouponRoutes  = require("./routes/adminCouponRoutes");
 const adminAlertRoutes = require("./routes/adminAlertRoutes");
 const visitRoutes = require("./routes/visitRoutes");
+const customerRequestRoutes = require("./routes/customerRequestRoutes");
+const customerRequestAdminRoutes = require("./routes/customerRequestAdminRoutes");
+const legalPublicRoutes = require("./routes/legalPublicRoutes");
+const { redactUrl } = require("./utils/redactUrl");
 
 const app = express();
 
@@ -60,10 +64,19 @@ app.use(
   })
 );
 
+// URL con query redactada (H-06): mismos formatos que antes ("combined" en
+// producción, "dev" en desarrollo) pero sin valores de parámetros no
+// permitidos.
+morgan.token("url-redacted", (req) => redactUrl(req.originalUrl || req.url));
+const MORGAN_COMBINED_REDACTED =
+  ':remote-addr - :remote-user [:date[clf]] ":method :url-redacted HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"';
+const MORGAN_DEV_REDACTED = ":method :url-redacted :status :response-time ms - :res[content-length]";
+
 app.use(
-  morgan(process.env.NODE_ENV === "production" ? "combined" : "dev", {
-    stream: logger.stream,
-  })
+  morgan(
+    process.env.NODE_ENV === "production" ? MORGAN_COMBINED_REDACTED : MORGAN_DEV_REDACTED,
+    { stream: logger.stream }
+  )
 );
 
 const globalLimiter = rateLimit({
@@ -180,9 +193,12 @@ app.use("/api/payments/nequi", nequiRoutes);
 app.use("/api/admin/coupons", adminCouponRoutes);
 app.use("/api/admin/alerts", adminAlertRoutes);
 app.use("/api/visits", visitRoutes);
+app.use("/api/pqr", customerRequestRoutes);
+app.use("/api/admin/pqr", customerRequestAdminRoutes);
+app.use("/api/legal", legalPublicRoutes);
 
 app.use((req, res, next) => {
-  next(new AppError(`Ruta no encontrada: ${req.originalUrl}`, 404));
+  next(new AppError(`Ruta no encontrada: ${redactUrl(req.originalUrl)}`, 404));
 });
 
 app.use(globalErrorHandler);

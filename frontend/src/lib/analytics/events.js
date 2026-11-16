@@ -1,6 +1,7 @@
 import { GA_MEASUREMENT_ID, isAnalyticsConfigured, ANALYTICS_DEBUG } from "./config";
 import { hasAnalyticsConsent } from "./consent";
 import { sanitizeParams, toSafeNumber, toSafeString } from "./sanitize";
+import { sanitizedPageLocation } from "./urlSanitizer";
 
 // Único punto del proyecto que debe tocar window.gtag. Ningún componente
 // debe llamar window.gtag(...) directamente — usar las funciones nombradas
@@ -17,7 +18,12 @@ export function trackEvent(eventName, params = {}) {
     }
     if (typeof window.gtag !== "function") return;
 
-    const clean = sanitizeParams(params);
+    // Nunca desde rutas excluidas; y siempre con page_location saneado para
+    // que gtag no adjunte la URL completa del documento (H-06, H-08).
+    const pageLocation = sanitizedPageLocation();
+    if (!pageLocation) return;
+
+    const clean = sanitizeParams({ ...params, page_location: pageLocation });
     if (ANALYTICS_DEBUG) {
       console.info("[analytics:send]", eventName, clean);
     }
@@ -42,7 +48,12 @@ export function initGtag() {
     // send_page_view: false — el page_view lo controla AnalyticsTracker de
     // forma explícita (con saneo de ruta/params y exclusión de rutas
     // privadas), para no depender del auto-tracking de Enhanced Measurement.
-    window.gtag("config", GA_MEASUREMENT_ID, { send_page_view: false });
+    window.gtag("config", GA_MEASUREMENT_ID, {
+      send_page_view: false,
+      // URL saneada en lugar de document.location (H-06). Enhanced
+      // Measurement debe revisarse en la propiedad GA4 (E-9).
+      page_location: sanitizedPageLocation() || undefined,
+    });
   } catch {
     // no bloquear el render de la app si gtag falla al inicializar
   }

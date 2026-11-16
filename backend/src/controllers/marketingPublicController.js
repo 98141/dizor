@@ -3,6 +3,7 @@ const {
   getPublicConfig,
   subscribeNewsletter,
   trackAbandonedCart,
+  unsubscribeByToken,
 } = require("../services/marketingService");
 
 exports.getMarketingConfig = catchAsync(async (req, res) => {
@@ -11,11 +12,12 @@ exports.getMarketingConfig = catchAsync(async (req, res) => {
 });
 
 exports.subscribe = catchAsync(async (req, res) => {
-  const { email, name, source } = req.body;
+  const { email, name, source, marketingConsent } = req.body;
   const { subscriber, alreadySubscribed } = await subscribeNewsletter({
     email,
     name,
     source,
+    marketingConsent,
   });
 
   res.status(alreadySubscribed ? 200 : 201).json({
@@ -31,17 +33,29 @@ exports.subscribe = catchAsync(async (req, res) => {
 });
 
 exports.saveAbandonedCart = catchAsync(async (req, res) => {
-  const { email, name, items } = req.body;
-  const cart = await trackAbandonedCart({
+  const { email, name, items, marketingConsent } = req.body;
+  await trackAbandonedCart({
     email,
     name,
     items,
     userId: req.user?.id,
+    marketingConsent,
   });
 
+  // No se devuelve el correo: el cliente ya lo conoce (minimización).
   res.status(200).json({
     status: "success",
     message: "Carrito guardado para recordatorio",
-    cart: { id: cart._id, email: cart.email },
+  });
+});
+
+// Baja pública e idempotente (H-04, H-05). POST para que los escáneres de
+// enlaces de los clientes de correo no den de baja por accidente.
+exports.unsubscribe = catchAsync(async (req, res) => {
+  const { purpose } = await unsubscribeByToken(req.body?.token);
+  res.status(200).json({
+    status: "success",
+    message: "Tu baja quedó registrada. No recibirás más correos de este tipo.",
+    purpose,
   });
 });

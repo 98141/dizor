@@ -1,8 +1,9 @@
 // frontend/src/services/productService.js
 import api from "./api";
 
-export const getCatalogFilters = async () => {
-  const res = await api.get("/products/filters");
+/** Taxonomía + facetas contextuales (`params` = mismos filtros del listado). */
+export const getCatalogFilters = async (params = {}) => {
+  const res = await api.get("/products/filters", { params });
   return res.data;
 };
 

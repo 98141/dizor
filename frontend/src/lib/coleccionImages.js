@@ -87,7 +87,7 @@ export function buildWeaveCards(weaveTypes = [], coleccionImages = []) {
         wt,
         images,
         img: images[0] || null,
-        href: `/catalogo?weaveType=${encodeURIComponent(weaveIdOf(wt))}`,
+        href: `/catalogo?weaveType=${encodeURIComponent(wt?.slug || weaveIdOf(wt))}`,
       };
     })
     .filter((card) => weaveIdOf(card.wt));

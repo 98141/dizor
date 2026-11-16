@@ -1,11 +1,12 @@
 const AuditLog = require("../models/AuditLog");
 const logger = require("../lib/logger");
+const { redactUrl } = require("../utils/redactUrl");
 
 const getRequestMeta = (req) => ({
   ip: req?.ip || req?.headers?.["x-forwarded-for"] || null,
   userAgent: req?.headers?.["user-agent"] || null,
   method: req?.method || null,
-  path: req?.originalUrl || req?.path || null,
+  path: redactUrl(req?.originalUrl || req?.path || null),
 });
 
 const sanitizePayload = (data) => {

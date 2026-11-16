@@ -35,6 +35,13 @@ const abandonedCartSchema = new mongoose.Schema(
     lastReminderAt: { type: Date, default: null },
     recoveredAt: { type: Date, default: null },
     recoveryOrderNumber: { type: String, default: "" },
+    // Evidencia de la autorización para el recordatorio (H-05). Sin ella el
+    // carrito nunca recibe correos.
+    consentRecord: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ConsentRecord",
+      default: null,
+    },
   },
   { timestamps: true }
 );

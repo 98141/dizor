@@ -5,6 +5,8 @@ const catchAsync = require("../utils/catchAsync");
 const { hashToken } = require("../utils/cryptoUtils");
 const { logAuthEvent } = require("../services/auditService");
 const { sendPasswordResetEmail } = require("../services/emailService");
+const { requireAuthorization, recordConsent } = require("../services/consentService");
+const { PURPOSES } = require("../config/legalTexts");
 const {
   generateAccessToken,
   generateRefreshToken,
@@ -63,6 +65,9 @@ const sendAuthResponse = async (user, statusCode, res) => {
 exports.register = catchAsync(async (req, res, next) => {
   const { name, email, password, phone } = req.body;
 
+  // Autorización de tratamiento para la cuenta, validada en el servidor (H-03).
+  requireAuthorization(req.body.privacyAuthorization, PURPOSES.ACCOUNT);
+
   const exists = await User.findOne({ email: email.toLowerCase() });
 
   if (exists) {
@@ -82,6 +87,15 @@ exports.register = catchAsync(async (req, res, next) => {
     { "buyer.email": email.toLowerCase(), user: null },
     { $set: { user: user._id } }
   );
+
+  await recordConsent({
+    purpose: PURPOSES.ACCOUNT,
+    subjectEmail: user.email,
+    userId: user._id,
+    source: req.body.registrationSource === "post_purchase" ? "register_post_purchase" : "register",
+    referenceType: "User",
+    referenceId: user._id,
+  });
 
   await logAuthEvent({
     req,

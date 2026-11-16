@@ -4,23 +4,49 @@ import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { trackOrder } from "@/services/checkoutService";
+import { lookupOrderConfirmation } from "@/services/checkoutService";
 import { formatCOP } from "@/lib/formatCurrency";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
 import { trackWhatsAppClick } from "@/lib/analytics/events";
+import {
+  readOrderAccess,
+  clearLegacyGuestData,
+  confirmationPath,
+} from "@/lib/orderAccess";
 import AuthFormField from "@/components/auth/AuthFormField";
 import AuthErrorAlert from "@/components/auth/AuthErrorAlert";
+import ConsentCheckbox, { isNoticeReady } from "@/components/legal/ConsentCheckbox";
+import { useLegalNotices } from "@/lib/legalNotices";
 
 const PAYMENT_LABELS = {
   wompi: "Tarjeta / PSE (Wompi)",
   nequi_manual: "Nequi (transferencia manual)",
+  nequi_api: "Nequi",
   contra_entrega: "Pago contra entrega",
 };
 
+const PAYMENT_STATUS_LABELS = {
+  pendiente: "Pendiente",
+  pagado: "Aprobado",
+  rechazado: "Rechazado",
+  reembolsado: "Reembolsado",
+};
+
+// Título según el estado REAL del pedido devuelto por el servidor (H-20).
+// Una redirección desde la pasarela no implica pago aprobado.
+function headingFor(order) {
+  if (order.paymentStatus === "pagado") return "¡Pago aprobado! Pedido confirmado";
+  if (order.paymentStatus === "rechazado") return "El pago no se completó";
+  if (order.paymentMethod === "contra_entrega") return "Pedido recibido";
+  return "Pedido recibido · pago pendiente";
+}
+
 function RegistroPromptModal({ email, name, isOpen, onClose }) {
   const { register } = useAuth();
+  const { notices, error: noticesError } = useLegalNotices();
   const [regName, setRegName] = useState(name || "");
   const [regPassword, setRegPassword] = useState("");
+  const [regAuthorization, setRegAuthorization] = useState(false);
   const [regError, setRegError] = useState("");
   const [regSuccess, setRegSuccess] = useState(false);
   const [regLoading, setRegLoading] = useState(false);
@@ -68,6 +94,10 @@ function RegistroPromptModal({ email, name, isOpen, onClose }) {
       setRegError("La contraseña debe tener al menos 8 caracteres");
       return;
     }
+    if (!regAuthorization) {
+      setRegError("Debes aceptar el tratamiento de datos para crear la cuenta");
+      return;
+    }
     setRegLoading(true);
     setRegError("");
     try {
@@ -76,6 +106,8 @@ function RegistroPromptModal({ email, name, isOpen, onClose }) {
         email,
         password: regPassword,
         passwordConfirm: regPassword,
+        privacyAuthorization: true,
+        registrationSource: "post_purchase",
       });
       setRegSuccess(true);
     } catch (err) {
@@ -84,12 +116,10 @@ function RegistroPromptModal({ email, name, isOpen, onClose }) {
         msg.toLowerCase().includes("ya está registrado") ||
         msg.toLowerCase().includes("already")
       ) {
+        // Sin el correo en la URL (H-06).
         setRegError(
           <>
-            Ese correo ya tiene cuenta.{" "}
-            <Link href={`/login?email=${encodeURIComponent(email)}`}>
-              Inicia sesión
-            </Link>
+            Ese correo ya tiene cuenta. <Link href="/login">Inicia sesión</Link>
           </>
         );
       } else {
@@ -115,7 +145,7 @@ function RegistroPromptModal({ email, name, isOpen, onClose }) {
         </h2>
         <p className="confirm-modal__message">
           Crea una cuenta en segundos y consulta tus pedidos en cualquier
-          momento.
+          momento. Es opcional.
         </p>
         <form onSubmit={handleSubmit} noValidate>
           <AuthFormField
@@ -148,6 +178,17 @@ function RegistroPromptModal({ email, name, isOpen, onClose }) {
             }}
             autoComplete="new-password"
           />
+          <ConsentCheckbox
+            notices={notices}
+            noticesError={noticesError}
+            purpose="account"
+            checked={regAuthorization}
+            onChange={(v) => {
+              setRegAuthorization(v);
+              setRegError("");
+            }}
+            compact
+          />
           {regError && <AuthErrorAlert message={regError} />}
           <div
             className="confirm-modal__actions"
@@ -163,7 +204,7 @@ function RegistroPromptModal({ email, name, isOpen, onClose }) {
             <button
               type="submit"
               className="modal-action-btn modal-action-btn--primary"
-              disabled={regLoading}
+              disabled={regLoading || !isNoticeReady(notices, "account") || !regAuthorization}
             >
               {regLoading ? "Creando cuenta..." : "Crear cuenta"}
             </button>
@@ -174,114 +215,79 @@ function RegistroPromptModal({ email, name, isOpen, onClose }) {
   );
 }
 
-function buildWhatsAppMessage({ orderNumber, subtotal, discount, couponCode, iva, ivaPercent, shipping, total, freeShipping }) {
+function buildWhatsAppMessage(order) {
   const fmt = (n) =>
-    Number(n).toLocaleString("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 });
+    Number(n || 0).toLocaleString("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 });
 
   const lines = [
-    `Hola! Quiero enviar mi comprobante de pago para el pedido *${orderNumber}*`,
+    `Hola! Quiero enviar mi comprobante de pago para el pedido *${order.orderNumber}*`,
     "",
     "📋 Resumen:",
-    `Subtotal: ${fmt(subtotal)}`,
+    `Subtotal: ${fmt(order.subtotal)}`,
   ];
-
-  if (Number(discount) > 0) {
-    lines.push(`Descuento${couponCode ? ` (${couponCode})` : ""}: -${fmt(discount)}`);
+  if (Number(order.discountTotal) > 0) {
+    lines.push(`Descuento${order.couponCode ? ` (${order.couponCode})` : ""}: -${fmt(order.discountTotal)}`);
   }
-
-  if (Number(iva) > 0) {
-    lines.push(`IVA${ivaPercent > 0 ? ` (${ivaPercent}%)` : ""}: ${fmt(iva)}`);
+  if (Number(order.taxTotal) > 0) {
+    lines.push(`IVA${order.ivaPercent > 0 ? ` (${order.ivaPercent}%)` : ""}: ${fmt(order.taxTotal)}`);
   }
-
-  if (freeShipping === "1") {
-    lines.push("Envío: Gratis");
-  } else {
-    lines.push(`Envío: ${fmt(shipping)}`);
-  }
-
-  lines.push(`*Total a pagar: ${fmt(total)}*`, "", "Adjunto el comprobante Nequi.");
+  lines.push(Number(order.shippingCost) > 0 ? `Envío: ${fmt(order.shippingCost)}` : "Envío: Gratis");
+  lines.push(`*Total a pagar: ${fmt(order.total)}*`, "", "Adjunto el comprobante Nequi.");
   return lines.join("\n");
 }
 
 function ConfirmacionContent() {
   const sp = useSearchParams();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loadingAuth } = useAuth();
+  const orderNumber = (sp.get("order") || "").trim();
 
-  const orderNumber = sp.get("order");
-  const total = sp.get("total");
-  const payment = sp.get("payment");
-
-  const subtotal = sp.get("subtotal") || "0";
-  const discount = sp.get("discount") || "0";
-  const couponCode = sp.get("couponCode") || "";
-  const iva = sp.get("iva") || "0";
-  const ivaPercent = Number(sp.get("ivaPercent") || "0");
-  const shipping = sp.get("shipping") || "0";
-  const freeShipping = sp.get("freeShipping") || "0";
-
-  // Para Wompi: el redirect externo no incluye email/nombre en la URL,
-  // por lo que se recuperan del sessionStorage guardado antes de la redirección.
-  const urlEmail = sp.get("email") || "";
-  const urlName = sp.get("name") || "";
-  const [guestEmail, setGuestEmail] = useState(urlEmail);
-  const [guestName, setGuestName] = useState(urlName);
-
+  const [order, setOrder] = useState(null);
+  const [status, setStatus] = useState("loading"); // loading | ready | limited
   const [showRegistroModal, setShowRegistroModal] = useState(false);
 
-  // Wompi redirige de vuelta sin el monto en la URL (ver wompiService.createPaymentLink),
-  // así que el total real se recupera del backend con el número de pedido + email.
-  const [resolvedTotal, setResolvedTotal] = useState(total);
-
+  // Enlaces antiguos traían correo, nombre e importes en la URL. Se reescribe
+  // la dirección para dejar solo el número de pedido (H-06). Esto evita nuevas
+  // exposiciones desde esta página, pero NO borra el historial previo del
+  // navegador ni registros ya escritos por servidores o terceros.
   useEffect(() => {
-    if (!urlEmail) {
-      try {
-        const storedEmail = sessionStorage.getItem("dizor_guest_email") || "";
-        const storedName = sessionStorage.getItem("dizor_guest_name") || "";
-        if (storedEmail) {
-          setGuestEmail(storedEmail);
-          setGuestName(storedName);
-        }
-      } catch {}
+    clearLegacyGuestData();
+    if (!orderNumber || typeof window === "undefined") return;
+    const current = new URLSearchParams(window.location.search);
+    const onlyOrder = [...current.keys()].every((k) => k === "order");
+    if (!onlyOrder) {
+      window.history.replaceState(window.history.state, "", confirmationPath(orderNumber));
     }
-  }, [urlEmail]);
+  }, [orderNumber]);
 
   useEffect(() => {
-    if (payment !== "wompi") return;
-    if (total && Number(total) > 0) return;
-    if (!orderNumber || !guestEmail) return;
-
+    if (!orderNumber || loadingAuth) return undefined;
+    const token = readOrderAccess(orderNumber);
+    if (!token && !isAuthenticated) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- el token solo existe en sessionStorage (cliente), tras hidratar
+      setStatus("limited");
+      return undefined;
+    }
     let cancelled = false;
-    trackOrder(orderNumber, guestEmail)
+    lookupOrderConfirmation(orderNumber, token)
       .then((data) => {
-        if (!cancelled && data?.order?.total != null) {
-          setResolvedTotal(String(data.order.total));
-        }
+        if (cancelled) return;
+        setOrder(data.order);
+        setStatus("ready");
       })
-      .catch(() => {});
+      .catch(() => {
+        if (!cancelled) setStatus("limited");
+      });
     return () => {
       cancelled = true;
     };
-  }, [payment, total, orderNumber, guestEmail]);
+  }, [orderNumber, isAuthenticated, loadingAuth]);
 
-  // Abrir el modal automáticamente 1.5 s después de llegar a la confirmación
+  // Ofrecer registro opcional al invitado, una vez cargado su pedido.
   useEffect(() => {
-    if (isAuthenticated) return;
-    const resolvedEmail = urlEmail || (() => {
-      try { return sessionStorage.getItem("dizor_guest_email") || ""; } catch { return ""; }
-    })();
-    if (!resolvedEmail) return;
-
+    if (isAuthenticated || status !== "ready" || !order?.buyer?.email) return undefined;
     const timer = setTimeout(() => setShowRegistroModal(true), 1500);
     return () => clearTimeout(timer);
-  }, [isAuthenticated, urlEmail]);
-
-  const handleCloseModal = () => {
-    setShowRegistroModal(false);
-    try {
-      sessionStorage.removeItem("dizor_guest_email");
-      sessionStorage.removeItem("dizor_guest_name");
-    } catch {}
-  };
+  }, [isAuthenticated, status, order]);
 
   if (!orderNumber) {
     return (
@@ -292,71 +298,109 @@ function ConfirmacionContent() {
     );
   }
 
+  if (status === "loading") {
+    return <p className="auth-loading">Cargando confirmación...</p>;
+  }
+
+  if (status === "limited") {
+    return (
+      <div className="checkout-page">
+        <h1 className="checkout-page__title checkout-success__heading">
+          Pedido {orderNumber}
+        </h1>
+        <p className="checkout-success__sub">
+          Por seguridad, el detalle del pedido solo se muestra en el navegador
+          donde hiciste la compra o si inicias sesión con tu cuenta.
+        </p>
+        <div className="checkout-confirm-actions">
+          <Link
+            href={`/seguimiento?order=${encodeURIComponent(orderNumber)}`}
+            className="checkout-btn checkout-btn--primary"
+          >
+            Consultar con número de pedido y correo
+          </Link>
+          <Link href="/login" className="checkout-btn">
+            Iniciar sesión
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const paid = order.paymentStatus === "pagado";
+
   return (
     <div className="checkout-page">
       <RegistroPromptModal
-        email={guestEmail}
-        name={guestName}
-        isOpen={showRegistroModal && !isAuthenticated && !!guestEmail}
-        onClose={handleCloseModal}
+        email={order.buyer?.email || ""}
+        name={order.buyer?.name || ""}
+        isOpen={showRegistroModal && !isAuthenticated}
+        onClose={() => setShowRegistroModal(false)}
       />
 
-      {/* ── Icono de éxito ── */}
-      <div className="checkout-success-icon" aria-hidden="true">✓</div>
+      <div className="checkout-success-icon" aria-hidden="true">
+        {order.paymentStatus === "rechazado" ? "!" : "✓"}
+      </div>
 
-      <h1 className="checkout-page__title checkout-success__heading">
-        ¡Pedido confirmado!
-      </h1>
+      <h1 className="checkout-page__title checkout-success__heading">{headingFor(order)}</h1>
       <p className="checkout-success__sub">
-        Gracias por comprar en Dizor. En breve recibirás novedades de tu pedido.
+        {order.receiptSent
+          ? "Te enviamos a tu correo el acuse de recibo con el detalle del pedido."
+          : "Guarda tu número de pedido para hacer seguimiento."}
       </p>
 
-      {/* ── Resumen del pedido ── */}
       <div className="checkout-confirm-card">
         <div className="checkout-confirm-row">
           <span>Número de pedido</span>
-          <strong className="checkout-confirm-highlight">{orderNumber}</strong>
+          <strong className="checkout-confirm-highlight">{order.orderNumber}</strong>
         </div>
-        {Number(subtotal) > 0 && (
-          <>
-            <div className="checkout-confirm-row">
-              <span>Subtotal</span>
-              <span>{formatCOP(Number(subtotal))}</span>
-            </div>
-            {Number(discount) > 0 && (
-              <div className="checkout-confirm-row" style={{ color: "var(--color-success)" }}>
-                <span>Descuento{couponCode ? ` (${couponCode})` : ""}</span>
-                <span>−{formatCOP(Number(discount))}</span>
-              </div>
-            )}
-            {Number(iva) > 0 && (
-              <div className="checkout-confirm-row">
-                <span>IVA{ivaPercent > 0 ? ` (${ivaPercent}%)` : ""}</span>
-                <span>{formatCOP(Number(iva))}</span>
-              </div>
-            )}
-            <div className="checkout-confirm-row">
-              <span>Envío</span>
-              <span>
-                {freeShipping === "1" || Number(shipping) === 0
-                  ? "Gratis"
-                  : formatCOP(Number(shipping))}
-              </span>
-            </div>
-          </>
+        {order.items.map((it, idx) => (
+          <div className="checkout-confirm-row" key={`${it.productName}-${idx}`}>
+            <span>
+              {it.productName}
+              {[it.sizeName, it.colorName].filter(Boolean).length > 0
+                ? ` · ${[it.sizeName, it.colorName].filter(Boolean).join(" · ")}`
+                : ""}{" "}
+              × {it.quantity} ({formatCOP(it.unitPrice)} c/u)
+            </span>
+            <span>{formatCOP(it.lineTotal)}</span>
+          </div>
+        ))}
+        <div className="checkout-confirm-row">
+          <span>Subtotal</span>
+          <span>{formatCOP(order.subtotal)}</span>
+        </div>
+        {order.discountTotal > 0 && (
+          <div className="checkout-confirm-row" style={{ color: "var(--color-success)" }}>
+            <span>Descuento{order.couponCode ? ` (${order.couponCode})` : ""}</span>
+            <span>−{formatCOP(order.discountTotal)}</span>
+          </div>
+        )}
+        {order.taxTotal > 0 && (
+          <div className="checkout-confirm-row">
+            <span>IVA{order.ivaPercent > 0 ? ` (${order.ivaPercent}%)` : ""}</span>
+            <span>{formatCOP(order.taxTotal)}</span>
+          </div>
         )}
         <div className="checkout-confirm-row">
-          <span>Total pagado</span>
-          <strong>{formatCOP(Number(resolvedTotal))}</strong>
+          <span>Envío</span>
+          <span>{order.shippingCost > 0 ? formatCOP(order.shippingCost) : "Gratis"}</span>
+        </div>
+        <div className="checkout-confirm-row">
+          <span>{paid ? "Total pagado" : "Total"}</span>
+          <strong>{formatCOP(order.total)}</strong>
         </div>
         <div className="checkout-confirm-row">
           <span>Método de pago</span>
-          <span>{PAYMENT_LABELS[payment] || payment}</span>
+          <span>{PAYMENT_LABELS[order.paymentMethod] || order.paymentMethod}</span>
+        </div>
+        <div className="checkout-confirm-row">
+          <span>Estado del pago</span>
+          <span>{PAYMENT_STATUS_LABELS[order.paymentStatus] || order.paymentStatus}</span>
         </div>
       </div>
 
-      {/* ── Instrucciones por método de pago ── */}
-      {payment === "nequi_manual" && (
+      {order.paymentMethod === "nequi_manual" && !paid && (
         <div className="checkout-payment-notice checkout-payment-notice--nequi">
           <p className="checkout-payment-notice__title">Siguiente paso</p>
           <p>
@@ -364,9 +408,7 @@ function ConfirmacionContent() {
             número de atención de Dizor para confirmar tu pago.
           </p>
           <a
-            href={getWhatsAppUrl(
-              buildWhatsAppMessage({ orderNumber, subtotal, discount, couponCode, iva, ivaPercent, shipping, total, freeShipping })
-            )}
+            href={getWhatsAppUrl(buildWhatsAppMessage(order))}
             target="_blank"
             rel="noreferrer"
             className="checkout-btn checkout-btn--primary"
@@ -380,18 +422,18 @@ function ConfirmacionContent() {
         </div>
       )}
 
-      {payment === "wompi" && (
+      {order.paymentMethod === "wompi" && !paid && order.paymentStatus !== "rechazado" && (
         <div className="checkout-payment-notice">
           <p className="checkout-payment-notice__title">Pago en línea</p>
           <p>
-            Si fuiste redirigido a Wompi y completaste el pago, tu pedido está
-            confirmado. Si aún no lo has hecho, vuelve a iniciar el proceso
-            desde el carrito.
+            Estamos esperando la confirmación de Wompi. El estado del pago se
+            actualizará cuando la pasarela lo confirme; puedes consultarlo en
+            el seguimiento del pedido.
           </p>
         </div>
       )}
 
-      {payment === "contra_entrega" && (
+      {order.paymentMethod === "contra_entrega" && (
         <div className="checkout-payment-notice checkout-payment-notice--info">
           <p>
             Pagarás al recibir tu pedido. El repartidor cobrará el valor exacto
@@ -400,10 +442,9 @@ function ConfirmacionContent() {
         </div>
       )}
 
-      {/* ── Acciones ── */}
       <div className="checkout-confirm-actions">
         <Link
-          href={`/seguimiento?order=${orderNumber}&email=${encodeURIComponent(guestEmail)}`}
+          href={`/seguimiento?order=${encodeURIComponent(order.orderNumber)}`}
           className="checkout-btn checkout-btn--primary"
         >
           Rastrear pedido

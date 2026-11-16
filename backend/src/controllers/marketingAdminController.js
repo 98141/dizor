@@ -8,7 +8,23 @@ const {
   getOrCreateSettings,
   getFormattedSettings,
   sendDueAbandonedReminders,
+  getNewsletterUnsubscribeToken,
 } = require("../services/marketingService");
+const ConsentRecord = require("../models/consentRecord");
+const MarketingSuppression = require("../models/marketingSuppression");
+const { PURPOSES } = require("../config/legalTexts");
+const { suppressMarketing } = require("../services/consentService");
+
+// Una evidencia cuenta para exportar/enviar solo si el texto estaba aprobado
+// (o, en pruebas locales explícitas, en borrador). Ver consentService.
+const evidenceIsUsable = (record) =>
+  Boolean(record) &&
+  record.purpose === PURPOSES.MARKETING_NEWSLETTER &&
+  record.action === "granted" &&
+  (record.textStatus === "approved" ||
+    (record.textStatus === "draft" &&
+      process.env.NODE_ENV !== "production" &&
+      process.env.CONSENT_ACCEPT_DRAFT_FOR_TESTS === "true"));
 
 exports.getSettings = catchAsync(async (req, res) => {
   const settings = await getFormattedSettings();
@@ -64,7 +80,13 @@ exports.getSubscribers = catchAsync(async (req, res) => {
     results: subscribers.length,
     total,
     page,
-    subscribers,
+    // hasConsentEvidence: false → suscriptor sin evidencia de autorización
+    // (registros previos a la corrección H-04). Se conserva, pero no se
+    // exporta para envíos comerciales.
+    subscribers: subscribers.map((s) => ({
+      ...s.toObject(),
+      hasConsentEvidence: Boolean(s.lastConsentRecord),
+    })),
   });
 });
 
@@ -99,18 +121,49 @@ exports.sendAbandonedReminders = catchAsync(async (req, res) => {
 });
 
 exports.exportNewsletterCsv = catchAsync(async (req, res) => {
-  const subscribers = await NewsletterSubscriber.find({ isActive: true })
+  // Solo suscriptores activos, con evidencia de autorización utilizable y
+  // sin baja registrada (H-04). Los demás se conservan pero no se exportan.
+  const subscribers = await NewsletterSubscriber.find({
+    isActive: true,
+    lastConsentRecord: { $ne: null },
+  })
     .sort({ createdAt: -1 })
     .limit(10000);
 
+  const [records, suppressed] = await Promise.all([
+    ConsentRecord.find({
+      _id: { $in: subscribers.map((s) => s.lastConsentRecord) },
+    }).lean(),
+    MarketingSuppression.find({
+      purpose: PURPOSES.MARKETING_NEWSLETTER,
+      email: { $in: subscribers.map((s) => s.email) },
+    }).lean(),
+  ]);
+  const recordById = new Map(records.map((r) => [String(r._id), r]));
+  const suppressedEmails = new Set(suppressed.map((x) => x.email));
+  const clientUrl = process.env.CLIENT_URL || "http://localhost:3000";
+
+  const exportable = subscribers.filter(
+    (s) =>
+      !suppressedEmails.has(s.email) &&
+      evidenceIsUsable(recordById.get(String(s.lastConsentRecord)))
+  );
+
   const csv = toCsv(
-    ["email", "name", "source", "createdAt"],
-    subscribers.map((s) => [
-      s.email,
-      s.name,
-      s.source,
-      s.createdAt?.toISOString(),
-    ])
+    ["email", "name", "source", "createdAt", "consentRecordedAt", "consentTextVersion", "unsubscribeUrl"],
+    exportable.map((s) => {
+      const rec = recordById.get(String(s.lastConsentRecord));
+      const token = getNewsletterUnsubscribeToken(s._id);
+      return [
+        s.email,
+        s.name,
+        s.source,
+        s.createdAt?.toISOString(),
+        rec?.recordedAt?.toISOString(),
+        rec?.textVersion,
+        token ? `${clientUrl}/baja?t=${encodeURIComponent(token)}` : "",
+      ];
+    })
   );
 
   res.setHeader("Content-Type", "text/csv; charset=utf-8");
@@ -190,5 +243,11 @@ exports.unsubscribeSubscriber = catchAsync(async (req, res, next) => {
   sub.isActive = false;
   sub.unsubscribedAt = new Date();
   await sub.save();
+  await suppressMarketing({
+    email: sub.email,
+    purpose: PURPOSES.MARKETING_NEWSLETTER,
+    source: "admin_panel",
+    userId: req.user?.id || null,
+  });
   res.status(200).json({ status: "success", message: "Suscriptor dado de baja" });
 });

@@ -9,6 +9,8 @@ const {
 } = require("../services/reviewService");
 const { isValidObjectId } = require("../utils/objectIdUtils");
 const { logAuditEvent, safeLog } = require("../services/auditService");
+const { requireAuthorization, recordConsent } = require("../services/consentService");
+const { PURPOSES } = require("../config/legalTexts");
 
 const populateProduct = { path: "product", select: "name slug" };
 const populateUser = { path: "user", select: "name email" };
@@ -68,6 +70,9 @@ exports.createCustomerReview = catchAsync(async (req, res, next) => {
     return next(new AppError("El comentario debe tener al menos 10 caracteres", 400));
   }
 
+  // El nombre y la ciudad se publican: autorización expresa (H-14, H-03).
+  requireAuthorization(req.body.publicationAuthorization, PURPOSES.REVIEW_PUBLICATION);
+
   await assertCanCreateCustomerReview(req.user, productId);
 
   const review = await Review.create({
@@ -79,6 +84,15 @@ exports.createCustomerReview = catchAsync(async (req, res, next) => {
     comment,
     aprobado: false,
     isBrandReview: false,
+  });
+
+  await recordConsent({
+    purpose: PURPOSES.REVIEW_PUBLICATION,
+    subjectEmail: req.user.email,
+    userId: req.user._id,
+    source: "product_review_form",
+    referenceType: "Review",
+    referenceId: review._id,
   });
 
   await review.populate(populateProduct);
