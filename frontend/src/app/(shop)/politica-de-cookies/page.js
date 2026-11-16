@@ -23,10 +23,14 @@ const NECESSARY = [
   { name: "dizor_cookie_preferences", type: "Almacenamiento local", purpose: "Recordar tu decisión sobre las cookies opcionales.", duration: "Hasta que la cambies o borres los datos del navegador" },
 ];
 
-const PREFERENCES_AND_STATS = [
-  { name: "dizor_promo_popup_seen", type: "Almacenamiento de sesión", purpose: "No volver a mostrarte la ventana promocional en la misma visita.", duration: "Hasta cerrar la pestaña" },
+const PREFERENCES = [
+  { name: "dizor_promo_popup_seen", type: "Almacenamiento de sesión", purpose: "Recordar que cerraste la ventana promocional para no volver a mostrártela en la misma visita.", duration: "Hasta cerrar la pestaña" },
+];
+
+// Opcionales: solo con tu permiso ("Estadísticas propias").
+const STATISTICS = [
   { name: "dizor_visit_day", type: "Cookie (servidor de la API)", purpose: "Contar tu visita una sola vez al día en el contador total del pie de página. Solo guarda la fecha.", duration: "1 día" },
-  { name: "dizor_last_visit_day", type: "Almacenamiento local", purpose: "Lo mismo que la anterior, en el navegador. Solo guarda la fecha.", duration: "Hasta borrar los datos del navegador" },
+  { name: "dizor_last_visit_day", type: "Almacenamiento local", purpose: "Lo mismo que la anterior, en el navegador. Solo guarda la fecha.", duration: "Hasta que retires el permiso o borres los datos del navegador" },
 ];
 
 function InventoryTable({ rows }) {
@@ -90,8 +94,16 @@ export default function PoliticaCookiesPage() {
         </p>
         <InventoryTable rows={NECESSARY} />
 
-        <h2 className="content-page__section-title">Preferencias y conteo de visitas</h2>
-        <InventoryTable rows={PREFERENCES_AND_STATS} />
+        <h2 className="content-page__section-title">Preferencias que tú eliges</h2>
+        <InventoryTable rows={PREFERENCES} />
+
+        <h2 className="content-page__section-title">Estadísticas propias (opcionales)</h2>
+        <p className="content-page__body-p">
+          Solo se usan si las aceptas en el aviso de cookies o en el panel de
+          preferencias. Si no las aceptas, el contador no registra tu visita.
+          Si retiras el permiso, se eliminan de tu navegador.
+        </p>
+        <InventoryTable rows={STATISTICS} />
 
         <h2 className="content-page__section-title">Cookies analíticas</h2>
         {analyticsActive ? (

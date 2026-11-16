@@ -25,8 +25,10 @@ const requireAuthorization = (value, purpose) => {
   const text = getText(purpose);
   if (!text || !text.required) return;
   if (!isAffirmative(value)) {
+    // Mensaje pensado también para quien tiene abierta una versión anterior
+    // del sitio (sin la casilla): al recargar obtiene el formulario nuevo.
     throw new AppError(
-      "Debes aceptar el tratamiento de datos para continuar",
+      "Debes aceptar el tratamiento de datos para continuar. Si no ves la casilla de autorización, recarga la página.",
       400
     );
   }

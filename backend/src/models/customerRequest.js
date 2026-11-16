@@ -40,6 +40,9 @@ const customerRequestSchema = new mongoose.Schema(
     history: { type: [historySchema], default: [] },
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null },
     accessTokenHash: { type: String, required: true, select: false },
+    // Hash de la clave de idempotencia enviada por el formulario: evita
+    // radicados duplicados si el cliente reintenta tras perder la respuesta.
+    idempotencyKeyHash: { type: String, select: false },
     // Fecha y hora de radicación: la del servidor, inmutable.
     receivedAt: { type: Date, required: true, default: Date.now, immutable: true },
   },
@@ -48,6 +51,10 @@ const customerRequestSchema = new mongoose.Schema(
 
 customerRequestSchema.index({ category: 1, status: 1, receivedAt: -1 });
 customerRequestSchema.index({ "contact.email": 1 });
+customerRequestSchema.index(
+  { idempotencyKeyHash: 1 },
+  { unique: true, partialFilterExpression: { idempotencyKeyHash: { $type: "string" } } }
+);
 
 customerRequestSchema.path("type").validate(function (value) {
   return (CATEGORY_TYPES[this.category] || []).includes(value);

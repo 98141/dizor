@@ -25,10 +25,16 @@ const matchesHash = (token, storedHash) => {
 
 const MIN_SECRET_LENGTH = 32;
 
-const getUnsubscribeSecret = () => {
-  const secret = process.env.MARKETING_TOKEN_SECRET || "";
-  return secret.length >= MIN_SECRET_LENGTH ? secret : null;
-};
+const validSecret = (value) =>
+  typeof value === "string" && value.length >= MIN_SECRET_LENGTH ? value : null;
+
+// Secreto vigente: firma los enlaces nuevos.
+const getUnsubscribeSecret = () => validSecret(process.env.MARKETING_TOKEN_SECRET || "");
+
+// Secreto anterior (opcional): solo VERIFICA enlaces ya enviados tras una
+// rotación, para que los correos antiguos sigan permitiendo darse de baja.
+const getPreviousUnsubscribeSecret = () =>
+  validSecret(process.env.MARKETING_TOKEN_SECRET_PREVIOUS || "");
 
 const isUnsubscribeConfigured = () => Boolean(getUnsubscribeSecret());
 
@@ -42,17 +48,25 @@ const createUnsubscribeToken = (purpose, docId) => {
   return `${payload}.${sign(payload, secret)}`;
 };
 
+const signatureMatches = (payload, signature, secret) => {
+  if (!secret) return false;
+  const a = Buffer.from(signature);
+  const b = Buffer.from(sign(payload, secret));
+  return a.length === b.length && crypto.timingSafeEqual(a, b);
+};
+
 const verifyUnsubscribeToken = (token) => {
-  const secret = getUnsubscribeSecret();
-  if (!secret || typeof token !== "string") return null;
+  const current = getUnsubscribeSecret();
+  const previous = getPreviousUnsubscribeSecret();
+  if ((!current && !previous) || typeof token !== "string") return null;
   const parts = token.split(".");
   if (parts.length !== 3) return null;
   const [purpose, docId, signature] = parts;
   if (!/^[a-f0-9]{24}$/i.test(docId)) return null;
-  const expected = sign(`${purpose}.${docId}`, secret);
-  const a = Buffer.from(signature);
-  const b = Buffer.from(expected);
-  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) return null;
+  const payload = `${purpose}.${docId}`;
+  if (!signatureMatches(payload, signature, current) && !signatureMatches(payload, signature, previous)) {
+    return null;
+  }
   return { purpose, docId };
 };
 

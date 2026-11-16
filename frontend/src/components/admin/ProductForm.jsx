@@ -102,16 +102,14 @@ export default function ProductForm({ productId }) {
   const router = useRouter();
   const isEdit = Boolean(productId);
 
-  const skuSeedRef = useRef(generateSeed());
+  // Semilla estable por montaje (estado, no ref: se lee durante el render inicial).
+  const [initialSkuSeed] = useState(generateSeed);
+  const skuSeedRef = useRef(initialSkuSeed);
 
   const [meta, setMeta] = useState(null);
   const [form, setForm] = useState(() => {
     const initial = defaultForm();
-    initial.variants[0].sku = generateUniqueSku(
-      "",
-      skuSeedRef.current,
-      []
-    );
+    initial.variants[0].sku = generateUniqueSku("", initialSkuSeed, []);
     return initial;
   });
   const [newImageUrl, setNewImageUrl] = useState("");

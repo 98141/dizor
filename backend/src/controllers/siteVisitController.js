@@ -35,6 +35,15 @@ exports.registerVisit = catchAsync(async (req, res) => {
   res.status(200).json({ status: "success", total: doc.total });
 });
 
+// Retirada del permiso de "estadísticas propias": borra la cookie de
+// deduplicación. Solo la API puede borrarla porque se emite desde su dominio.
+// No modifica el total agregado (no contiene datos personales).
+exports.forgetVisit = (req, res) => {
+  const { maxAge, ...options } = visitCookieOptions();
+  res.clearCookie(COOKIE_NAME, options);
+  res.status(204).end();
+};
+
 exports.getVisitCount = catchAsync(async (req, res) => {
   const doc = await SiteVisit.findOne({ key: "global" });
   res.status(200).json({ status: "success", total: doc?.total || 0 });

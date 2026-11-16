@@ -33,7 +33,7 @@ const TAXONOMY_PARAMS = {
   size: "sizes",
   color: "colors",
 };
-const OBJECT_ID = /^[a-fd]{24}$/i;
+const OBJECT_ID = /^[a-f\d]{24}$/i;
 
 /**
  * Enlaces con ids (antiguos, CMS del home) → URL canónica con slugs

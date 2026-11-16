@@ -32,6 +32,13 @@ export default function PqrPage() {
     description: "",
   });
   const [privacyAuthorization, setPrivacyAuthorization] = useState(false);
+  // Clave aleatoria por intento de radicación: si la respuesta se pierde y se
+  // reenvía, el servidor devuelve el mismo radicado en vez de duplicarlo.
+  const [idempotencyKey] = useState(() =>
+    typeof crypto !== "undefined" && crypto.randomUUID
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(36).slice(2)}-${Math.random().toString(36).slice(2)}`
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [result, setResult] = useState(null);
@@ -53,6 +60,7 @@ export default function PqrPage() {
       const data = await createCustomerRequest({
         ...form,
         privacyAuthorization: privacyAuthorization === true,
+        idempotencyKey,
       });
       setResult(data.request);
     } catch (err) {

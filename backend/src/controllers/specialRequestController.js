@@ -69,7 +69,8 @@ exports.trackRequest = catchAsync(async (req, res, next) => {
 exports.trackRequestLegacy = (req, res) => {
   res.status(410).json({
     status: "fail",
-    message: "Esta forma de consulta ya no está disponible. Usa el formulario de seguimiento.",
+    message:
+      "Esta forma de consulta ya no está disponible. Recarga la página y vuelve a consultar con el formulario de seguimiento.",
   });
 };
 

@@ -13,7 +13,8 @@ export const LEGACY_ANALYTICS_KEY = "dizor_analytics_consent";
 // Subir este valor si cambia sustancialmente la política de cookies:
 // invalida las decisiones guardadas, desactiva la analítica y vuelve a
 // mostrar el banner.
-export const CONSENT_VERSION = "2";
+// "3": se añade la categoría de estadísticas propias (contador de visitas).
+export const CONSENT_VERSION = "3";
 
 export function readValidRecord() {
   if (typeof window === "undefined") return null;

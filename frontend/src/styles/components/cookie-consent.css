@@ -240,6 +240,12 @@
     text-align: center;
   }
 
+  /* En columna, el flex-basis de 320px se aplicaba como ALTURA y el banner
+     ocupaba media pantalla con un hueco en blanco. */
+  .cookie-banner__text {
+    flex: 0 0 auto;
+  }
+
   .cookie-banner__actions {
     justify-content: stretch;
   }

@@ -1,3 +1,5 @@
+import "@/styles/pages/order-view.css";
+
 export const metadata = {
   robots: { index: false, follow: false },
 };

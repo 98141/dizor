@@ -6,7 +6,7 @@ import {
   rejectAllPreferences,
   usePreferences,
 } from "@/lib/consentPreferences";
-import { isAnalyticsConfigured } from "@/lib/analytics/config";
+import { isCategoryActive, hasActiveOptionalCategory } from "@/lib/optionalTechnologies";
 
 // Franja discreta, no un modal a pantalla completa. Desaparece en cuanto
 // existe una decisión guardada (aceptar, rechazar o configurar) y no vuelve
@@ -16,16 +16,21 @@ export default function CookieConsentBanner() {
   const preferences = usePreferences();
 
   if (preferences != null) return null;
-  // Sin ninguna tecnología opcional configurada no hay nada que aceptar ni
-  // rechazar: no se muestra un banner "por costumbre" (H-09). El almacenamiento
-  // necesario se informa en la Política de Cookies.
-  if (!isAnalyticsConfigured()) return null;
+  // Se muestra si existe al menos una tecnología opcional activa según el
+  // inventario central (no solo Google Analytics). Sin ninguna, no hay nada
+  // que aceptar o rechazar y no se muestra "por costumbre" (H-09).
+  if (!hasActiveOptionalCategory()) return null;
+
+  const optionalParts = [
+    isCategoryActive("statistics") && "un contador de visitas propio",
+    isCategoryActive("analytics") && "cookies analíticas de Google Analytics",
+  ].filter(Boolean);
 
   return (
     <div className="cookie-banner" role="region" aria-label="Aviso de cookies">
       <p className="cookie-banner__text">
-        Usamos cookies necesarias para que la tienda funcione y, solo con tu
-        permiso, cookies analíticas para entender cómo se usa el sitio.{" "}
+        Usamos almacenamiento necesario para que la tienda funcione y, solo
+        con tu permiso, {optionalParts.join(" y ")}.{" "}
         <a href="/politica-de-cookies">Política de cookies</a>
       </p>
       <div className="cookie-banner__actions">

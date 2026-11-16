@@ -76,6 +76,8 @@ const CARRIER_TRACKING_URL = {
 
 const NON_CANCELLABLE = ["enviado", "entregado", "cancelado", "rechazado", "devuelto"];
 
+const ACCOUNT_TABS = ["perfil", "pedidos", "solicitudes", "direcciones", "seguridad"];
+
 const REQUEST_BADGE = {
   pendiente:   "badge--warning",
   en_revision: "badge--info",
@@ -326,6 +328,15 @@ function CuentaContent() {
       setAddresses(user.shippingAddresses || []);
     }
   }, [user]);
+
+  // El enlace "Ver mi pedido" llega como /cuenta?tab=pedidos.
+  useEffect(() => {
+    const requested = new URLSearchParams(window.location.search).get("tab");
+    if (requested && ACCOUNT_TABS.includes(requested)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- la query solo existe en el cliente
+      setTab(requested);
+    }
+  }, []);
 
   useEffect(() => {
     getMyOrders()

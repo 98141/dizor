@@ -9,23 +9,28 @@ import {
   useConsentPanelOpen,
   usePreferences,
 } from "@/lib/consentPreferences";
-import { isAnalyticsConfigured } from "@/lib/analytics/config";
+import { getOptionalCategories } from "@/lib/optionalTechnologies";
+
+// Panel de preferencias. Las categorías opcionales salen del inventario
+// central (lib/optionalTechnologies.js): solo las activas se pueden marcar.
+const draftFrom = (preferences) => ({
+  statistics: Boolean(preferences?.statistics),
+  analytics: Boolean(preferences?.analytics),
+});
 
 export default function CookiePreferencesPanel() {
   const isOpen = useConsentPanelOpen();
   const preferences = usePreferences();
-  const [analyticsDraft, setAnalyticsDraft] = useState(() => preferences?.analytics ?? false);
+  const [draft, setDraft] = useState(() => draftFrom(preferences));
 
   // Sincroniza el borrador con la última decisión guardada cada vez que el
-  // panel pasa de cerrado a abierto (para que "Configurar cookies" desde el
-  // footer muestre lo que ya está activo, no valores en blanco). Ajustar
-  // estado durante el render al detectar el cambio, en vez de en un efecto
-  // (patrón recomendado por React para "adjusting state on prop change").
+  // panel pasa de cerrado a abierto (patrón de React "adjusting state on prop
+  // change", sin efecto).
   const [wasOpen, setWasOpen] = useState(isOpen);
   if (isOpen !== wasOpen) {
     setWasOpen(isOpen);
     if (isOpen) {
-      setAnalyticsDraft(preferences?.analytics ?? false);
+      setDraft(draftFrom(preferences));
     }
   }
 
@@ -39,10 +44,10 @@ export default function CookiePreferencesPanel() {
 
   if (!isOpen) return null;
 
-  const analyticsAvailable = isAnalyticsConfigured();
+  const categories = getOptionalCategories();
 
   const handleSave = () => {
-    savePreferences({ analytics: analyticsDraft });
+    savePreferences(draft);
     closeConsentPanel();
   };
 
@@ -81,7 +86,7 @@ export default function CookiePreferencesPanel() {
 
         <h2 className="cookie-panel__title">Preferencias de cookies</h2>
         <p className="cookie-panel__intro">
-          Elige qué categorías de cookies quieres permitir. Puedes cambiar tu
+          Elige qué categorías opcionales quieres permitir. Puedes cambiar tu
           decisión cuando quieras desde &quot;Configurar cookies&quot; en el
           pie de página.
         </p>
@@ -91,55 +96,43 @@ export default function CookiePreferencesPanel() {
             <p className="cookie-category__title">Necesarias</p>
             <p className="cookie-category__desc">
               Imprescindibles para el funcionamiento del sitio: carrito de
-              compras, sesión, checkout como invitado y esta misma
-              preferencia de cookies. No se pueden desactivar.
+              compras, sesión, confirmación del pedido y esta misma
+              preferencia. No se pueden desactivar.
             </p>
           </div>
           <label className="cookie-toggle">
-            <input type="checkbox" checked disabled readOnly />
+            <input type="checkbox" checked disabled readOnly aria-label="Necesarias (siempre activas)" />
             <span className="cookie-toggle__track" />
           </label>
         </div>
 
-        <div className="cookie-category">
-          <div className="cookie-category__info">
-            <p className="cookie-category__title">Analíticas</p>
-            <p className="cookie-category__desc">
-              Medirían cómo se usa el sitio (páginas vistas, productos
-              populares) mediante Google Analytics, solo con tu permiso.
-            </p>
-            {!analyticsAvailable && (
-              <p className="cookie-category__note">
-                Actualmente no utilizamos cookies analíticas.
-              </p>
-            )}
-          </div>
-          <label className="cookie-toggle">
-            <input
-              type="checkbox"
-              checked={analyticsAvailable && analyticsDraft}
-              disabled={!analyticsAvailable}
-              onChange={(e) => setAnalyticsDraft(e.target.checked)}
-            />
-            <span className="cookie-toggle__track" />
-          </label>
-        </div>
-
-        <div className="cookie-category">
-          <div className="cookie-category__info">
-            <p className="cookie-category__title">Marketing</p>
-            <p className="cookie-category__desc">
-              Para anuncios personalizados y remarketing.
-            </p>
-            <p className="cookie-category__note">
-              Aún no utilizamos cookies de marketing.
-            </p>
-          </div>
-          <label className="cookie-toggle">
-            <input type="checkbox" checked={false} disabled readOnly />
-            <span className="cookie-toggle__track" />
-          </label>
-        </div>
+        {categories.map((c) => {
+          const selectable = c.active && c.id in draft;
+          return (
+            <div className="cookie-category" key={c.id}>
+              <div className="cookie-category__info">
+                <p className="cookie-category__title">{c.title}</p>
+                <p className="cookie-category__desc">{c.description}</p>
+                {!c.active && c.inactiveNote && (
+                  <p className="cookie-category__note">{c.inactiveNote}</p>
+                )}
+              </div>
+              <label className="cookie-toggle">
+                <input
+                  type="checkbox"
+                  aria-label={c.title}
+                  data-category={c.id}
+                  checked={selectable ? draft[c.id] : false}
+                  disabled={!selectable}
+                  onChange={(e) =>
+                    setDraft((d) => ({ ...d, [c.id]: e.target.checked }))
+                  }
+                />
+                <span className="cookie-toggle__track" />
+              </label>
+            </div>
+          );
+        })}
 
         <div className="cookie-panel__actions">
           <button

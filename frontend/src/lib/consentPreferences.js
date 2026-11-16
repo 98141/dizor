@@ -4,6 +4,25 @@ import { useSyncExternalStore } from "react";
 import { grantAnalyticsConsent, denyAnalyticsConsent } from "@/lib/analytics/consent";
 import { CONSENT_VERSION, readValidRecord, writeRecord } from "@/lib/consentRecord";
 import { isAnalyticsConfigured } from "@/lib/analytics/config";
+import { forgetVisit } from "@/services/visitService";
+
+const VISIT_DAY_KEY = "dizor_last_visit_day";
+
+// Al no haber permiso de estadísticas propias se elimina lo que guarda el
+// contador: la clave local y la cookie que emite la API. Idempotente.
+function clearStatisticsStorage() {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.removeItem(VISIT_DAY_KEY);
+  } catch {
+    // ignorar
+  }
+  forgetVisit().catch(() => {});
+}
+
+export function hasStatisticsConsent() {
+  return Boolean(preferences?.statistics);
+}
 
 // Registro estructurado de preferencias de cookies. Orquesta el adaptador
 // técnico de analítica (src/lib/analytics/consent.js), que deriva su estado
@@ -31,6 +50,14 @@ function setPreferences(record) {
 
 if (typeof window !== "undefined") {
   preferences = readValidRecord();
+  // Restos de versiones anteriores (antes el contador no pedía permiso).
+  if (!preferences?.statistics) {
+    try {
+      window.localStorage.removeItem(VISIT_DAY_KEY);
+    } catch {
+      // ignorar
+    }
+  }
 }
 
 export function getStoredPreferences() {
@@ -52,8 +79,9 @@ export function usePreferences() {
 
 // marketing queda fijo en false: no existe ninguna integración de marketing
 // todavía, así que nunca se persiste como aceptado bajo ninguna circunstancia.
-export function savePreferences({ analytics }) {
+export function savePreferences({ analytics, statistics }) {
   const record = {
+    statistics: Boolean(statistics),
     // Sin un servicio de analítica configurado no hay nada que aceptar
     // (H-09): la categoría se guarda siempre como no aceptada.
     analytics: Boolean(analytics) && isAnalyticsConfigured(),
@@ -67,14 +95,15 @@ export function savePreferences({ analytics }) {
   } else {
     denyAnalyticsConsent();
   }
+  if (!record.statistics) clearStatisticsStorage();
 }
 
 export function acceptAllPreferences() {
-  savePreferences({ analytics: true });
+  savePreferences({ analytics: true, statistics: true });
 }
 
 export function rejectAllPreferences() {
-  savePreferences({ analytics: false });
+  savePreferences({ analytics: false, statistics: false });
 }
 
 // Retira el consentimiento por completo: borra la decisión guardada (el
@@ -82,6 +111,7 @@ export function rejectAllPreferences() {
 export function withdrawConsent() {
   setPreferences(null);
   denyAnalyticsConsent();
+  clearStatisticsStorage();
 }
 
 // ─── Estado del panel de preferencias ──────────────────────────────────────

@@ -23,6 +23,10 @@ const PAYMENT_LABELS = {
   nequi_manual: "Nequi (transferencia manual)",
   nequi_api: "Nequi",
   contra_entrega: "Pago contra entrega",
+  efectivo: "Efectivo",
+  nequi_presencial: "Nequi presencial",
+  tarjeta: "Tarjeta",
+  transferencia: "Transferencia",
 };
 
 const PAYMENT_STATUS_LABELS = {
@@ -32,13 +36,98 @@ const PAYMENT_STATUS_LABELS = {
   reembolsado: "Reembolsado",
 };
 
-// Título según el estado REAL del pedido devuelto por el servidor (H-20).
-// Una redirección desde la pasarela no implica pago aprobado.
-function headingFor(order) {
-  if (order.paymentStatus === "pagado") return "¡Pago aprobado! Pedido confirmado";
-  if (order.paymentStatus === "rechazado") return "El pago no se completó";
-  if (order.paymentMethod === "contra_entrega") return "Pedido recibido";
-  return "Pedido recibido · pago pendiente";
+const ORDER_STATUS_LABELS = {
+  pendiente: "Pendiente",
+  pago_pendiente: "Pago pendiente",
+  pagado: "Pagado",
+  en_preparacion: "En preparación",
+  enviado: "Enviado",
+  entregado: "Entregado",
+  cancelado: "Cancelado",
+  rechazado: "Rechazado",
+  devuelto: "Devuelto",
+};
+
+function statusTone(status) {
+  if (status === "entregado" || status === "pagado") return "positive";
+  if (status === "cancelado" || status === "rechazado" || status === "devuelto") return "critical";
+  if (status === "pendiente" || status === "pago_pendiente") return "pending";
+  return "neutral";
+}
+
+function formatOrderDate(iso) {
+  if (!iso) return "";
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return "";
+  return date.toLocaleDateString("es-CO", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
+// El título no afirma un pago que el servidor no haya marcado como aprobado.
+function confirmationCopy(order) {
+  if (order.paymentStatus === "rechazado" || order.orderStatus === "rechazado") {
+    return {
+      tone: "alert",
+      title: "El pago no se completó",
+      lead: "El pedido quedó registrado, pero el pago no fue aprobado. El estado que ves es el que devolvió el sistema.",
+    };
+  }
+  if (order.orderStatus === "cancelado") {
+    return {
+      tone: "alert",
+      title: "Este pedido fue cancelado",
+      lead: "Conserva el número si necesitas consultarlo más adelante.",
+    };
+  }
+  if (order.orderStatus === "devuelto") {
+    return {
+      tone: "quiet",
+      title: "Pedido devuelto",
+      lead: "El estado que ves es el registrado en el sistema.",
+    };
+  }
+
+  let lead = order.receiptSent
+    ? "Te enviamos a tu correo el acuse de recibo con el detalle del pedido."
+    : "Tu pedido quedó registrado. Conserva este número para consultarlo cuando lo necesites.";
+
+  if (order.paymentStatus === "pendiente" && order.paymentMethod !== "contra_entrega") {
+    lead = order.receiptSent
+      ? "Te enviamos el acuse de recibo. El pago sigue pendiente de confirmación."
+      : "Tu pedido quedó registrado. El pago sigue pendiente de confirmación.";
+  }
+
+  return {
+    tone: "ok",
+    title: "¡Gracias por tu compra!",
+    lead,
+  };
+}
+
+function OrderGlyph({ tone }) {
+  const alert = tone === "alert";
+  return (
+    <span className={`order-glyph${alert ? " order-glyph--alert" : tone === "quiet" ? " order-glyph--quiet" : ""}`} aria-hidden="true">
+      {alert ? (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <path d="M12 8v5" strokeLinecap="round" />
+          <circle cx="12" cy="16.6" r="0.7" fill="currentColor" stroke="none" />
+        </svg>
+      ) : tone === "quiet" ? (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <path d="M7 8.5h10v9.5H7z" />
+          <path d="M9 8.5V7.2A3 3 0 0 1 12 4a3 3 0 0 1 3 3.2v1.3" strokeLinecap="round" />
+        </svg>
+      ) : (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <path d="M6.5 12.5 10 16l7.5-8" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      )}
+    </span>
+  );
 }
 
 function RegistroPromptModal({ email, name, isOpen, onClose }) {
@@ -57,17 +146,16 @@ function RegistroPromptModal({ email, name, isOpen, onClose }) {
     return (
       <div className="confirm-modal-overlay">
         <div
-          className="confirm-modal"
+          className="confirm-modal order-register order-register--done"
           role="dialog"
           aria-modal="true"
-          style={{ maxWidth: "480px", textAlign: "center" }}
         >
-          <p style={{ fontSize: "2rem", margin: "0 0 0.5rem" }}>✓</p>
+          <OrderGlyph tone="ok" />
           <h2 className="guest-modal__title">¡Cuenta creada!</h2>
           <p className="confirm-modal__message">
             Tus pedidos quedan guardados en tu perfil.
           </p>
-          <div className="confirm-modal__actions" style={{ justifyContent: "center" }}>
+          <div className="confirm-modal__actions">
             <Link
               href="/cuenta"
               className="modal-action-btn modal-action-btn--primary"
@@ -133,12 +221,11 @@ function RegistroPromptModal({ email, name, isOpen, onClose }) {
   return (
     <div className="confirm-modal-overlay" onClick={onClose}>
       <div
-        className="confirm-modal"
+        className="confirm-modal order-register"
         role="dialog"
         aria-modal="true"
         aria-labelledby="registro-modal-title"
         onClick={(e) => e.stopPropagation()}
-        style={{ maxWidth: "480px" }}
       >
         <h2 id="registro-modal-title" className="guest-modal__title">
           ¿Guardar tus datos para próximas compras?
@@ -190,10 +277,7 @@ function RegistroPromptModal({ email, name, isOpen, onClose }) {
             compact
           />
           {regError && <AuthErrorAlert message={regError} />}
-          <div
-            className="confirm-modal__actions"
-            style={{ marginTop: "1rem" }}
-          >
+          <div className="confirm-modal__actions order-register__actions">
             <button
               type="button"
               className="modal-action-btn"
@@ -234,6 +318,210 @@ function buildWhatsAppMessage(order) {
   lines.push(Number(order.shippingCost) > 0 ? `Envío: ${fmt(order.shippingCost)}` : "Envío: Gratis");
   lines.push(`*Total a pagar: ${fmt(order.total)}*`, "", "Adjunto el comprobante Nequi.");
   return lines.join("\n");
+}
+
+function NextStep({ order }) {
+  const paid = order.paymentStatus === "pagado";
+  const rejected = order.paymentStatus === "rechazado";
+  const closed = ["cancelado", "rechazado", "devuelto"].includes(order.orderStatus);
+
+  if (!rejected && !closed && order.paymentMethod === "nequi_manual" && !paid) {
+    return (
+      <section className="order-note order-note--attention" aria-labelledby="order-next-title">
+        <h2 id="order-next-title" className="order-note__title">Siguiente paso</h2>
+        <p>
+          Envía el comprobante de tu transferencia Nequi por WhatsApp al
+          número de atención de Dizor para confirmar tu pago.
+        </p>
+        <a
+          href={getWhatsAppUrl(buildWhatsAppMessage(order))}
+          target="_blank"
+          rel="noreferrer"
+          className="order-btn order-btn--primary"
+          onClick={() =>
+            trackWhatsAppClick({ linkLocation: "order_confirmation", purpose: "payment_proof" })
+          }
+        >
+          Enviar comprobante por WhatsApp
+        </a>
+      </section>
+    );
+  }
+
+  if (!rejected && !closed && order.paymentMethod === "wompi" && !paid) {
+    return (
+      <section className="order-note" aria-labelledby="order-next-title">
+        <h2 id="order-next-title" className="order-note__title">Pago en línea</h2>
+        <p>
+          Estamos esperando la confirmación de Wompi. El estado del pago se
+          actualizará cuando la pasarela lo confirme; puedes consultarlo en
+          el seguimiento del pedido.
+        </p>
+      </section>
+    );
+  }
+
+  if (!rejected && !closed && order.paymentMethod === "nequi_api" && !paid) {
+    return (
+      <section className="order-note" aria-labelledby="order-next-title">
+        <h2 id="order-next-title" className="order-note__title">Pago en línea</h2>
+        <p>
+          Estamos esperando la confirmación de Nequi. El estado del pago se
+          actualizará cuando quede confirmado en el sistema.
+        </p>
+      </section>
+    );
+  }
+
+  if (
+    !rejected &&
+    !closed &&
+    !paid &&
+    order.paymentStatus !== "reembolsado" &&
+    order.paymentMethod === "contra_entrega"
+  ) {
+    return (
+      <section className="order-note" aria-labelledby="order-next-title">
+        <h2 id="order-next-title" className="order-note__title">Siguiente paso</h2>
+        <p>
+          Pagarás al recibir tu pedido. El repartidor cobrará el valor exacto
+          en efectivo o con tu método acordado.
+        </p>
+      </section>
+    );
+  }
+
+  if (order.paymentStatus === "reembolsado") {
+    return (
+      <section className="order-note" aria-labelledby="order-next-title">
+        <h2 id="order-next-title" className="order-note__title">Pago</h2>
+        <p>El pago figura como reembolsado.</p>
+      </section>
+    );
+  }
+
+  if (order.orderStatus === "en_preparacion") {
+    return (
+      <section className="order-note" aria-labelledby="order-next-title">
+        <h2 id="order-next-title" className="order-note__title">Siguiente paso</h2>
+        <p>El pedido está en preparación.</p>
+      </section>
+    );
+  }
+
+  if (order.orderStatus === "enviado") {
+    return (
+      <section className="order-note" aria-labelledby="order-next-title">
+        <h2 id="order-next-title" className="order-note__title">Siguiente paso</h2>
+        <p>
+          El pedido figura como enviado. La guía, si ya fue registrada, aparece
+          al consultar el pedido con tu correo.
+        </p>
+      </section>
+    );
+  }
+
+  if (order.orderStatus === "entregado") {
+    return (
+      <section className="order-note" aria-labelledby="order-next-title">
+        <h2 id="order-next-title" className="order-note__title">Estado</h2>
+        <p>El pedido figura como entregado.</p>
+      </section>
+    );
+  }
+
+  return null;
+}
+
+function OrderSummary({ order }) {
+  const items = Array.isArray(order.items) ? order.items : [];
+  const paid = order.paymentStatus === "pagado";
+  const registered = formatOrderDate(order.createdAt);
+
+  return (
+    <>
+      <p className="order-ref">
+        Pedido <strong>{order.orderNumber}</strong>
+        <span className={`order-status order-status--${statusTone(order.orderStatus)}`}>
+          {ORDER_STATUS_LABELS[order.orderStatus] || order.orderStatus}
+        </span>
+      </p>
+      {registered && <p className="order-ref__date">Registrado el {registered}</p>}
+
+      <div className="order-view__body">
+        <section className="order-section" aria-labelledby="order-summary-title">
+          <h2 id="order-summary-title" className="order-section__title">Resumen</h2>
+          {items.length > 0 && (
+            <ul className="order-items">
+              {items.map((it, idx) => {
+                const variant = [it.sizeName, it.colorName].filter(Boolean).join(" · ");
+                const qty = `${it.quantity} × ${formatCOP(it.unitPrice)}`;
+                return (
+                  <li key={`${it.productName}-${idx}`}>
+                    <div>
+                      <p className="order-line__name">{it.productName}</p>
+                      <p className="order-line__meta">{variant ? `${variant} · ${qty}` : qty}</p>
+                    </div>
+                    <span className="order-line__amount">{formatCOP(it.lineTotal)}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+          <div className="order-totals">
+            <div className="order-totals__row">
+              <span>Subtotal</span>
+              <span>{formatCOP(order.subtotal)}</span>
+            </div>
+            {Number(order.discountTotal) > 0 && (
+              <div className="order-totals__row order-totals__row--discount">
+                <span>Descuento{order.couponCode ? ` (${order.couponCode})` : ""}</span>
+                <span>−{formatCOP(order.discountTotal)}</span>
+              </div>
+            )}
+            {Number(order.taxTotal) > 0 && (
+              <div className="order-totals__row">
+                <span>IVA{Number(order.ivaPercent) > 0 ? ` (${order.ivaPercent}%)` : ""}</span>
+                <span>{formatCOP(order.taxTotal)}</span>
+              </div>
+            )}
+            <div className="order-totals__row">
+              <span>Envío</span>
+              <span>{Number(order.shippingCost) > 0 ? formatCOP(order.shippingCost) : "Gratis"}</span>
+            </div>
+            <div className="order-totals__grand">
+              <span>{paid ? "Total pagado" : "Total"}</span>
+              <strong>{formatCOP(order.total)}</strong>
+            </div>
+          </div>
+        </section>
+
+        <section className="order-section" aria-labelledby="order-payment-title">
+          <h2 id="order-payment-title" className="order-section__title">Pago</h2>
+          <dl className="order-meta">
+            <div>
+              <dt>Método</dt>
+              <dd>{PAYMENT_LABELS[order.paymentMethod] || order.paymentMethod}</dd>
+            </div>
+            <div>
+              <dt>Estado del pago</dt>
+              <dd>{PAYMENT_STATUS_LABELS[order.paymentStatus] || order.paymentStatus}</dd>
+            </div>
+          </dl>
+        </section>
+
+        <NextStep order={order} />
+      </div>
+    </>
+  );
+}
+
+function OrderViewFrame({ children, busy = false }) {
+  return (
+    <div className="order-view" aria-busy={busy || undefined}>
+      <div className="order-view__shell">{children}</div>
+    </div>
+  );
 }
 
 function ConfirmacionContent() {
@@ -291,180 +579,110 @@ function ConfirmacionContent() {
 
   if (!orderNumber) {
     return (
-      <div className="checkout-page checkout-success">
-        <p>Información de pedido no encontrada.</p>
-        <Link href="/">Volver al inicio</Link>
-      </div>
+      <OrderViewFrame>
+        <article className="order-view__panel order-view__panel--center">
+          <h1 className="order-view__title">No encontramos el pedido</h1>
+          <p className="order-view__lead">Este enlace no incluye un número de pedido.</p>
+          <div className="order-actions">
+            <Link href="/catalogo" className="order-btn order-btn--primary">
+              Volver a la tienda
+            </Link>
+          </div>
+        </article>
+      </OrderViewFrame>
     );
   }
 
   if (status === "loading") {
-    return <p className="auth-loading">Cargando confirmación...</p>;
-  }
-
-  if (status === "limited") {
     return (
-      <div className="checkout-page">
-        <h1 className="checkout-page__title checkout-success__heading">
-          Pedido {orderNumber}
-        </h1>
-        <p className="checkout-success__sub">
-          Por seguridad, el detalle del pedido solo se muestra en el navegador
-          donde hiciste la compra o si inicias sesión con tu cuenta.
-        </p>
-        <div className="checkout-confirm-actions">
-          <Link
-            href={`/seguimiento?order=${encodeURIComponent(orderNumber)}`}
-            className="checkout-btn checkout-btn--primary"
-          >
-            Consultar con número de pedido y correo
-          </Link>
-          <Link href="/login" className="checkout-btn">
-            Iniciar sesión
-          </Link>
+      <OrderViewFrame busy>
+        <div className="order-view__panel order-view__panel--loading">
+          <p className="order-view__loading">Cargando confirmación…</p>
         </div>
-      </div>
+      </OrderViewFrame>
     );
   }
 
-  const paid = order.paymentStatus === "pagado";
+  if (status === "limited") {
+    const loginHref = `/login?next=${encodeURIComponent(confirmationPath(orderNumber))}`;
+    return (
+      <OrderViewFrame>
+        <article className="order-view__panel order-view__panel--center">
+          <h1 className="order-view__title">Verifica tu acceso</h1>
+          <p className="order-ref">
+            Pedido <strong>{orderNumber}</strong>
+          </p>
+          <p className="order-view__lead">
+            Por seguridad, el detalle del pedido solo se muestra en el navegador
+            donde hiciste la compra o si inicias sesión con tu cuenta.
+          </p>
+          <div className="order-actions">
+            <Link
+              href={`/seguimiento?order=${encodeURIComponent(orderNumber)}`}
+              className="order-btn order-btn--primary"
+            >
+              Consultar pedido
+            </Link>
+            <Link href={loginHref} className="order-btn order-btn--ghost">
+              Iniciar sesión
+            </Link>
+          </div>
+          <Link href="/catalogo" className="order-view__quiet">
+            Volver a la tienda
+          </Link>
+        </article>
+      </OrderViewFrame>
+    );
+  }
+
+  const copy = confirmationCopy(order);
+  const orderHref = isAuthenticated
+    ? "/cuenta?tab=pedidos"
+    : `/seguimiento?order=${encodeURIComponent(order.orderNumber)}`;
 
   return (
-    <div className="checkout-page">
-      <RegistroPromptModal
-        email={order.buyer?.email || ""}
-        name={order.buyer?.name || ""}
-        isOpen={showRegistroModal && !isAuthenticated}
-        onClose={() => setShowRegistroModal(false)}
-      />
+    <OrderViewFrame>
+      <article className="order-view__panel">
+        <RegistroPromptModal
+          email={order.buyer?.email || ""}
+          name={order.buyer?.name || ""}
+          isOpen={showRegistroModal && !isAuthenticated}
+          onClose={() => setShowRegistroModal(false)}
+        />
 
-      <div className="checkout-success-icon" aria-hidden="true">
-        {order.paymentStatus === "rechazado" ? "!" : "✓"}
-      </div>
+        <header className="order-view__hero">
+          <h1 className="order-view__title">{copy.title}</h1>
+          <p className="order-view__lead">{copy.lead}</p>
+        </header>
 
-      <h1 className="checkout-page__title checkout-success__heading">{headingFor(order)}</h1>
-      <p className="checkout-success__sub">
-        {order.receiptSent
-          ? "Te enviamos a tu correo el acuse de recibo con el detalle del pedido."
-          : "Guarda tu número de pedido para hacer seguimiento."}
-      </p>
+        <OrderSummary order={order} />
 
-      <div className="checkout-confirm-card">
-        <div className="checkout-confirm-row">
-          <span>Número de pedido</span>
-          <strong className="checkout-confirm-highlight">{order.orderNumber}</strong>
-        </div>
-        {order.items.map((it, idx) => (
-          <div className="checkout-confirm-row" key={`${it.productName}-${idx}`}>
-            <span>
-              {it.productName}
-              {[it.sizeName, it.colorName].filter(Boolean).length > 0
-                ? ` · ${[it.sizeName, it.colorName].filter(Boolean).join(" · ")}`
-                : ""}{" "}
-              × {it.quantity} ({formatCOP(it.unitPrice)} c/u)
-            </span>
-            <span>{formatCOP(it.lineTotal)}</span>
-          </div>
-        ))}
-        <div className="checkout-confirm-row">
-          <span>Subtotal</span>
-          <span>{formatCOP(order.subtotal)}</span>
-        </div>
-        {order.discountTotal > 0 && (
-          <div className="checkout-confirm-row" style={{ color: "var(--color-success)" }}>
-            <span>Descuento{order.couponCode ? ` (${order.couponCode})` : ""}</span>
-            <span>−{formatCOP(order.discountTotal)}</span>
-          </div>
-        )}
-        {order.taxTotal > 0 && (
-          <div className="checkout-confirm-row">
-            <span>IVA{order.ivaPercent > 0 ? ` (${order.ivaPercent}%)` : ""}</span>
-            <span>{formatCOP(order.taxTotal)}</span>
-          </div>
-        )}
-        <div className="checkout-confirm-row">
-          <span>Envío</span>
-          <span>{order.shippingCost > 0 ? formatCOP(order.shippingCost) : "Gratis"}</span>
-        </div>
-        <div className="checkout-confirm-row">
-          <span>{paid ? "Total pagado" : "Total"}</span>
-          <strong>{formatCOP(order.total)}</strong>
-        </div>
-        <div className="checkout-confirm-row">
-          <span>Método de pago</span>
-          <span>{PAYMENT_LABELS[order.paymentMethod] || order.paymentMethod}</span>
-        </div>
-        <div className="checkout-confirm-row">
-          <span>Estado del pago</span>
-          <span>{PAYMENT_STATUS_LABELS[order.paymentStatus] || order.paymentStatus}</span>
-        </div>
-      </div>
-
-      {order.paymentMethod === "nequi_manual" && !paid && (
-        <div className="checkout-payment-notice checkout-payment-notice--nequi">
-          <p className="checkout-payment-notice__title">Siguiente paso</p>
-          <p>
-            Envía el comprobante de tu transferencia Nequi por WhatsApp al
-            número de atención de Dizor para confirmar tu pago.
-          </p>
-          <a
-            href={getWhatsAppUrl(buildWhatsAppMessage(order))}
-            target="_blank"
-            rel="noreferrer"
-            className="checkout-btn checkout-btn--primary"
-            style={{ display: "inline-block", marginTop: "0.75rem" }}
-            onClick={() =>
-              trackWhatsAppClick({ linkLocation: "order_confirmation", purpose: "payment_proof" })
-            }
-          >
-            Enviar comprobante por WhatsApp
-          </a>
-        </div>
-      )}
-
-      {order.paymentMethod === "wompi" && !paid && order.paymentStatus !== "rechazado" && (
-        <div className="checkout-payment-notice">
-          <p className="checkout-payment-notice__title">Pago en línea</p>
-          <p>
-            Estamos esperando la confirmación de Wompi. El estado del pago se
-            actualizará cuando la pasarela lo confirme; puedes consultarlo en
-            el seguimiento del pedido.
-          </p>
-        </div>
-      )}
-
-      {order.paymentMethod === "contra_entrega" && (
-        <div className="checkout-payment-notice checkout-payment-notice--info">
-          <p>
-            Pagarás al recibir tu pedido. El repartidor cobrará el valor exacto
-            en efectivo o con tu método acordado.
-          </p>
-        </div>
-      )}
-
-      <div className="checkout-confirm-actions">
-        <Link
-          href={`/seguimiento?order=${encodeURIComponent(order.orderNumber)}`}
-          className="checkout-btn checkout-btn--primary"
-        >
-          Rastrear pedido
-        </Link>
-        {isAuthenticated && (
-          <Link href="/cuenta?tab=pedidos" className="checkout-btn">
-            Ver mis pedidos
+        <div className="order-actions order-actions--split">
+          <Link href={orderHref} className="order-btn order-btn--primary">
+            Ver mi pedido
           </Link>
-        )}
-        <Link href="/catalogo" className="checkout-btn">
-          Seguir comprando
-        </Link>
-      </div>
-    </div>
+          <Link href="/catalogo" className="order-btn order-btn--ghost">
+            Seguir explorando
+          </Link>
+        </div>
+      </article>
+    </OrderViewFrame>
   );
 }
 
 export default function ConfirmacionPage() {
   return (
-    <Suspense fallback={<p className="auth-loading">Cargando confirmación...</p>}>
+    <Suspense
+      fallback={
+        <div className="order-view">
+          <div className="order-view__shell">
+            <div className="order-view__panel order-view__panel--loading">
+              <p className="order-view__loading">Cargando confirmación…</p>
+            </div>
+          </div>
+        </div>
+      }
+    >
       <ConfirmacionContent />
     </Suspense>
   );

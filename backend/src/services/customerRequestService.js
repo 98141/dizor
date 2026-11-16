@@ -5,6 +5,7 @@ const CustomerRequest = require("../models/customerRequest");
 const { CATEGORY_TYPES, STATUSES } = require("../models/customerRequest");
 const AppError = require("../utils/AppError");
 const { issueAccessToken, matchesHash } = require("../utils/opaqueTokens");
+const { hashToken } = require("../utils/cryptoUtils");
 const { requireAuthorization, recordConsent } = require("./consentService");
 const { PURPOSES } = require("../config/legalTexts");
 
@@ -92,6 +93,22 @@ const sendReceipt = async (doc, accessCode) => {
   }
 };
 
+const IDEMPOTENCY_KEY_PATTERN = /^[A-Za-z0-9-]{16,100}$/;
+
+// Busca una solicitud ya creada con la misma clave de idempotencia. Solo la
+// reutiliza si coincide el correo (la clave nunca sirve para abrir solicitudes
+// ajenas) y rota su código de consulta.
+const resolveDuplicate = async (idempotencyKeyHash, email, newTokenHash) => {
+  const existing = await CustomerRequest.findOne({ idempotencyKeyHash });
+  if (!existing) return null;
+  if (existing.contact.email !== email) {
+    throw new AppError("No se pudo registrar la solicitud. Recarga la página e inténtalo de nuevo.", 409);
+  }
+  existing.accessTokenHash = newTokenHash;
+  await existing.save();
+  return existing;
+};
+
 /**
  * Radica una solicitud. Primero se PERSISTE; solo después se devuelve el
  * radicado (no se muestra éxito si no quedó guardada).
@@ -124,7 +141,31 @@ const createCustomerRequest = async ({ body, user }) => {
     throw new AppError("Describe tu solicitud (mínimo 10 caracteres)", 400);
   }
 
+  // Idempotencia: el formulario envía una clave aleatoria por intento. Si la
+  // respuesta se pierde y el cliente reintenta con la misma clave, no se crea
+  // un segundo radicado: se devuelve el existente con un código nuevo (el
+  // anterior queda invalidado) y se reenvía la constancia.
+  const idemKey = typeof body?.idempotencyKey === "string" ? body.idempotencyKey.trim() : "";
+  const idempotencyKeyHash = IDEMPOTENCY_KEY_PATTERN.test(idemKey) ? hashToken(idemKey) : null;
+
   const { token, tokenHash } = issueAccessToken();
+
+  if (idempotencyKeyHash) {
+    const existing = await resolveDuplicate(idempotencyKeyHash, email, tokenHash);
+    if (existing) {
+      const receiptSent = await sendReceipt(existing, token);
+      return {
+        radicado: existing.radicado,
+        receivedAt: existing.receivedAt,
+        category: existing.category,
+        type: existing.type,
+        accessCode: token,
+        receiptSent,
+        duplicate: true,
+      };
+    }
+  }
+
   const receivedAt = new Date();
 
   let doc = null;
@@ -141,10 +182,28 @@ const createCustomerRequest = async ({ body, user }) => {
         history: [{ status: "recibida", changedAt: receivedAt }],
         user: user?.id || null,
         accessTokenHash: tokenHash,
+        idempotencyKeyHash,
         receivedAt,
       });
     } catch (err) {
-      if (err?.code !== 11000) throw err; // colisión de radicado: reintentar
+      if (err?.code !== 11000) throw err;
+      // Reintento concurrente con la misma clave: devolver el existente.
+      if (idempotencyKeyHash && err?.keyPattern?.idempotencyKeyHash) {
+        const existing = await resolveDuplicate(idempotencyKeyHash, email, tokenHash);
+        if (existing) {
+          const receiptSent = await sendReceipt(existing, token);
+          return {
+            radicado: existing.radicado,
+            receivedAt: existing.receivedAt,
+            category: existing.category,
+            type: existing.type,
+            accessCode: token,
+            receiptSent,
+            duplicate: true,
+          };
+        }
+      }
+      // Si no, fue una colisión de radicado: reintentar con otro.
     }
   }
   if (!doc) throw new AppError("No se pudo registrar la solicitud. Intenta de nuevo.", 500);

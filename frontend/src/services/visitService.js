@@ -13,6 +13,11 @@ export const getVisitCount = async () => {
   }
 };
 
+// Retirada del permiso de estadísticas: la API borra su cookie de conteo.
+export const forgetVisit = async () => {
+  await fetch(`${API}/visits/forget`, { method: "POST", credentials: "include" });
+};
+
 export const registerVisit = async () => {
   const res = await fetch(`${API}/visits/register`, {
     method: "POST",
