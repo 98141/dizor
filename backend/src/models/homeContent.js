@@ -198,7 +198,7 @@ const homeContentSchema = new mongoose.Schema(
       instagramUrl: {
         type: String,
         trim: true,
-        default: "https://www.instagram.com/",
+        default: "https://www.instagram.com/sombrereriadizor/",
       },
     },
     reseñasSection: {

@@ -71,9 +71,10 @@
 
 .site-header__logo-img {
   display: block;
-  height: 44px;
+  height: 56px;
   width: auto;
-  max-width: 160px;
+  max-width: 260px;
+  background: #ffffff;
   object-fit: contain;
   transition:
     height var(--motion-normal) var(--ease-out),
@@ -81,8 +82,8 @@
 }
 
 .site-header.is-scrolled .site-header__logo-img {
-  height: 38px;
-  max-width: 140px;
+  height: 48px;
+  max-width: 225px;
 }
 
 .site-header__search-wrap {
@@ -486,13 +487,13 @@
   }
 
   .site-header__logo-img {
-    height: 56px;
-    max-width: 200px;
+    height: 66px;
+    max-width: 280px;
   }
 
   .site-header.is-scrolled .site-header__logo-img {
-    height: 44px;
-    max-width: 170px;
+    height: 52px;
+    max-width: 225px;
   }
 
   .site-header__menu-btn,
@@ -708,8 +709,8 @@
 /* Tablet intermedia: evitar overflow sin forzar nav denso */
 @media (min-width: 900px) and (max-width: 1023px) {
   .site-header__logo-img {
-    height: 48px;
-    max-width: 170px;
+    height: 60px;
+    max-width: 260px;
   }
 
   .site-header__actions {

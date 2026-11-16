@@ -12,9 +12,8 @@ import "@/styles/pages/not-found.css";
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://sombrerosdizor.com.co").replace(/\/$/, "");
 
-// Assets estáticos de respaldo (se usan si la BBDD no trae una URL propia).
-// Pegar los archivos en: frontend/public/images/
-const DEFAULT_FAVICON = "/icon-512.png";
+// Favicon estático de marca, compuesto sobre blanco para conservar contraste.
+const FAVICON = "/favicon-dizor-192.png?v=20260917";
 
 export async function generateMetadata() {
   const appearance = await fetchAppearance();
@@ -53,9 +52,12 @@ export async function generateMetadata() {
     twitter: { card: "summary_large_image" },
     robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
     icons: {
-      icon: appearance?.faviconUrl || DEFAULT_FAVICON,
-      shortcut: appearance?.faviconUrl || DEFAULT_FAVICON,
-      apple: appearance?.faviconUrl || DEFAULT_FAVICON,
+      icon: [
+        { url: FAVICON, sizes: "192x192", type: "image/png" },
+        { url: "/favicon-dizor.png", sizes: "512x512", type: "image/png" },
+      ],
+      shortcut: FAVICON,
+      apple: FAVICON,
     },
   };
 }

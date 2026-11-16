@@ -100,7 +100,7 @@ const DEFAULT_HOME = {
     subtitle:
       "Una selección visual del universo Dizor: fotografías curadas del oficio y de nuestras piezas.",
     ctaLabel: "Síguenos en Instagram",
-    instagramUrl: "https://www.instagram.com/",
+    instagramUrl: "https://www.instagram.com/sombrereriadizor/",
   },
   reseñasSection: {
     eyebrow: "VOCES",

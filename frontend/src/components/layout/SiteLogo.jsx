@@ -4,17 +4,18 @@ import Link from "next/link";
 import { useState } from "react";
 import { useSiteConfig } from "@/context/SiteConfigContext";
 
+const NAVBAR_LOGO = "/logoHorizontal-navbar.png";
+const BRAND_FALLBACK = "Dizor";
+
 /**
- * Logo del navbar: imagen de BBDD/CMS si existe.
- * Sin URL (o si falla la carga) → nombre del sitio en texto.
- * No pedir /images/logo-dizor-horizontal.png si el archivo no está en el repo.
+ * Logo del navbar: usa el recurso horizontal incluido en public.
+ * Si el recurso no está disponible, muestra el nombre de la marca en texto.
  */
 export default function SiteLogo({ active = false }) {
-  const { siteName, logoUrl } = useSiteConfig();
+  const { siteName } = useSiteConfig();
   const [imgFailed, setImgFailed] = useState(false);
 
-  const src = (logoUrl || "").trim();
-  const showImg = Boolean(src) && !imgFailed;
+  const showImg = !imgFailed;
 
   return (
     <Link
@@ -26,16 +27,16 @@ export default function SiteLogo({ active = false }) {
       aria-label={siteName}
     >
       {showImg ? (
-        // CMS puede servir cualquier host; <img> + onError evita 404 de asset local.
-        // eslint-disable-next-line @next/next/no-img-element -- remote/CMS logo fallback
+        // El manejo de error habilita el respaldo textual si el asset local no existe.
+        // eslint-disable-next-line @next/next/no-img-element -- static local logo with text fallback
         <img
-          src={src}
+          src={NAVBAR_LOGO}
           alt={siteName}
           className="site-header__logo-img"
           onError={() => setImgFailed(true)}
         />
       ) : (
-        siteName
+        BRAND_FALLBACK
       )}
     </Link>
   );

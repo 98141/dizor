@@ -2014,18 +2014,20 @@
   }
 }
 
-/* ─── Inspiración (mosaico editorial — contain, fondo página) ─── */
+/* ─── Inspiración (galería editorial — filas justificadas, sin recortes) ───
+   Cada foto conserva su proporción (--ar). En tablet/escritorio las fotos de
+   una fila comparten altura y su ancho es su fracción de la fila (--ft/--fd);
+   --kt/--kd = fotos en la fila. Valores calculados en lib/inspirationLayout. */
 
 .home-section--inspire {
   border-top: 1px solid var(--color-border);
-  --inspiration-matte: var(--color-bg);
 }
 
 .home-inspire__header {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  margin-bottom: 1.35rem;
+  margin-bottom: 1.5rem;
 }
 
 @media (min-width: 768px) {
@@ -2033,7 +2035,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-end;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.75rem;
   }
 
   .home-inspire__header > div {
@@ -2041,154 +2043,104 @@
   }
 }
 
-.home-inspire__mosaic {
-  display: grid;
-  gap: 0.7rem;
-}
-
-.home-inspire__cell {
-  position: relative;
-  overflow: hidden;
-  display: block;
-  aspect-ratio: 4 / 3;
-  background: var(--inspiration-matte);
-  border: none;
-  border-radius: 0;
-  box-shadow: none;
+.home-inspire__gallery {
+  --inspire-gap: 0.5rem;
+  --inspire-row-max-h: min(78vh, 680px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--inspire-gap);
+  margin: 0;
   padding: 0;
-  min-height: 0;
-  color: inherit;
-  text-decoration: none;
+  list-style: none;
 }
 
-.home-inspire__cell:focus-visible {
+/* Móvil: una columna, cada foto a ancho completo y proporción natural */
+.home-inspire__item {
+  flex: 0 0 100%;
+  min-width: 0;
+}
+
+.home-inspire__tile {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: var(--ar, 4 / 5);
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background: var(--color-bg-hover);
+  cursor: zoom-in;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.home-inspire__tile:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 3px;
 }
 
-.home-inspire__cell img,
-.home-inspire__img {
-  object-fit: contain;
-  object-position: center center;
-  transition: transform var(--motion-image) var(--ease-image);
+/* Contenedor y foto con la misma proporción → cover no recorta nada */
+.home-inspire__photo {
+  object-fit: cover;
+  object-position: center;
+  transition:
+    transform var(--motion-image) var(--ease-image),
+    filter var(--motion-image) var(--ease-image);
 }
 
-.home-inspire__cell:hover img,
-.home-inspire__cell:hover .home-inspire__img {
-  transform: scale(1.012);
+/* Velo muy sutil al pasar el cursor: invita a ampliar sin texto encima */
+.home-inspire__tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(26, 26, 26, 0.06);
+  opacity: 0;
+  transition: opacity var(--motion-normal) var(--ease-standard);
+  pointer-events: none;
 }
 
-/* Móvil: scroll horizontal — matte sin marcos enormes */
-@media (max-width: 767px) {
-  .home-inspire__mosaic {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    gap: 0.65rem;
-    margin-inline: -1.25rem;
-    padding-inline: 1.25rem;
-    overscroll-behavior-x: contain;
-    scrollbar-width: thin;
+@media (hover: hover) {
+  .home-inspire__tile:hover .home-inspire__photo {
+    transform: scale(1.035);
   }
 
-  .home-inspire__cell {
-    flex: 0 0 min(82vw, 20.5rem);
-    scroll-snap-align: start;
-    aspect-ratio: 5 / 4;
-  }
-
-  .home-inspire__mosaic--n1 .home-inspire__cell {
-    flex: 0 0 min(90vw, 24rem);
-    aspect-ratio: 3 / 2;
+  .home-inspire__tile:hover::after {
+    opacity: 1;
   }
 }
 
-@media (min-width: 768px) {
-  .home-inspire__mosaic--n1 {
-    grid-template-columns: minmax(0, 1fr);
-    max-width: 48rem;
+/* Tablet: filas justificadas, preferentemente 2 por fila */
+@media (min-width: 640px) {
+  .home-inspire__gallery {
+    --inspire-gap: 0.625rem;
+    --inspire-row-max-h: min(72vh, 560px);
+    /* La fila más baja en ratios no supera la altura máxima */
+    max-width: calc(
+      var(--inspire-row-max-h) * var(--sum-t, 99) + 2 * var(--inspire-gap)
+    );
     margin-inline: auto;
   }
 
-  .home-inspire__mosaic--n1 .home-inspire__cell {
-    aspect-ratio: 16 / 10;
-  }
-
-  .home-inspire__mosaic--n2 {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .home-inspire__mosaic--n2 .home-inspire__cell {
-    aspect-ratio: 4 / 3;
-  }
-
-  /* Geometría n3 conservada; min-height moderado → menos letterbox forzado */
-  .home-inspire__mosaic--n3 {
-    grid-template-columns: 1.35fr 1fr;
-    grid-template-rows: repeat(2, minmax(0, 1fr));
-    min-height: min(20rem, 44vw);
-  }
-
-  .home-inspire__mosaic--n3 .home-inspire__cell--1 {
-    grid-column: 1;
-    grid-row: 1 / -1;
-    aspect-ratio: auto;
-    height: 100%;
-    min-height: 100%;
-  }
-
-  .home-inspire__mosaic--n3 .home-inspire__cell--2,
-  .home-inspire__mosaic--n3 .home-inspire__cell--3 {
-    aspect-ratio: auto;
-    min-height: 0;
-    height: 100%;
-  }
-
-  .home-inspire__mosaic--n4 {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
-    min-height: 0;
-  }
-
-  .home-inspire__mosaic--n4 .home-inspire__cell {
-    aspect-ratio: 4 / 3;
-  }
-
-  .home-inspire__mosaic--n4 .home-inspire__cell--1 {
-    grid-row: auto;
-    grid-column: auto;
-  }
-
-  /* Protagonista izq + 4 — misma geometría; altura mosaico moderada */
-  .home-inspire__mosaic--n5 {
-    grid-template-columns: 2fr 1fr 1fr;
-    grid-template-rows: repeat(2, minmax(0, 1fr));
-    gap: 0.7rem;
-    min-height: min(22rem, 40vw);
-  }
-
-  .home-inspire__mosaic--n5 .home-inspire__cell--1 {
-    grid-column: 1;
-    grid-row: 1 / span 2;
-    aspect-ratio: auto;
-    height: 100%;
-  }
-
-  .home-inspire__mosaic--n5 .home-inspire__cell:not(.home-inspire__cell--1) {
-    aspect-ratio: auto;
-    min-height: 0;
-    height: 100%;
+  .home-inspire__item {
+    flex: var(--ft) 1
+      calc((100% - (var(--kt) - 1) * var(--inspire-gap)) * var(--ft) - 1px);
   }
 }
 
+/* Escritorio: hasta 3 por fila, composición amplia */
 @media (min-width: 1024px) {
-  .home-inspire__mosaic--n3 {
-    min-height: 22rem;
+  .home-inspire__gallery {
+    --inspire-gap: 0.75rem;
+    --inspire-row-max-h: min(78vh, 680px);
+    max-width: calc(
+      var(--inspire-row-max-h) * var(--sum-d, 99) + 2 * var(--inspire-gap)
+    );
   }
 
-  .home-inspire__mosaic--n5 {
-    min-height: 24rem;
+  .home-inspire__item {
+    flex: var(--fd) 1
+      calc((100% - (var(--kd) - 1) * var(--inspire-gap)) * var(--fd) - 1px);
   }
 
   .home-section--inspire .home-container--wide {
@@ -2196,12 +2148,201 @@
   }
 }
 
-.home-inspire__cell .home-media-fallback {
-  position: absolute;
+/* ─── Lightbox Inspiración ─── */
+
+@keyframes inspireLightboxIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes inspireLightboxFrameIn {
+  from {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.home-inspire-lightbox {
+  --lb-chrome: 4.5rem;
+  position: fixed;
   inset: 0;
+  /* Sobre header (100), WhatsApp y banner de cookies (1300/1400) */
+  z-index: 1500;
+  display: flex;
+  flex-direction: column;
+  background: rgba(18, 17, 15, 0.95);
+  color: #fff;
+  animation: inspireLightboxIn var(--motion-normal) var(--ease-out);
+  overscroll-behavior: contain;
+}
+
+.home-inspire-lightbox__stage {
+  flex: 1 1 auto;
   min-height: 0;
-  height: 100%;
-  background: var(--inspiration-matte);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--lb-chrome) 1rem 0;
+}
+
+.home-inspire-lightbox__frame {
+  position: relative;
+  margin: 0;
+  aspect-ratio: var(--ar, 4 / 5);
+  width: min(100%, calc((100vh - 2 * var(--lb-chrome)) * var(--ar, 0.8)));
+  width: min(100%, calc((100dvh - 2 * var(--lb-chrome)) * var(--ar, 0.8)));
+  max-height: 100%;
+  animation: inspireLightboxFrameIn var(--motion-slow) var(--ease-out);
+}
+
+.home-inspire-lightbox__img {
+  object-fit: contain;
+  user-select: none;
+}
+
+.home-inspire-lightbox__btn {
+  position: absolute;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 50%;
+  background: rgba(18, 17, 15, 0.35);
+  color: #fff;
+  cursor: pointer;
+  transition:
+    background var(--motion-fast) var(--ease-standard),
+    border-color var(--motion-fast) var(--ease-standard);
+}
+
+.home-inspire-lightbox__btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.home-inspire-lightbox__btn:focus-visible,
+.home-inspire-lightbox__link:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.home-inspire-lightbox__close {
+  top: 1rem;
+  right: 1rem;
+}
+
+.home-inspire-lightbox__nav {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.home-inspire-lightbox__nav--prev {
+  left: 1rem;
+}
+
+.home-inspire-lightbox__nav--next {
+  right: 1rem;
+}
+
+.home-inspire-lightbox__footer {
+  flex: 0 0 var(--lb-chrome);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding-inline: 1rem;
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.home-inspire-lightbox__counter {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-variant-numeric: tabular-nums;
+}
+
+.home-inspire-lightbox__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 0.35em;
+}
+
+.home-inspire-lightbox__link svg {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+/* Móvil: navegación abajo para no tapar la foto (también hay swipe) */
+@media (max-width: 767px) {
+  .home-inspire-lightbox__stage {
+    padding-inline: 0.75rem;
+  }
+
+  .home-inspire-lightbox__nav {
+    top: auto;
+    bottom: 0.875rem;
+    transform: none;
+  }
+
+  .home-inspire-lightbox__nav--prev {
+    left: 0.75rem;
+  }
+
+  .home-inspire-lightbox__nav--next {
+    right: 0.75rem;
+  }
+
+  .home-inspire-lightbox__close {
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-inspire-lightbox__nav--prev {
+    left: 1.75rem;
+  }
+
+  .home-inspire-lightbox__nav--next {
+    right: 1.75rem;
+  }
+
+  .home-inspire-lightbox__stage {
+    padding-inline: 6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-inspire__photo,
+  .home-inspire__tile::after {
+    transition: none;
+  }
+
+  .home-inspire__tile:hover .home-inspire__photo {
+    transform: none;
+  }
+
+  .home-inspire-lightbox,
+  .home-inspire-lightbox__frame {
+    animation: none;
+  }
 }
 
 /* ─── Pausas visuales editoriales (solo fotografía) ─── */
@@ -2427,13 +2568,11 @@
   }
 
   .home-collection-card__media img,
-  .home-inspire__cell img,
   .home-discover__image {
     transition: none;
   }
 
   .home-collection-card:hover .home-collection-card__media img,
-  .home-inspire__cell:hover img,
   .home-discover__card:hover .home-discover__image {
     transform: none;
   }
