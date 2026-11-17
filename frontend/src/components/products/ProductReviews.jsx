@@ -43,12 +43,6 @@ export default function ProductReviews({ productId, productName }) {
     };
   }, [productId]);
 
-  useEffect(() => {
-    if (user?.name) {
-      setForm((f) => ({ ...f, authorName: user.name }));
-    }
-  }, [user]);
-
   const submit = async (e) => {
     e.preventDefault();
     setStatus("loading");
@@ -74,7 +68,9 @@ export default function ProductReviews({ productId, productName }) {
     }
   };
 
-  if (loadingAuth || !user) return null;
+  // Visitantes: solo la lista, y solo si hay reseñas publicadas.
+  // Con sesión: lista (o mensaje de vacío) + formulario.
+  if (loadingAuth || (!user && (loading || reviews.length === 0))) return null;
 
   return (
     <section className="product-reviews">
@@ -106,6 +102,7 @@ export default function ProductReviews({ productId, productName }) {
         </ul>
       )}
 
+      {user ? (
       <div className="product-reviews__form-wrap">
         <h3>Escribe tu reseña</h3>
         <form className="product-reviews__form" onSubmit={submit}>
@@ -177,6 +174,7 @@ export default function ProductReviews({ productId, productName }) {
           ) : null}
         </form>
       </div>
+      ) : null}
     </section>
   );
 }
