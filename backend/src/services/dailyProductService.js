@@ -227,6 +227,41 @@ exports.getOrCreateDailyPicks = async (limit = PRODUCT_SLOT_COUNT) => {
     await pick.save();
   }
 
+  // La grilla pide 5 piezas vivas. Si el día quedó corto o un id ya no
+  // existe, se completa al final sin reordenar las que sí se ven.
+  if (pick) {
+    const existing = (pick.productIds || []).filter(Boolean);
+    const alive = existing.length
+      ? await Product.find({ _id: { $in: existing }, isActive: true }).select(
+          "_id"
+        )
+      : [];
+    const aliveSet = new Set(alive.map((product) => String(product._id)));
+    const kept = existing.filter((id) => aliveSet.has(String(id)));
+
+    if (kept.length < capped) {
+      const filler = await Product.aggregate([
+        {
+          $match: {
+            isActive: true,
+            ...(kept.length ? { _id: { $nin: kept } } : {}),
+          },
+        },
+        { $sample: { size: capped - kept.length } },
+        { $project: { _id: 1 } },
+      ]);
+      const extra = filler.map((doc) => doc?._id).filter(Boolean);
+      const nextIds = [...kept, ...extra].slice(0, capped);
+      const changed =
+        nextIds.length !== existing.length ||
+        nextIds.some((id, index) => String(id) !== String(existing[index]));
+      if (changed && nextIds.length) {
+        pick.productIds = nextIds;
+        await pick.save();
+      }
+    }
+  }
+
   const weaveTypes = await loadWeaveTypes(pick?.weaveTypeIds || []);
 
   if (!pick?.productIds?.length) {
