@@ -116,11 +116,6 @@ export default function ProductCard({
     if (secondaryUrl) setLoadSecondary(true);
   };
 
-  const metaParts = [
-    product.weaveType?.name,
-    !isEditorial && product.style?.name ? product.style.name : null,
-  ].filter(Boolean);
-
   return (
     <article
       className={[
@@ -184,46 +179,42 @@ export default function ProductCard({
       />
 
       <div className="product-card__body">
-        {metaParts.length > 0 ? (
-          <p className="product-card__meta">{metaParts.join(" · ")}</p>
-        ) : null}
-
         <h2 className="product-card__title">
           <Link href={productHref} onClick={handleSelect}>
             {product.name}
           </Link>
         </h2>
 
-        {visibleColors.length > 0 ? (
-          <div
-            className="product-card__colors"
-            aria-label="Colores disponibles"
-          >
-            {visibleColors.map((color) =>
-              color.hexCode ? (
-                <span
-                  key={String(color._id)}
-                  className="product-card__color-dot"
-                  style={{ backgroundColor: color.hexCode }}
-                  title={color.name}
-                  role="img"
-                  aria-label={color.name}
-                />
-              ) : (
-                <span
-                  key={String(color._id)}
-                  className="product-card__color-dot product-card__color-dot--text"
-                  title={color.name}
-                >
-                  {color.name?.charAt(0).toUpperCase()}
-                </span>
-              )
-            )}
-            {extraColors > 0 ? (
-              <span className="product-card__color-more">+{extraColors}</span>
-            ) : null}
-          </div>
-        ) : null}
+        <div
+          className="product-card__colors"
+          {...(visibleColors.length
+            ? { "aria-label": "Colores disponibles" }
+            : { "aria-hidden": "true" })}
+        >
+          {visibleColors.map((color) =>
+            color.hexCode ? (
+              <span
+                key={String(color._id)}
+                className="product-card__color-dot"
+                style={{ backgroundColor: color.hexCode }}
+                title={color.name}
+                role="img"
+                aria-label={color.name}
+              />
+            ) : (
+              <span
+                key={String(color._id)}
+                className="product-card__color-dot product-card__color-dot--text"
+                title={color.name}
+              >
+                {color.name?.charAt(0).toUpperCase()}
+              </span>
+            )
+          )}
+          {extraColors > 0 ? (
+            <span className="product-card__color-more">+{extraColors}</span>
+          ) : null}
+        </div>
 
         <div className="product-card__price">
           <span className="product-card__price-current">

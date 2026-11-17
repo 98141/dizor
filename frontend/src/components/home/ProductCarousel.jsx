@@ -17,14 +17,24 @@ export default function ProductCarousel({
     const el = trackRef.current;
     if (!el) return undefined;
 
-    const checkOverflow = () => {
+    const sync = () => {
+      const img = el.querySelector(".product-card__image-wrap");
+      const root = el.parentElement;
+      if (img && root) {
+        root.style.setProperty(
+          "--carousel-arrow-top",
+          `${img.getBoundingClientRect().height / 2}px`
+        );
+      }
       setCanScroll(el.scrollWidth - el.clientWidth > 4);
     };
 
-    checkOverflow();
+    sync();
 
-    const observer = new ResizeObserver(checkOverflow);
+    const observer = new ResizeObserver(sync);
     observer.observe(el);
+    const img = el.querySelector(".product-card__image-wrap");
+    if (img) observer.observe(img);
     return () => observer.disconnect();
   }, [products]);
 
@@ -38,24 +48,41 @@ export default function ProductCarousel({
   if (!products.length) return null;
 
   return (
-    <div className={`home-carousel ${countClass}`} data-count={count}>
+    <div
+      className={`home-carousel ${countClass}${canScroll ? " home-carousel--scroll" : ""}`}
+      data-count={count}
+    >
       {canScroll && (
         <div className="home-carousel__controls">
           <button
             type="button"
-            className="home-carousel__btn"
+            className="home-carousel__btn home-carousel__btn--prev"
             aria-label="Anterior"
             onClick={() => scrollBy(-1)}
           >
-            ←
+            <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+              <path
+                d="M10.2 3.2 5.4 8l4.8 4.8"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.4"
+              />
+            </svg>
           </button>
           <button
             type="button"
-            className="home-carousel__btn"
+            className="home-carousel__btn home-carousel__btn--next"
             aria-label="Siguiente"
             onClick={() => scrollBy(1)}
           >
-            →
+            <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+              <path
+                d="M5.8 3.2 10.6 8l-4.8 4.8"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.4"
+              />
+            </svg>
           </button>
         </div>
       )}

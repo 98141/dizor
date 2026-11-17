@@ -292,7 +292,7 @@
   --hero-chrome: calc(var(--header-height) + 2.25rem);
   position: relative;
   isolation: isolate;
-  min-height: clamp(26rem, 70svh, 36rem);
+  min-height: calc(100svh - var(--header-height));
   display: flex;
   align-items: flex-end;
   background: linear-gradient(
@@ -308,7 +308,7 @@
 @media (min-width: 1024px) {
   .home-hero {
     --hero-chrome: calc(var(--header-height-desktop) + 2rem);
-    min-height: clamp(30rem, 72svh, 42rem);
+    min-height: calc(100svh - var(--header-height-desktop));
     align-items: flex-end;
   }
 }
@@ -638,7 +638,7 @@
 
 @media (max-width: 767px) {
   .home-hero {
-    min-height: clamp(24rem, 68svh, 36rem);
+    min-height: calc(100svh - var(--header-height));
     align-items: flex-end;
   }
 
@@ -1118,24 +1118,48 @@
 
 .home-carousel {
   position: relative;
+  overflow: visible;
 }
 
 .home-carousel__controls {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
 }
 
 .home-carousel__btn {
-  width: 2.5rem;
-  height: 2.5rem;
+  position: absolute;
+  top: var(--carousel-arrow-top, 8rem);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
   border: 1px solid var(--color-border);
-  background: var(--color-bg-card);
+  background: #fff;
   color: var(--color-text);
   cursor: pointer;
-  font-size: 1rem;
-  line-height: 1;
+  line-height: 0;
+  pointer-events: auto;
+  transform: translateY(-50%);
+}
+
+.home-carousel__btn svg {
+  width: 1rem;
+  height: 1rem;
+  display: block;
+}
+
+.home-carousel__btn--prev {
+  left: 0;
+  transform: translate(calc(-100% - 0.5rem), -50%);
+}
+
+.home-carousel__btn--next {
+  right: 0;
+  transform: translate(calc(100% + 0.5rem), -50%);
 }
 
 .home-carousel__btn:hover {
@@ -1153,10 +1177,14 @@
   gap: 1rem;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  padding-bottom: 0.5rem;
+  padding-bottom: 0;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
+  scrollbar-width: none;
   overscroll-behavior-x: contain;
+}
+
+.home-carousel__track::-webkit-scrollbar {
+  display: none;
 }
 
 .home-carousel__track:focus-visible {
@@ -1167,15 +1195,28 @@
 .home-carousel__item {
   flex: 0 0 min(72vw, 17.5rem);
   scroll-snap-align: start;
+  display: flex;
+  min-width: 0;
 }
 
 .home-carousel__item .product-card {
+  width: 100%;
   height: 100%;
 }
 
-.home-carousel__item .product-card__body {
-  padding-inline: 0;
-  padding-bottom: 0;
+.home-carousel__item .product-card__image-wrap {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  flex-shrink: 0;
+}
+
+.home-carousel__item .product-card--editorial .product-card__body {
+  display: grid;
+  grid-template-rows: 1.35em 0.85rem auto;
+  align-content: start;
+  gap: 0.3rem;
+  flex: 0 0 auto;
+  padding: 0.7rem 0 0;
 }
 
 .home-carousel .product-card__title,
@@ -1185,18 +1226,27 @@
   font-weight: var(--weight-regular);
   letter-spacing: 0;
   line-height: 1.35;
+  height: 1.35em;
 }
 
-.home-carousel .product-card__meta {
-  font-size: 13px;
-  letter-spacing: 0.02em;
-  text-transform: none;
+.home-carousel .product-card__colors {
+  height: 0.85rem;
+  min-height: 0.85rem;
+  margin: 0;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.home-carousel .product-card__price {
+  margin: 0;
+  padding: 0;
 }
 
 .home-carousel .product-card__price-current {
   font-family: var(--font-body);
   font-size: 15px;
   font-weight: var(--weight-semibold);
+  line-height: 1.35;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1205,19 +1255,46 @@
   }
 }
 
+@media (max-width: 1023px) {
+  .home-carousel__btn {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .home-carousel--scroll .home-carousel__btn--prev,
+  .home-carousel--scroll .home-carousel__btn--next {
+    transform: translateY(-50%);
+  }
+
+  .home-carousel--scroll .home-carousel__btn--prev {
+    left: 0;
+  }
+
+  .home-carousel--scroll .home-carousel__btn--next {
+    right: 0;
+  }
+
+  .home-carousel--scroll .home-carousel__track {
+    margin-inline: 2.4rem;
+    padding-inline: 0;
+  }
+}
+
 @media (max-width: 767px) {
   .home-carousel__controls {
     display: none;
   }
 
-  .home-carousel__track {
-    gap: 0.85rem;
+  .home-carousel__track,
+  .home-carousel--scroll .home-carousel__track {
+    gap: 0.75rem;
     margin-inline: -1.25rem;
     padding-inline: 1.25rem;
+    scroll-padding-inline: 1.25rem;
   }
 
   .home-carousel__item {
-    flex: 0 0 min(78vw, 18.5rem);
+    flex: 0 0 62%;
   }
 
   .home-carousel--count-1 .home-carousel__track,
@@ -1489,7 +1566,7 @@
   text-decoration: line-through;
 }
 
-/* Móvil: 1 producto → resto en fila con peek si hay varios */
+/* Móvil: una pieza grande y dos menores al lado, como máximo tres */
 @media (max-width: 767px) {
   .home-discover__grid--n1 {
     grid-template-columns: 1fr;
@@ -1498,34 +1575,44 @@
   .home-discover__grid--n3,
   .home-discover__grid--n4,
   .home-discover__grid--n5 {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    gap: 0.85rem;
-    margin-inline: -1.25rem;
-    padding-inline: 1.25rem;
-    overscroll-behavior-x: contain;
-    scrollbar-width: thin;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-inline: 0;
+    padding-inline: 0;
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+
+  .home-discover__grid .home-discover__card:nth-child(n + 4) {
+    display: none;
   }
 
   .home-discover__grid--n3 .home-discover__card,
   .home-discover__grid--n4 .home-discover__card,
   .home-discover__grid--n5 .home-discover__card {
-    flex: 0 0 min(72vw, 16.5rem);
-    scroll-snap-align: start;
+    flex: unset;
+    width: auto;
+    min-width: 0;
   }
 
-  .home-discover__grid--n3 .home-discover__card--featured,
-  .home-discover__grid--n4 .home-discover__card--featured,
-  .home-discover__grid--n5 .home-discover__card--featured {
-    flex: 0 0 min(74vw, 17rem);
+  .home-discover__card--featured {
+    grid-column: 1 / -1;
   }
 
-  .home-discover__grid--n3 .home-discover__card--featured .home-discover__media,
-  .home-discover__grid--n4 .home-discover__card--featured .home-discover__media,
-  .home-discover__grid--n5 .home-discover__card--featured .home-discover__media {
+  .home-discover__card--featured .home-discover__media {
     aspect-ratio: 4 / 5;
+  }
+
+  .home-discover__card:not(.home-discover__card--featured) .home-discover__media {
+    aspect-ratio: 1 / 1;
+  }
+
+  .home-discover__name {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 

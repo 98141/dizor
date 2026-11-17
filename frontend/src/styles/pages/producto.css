@@ -15,6 +15,9 @@
 
 .product-detail__grid {
   display: grid;
+  /* minmax(0, …): la fila de miniaturas (con scroll propio) no debe
+     ensanchar la columna — con 6+ fotos desbordaba en móvil. */
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-xl);
 }
 
@@ -880,14 +883,14 @@
 
 @media (min-width: 768px) {
   .product-detail__grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: start;
   }
 }
 
 @media (min-width: 1024px) {
   .product-detail__grid {
-    grid-template-columns: 1.1fr 1fr;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
     gap: var(--space-2xl);
   }
 }

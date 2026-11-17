@@ -4,7 +4,11 @@ import {
   getActiveWeaveTypes,
 } from "@/lib/fetchCatalogFilters";
 import { fetchDailyRandom } from "@/lib/homeFetches";
-import { buildWeaveCards } from "@/lib/coleccionImages";
+import {
+  buildWeaveCards,
+  matchColeccionImagesForWeave,
+  weaveIdOf,
+} from "@/lib/coleccionImages";
 import HomeCraftSection from "./HomeCraftSection";
 
 /**
@@ -23,11 +27,27 @@ export default async function HomeCraftBlock() {
     (img) => img?.url
   );
   const craftTypes = getActiveWeaveTypes(filtersData);
-  const dailyWeaves =
-    Array.isArray(dailyData?.weaveTypes) && dailyData.weaveTypes.length > 0
-      ? dailyData.weaveTypes.slice(0, 3)
-      : craftTypes.slice(0, 3);
-  const weaveCards = buildWeaveCards(dailyWeaves, coleccionImages);
+  const dailyWeaves = Array.isArray(dailyData?.weaveTypes)
+    ? dailyData.weaveTypes
+    : [];
+
+  // Tejidos con foto de colección primero (respetando el sorteo diario): un
+  // tejido recién creado sin foto no debe dejar una tarjeta vacía en el home.
+  const seen = new Set();
+  const candidates = [...dailyWeaves, ...craftTypes].filter((wt) => {
+    const id = weaveIdOf(wt);
+    if (!id || seen.has(id)) return false;
+    seen.add(id);
+    return true;
+  });
+  const withImage = candidates.filter(
+    (wt) => matchColeccionImagesForWeave(wt, coleccionImages).length > 0
+  );
+  const pool = [
+    ...withImage,
+    ...candidates.filter((wt) => !withImage.includes(wt)),
+  ];
+  const weaveCards = buildWeaveCards(pool.slice(0, 3), coleccionImages);
 
   return <HomeCraftSection craftSection={craftSection} cards={weaveCards} />;
 }
