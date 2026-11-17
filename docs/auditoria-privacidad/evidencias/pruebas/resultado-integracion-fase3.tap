@@ -1,0 +1,442 @@
+TAP version 13
+# (node:27208) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"orderNumber":1} for model "Order". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:27208) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"slug":1} for model "Product". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+# (node:27208) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"code":1} for model "Coupon". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+# (node:27208) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+# 18:54:03 [[32mhttp[39m]: GET /api/legal/notices 200 17.924 ms - 2746
+# Subtest: GET /api/legal/notices: textos definitivos versionados, términos obligatorios, sin marcas
+ok 1 - GET /api/legal/notices: textos definitivos versionados, términos obligatorios, sin marcas
+  ---
+  duration_ms: 5282.4694
+  type: 'test'
+  ...
+# 18:54:03 [[32mhttp[39m]: POST /api/checkout/orders 400 45.809 ms - 142
+# Subtest: checkout sin autorización de tratamiento → 400 y no crea pedido
+ok 2 - checkout sin autorización de tratamiento → 400 y no crea pedido
+  ---
+  duration_ms: 106.6176
+  type: 'test'
+  ...
+# 18:54:03 [[32mhttp[39m]: POST /api/checkout/orders 400 1.224 ms - 129
+# 18:54:03 [[32mhttp[39m]: POST /api/checkout/orders 400 1.015 ms - 129
+# 18:54:03 [[32mhttp[39m]: POST /api/checkout/orders 400 1.087 ms - 129
+# Subtest: checkout sin aceptar términos (o con 'true' en texto) → 400 y no crea pedido
+ok 3 - checkout sin aceptar términos (o con 'true' en texto) → 400 y no crea pedido
+  ---
+  duration_ms: 19.5038
+  type: 'test'
+  ...
+# 18:54:03 [[32mhttp[39m]: POST /api/checkout/orders 400 1.206 ms - 142
+# Subtest: checkout con autorización 'true' en texto no cuenta como autorización
+ok 4 - checkout con autorización 'true' en texto no cuenta como autorización
+  ---
+  duration_ms: 5.8215
+  type: 'test'
+  ...
+# (node:27208) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:27208) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# [Dizor] Nuevo pedido: DIZ-20261116-0001
+# 18:54:03 [[32mhttp[39m]: POST /api/checkout/orders 201 111.033 ms - 355
+# Subtest: checkout con autorización → pedido, evidencia, token y acuse único
+ok 5 - checkout con autorización → pedido, evidencia, token y acuse único
+  ---
+  duration_ms: 123.5346
+  type: 'test'
+  ...
+# 18:54:03 [[32mhttp[39m]: POST /api/checkout/orders 200 15.041 ms - 331
+# 18:54:04 [[32mhttp[39m]: POST /api/checkout/orders/lookup 404 4.811 ms - 50
+# Subtest: reintento con la misma clave: mismo pedido, sin segundo acuse, token rotado
+ok 6 - reintento con la misma clave: mismo pedido, sin segundo acuse, token rotado
+  ---
+  duration_ms: 28.8538
+  type: 'test'
+  ...
+# 18:54:04 [[32mhttp[39m]: POST /api/checkout/orders/lookup 200 3.418 ms - 576
+# 18:54:04 [[32mhttp[39m]: POST /api/checkout/orders/lookup 404 3.260 ms - 50
+# (node:27208) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:27208) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# [Dizor] Nuevo pedido: DIZ-20261116-0002
+# 18:54:04 [[32mhttp[39m]: POST /api/checkout/orders 201 40.532 ms - 355
+# 18:54:04 [[32mhttp[39m]: POST /api/checkout/orders/lookup 404 2.990 ms - 50
+# Subtest: confirmación: token válido → datos; token/pedido ajeno → 404 genérico
+ok 7 - confirmación: token válido → datos; token/pedido ajeno → 404 genérico
+  ---
+  duration_ms: 61.9732
+  type: 'test'
+  ...
+# 18:54:04 [[32mhttp[39m]: POST /api/checkout/orders/lookup 404 4.666 ms - 50
+# Subtest: token vencido → 404
+ok 8 - token vencido → 404
+  ---
+  duration_ms: 9.4412
+  type: 'test'
+  ...
+# (node:27208) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:27208) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:27208) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# Subtest: acuse: fallo del proveedor libera la reclamación y permite reintentar una sola vez
+ok 9 - acuse: fallo del proveedor libera la reclamación y permite reintentar una sola vez
+  ---
+  duration_ms: 17.7927
+  type: 'test'
+  ...
+# 18:54:04 [[32mhttp[39m]: POST /api/checkout/track 200 3.091 ms - 336
+# 18:54:04 [[32mhttp[39m]: POST /api/checkout/track 404 2.329 ms - 50
+# 18:54:04 [[32mhttp[39m]: GET /api/checkout/track?orderNumber=[redactado]&email=[redactado] 410 0.601 ms - 150
+# Subtest: seguimiento: POST con correo en el cuerpo; GET antiguo → 410
+ok 10 - seguimiento: POST con correo en el cuerpo; GET antiguo → 410
+  ---
+  duration_ms: 13.0221
+  type: 'test'
+  ...
+# Subtest: redacción de URLs en logs
+ok 11 - redacción de URLs en logs
+  ---
+  duration_ms: 0.3302
+  type: 'test'
+  ...
+# 18:54:04 [[32mhttp[39m]: POST /api/auth/register 400 6.718 ms - 142
+# 18:54:04 [[32mhttp[39m]: POST /api/auth/register 201 348.623 ms - 167
+# Subtest: registro sin autorización → 400; con autorización → evidencia
+ok 12 - registro sin autorización → 400; con autorización → evidencia
+  ---
+  duration_ms: 375.0289
+  type: 'test'
+  ...
+# (node:27208) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# 18:54:04 [[32mhttp[39m]: PUT /api/cart/sync 200 13.471 ms - 67
+# Subtest: usuario registrado que sincroniza carrito NO queda inscrito en recordatorios
+ok 13 - usuario registrado que sincroniza carrito NO queda inscrito en recordatorios
+  ---
+  duration_ms: 17.9323
+  type: 'test'
+  ...
+# 18:54:04 [[32mhttp[39m]: POST /api/marketing/newsletter 400 1.225 ms - 88
+# 18:54:04 [[32mhttp[39m]: POST /api/marketing/newsletter 201 6.323 ms - 106
+# Subtest: newsletter: sin autorización → 400; con autorización → evidencia
+ok 14 - newsletter: sin autorización → 400; con autorización → evidencia
+  ---
+  duration_ms: 15.7392
+  type: 'test'
+  ...
+# 18:54:04 [[32mhttp[39m]: POST /api/auth/login 200 349.265 ms - 161
+# 18:54:04 [[32mhttp[39m]: GET /api/admin/marketing/newsletter/export 200 9.997 ms - 279
+# Subtest: exportación: excluye suscriptores sin evidencia (heredados) e incluye enlace de baja
+ok 15 - exportación: excluye suscriptores sin evidencia (heredados) e incluye enlace de baja
+  ---
+  duration_ms: 367.3649
+  type: 'test'
+  ...
+# 18:54:04 [[32mhttp[39m]: POST /api/marketing/unsubscribe 200 8.074 ms - 133
+# 18:54:04 [[32mhttp[39m]: POST /api/marketing/unsubscribe 200 3.126 ms - 133
+# 18:54:04 [[32mhttp[39m]: POST /api/marketing/unsubscribe 400 0.677 ms - 64
+# 18:54:04 [[32mhttp[39m]: GET /api/admin/marketing/newsletter/export 200 6.154 ms - 82
+# Subtest: baja por token: sin sesión, idempotente, registrada y respetada en exportación
+ok 16 - baja por token: sin sesión, idempotente, registrada y respetada en exportación
+  ---
+  duration_ms: 29.2509
+  type: 'test'
+  ...
+# 18:54:04 [[32mhttp[39m]: GET /api/marketing/config 200 4.667 ms - 503
+# 18:54:04 [[31merror[39m]: Server error Los recordatorios de carrito no están disponibles
+# Error: Los recordatorios de carrito no están disponibles
+#     at exports.trackAbandonedCart (c:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\services\\marketingService.js:115:11)
+#     at c:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\controllers\\marketingPublicController.js:37:9
+#     at c:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\utils\\catchAsync.js:3:21
+#     at Layer.handleRequest (c:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\node_modules\\router\\lib\\layer.js:152:17)
+#     at next (c:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\node_modules\\router\\lib\\route.js:157:13)
+#     at c:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\middlewares\\optionalAuthMiddleware.js:20:12
+#     at c:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\utils\\catchAsync.js:3:21
+#     at Layer.handleRequest (c:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\node_modules\\router\\lib\\layer.js:152:17)
+#     at next (c:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\node_modules\\router\\lib\\route.js:157:13)
+#     at c:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\node_modules\\express-rate-limit\\dist\\index.cjs:999:7
+#     at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+#     at async c:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\node_modules\\express-rate-limit\\dist\\index.cjs:854:5 {"method":"POST","url":"/api/marketing/abandoned-cart","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+# 18:54:04 [[32mhttp[39m]: POST /api/marketing/abandoned-cart 503 2.138 ms - 81
+# 18:54:04 [[32mhttp[39m]: POST /api/admin/marketing/abandoned-carts/send-reminders 409 2.506 ms - 143
+# Subtest: F3-M1: recordatorios desactivados por defecto: no se muestra, no se guarda, no se envía
+ok 17 - F3-M1: recordatorios desactivados por defecto: no se muestra, no se guarda, no se envía
+  ---
+  duration_ms: 19.7157
+  type: 'test'
+  ...
+# 18:54:04 [[32mhttp[39m]: POST /api/marketing/abandoned-cart 400 0.686 ms - 93
+# (node:27208) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# 18:54:04 [[32mhttp[39m]: POST /api/marketing/abandoned-cart 200 14.484 ms - 67
+# [Dizor] (sin RESEND_API_KEY) Recordatorio de carrito no enviado
+# 18:54:04 [[32mhttp[39m]: POST /api/marketing/unsubscribe 200 4.897 ms - 136
+# Subtest: recordatorio de invitado: exige autorización; envío respeta franja, baja y evidencia
+ok 18 - recordatorio de invitado: exige autorización; envío respeta franja, baja y evidencia
+  ---
+  duration_ms: 52.0386
+  type: 'test'
+  ...
+# Subtest: evidencias: 'published' autoriza; las de borrador ('Texto en revisión') NO se regularizan
+ok 19 - evidencias: 'published' autoriza; las de borrador ('Texto en revisión') NO se regularizan
+  ---
+  duration_ms: 15.933
+  type: 'test'
+  ...
+# Subtest: ConsentRecord es inmutable
+ok 20 - ConsentRecord es inmutable
+  ---
+  duration_ms: 0.9555
+  type: 'test'
+  ...
+# 18:54:05 [[32mhttp[39m]: POST /api/special-requests 400 0.919 ms - 142
+# [Dizor] Nueva solicitud especial: SOL-20261116-0001 Personalización
+# 18:54:05 [[32mhttp[39m]: POST /api/special-requests 201 11.034 ms - 664
+# 18:54:05 [[32mhttp[39m]: POST /api/special-requests/track 200 2.965 ms - 664
+# 18:54:05 [[32mhttp[39m]: GET /api/special-requests/track?requestNumber=[redactado]&email=[redactado] 410 0.373 ms - 150
+# Subtest: solicitud especial: autorización obligatoria; seguimiento POST; GET → 410
+ok 21 - solicitud especial: autorización obligatoria; seguimiento POST; GET → 410
+  ---
+  duration_ms: 24.8442
+  type: 'test'
+  ...
+# 18:54:05 [[32mhttp[39m]: POST /api/reviews 400 2.940 ms - 142
+# Subtest: reseña sin autorización de publicación → 400
+ok 22 - reseña sin autorización de publicación → 400
+  ---
+  duration_ms: 5.8882
+  type: 'test'
+  ...
+# 18:54:05 [[31merror[39m]: Server error Este canal aún no está habilitado. Mientras tanto, contáctanos por WhatsApp.
+# Error: Este canal aún no está habilitado. Mientras tanto, contáctanos por WhatsApp.
+#     at Object.createCustomerRequest (c:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\services\\customerRequestService.js:147:11)
+#     at c:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\controllers\\customerRequestController.js:17:32
+#     at c:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\utils\\catchAsync.js:3:21
+#     at Layer.handleRequest (c:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\node_modules\\router\\lib\\layer.js:152:17)
+#     at next (c:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\node_modules\\router\\lib\\route.js:157:13)
+#     at c:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\middlewares\\optionalAuthMiddleware.js:20:12
+#     at c:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\utils\\catchAsync.js:3:21
+#     at Layer.handleRequest (c:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\node_modules\\router\\lib\\layer.js:152:17)
+#     at next (c:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\node_modules\\router\\lib\\route.js:157:13)
+#     at c:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\node_modules\\express-rate-limit\\dist\\index.cjs:999:7
+#     at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+#     at async c:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\node_modules\\express-rate-limit\\dist\\index.cjs:854:5 {"method":"POST","url":"/api/pqr","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+# 18:54:05 [[32mhttp[39m]: POST /api/pqr 503 1.650 ms - 110
+# Subtest: PQR deshabilitada → 503 y nada se guarda
+ok 23 - PQR deshabilitada → 503 y nada se guarda
+  ---
+  duration_ms: 6.7842
+  type: 'test'
+  ...
+# 18:54:05 [[32mhttp[39m]: POST /api/pqr 400 0.626 ms - 142
+# 18:54:05 [[32mhttp[39m]: POST /api/pqr 400 0.577 ms - 57
+# [Dizor] (sin RESEND_API_KEY) Constancia de radicado no enviada
+# 18:54:05 [[32mhttp[39m]: POST /api/pqr 201 6.136 ms - 244
+# [Dizor] (sin RESEND_API_KEY) Constancia de radicado no enviada
+# 18:54:05 [[32mhttp[39m]: POST /api/pqr 201 5.815 ms - 255
+# Subtest: PQR: validación, persistencia, radicado con fecha y constancia
+ok 24 - PQR: validación, persistencia, radicado con fecha y constancia
+  ---
+  duration_ms: 25.3418
+  type: 'test'
+  ...
+# 18:54:05 [[32mhttp[39m]: POST /api/pqr/track 200 2.549 ms - 248
+# 18:54:05 [[32mhttp[39m]: POST /api/pqr/track 404 2.725 ms - 53
+# 18:54:05 [[32mhttp[39m]: POST /api/pqr/track 404 2.465 ms - 53
+# Subtest: PQR: seguimiento protegido por código; sin acceso a solicitudes ajenas
+ok 25 - PQR: seguimiento protegido por código; sin acceso a solicitudes ajenas
+  ---
+  duration_ms: 15.9809
+  type: 'test'
+  ...
+# 18:54:05 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"GET","url":"/api/admin/pqr","statusCode":403,"ip":"127.0.0.1"}
+# 18:54:05 [[32mhttp[39m]: GET /api/admin/pqr 403 2.932 ms - 75
+# 18:54:05 [[32mhttp[39m]: GET /api/admin/pqr?category=consumo 200 5.859 ms - 544
+# 18:54:05 [[32mhttp[39m]: PATCH /api/admin/pqr/6afb979d3bad2c36d1dc25c5/status 200 6.991 ms - 697
+# 18:54:05 [[32mhttp[39m]: POST /api/pqr/track 200 2.256 ms - 340
+# Subtest: PQR admin: solo administradores; historial con nota pública e interna
+ok 26 - PQR admin: solo administradores; historial con nota pública e interna
+  ---
+  duration_ms: 26.7899
+  type: 'test'
+  ...
+# (node:27208) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:27208) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# [Dizor] Nuevo pedido: DIZ-20261116-0003
+# 18:54:05 [[32mhttp[39m]: POST /api/checkout/orders 201 48.700 ms - 355
+# 18:54:05 [[32mhttp[39m]: POST /api/checkout/orders/lookup 200 4.620 ms - 572
+# 18:54:05 [[32mhttp[39m]: POST /api/auth/register 201 350.739 ms - 170
+# 18:54:05 [[32mhttp[39m]: POST /api/checkout/orders/lookup 404 4.527 ms - 50
+# 18:54:05 [[32mhttp[39m]: GET /api/checkout/orders/6afb979d3bad2c36d1dc25cf 404 4.514 ms - 50
+# 18:54:05 [[33mwarn[39m]: Auth failure No has iniciado sesión {"method":"GET","url":"/api/checkout/orders/6afb979d3bad2c36d1dc25cf","statusCode":401,"ip":"127.0.0.1"}
+# 18:54:05 [[32mhttp[39m]: GET /api/checkout/orders/6afb979d3bad2c36d1dc25cf 401 0.692 ms - 53
+# Subtest: N-01: otro usuario autenticado no puede ver un pedido ajeno (ni por número ni por id)
+ok 27 - N-01: otro usuario autenticado no puede ver un pedido ajeno (ni por número ni por id)
+  ---
+  duration_ms: 425.9667
+  type: 'test'
+  ...
+# 18:54:05 [[33mwarn[39m]: Auth failure No has iniciado sesión {"method":"GET","url":"/api/checkout/orders/lookup","statusCode":401,"ip":"127.0.0.1"}
+# 18:54:05 [[32mhttp[39m]: GET /api/checkout/orders/lookup 401 0.749 ms - 53
+# 18:54:05 [[32mhttp[39m]: GET /api/pqr/track 404 0.386 ms - 64
+# 18:54:05 [[32mhttp[39m]: PUT /api/checkout/orders/lookup 404 0.611 ms - 77
+# 18:54:05 [[32mhttp[39m]: GET /api/checkout/track?orderNumber=[redactado]&email=[redactado] 410 0.357 ms - 150
+# Subtest: N-02: cambiar el método HTTP no evita la autorización
+ok 28 - N-02: cambiar el método HTTP no evita la autorización
+  ---
+  duration_ms: 9.4964
+  type: 'test'
+  ...
+# 18:54:05 [[32mhttp[39m]: POST /api/checkout/orders 400 0.619 ms - 142
+# Subtest: N-03: mensaje de autorización orienta a clientes con la versión anterior abierta
+ok 29 - N-03: mensaje de autorización orienta a clientes con la versión anterior abierta
+  ---
+  duration_ms: 2.9068
+  type: 'test'
+  ...
+# [Dizor] (sin RESEND_API_KEY) Constancia de radicado no enviada
+# 18:54:05 [[32mhttp[39m]: POST /api/pqr 201 6.649 ms - 245
+# [Dizor] (sin RESEND_API_KEY) Constancia de radicado no enviada
+# 18:54:05 [[32mhttp[39m]: POST /api/pqr 201 5.711 ms - 262
+# 18:54:05 [[32mhttp[39m]: POST /api/pqr/track 404 2.241 ms - 53
+# 18:54:05 [[32mhttp[39m]: POST /api/pqr/track 200 1.846 ms - 249
+# 18:54:05 [[32mhttp[39m]: POST /api/pqr 409 2.815 ms - 106
+# Subtest: N-04: PQR idempotente — reintento con la misma clave no duplica y rota el código
+ok 30 - N-04: PQR idempotente — reintento con la misma clave no duplica y rota el código
+  ---
+  duration_ms: 30.4945
+  type: 'test'
+  ...
+# [Dizor] (sin RESEND_API_KEY) Constancia de radicado no enviada
+# 18:54:05 [[32mhttp[39m]: POST /api/pqr 201 8.981 ms - 242
+# [Dizor] (sin RESEND_API_KEY) Constancia de radicado no enviada
+# 18:54:05 [[32mhttp[39m]: POST /api/pqr 201 6.200 ms - 259
+# Subtest: N-05: PQR concurrentes con la misma clave → un solo radicado
+ok 31 - N-05: PQR concurrentes con la misma clave → un solo radicado
+  ---
+  duration_ms: 16.1983
+  type: 'test'
+  ...
+# Subtest: N-06: rotación del secreto de baja — los enlaces ya enviados siguen funcionando
+ok 32 - N-06: rotación del secreto de baja — los enlaces ya enviados siguen funcionando
+  ---
+  duration_ms: 0.7913
+  type: 'test'
+  ...
+# (node:27208) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# 18:54:05 [[32mhttp[39m]: POST /api/visits/register 200 2.782 ms - 30
+# 18:54:05 [[32mhttp[39m]: POST /api/visits/forget 204 0.489 ms - -
+# Subtest: N-07: retirar estadísticas borra la cookie de conteo emitida por la API
+ok 33 - N-07: retirar estadísticas borra la cookie de conteo emitida por la API
+  ---
+  duration_ms: 6.7221
+  type: 'test'
+  ...
+# 18:54:05 [[32mhttp[39m]: GET /api/checkout/config 200 2.460 ms - 725
+# 18:54:05 [[32mhttp[39m]: GET /api/checkout/config 200 3.248 ms - 836
+# Subtest: F3-P1: configuración pública: solo Wompi (si está configurado) y contraentrega; envío incluido; plazo no publicado
+ok 34 - F3-P1: configuración pública: solo Wompi (si está configurado) y contraentrega; envío incluido; plazo no publicado
+  ---
+  duration_ms: 10.0442
+  type: 'test'
+  ...
+# 18:54:05 [[32mhttp[39m]: POST /api/checkout/orders 400 0.544 ms - 127
+# 18:54:05 [[32mhttp[39m]: POST /api/checkout/orders 400 0.504 ms - 127
+# 18:54:05 [[32mhttp[39m]: POST /api/checkout/orders 400 0.478 ms - 127
+# 18:54:05 [[32mhttp[39m]: POST /api/checkout/orders 400 0.447 ms - 127
+# 18:54:05 [[32mhttp[39m]: POST /api/checkout/orders 400 1.157 ms - 127
+# 18:54:05 [[32mhttp[39m]: POST /api/checkout/orders 400 0.471 ms - 127
+# 18:54:05 [[32mhttp[39m]: POST /api/checkout/orders 400 0.761 ms - 127
+# 18:54:05 [[32mhttp[39m]: POST /api/checkout/orders 400 0.470 ms - 127
+# Subtest: F3-P2: el backend rechaza Nequi directo, transferencia manual y métodos desconocidos (clientes antiguos o manipulados)
+ok 35 - F3-P2: el backend rechaza Nequi directo, transferencia manual y métodos desconocidos (clientes antiguos o manipulados)
+  ---
+  duration_ms: 21.7463
+  type: 'test'
+  ...
+# 18:54:05 [[32mhttp[39m]: POST /api/checkout/orders 400 0.730 ms - 58
+# (node:27208) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:27208) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# [Dizor] Nuevo pedido: DIZ-20261116-0004
+# 18:54:05 [[32mhttp[39m]: POST /api/checkout/orders 201 33.142 ms - 355
+# Subtest: F3-P3: transportadora no confirmada → 400; confirmada → 201
+ok 36 - F3-P3: transportadora no confirmada → 400; confirmada → 201
+  ---
+  duration_ms: 37.9694
+  type: 'test'
+  ...
+# Subtest: F3-P4: sin modo mock por omisión: variables ausentes, vacías o inválidas → integración desactivada
+ok 37 - F3-P4: sin modo mock por omisión: variables ausentes, vacías o inválidas → integración desactivada
+  ---
+  duration_ms: 3.3101
+  type: 'test'
+  ...
+# (node:27208) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:27208) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# [Dizor] Nuevo pedido: DIZ-20261116-0005
+# 18:54:05 [[32mhttp[39m]: POST /api/checkout/orders 201 32.196 ms - 355
+# (node:27208) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:27208) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# [Dizor] Nuevo pedido: DIZ-20261116-0006
+# 18:54:05 [[32mhttp[39m]: POST /api/checkout/orders 201 32.407 ms - 355
+# 18:54:05 [[32mhttp[39m]: POST /api/payments/nequi/webhook 410 0.892 ms - 229
+# 18:54:05 [[32mhttp[39m]: GET /api/payments/nequi/status/6afb979d3bad2c36d1dc25f3 410 0.938 ms - 229
+# 18:54:05 [[32mhttp[39m]: POST /api/payments/nequi/create 410 0.594 ms - 229
+# 18:54:05 [[32mhttp[39m]: POST /api/payments/nequi/webhook 410 0.425 ms - 229
+# Subtest: F3-P5: endpoints propios de Nequi → 410 sin tocar pedidos históricos (ni por 'compatibilidad')
+ok 38 - F3-P5: endpoints propios de Nequi → 410 sin tocar pedidos históricos (ni por 'compatibilidad')
+  ---
+  duration_ms: 91.2285
+  type: 'test'
+  ...
+# (node:27208) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:27208) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# [Dizor] Nuevo pedido: DIZ-20261116-0007
+# 18:54:05 [[32mhttp[39m]: POST /api/checkout/orders 201 34.405 ms - 355
+# 18:54:05 [[32mhttp[39m]: POST /api/webhooks/wompi 401 1.313 ms - 48
+# 18:54:05 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.492 ms - 48
+# 18:54:05 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.375 ms - 48
+# 18:54:05 [[32mhttp[39m]: POST /api/webhooks/wompi 200 0.635 ms - 2
+# 18:54:05 [[32mhttp[39m]: POST /api/webhooks/wompi 200 6.922 ms - 2
+# 18:54:05 [[32mhttp[39m]: POST /api/webhooks/wompi 200 16.316 ms - 2
+# 18:54:05 [[32mhttp[39m]: POST /api/webhooks/wompi 200 7.858 ms - 2
+# 18:54:05 [[32mhttp[39m]: POST /api/webhooks/wompi 200 5.560 ms - 2
+# 18:54:05 [[32mhttp[39m]: POST /api/webhooks/wompi 200 6.552 ms - 2
+# 18:54:05 [[32mhttp[39m]: POST /api/webhooks/wompi 200 6.587 ms - 2
+# Subtest: F3-W1: webhook Wompi verifica checksum, entorno, moneda, monto y método; Nequi dentro de Wompi sí se acepta
+ok 39 - F3-W1: webhook Wompi verifica checksum, entorno, moneda, monto y método; Nequi dentro de Wompi sí se acepta
+  ---
+  duration_ms: 123.613
+  type: 'test'
+  ...
+# (node:27208) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# (node:27208) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+# [Dizor] Nuevo pedido: DIZ-20261116-0008
+# 18:54:05 [[32mhttp[39m]: POST /api/checkout/orders 201 35.641 ms - 355
+# 18:54:05 [[32mhttp[39m]: POST /api/webhooks/wompi 200 2.834 ms - 2
+# 18:54:05 [[32mhttp[39m]: POST /api/webhooks/wompi 200 2.504 ms - 2
+# Subtest: F3-W2: un evento Wompi no modifica pedidos de contraentrega ni pedidos Nequi históricos
+ok 40 - F3-W2: un evento Wompi no modifica pedidos de contraentrega ni pedidos Nequi históricos
+  ---
+  duration_ms: 52.053
+  type: 'test'
+  ...
+# 18:54:05 [[32mhttp[39m]: POST /api/cart/validate 200 5.711 ms - 473
+# 18:54:05 [[32mhttp[39m]: POST /api/checkout/calculate 200 5.045 ms - 559
+# 18:54:05 [[32mhttp[39m]: POST /api/cart/validate 200 5.284 ms - 478
+# Subtest: F3-S1: envío incluido en carrito y checkout; reversible con SHIPPING_INCLUDED_IN_PRICE=false
+ok 41 - F3-S1: envío incluido en carrito y checkout; reversible con SHIPPING_INCLUDED_IN_PRICE=false
+  ---
+  duration_ms: 22.4566
+  type: 'test'
+  ...
+# Subtest: F3-Q1: PQR avisa a la bandeja de atención con datos mínimos; la constancia identifica al vendedor
+ok 42 - F3-Q1: PQR avisa a la bandeja de atención con datos mínimos; la constancia identifica al vendedor
+  ---
+  duration_ms: 5.0728
+  type: 'test'
+  ...
+1..42
+# tests 42
+# suites 0
+# pass 42
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 9234.7789

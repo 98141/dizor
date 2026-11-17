@@ -7,7 +7,8 @@ import Link from "next/link";
  * - Nunca viene marcada por defecto: el estado lo controla el formulario.
  * - Si el aviso no cargó, no se muestra casilla y el formulario debe impedir
  *   el envío (ver `isNoticeReady`).
- * - Si el texto está en borrador, se indica visiblemente.
+ * - El texto es el definitivo publicado; la revisión jurídica se gestiona
+ *   internamente (docs/auditoria-privacidad/07-…) y no se muestra al público.
  */
 export function isNoticeReady(notices, purpose) {
   const n = notices?.[purpose];
@@ -53,12 +54,9 @@ export default function ConsentCheckbox({
       <label htmlFor={inputId} className="consent-check__label">
         {notice.label}{" "}
         <Link href={notice.policyPath || "/politica-de-privacidad"} target="_blank">
-          Política de Privacidad
+          {notice.policyPath === "/terminos-y-condiciones" ? "Ver términos" : "Ver política"}
         </Link>
         {notice.required ? null : <span className="consent-check__optional"> (opcional)</span>}
-        {notice.status === "draft" ? (
-          <span className="consent-check__draft"> · Texto en revisión</span>
-        ) : null}
       </label>
     </div>
   );

@@ -60,17 +60,30 @@ exports.createPaymentLink = async (order) => {
   };
 };
 
+// Wompi reintenta un evento no confirmado hasta 3 veces en 24 h (30 min,
+// 3 h y 24 h; documentación oficial de eventos). Una ventana de 5 minutos
+// rechazaba esos reintentos legítimos. Se acepta hasta 26 h; la repetición
+// de un evento ya aplicado es inocua porque el procesamiento es idempotente
+// y nunca degrada un pedido pagado (wompiWebhookController).
+const EVENT_MAX_AGE_MS = 26 * 60 * 60 * 1000;
+
+// Entorno esperado en `event.environment` según WOMPI_ENV.
+exports.getExpectedEventEnvironment = () =>
+  (process.env.WOMPI_ENV || "sandbox") === "production" ? "prod" : "test";
+
 exports.verifyEventChecksum = (eventBody, checksumHeader) => {
   const secret = process.env.WOMPI_EVENTS_SECRET;
-  if (!secret || !eventBody?.signature || !checksumHeader) {
+  // El checksum llega en la cabecera X-Event-Checksum o en signature.checksum.
+  const receivedChecksum = checksumHeader || eventBody?.signature?.checksum;
+  if (!secret || !eventBody?.signature || !receivedChecksum) {
     return false;
   }
 
-  // Anti-replay: rechazar eventos con más de 5 minutos de antigüedad o del futuro
+  // Anti-replay: rechazar eventos demasiado antiguos o del futuro.
   const eventTimestamp = eventBody.timestamp;
   if (!eventTimestamp) return false;
   const ageMs = Date.now() - eventTimestamp * 1000;
-  if (ageMs > 5 * 60 * 1000 || ageMs < -60 * 1000) {
+  if (ageMs > EVENT_MAX_AGE_MS || ageMs < -60 * 1000) {
     return false;
   }
 
@@ -91,7 +104,7 @@ exports.verifyEventChecksum = (eventBody, checksumHeader) => {
   chain += secret;
 
   const calculated = crypto.createHash("sha256").update(chain).digest("hex").toUpperCase();
-  const received = String(checksumHeader).toUpperCase();
+  const received = String(receivedChecksum).toUpperCase();
 
   // Comparación en tiempo constante: evita un canal lateral de temporización
   // (timing attack) al comparar el checksum. timingSafeEqual exige buffers de

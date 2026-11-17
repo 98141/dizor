@@ -299,25 +299,16 @@ function RegistroPromptModal({ email, name, isOpen, onClose }) {
   );
 }
 
+// Consulta sobre un pedido registrado con un medio de pago que ya no se
+// ofrece (Nequi directo / transferencia manual, desactivados 2026-11-16).
+// No pide comprobantes ni transferencias: solo abre la conversación.
 function buildWhatsAppMessage(order) {
-  const fmt = (n) =>
-    Number(n || 0).toLocaleString("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 });
+  return `Hola, tengo una consulta sobre el pago de mi pedido *${order.orderNumber}*.`;
+}
 
-  const lines = [
-    `Hola! Quiero enviar mi comprobante de pago para el pedido *${order.orderNumber}*`,
-    "",
-    "📋 Resumen:",
-    `Subtotal: ${fmt(order.subtotal)}`,
-  ];
-  if (Number(order.discountTotal) > 0) {
-    lines.push(`Descuento${order.couponCode ? ` (${order.couponCode})` : ""}: -${fmt(order.discountTotal)}`);
-  }
-  if (Number(order.taxTotal) > 0) {
-    lines.push(`IVA${order.ivaPercent > 0 ? ` (${order.ivaPercent}%)` : ""}: ${fmt(order.taxTotal)}`);
-  }
-  lines.push(Number(order.shippingCost) > 0 ? `Envío: ${fmt(order.shippingCost)}` : "Envío: Gratis");
-  lines.push(`*Total a pagar: ${fmt(order.total)}*`, "", "Adjunto el comprobante Nequi.");
-  return lines.join("\n");
+function shippingLabel(order) {
+  if (order.shippingIncluded) return "Incluido en el precio";
+  return Number(order.shippingCost) > 0 ? formatCOP(order.shippingCost) : "Sin costo";
 }
 
 function NextStep({ order }) {
@@ -325,13 +316,19 @@ function NextStep({ order }) {
   const rejected = order.paymentStatus === "rechazado";
   const closed = ["cancelado", "rechazado", "devuelto"].includes(order.orderStatus);
 
-  if (!rejected && !closed && order.paymentMethod === "nequi_manual" && !paid) {
+  if (
+    !rejected &&
+    !closed &&
+    (order.paymentMethod === "nequi_manual" || order.paymentMethod === "nequi_api") &&
+    !paid
+  ) {
     return (
       <section className="order-note order-note--attention" aria-labelledby="order-next-title">
         <h2 id="order-next-title" className="order-note__title">Siguiente paso</h2>
         <p>
-          Envía el comprobante de tu transferencia Nequi por WhatsApp al
-          número de atención de Dizor para confirmar tu pago.
+          Este pedido se registró con un medio de pago que ya no ofrecemos. No
+          realices transferencias por tu cuenta: escríbenos indicando el número
+          de pedido y te indicaremos cómo continuar.
         </p>
         <a
           href={getWhatsAppUrl(buildWhatsAppMessage(order))}
@@ -339,10 +336,10 @@ function NextStep({ order }) {
           rel="noreferrer"
           className="order-btn order-btn--primary"
           onClick={() =>
-            trackWhatsAppClick({ linkLocation: "order_confirmation", purpose: "payment_proof" })
+            trackWhatsAppClick({ linkLocation: "order_confirmation", purpose: "payment_inquiry" })
           }
         >
-          Enviar comprobante por WhatsApp
+          Escribir por WhatsApp
         </a>
       </section>
     );
@@ -356,18 +353,6 @@ function NextStep({ order }) {
           Estamos esperando la confirmación de Wompi. El estado del pago se
           actualizará cuando la pasarela lo confirme; puedes consultarlo en
           el seguimiento del pedido.
-        </p>
-      </section>
-    );
-  }
-
-  if (!rejected && !closed && order.paymentMethod === "nequi_api" && !paid) {
-    return (
-      <section className="order-note" aria-labelledby="order-next-title">
-        <h2 id="order-next-title" className="order-note__title">Pago en línea</h2>
-        <p>
-          Estamos esperando la confirmación de Nequi. El estado del pago se
-          actualizará cuando quede confirmado en el sistema.
         </p>
       </section>
     );
@@ -487,7 +472,7 @@ function OrderSummary({ order }) {
             )}
             <div className="order-totals__row">
               <span>Envío</span>
-              <span>{Number(order.shippingCost) > 0 ? formatCOP(order.shippingCost) : "Gratis"}</span>
+              <span>{shippingLabel(order)}</span>
             </div>
             <div className="order-totals__grand">
               <span>{paid ? "Total pagado" : "Total"}</span>

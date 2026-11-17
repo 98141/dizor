@@ -11,8 +11,10 @@ const storeSettingsSchema = new mongoose.Schema(
     taxRate: { type: Number, default: 0, min: 0, max: 100 },
     shippingMode: {
       type: String,
-      enum: ["fixed", "free_threshold", "by_department"],
-      default: "free_threshold",
+      enum: ["included", "fixed", "free_threshold", "by_department"],
+      // "included": el envío está incluido en el precio de cada producto
+      // (decisión del negocio 2026-11-16). Ver settingsService.isShippingIncluded.
+      default: "included",
     },
     shippingFixedCost: { type: Number, default: 15000 },
     freeShippingMinAmount: { type: Number, default: 200000 },
@@ -24,7 +26,7 @@ const storeSettingsSchema = new mongoose.Schema(
     currency: { type: String, default: "COP" },
     carriers: {
       type: [String],
-      default: ["interrapidisimo", "envia", "coordinadora"],
+      default: ["interrapidisimo", "servientrega"],
     },
     appearance: {
       siteName: { type: String, default: "" },

@@ -1,6 +1,6 @@
 # B. Informe de implementación — correcciones de privacidad y comercio electrónico
 
-Fecha: 2026-11-16. Base: `main` @ `59a4717` más cambios locales.
+Fecha: 2026-11-16. Base: `main` @ `59a4717` más cambios locales (fases 1–2); fase 3 sobre `10cdf28` (§6).
 
 **No se hizo commit, push ni despliegue, ni se modificó producción, la base de datos real o el CMS.**
 
@@ -24,7 +24,7 @@ Fecha: 2026-11-16. Base: `main` @ `59a4717` más cambios locales.
 | Ramas `develop`, `MejoraUno`, `origin/develop` | Todavía contienen `nequi_api` en el controlador |
 | Producción (`/api/checkout/config`, 2026-11-16) | Ofrece `wompi`, `nequi_api`, `nequi_manual`, `contra_entrega` |
 
-**Conclusión:** producción ejecuta un backend **anterior a `52bbcc8`** o de otra rama. El commit exacto no se puede determinar (E-12).
+**Conclusión de la fase 1:** producción ejecuta un backend **anterior a `52bbcc8`** o de otra rama. El commit exacto no se puede determinar (E-12). La fase 2 precisa más esta conclusión; ver §5.2.
 
 Medidas tomadas:
 
@@ -225,7 +225,153 @@ Archivos ya modificados antes de esta tarea, **no tocados**:
 3. **`CONSENT_VERSION` = "2":** al desplegar, las decisiones de cookies previas se invalidan (sin efecto visible mientras GA esté apagado).
 4. **Franja horaria:** no incluye festivos (no hay un calendario validado); hay que usar `MARKETING_BLOCKED_DATES`. Su aplicabilidad legal está pendiente.
 5. **Enhanced Measurement de GA4** no es controlable desde el código (E-9).
-6. **`.next/` local** se regeneró con `next build` usando una API inalcanzable. Antes de `next start` hay que volver a compilar con la configuración correcta (`next dev` no se ve afectado).
+6. **`.next/` local** se regeneró en la fase 1 con `next build` usando una API inalcanzable. Antes de `next start` hay que volver a compilar con la configuración correcta (`next dev` no se ve afectado). En la fase 2 **no** se usó ni se modificó: las pruebas se hicieron sobre una copia compilada aparte.
 7. **`backend/logs/`** contiene entradas de las pruebas (solo datos sintéticos).
 8. **Mongoose** muestra un aviso de obsolescencia (`new` en `findOneAndUpdate`); es un patrón preexistente en el proyecto, que también se usa en el código nuevo por consistencia.
 9. **Errores 503 de PQR deshabilitado:** se registran como "Server error" (comportamiento preexistente del middleware para códigos ≥500). Generan ruido en los logs sin datos personales.
+
+---
+
+## 5. Fase 2 — validación final local (2026-11-16)
+
+Punto de partida: el propietario confirmó la fase 1 en el commit `1f3ff14` ("Mejora de politicas y cookies"). Durante esta fase tenía cambios **sin confirmar** en `cuenta/page.js`, `catalogo/page.js`, `pedido/confirmacion/page.js`, `pedido/layout.js`, `seguimiento/layout.js`, `seguimiento/page.js` y `styles/pages/order-view.css`, entre ellos el rediseño de las páginas de confirmación y seguimiento. **No se editó ninguno de esos archivos.** Se revisó que el rediseño conserva la lógica de privacidad (token, limpieza de URL, `POST`, estados reales del pago), y se probó tal cual en E2E.
+
+Aislamiento: igual que en la fase 1, más E2E con navegador real sobre una copia compilada del frontend (ver `evidencias/README.md`).
+
+### 5.1 Defectos encontrados y corregidos en esta fase
+
+| ID | Defecto comprobado | Hallazgo | Corrección | Prueba |
+|---|---|---|---|---|
+| V-02 | En móvil (≤480 px) el banner de cookies ocupaba **402 px de 844**, con un hueco en blanco: con `flex-direction: column`, el `flex: 1 1 320px` del texto se aplicaba como altura. **Preexistente** (ya estaba en `59a4717` y en producción) | H-09 | `cookie-consent.css`: `.cookie-banner__text { flex: 0 0 auto }` dentro de la regla móvil existente | E2E L-movil: banner ≤35 % de la altura (captura `L-movil-banner.png`) |
+| V-03 | El banner y los controles dependían **solo** del ID de Google Analytics. El contador de visitas guardaba una cookie de la API (`dizor_visit_day`) y una clave local **sin permiso**, y al retirar el permiso no se detenía ese tratamiento | H-09, H-10 | Inventario central de tecnologías opcionales (`lib/optionalTechnologies.js`); categoría **"Estadísticas propias"** (contador); `VisitCounter` solo registra con permiso; al rechazar o retirar se borra la clave local y la API borra su cookie (`POST /api/visits/forget`); el panel se construye desde el inventario; la política de cookies separa esa categoría; `CONSENT_VERSION` "2" → "3" | E2E C-01…C-06; N-07 |
+| V-04 | Las PQR no eran idempotentes: si la respuesta se perdía, el reintento creaba **otro radicado** | H-22 | Clave de idempotencia por intento desde el formulario; hash único en `CustomerRequest`; el reintento devuelve el mismo radicado con un código nuevo (el anterior se invalida) y reenvía la constancia; con otro correo → 409; seguro frente a concurrencia | N-04, N-05 |
+| V-05 | Rotar `MARKETING_TOKEN_SECRET` invalidaba **todos** los enlaces de baja ya enviados | H-04, H-05 | Variable opcional `MARKETING_TOKEN_SECRET_PREVIOUS`: solo verifica, nunca firma | N-06 |
+| V-06 | Los 400/410 no orientaban a quien tenía abierta la versión anterior del sitio | Transición de la API | Los mensajes indican "recarga la página" (autorización ausente y seguimiento por GET) | N-02, N-03 |
+
+**Clasificación del contador como opcional:** es una decisión **conservadora** (no es necesario para comprar y guarda datos en el dispositivo). Su calificación jurídica queda pendiente (`05-borradores…` §4). Efecto visible: el banner vuelve a mostrarse en la primera visita, porque hay una tecnología opcional activa, y el contador solo cuenta a quien acepta.
+
+Archivos de la fase 2:
+
+- **Backend:** `controllers/siteVisitController.js`, `routes/visitRoutes.js`, `models/customerRequest.js`, `services/customerRequestService.js`, `services/consentService.js` (mensaje), `controllers/checkoutController.js` y `controllers/specialRequestController.js` (mensaje 410), `utils/opaqueTokens.js`.
+- **Frontend:** `lib/optionalTechnologies.js` (nuevo), `lib/consentRecord.js`, `lib/consentPreferences.js`, `services/visitService.js`, `components/layout/VisitCounter.jsx`, `components/consent/CookieConsentBanner.jsx`, `components/consent/CookiePreferencesPanel.jsx`, `app/(shop)/politica-de-cookies/page.js`, `app/(shop)/pqr/page.js`, `styles/components/cookie-consent.css`.
+
+### 5.2 Diferencia con producción (H-24): evidencia con lecturas GET públicas
+
+Solo se hicieron peticiones GET públicas, sin autenticación y sin ninguna operación que cree o modifique datos. No se afirma que producción ejecute un commit concreto.
+
+| Capa | Evidencia (2026-11-16) | Interpretación |
+|---|---|---|
+| **Backend** | `GET /api/reviews` → 200 (ruta añadida en `237b4bd`, 2026-07-18); `GET /api/favorites/ids` → 404 "Ruta no encontrada" (ruta añadida en `68e986b`, 2026-09-12); `GET /api/products/random-sample` no existe (añadida en `52bbcc8`); `GET /api/legal/notices` → 404; `GET /api/checkout/track` → 400 con el contrato antiguo | Coherente con código **posterior a `237b4bd` y anterior a `68e986b`** en la historia de `main`, o con código no versionado. **Ningún commit queda identificado** |
+| **Frontend** | `/politica-de-cookies` → 200 (creada en `245d22a`, 2026-07-14); `/guia-de-tallas` → 404 (creada en `cbddfe3`, 2026-08-31); `/favoritos` → 404 (creada en `68e986b`); `/pqr` y `/baja` → 404 | Coherente con código **posterior a `245d22a` y anterior a `cbddfe3`**. Puede ser una versión **distinta** de la del backend |
+| **Configuración** | `/api/checkout/config` ofrece `nequi_api` y `nequi_manual`; `taxEnabled:false`; `shippingFixedCost:0` | Configuración de BD y variables de entorno de producción, no del código. El valor de `NEQUI_ENV` es desconocido (ver V-01) |
+| **Contenido administrado** | Páginas CMS "Nosotros", "Envíos", "Política de cambios" (en BD) | No dependen del commit |
+| **Caché** | Portada: `x-nextjs-cache: STALE`, `cache-control: s-maxage=30, stale-while-revalidate=31535970`, servidor `LiteSpeed` | Las páginas ISR pueden servirse obsoletas mientras se regeneran; tras un despliegue puede verse contenido anterior durante un tiempo |
+| **Hosting** | `frontend/server.js` documenta el arranque para "Setup Node.js App" de cPanel (Passenger), coherente con `LiteSpeed` | Proveedor y retención de logs: E-4 |
+
+**Consecuencia para el despliegue:** desplegar `main` no es "aplicar la remediación" a lo que hay en producción. Llevaría también unos dos meses de cambios no publicados (favoritos, guía de tallas, rediseño de la home, filtros del catálogo y la retirada de Nequi del checkout en `52bbcc8`). Ver `06-plan-despliegue-reversion.md` §1.
+
+**Lo que debe obtener el operador** (sin compartir secretos):
+
+1. En cPanel → "Setup Node.js App", de **cada** aplicación (frontend y API): ruta raíz de la aplicación, archivo de arranque, versión de Node y los **nombres** de las variables de entorno definidas (no sus valores). Excepción: el **valor** de `NEQUI_ENV`, que no es secreto (`mock`/`sandbox`/`production`).
+2. Si la ruta raíz es un clon de Git: en la terminal de cPanel, `git -C <ruta> log -1 --format="%H %ad"` y `git -C <ruta> status --short | head -20`. Si no es un clon: fecha y origen del último despliegue (zip o subida).
+3. Si hay `.next/BUILD_ID` en el frontend desplegado, su valor y su fecha.
+
+**No se eliminó ni restauró Nequi.** El código local mantiene las rutas de Nequi tal como estaban.
+
+### 5.3 Riesgo crítico encontrado (fuera de los hallazgos originales): V-01 — Nequi en modo `mock`
+
+Evidencia **solo de código**; no se hizo ninguna prueba contra producción, porque sería un ataque:
+
+- `backend/src/services/nequiPaymentService.js:5`: `NEQUI_ENV` toma por defecto `"mock"` si no está definido.
+- `:28`: en `mock`, `isNequiConfigured()` es verdadero, así que el checkout **ofrece** "Nequi (pago directo)".
+- `:183`: en `mock`, `verifyWebhookSignature()` **siempre** devuelve `true`.
+- `controllers/nequiController.js:213-251`: el webhook busca el pedido por número (`reference`) y, si el estado mapea a aprobado, ejecuta `approveOrder(order, "webhook")`.
+- El mismo código existía en `237b4bd` (rango del backend desplegado).
+
+**Consecuencia si producción está en `mock`:**
+
+1. Cualquiera que conozca o adivine un número de pedido `nequi_api` (formato secuencial `DIZ-AAAAMMDD-NNNN`) podría marcarlo como **pagado** con una petición sin firma.
+2. Los clientes que elijan Nequi recibirían un cobro simulado que nunca se procesa.
+
+**Estado:** Pendiente de verificar contra producción (E-18). Es **prioridad máxima**, aunque no sea un hallazgo de privacidad. Acción del operador: confirmar el valor de `NEQUI_ENV`. Si es `mock` o no está definido, la decisión de desactivar Nequi en producción corresponde al propietario. No se modificó el código de Nequi.
+
+### 5.4 Experiencia con enlaces antiguos que responden 410 y vía de recuperación
+
+| Situación del cliente | Qué ve | Vía de recuperación segura |
+|---|---|---|
+| Pestaña abierta con la versión anterior que consulta el seguimiento por GET | Mensaje del 410: "…Recarga la página y vuelve a consultar con el formulario de seguimiento" | Recargar → formulario nuevo (POST con número y correo en el cuerpo) |
+| Pestaña anterior que intenta finalizar la compra sin la casilla | 400: "…Si no ves la casilla de autorización, recarga la página." El carrito se conserva (`localStorage`) | Recargar → checkout con la casilla; la clave de idempotencia nueva evita duplicados (el intento anterior no creó pedido) |
+| Marcador o enlace antiguo `/seguimiento?order=…&email=…` | Formulario con el número precargado; el correo se elimina de la URL y **no** se precarga | Escribir el correo o iniciar sesión → "Ver mis pedidos" |
+| Enlace antiguo de confirmación con datos en la URL, abierto sin token ni sesión | "Verifica tu acceso" (modo limitado); no muestra datos | "Consultar con número de pedido y correo" o iniciar sesión |
+| Sin acceso a nada de lo anterior | — | Canal de atención: WhatsApp hoy; PQR cuando se habilite (E-2) |
+
+En ningún caso se restablece el acceso por correo en la URL ni se relajan controles.
+
+### 5.5 Observación menor (no corregida)
+
+`GET /api/payments/nequi/status/:orderId` responde sin autenticación con el estado del pago de un pedido `nequi_api` si se conoce su `_id` (ObjectId, no adivinable). No expone datos personales. No se modificó porque forma parte del flujo de Nequi (ver V-01); revisarlo junto con esa decisión.
+
+## 6. Fase 3 — datos reales, políticas, pagos y expediente jurídico (2026-11-16)
+
+Base: `main` @ `10cdf28` más los cambios locales sin confirmar del propietario (ProductCard, guía de tallas, newsletter compacta, estilos), que **no** se modificaron. Sin commit, push, despliegue ni cambios en el CMS o la BD reales. Datos y procedencia en `07-…` §1.
+
+### 6.1 Medios de pago: solo Wompi y contraentrega
+
+| Elemento | Antes | Ahora |
+|---|---|---|
+| `nequiPaymentService.getNequiEnv` | `NEQUI_ENV \|\| "mock"` | `sandbox`/`production` solo si se fijan; `mock` solo con `NODE_ENV=test`; cualquier otro caso → `disabled` |
+| Activación | Implícita (mock siempre "configurado") | `isNequiDirectEnabled()` exige `NEQUI_DIRECT_ENABLED=true` + entorno válido + 4 credenciales; `isNequiManualEnabled()` exige `NEQUI_MANUAL_ENABLED=true`. Ambas **desactivadas** |
+| `verifyWebhookSignature` | `true` en mock | `false` si la integración está desactivada |
+| Endpoints `/api/payments/nequi/*` | Activos; el webhook aprobaba pedidos | **410** antes de leer o modificar pedidos (también con `NEQUI_ENV=mock`) |
+| `createCheckoutOrder` | Lista fija con `nequi_api` y `nequi_manual` | `services/paymentMethods.js`: solo lo habilitado (Wompi si está configurado + contraentrega). Cualquier otro valor, incluido un objeto, → 400 sin crear pedido |
+| `getCheckoutConfig` | Lista propia | La misma fuente (`getEnabledPaymentMethods`) |
+| Confirmación (pedidos históricos Nequi) | Instrucciones de transferencia y "enviar comprobante por WhatsApp" | Aviso de que el medio ya no se ofrece y botón de consulta (cambio quirúrgico en el diseño del propietario) |
+| Código de Nequi | — | **Conservado** (servicio, controlador, rutas, modelo `Order.nequi`, pantalla de espera del checkout), inactivo |
+| Pedidos históricos | — | Intactos: ni se borran, ni se reclasifican, ni se marcan pagados. Conciliación en `06-…` §7.2 |
+
+Contraentrega: el pedido se crea con `paymentStatus: "pendiente"` (probado). El acuse y la confirmación lo indican.
+
+### 6.2 Webhook de Wompi (sin cambiar los métodos del checkout alojado)
+
+- Se mantiene la verificación oficial del checksum (SHA-256 de `signature.properties` + `timestamp` + secreto, comparación en tiempo constante). Ahora acepta el checksum en la cabecera `X-Event-Checksum` **o** en `signature.checksum`.
+- Ventana anti-repetición: de 5 minutos a **26 horas**, porque Wompi reintenta hasta 3 veces en 24 h (30 min, 3 h, 24 h). Repetir un evento ya aplicado es inocuo.
+- Nuevas validaciones: `event.environment` debe coincidir con `WOMPI_ENV` (`prod`/`test`); el pedido debe ser `paymentMethod: "wompi"`; `currency` debe ser `COP`; el monto debe coincidir (ya existía).
+- Un pedido pagado **no se degrada** por un evento posterior `DECLINED`/`VOIDED`/`ERROR` (se anota en el historial).
+- No se filtra por `payment_method_type`: Nequi procesado dentro de Wompi se acepta (proveedor ≠ medio).
+- La redirección del navegador sigue sin confirmar pagos: solo el webhook verificado cambia el estado.
+
+### 6.3 Envío incluido en el precio y transportadoras
+
+- `settingsService.isShippingIncluded()`: activo por defecto (`SHIPPING_INCLUDED_IN_PRICE !== "false"`) o con el nuevo modo `included`. El costo de envío es 0, `freeShippingApplied` es `false` y no se anuncia umbral.
+- `Order.shippingIncluded` guarda la condición de cada pedido.
+- Textos: "Incluido en el precio" en carrito, checkout, confirmación, cuenta, acuse y panel. Se eliminó "Gratis" / "gratis ≥ …". El panel de configuración ofrece "Incluido en el precio" y avisa del valor efectivo.
+- Transportadoras: `interrapidisimo` y `servientrega` (código). Se valida la elegida. Etiquetas añadidas en checkout, cuenta, seguimiento, `orderLabels` y correo (sin URL de rastreo de Servientrega, que no se conoce).
+
+### 6.4 Plazos de entrega (bloqueados)
+
+`backend/src/config/deliveryTerms.js` con `status: "pending_definition"`. Mientras tanto: no se muestra plazo en checkout ni en "Envíos y entregas"; el acuse dice "te lo confirmaremos por este medio". Cuando se defina, el checkout lo mostrará antes de confirmar y el pedido guardará `legal.deliveryTermsVersion` y `deliveryTermsText`. `ORDER_DELIVERY_TIME_TEXT` deja de usarse.
+
+### 6.5 Textos legales y formularios
+
+- `legalTexts.js`: versiones "2" (casillas) y "1" (términos), estado `published` con `legalReview: "pending"` interno. Nombran a la sociedad como responsable. La versión de fase 1 queda en `HISTORY`.
+- `ConsentCheckbox`: sin la marca "Texto en revisión"; enlace "Ver política"/"Ver términos".
+- Checkout: casilla obligatoria de términos (`termsAccepted === true` en el servidor) → `Order.legal.termsVersion/termsStatus` + `ConsentRecord` de finalidad `terms`.
+- `consentService.isUsableTextStatus`: `approved` y `published` cuentan; `draft` no (salvo pruebas explícitas). Lo usa también la exportación de la newsletter.
+- Formularios revisados (todos reciben el texto del servidor): registro, checkout, registro tras la compra, newsletter (pie, inicio, ventana), encargos, mayoristas, reseñas, PQR y recordatorio (desactivado).
+- Páginas: `/politica-de-privacidad` reescrita; `/politica-de-cookies` sin PLACEHOLDER; nuevas `/terminos-y-condiciones` y `/garantias-y-devoluciones` (imprimibles); `/pagina/envios` estática con el mismo título, ruta y diseño; `/pagina/cambios` → redirección; pie con identificación del vendedor; sitemap actualizado. Cada página muestra su versión y solo muestra fecha de vigencia si se define `NEXT_PUBLIC_LEGAL_EFFECTIVE_DATE`.
+- Corrección encontrada en la validación: el compilador eliminaba el espacio tras `</strong>` cuando el texto siguiente contenía `&quot;` ("personalización:su ficha"); se añadió `{" "}` explícito en 4 lugares.
+
+### 6.6 Marketing, PQR y acuse
+
+- Recordatorios de carrito: interruptor de servidor `MARKETING_CART_REMINDERS_ENABLED` (desactivado). Configuración pública `cartReminders.enabled=false` → el carrito no muestra el formulario; `POST /marketing/abandoned-cart` → 503 sin guardar nada; `sendDueAbandonedReminders` → `feature_disabled`; el endpoint del panel → 409 y el botón queda deshabilitado.
+- PQR: aviso interno a `ADMIN_NOTIFY_EMAIL` con datos mínimos; constancia con razón social, NIT, correo y horario; página `/pqr` con contacto y horario (y, si el canal está desactivado, el correo además de WhatsApp). Canal **sin activar**.
+- Acuse: identificación del vendedor, envío incluido, aviso de contraentrega y contacto.
+- `seedCms.js` y `seedStoreSettings.js` actualizados (no ejecutados).
+
+### 6.7 Archivos de la fase 3
+
+Backend nuevos: `config/businessInfo.js`, `config/deliveryTerms.js`, `services/paymentMethods.js`.
+Backend modificados: `config/legalTexts.js`; `controllers/{cart,checkout,marketingAdmin,nequi,settingsAdmin,wompiWebhook}Controller.js`; `models/{consentRecord,order,storeSettings}.js`; `scripts/{seedCms,seedStoreSettings}.js`; `services/{cart,consent,customerRequest,email,marketing,nequiPayment,orderReceipt,order,settings,wompi}Service.js`; `utils/formatMarketingSettings.js`.
+Frontend nuevos: `app/(shop)/terminos-y-condiciones/page.js`, `app/(shop)/garantias-y-devoluciones/page.js`, `app/(shop)/pagina/envios/page.js`, `components/legal/{LegalDocMeta,PrintButton}.jsx`, `lib/businessInfo.js`.
+Frontend modificados: `next.config.mjs` (redirección), `app/sitemap.js`, `app/(shop)/{carrito,checkout,politica-de-privacidad,politica-de-cookies,pqr}/page.js`, `app/admin/{configuracion,contenido}/page.js`, `components/{layout/SiteFooter,legal/ConsentCheckbox,marketing/AbandonedCartCapture}.jsx`, `lib/orderLabels.js`, `styles/layouts/public-footer.css`; ediciones **quirúrgicas** en archivos rediseñados por el propietario: `pedido/confirmacion/page.js` (bloque Nequi y fila de envío), `cuenta/page.js` y `seguimiento/page.js` (etiquetas), `components/admin/OrderDetail.jsx` (fila de envío).
+No tocados: `ProductCard.jsx`, `SizeGuide.jsx`, `guia-de-tallas/*`, `HomeNewsletter.jsx`, `product-card.css`, `size-guide.css` (cambios del propietario), catálogo.

@@ -825,6 +825,12 @@ function ContenidoAdminContent() {
             onChange={(e) => setNl("footerText", e.target.value)} />
 
           <h2 style={{ marginTop: "1.5rem" }}>Carrito abandonado</h2>
+          {!marketing.abandonedCart?.featureEnabled && (
+            <p className="admin-muted">
+              Función desactivada en el servidor (MARKETING_CART_REMINDERS_ENABLED). No se
+              muestra el formulario a los clientes ni se envían recordatorios.
+            </p>
+          )}
           <label className="admin-checkbox">
             <input type="checkbox" checked={Boolean(marketing.abandonedCart?.enabled)}
               onChange={(e) => setAbandoned("enabled", e.target.checked)} />
@@ -867,7 +873,9 @@ function ContenidoAdminContent() {
       {tab === "carritos" && (
         <div className="marketing-admin__card">
           <button type="button" className="admin-btn admin-btn--primary"
-            onClick={handleSendReminders} disabled={saving} style={{ marginBottom: "1rem" }}>
+            onClick={handleSendReminders}
+            disabled={saving || !marketing?.abandonedCart?.featureEnabled}
+            style={{ marginBottom: "1rem" }}>
             Enviar recordatorios pendientes
           </button>
           <table className="marketing-admin__table">

@@ -92,6 +92,12 @@ function AdminConfigContent() {
 
         <section className="product-form__section">
           <h2>Envíos</h2>
+          {form.shippingIncluded && (
+            <p className="admin-muted">
+              El envío está incluido en el precio de los productos: el checkout no suma
+              costo de envío, sin importar el modo guardado (SHIPPING_INCLUDED_IN_PRICE).
+            </p>
+          )}
           <div className="admin-form__group">
             <label htmlFor="shippingMode">Modo de envío</label>
             <select
@@ -99,6 +105,7 @@ function AdminConfigContent() {
               value={form.shippingMode}
               onChange={(e) => handleChange("shippingMode", e.target.value)}
             >
+              <option value="included">Incluido en el precio</option>
               <option value="free_threshold">Gratis desde monto mínimo</option>
               <option value="fixed">Costo fijo siempre</option>
               <option value="by_department">Por departamento</option>
@@ -139,7 +146,7 @@ function AdminConfigContent() {
         <section className="product-form__section">
           <h2>Transportadoras</h2>
           <p className="admin-muted">
-            {form.carriers?.join(", ") || "Sin transportadoras"}
+            {(form.activeCarriers || form.carriers)?.join(", ") || "Sin transportadoras"}
           </p>
         </section>
 

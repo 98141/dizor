@@ -8,6 +8,7 @@ const { sendAbandonedCartEmail } = require("./emailService");
 const {
   formatMarketingSettings,
   formatPublicMarketingConfig,
+  isCartReminderFeatureEnabled,
 } = require("../utils/formatMarketingSettings");
 const { PURPOSES } = require("../config/legalTexts");
 const {
@@ -109,6 +110,10 @@ exports.subscribeNewsletter = async ({ email, name, source, marketingConsent }) 
  * sincronización del carrito de usuarios registrados.
  */
 exports.trackAbandonedCart = async ({ email, name, items, userId, marketingConsent }) => {
+  // Función desactivada: no se guarda carrito ni correo ni evidencia.
+  if (!isCartReminderFeatureEnabled()) {
+    throw new AppError("Los recordatorios de carrito no están disponibles", 503);
+  }
   if (!email?.trim() || !items?.length) {
     throw new AppError("Correo e ítems del carrito son obligatorios", 400);
   }
@@ -185,6 +190,9 @@ exports.markAbandonedCartRecovered = async (email, orderNumber) => {
  * posterior a guardar el carrito sí se respeta.
  */
 exports.sendDueAbandonedReminders = async ({ now = new Date() } = {}) => {
+  if (!isCartReminderFeatureEnabled()) {
+    return { sent: 0, skipped: 0, reason: "feature_disabled" };
+  }
   const settings = await exports.getOrCreateSettings();
   if (!settings.abandonedCart?.enabled) {
     return { sent: 0, skipped: 0, reason: "disabled" };

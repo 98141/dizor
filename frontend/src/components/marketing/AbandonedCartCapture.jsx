@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
-import { saveAbandonedCart } from "@/services/marketingService";
+import { saveAbandonedCart, getMarketingConfig } from "@/services/marketingService";
 import ConsentCheckbox, { isNoticeReady } from "@/components/legal/ConsentCheckbox";
 import { useLegalNotices } from "@/lib/legalNotices";
 
@@ -11,7 +11,26 @@ import { useLegalNotices } from "@/lib/legalNotices";
 // expresamente (H-05). Se mantiene oculto para usuarios registrados, como
 // antes; a ellos ya no se les inscribe automáticamente. Ofrecerles la
 // opción es una decisión de negocio pendiente (E-5).
+//
+// Función preparada pero DESACTIVADA: solo se muestra si el servidor la
+// habilita (MARKETING_CART_REMINDERS_ENABLED=true y el interruptor del panel).
 export default function AbandonedCartCapture() {
+  const [featureEnabled, setFeatureEnabled] = useState(false);
+  useEffect(() => {
+    let alive = true;
+    getMarketingConfig()
+      .then((d) => {
+        if (alive) setFeatureEnabled(d?.config?.cartReminders?.enabled === true);
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, []);
+  return featureEnabled ? <AbandonedCartForm /> : null;
+}
+
+function AbandonedCartForm() {
   const { items, toApiItems } = useCart();
   const { user } = useAuth();
   const [email, setEmail] = useState("");

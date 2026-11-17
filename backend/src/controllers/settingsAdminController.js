@@ -1,6 +1,6 @@
 const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/catchAsync");
-const { getStoreSettings } = require("../services/settingsService");
+const { getStoreSettings, isShippingIncluded, getActiveCarriers } = require("../services/settingsService");
 const { logAuditEvent, safeLog } = require("../services/auditService");
 
 const formatSettings = (settings) => {
@@ -25,6 +25,9 @@ const formatSettings = (settings) => {
     shippingByDepartment,
     currency: doc.currency,
     carriers: doc.carriers,
+    // Valores efectivos (pueden diferir de la BD: ver settingsService).
+    shippingIncluded: isShippingIncluded(doc),
+    activeCarriers: getActiveCarriers(),
     appearance: doc.appearance || {},
     updatedAt: doc.updatedAt,
   };

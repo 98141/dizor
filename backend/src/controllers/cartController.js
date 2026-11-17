@@ -3,7 +3,7 @@ const Coupon = require("../models/coupon");
 const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/catchAsync");
 const { resolveCartItems } = require("../services/cartService");
-const { getStoreSettings, getShippingCost } = require("../services/settingsService");
+const { getStoreSettings, getShippingCost, isShippingIncluded } = require("../services/settingsService");
 
 exports.validateCart = catchAsync(async (req, res) => {
   const { items, department } = req.body;
@@ -22,6 +22,7 @@ exports.validateCart = catchAsync(async (req, res) => {
     subtotal,
     taxTotal,
     shippingCost,
+    shippingIncluded: isShippingIncluded(settings),
     total,
     taxEnabled: settings.taxEnabled,
     taxRate: settings.taxRate,

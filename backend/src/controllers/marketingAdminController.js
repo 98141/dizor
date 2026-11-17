@@ -13,18 +13,15 @@ const {
 const ConsentRecord = require("../models/consentRecord");
 const MarketingSuppression = require("../models/marketingSuppression");
 const { PURPOSES } = require("../config/legalTexts");
-const { suppressMarketing } = require("../services/consentService");
+const { suppressMarketing, isUsableTextStatus } = require("../services/consentService");
 
-// Una evidencia cuenta para exportar/enviar solo si el texto estaba aprobado
-// (o, en pruebas locales explícitas, en borrador). Ver consentService.
+// Una evidencia cuenta para exportar/enviar solo si el texto era definitivo
+// ("published"/"approved"); las de borrador no (ver consentService).
 const evidenceIsUsable = (record) =>
   Boolean(record) &&
   record.purpose === PURPOSES.MARKETING_NEWSLETTER &&
   record.action === "granted" &&
-  (record.textStatus === "approved" ||
-    (record.textStatus === "draft" &&
-      process.env.NODE_ENV !== "production" &&
-      process.env.CONSENT_ACCEPT_DRAFT_FOR_TESTS === "true"));
+  isUsableTextStatus(record.textStatus);
 
 exports.getSettings = catchAsync(async (req, res) => {
   const settings = await getFormattedSettings();
@@ -113,6 +110,13 @@ exports.getAbandonedCarts = catchAsync(async (req, res) => {
 
 exports.sendAbandonedReminders = catchAsync(async (req, res) => {
   const result = await sendDueAbandonedReminders();
+  if (result.reason === "feature_disabled") {
+    return res.status(409).json({
+      status: "fail",
+      message: "Los recordatorios de carrito están desactivados en el servidor.",
+      ...result,
+    });
+  }
   res.status(200).json({
     status: "success",
     message: `Recordatorios enviados: ${result.sent}`,

@@ -2,24 +2,27 @@
 // los formularios y de su versión. El servidor —nunca el cliente— decide qué
 // versión queda registrada como evidencia (ver services/consentService.js).
 //
-// ESTADO: todos los textos están en "draft". Faltan datos del propietario
-// (informe de auditoría 2026-11-16, sección E):
-//   - E-1: identidad legal del responsable del tratamiento.
-//   - E-2: canal oficial para ejercer derechos.
-//   - E-5: finalidades que el negocio decide mantener.
-// y revisión jurídica del texto final (sección F.3).
+// Estados de un texto:
+//   - "draft": versión de trabajo de la fase 1 (se mostraba con la marca
+//     "Texto en revisión"). Lo registrado con ella NO cuenta como
+//     autorización comercial y NO se regulariza retroactivamente.
+//   - "published": redacción definitiva preparada con los datos confirmados
+//     por el propietario (2026-11-16), apta para mostrarse sin marcas. La
+//     revisión jurídica externa sigue pendiente (`legalReview: "pending"`,
+//     ver docs/auditoria-privacidad/07-guia-revision-juridica.md). No se
+//     muestra al público como "pendiente": es el texto que el titular ve.
+//   - "approved": confirmado tras la revisión jurídica.
+//   - "missing": no existe texto (no se muestra casilla ni se registra nada).
 //
-// Mientras un texto esté en "draft":
-//   - Se puede mostrar y registrar en entornos locales/pruebas.
-//   - La evidencia queda marcada con textStatus "draft": NO cuenta como
-//     autorización válida (consentService la trata como evidencia
-//     provisional).
-//   - El plan de despliegue bloquea su publicación.
-//
-// Para aprobar un texto: completar el contenido definitivo, cambiar
-// status a "approved" y SUBIR la versión. Nunca reutilizar una versión con
-// un texto distinto: la versión identifica el texto exacto que vio el
-// titular.
+// Reglas de versión:
+//   - La versión identifica el texto EXACTO que vio el titular. Si cambia una
+//     sola palabra, se SUBE la versión.
+//   - Pasar de "published" a "approved" sin cambiar el texto no exige nueva
+//     versión; la evidencia previa conserva el estado con que se registró.
+//   - El texto que se muestra y el que se registra salen de este archivo; los
+//     formularios del frontend los reciben de /api/consents/notices.
+
+const { BUSINESS } = require("./businessInfo");
 
 const PURPOSES = Object.freeze({
   ORDER_PROCESSING: "order_processing",
@@ -38,78 +41,93 @@ const MARKETING_PURPOSES = Object.freeze([
 ]);
 
 const PRIVACY_POLICY_PATH = "/politica-de-privacidad";
+const TERMS_PATH = "/terminos-y-condiciones";
+
+const RESPONSIBLE = `${BUSINESS.legalName} (${BUSINESS.brand})`;
 
 const TEXTS = Object.freeze({
   [PURPOSES.ORDER_PROCESSING]: {
-    version: "2026-11-16-draft-1",
-    status: "draft",
+    version: "2",
+    status: "published",
+    legalReview: "pending",
     required: true,
     label:
-      "Autorizo el tratamiento de mis datos (nombre, correo, teléfono y dirección) para gestionar mi pedido: confirmación, pago, envío, atención y garantía, conforme a la Política de Privacidad.",
-    missing: ["E-1", "E-2", "revisión jurídica"],
+      `Autorizo a ${RESPONSIBLE} a tratar mis datos de identificación y contacto (nombre, correo, teléfono y dirección) para gestionar mi pedido: confirmación, pago, facturación, envío, atención, garantía y solicitudes relacionadas, conforme a la Política de Tratamiento de Datos Personales.`,
   },
   [PURPOSES.ACCOUNT]: {
-    version: "2026-11-16-draft-1",
-    status: "draft",
+    version: "2",
+    status: "published",
+    legalReview: "pending",
     required: true,
     label:
-      "Autorizo el tratamiento de mis datos para crear y administrar mi cuenta (inicio de sesión, direcciones, historial de pedidos y favoritos), conforme a la Política de Privacidad.",
-    missing: ["E-1", "E-2", "revisión jurídica"],
+      `Autorizo a ${RESPONSIBLE} a tratar mis datos para crear y administrar mi cuenta (inicio de sesión, direcciones, historial de pedidos y favoritos), conforme a la Política de Tratamiento de Datos Personales.`,
   },
   [PURPOSES.SPECIAL_REQUEST]: {
-    version: "2026-11-16-draft-1",
-    status: "draft",
+    version: "2",
+    status: "published",
+    legalReview: "pending",
     required: true,
     label:
-      "Autorizo el tratamiento de mis datos de contacto y de la información de mi solicitud para responderla y cotizarla, conforme a la Política de Privacidad.",
-    missing: ["E-1", "E-2", "revisión jurídica"],
+      `Autorizo a ${RESPONSIBLE} a tratar mis datos de contacto y la información de mi solicitud para responderla y cotizarla, conforme a la Política de Tratamiento de Datos Personales.`,
   },
   [PURPOSES.REVIEW_PUBLICATION]: {
-    version: "2026-11-16-draft-1",
-    status: "draft",
+    version: "2",
+    status: "published",
+    legalReview: "pending",
     required: true,
     label:
-      "Entiendo que, si mi reseña se aprueba, se publicarán el nombre visible, la ciudad (si la indico), la calificación y el comentario, y autorizo esa publicación.",
-    missing: ["E-1", "E-5", "revisión jurídica"],
+      "Autorizo que, si mi reseña se aprueba, se publiquen en este sitio el nombre que indique, la ciudad (si la indico), la calificación y el comentario. No se publican fotografías mías sin una autorización aparte.",
   },
   [PURPOSES.CUSTOMER_REQUEST]: {
-    version: "2026-11-16-draft-1",
-    status: "draft",
+    version: "2",
+    status: "published",
+    legalReview: "pending",
     required: true,
     label:
-      "Autorizo el tratamiento de mis datos para registrar, tramitar y responder esta solicitud, conforme a la Política de Privacidad.",
-    missing: ["E-1", "E-2", "revisión jurídica"],
+      `Autorizo a ${RESPONSIBLE} a tratar mis datos para registrar, tramitar y responder esta solicitud, conforme a la Política de Tratamiento de Datos Personales.`,
   },
   [PURPOSES.MARKETING_NEWSLETTER]: {
-    version: "2026-11-16-draft-1",
-    status: "draft",
+    version: "2",
+    status: "published",
+    legalReview: "pending",
     required: false,
     label:
-      "Quiero recibir por correo novedades y ofertas. Es opcional y puedo darme de baja en cualquier momento desde el enlace incluido en cada correo.",
-    missing: ["E-1", "E-5", "E-8", "revisión jurídica (Ley 2300/2023)"],
+      `Quiero recibir por correo electrónico novedades y ofertas de ${BUSINESS.brand}. Es opcional, no condiciona ninguna compra y puedo darme de baja en cualquier momento desde el enlace incluido en cada correo.`,
   },
   [PURPOSES.MARKETING_CART_REMINDER]: {
-    version: "2026-11-16-draft-1",
-    status: "draft",
+    version: "2",
+    status: "published",
+    legalReview: "pending",
     required: false,
     label:
-      "Quiero recibir por correo un recordatorio de los productos de este carrito. Es opcional y puedo darme de baja desde el enlace incluido en el correo.",
-    missing: ["E-1", "E-5", "E-8", "revisión jurídica (Ley 2300/2023)"],
+      `Quiero recibir por correo electrónico un recordatorio de los productos de este carrito. Es opcional y puedo darme de baja desde el enlace incluido en el correo.`,
   },
   [PURPOSES.TERMS]: {
-    // No existen términos y condiciones aprobados (H-17). Sin texto no se
-    // muestra casilla ni se registra aceptación.
-    version: null,
-    status: "missing",
-    required: false,
-    label: "",
-    missing: ["E-1", "E-10", "revisión jurídica"],
+    version: "1",
+    status: "published",
+    legalReview: "pending",
+    required: true,
+    path: TERMS_PATH,
+    label:
+      "He leído y acepto los Términos y condiciones de compra, incluida la información sobre garantía, derecho de retracto, reversión del pago y cambios.",
+  },
+});
+
+// Versiones anteriores (solo referencia para interpretar la evidencia
+// histórica; no se muestran ni se registran).
+const HISTORY = Object.freeze({
+  "2026-11-16-draft-1": {
+    status: "draft",
+    note: "Fase 1. Se mostraba con la marca 'Texto en revisión'. No cuenta como autorización comercial.",
   },
 });
 
 const getText = (purpose) => TEXTS[purpose] || null;
 
 const isMarketingPurpose = (purpose) => MARKETING_PURPOSES.includes(purpose);
+
+// Estados con los que un texto puede mostrarse al público sin marcas.
+const PUBLISHABLE_STATUSES = Object.freeze(["published", "approved"]);
 
 // Vista pública: solo lo que el formulario necesita para mostrarse.
 const getPublicNotices = () =>
@@ -121,7 +139,7 @@ const getPublicNotices = () =>
         status: t.status,
         required: t.required,
         label: t.label,
-        policyPath: PRIVACY_POLICY_PATH,
+        policyPath: t.path || PRIVACY_POLICY_PATH,
       },
     ])
   );
@@ -129,7 +147,11 @@ const getPublicNotices = () =>
 module.exports = {
   PURPOSES,
   MARKETING_PURPOSES,
+  PUBLISHABLE_STATUSES,
+  PRIVACY_POLICY_PATH,
+  TERMS_PATH,
   TEXTS,
+  HISTORY,
   getText,
   getPublicNotices,
   isMarketingPurpose,

@@ -71,14 +71,18 @@ exports.calculateTotals = (resolvedItems, settings, department) => {
   const taxable = subtotal - discountTotal;
   const taxTotal = ivaEnabled ? Math.round(taxable * (ivaPercent / 100)) : 0;
 
-  const { getShippingCost } = require("./settingsService");
+  const { getShippingCost, isShippingIncluded } = require("./settingsService");
+  const shippingIncluded = isShippingIncluded(settings);
   const shippingCost = getShippingCost(settings, subtotal, department);
 
+  // Con el envío incluido en el precio no hay "envío gratis": no se marca
+  // como promoción ni se anuncia un umbral.
   const freeShippingApplied =
+    !shippingIncluded &&
     settings.shippingMode === "free_threshold" &&
     subtotal >= settings.freeShippingMinAmount;
   const freeShippingThreshold =
-    settings.shippingMode === "free_threshold"
+    !shippingIncluded && settings.shippingMode === "free_threshold"
       ? (settings.freeShippingMinAmount || 0)
       : 0;
 
@@ -94,5 +98,6 @@ exports.calculateTotals = (resolvedItems, settings, department) => {
     ivaPercent,
     freeShippingApplied,
     freeShippingThreshold,
+    shippingIncluded,
   };
 };

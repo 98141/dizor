@@ -29,9 +29,12 @@ const seedCms = async () => {
     {
       title: "Envíos y entregas",
       slug: "envios",
-      excerpt: "Cobertura nacional y tiempos de entrega.",
+      excerpt: "Cobertura nacional, transportadoras y envío incluido en el precio.",
+      // Nota: la ruta /pagina/envios la sirve una página estática del
+      // frontend (app/(shop)/pagina/envios/page.js). Este texto solo se usa
+      // si se elimina esa página.
       body:
-        "Realizamos envíos a todo Colombia a través de Interrapidísimo, Envía y Coordinadora.\n\nLos tiempos de entrega dependen de la ciudad destino. En el checkout verás el costo de envío según tu departamento.\n\nEnvío gratis en pedidos que superen el monto mínimo configurado en la tienda.",
+        "Vendemos y enviamos únicamente dentro de Colombia, con cobertura nacional, a través de Inter Rapidísimo o Servientrega.\n\nEl valor del envío ya está incluido en el precio de cada producto: no se cobra un cargo adicional por envío en el checkout.\n\nEl plazo de entrega aplicable se informa antes de confirmar la compra.",
       isPublished: true,
       showInFooter: true,
       sortOrder: 2,
@@ -40,9 +43,12 @@ const seedCms = async () => {
       title: "Política de cambios",
       slug: "cambios",
       excerpt: "Condiciones para cambios y devoluciones.",
+      // Sustituida por /garantias-y-devoluciones (el frontend redirige
+      // /pagina/cambios). El texto anterior limitaba los reclamos a 5 días y
+      // excluía la garantía de piezas personalizadas: no debe publicarse.
       body:
-        "Por tratarse de productos artesanales, las piezas personalizadas no tienen devolución salvo defecto de fabricación.\n\nPara productos de catálogo estándar, contáctanos dentro de los 5 días hábiles posteriores a la entrega si recibes un artículo dañado o incorrecto.",
-      isPublished: true,
+        "Consulta la información vigente sobre garantía, retracto, reversión del pago y cambios en /garantias-y-devoluciones.",
+      isPublished: false,
       showInFooter: true,
       sortOrder: 3,
     },

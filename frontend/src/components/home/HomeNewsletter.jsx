@@ -24,7 +24,7 @@ export default async function HomeNewsletter() {
           {newsletterSection.subtitle ||
             "Avisos puntuales de colecciones, personalización y el oficio detrás de cada trama."}
         </p>
-        <NewsletterSignup title="" description="" source="home" />
+        <NewsletterSignup title="" description="" source="home" compact />
       </div>
     </section>
   );

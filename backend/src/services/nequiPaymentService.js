@@ -2,7 +2,21 @@ const crypto = require("crypto");
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-const getNequiEnv = () => process.env.NEQUI_ENV || "mock";
+// INTEGRACIÓN DESACTIVADA (decisión del negocio, 2026-11-16; riesgo V-01).
+// El código se conserva, pero ya no hay valor por defecto inseguro:
+// - "sandbox" / "production" solo si se fijan explícitamente.
+// - "mock" solo en pruebas automatizadas (NODE_ENV=test y NEQUI_ENV=mock).
+// - Cualquier otro caso (ausente, vacío, inválido) → "disabled".
+// Además, el cobro directo exige NEQUI_DIRECT_ENABLED=true (ver
+// isNequiDirectEnabled). Una variable ausente NUNCA activa el modo mock.
+const getNequiEnv = () => {
+  const raw = String(process.env.NEQUI_ENV || "").trim().toLowerCase();
+  if (raw === "production" || raw === "sandbox") return raw;
+  if (raw === "mock" && process.env.NODE_ENV === "test") return "mock";
+  return "disabled";
+};
+
+exports.getNequiEnv = getNequiEnv;
 
 const getBaseUrl = () => {
   switch (getNequiEnv()) {
@@ -24,14 +38,28 @@ exports.normalizePhone = normalizePhone;
 
 // ─── Configuration check ──────────────────────────────────────────────────────
 
-exports.isNequiConfigured = () => {
-  if (getNequiEnv() === "mock") return true; // mock siempre disponible
+// Cobro directo (nequi_api): requiere activación explícita + entorno válido
+// + credenciales. Por defecto: desactivado.
+const isNequiDirectEnabled = () => {
+  if (process.env.NEQUI_DIRECT_ENABLED !== "true") return false;
+  const env = getNequiEnv();
+  if (env === "disabled") return false;
+  if (env === "mock") return true; // solo alcanzable con NODE_ENV=test
   return Boolean(
     process.env.NEQUI_CLIENT_ID &&
     process.env.NEQUI_CLIENT_SECRET &&
-    process.env.NEQUI_API_KEY
+    process.env.NEQUI_API_KEY &&
+    process.env.NEQUI_WEBHOOK_SECRET
   );
 };
+
+// Transferencia manual (nequi_manual): desactivada salvo activación explícita.
+const isNequiManualEnabled = () => process.env.NEQUI_MANUAL_ENABLED === "true";
+
+exports.isNequiDirectEnabled = isNequiDirectEnabled;
+exports.isNequiManualEnabled = isNequiManualEnabled;
+// Alias histórico: mismo criterio que el cobro directo.
+exports.isNequiConfigured = isNequiDirectEnabled;
 
 // ─── OAuth2 token cache ───────────────────────────────────────────────────────
 
@@ -180,7 +208,9 @@ exports.getChargeStatus = async (paymentToken) => {
 // NOTA: Confirmar cabecera exacta con la documentación oficial al activar producción.
 
 exports.verifyWebhookSignature = (rawBody, signatureHeader) => {
-  if (getNequiEnv() === "mock") return true;
+  // Integración desactivada → ninguna firma es válida.
+  if (!isNequiDirectEnabled()) return false;
+  if (getNequiEnv() === "mock") return true; // solo NODE_ENV=test
 
   const secret = process.env.NEQUI_WEBHOOK_SECRET;
   if (!secret || !signatureHeader) return false;

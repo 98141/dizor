@@ -1,0 +1,46 @@
+TAP version 13
+# Subtest: H-07: decisión de versión anterior + clave antigua 'granted' → analítica DENEGADA
+ok 1 - H-07: decisión de versión anterior + clave antigua 'granted' → analítica DENEGADA
+  ---
+  duration_ms: 1.5095
+  type: 'test'
+  ...
+# Subtest: sin consentimiento no se envía ningún evento
+ok 2 - sin consentimiento no se envía ningún evento
+  ---
+  duration_ms: 0.4784
+  type: 'test'
+  ...
+# Subtest: aceptar → consentimiento y registro versionado v3; eventos con page_location saneado
+ok 3 - aceptar → consentimiento y registro versionado v3; eventos con page_location saneado
+  ---
+  duration_ms: 3.8664
+  type: 'test'
+  ...
+# Subtest: H-06/H-08: rutas excluidas no envían eventos
+ok 4 - H-06/H-08: rutas excluidas no envían eventos
+  ---
+  duration_ms: 0.3022
+  type: 'test'
+  ...
+# Subtest: H-08: retirar/rechazar borra cookies _ga* y marcas de compra, y recarga si gtag cargó
+ok 5 - H-08: retirar/rechazar borra cookies _ga* y marcas de compra, y recarga si gtag cargó
+  ---
+  duration_ms: 39.2453
+  type: 'test'
+  ...
+# Subtest: retirada completa vuelve a mostrar el banner
+ok 6 - retirada completa vuelve a mostrar el banner
+  ---
+  duration_ms: 0.5875
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 329.2109

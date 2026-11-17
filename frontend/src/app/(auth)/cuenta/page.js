@@ -61,7 +61,8 @@ const PAYMENT_METHOD_LABELS = {
 };
 
 const CARRIER_LABELS = {
-  interrapidisimo: "Interrapidísimo",
+  interrapidisimo: "Inter Rapidísimo",
+  servientrega: "Servientrega",
   envia: "Envía",
   coordinadora: "Coordinadora",
 };
@@ -257,7 +258,7 @@ function OrderDetail({ orderId }) {
             {detail.shippingCost === 0 && (
               <div className="cuenta-card__row">
                 <span className="cuenta-card__label">Envío</span>
-                <span>Gratis</span>
+                <span>{detail.shippingIncluded ? "Incluido en el precio" : "Sin costo"}</span>
               </div>
             )}
             {detail.taxTotal > 0 && (

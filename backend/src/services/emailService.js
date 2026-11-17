@@ -112,6 +112,8 @@ const STATUS_LABELS = {
 
 const CARRIER_LABELS = {
   interrapidisimo: "Inter Rapidísimo",
+  servientrega: "Servientrega",
+  // Históricos
   envia: "Envía",
   coordinadora: "Coordinadora",
 };

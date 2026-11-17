@@ -302,9 +302,11 @@ export default function OrderDetail({ orderId, backHref }) {
             <div className="order-detail-row">
               <span>Envío</span>
               <span>
-                {order.freeShippingApplied
-                  ? "Gratis"
-                  : formatCOP(order.shippingCost ?? 0)}
+                {order.shippingIncluded
+                  ? "Incluido en el precio"
+                  : order.freeShippingApplied
+                    ? "Gratis (promoción anterior)"
+                    : formatCOP(order.shippingCost ?? 0)}
               </span>
             </div>
             <div className="order-detail-row">

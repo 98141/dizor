@@ -4,6 +4,7 @@ const Order      = require("../models/order");
 const Coupon     = require("../models/coupon");
 const {
   isNequiConfigured,
+  isNequiDirectEnabled,
   createNequiCharge,
   getChargeStatus,
   verifyWebhookSignature,
@@ -11,6 +12,21 @@ const {
   normalizePhone,
 } = require("../services/nequiPaymentService");
 const { deductOrderStock } = require("../services/orderService");
+
+// ─── Integración desactivada (2026-11-16) ─────────────────────────────────────
+// Con la integración propia de Nequi desactivada, los tres endpoints responden
+// 410 SIN leer ni modificar pedidos (ni por "compatibilidad"). Los pedidos
+// históricos nequi_api / nequi_manual se concilian manualmente
+// (docs/auditoria-privacidad/06-… §Conciliación).
+const DISABLED_MESSAGE =
+  "El pago directo con Nequi no está disponible. Si pagaste con Nequi a través de Wompi, " +
+  "tu pago se gestiona por Wompi. Para dudas sobre un pedido anterior, escríbenos.";
+
+const rejectIfDisabled = (res) => {
+  if (isNequiDirectEnabled()) return false;
+  res.status(410).json({ status: "fail", code: "NEQUI_DIRECT_DISABLED", message: DISABLED_MESSAGE });
+  return true;
+};
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -85,6 +101,7 @@ const declineOrder = (order, nequiStatus, source) => {
 // Re-inicia un cobro Nequi para una orden pendiente existente (p.ej. tras expirar).
 
 exports.createNequiPayment = catchAsync(async (req, res, next) => {
+  if (rejectIfDisabled(res)) return;
   const { orderId, phoneNumber } = req.body;
 
   if (!orderId)     return next(new AppError("orderId requerido", 400));
@@ -142,6 +159,7 @@ exports.createNequiPayment = catchAsync(async (req, res, next) => {
 // Polling del frontend. Llama a Nequi solo si la orden sigue pendiente.
 
 exports.getNequiStatus = catchAsync(async (req, res, next) => {
+  if (rejectIfDisabled(res)) return;
   const order = await Order.findById(req.params.orderId);
   if (!order) return next(new AppError("Pedido no encontrado", 404));
 
@@ -207,6 +225,7 @@ exports.getNequiStatus = catchAsync(async (req, res, next) => {
 // Recibe notificaciones push de Nequi cuando el usuario aprueba/rechaza el cobro.
 
 exports.handleNequiWebhook = catchAsync(async (req, res) => {
+  if (rejectIfDisabled(res)) return;
   const signatureHeader = req.headers["x-nequi-signature"];
   const rawBody         = req.rawBody || JSON.stringify(req.body);
 

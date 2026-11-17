@@ -9,7 +9,7 @@ const SITE_URL = (
 export const metadata = {
   title: "Guía de tallas",
   description:
-    "Aprende a medir tu cabeza y elige la talla correcta para tu sombrero de palma de iraca. Tabla de tallas XS a XXL.",
+    "Aprende a medir tu cabeza y elige la talla de tu sombrero de palma de iraca. Tabla de tallas XS a XL.",
   alternates: {
     canonical: "/guia-de-tallas",
   },
@@ -22,7 +22,7 @@ export default function GuiaDeTallasPage() {
   ];
 
   return (
-    <article className="hat-size-guide-page">
+    <article className="size-guide-page">
       <BreadcrumbJsonLd items={breadcrumbItems} siteUrl={SITE_URL} />
       <Breadcrumbs
         items={breadcrumbItems}
@@ -30,7 +30,7 @@ export default function GuiaDeTallasPage() {
         className="content-page__breadcrumb"
       />
       <SizeGuide variant="page" />
-      <p className="hat-size-guide-page__back">
+      <p className="size-guide-page__back">
         <Link href="/catalogo" className="content-page__back-link">
           ← Ver productos
         </Link>

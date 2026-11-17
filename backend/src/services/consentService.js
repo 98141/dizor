@@ -18,6 +18,17 @@ const draftAcceptedForTesting = () =>
   process.env.CONSENT_ACCEPT_DRAFT_FOR_TESTS === "true";
 
 /**
+ * ¿La evidencia registrada con este estado de texto sirve como autorización?
+ * - "approved" y "published" (texto definitivo mostrado sin marcas): sí.
+ * - "draft" (fase 1, mostrado como "Texto en revisión"): no; no se
+ *   regulariza retroactivamente. Solo en pruebas locales explícitas.
+ */
+const isUsableTextStatus = (status) =>
+  status === "approved" ||
+  status === "published" ||
+  (status === "draft" && draftAcceptedForTesting());
+
+/**
  * Exige la autorización de una finalidad obligatoria para el trámite.
  * Lanza 400 si el cliente no envió `true`.
  */
@@ -91,9 +102,7 @@ const hasValidMarketingConsent = async (email, purpose) => {
     .lean();
 
   if (!latest || latest.action !== "granted") return false;
-  if (latest.textStatus === "approved") return true;
-  if (latest.textStatus === "draft" && draftAcceptedForTesting()) return true;
-  return false;
+  return isUsableTextStatus(latest.textStatus);
 };
 
 /**
@@ -131,6 +140,7 @@ const liftSuppression = async (email, purpose) => {
 module.exports = {
   normalizeEmail,
   isAffirmative,
+  isUsableTextStatus,
   requireAuthorization,
   recordConsent,
   isSuppressed,

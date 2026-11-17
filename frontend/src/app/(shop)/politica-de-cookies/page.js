@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { isAnalyticsConfigured } from "@/lib/analytics/config";
+import { BUSINESS, LEGAL_DOCS } from "@/lib/businessInfo";
+import LegalDocMeta from "@/components/legal/LegalDocMeta";
 
 export const metadata = {
   title: "Política de Cookies",
@@ -79,6 +81,7 @@ export default function PoliticaCookiesPage() {
       </div>
 
       <div className="content-page__body">
+        <LegalDocMeta version={LEGAL_DOCS.cookies.version} />
         <h2 className="content-page__section-title">¿Qué son?</h2>
         <p className="content-page__body-p">
           Las cookies y mecanismos equivalentes (almacenamiento local y de
@@ -149,11 +152,14 @@ export default function PoliticaCookiesPage() {
           configuración de tu navegador; si lo haces, se vaciará tu carrito.
         </p>
 
+        <h2 className="content-page__section-title">Contacto</h2>
         <p className="content-page__body-p">
-          <strong>
-            [PLACEHOLDER — pendiente de revisión legal: datos de contacto
-            formales para consultas sobre esta política]
-          </strong>
+          Si tienes preguntas sobre esta política o sobre el tratamiento de tus
+          datos, escríbenos a{" "}
+          <a href={`mailto:${BUSINESS.email}`}>{BUSINESS.email}</a>. El
+          responsable del tratamiento es {BUSINESS.legalName} ({BUSINESS.brand}),
+          NIT {BUSINESS.nit}. Más información en la{" "}
+          <Link href="/politica-de-privacidad">Política de Tratamiento de Datos Personales</Link>.
         </p>
       </div>
 

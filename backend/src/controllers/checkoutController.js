@@ -7,11 +7,17 @@ const {
   resolveCartItems,
   calculateTotals,
 } = require("../services/cartService");
-const { getStoreSettings } = require("../services/settingsService");
+const {
+  getStoreSettings,
+  isShippingIncluded,
+  getActiveCarriers,
+} = require("../services/settingsService");
+const { getEnabledPaymentMethods, isPaymentMethodEnabled } = require("../services/paymentMethods");
+const { getPublicDeliveryTerms } = require("../config/deliveryTerms");
 const { createOrder, restoreOrderStock } = require("../services/orderService");
 const { isWompiConfigured, createPaymentLink } = require("../services/wompiService");
 const {
-  isNequiConfigured,
+  isNequiDirectEnabled,
   createNequiCharge,
   normalizePhone,
 } = require("../services/nequiPaymentService");
@@ -64,6 +70,7 @@ const formatOrderConfirmation = (order) => ({
   ivaPercent: order.ivaPercent,
   shippingCost: order.shippingCost,
   freeShippingApplied: order.freeShippingApplied,
+  shippingIncluded: Boolean(order.shippingIncluded),
   total: order.total,
   // Se devuelve al titular del token para prellenar el registro opcional
   // (sustituye a guardar el correo en la URL o en sessionStorage).
@@ -82,6 +89,7 @@ const formatOrderForClient = (order) => ({
   discountTotal: order.discountTotal,
   taxTotal: order.taxTotal,
   shippingCost: order.shippingCost,
+  shippingIncluded: Boolean(order.shippingIncluded),
   total: order.total,
   couponCode: order.couponCode,
   carrier: order.carrier,
@@ -121,25 +129,14 @@ exports.getCheckoutConfig = catchAsync(async (req, res) => {
       taxEnabled: settings.taxEnabled,
       taxRate: settings.taxRate,
       shippingMode: settings.shippingMode,
+      shippingIncluded: isShippingIncluded(settings),
       shippingFixedCost: settings.shippingFixedCost,
-      freeShippingMinAmount: settings.freeShippingMinAmount,
-      carriers: settings.carriers,
-      paymentMethods: [
-        ...(isWompiConfigured()
-          ? [
-              {
-                id: "wompi",
-                label: "Tarjeta / PSE (Wompi)",
-                description: "Pago en línea seguro",
-              },
-            ]
-          : []),
-        {
-          id: "contra_entrega",
-          label: "Pago contra entrega",
-          description: "Pagas al recibir tu pedido",
-        },
-      ],
+      freeShippingMinAmount: isShippingIncluded(settings) ? 0 : settings.freeShippingMinAmount,
+      carriers: getActiveCarriers(),
+      // Solo los métodos habilitados en el servidor (Wompi y contraentrega).
+      paymentMethods: getEnabledPaymentMethods(),
+      // null mientras el plazo no esté definido (no se promete nada ambiguo).
+      deliveryTerms: getPublicDeliveryTerms(),
       departments: [
         "Amazonas",
         "Antioquia",
@@ -221,19 +218,44 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
     return next(new AppError("Dirección de envío incompleta", 400));
   }
 
-  const validPayments = ["wompi", "nequi_api", "nequi_manual", "contra_entrega"];
-  if (!validPayments.includes(paymentMethod)) {
-    return next(new AppError("Método de pago inválido", 400));
+  // Solo métodos habilitados en el servidor (hoy: Wompi y contraentrega).
+  // Rechaza nequi_api / nequi_manual aunque los envíe un cliente antiguo o
+  // manipulado; no se crea ningún pedido.
+  if (typeof paymentMethod !== "string" || !isPaymentMethodEnabled(paymentMethod)) {
+    return next(
+      new AppError(
+        "Este método de pago no está disponible. Recarga la página y elige Wompi o pago contra entrega.",
+        400
+      )
+    );
+  }
+
+  // Transportadora: vacía (la asigna la tienda) o una de las confirmadas.
+  if (carrier && !getActiveCarriers().includes(carrier)) {
+    return next(new AppError("Transportadora no disponible", 400));
+  }
+
+  // Términos y condiciones de compra (H-17): aceptación obligatoria cuando
+  // existe un texto publicado. Solo `true` cuenta.
+  const termsNotice = getText(PURPOSES.TERMS);
+  if (termsNotice?.required && termsNotice.status !== "missing" && req.body.termsAccepted !== true) {
+    return next(
+      new AppError(
+        "Debes aceptar los Términos y condiciones para continuar. Si no ves la casilla, recarga la página.",
+        400
+      )
+    );
   }
 
   // Validar número Nequi antes de crear la orden para no dejar órdenes huérfanas
+  // (solo alcanzable si la integración se reactivara explícitamente).
   if (paymentMethod === "nequi_api") {
     const normalizedNequiPhone = normalizePhone(nequiPhone);
     if (!normalizedNequiPhone || !/^3\d{9}$/.test(normalizedNequiPhone)) {
       return next(new AppError("Número de teléfono Nequi inválido (10 dígitos empezando en 3)", 400));
     }
-    if (!isNequiConfigured()) {
-      return next(new AppError("Nequi no está configurado en el servidor", 503));
+    if (!isNequiDirectEnabled()) {
+      return next(new AppError("Este método de pago no está disponible", 400));
     }
   }
 
@@ -427,11 +449,18 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
   // Evidencia de lo aceptado (H-19) y autorización de tratamiento (H-03).
   const privacyText = getText(PURPOSES.ORDER_PROCESSING);
   const termsText = getText(PURPOSES.TERMS);
+  const termsRecorded =
+    Boolean(termsText) && termsText.status !== "missing" && req.body.termsAccepted === true;
+  const deliveryTerms = getPublicDeliveryTerms();
   order.legal = {
     privacyNoticeVersion: privacyText.version,
     privacyNoticeStatus: privacyText.status,
-    // Sin términos aprobados no se registra aceptación de términos (H-17).
-    termsVersion: termsText.status === "approved" ? termsText.version : null,
+    // Versión exacta de los términos aceptados (H-17); null si no hay texto.
+    termsVersion: termsRecorded ? termsText.version : null,
+    termsStatus: termsRecorded ? termsText.status : null,
+    // Plazo mostrado antes de confirmar; null mientras no esté definido.
+    deliveryTermsVersion: deliveryTerms?.version || null,
+    deliveryTermsText: deliveryTerms?.text || null,
     acceptedAt: new Date(),
   };
   await order.save({ validateBeforeSave: false });
@@ -443,6 +472,16 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
     referenceType: "Order",
     referenceId: order._id,
   });
+  if (termsRecorded) {
+    await recordConsent({
+      purpose: PURPOSES.TERMS,
+      subjectEmail: buyer.email,
+      userId: req.user?.id || null,
+      source: "checkout",
+      referenceType: "Order",
+      referenceId: order._id,
+    });
+  }
 
   const accessToken = await grantOrderAccess(order._id);
 
@@ -473,9 +512,7 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
         ? "Pedido creado. Serás redirigido a Wompi para completar el pago."
         : paymentMethod === "nequi_api"
           ? "Pedido creado. Aprueba el pago en tu app Nequi."
-          : paymentMethod === "nequi_manual"
-            ? "Pedido creado. Envía tu comprobante Nequi por WhatsApp."
-            : "Pedido creado. Pagarás al recibir tu pedido.",
+          : "Pedido creado. Pagarás al recibir tu pedido.",
   });
 });
 

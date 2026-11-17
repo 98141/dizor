@@ -235,10 +235,6 @@ export default function ProductCard({
             </span>
           ) : null}
         </div>
-
-        <span className="product-card__cta" aria-hidden="true">
-          Ver pieza
-        </span>
       </div>
     </article>
   );

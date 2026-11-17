@@ -15,7 +15,7 @@ const consentRecordSchema = new mongoose.Schema(
     textVersion: { type: String, default: null },
     textStatus: {
       type: String,
-      enum: ["approved", "draft", "missing", "not_applicable"],
+      enum: ["approved", "published", "draft", "missing", "not_applicable"],
       required: true,
     },
     subjectEmail: { type: String, lowercase: true, trim: true, default: null },

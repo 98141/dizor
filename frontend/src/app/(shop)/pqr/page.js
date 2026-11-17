@@ -13,6 +13,7 @@ import {
 } from "@/services/customerRequestService";
 import { CATEGORY_LABELS, TYPE_LABELS, formatDateTime } from "@/lib/customerRequestLabels";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
+import { BUSINESS } from "@/lib/businessInfo";
 
 // Formulario de PQR y solicitudes de titulares (H-22, H-11). Solo muestra el
 // radicado cuando el servidor confirma que la solicitud quedó guardada.
@@ -99,11 +100,13 @@ export default function PqrPage() {
       <div className="special-page">
         <h1 className="special-page__title">Peticiones, quejas y reclamos</h1>
         <p className="special-page__intro">
-          Este canal aún no está habilitado. Mientras tanto, escríbenos por{" "}
+          Para peticiones, quejas, reclamos o solicitudes sobre tus datos
+          personales, escríbenos a{" "}
+          <a href={`mailto:${BUSINESS.email}`}>{BUSINESS.email}</a> o por{" "}
           <a href={getWhatsAppUrl()} target="_blank" rel="noopener noreferrer">
             WhatsApp
-          </a>
-          .
+          </a>{" "}
+          indicando tu número de pedido, si lo tienes. Atención: {BUSINESS.attentionHours}.
         </p>
       </div>
     );
@@ -118,6 +121,11 @@ export default function PqrPage() {
         Radica una petición, queja o reclamo sobre una compra, o una solicitud
         sobre tus datos personales. Recibirás un número de radicado con fecha
         y hora. ¿Ya radicaste? <Link href="/pqr/seguimiento">Consulta el estado</Link>.
+      </p>
+      <p className="special-page__intro" style={{ fontSize: "0.9rem" }}>
+        El formulario recibe solicitudes en cualquier momento; la atención
+        personal es de {BUSINESS.attentionHours}. También puedes escribirnos a{" "}
+        <a href={`mailto:${BUSINESS.email}`}>{BUSINESS.email}</a>.
       </p>
 
       <div className="special-form-card">

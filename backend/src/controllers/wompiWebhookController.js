@@ -1,7 +1,7 @@
 const catchAsync = require("../utils/catchAsync");
 const Order = require("../models/order");
 const Coupon = require("../models/coupon");
-const { verifyEventChecksum } = require("../services/wompiService");
+const { verifyEventChecksum, getExpectedEventEnvironment } = require("../services/wompiService");
 const { markAbandonedCartRecovered } = require("../services/marketingService");
 const { deductOrderStock } = require("../services/orderService");
 
@@ -30,6 +30,11 @@ exports.handleWompiEvent = catchAsync(async (req, res) => {
     return res.status(200).send("OK");
   }
 
+  // Un evento de sandbox nunca afecta pedidos de producción (y viceversa).
+  if (event.environment && event.environment !== getExpectedEventEnvironment()) {
+    return res.status(200).send("OK");
+  }
+
   const order = await Order.findOne({
     $or: [
       { orderNumber: transaction.reference },
@@ -39,6 +44,27 @@ exports.handleWompiEvent = catchAsync(async (req, res) => {
   });
 
   if (!order) {
+    return res.status(200).send("OK");
+  }
+
+  // Solo pedidos creados con Wompi. El proveedor es Wompi aunque el medio
+  // usado dentro de Wompi sea Nequi, tarjeta o PSE (payment_method_type):
+  // no se filtra por medio.
+  if (order.paymentMethod !== "wompi") {
+    return res.status(200).send("OK");
+  }
+
+  // Un pedido ya pagado no se degrada por un evento posterior (reintento,
+  // otra transacción del mismo enlace, evento fuera de orden).
+  if (order.paymentStatus === "pagado") {
+    if (transaction.status !== "APPROVED") {
+      pushStatusHistory(
+        order,
+        order.orderStatus,
+        `Evento Wompi ${transaction.status} recibido para un pedido ya pagado. Sin cambios; revisar si corresponde.`
+      );
+      await order.save();
+    }
     return res.status(200).send("OK");
   }
 
@@ -57,6 +83,15 @@ exports.handleWompiEvent = catchAsync(async (req, res) => {
     // wompiService.createPaymentLink), así que aquí debe cuadrar exactamente.
     const expectedCents = Math.round(order.total * 100);
     const paidCents = Number(transaction.amount_in_cents);
+    if (transaction.currency !== "COP") {
+      pushStatusHistory(
+        order,
+        order.orderStatus,
+        `ALERTA: pago Wompi en moneda "${transaction.currency || "sin moneda"}" (se esperaba COP). Revisión manual requerida.`
+      );
+      await order.save();
+      return res.status(200).send("OK");
+    }
     if (!Number.isFinite(paidCents) || paidCents !== expectedCents) {
       pushStatusHistory(
         order,

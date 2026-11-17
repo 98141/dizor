@@ -1,10 +1,12 @@
 # E. Borradores legales internos — DIZOR
 
-> **BORRADOR INTERNO — NO PUBLICAR.**
-> Ninguna sección de este documento está aprobada. Contiene marcas
-> `[PENDIENTE …]` que solo pueden completarse con datos reales del propietario
-> y revisión de un abogado. No sustituye asesoría jurídica ni certifica
-> cumplimiento.
+> **DOCUMENTO INTERNO DE ANÁLISIS — no es un texto para el cliente.**
+> Desde la fase 3 (2026-11-16), los textos que verá el cliente están en
+> `08-textos-legales-consolidados.md` y las preguntas abiertas en
+> `07-guia-revision-juridica.md` §3. Este documento conserva el análisis
+> jurídico de soporte. Ninguna sección está aprobada por un abogado; no
+> sustituye asesoría jurídica ni certifica cumplimiento. Las marcas
+> `[PENDIENTE …]` que siguen abiertas se indican como tales.
 
 Etiquetas usadas:
 
@@ -31,12 +33,12 @@ Para evitar documentos duplicados o contradictorios, cada tema tiene **un solo l
 
 | Campo | Valor |
 |---|---|
-| Tipo de persona (natural o jurídica) | `[PENDIENTE E-1]` |
-| Nombre o razón social | `[PENDIENTE E-1]` |
-| NIT | `[PENDIENTE E-1]` |
-| Dirección de notificación judicial | `[PENDIENTE E-1]` |
-| Teléfono | `[PENDIENTE E-1/E-2]` (el WhatsApp comercial existe en `lib/whatsapp.js`; confirmar si es el canal oficial) |
-| Correo electrónico | `[PENDIENTE E-2]` |
+| Tipo de persona (natural o jurídica) | Persona jurídica (SAS) — dato del propietario, fase 3 |
+| Nombre o razón social | COMERCIALIZADORA DE ARTESANIAS SANDONEÑA PARRA S SAS |
+| NIT | 901.027.825-5 |
+| Dirección de notificación judicial | Se publica la dirección del RUT como "Domicilio registrado" (CR 5 02 50 BRR NARANJAL, Sandoná, Nariño). `[PENDIENTE abogado: 07 J-2]` |
+| Teléfono | WhatsApp operativo +57 315 916 2520 (`lib/whatsapp.js`). `[PENDIENTE E-21: contraste con el RUT]` |
+| Correo electrónico | dizorsandona@gmail.com |
 
 Nota: "DIZOR" es la marca comercial y **no** equivale a la identidad legal.
 
@@ -44,17 +46,17 @@ Nota: "DIZOR" es la marca comercial y **no** equivale a la identidad legal.
 
 [OBLIGACIÓN LEGAL VERIFICADA] Art. 50 lit. d: condiciones generales accesibles, imprimibles y descargables. Arts. 37 y 43: no pueden incluir cláusulas ineficaces; por ejemplo, las que limitan la responsabilidad legal (num. 1) o implican renuncia de derechos (num. 2).
 
-Secciones previstas, sin contenido hasta tener los datos:
+**Fase 3:** redactado y publicado localmente en `/terminos-y-condiciones` (texto en `08-…`). Esquema original:
 
 1. Identificación del vendedor → §1.
 2. Proceso de compra: carrito → datos → envío → transportadora → pago → **resumen con precio unitario y total, posibilidad de corregir** → confirmación → **acuse de recibo**. Describe lo que hace el sistema tras las correcciones de H-19 y H-20.
 3. Precios: en pesos colombianos con todos los impuestos incluidos [OBLIGACIÓN LEGAL VERIFICADA, art. 26]. Hoy el IVA está desactivado; ver H-25 antes de activarlo.
-4. Medios de pago: `[PENDIENTE E-12]` confirmar cuáles quedan activos (producción ofrece Wompi, Nequi API, Nequi manual y contra entrega; el repositorio actual solo Wompi y contra entrega).
+4. Medios de pago: **decidido** — solo Wompi y contraentrega (Nequi propio desactivado; Nequi dentro de Wompi permitido).
 5. Envíos y plazos → §6.
 6. Garantía, retracto, reversión del pago y cambios → §5.
 7. PQR y atención → §9.
 8. Datos personales → remisión a la Política de Privacidad.
-9. Ley aplicable `[PENDIENTE abogado]`.
+9. Ley aplicable: Colombia (venta solo en Colombia). Revisión del abogado.
 
 ## 3. Política de tratamiento de datos personales — borrador estructurado
 
@@ -64,7 +66,7 @@ Numeración en el Decreto Único 1074/2015: según fuentes secundarias, el art. 
 
 ### 3.1 Responsable
 
-`[PENDIENTE E-1]` (ver §1). Contacto para datos personales: `[PENDIENTE E-2]`.
+La sociedad de §1, por ser vendedora y facturadora. `[PENDIENTE abogado: 07 J-1 — confirmar que decide las finalidades]`. Contacto: dizorsandona@gmail.com y WhatsApp; atiende Roger Parra (nombre no publicado).
 
 ### 3.2 Tratamientos y finalidades
 
@@ -82,7 +84,7 @@ Inventario comprobado en el código el 2026-11-16:
 | Evidencias de autorización | finalidad, versión del texto, fecha, origen, correo y referencia | demostrar la autorización (Dec. 1377, art. 8) | Obligación del responsable |
 | Registro de auditoría del panel | correo e id del personal, IP, user-agent, ruta (redactada), acción | seguridad y trazabilidad interna | `[INTERPRETACIÓN PENDIENTE]` |
 | Logs del servidor | IP, ruta (con query redactada), user-agent | operación y seguridad | `[INTERPRETACIÓN PENDIENTE]`; conservación 14 días (error: 30) en el servidor de la API; hosting `[PENDIENTE E-4]` |
-| Contador de visitas | solo la fecha (cookie y almacenamiento local); total agregado en BD | estadística agregada | — |
+| Contador de visitas ("Estadísticas propias") | solo la fecha (cookie de la API y almacenamiento local); total agregado en BD | estadística agregada | Opcional, **solo con aceptación** en el aviso de cookies (fase 2). `[INTERPRETACIÓN PENDIENTE: ¿requiere aceptación o es necesario?]` |
 | Analítica (Google Analytics) | **No activa** | — | Solo con aceptación, si se activa (E-9) |
 
 ### 3.3 Destinatarios y encargados
@@ -119,7 +121,15 @@ No se recogen intencionalmente (H-27). [OBLIGACIÓN LEGAL VERIFICADA] Ley 1581, 
 
 ## 4. Cookies
 
-Ya implementada en `frontend/src/app/(shop)/politica-de-cookies/page.js` con el inventario real. Falta el contacto `[PENDIENTE E-2]`.
+Implementada en `frontend/src/app/(shop)/politica-de-cookies/page.js` con el inventario real y, desde la fase 3, el contacto definitivo.
+
+Desde la fase 2, los controles (aviso, panel y política) se derivan de un inventario central de tecnologías opcionales (`frontend/src/lib/optionalTechnologies.js`), no de la presencia de Google Analytics:
+
+- **Estadísticas propias (contador de visitas):** activas, opcionales, solo con aceptación.
+- **Analíticas (GA):** inactivas mientras no se configure.
+- **Marketing:** no existe.
+
+[RECOMENDACIÓN] Clasificar el contador como opcional es la opción conservadora: guarda datos en el dispositivo y no es necesario para comprar. [INTERPRETACIÓN PENDIENTE] Un abogado debe confirmar si puede tratarse como necesario. Si así fuera, habría que retirarlo del inventario de opcionales y quitar la condición de permiso en `VisitCounter.jsx`. Entonces el aviso dejaría de mostrarse mientras no haya otras categorías activas.
 
 [INTERPRETACIÓN PENDIENTE] La normativa colombiana revisada no contiene una regla específica sobre cookies. La exigencia de aceptación previa para la analítica se apoya en los principios de la Ley 1581 (arts. 4 y 9) y requiere criterio de un abogado. La Circular Externa SIC 005 de 2020 remite a guías de 2019 sobre comercio electrónico y marketing; **no se leyeron** y no se les atribuye alcance general sobre cookies.
 
@@ -155,13 +165,14 @@ Son **cuatro figuras distintas** y deben presentarse por separado.
 
 ### 5.4 Cambios comerciales voluntarios
 
-Política comercial opcional del negocio (talla, color, etc.) `[PENDIENTE E-10]`. Debe presentarse como **adicional** y nunca sustituir las figuras de §5.1 a §5.3.
+**Fase 3 (dato del negocio):** el cliente paga el transporte solo cuando pide un cambio de talla habiendo recibido el producto correcto; el negocio paga cuando envía un producto equivocado o hay daño en el transporte. Sin plazo fijado (07 J-9), sin limitar reclamos a 5 días, sin exigir video, factura física ni empaque intacto, y con WhatsApp como canal adicional (no exclusivo). Se presenta como **adicional** a §5.1–5.3 en `/garantias-y-devoluciones`.
 
 ## 6. Envíos y plazos
 
 - [OBLIGACIÓN LEGAL VERIFICADA] Art. 50 lit. c: informar el tiempo de entrega.
 - [OBLIGACIÓN LEGAL VERIFICADA] Art. 50 lit. h (Ley 2439/2024, art. 4): entregar en el plazo aceptado por el consumidor; si no se pactó, máximo 30 días calendario desde el pedido. Ante retraso o falta de disponibilidad, el consumidor puede terminar el contrato y recibir la devolución total en máximo 15 días calendario.
-- Plazos reales por zona y tipo de producto (fabricación de personalizados): `[PENDIENTE E-10]`. Al tenerlos, definir `ORDER_DELIVERY_TIME_TEXT` y mostrarlos en el checkout.
+- **Fase 3:** referencias del negocio (disponibles 4–6 días hábiles; por encargo ~15 días hábiles; transporte variable) **no publicadas** por ambiguas (07 J-8). No sumar 15+6, no inventar plazos por ciudad, no usar "pago confirmado" como inicio para contraentrega. El soporte técnico está en `backend/src/config/deliveryTerms.js` (sustituye a `ORDER_DELIVERY_TIME_TEXT`).
+- Incidencias de transporte: sin exoneración general; DIZOR es canal de solución; fuerza mayor solo según la ley y con hechos verificables; sin prórrogas unilaterales (texto en `/pagina/envios`).
 
 ## 7. Registro Nacional de Bases de Datos (RNBD)
 
@@ -172,6 +183,8 @@ Política comercial opcional del negocio (talla, color, etc.) `[PENDIENTE E-10]`
 - **No estar obligado a inscribirse no exime de las demás obligaciones de la Ley 1581.**
 
 ## 8. Registro de encargados y proveedores (plantilla)
+
+**Fase 3:** versión actualizada en `07-guia-revision-juridica.md` §6 (HostingLabs y MongoDB Atlas confirmados; Nequi desactivado).
 
 | Proveedor | Servicio | Datos | Rol (encargado / responsable) | Región | Contrato o DPA | Fecha |
 |---|---|---|---|---|---|---|
@@ -186,7 +199,7 @@ Política comercial opcional del negocio (talla, color, etc.) `[PENDIENTE E-10]`
 ## 9. Canales de atención
 
 - [OBLIGACIÓN LEGAL VERIFICADA] Art. 50 lit. g (Ley 2439/2024, art. 4): canales de fácil acceso en el mismo medio; número de registro o radicado con fecha y hora; trazabilidad.
-- Implementado y **desactivado**: `/pqr`, `/pqr/seguimiento`, `/admin/pqr`. Activación: `[PENDIENTE E-2]`.
+- Implementado y **desactivado**: `/pqr`, `/pqr/seguimiento`, `/admin/pqr`. Canal y responsable recibidos (fase 3); procedimiento operativo en `07-…` §7. Activación: buzón probado, acceso autorizado y `ADMIN_NOTIFY_EMAIL`.
 - [RECOMENDACIÓN] Antes de activarlo, el propietario debe definir quién revisa `/admin/pqr`, con qué frecuencia y los plazos internos. El software no fija esos plazos.
 
 ## 10. Comunicaciones comerciales (Ley 2300 de 2023)

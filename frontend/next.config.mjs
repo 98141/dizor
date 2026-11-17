@@ -106,6 +106,14 @@ const nextConfig = {
         destination: "/guia-de-tallas",
         permanent: true,
       },
+      {
+        // La antigua "Política de cambios" (CMS) limitaba los reclamos a 5
+        // días y mezclaba garantía con cambios: se sustituye por la página
+        // de garantías, retracto, reversión y cambios.
+        source: "/pagina/cambios",
+        destination: "/garantias-y-devoluciones",
+        permanent: false,
+      },
     ];
   },
 };

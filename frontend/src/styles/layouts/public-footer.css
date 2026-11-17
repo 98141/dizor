@@ -77,6 +77,25 @@
   color: var(--color-text-inverse-subtle, #8a8a8a);
 }
 
+.site-footer__seller {
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  padding: var(--space-md) 0;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--color-text-inverse-subtle, #8a8a8a);
+  overflow-wrap: anywhere;
+}
+
+.site-footer__seller p {
+  margin: 0;
+}
+
+.site-footer .site-footer__seller a {
+  display: inline;
+  margin: 0;
+  font-size: inherit;
+}
+
 .site-footer__bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.15);
   padding-top: var(--space-md);

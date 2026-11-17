@@ -53,7 +53,7 @@ globalThis.document = {
 
 // Estado previo de una versión anterior: decisión v1 aceptando analítica y
 // la clave antigua "granted".
-window.localStorage.setItem("dizor_cookie_preferences", JSON.stringify({ analytics: true, version: "1" }));
+window.localStorage.setItem("dizor_cookie_preferences", JSON.stringify({ analytics: true, version: "2" }));
 window.localStorage.setItem("dizor_analytics_consent", "granted");
 
 process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID = "G-TEST000000";
@@ -75,11 +75,11 @@ test("sin consentimiento no se envía ningún evento", () => {
   assert.equal(gtagCalls.length, 0);
 });
 
-test("aceptar → consentimiento y registro versionado v2; eventos con page_location saneado", () => {
+test("aceptar → consentimiento y registro versionado v3; eventos con page_location saneado", () => {
   prefs.acceptAllPreferences();
   assert.equal(consent.hasAnalyticsConsent(), true);
   const rec = JSON.parse(window.localStorage.getItem("dizor_cookie_preferences"));
-  assert.equal(rec.version, "2");
+  assert.equal(rec.version, "3");
   assert.equal(rec.analytics, true);
 
   gtagCalls.length = 0;

@@ -3,6 +3,7 @@ import { getContentPages } from "@/services/cmsService";
 import { fetchAppearance, getSiteName } from "@/lib/fetchAppearance";
 import { getVisitCount } from "@/services/visitService";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
+import { BUSINESS } from "@/lib/businessInfo";
 import VisitCounter from "./VisitCounter";
 import TrackedWhatsAppLink from "./TrackedWhatsAppLink";
 import CookieSettingsLink from "./CookieSettingsLink";
@@ -13,7 +14,12 @@ export default async function SiteFooter() {
   try {
     const data = await getContentPages();
             pages = (data.pages || []).filter(
-              (p) => p.showInFooter !== false && p.slug !== "guia-de-tallas"
+              // "cambios" queda sustituida por /garantias-y-devoluciones.
+              (p) =>
+                p.showInFooter !== false &&
+                p.slug !== "guia-de-tallas" &&
+                p.slug !== "cambios" &&
+                p.slug !== "envios"
             );
   } catch {
     pages = [];
@@ -63,6 +69,9 @@ export default async function SiteFooter() {
                 {p.title}
               </Link>
             ))}
+            <Link href="/pagina/envios">Envíos y entregas</Link>
+            <Link href="/garantias-y-devoluciones">Garantías, retracto y devoluciones</Link>
+            <Link href="/terminos-y-condiciones">Términos y condiciones</Link>
             <Link href="/politica-de-privacidad">Política de privacidad</Link>
             <Link href="/politica-de-cookies">Política de cookies</Link>
             {/* Canal PQR: visible solo cuando el propietario lo habilite (E-2). */}
@@ -78,10 +87,19 @@ export default async function SiteFooter() {
             >
               Superintendencia de Industria y Comercio (SIC)
             </a>
-            {pages.length === 0 && (
-              <span className="site-footer__muted">Próximamente</span>
-            )}
           </div>
+        </div>
+
+        {/* Identificación del vendedor (Ley 1480, art. 50 lit. a). */}
+        <div className="site-footer__seller">
+          <p>
+            {BUSINESS.brand} es una marca de {BUSINESS.legalName} · NIT {BUSINESS.nit}
+          </p>
+          <p>
+            Domicilio registrado: {BUSINESS.registeredAddress} ·{" "}
+            <a href={`mailto:${BUSINESS.email}`}>{BUSINESS.email}</a> · Atención:{" "}
+            {BUSINESS.attentionHours}
+          </p>
         </div>
 
         <div className="site-footer__bottom">

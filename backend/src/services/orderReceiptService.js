@@ -1,5 +1,6 @@
 const { Resend } = require("resend");
 const Order = require("../models/order");
+const { BUSINESS } = require("../config/businessInfo");
 
 // ─── Acuse de recibo del pedido al comprador (H-20) ────────────────────────
 // Correo TRANSACCIONAL (no comercial): sin enlace de baja ni contenido
@@ -8,17 +9,18 @@ const Order = require("../models/order");
 // impuestos, gastos de envío y forma de pago.
 //
 // Limitaciones conocidas (no se inventan datos):
-//   - Tiempo de entrega: solo se incluye si ORDER_DELIVERY_TIME_TEXT contiene
-//     un plazo confirmado por el propietario (E-10). Si falta, el correo lo
-//     dice y H-20/H-21 siguen abiertos.
-//   - Identificación del vendedor: pendiente E-1.
+//   - Tiempo de entrega: se incluye el plazo que el comprador vio antes de
+//     confirmar (order.legal.deliveryTermsText, de config/deliveryTerms.js).
+//     Mientras no esté definido (E-10), el correo lo dice y H-20/H-21 siguen
+//     abiertos.
+//   - Identificación del vendedor: config/businessInfo.js (E-1 recibido).
 //
 // Idempotencia: el envío se "reclama" de forma atómica en el pedido
 // (buyerReceipt.claimedAt) antes de llamar al proveedor, de modo que un
 // reintento de la misma petición o un doble clic no duplican el correo.
 
 const PAYMENT_LABELS = {
-  wompi: "Tarjeta / PSE (Wompi)",
+  wompi: "Wompi (tarjeta, PSE u otro medio elegido en Wompi)",
   nequi_manual: "Nequi (transferencia manual)",
   nequi_api: "Nequi",
   contra_entrega: "Pago contra entrega",
@@ -45,7 +47,7 @@ const escapeHtml = (value) =>
 const fmtCop = (n) => `$${Number(n || 0).toLocaleString("es-CO")} COP`;
 
 const buildOrderReceivedEmail = (order) => {
-  const deliveryText = (process.env.ORDER_DELIVERY_TIME_TEXT || "").trim();
+  const deliveryText = String(order.legal?.deliveryTermsText || "").trim();
 
   const lines = (order.items || [])
     .map((i) => {
@@ -65,7 +67,14 @@ const buildOrderReceivedEmail = (order) => {
       ? [[`Descuento${order.couponCode ? ` (${escapeHtml(order.couponCode)})` : ""}`, `−${fmtCop(order.discountTotal)}`]]
       : []),
     ...(order.taxTotal > 0 ? [[`IVA (${Number(order.ivaPercent || 0)}%)`, fmtCop(order.taxTotal)]] : []),
-    ["Envío", order.shippingCost > 0 ? fmtCop(order.shippingCost) : "Sin costo"],
+    [
+      "Envío",
+      order.shippingIncluded
+        ? "Incluido en el precio"
+        : order.shippingCost > 0
+          ? fmtCop(order.shippingCost)
+          : "Sin costo",
+    ],
     ["Total", fmtCop(order.total)],
   ]
     .map(([k, v]) => `<tr><td style="padding:2px 12px 2px 0;">${k}</td><td style="padding:2px 0; text-align:right;">${v}</td></tr>`)
@@ -94,7 +103,13 @@ const buildOrderReceivedEmail = (order) => {
       <p><strong>Tiempo de entrega:</strong> ${
         deliveryText ? escapeHtml(deliveryText) : "te lo confirmaremos por este medio."
       }</p>
-      <p style="font-size: 12px; color: #999;">Mensaje transaccional sobre tu compra.</p>
+      ${order.paymentMethod === "contra_entrega"
+        ? "<p>Pagarás el total al recibir el pedido. Hasta entonces el pago figura como pendiente.</p>"
+        : ""}
+      <p>Si tienes una duda o una solicitud sobre este pedido, escríbenos a ${escapeHtml(BUSINESS.email)}
+         indicando el número de pedido (atención: ${escapeHtml(BUSINESS.attentionHours)}).</p>
+      <p style="font-size: 12px; color: #999;">Vendedor: ${escapeHtml(BUSINESS.legalName)} (${escapeHtml(BUSINESS.brand)}),
+         NIT ${escapeHtml(BUSINESS.nit)}. Mensaje transaccional sobre tu compra.</p>
     </div>
   `;
 

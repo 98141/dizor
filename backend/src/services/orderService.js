@@ -149,6 +149,7 @@ exports.createOrder = async ({
     ivaPercent: totals.ivaPercent ?? 0,
     freeShippingApplied: totals.freeShippingApplied ?? false,
     freeShippingThreshold: totals.freeShippingThreshold ?? 0,
+    shippingIncluded: totals.shippingIncluded ?? false,
     paymentMethod,
     paymentStatus: "pendiente",
     orderStatus: initialStatus,

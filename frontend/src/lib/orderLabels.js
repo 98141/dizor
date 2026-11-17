@@ -43,7 +43,9 @@ export const SOURCE_LABELS = {
 };
 
 export const CARRIER_LABELS = {
-  interrapidisimo: "Interrapidísimo",
+  interrapidisimo: "Inter Rapidísimo",
+  servientrega: "Servientrega",
+  // Históricos
   envia: "Envía",
   coordinadora: "Coordinadora",
 };

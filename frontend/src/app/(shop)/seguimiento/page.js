@@ -28,7 +28,8 @@ const PAYMENT_STATUS_LABELS = {
 };
 
 const CARRIER_LABELS = {
-  interrapidisimo: "Interrapidísimo",
+  interrapidisimo: "Inter Rapidísimo",
+  servientrega: "Servientrega",
   envia: "Envía",
   coordinadora: "Coordinadora",
 };

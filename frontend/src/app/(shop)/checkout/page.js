@@ -39,7 +39,9 @@ import { saveOrderAccess, confirmationPath } from "@/lib/orderAccess";
 const STEPS = ["Datos", "Envío", "Entrega", "Pago", "Confirmar"];
 
 const CARRIER_LABELS = {
-  interrapidisimo: "Interrapidísimo",
+  interrapidisimo: "Inter Rapidísimo",
+  servientrega: "Servientrega",
+  // Históricos
   envia: "Envía",
   coordinadora: "Coordinadora",
 };
@@ -86,6 +88,10 @@ export default function CheckoutPage() {
   const [privacyAuthorization, setPrivacyAuthorization] = useState(false);
   const { notices, error: noticesError } = useLegalNotices();
   const privacyNoticeReady = isNoticeReady(notices, "order_processing");
+  // Términos y condiciones de compra (H-17): casilla obligatoria, nunca
+  // premarcada; el servidor exige `termsAccepted === true`.
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const termsNoticeReady = isNoticeReady(notices, "terms");
 
   // Líneas del pedido con precios calculados por el servidor (H-19).
   const [quoteItems, setQuoteItems] = useState([]);
@@ -122,7 +128,16 @@ export default function CheckoutPage() {
   }, [user]);
 
   useEffect(() => {
-    getCheckoutConfig().then((d) => setConfig(d.config));
+    getCheckoutConfig().then((d) => {
+      const cfg = d.config;
+      setConfig(cfg);
+      // Solo se puede elegir lo que el servidor ofrece (hoy: Wompi y
+      // contraentrega; transportadoras confirmadas).
+      const methods = (cfg?.paymentMethods || []).map((m) => m.id);
+      setPaymentMethod((cur) => (methods.includes(cur) ? cur : methods[0] || ""));
+      const carriers = cfg?.carriers || [];
+      setCarrier((cur) => (carriers.includes(cur) ? cur : carriers[0] || ""));
+    });
   }, []);
 
   useEffect(() => {
@@ -289,6 +304,7 @@ export default function CheckoutPage() {
         idempotencyKey,
         nequiPhone:      paymentMethod === "nequi_api" ? normalizeNequiPhone(nequiPhone) : undefined,
         privacyAuthorization: privacyAuthorization === true,
+        termsAccepted: termsAccepted === true,
       });
 
       // Token de acceso a la confirmación (H-06). Se guarda antes de
@@ -728,6 +744,14 @@ export default function CheckoutPage() {
               {config.paymentMethods.find((p) => p.id === paymentMethod)?.label}
             </span>
           </div>
+          {/* Plazo de entrega: solo cuando el negocio lo haya definido
+              (config/deliveryTerms.js). Mientras tanto no se promete nada. */}
+          {config.deliveryTerms?.text && (
+            <div className="checkout-review-item">
+              <span>Plazo de entrega</span>
+              <span>{config.deliveryTerms.text}</span>
+            </div>
+          )}
           {paymentMethod === "nequi_api" && nequiPhone && (
             <div className="checkout-review-item">
               <span>Número Nequi</span>
@@ -753,16 +777,13 @@ export default function CheckoutPage() {
                 </div>
               )}
               <div className="checkout-review-item">
+                <span>Envío</span>
                 <span>
-                  Envío
-                  {totals.freeShippingApplied && (
-                    <span style={{ fontSize: "0.75rem", color: "var(--color-success)", marginLeft: "0.4rem" }}>
-                      (gratis ≥ {formatCOP(totals.freeShippingThreshold)})
-                    </span>
-                  )}
-                </span>
-                <span>
-                  {totals.shippingCost === 0 ? "Gratis" : formatCOP(totals.shippingCost)}
+                  {totals.shippingIncluded
+                    ? "Incluido en el precio"
+                    : totals.shippingCost === 0
+                      ? "Sin costo"
+                      : formatCOP(totals.shippingCost)}
                 </span>
               </div>
               <div
@@ -796,6 +817,13 @@ export default function CheckoutPage() {
             checked={privacyAuthorization}
             onChange={setPrivacyAuthorization}
           />
+          <ConsentCheckbox
+            notices={notices}
+            noticesError={noticesError}
+            purpose="terms"
+            checked={termsAccepted}
+            onChange={setTermsAccepted}
+          />
           <AuthErrorAlert message={error} />
         </div>
       )}
@@ -828,7 +856,14 @@ export default function CheckoutPage() {
           <button
             type="button"
             className="checkout-btn checkout-btn--primary"
-            disabled={loading || !totals || !privacyNoticeReady || !privacyAuthorization}
+            disabled={
+              loading ||
+              !totals ||
+              !privacyNoticeReady ||
+              !privacyAuthorization ||
+              !termsNoticeReady ||
+              !termsAccepted
+            }
             onClick={handleSubmit}
           >
             {loading ? "Procesando..." : "Confirmar pedido"}

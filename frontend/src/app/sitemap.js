@@ -71,6 +71,19 @@ export default async function sitemap() {
       changeFrequency: "monthly",
       priority: 0.6,
     },
+    // Documentos legales y de compra (estáticos).
+    ...[
+      "/terminos-y-condiciones",
+      "/garantias-y-devoluciones",
+      "/pagina/envios",
+      "/politica-de-privacidad",
+      "/politica-de-cookies",
+    ].map((path) => ({
+      url: `${SITE_URL}${path}`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.3,
+    })),
   ];
 
   const productRoutes = products.map((p) => ({
@@ -81,7 +94,12 @@ export default async function sitemap() {
   }));
 
   const pageRoutes = cmsPages
-    .filter((p) => p.isPublished && p.slug && p.slug !== "guia-de-tallas")
+    .filter(
+      (p) =>
+        p.isPublished &&
+        p.slug &&
+        !["guia-de-tallas", "envios", "cambios"].includes(p.slug)
+    )
     .map((p) => ({
       url: `${SITE_URL}/pagina/${p.slug}`,
       lastModified: new Date(p.updatedAt || Date.now()),

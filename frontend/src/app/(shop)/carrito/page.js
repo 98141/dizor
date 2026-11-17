@@ -50,6 +50,7 @@ export default function CarritoPage() {
           taxEnabled: data.taxEnabled ?? false,
           taxRate: data.taxRate ?? 0,
           shippingCost: data.shippingCost,
+          shippingIncluded: Boolean(data.shippingIncluded),
           total: data.total,
           items: data.items,
         });
@@ -259,11 +260,13 @@ export default function CarritoPage() {
               )}
 
               <div className="cart-summary__row">
-                <span>Envío estimado</span>
+                <span>Envío</span>
                 <span>
-                  {totals?.shippingCost === 0
-                    ? "Gratis"
-                    : formatCOP(totals?.shippingCost)}
+                  {totals?.shippingIncluded
+                    ? "Incluido en el precio"
+                    : totals?.shippingCost === 0
+                      ? "Sin costo"
+                      : formatCOP(totals?.shippingCost)}
                 </span>
               </div>
 
@@ -292,9 +295,11 @@ export default function CarritoPage() {
                 <span>{displayTotal != null ? formatCOP(displayTotal) : "—"}</span>
               </div>
 
-              <p className="cart-summary__note">
-                Envío final según departamento en checkout
-              </p>
+              {!totals?.shippingIncluded && (
+                <p className="cart-summary__note">
+                  Envío final según departamento en checkout
+                </p>
+              )}
 
               {/* ── Campo de cupón ── */}
               {!appliedCoupon && (

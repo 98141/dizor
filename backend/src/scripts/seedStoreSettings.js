@@ -13,11 +13,11 @@ const seedStoreSettings = async () => {
         key: "default",
         taxEnabled: process.env.TAX_ENABLED === "true",
         taxRate: Number(process.env.TAX_RATE) || 0,
-        shippingMode: "free_threshold",
+        shippingMode: "included", // envío incluido en el precio (2026-11-16)
         shippingFixedCost: 15000,
         freeShippingMinAmount: 200000,
         currency: "COP",
-        carriers: ["interrapidisimo", "envia", "coordinadora"],
+        carriers: ["interrapidisimo", "servientrega"],
       },
       { upsert: true, new: true }
     );

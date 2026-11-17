@@ -8,6 +8,7 @@ const { issueAccessToken, matchesHash } = require("../utils/opaqueTokens");
 const { hashToken } = require("../utils/cryptoUtils");
 const { requireAuthorization, recordConsent } = require("./consentService");
 const { PURPOSES } = require("../config/legalTexts");
+const { BUSINESS } = require("../config/businessInfo");
 
 // El canal público solo se habilita cuando el propietario confirme quién lo
 // atiende y por qué medio (E-2). Mientras tanto responde 503: el software no
@@ -79,12 +80,40 @@ const sendReceipt = async (doc, accessCode) => {
          <strong>Fecha y hora de recepción:</strong> ${when} (hora de Colombia)<br/>
          <strong>Código de consulta:</strong> ${accessCode}</p>
       <p>Con el radicado y el código puedes consultar el estado de tu solicitud.</p>
-      <p style="font-size: 12px; color: #999;">Mensaje transaccional. No compartas tu código de consulta.</p>
+      <p>La recepción por el sitio es permanente; la atención personal es de ${BUSINESS.attentionHours}.
+         Si necesitas añadir información, escríbenos a ${BUSINESS.email} indicando tu radicado.</p>
+      <p style="font-size: 12px; color: #999;">${BUSINESS.legalName} (${BUSINESS.brand}) · NIT ${BUSINESS.nit}.
+         Mensaje transaccional. No compartas tu código de consulta.</p>
     </div>`;
   try {
     await (transport || defaultTransport)({
       to: doc.contact.email,
       subject: `Radicado ${doc.radicado} — Dizor`,
+      html,
+    });
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+// Aviso interno de nueva solicitud a la bandeja de atención (ADMIN_NOTIFY_EMAIL).
+// Minimización: solo radicado, categoría, tipo y fecha; el detalle se consulta
+// en el panel con sesión. Un fallo no impide radicar.
+const notifyStaff = async (doc) => {
+  const to = process.env.ADMIN_NOTIFY_EMAIL;
+  if (!to) return false;
+  const when = doc.receivedAt.toLocaleString("es-CO", { timeZone: "America/Bogota" });
+  const html = `
+    <div style="font-family: Georgia, serif; max-width: 560px; margin: 0 auto; color: #1f1f1f;">
+      <h1 style="font-size: 20px; font-weight: 500;">Nueva solicitud ${doc.radicado}</h1>
+      <p>Categoría: ${doc.category} · Tipo: ${doc.type}<br/>Recibida: ${when} (hora de Colombia)</p>
+      <p style="font-size: 12px; color: #999;">Revisa el detalle en el panel (Solicitudes).</p>
+    </div>`;
+  try {
+    await (transport || defaultTransport)({
+      to,
+      subject: `[Dizor] Nueva solicitud ${doc.radicado}`,
       html,
     });
     return true;
@@ -218,6 +247,7 @@ const createCustomerRequest = async ({ body, user }) => {
   });
 
   const receiptSent = await sendReceipt(doc, token);
+  await notifyStaff(doc);
 
   return {
     radicado: doc.radicado,

@@ -105,7 +105,8 @@ const orderSchema = new mongoose.Schema(
     },
     carrier: {
       type: String,
-      enum: ["interrapidisimo", "envia", "coordinadora", ""],
+      // "envia"/"coordinadora" se conservan por los pedidos históricos.
+      enum: ["interrapidisimo", "servientrega", "envia", "coordinadora", ""],
       default: "",
     },
     trackingNumber: { type: String, default: "" },
@@ -139,6 +140,8 @@ const orderSchema = new mongoose.Schema(
     ivaPercent: { type: Number, default: 0 },
     freeShippingApplied: { type: Boolean, default: false },
     freeShippingThreshold: { type: Number, default: 0 },
+    // Copia de la condición vigente al comprar: el precio ya incluía el envío.
+    shippingIncluded: { type: Boolean, default: false },
 
     // Acceso limitado del comprador a la confirmación de SU pedido (H-06).
     // Solo se guarda el hash; el token en claro se entrega una vez al crear
@@ -154,6 +157,11 @@ const orderSchema = new mongoose.Schema(
       privacyNoticeVersion: { type: String, default: null },
       privacyNoticeStatus: { type: String, default: null },
       termsVersion: { type: String, default: null },
+      termsStatus: { type: String, default: null },
+      // Plazo de entrega mostrado antes de confirmar (null mientras no esté
+      // definido: config/deliveryTerms.js).
+      deliveryTermsVersion: { type: String, default: null },
+      deliveryTermsText: { type: String, default: null },
       acceptedAt: { type: Date, default: null },
     },
 

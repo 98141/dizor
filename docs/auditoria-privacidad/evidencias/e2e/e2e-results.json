@@ -1,0 +1,263 @@
+{
+  "date": "2026-11-16T23:47:17.803Z",
+  "browser": "Chromium (Playwright 1.61.1, caché local)",
+  "results": [
+    {
+      "id": "C-01",
+      "title": "Primera visita: banner visible y sin almacenamiento ni peticiones opcionales",
+      "status": "PASS",
+      "ms": 2023,
+      "notes": "Banner: \"Usamos almacenamiento necesario para que la tienda funcione y, solo con tu permiso, un contador de visitas propio. Política de cookiesConfig…\""
+    },
+    {
+      "id": "C-02",
+      "title": "Aceptar: se activa solo lo aceptado (registro de visita + cookie + clave)",
+      "status": "PASS",
+      "ms": 556,
+      "notes": "prefs={\"statistics\":true,\"analytics\":false,\"marketing\":false,\"timestamp\":\"2026-11-16T23:46:33.791Z\",\"version\":\"3\"}"
+    },
+    {
+      "id": "C-03",
+      "title": "Recarga y navegación interna: decisión recordada, sin doble conteo",
+      "status": "PASS",
+      "ms": 2639,
+      "notes": ""
+    },
+    {
+      "id": "C-04",
+      "title": "Retirada desde 'Configurar cookies' → Rechazar todo: se detiene el conteo y se borra lo guardado",
+      "status": "PASS",
+      "ms": 2614,
+      "notes": ""
+    },
+    {
+      "id": "C-05",
+      "title": "Rechazar en la primera visita: nada opcional y la tienda funciona",
+      "status": "PASS",
+      "ms": 1636,
+      "notes": ""
+    },
+    {
+      "id": "C-06",
+      "title": "Elección parcial desde 'Configurar': solo estadísticas",
+      "status": "PASS",
+      "ms": 656,
+      "notes": ""
+    },
+    {
+      "id": "R-01",
+      "title": "Registro con autorización obligatoria y sin inscripción comercial",
+      "status": "PASS",
+      "ms": 1403,
+      "notes": "0 AbandonedCart, 0 suscripciones, 1 ConsentRecord(account, published v2)"
+    },
+    {
+      "id": "K-01",
+      "title": "Checkout invitado: resumen con precio unitario, autorización y confirmación sin datos en la URL",
+      "status": "PASS",
+      "ms": 2421,
+      "notes": "pedido DIZ-20261116-0001; 1 acuse; sessionStorage=dizor_order_access"
+    },
+    {
+      "id": "K-02",
+      "title": "Otra pestaña sin token: modo limitado, sin datos del pedido",
+      "status": "PASS",
+      "ms": 475,
+      "notes": ""
+    },
+    {
+      "id": "K-03",
+      "title": "Enlace antiguo con correo y nombre: URL limpiada y sin exponer datos",
+      "status": "PASS",
+      "ms": 711,
+      "notes": ""
+    },
+    {
+      "id": "K-04",
+      "title": "Seguimiento: enlace antiguo con correo se limpia; consulta por POST",
+      "status": "PASS",
+      "ms": 2197,
+      "notes": ""
+    },
+    {
+      "id": "A-01",
+      "title": "Comprador autenticado: acceso a su pedido aun sin token en la pestaña",
+      "status": "PASS",
+      "ms": 2248,
+      "notes": "pedido DIZ-20261116-0002 visible tras borrar el token (sesión de dueño)"
+    },
+    {
+      "id": "A-02",
+      "title": "Otro usuario autenticado no ve el pedido ajeno",
+      "status": "PASS",
+      "ms": 1305,
+      "notes": ""
+    },
+    {
+      "id": "M-01",
+      "title": "Newsletter: casilla opcional obligatoria para este formulario, evidencia y baja sin sesión",
+      "status": "PASS",
+      "ms": 1611,
+      "notes": ""
+    },
+    {
+      "id": "M-02",
+      "title": "Recordatorio de carrito DESACTIVADO: no se ofrece, el API lo rechaza y no hay envíos",
+      "status": "PASS",
+      "ms": 1878,
+      "notes": "sin formulario; API 503; envío: feature_disabled"
+    },
+    {
+      "id": "X-01",
+      "title": "Cliente antiguo/manipulado: Nequi directo y transferencia manual rechazados por el backend",
+      "status": "PASS",
+      "ms": 875,
+      "notes": "estados 400,400,410,410; medios: Tarjeta, PSE y otros medios (Wompi) | Pago contra entrega"
+    },
+    {
+      "id": "P-01",
+      "title": "PQR: radicado con fecha y hora solo tras persistir; constancia",
+      "status": "PASS",
+      "ms": 914,
+      "notes": "PQR-20261116-E46C14E4"
+    },
+    {
+      "id": "P-02",
+      "title": "PQR: seguimiento con código; código incorrecto no muestra nada",
+      "status": "PASS",
+      "ms": 412,
+      "notes": ""
+    },
+    {
+      "id": "P-03",
+      "title": "Admin PQR: gestiona estado; nota pública visible y nota interna oculta",
+      "status": "PASS",
+      "ms": 1430,
+      "notes": ""
+    },
+    {
+      "id": "P-04",
+      "title": "Cliente sin rol de administrador no accede a /admin/pqr",
+      "status": "PASS",
+      "ms": 3426,
+      "notes": "URL final: /cuenta"
+    },
+    {
+      "id": "L-escritorio",
+      "title": "Pie de página y páginas legales (escritorio)",
+      "status": "PASS",
+      "ms": 6860,
+      "notes": "/politica-de-privacidad:200 /politica-de-cookies:200 /terminos-y-condiciones:200 /garantias-y-devoluciones:200 /pagina/envios:200 /pqr:200 /pqr/seguimiento:200 /baja:200 /seguimiento:200"
+    },
+    {
+      "id": "L-movil",
+      "title": "Pie de página y páginas legales (movil)",
+      "status": "PASS",
+      "ms": 5903,
+      "notes": "/politica-de-privacidad:200 /politica-de-cookies:200 /terminos-y-condiciones:200 /garantias-y-devoluciones:200 /pagina/envios:200 /pqr:200 /pqr/seguimiento:200 /baja:200 /seguimiento:200"
+    }
+  ],
+  "externalAttemptsFromBrowser": [],
+  "externalAttemptsFromBackend": [],
+  "consoleErrors": [
+    "[console] http://127.0.0.1:3100/ Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/ Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/ Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/ Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/catalogo Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/catalogo Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/ Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/ Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/catalogo Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/catalogo Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/carrito Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/carrito Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/ Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/ Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/register Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/register Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/checkout Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/checkout Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/pedido/confirmacion?order=DIZ-20261116-0001 Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/pedido/confirmacion?order=DIZ-20261116-0001 Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/pedido/confirmacion?order=DIZ-20261116-0001 Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/pedido/confirmacion?order=DIZ-20261116-0001 Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/seguimiento?order=DIZ-20261116-0001 Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/seguimiento?order=DIZ-20261116-0001 Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/login Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/login Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/register Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/register Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/pedido/confirmacion?order=DIZ-20261116-0002 Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "[console] http://127.0.0.1:3100/ Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/ Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/baja Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/baja Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/carrito Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/carrito Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/carrito Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+    "[console] http://127.0.0.1:3100/checkout Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/checkout Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/checkout Failed to load resource: the server responded with a status of 400 (Bad Request)",
+    "[console] http://127.0.0.1:3100/checkout Failed to load resource: the server responded with a status of 400 (Bad Request)",
+    "[console] http://127.0.0.1:3100/checkout Failed to load resource: the server responded with a status of 410 (Gone)",
+    "[console] http://127.0.0.1:3100/checkout Failed to load resource: the server responded with a status of 410 (Gone)",
+    "[console] http://127.0.0.1:3100/pqr Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/pqr Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/pqr/seguimiento Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/pqr/seguimiento Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/pqr/seguimiento Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "[console] http://127.0.0.1:3100/login Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/login Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/login Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/login Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/ Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/ Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/politica-de-cookies Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/politica-de-cookies Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/politica-de-privacidad Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/politica-de-privacidad Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/politica-de-cookies Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/politica-de-cookies Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/terminos-y-condiciones Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/terminos-y-condiciones Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/garantias-y-devoluciones Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/garantias-y-devoluciones Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/pagina/envios Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/pagina/envios Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/pagina/envios Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/pagina/envios Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/garantias-y-devoluciones Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/garantias-y-devoluciones Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/guia-de-tallas Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/guia-de-tallas Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/catalogo Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/catalogo Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/ Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/ Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/ Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/ Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/politica-de-cookies Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/politica-de-cookies Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/politica-de-privacidad Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/politica-de-privacidad Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/politica-de-cookies Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/politica-de-cookies Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/terminos-y-condiciones Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/terminos-y-condiciones Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/garantias-y-devoluciones Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/garantias-y-devoluciones Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/pagina/envios Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/pagina/envios Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/pagina/envios Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/pagina/envios Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/garantias-y-devoluciones Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/garantias-y-devoluciones Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/guia-de-tallas Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/guia-de-tallas Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/catalogo Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/catalogo Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/ Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "[console] http://127.0.0.1:3100/ Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+  ]
+}
