@@ -7,8 +7,8 @@ export const getCatalogFilters = async (params = {}) => {
   return res.data;
 };
 
-export const getProducts = async (params = {}) => {
-  const res = await api.get("/products", { params });
+export const getProducts = async (params = {}, { signal, timeout } = {}) => {
+  const res = await api.get("/products", { params, signal, timeout });
   return res.data;
 };
 

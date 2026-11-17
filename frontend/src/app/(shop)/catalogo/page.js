@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import CatalogoContent from "@/components/catalog/CatalogoContent";
+import { DelayedCatalogLoading } from "@/components/catalog/CatalogLoadingOverlay";
 
 const BASE_API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
@@ -142,7 +143,7 @@ export default async function CatalogoPage({ searchParams }) {
   if (canonical) redirect(canonical);
 
   return (
-    <Suspense fallback={<p className="auth-loading">Cargando...</p>}>
+    <Suspense fallback={<DelayedCatalogLoading active />}>
       <CatalogoContent
         initialProducts={productsData?.products ?? null}
         initialTotal={productsData?.total ?? 0}

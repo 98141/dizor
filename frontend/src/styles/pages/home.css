@@ -662,47 +662,150 @@
   }
 }
 
-/* ─── Beneficios (transición compacta Hero → cuerpo) ─── */
+/* ─── Beneficios: franja centrada, icono + título + apoyo ─── */
 
 .home-benefits {
-  padding: 1.5rem 0 1.75rem;
-  border-bottom: 1px solid var(--color-border);
-  background: var(--color-bg);
+  padding: 2.15rem 0 2.25rem;
+  background: var(--color-surface-sand);
+  border-top: 1px solid rgba(138, 85, 3, 0.14);
+  border-bottom: 1px solid rgba(138, 85, 3, 0.14);
 }
 
 @media (min-width: 1024px) {
   .home-benefits {
-    padding: 2rem 0 2.25rem;
+    padding: 2.75rem 0 2.85rem;
   }
 }
 
 .home-benefits__grid {
   display: grid;
-  gap: 1.25rem 2rem;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;
+}
+
+.home-benefit {
+  position: relative;
+  padding: 1.15rem 1.25rem;
+  text-align: center;
+}
+
+.home-benefit + .home-benefit {
+  border-top: 1px solid rgba(138, 85, 3, 0.16);
+}
+
+@media (min-width: 720px) {
+  .home-benefits--n2 .home-benefits__grid,
+  .home-benefits--n3 .home-benefits__grid,
+  .home-benefits--n4 .home-benefits__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .home-benefit + .home-benefit {
+    border-top: none;
+  }
+
+  .home-benefits--n2 .home-benefit:nth-child(n + 3),
+  .home-benefits--n3 .home-benefit:nth-child(n + 3),
+  .home-benefits--n4 .home-benefit:nth-child(n + 3) {
+    border-top: 1px solid rgba(138, 85, 3, 0.16);
+  }
+
+  .home-benefits--n2 .home-benefit:nth-child(2n)::before,
+  .home-benefits--n3 .home-benefit:nth-child(2n)::before,
+  .home-benefits--n4 .home-benefit:nth-child(2n)::before {
+    content: "";
+    position: absolute;
+    top: 18%;
+    bottom: 18%;
+    left: 0;
+    width: 1px;
+    background: rgba(138, 85, 3, 0.2);
+  }
 }
 
 @media (min-width: 1024px) {
-  .home-benefits__grid {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem 2.5rem;
-    align-items: start;
+  .home-benefits--n1 .home-benefits__grid {
+    grid-template-columns: minmax(0, 22rem);
+    justify-content: center;
   }
 
-  .home-benefits--n1 .home-benefits__grid,
-  .home-benefits--n2 .home-benefits__grid,
-  .home-benefits--n3 .home-benefits__grid {
-    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
-    max-width: 56rem;
+  .home-benefits--n2 .home-benefits__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 48rem;
     margin-inline: auto;
+  }
+
+  .home-benefits--n3 .home-benefits__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .home-benefits--n4 .home-benefits__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .home-benefit,
+  .home-benefit + .home-benefit,
+  .home-benefits--n2 .home-benefit:nth-child(n + 3),
+  .home-benefits--n3 .home-benefit:nth-child(n + 3),
+  .home-benefits--n4 .home-benefit:nth-child(n + 3) {
+    border-top: none;
+  }
+
+  .home-benefits--n2 .home-benefit:nth-child(2n)::before,
+  .home-benefits--n3 .home-benefit:nth-child(2n)::before,
+  .home-benefits--n4 .home-benefit:nth-child(2n)::before {
+    content: none;
+  }
+
+  .home-benefits--n2 .home-benefit:not(:first-child)::before,
+  .home-benefits--n3 .home-benefit:not(:first-child)::before,
+  .home-benefits--n4 .home-benefit:not(:first-child)::before {
+    content: "";
+    position: absolute;
+    top: 12%;
+    bottom: 12%;
+    left: 0;
+    width: 1px;
+    background: rgba(138, 85, 3, 0.2);
   }
 }
 
-@media (max-width: 767px) {
-  .home-benefits {
-    padding: 1.15rem 0 1.35rem;
-  }
+.home-benefit__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  margin: 0 auto 0.75rem;
+  color: var(--color-accent-text);
+  font-size: 1.85rem;
+  line-height: 1;
+}
 
+.home-benefit__icon svg {
+  width: 1.85rem;
+  height: 1.85rem;
+}
+
+.home-benefit__title {
+  margin: 0 0 0.3rem;
+  font-family: var(--font-ui);
+  font-size: 1rem;
+  font-weight: var(--weight-bold);
+  line-height: 1.3;
+  letter-spacing: var(--tracking-normal);
+  color: var(--color-text);
+}
+
+.home-benefit__text {
+  max-width: 16rem;
+  margin: 0 auto;
+  font-family: var(--font-ui);
+  font-size: 0.84rem;
+  line-height: 1.45;
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 719px) {
   .home-benefits .home-container {
     padding-inline: 0;
   }
@@ -715,6 +818,7 @@
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    -ms-overflow-style: none;
     padding: 0 1.25rem;
     overscroll-behavior-x: contain;
   }
@@ -726,47 +830,13 @@
   .home-benefit {
     flex: 0 0 min(68vw, 14.5rem);
     scroll-snap-align: start;
-    padding-right: 1.25rem;
-    border-right: 1px solid var(--color-border);
+    padding: 0.35rem 1.15rem 0.35rem 0;
   }
 
-  .home-benefit:last-child {
-    border-right: none;
-    padding-right: 0;
-  }
-}
-
-.home-benefit__icon {
-  display: block;
-  margin-bottom: 0.35rem;
-  font-size: 0.95rem;
-  color: var(--color-primary);
-  line-height: 1;
-}
-
-.home-benefit__title {
-  margin: 0 0 0.35rem;
-  font-family: var(--font-serif);
-  font-size: 1.05rem;
-  font-weight: 400;
-  line-height: 1.25;
-}
-
-.home-benefit__text {
-  margin: 0;
-  font-size: 0.8rem;
-  line-height: 1.55;
-  color: var(--color-text-muted);
-}
-
-@media (min-width: 1024px) {
-  .home-benefit__title {
-    font-size: 1.1rem;
-  }
-
-  .home-benefit__text {
-    font-size: 0.82rem;
-    line-height: 1.6;
+  .home-benefit + .home-benefit {
+    border-top: none;
+    border-left: 1px solid rgba(138, 85, 3, 0.2);
+    padding-left: 1.15rem;
   }
 }
 
@@ -812,6 +882,27 @@
     flex: unset;
     width: auto;
     max-width: none;
+  }
+
+  .home-collection__track--n3 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    overflow: visible;
+    scroll-snap-type: none;
+    margin-inline: 0;
+    padding: 0;
+  }
+
+  .home-collection__track--n3 .home-collection-card {
+    flex: unset;
+    width: auto;
+    max-width: none;
+    scroll-snap-align: unset;
+  }
+
+  .home-collection__track--n3 .home-collection-card--featured {
+    grid-column: 1 / -1;
   }
 }
 
@@ -1563,6 +1654,17 @@
   font-size: 0.75rem;
   color: var(--color-text-muted);
   text-decoration: line-through;
+}
+
+/* Móvil: una a todo el ancho y las otras en filas de dos */
+@media (max-width: 1023px) {
+  .home-discover__grid--n5 .home-discover__card--featured {
+    grid-column: 1 / -1;
+  }
+
+  .home-discover__grid--n5 .home-discover__card--featured .home-discover__media {
+    aspect-ratio: 4 / 5;
+  }
 }
 
 /* Escritorio: protagonista a la izquierda y secundarias con área propia */

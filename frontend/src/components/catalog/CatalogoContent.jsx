@@ -9,11 +9,22 @@ import CatalogFilters, {
   getVisibleFilters,
 } from "@/components/catalog/CatalogFilters";
 import CatalogPromo from "@/components/cms/CatalogPromo";
+import { DelayedCatalogLoading } from "@/components/catalog/CatalogLoadingOverlay";
 import { getCatalogFilters, getProducts } from "@/services/productService";
 import { trackCatalogFilter, trackViewItemList } from "@/lib/analytics/events";
 import { mapProductToItem } from "@/lib/analytics/productMapper";
 import { matchesTaxonomy, parseValueList } from "@/lib/catalogTaxonomy";
 import { formatCOP } from "@/lib/formatCurrency";
+
+const CATALOG_REQUEST_TIMEOUT_MS = 20000;
+
+function isAbortError(err) {
+  return (
+    err?.code === "ERR_CANCELED" ||
+    err?.name === "CanceledError" ||
+    err?.name === "AbortError"
+  );
+}
 
 const FILTER_PARAM_KEYS = [
   "term",
@@ -137,6 +148,10 @@ export default function CatalogoContent({
   const isInitialProductsLoad = useRef(hasServerProducts);
   const isInitialFiltersLoad = useRef(Boolean(initialFacets));
   const facetsRequestId = useRef(0);
+  const productsRequestId = useRef(0);
+  const productsAbortRef = useRef(null);
+  const loadingRef = useRef(!hasServerProducts);
+  const focusReturnRef = useRef(null);
 
   const buildParamsFromUrl = useCallback(() => {
     const params = {};
@@ -148,28 +163,37 @@ export default function CatalogoContent({
   }, [searchParams]);
 
   const loadProducts = useCallback(async () => {
+    const requestId = ++productsRequestId.current;
+    productsAbortRef.current?.abort();
+    const controller = new AbortController();
+    productsAbortRef.current = controller;
+
+    loadingRef.current = true;
     setLoading(true);
     setLoadError("");
     try {
       const params = buildParamsFromUrl();
-      const data = await getProducts({
-        ...params,
-        page: searchParams.get("page") || 1,
-        limit: 12,
-      });
+      const data = await getProducts(
+        {
+          ...params,
+          page: searchParams.get("page") || 1,
+          limit: 12,
+        },
+        { signal: controller.signal, timeout: CATALOG_REQUEST_TIMEOUT_MS }
+      );
+      if (requestId !== productsRequestId.current) return;
       setProducts(data.products || []);
       setTotal(data.total);
       setPage(data.page);
       setTotalPages(data.totalPages);
     } catch (err) {
-      setProducts([]);
-      setTotal(0);
-      setLoadError(
-        err.response?.data?.message ||
-          "No se pudo cargar el catálogo. Revisa que el backend esté activo."
-      );
+      if (requestId !== productsRequestId.current || isAbortError(err)) return;
+      setLoadError("No pudimos cargar el catálogo. Intenta nuevamente.");
     } finally {
-      setLoading(false);
+      if (requestId === productsRequestId.current) {
+        loadingRef.current = false;
+        setLoading(false);
+      }
     }
   }, [buildParamsFromUrl, searchParams]);
 
@@ -191,6 +215,13 @@ export default function CatalogoContent({
         if (requestId === facetsRequestId.current) setFacets(null);
       });
   }, [buildParamsFromUrl]);
+
+  useEffect(() => {
+    return () => {
+      productsRequestId.current += 1;
+      productsAbortRef.current?.abort();
+    };
+  }, []);
 
   useEffect(() => {
     const legacy =
@@ -269,6 +300,14 @@ export default function CatalogoContent({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [products, loading]);
 
+  const beginWait = (event) => {
+    if (event?.currentTarget instanceof HTMLElement) {
+      focusReturnRef.current = event.currentTarget;
+    }
+    loadingRef.current = true;
+    setLoading(true);
+  };
+
   const pushFiltersToUrl = (source) => {
     const current = buildParamsFromUrl();
     const changedKeys = new Set([
@@ -290,7 +329,10 @@ export default function CatalogoContent({
     Object.entries(source).forEach(([k, v]) => {
       if (v) params.set(k, String(v));
     });
-    router.push(catalogUrl(params));
+    const nextUrl = catalogUrl(params);
+    const currentUrl = catalogUrl(new URLSearchParams(searchParams.toString()));
+    if (nextUrl !== currentUrl) beginWait();
+    router.push(nextUrl);
     setFiltersOpen(false);
   };
 
@@ -307,7 +349,10 @@ export default function CatalogoContent({
       }
     });
     setDraftFilters(Object.fromEntries(params.entries()));
-    router.push(catalogUrl(params));
+    const nextUrl = catalogUrl(params);
+    const currentUrl = catalogUrl(new URLSearchParams(searchParams.toString()));
+    if (nextUrl !== currentUrl) beginWait();
+    router.push(nextUrl);
     setFiltersOpen(false);
   };
 
@@ -327,8 +372,11 @@ export default function CatalogoContent({
       params.delete(chip.param);
     }
     params.delete("page");
+    const nextUrl = catalogUrl(params);
+    if (nextUrl === catalogUrl(new URLSearchParams(searchParams.toString()))) return;
     trackCatalogFilter({ filterName: chip.param, filterValue: "(cleared)" });
-    router.push(catalogUrl(params));
+    beginWait();
+    router.push(nextUrl);
   };
 
   const filterProps = {
@@ -343,27 +391,34 @@ export default function CatalogoContent({
     activeFilterCount,
   };
 
-  const changeSort = (sort) => {
-    trackCatalogFilter({
-      filterName: "sort",
-      filterValue: sort || "(default)",
-    });
+  const changeSort = (sort, event) => {
     const params = new URLSearchParams(searchParams.toString());
     if (sort) params.set("sort", sort);
     else params.delete("sort");
     params.delete("page");
-    router.push(catalogUrl(params));
+    const nextUrl = catalogUrl(params);
+    if (nextUrl === catalogUrl(new URLSearchParams(searchParams.toString()))) return;
+    trackCatalogFilter({
+      filterName: "sort",
+      filterValue: sort || "(default)",
+    });
+    beginWait(event);
+    router.push(nextUrl);
   };
 
-  const changePage = (newPage) => {
+  const changePage = (newPage, event) => {
+    if (loadingRef.current || newPage === page) return;
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", String(newPage));
-    router.push(catalogUrl(params));
+    const nextUrl = catalogUrl(params);
+    if (nextUrl === catalogUrl(new URLSearchParams(searchParams.toString()))) return;
+    beginWait(event);
+    router.push(nextUrl);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
-    <div className="catalog-layout">
+    <div className="catalog-layout" aria-busy={loading || undefined}>
       <header className="catalog-layout__header">
         <h1 className="catalog-layout__title">{pageTitle}</h1>
         <p className="catalog-layout__subtitle">{pageSubtitle}</p>
@@ -383,7 +438,7 @@ export default function CatalogoContent({
         <div className="catalog-sort">
           <select
             value={searchParams.get("sort") || ""}
-            onChange={(e) => changeSort(e.target.value)}
+            onChange={(e) => changeSort(e.target.value, e)}
             aria-label="Ordenar productos"
           >
             <option value="">Más recientes</option>
@@ -434,12 +489,30 @@ export default function CatalogoContent({
 
         <div>
           {loadError ? (
-            <p className="catalog-empty" style={{ color: "#b33" }}>
-              {loadError}
-            </p>
-          ) : loading ? (
-            <p className="auth-loading">Cargando catálogo...</p>
-          ) : products.length === 0 ? (
+            <div className="catalog-empty catalog-load-error" role="alert">
+              <p>{loadError}</p>
+              <button
+                type="button"
+                className="catalog-filters__btn catalog-filters__btn--primary"
+                onClick={() => loadProducts()}
+              >
+                Reintentar
+              </button>
+            </div>
+          ) : products.length > 0 ? (
+            <div className="products-grid">
+              {products.map((product, i) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  priority={i === 0}
+                  itemListId="catalog"
+                  itemListName={pageTitle}
+                  index={i}
+                />
+              ))}
+            </div>
+          ) : !loading ? (
             <div className="catalog-empty">
               <p>
                 {searchQuery
@@ -457,27 +530,14 @@ export default function CatalogoContent({
                 </button>
               )}
             </div>
-          ) : (
-            <div className="products-grid">
-              {products.map((product, i) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  priority={i === 0}
-                  itemListId="catalog"
-                  itemListName={pageTitle}
-                  index={i}
-                />
-              ))}
-            </div>
-          )}
+          ) : null}
 
           {totalPages > 1 && (
             <div className="catalog-pagination">
               <button
                 type="button"
-                disabled={page <= 1}
-                onClick={() => changePage(page - 1)}
+                disabled={loading || page <= 1}
+                onClick={(event) => changePage(page - 1, event)}
               >
                 Anterior
               </button>
@@ -486,8 +546,8 @@ export default function CatalogoContent({
               </span>
               <button
                 type="button"
-                disabled={page >= totalPages}
-                onClick={() => changePage(page + 1)}
+                disabled={loading || page >= totalPages}
+                onClick={(event) => changePage(page + 1, event)}
               >
                 Siguiente
               </button>
@@ -495,6 +555,7 @@ export default function CatalogoContent({
           )}
         </div>
       </div>
+      <DelayedCatalogLoading active={loading} restoreFocusRef={focusReturnRef} />
     </div>
   );
 }
