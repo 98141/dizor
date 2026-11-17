@@ -1,30 +1,31 @@
 "use client";
 
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { SHIMMER_BLUR_DATA_URL } from "@/lib/imagePlaceholder";
-import {
-  buildJustifiedRows,
-  DEFAULT_INSPIRATION_RATIO,
-  DESKTOP_LAYOUT,
-  TABLET_LAYOUT,
-} from "@/lib/inspirationLayout";
+import { DEFAULT_INSPIRATION_RATIO } from "@/lib/inspirationLayout";
 
 const SWIPE_THRESHOLD = 48;
+const TILE_SIZES =
+  "(max-width: 1023px) 46vw, (min-width: 1024px) 40vw";
+const TILE_SIZES_WIDE =
+  "(max-width: 1023px) 92vw, (min-width: 1024px) 40vw";
 
-/** `sizes` acorde al ancho real de cada foto en su fila. */
-function tileSizes(desktop, tablet) {
-  const d = Math.ceil(desktop.f * 100);
-  const t = Math.ceil(tablet.f * 100);
-  const dPx = Math.ceil(desktop.f * 1280);
-  return `(max-width: 639px) 100vw, (max-width: 1023px) ${t}vw, (min-width: 1400px) ${dPx}px, ${d}vw`;
+/**
+ * Encuadre móvil. La celda manda (1:1 o 2:1); la foto se adapta dentro.
+ * Cover solo si el recorte es mínimo, o si un retrato cabe en la banda
+ * ancha conservando la parte superior (sombrero y rostro).
+ * Si cover cortaría un borde relevante, la foto se ve completa.
+ */
+function frameFor(ratio, cellRatio) {
+  if (!ratio || ratio <= 0) return { fit: "cover", position: "center" };
+  const visible = Math.min(ratio, cellRatio) / Math.max(ratio, cellRatio);
+  if (visible >= 0.9) return { fit: "cover", position: "center" };
+  if (cellRatio > ratio && cellRatio >= 1.5 && visible >= 0.45) {
+    return { fit: "cover", position: "upper" };
+  }
+  return { fit: "contain", position: "center" };
 }
 
 function Icon({ path }) {
@@ -52,7 +53,9 @@ const ICON_NEXT = "M9 5l7 7-7 7";
 const ICON_EXTERNAL = "M14 5h5v5M19 5l-8 8M17 14v4a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h4";
 
 /**
- * Galería editorial Inspiración — filas justificadas sin recortes + lightbox.
+ * Galería Inspiración. En móvil, mosaico de dos columnas (la última ocupa
+ * el ancho si el total es impar). En escritorio, una foto protagonista y
+ * las demás a su lado, cada una con su proporción.
  * @param {{ images: { id: string, url: string, alt: string, linkHref: string, ratio: number|null }[] }} props
  */
 export default function InspirationGallery({ images = [] }) {
@@ -61,9 +64,6 @@ export default function InspirationGallery({ images = [] }) {
   );
   const [openIndex, setOpenIndex] = useState(null);
   const tileRefs = useRef([]);
-
-  const desktop = useMemo(() => buildJustifiedRows(ratios, DESKTOP_LAYOUT), [ratios]);
-  const tablet = useMemo(() => buildJustifiedRows(ratios, TABLET_LAYOUT), [ratios]);
 
   /** Respaldo: si el servidor no obtuvo la proporción, se mide al cargar. */
   const handleLoad = useCallback(
@@ -97,52 +97,68 @@ export default function InspirationGallery({ images = [] }) {
 
   if (!images.length) return null;
 
+  const count = images.length;
+  const grouped = count >= 3;
+
+  const renderItem = (img, idx) => {
+    const wide = idx === count - 1 && count % 2 === 1;
+    const frame = frameFor(ratios[idx], wide ? 2 : 1);
+    const fitClass =
+      frame.fit === "contain"
+        ? " is-contain"
+        : frame.position === "upper"
+          ? " is-upper"
+          : "";
+    return (
+      <div
+        key={img.id}
+        className={`home-inspire__item${idx === 0 ? " is-lead" : ""}${wide ? " is-wide" : ""}`}
+        style={{ "--ar": ratios[idx].toFixed(4) }}
+      >
+        <button
+          type="button"
+          ref={(el) => {
+            tileRefs.current[idx] = el;
+          }}
+          className="home-inspire__tile"
+          onClick={() => setOpenIndex(idx)}
+          aria-haspopup="dialog"
+          aria-label={`Ampliar fotografía: ${img.alt}`}
+        >
+          <Image
+            src={img.url}
+            alt=""
+            fill
+            sizes={wide ? TILE_SIZES_WIDE : TILE_SIZES}
+            className={`home-inspire__photo${fitClass}`}
+            placeholder="blur"
+            blurDataURL={SHIMMER_BLUR_DATA_URL}
+            onLoad={(e) => handleLoad(idx, e)}
+          />
+        </button>
+      </div>
+    );
+  };
+
   return (
     <>
-      <ul
+      <div
         className="home-inspire__gallery"
-        data-count={images.length}
-        style={{
-          "--sum-d": desktop.minSum.toFixed(4),
-          "--sum-t": tablet.minSum.toFixed(4),
-        }}
+        data-count={count}
+        role="region"
+        aria-label="Fotografías de inspiración"
       >
-        {images.map((img, idx) => (
-          <li
-            key={img.id}
-            className="home-inspire__item"
-            style={{
-              "--ar": ratios[idx].toFixed(4),
-              "--fd": desktop.items[idx].f.toFixed(5),
-              "--kd": desktop.items[idx].k,
-              "--ft": tablet.items[idx].f.toFixed(5),
-              "--kt": tablet.items[idx].k,
-            }}
-          >
-            <button
-              type="button"
-              ref={(el) => {
-                tileRefs.current[idx] = el;
-              }}
-              className="home-inspire__tile"
-              onClick={() => setOpenIndex(idx)}
-              aria-haspopup="dialog"
-              aria-label={`Ampliar fotografía: ${img.alt}`}
-            >
-              <Image
-                src={img.url}
-                alt=""
-                fill
-                sizes={tileSizes(desktop.items[idx], tablet.items[idx])}
-                className="home-inspire__photo"
-                placeholder="blur"
-                blurDataURL={SHIMMER_BLUR_DATA_URL}
-                onLoad={(e) => handleLoad(idx, e)}
-              />
-            </button>
-          </li>
-        ))}
-      </ul>
+        {grouped ? (
+          <>
+            <div className="home-inspire__lead">{renderItem(images[0], 0)}</div>
+            <div className="home-inspire__rest">
+              {images.slice(1).map((img, index) => renderItem(img, index + 1))}
+            </div>
+          </>
+        ) : (
+          images.map((img, idx) => renderItem(img, idx))
+        )}
+      </div>
 
       {openIndex !== null ? (
         <InspirationLightbox

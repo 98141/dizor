@@ -21,7 +21,6 @@ export default async function HomeWholesale() {
           }${!porMayorImage ? " home-personalize--no-media" : ""}`}
         >
           <div className="home-personalize__content">
-            <p className="home-eyebrow">{porMayor.eyebrow || "POR VOLUMEN"}</p>
             <h2 className="home-section__heading">
               {porMayor.title || "Pedidos al por mayor"}
             </h2>

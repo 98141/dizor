@@ -25,9 +25,6 @@ export default async function HomePersonalization() {
           }${!personalizacionImage ? " home-personalize--no-media" : ""}`}
         >
           <div className="home-personalize__content">
-            <p className="home-eyebrow">
-              {personalizacion.eyebrow || "A TU MEDIDA"}
-            </p>
             <h2 className="home-section__heading">
               {personalizacion.title || "Personaliza tu sombrero"}
             </h2>

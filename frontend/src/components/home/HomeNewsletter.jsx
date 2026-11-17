@@ -14,9 +14,6 @@ export default async function HomeNewsletter() {
   return (
     <section className="home-newsletter">
       <div className="home-container home-newsletter__inner">
-        <p className="home-eyebrow">
-          {newsletterSection.eyebrow || "NOVEDADES"}
-        </p>
         <h2 className="home-section__heading">
           {newsletterSection.title || "Entérate de las piezas nuevas"}
         </h2>

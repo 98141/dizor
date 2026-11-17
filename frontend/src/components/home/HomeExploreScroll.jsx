@@ -8,7 +8,7 @@ const ProductCarousel = dynamic(() => import("./ProductCarousel"), {
 });
 
 /**
- * Descubre hoy (carrusel) — hasta 10 productos sin nuevo/destacado.
+ * Carrusel del catálogo — hasta 10 productos sin nuevo/destacado.
  * Selección del día (America/Bogota); si hay ≤10 elegibles, salen todos.
  */
 export default async function HomeExploreScroll() {
@@ -17,17 +17,13 @@ export default async function HomeExploreScroll() {
 
   if (products.length === 0) return null;
 
-  const listName = "Descubre hoy";
+  const listName = "También en el catálogo";
 
   return (
     <section className="home-section home-section--explore-scroll home-section--border">
       <div className="home-container">
         <header className="home-section__intro home-section__intro--compact">
-          <p className="home-eyebrow">CATÁLOGO</p>
           <h2 className="home-section__heading">{listName}</h2>
-          <p className="home-section__lead">
-            Una muestra del catálogo que se renueva cada día a medianoche.
-          </p>
         </header>
         <ViewItemListTracker
           products={products}

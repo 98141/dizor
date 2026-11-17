@@ -33,7 +33,6 @@ export default async function HomeStory() {
             </MotionReveal>
           ) : null}
           <MotionReveal variant="editorial" className="home-story__content">
-            <p className="home-eyebrow">{historia.eyebrow || "ORIGEN"}</p>
             <h2 className="home-section__heading">
               {historia.title || "Del oficio a tu cotidianidad"}
             </h2>

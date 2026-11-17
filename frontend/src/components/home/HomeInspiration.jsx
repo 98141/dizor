@@ -45,7 +45,7 @@ function readableAlt(altText, index) {
     : `Inspiración Dizor — fotografía ${index + 1}`;
 }
 
-/** Inspiración — galería editorial de filas justificadas (1–5 imágenes). */
+/** Inspiración — galería editorial (1–5 imágenes del CMS). */
 export default async function HomeInspiration() {
   const cmsData = await getHomeContent().catch(() => null);
   const inspiracion = cmsData?.home?.inspiracion || {};
@@ -73,30 +73,24 @@ export default async function HomeInspiration() {
       aria-labelledby="home-inspire-heading"
     >
       <div className="home-container home-container--wide">
-        <div className="home-inspire__header">
-          <div>
-            <p className="home-eyebrow">
-              {inspiracion.eyebrow || "INSPIRACIÓN"}
-            </p>
-            <h2 id="home-inspire-heading" className="home-section__heading">
-              {inspiracion.title || "La pieza en la vida real"}
-            </h2>
-            <p className="home-section__lead">
-              {inspiracion.subtitle ||
-                "Una selección visual del universo Dizor."}
-            </p>
-          </div>
+        <header className="home-inspire__header">
+          <h2 id="home-inspire-heading" className="home-section__heading">
+            {inspiracion.title || "Inspiración"}
+          </h2>
+        </header>
+
+        <InspirationGallery images={images} />
+
+        <p className="home-inspire__follow">
           <a
             href={resolveInstagramUrl(inspiracion.instagramUrl)}
             target="_blank"
             rel="noopener noreferrer"
-            className="home-btn home-btn--outline"
+            className="home-text-link"
           >
             {inspiracion.ctaLabel || "Síguenos en Instagram"}
           </a>
-        </div>
-
-        <InspirationGallery images={images} />
+        </p>
       </div>
     </section>
   );

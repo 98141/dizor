@@ -150,7 +150,7 @@ export default function HomeHero({
                   priority={index === 0}
                   sizes="100vw"
                   className="home-hero__bg-image"
-                  style={{ objectFit: "cover", objectPosition: "center 35%" }}
+                  style={{ objectFit: "cover", objectPosition: "center 72%" }}
                 />
               </div>
             );

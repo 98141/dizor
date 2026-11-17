@@ -68,7 +68,6 @@ export default function HomeCraftSection({
   cards = [],
   linkLabel = "Ver",
 }) {
-  const eyebrow = craftSection.eyebrow || "COLECCIÓN";
   const title = craftSection.title || "Nuestros tejidos";
   const subtitle =
     craftSection.subtitle ||
@@ -80,7 +79,6 @@ export default function HomeCraftSection({
     <section className="home-section home-section--craft">
       <div className="home-container home-container--wide">
         <header className="home-section__intro">
-          <p className="home-eyebrow">{eyebrow}</p>
           <h2 className="home-section__heading">{title}</h2>
           <p className="home-section__lead">{subtitle}</p>
         </header>

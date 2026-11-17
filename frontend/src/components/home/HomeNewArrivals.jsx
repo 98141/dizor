@@ -17,6 +17,10 @@ export default async function HomeNewArrivals() {
 
   const newSection = cmsData?.home?.newSection || {};
   const newProducts = newProductsData?.products || [];
+  const subtitle = (newSection.subtitle || "").trim();
+  const subtitleRepiteElTitulo =
+    subtitle ===
+    "Las piezas recién marcadas como nuevas en nuestro catálogo.";
 
   if (newSection.isActive === false || newProducts.length === 0) return null;
 
@@ -24,14 +28,12 @@ export default async function HomeNewArrivals() {
     <section className="home-section home-section--arrivals home-section--border">
       <div className="home-container">
         <header className="home-section__intro home-section__intro--compact">
-          <p className="home-eyebrow">{newSection.eyebrow || "LO NUEVO"}</p>
           <h2 className="home-section__heading">
             {newSection.title || "Novedades"}
           </h2>
-          <p className="home-section__lead">
-            {newSection.subtitle ||
-              "Las piezas recién marcadas como nuevas en nuestro catálogo."}
-          </p>
+          {subtitle && !subtitleRepiteElTitulo ? (
+            <p className="home-section__lead">{subtitle}</p>
+          ) : null}
         </header>
         <ViewItemListTracker
           products={newProducts}

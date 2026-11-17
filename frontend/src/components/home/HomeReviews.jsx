@@ -38,7 +38,6 @@ export default async function HomeReviews() {
             single ? " home-section__intro--compact" : ""
           }`}
         >
-          <p className="home-eyebrow">{reseñasSection.eyebrow || "VOCES"}</p>
           <h2 className="home-section__heading">
             {reseñasSection.title || "Quienes ya eligieron Dizor"}
           </h2>

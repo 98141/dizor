@@ -29,9 +29,6 @@ export default async function HomeDiscover() {
       <div className="home-container">
         <div className="home-discover__header">
           <header className="home-section__intro">
-            <p className="home-eyebrow">
-              {randomSection.eyebrow || "CURADURÍA"}
-            </p>
             <h2 className="home-section__heading">{listName}</h2>
             {randomSection.subtitle ? (
               <p className="home-section__lead">{randomSection.subtitle}</p>
