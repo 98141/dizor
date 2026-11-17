@@ -84,10 +84,6 @@
     padding: 3.5rem 0;
   }
 
-  .home-section--story {
-    padding: 4rem 0;
-  }
-
   /* Inspiración: visual denso, menos aire “vacío” */
   .home-section--inspire {
     padding: 3.25rem 0;
@@ -1205,6 +1201,216 @@
   color: rgba(245, 243, 239, 0.7);
 }
 
+/* Capas de fondo: ocultas fuera de escritorio para no alterar móvil ni tablet */
+.home-story__stage {
+  display: none;
+}
+
+/* Escritorio (1024): bloque editorial más alto, foto protagonista */
+@media (min-width: 1024px) {
+  .home-section--story {
+    position: relative;
+    isolation: isolate;
+    overflow-x: clip;
+    display: flex;
+    align-items: center;
+    min-height: 42.5rem;
+    padding-block: clamp(5.75rem, 7vh, 8rem);
+    background-color: #201e19;
+    color: var(--color-text-inverse, #ffffff);
+  }
+
+  .home-section--story > .home-container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+  }
+
+  .home-story__stage {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .home-story__light {
+    position: absolute;
+    inset: -12% -8%;
+    background: radial-gradient(
+      ellipse 125% 95% at 28% 46%,
+      rgba(245, 195, 123, 0.16) 0%,
+      rgba(184, 115, 5, 0.07) 38%,
+      transparent 68%
+    );
+    transform: translateX(-1.75rem);
+    transition: transform 3.6s var(--ease-out);
+  }
+
+  .home-story__light.is-visible {
+    transform: translateX(0);
+  }
+
+  .home-story__fiber {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: min(46%, 36rem);
+    height: 5.25rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 720 96' fill='none'%3E%3Cpath d='M-30 22c120-14 210 12 340-4s210-6 340 8' stroke='%23f5c37b' stroke-opacity='.55' stroke-width='.8'/%3E%3Cpath d='M-20 44c140 10 220-16 360-2s200 14 330-8' stroke='%23f5c37b' stroke-opacity='.38' stroke-width='.7'/%3E%3Cpath d='M20 66c110-12 240 16 360 2s180-14 300 10' stroke='%23b87305' stroke-opacity='.4' stroke-width='.6'/%3E%3Cpath d='M-10 84c160-8 250 10 390 0s190-4 280 6' stroke='%23f5c37b' stroke-opacity='.22' stroke-width='.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    opacity: 0.7;
+    -webkit-mask-image: radial-gradient(125% 170% at 100% 0%, #000 0%, transparent 74%);
+    mask-image: radial-gradient(125% 170% at 100% 0%, #000 0%, transparent 74%);
+  }
+
+  .home-story--with-image {
+    grid-template-columns: minmax(0, 1.42fr) minmax(0, 1fr);
+    column-gap: clamp(3.25rem, 5.5vw, 6rem);
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+  }
+
+  .home-story__media {
+    width: 100%;
+    max-width: 40rem;
+    min-width: 0;
+    justify-self: end;
+  }
+
+  .home-story__image-wrap {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    max-height: none;
+    background: transparent;
+  }
+
+  .home-story__img {
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .home-story__content {
+    width: 100%;
+    max-width: 32.5rem;
+    min-width: 0;
+    justify-self: start;
+    padding-block: 0;
+  }
+
+  .home-section--story .home-section__heading {
+    max-width: none;
+    margin-bottom: 1.05rem;
+    font-size: clamp(2.2rem, 0.95rem + 1.7vw, 2.8rem);
+    line-height: 1.16;
+  }
+
+  .home-story__body {
+    max-width: none;
+    font-size: 1.133rem;
+    line-height: 1.75;
+    color: color-mix(in srgb, #ffffff 90%, var(--color-accent-soft) 10%);
+  }
+
+  .home-section--story .home-text-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-top: 1.85rem;
+    padding-bottom: 0.12rem;
+    background-image: none;
+    border-bottom: 1px solid currentColor;
+    line-height: 1.2;
+  }
+
+  .home-section--story .home-text-link::after {
+    content: "";
+    width: 0.45rem;
+    height: 0.45rem;
+    border-top: 1px solid currentColor;
+    border-right: 1px solid currentColor;
+    transform: translateY(1px) rotate(45deg);
+    transition: transform var(--motion-normal) var(--ease-out);
+  }
+
+  .home-section--story .home-text-link:hover,
+  .home-section--story .home-text-link:focus-visible {
+    color: var(--color-accent-soft);
+  }
+
+  .home-section--story .home-text-link:hover::after,
+  .home-section--story .home-text-link:focus-visible::after {
+    transform: translate(3px, 1px) rotate(45deg);
+  }
+
+  .home-section--story .home-text-link:focus-visible {
+    outline: 1px solid var(--color-accent-soft);
+    outline-offset: 5px;
+  }
+
+  .home-section--story .motion-reveal--photo {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity var(--motion-image) var(--ease-image),
+      transform var(--motion-image) var(--ease-image);
+  }
+
+  .home-section--story .motion-reveal--photo.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .home-section--story .motion-reveal--editorial {
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+      opacity var(--motion-image) var(--ease-out) 160ms,
+      transform var(--motion-image) var(--ease-out) 160ms;
+  }
+
+  .home-section--story .motion-reveal--editorial.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (min-width: 1440px) {
+  .home-section--story {
+    min-height: 44rem;
+  }
+}
+
+@media (scripting: none) {
+  .home-section--story .motion-reveal--photo,
+  .home-section--story .motion-reveal--editorial,
+  .home-section--story .motion-reveal--drift {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-section--story .motion-reveal--drift,
+  .home-section--story .home-story__light {
+    transform: none;
+    transition: none;
+  }
+
+  .home-section--story .home-text-link::after,
+  .home-section--story .home-text-link:hover::after,
+  .home-section--story .home-text-link:focus-visible::after {
+    transition: none;
+    transform: translateY(1px) rotate(45deg);
+  }
+}
+
 /* ─── Carrusel productos (Novedades) ─── */
 
 .home-carousel {
@@ -1600,12 +1806,17 @@
 }
 
 .home-discover__name {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
   font-family: var(--font-body);
   font-size: 15px;
   line-height: 1.35;
   color: var(--color-text);
   text-decoration: none;
-  overflow-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .home-discover__colors {
