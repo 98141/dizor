@@ -135,3 +135,11 @@ exports.getTransaction = async (id) => {
   if (json?.data?.id !== id) throw new Error("Invalid provider response");
   return json.data;
 };
+
+exports.getPaymentLink = async (id) => {
+  const res = await fetch(`${getBaseUrl()}/payment_links/${encodeURIComponent(id)}`, { signal: AbortSignal.timeout(10000) });
+  if (!res.ok) throw new Error("Payment link verification unavailable");
+  const json = await res.json();
+  if (json?.data?.id !== id) throw new Error("Invalid payment link response");
+  return json.data;
+};

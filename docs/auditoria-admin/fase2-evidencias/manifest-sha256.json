@@ -1,0 +1,134 @@
+[
+  {
+    "file": "backend/package.json",
+    "sha256": "0060e3cd1c7e7b8a02c50a3c2f2a49470dc53a9bfb927d3f5735763e439f15c1"
+  },
+  {
+    "file": "backend/src/controllers/adminAlertController.js",
+    "sha256": "a2f69c254afa143bd5db37247ec977c3d9c38988862cb62b7d11cbaf729999be"
+  },
+  {
+    "file": "backend/src/controllers/checkoutController.js",
+    "sha256": "ae6aa52c9fc16781352418c9459eb3c9f2b6a60d7795b8882f5ece689bed9074"
+  },
+  {
+    "file": "backend/src/controllers/dashboardAdminController.js",
+    "sha256": "580d9edc1ac8d89d092a418efcb648e3afc15b942326a8990138fdb649577dec"
+  },
+  {
+    "file": "backend/src/controllers/notificationAdminController.js",
+    "sha256": "5db1a56050b6f6c597c7db10b6c11b7c88e45d5157ce34aa1dfbc205870ea482"
+  },
+  {
+    "file": "backend/src/controllers/orderAdminController.js",
+    "sha256": "c803d43d58e036f528a9931417c894688c270c89d4a25e64dfc5bc239026d535"
+  },
+  {
+    "file": "backend/src/models/notification.js",
+    "sha256": "c838a69bf6fcda1f1bfb22e7aecdf51fa56463658dedaf25d94ef03e51585d58"
+  },
+  {
+    "file": "backend/src/models/order.js",
+    "sha256": "5dec5bfda0dcd56e1a7f1cc05576f5e25504d655f912eea01844c90fb4d9c79f"
+  },
+  {
+    "file": "backend/src/models/paymentEvent.js",
+    "sha256": "4a6a449a731f04d4224a9fce3f4bfc05be87fab4270170ab5c3fb9c8189801a2"
+  },
+  {
+    "file": "backend/src/routes/adminOrderRoutes.js",
+    "sha256": "72c7f10e15aabc26b241a1e9f8aba2d51cca00b8cc68080543c6d82af3b3985d"
+  },
+  {
+    "file": "backend/src/server.js",
+    "sha256": "f9cafd328dd332bbb1365304728b95bf79bb2864832d0bc3ac22c87b6c689bfb"
+  },
+  {
+    "file": "backend/src/services/emailService.js",
+    "sha256": "584bdb3b590497e3855fe2c70db93f019f0b0c5236cbbb2f87406ec680fd7704"
+  },
+  {
+    "file": "backend/src/services/notificationDelivery.js",
+    "sha256": "39c60fcfcedc4012c39282d4eaeab63517af6e30b5f876b9e875cba1057abb6a"
+  },
+  {
+    "file": "backend/src/services/notificationEvents.js",
+    "sha256": "5d19765fbc8faee05641227c15b8449df40ae255dc542f53ce51ab9d956cebb3"
+  },
+  {
+    "file": "backend/src/services/notificationTemplates.js",
+    "sha256": "bc6f0c44ddba5a38143e13c0a9df4473974c6cda1d1c14129af1756eaaa7db80"
+  },
+  {
+    "file": "backend/src/services/orderOperations.js",
+    "sha256": "e54f9c7a59b35774062166b6bd1f056881e3bf35330c98319b715acadee5da8e"
+  },
+  {
+    "file": "backend/src/services/orderReceiptService.js",
+    "sha256": "f4a29fdedf2b9ea4b067eb569c04d8b9190a30fa44b6b782de1fc7a50c8d201a"
+  },
+  {
+    "file": "backend/src/services/orderService.js",
+    "sha256": "3cb6fc704746bca66f70753695bbdcbfc2d9f90bda1b66c62d0effe42510bd98"
+  },
+  {
+    "file": "backend/src/services/wompiPaymentService.js",
+    "sha256": "e6ae33a3361406a5aca8b54c973a8db5db2dd6756ee7f4801d19ee4a2825de8f"
+  },
+  {
+    "file": "backend/src/services/wompiService.js",
+    "sha256": "d5188f6a84819158a387489c902e5646e4d095193e27c793ed1e851c7b4e00af"
+  },
+  {
+    "file": "backend/test/helpers/phase2Fixture.cjs",
+    "sha256": "0cb2e5e0f7f2970570ea57f35d2e61cd5792255b9e783fad2834b21c2e013a6d"
+  },
+  {
+    "file": "backend/test/phase2-compatibility.test.js",
+    "sha256": "a340a1540f6dcacda71727cbe349fff89694526ea4e57b68bde2e58cbf9d3eb9"
+  },
+  {
+    "file": "backend/test/phase2.test.js",
+    "sha256": "106e08cf07d3a94aec350a763add5508c59f8ef83fc1e700d2973c6b6f08d099"
+  },
+  {
+    "file": "docs/auditoria-admin/fase2-evidencias/build-fase2.cjs",
+    "sha256": "aea1d81fc2f202c2fd4769388f223e926e168a936bd38623176b3d9e7d466c0c"
+  },
+  {
+    "file": "docs/auditoria-admin/fase2-evidencias/verificar-estatico.cjs",
+    "sha256": "eb92e40f0889de3e50c7a7496529e43f3b6016442f332b9e12135961b9a3393e"
+  },
+  {
+    "file": "frontend/src/app/admin/alertas/page.js",
+    "sha256": "fa23f3d36d25bcb2090bd87c6a0a4b245c129f97caa05ac6b610e5a550f9307b"
+  },
+  {
+    "file": "frontend/src/components/admin/AlertBell.jsx",
+    "sha256": "67cb5fe025456f94d8053492d27a723111ef9bb6e4051118bf64adb5bbf23200"
+  },
+  {
+    "file": "frontend/src/components/admin/CommunicationAlerts.jsx",
+    "sha256": "e43b51add6e037ddf97e53a7b321a3fcb0b2997ae948ccc8bd01c0729bbd8e69"
+  },
+  {
+    "file": "frontend/src/components/admin/OrderCommunications.jsx",
+    "sha256": "a94c29012fe19f424943ff022a6c08dd1cd4bd7eff1099a690936ca919f414a7"
+  },
+  {
+    "file": "frontend/src/components/admin/OrderCommunications.module.css",
+    "sha256": "48bcf1e6994eb83c612e611cbd65b88f452cc0edb300164f4a1793ac0e6f03fc"
+  },
+  {
+    "file": "frontend/src/components/admin/OrderDetail.jsx",
+    "sha256": "502b3716bfd887fcd1db6047afd9dbbee73ebaf44da2e818682fb1b87d3c7f99"
+  },
+  {
+    "file": "frontend/src/services/orderAdminService.js",
+    "sha256": "db26f88173ad2028b290d21568f5289634509a3979902319a725213c0cf82e62"
+  },
+  {
+    "file": "frontend/test/communications-browser.cjs",
+    "sha256": "e0a5c5e246ca6d1fa93fc5b852e94eeaf37f027ec61ad2980084225891487cd2"
+  }
+]

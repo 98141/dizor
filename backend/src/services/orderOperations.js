@@ -11,11 +11,14 @@ exports.addIncident = (order, code, detail = "") => {
 exports.history = (order, note, user) => order.statusHistory.push({
   status: order.orderStatus, note, changedBy: user?.id || null, changedAt: new Date(),
 });
-exports.mutateOrder = (id, work) => inTransaction(async (session) => {
+exports.mutateOrder = (id, work, options = {}) => inTransaction(async (session) => {
   const order = await Order.findById(id).session(session);
   if (!order) throw new AppError("Pedido no encontrado", 404);
+  const previous = { status: order.orderStatus, tracking: `${order.carrier}|${order.trackingNumber}` };
   const result = await work(order, session);
-  await order.save({ session, validateModifiedOnly: true });
+  if (`${order.carrier}|${order.trackingNumber}` !== previous.tracking) order.shippingRevision = (order.shippingRevision || 0) + 1;
+  await require("./notificationEvents").orderChanged(order, previous, session);
+  await order.save({ session, validateModifiedOnly: true, ...(options.timestamps === false ? { timestamps: false } : {}) });
   return { order, ...result };
 });
 exports.transition = async (order, status, user, note, session) => {

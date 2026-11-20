@@ -22,7 +22,6 @@ const {
   normalizePhone,
 } = require("../services/nequiPaymentService");
 const { markAbandonedCartRecovered } = require("../services/marketingService");
-const { sendNewOrderAdminEmail } = require("../services/emailService");
 const { sendOrderReceiptOnce } = require("../services/orderReceiptService");
 const { requireAuthorization, recordConsent } = require("../services/consentService");
 const { PURPOSES, getText } = require("../config/legalTexts");
@@ -460,18 +459,15 @@ const createCheckoutOrder = async (req, res, next) => {
     });
   }
 
-  await Order.updateOne({ _id: order._id }, { $set: { checkoutState: "ready" } });
+  await mutateOrder(order._id, async (current, session) => {
+    current.checkoutState = "ready";
+    await require("../services/notificationEvents").orderRegistered(current, session);
+  });
   const accessToken = await grantOrderAccess(order._id);
 
   // Acuse de recibo al comprador (H-20): idempotente; un fallo no bloquea el
   // pedido y queda registrado en order.buyerReceipt para reintento.
   await sendOrderReceiptOnce(order._id);
-
-  try {
-    await sendNewOrderAdminEmail(order);
-  } catch (err) {
-    console.error("[Dizor] No se pudo enviar el correo de notificación de pedido:", err.message);
-  }
 
   res.status(201).json({
     accessToken,
@@ -662,6 +658,7 @@ exports.cancelMyOrder = catchAsync(async (req, res, next) => {
   }
   await mutateOrder(order._id, async (current, session) => {
     if (String(current.user) !== String(req.user.id) || !canSelfCancel(current)) throw new AppError("El pedido ya no puede autocancelarse", 409);
+    current.cancelledByCustomer = true;
     await transition(current, "cancelado", { ...req.user.toObject?.(), id: req.user.id, role: "admin" }, "Cancelado por el cliente antes de preparación", session);
   });
   res.status(200).json({ status: "success", message: "Pedido cancelado", order: { orderNumber: order.orderNumber, orderStatus: "cancelado" } });

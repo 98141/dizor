@@ -8,7 +8,6 @@ const {
 } = require("../utils/orderPermissions");
 const { mutateOrder, transition, history } = require("../services/orderOperations");
 const { allowedTransitions, assertCollection } = require("../services/orderTransitions");
-const { sendOrderShippedEmail } = require("../services/emailService");
 
 const formatOrderList = (order) => ({
   id: order._id,
@@ -125,9 +124,6 @@ exports.updateOrderStatus = catchAsync(async (req, res) => {
   });
   if (changed) safeLog(logAuditEvent({ req, user: req.user, action: "order_status_changed", module: "orders",
     entityId: order._id, entityType: "order", summary: `Pedido ${order.orderNumber}: ${order.orderStatus}` }));
-  if (changed && order.orderStatus === "enviado") {
-    try { await sendOrderShippedEmail(order); } catch (err) { console.error("[Dizor] Correo de despacho pendiente", err.message); }
-  }
   res.status(200).json({ status: "success", message: "Estado actualizado", order: formatOrderList(order) });
 });
 
@@ -153,7 +149,7 @@ exports.confirmPayment = catchAsync(async (req, res) => {
 });
 
 exports.updateShipping = catchAsync(async (req, res) => {
-  const { order, changed } = await mutateOrder(req.params.id, async (order, session) => {
+  const { order } = await mutateOrder(req.params.id, async (order, session) => {
     if (!["en_preparacion", "enviado"].includes(order.orderStatus) || order.requiresReview
         || (order.paymentMethod !== "contra_entrega" && order.paymentStatus !== "pagado")) {
       throw new AppError("No se puede registrar una guía en este estado", 409);
@@ -170,9 +166,6 @@ exports.updateShipping = catchAsync(async (req, res) => {
     if (!changed && previous !== `${order.carrier}|${order.trackingNumber}|${order.shippingNotes}`) history(order, `Guía corregida: ${order.trackingNumber}`, req.user);
     return { changed };
   });
-  if (changed) {
-    try { await sendOrderShippedEmail(order); } catch (err) { console.error("[Dizor] Correo de despacho pendiente", err.message); }
-  }
   res.status(200).json({ status: "success", message: "Guía guardada", order: formatOrderList(order) });
 });
 

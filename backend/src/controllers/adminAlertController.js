@@ -51,10 +51,11 @@ exports.getAlerts = catchAsync(async (req, res) => {
       0
     );
     const active = (p.variants || []).filter((v) => v.isActive !== false);
-    if (active.some((v) => v.stock === 0)) {
-      outOfStockProducts.push({ id: p._id, name: p.name, slug: p.slug, totalStock: 0 });
+    const affectedVariants = active.filter((v) => v.stock <= LOW_STOCK_THRESHOLD).map((v) => ({ id: v._id, sku: v.sku, stock: v.stock }));
+    if (active.length === 0 || active.some((v) => v.stock === 0)) {
+      outOfStockProducts.push({ id: p._id, name: p.name, slug: p.slug, totalStock, affectedVariants, unavailable: active.every((v) => v.stock === 0) });
     } else if (active.some((v) => v.stock <= LOW_STOCK_THRESHOLD)) {
-      lowStockProducts.push({ id: p._id, name: p.name, slug: p.slug, totalStock });
+      lowStockProducts.push({ id: p._id, name: p.name, slug: p.slug, totalStock, affectedVariants });
     }
   }
 
@@ -62,6 +63,7 @@ exports.getAlerts = catchAsync(async (req, res) => {
   lowStockProducts.sort((a, b) => a.totalStock - b.totalStock);
 
   const alerts = {
+    communications: await require("./notificationAdminController").communicationAlerts(),
     newOrders: {
       count: newOrders.length,
       items: newOrders.slice(0, 10),

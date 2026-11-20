@@ -145,6 +145,7 @@
   /* ── Radios / sombras / espacio ── */
   --radius-sm: 2px;
   --radius-md: 4px;
+  --radius-btn: 8px;
   --shadow-card: 0 4px 20px rgba(26, 26, 26, 0.06);
   --space-xs: 0.5rem;
   --space-sm: 0.75rem;

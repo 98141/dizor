@@ -41,8 +41,18 @@ export default function ProductCarousel({
   const scrollBy = (dir) => {
     const el = trackRef.current;
     if (!el) return;
-    const amount = Math.min(360, el.clientWidth * 0.85);
+    const item = el.querySelector(".home-carousel__item");
+    const gap = parseFloat(getComputedStyle(el).columnGap) || 0;
+    const amount = item
+      ? item.getBoundingClientRect().width + gap
+      : el.clientWidth;
     el.scrollBy({ left: dir * amount, behavior: "smooth" });
+  };
+
+  const onTrackKeyDown = (event) => {
+    if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+    event.preventDefault();
+    scrollBy(event.key === "ArrowRight" ? 1 : -1);
   };
 
   if (!products.length) return null;
@@ -86,7 +96,12 @@ export default function ProductCarousel({
           </button>
         </div>
       )}
-      <div className="home-carousel__track" ref={trackRef} tabIndex={0}>
+      <div
+        className="home-carousel__track"
+        ref={trackRef}
+        tabIndex={0}
+        onKeyDown={onTrackKeyDown}
+      >
         {products.map((product, i) => (
           <div key={product.id} className="home-carousel__item">
             <ProductCard

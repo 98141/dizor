@@ -1,0 +1,11 @@
+.panel { min-width: 0; overflow-wrap: anywhere; }
+.hint { color: var(--color-text-muted); font-size: 0.8rem; line-height: 1.6; }
+.item { border-top: 1px solid var(--color-border); margin-top: 1rem; padding-top: 1rem; }
+.item h3 { font-family: var(--font-ui); font-size: 0.9rem; }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; margin-top: 0.7rem; }
+.confirm { min-width: 0; border: 1px solid var(--color-border); padding: 0.8rem; margin: 1rem 0; }
+.confirm label { display: block; margin: 0.8rem 0; line-height: 1.6; }
+.confirm input:not([type="checkbox"]) { display: block; box-sizing: border-box; width: 100%; margin-top: 0.4rem; }
+.panel button { white-space: normal; }
+.panel button:focus-visible, .confirm input:focus-visible { outline: 2px solid var(--color-accent-text); outline-offset: 3px; }
+@media (max-width: 420px) { .actions { align-items: stretch; flex-direction: column; } .actions button { width: 100%; } }

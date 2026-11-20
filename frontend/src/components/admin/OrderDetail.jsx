@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import OrderCommunications from "./OrderCommunications";
 import { useAuth } from "@/context/AuthContext";
 import { useSiteConfig } from "@/context/SiteConfigContext";
 import {
@@ -452,6 +453,7 @@ export default function OrderDetail({ orderId, backHref }) {
             </button>
           </div>
 
+          <OrderCommunications key={orderId} orderId={orderId} />
           {order.statusHistory?.length > 0 && (
             <div className="order-detail-card">
               <h2>Historial</h2>

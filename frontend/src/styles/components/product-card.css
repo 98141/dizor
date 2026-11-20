@@ -117,7 +117,7 @@
   z-index: 3;
   width: 2.25rem;
   height: 2.25rem;
-  border-radius: 0;
+  border-radius: var(--radius-btn);
   background: rgba(255, 255, 255, 0.92);
   color: var(--color-text);
   box-shadow: 0 1px 4px rgba(26, 26, 26, 0.08);

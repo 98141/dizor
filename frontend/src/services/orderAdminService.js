@@ -1,4 +1,7 @@
 import api from "./api";
+export const getOrderCommunications = async (id, page = 1) => (await api.get(`/admin/orders/${id}/communications`, { params: { page } })).data;
+export const retryOrderCommunication = async (id, notificationId) => (await api.post(`/admin/orders/${id}/communications/${notificationId}/retry`)).data;
+export const resendOrderCommunication = async (id, notificationId, data) => (await api.post(`/admin/orders/${id}/communications/${notificationId}/resend`, data)).data;
 
 export const reconcileWompi = async (id) => (await api.post(`/admin/orders/${id}/reconcile-wompi`)).data;
 

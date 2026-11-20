@@ -84,6 +84,7 @@ exports.processTransaction = async (orderId, tx, evidence = {}) => {
         if (["DECLINED", "ERROR", "VOIDED"].includes(tx.status)) order.paymentStatus = "rechazado";
         history(order, `Wompi ${tx.status}: ${tx.id}. No se cancela el pedido automáticamente.`);
       }
+      await require("./notificationEvents").paymentResult(order, tx, session);
       await order.save({ session, validateModifiedOnly: true });
       receipt.processedAt = new Date(); receipt.lastError = "";
       await receipt.save({ session });
@@ -94,6 +95,12 @@ exports.processTransaction = async (orderId, tx, evidence = {}) => {
       await Order.updateOne({ _id: orderId, incidents: { $not: { $elemMatch: { code: "payment_processing_failed", detail: tx.id, resolvedAt: null } } } }, { $set: { requiresReview: true }, $push: {
         incidents: { code: "payment_processing_failed", detail: tx.id },
       } });
+      // The financial fact and incident already survive a failed fulfillment.
+      // Queue its alert separately if storage is available; the durable inbox
+      // and visible incident remain the recovery source if it is not.
+      try {
+        await require("./orderOperations").mutateOrder(orderId, async () => {});
+      } catch { /* Original failure remains non-2xx for provider retry. */ }
     }
     throw err; // non-2xx asks provider to retry; evidence is already durable
   }

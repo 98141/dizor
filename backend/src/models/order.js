@@ -118,6 +118,9 @@ const orderSchema = new mongoose.Schema(
       default: "",
     },
     trackingNumber: { type: String, default: "" },
+    shippingRevision: { type: Number, default: 0 },
+    cancelledByCustomer: { type: Boolean, default: false },
+    notificationReviewCheckedAt: { type: Date, default: null },
     shippingNotes: { type: String, default: "" },
     customerNotes: { type: String, default: "" },
     assignedTo: {

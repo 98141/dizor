@@ -30,7 +30,13 @@ if (process.env.NODE_ENV === "production" && process.env.WOMPI_ENV !== "producti
   process.exit(1);
 }
 
-connectDB();
+let stopNotifications = () => {};
+connectDB().then(async () => {
+  await require("./models/notification").init();
+  if (process.env.TRANSACTIONAL_NOTIFICATIONS_ENABLED === "true") {
+    stopNotifications = require("./services/notificationDelivery").startWorker();
+  }
+}).catch(() => logger.error("Notification outbox initialization pending"));
 
 const server = app.listen(PORT, () => {
   logger.info("Servidor iniciado", {
@@ -38,6 +44,7 @@ const server = app.listen(PORT, () => {
     env: process.env.NODE_ENV || "development",
   });
 });
+server.on("close", () => stopNotifications());
 
 process.on("unhandledRejection", (err) => {
   logger.error("Unhandled Rejection — cerrando servidor", {

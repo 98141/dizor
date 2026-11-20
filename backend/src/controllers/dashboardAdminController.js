@@ -133,6 +133,7 @@ exports.getDashboard = catchAsync(async (req, res) => {
   res.status(200).json({
     status: "success",
     dashboard: {
+      communications: await require("./notificationAdminController").communicationAlerts(),
       orders: {
         total: ordersTotal,
         pendingPayment,

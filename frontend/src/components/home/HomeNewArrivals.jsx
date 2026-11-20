@@ -33,6 +33,7 @@ export default async function HomeNewArrivals() {
     <section
       className="home-section home-section--arrivals"
       aria-labelledby="home-arrivals-heading"
+      data-count={newProducts.length}
     >
       <div className="home-container">
         <HomeSectionIntro

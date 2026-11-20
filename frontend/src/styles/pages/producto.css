@@ -775,7 +775,7 @@
   min-height: 44px;
   padding: 0.5rem 1rem;
   border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-btn);
   background: var(--color-bg-card);
   color: var(--color-text);
   cursor: pointer;
@@ -944,7 +944,7 @@
   flex-shrink: 0;
   align-items: stretch;
   border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-btn);
   overflow: hidden;
 }
 
@@ -994,7 +994,7 @@
   background: var(--color-primary);
   color: #fff;
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-btn);
   font-family: var(--font-ui);
   font-size: 1rem;
   font-weight: var(--weight-medium);
@@ -1928,7 +1928,7 @@
   min-width: 12rem;
   padding: 0.65rem 1.5rem;
   border: 1px solid var(--color-text);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-btn);
   background: #fff;
   color: var(--color-text);
   font-family: var(--font-ui);
@@ -2474,7 +2474,7 @@
   min-width: 7.5rem;
   padding: 0 1.1rem;
   border: 0;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-btn);
   background: var(--color-primary);
   color: #fff;
   font-family: var(--font-ui);

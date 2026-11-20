@@ -1,5 +1,6 @@
 const express = require("express");
 const orderAdminController = require("../controllers/orderAdminController");
+const communications = require("../controllers/notificationAdminController");
 const { protect } = require("../middlewares/authMiddleware");
 const { authorizeRoles } = require("../middlewares/roleMiddleware");
 
@@ -14,6 +15,9 @@ router.get("/stats", orderAdminController.getOrderStats);
 router.get("/export/pdf", orderAdminController.exportOrdersPdf);
 router.get("/", orderAdminController.getOrders);
 router.get("/:id", orderAdminController.getOrder);
+router.get("/:id/communications", communications.list);
+router.post("/:id/communications/:notificationId/retry", authorizeRoles("superadmin", "admin"), communications.retry);
+router.post("/:id/communications/:notificationId/resend", authorizeRoles("superadmin", "admin"), communications.resend);
 router.patch("/:id/status", orderAdminController.updateOrderStatus);
 router.patch("/:id/payment", orderAdminController.confirmPayment);
 router.post("/:id/reconcile-wompi", authorizeRoles("superadmin", "admin"), orderAdminController.reconcileWompi);

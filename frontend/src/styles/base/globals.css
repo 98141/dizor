@@ -121,7 +121,7 @@ textarea {
 
 .modal-action-btn {
   padding: 0.55rem 1.1rem;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-btn);
   border: 1.5px solid var(--color-border, #e6e6e6);
   background: transparent;
   cursor: pointer;

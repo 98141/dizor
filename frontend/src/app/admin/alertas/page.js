@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import AdminShell from "@/components/admin/AdminShell";
+import CommunicationAlerts from "@/components/admin/CommunicationAlerts";
 import { getAlerts } from "@/services/adminAlertService";
 
 const REFRESH_INTERVAL = 60_000;
@@ -166,7 +167,7 @@ export default function AlertasPage() {
               />
               <SummaryCard
                 count={alerts.pendingPayments?.count ?? 0}
-                label="Pagos por confirmar"
+                label="Pedidos por conciliar"
                 color="#d97706"
                 href="/admin/pedidos"
               />
@@ -247,6 +248,7 @@ export default function AlertasPage() {
               </div>
             </AlertSection>
 
+            <CommunicationAlerts alerts={alerts.communications} />
             {/* ── Pedidos por conciliar ── */}
             <AlertSection
               id="pendingPayments"
@@ -321,7 +323,7 @@ export default function AlertasPage() {
                   <tbody>
                     {alerts.lowStock.items.map((p) => (
                       <tr key={p.id}>
-                        <td>{p.name}</td>
+                        <td>{p.name}{p.affectedVariants?.length > 0 && <small style={{ display: "block" }}>{p.affectedVariants.map((v) => `${v.sku}: ${v.stock} uds`).join(" · ")}</small>}</td>
                         <td>
                           <span className="alert-stock alert-stock--low">
                             {p.totalStock} ud{p.totalStock !== 1 ? "s" : ""}
@@ -342,7 +344,7 @@ export default function AlertasPage() {
             {/* ── Sin stock ── */}
             <AlertSection
               id="outOfStock"
-              title="Productos agotados"
+              title="Variantes agotadas o sin disponibilidad"
               count={alerts.outOfStock?.count ?? 0}
               color="#dc2626"
               dot="🔴"
@@ -361,9 +363,9 @@ export default function AlertasPage() {
                   <tbody>
                     {alerts.outOfStock.items.map((p) => (
                       <tr key={p.id}>
-                        <td>{p.name}</td>
+                        <td>{p.name}{p.affectedVariants?.length > 0 && <small style={{ display: "block" }}>{p.affectedVariants.map((v) => `${v.sku}: ${v.stock} uds`).join(" · ")}</small>}</td>
                         <td>
-                          <span className="alert-stock alert-stock--out">Agotado</span>
+                          <span className="alert-stock alert-stock--out">{p.unavailable ? "Sin variantes disponibles" : "Variante agotada"}</span>
                         </td>
                         <td>
                           <Link href="/admin/inventario" className="alert-link">

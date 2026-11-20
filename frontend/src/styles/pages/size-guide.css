@@ -163,7 +163,7 @@
   width: auto;
   padding: 0 1.1rem;
   border: none;
-  border-radius: 0;
+  border-radius: var(--radius-btn);
   background: var(--color-primary);
   color: var(--color-primary-contrast);
   cursor: pointer;

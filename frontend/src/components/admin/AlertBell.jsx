@@ -8,10 +8,11 @@ const REFRESH_INTERVAL = 60_000;
 const DISMISSED_KEY = "dizor_dismissed_alerts";
 
 const ALERT_META = {
+  communications: { label: "Comunicaciones por revisar", color: "#d97706", dot: "🟡" },
   newOrders:       { label: "Pedidos nuevos (24h)",        color: "#dc2626", dot: "🔴" },
   pendingPayments: { label: "Pedidos por conciliar",   color: "#d97706", dot: "🟡" },
   lowStock:        { label: "Stock bajo",                  color: "#d97706", dot: "🟡" },
-  outOfStock:      { label: "Sin stock",                   color: "#dc2626", dot: "🔴" },
+  outOfStock:      { label: "Variantes agotadas",                   color: "#dc2626", dot: "🔴" },
   specialRequests: { label: "Solicitudes sin atender",     color: "#d97706", dot: "🟡" },
   expiringCoupons: { label: "Cupones por vencer (3 días)", color: "#7c3aed", dot: "🟣" },
 };
@@ -142,6 +143,12 @@ export default function AlertBell() {
                       </span>
                     </div>
 
+                    {key === "communications" && group.items.slice(0, 3).map((item) => (
+                      <Link key={item.id} href={`/admin/pedidos/${item.orderId}`} className="alert-bell__item" onClick={() => setOpen(false)}>
+                        <span className="alert-bell__item-main">{item.orderNumber || "Ver pedido"}</span>
+                        <span className="alert-bell__item-sub">{item.message}</span>
+                      </Link>
+                    ))}
                     {key === "newOrders" && group.items.slice(0, 3).map((o) => (
                       <Link
                         key={o._id}

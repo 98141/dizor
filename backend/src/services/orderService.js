@@ -112,6 +112,7 @@ exports.createOrder = async ({
       }
       await created.save({ session });
     }
+    if (checkoutState === "ready") await require("./notificationEvents").orderRegistered(created, session);
     return created;
   });
 

@@ -9,6 +9,7 @@ const schema = new mongoose.Schema({
   amountInCents: Number, currency: String, reference: String, environment: String,
   checksum: String, providerTimestamp: Number,
   processedAt: { type: Date, default: null },
+  notificationQueuedAt: { type: Date, default: null },
   lastError: { type: String, default: "" },
 }, { timestamps: true });
 schema.index({ order: 1, createdAt: -1 });

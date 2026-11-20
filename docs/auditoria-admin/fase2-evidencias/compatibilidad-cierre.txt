@@ -1,0 +1,91 @@
+(node:8008) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:8008) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:8008) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:8008) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:8008) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:8008) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+17:24:22 [[32mhttp[39m]: POST /api/auth/login 200 501.764 ms - 168
+17:24:22 [[32mhttp[39m]: POST /api/auth/login 200 423.964 ms - 169
+17:24:23 [[32mhttp[39m]: POST /api/auth/login 200 417.000 ms - 174
+17:24:23 [[32mhttp[39m]: POST /api/auth/login 200 415.326 ms - 173
+17:24:23 [[32mhttp[39m]: GET /api/admin/finance/report?from=2026-11-19T22%3A24%3A23.811Z&to=2026-11-21T22%3A24%3A23.811Z 200 75.600 ms - 1638
+17:24:23 [[32mhttp[39m]: GET /api/admin/finance/history?from=2026-11-19T22%3A24%3A23.811Z&to=2026-11-21T22%3A24%3A23.811Z 200 10.461 ms - 196
+17:24:23 [[32mhttp[39m]: GET /api/admin/finance/report?from=2026-11-19T22%3A24%3A23.811Z&to=2026-11-21T22%3A24%3A23.811Z 200 25.013 ms - 2182
+17:24:23 [[32mhttp[39m]: GET /api/admin/finance/history?from=2026-11-19T22%3A24%3A23.811Z&to=2026-11-21T22%3A24%3A23.811Z 200 6.658 ms - 380
+✔ independiente sin cambios: scenarioFinanceGap (9903.4018ms)
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+17:24:24 [[32mhttp[39m]: POST /api/checkout/orders 400 151.026 ms - 65
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+17:24:24 [[32mhttp[39m]: POST /api/admin/catalog/products/6b00c8972cc969cb431af58d/stock 200 153.580 ms - 47
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+17:24:24 [[32mhttp[39m]: POST /api/admin/catalog/products/6b00c8972cc969cb431af58d/stock 200 205.840 ms - 48
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+17:24:24 [[32mhttp[39m]: POST /api/admin/catalog/products/6b00c8972cc969cb431af58d/stock 200 248.644 ms - 48
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+17:24:24 [[32mhttp[39m]: POST /api/admin/catalog/products/6b00c8972cc969cb431af58d/stock 200 284.219 ms - 48
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+17:24:24 [[32mhttp[39m]: POST /api/checkout/orders 201 515.308 ms - 371
+17:24:24 [[32mhttp[39m]: POST /api/admin/catalog/products/6b00c8972cc969cb431af58d/stock 200 486.042 ms - 47
+17:24:24 [[32mhttp[39m]: POST /api/checkout/orders 201 544.627 ms - 371
+17:24:24 [[32mhttp[39m]: POST /api/checkout/orders 201 576.215 ms - 371
+17:24:24 [[32mhttp[39m]: POST /api/checkout/orders 201 585.953 ms - 371
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:8008) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+17:24:24 [[32mhttp[39m]: POST /api/admin/catalog/products/6b00c8972cc969cb431af58d/stock 200 22.258 ms - 47
+17:24:24 [[32mhttp[39m]: POST /api/admin/catalog/products/6b00c8972cc969cb431af58d/stock 200 27.495 ms - 46
+17:24:24 [[32mhttp[39m]: POST /api/admin/catalog/products/6b00c8972cc969cb431af58d/stock 409 8.031 ms - 62
+✔ independiente sin cambios: scenarioStockRaces (687.2408ms)
+✔ independiente sin cambios: scenarioUiGuards (2.2246ms)
+17:24:24 [[32mhttp[39m]: GET /api/admin/finance/report?from=2026-11-19T22%3A24%3A24.646Z&to=2026-11-21T22%3A24%3A24.646Z 200 26.730 ms - 2828
+17:24:24 [[32mhttp[39m]: GET /api/admin/finance/history?from=2026-11-19T22%3A24%3A24.646Z&to=2026-11-21T22%3A24%3A24.646Z 200 8.114 ms - 380
+17:24:24 [[32mhttp[39m]: GET /api/admin/dashboard 200 28.970 ms - 3790
+17:24:24 [[32mhttp[39m]: GET /api/admin/finance/report?from=2026-11-19T22%3A24%3A24.646Z&to=2026-11-21T22%3A24%3A24.646Z 200 19.914 ms - 4338
+17:24:24 [[32mhttp[39m]: GET /api/admin/finance/history?from=2026-11-19T22%3A24%3A24.646Z&to=2026-11-21T22%3A24%3A24.646Z 200 4.925 ms - 387
+17:24:24 [[32mhttp[39m]: GET /api/admin/dashboard 200 23.399 ms - 3923
+✔ finanzas: cancelados, devueltos, reembolsados e incidencias activas no son ingresos conciliados (139.4725ms)
+17:24:24 [[32mhttp[39m]: GET /api/admin/finance/export/csv?from=2026-11-19T05%3A00%3A00.000Z&to=2026-11-22T04%3A59%3A59.999Z 200 24.150 ms - 715
+17:24:24 [[32mhttp[39m]: GET /api/admin/finance/export/xlsx?from=2026-11-19T05%3A00%3A00.000Z&to=2026-11-22T04%3A59%3A59.999Z 200 78.140 ms - 8545
+17:24:25 [[32mhttp[39m]: GET /api/admin/finance/export/pdf?from=2026-11-19T05%3A00%3A00.000Z&to=2026-11-22T04%3A59%3A59.999Z 200 73.944 ms - 1878
+✔ finanzas: indicadores, métodos, tendencia y exportaciones contienen solo las mismas ventas (230.2205ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13775.4242

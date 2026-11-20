@@ -1,5 +1,4 @@
 import { getHomeContent } from "@/services/cmsService";
-import { getWhatsAppUrl } from "@/lib/whatsapp";
 import HomeServiceCard from "./HomeServiceCard";
 
 /** Personalización — composición dentro de «Hecho para ti» (HomeServices). */
@@ -9,9 +8,6 @@ export default async function HomePersonalization() {
   const homeImages = cmsData?.homeImages || {};
   const personalizacionImage =
     homeImages.personalizacion?.[0]?.url || personalizacion.imageUrl || "";
-  const waPersonalizar = getWhatsAppUrl(
-    "Hola Dizor, quiero personalizar un sombrero."
-  );
 
   return (
     <HomeServiceCard
@@ -30,15 +26,6 @@ export default async function HomePersonalization() {
         href: personalizacion.ctaHref || "/personalizar",
         label: personalizacion.ctaLabel || "Personalizar",
       }}
-    >
-      <a
-        href={waPersonalizar}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="home-service__wa"
-      >
-        {personalizacion.whatsappHint || "También puedes escribirnos por WhatsApp"}
-      </a>
-    </HomeServiceCard>
+    />
   );
 }

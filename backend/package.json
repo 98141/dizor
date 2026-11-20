@@ -8,6 +8,7 @@
     "start": "node src/server.js",
     "test": "node --test test/*.test.js",
     "test:phase1": "node --test test/phase1.test.js",
+    "test:phase2": "node --test test/phase2.test.js",
     "seed:superadmin": "node src/scripts/seedSuperadmin.js",
     "seed:catalog": "node src/scripts/seedCatalog.js",
     "seed:settings": "node src/scripts/seedStoreSettings.js",
