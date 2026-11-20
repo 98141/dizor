@@ -6,23 +6,21 @@
 //   - "draft": versión de trabajo de la fase 1 (se mostraba con la marca
 //     "Texto en revisión"). Lo registrado con ella NO cuenta como
 //     autorización comercial y NO se regulariza retroactivamente.
-//   - "published": redacción definitiva preparada con los datos confirmados
-//     por el propietario (2026-11-16), apta para mostrarse sin marcas. La
-//     revisión jurídica externa sigue pendiente (`legalReview: "pending"`,
-//     ver docs/auditoria-privacidad/07-guia-revision-juridica.md). No se
-//     muestra al público como "pendiente": es el texto que el titular ve.
-//   - "approved": confirmado tras la revisión jurídica.
+//   - "published": redacción definitiva con los datos confirmados por el
+//     propietario, que la dio por vigente el 2026-11-20. Si más adelante
+//     cambia, se edita aquí y se sube la versión.
+//   - "approved": reservado por si se valida con asesoría externa.
 //   - "missing": no existe texto (no se muestra casilla ni se registra nada).
 //
 // Reglas de versión:
+//   - Textos cortos y directos (decisión del propietario, 2026-11-20); el
+//     detalle y la razón social están en la política enlazada.
 //   - La versión identifica el texto EXACTO que vio el titular. Si cambia una
 //     sola palabra, se SUBE la versión.
 //   - Pasar de "published" a "approved" sin cambiar el texto no exige nueva
 //     versión; la evidencia previa conserva el estado con que se registró.
 //   - El texto que se muestra y el que se registra salen de este archivo; los
 //     formularios del frontend los reciben de /api/consents/notices.
-
-const { BUSINESS } = require("./businessInfo");
 
 const PURPOSES = Object.freeze({
   ORDER_PROCESSING: "order_processing",
@@ -43,73 +41,55 @@ const MARKETING_PURPOSES = Object.freeze([
 const PRIVACY_POLICY_PATH = "/politica-de-privacidad";
 const TERMS_PATH = "/terminos-y-condiciones";
 
-const RESPONSIBLE = `${BUSINESS.legalName} (${BUSINESS.brand})`;
-
 const TEXTS = Object.freeze({
   [PURPOSES.ORDER_PROCESSING]: {
-    version: "2",
+    version: "3",
     status: "published",
-    legalReview: "pending",
     required: true,
-    label:
-      `Autorizo a ${RESPONSIBLE} a tratar mis datos de identificación y contacto (nombre, correo, teléfono y dirección) para gestionar mi pedido: confirmación, pago, facturación, envío, atención, garantía y solicitudes relacionadas, conforme a la Política de Tratamiento de Datos Personales.`,
+    label: "Autorizo a DIZOR a usar mis datos para gestionar mi pedido.",
   },
   [PURPOSES.ACCOUNT]: {
-    version: "2",
+    version: "3",
     status: "published",
-    legalReview: "pending",
     required: true,
-    label:
-      `Autorizo a ${RESPONSIBLE} a tratar mis datos para crear y administrar mi cuenta (inicio de sesión, direcciones, historial de pedidos y favoritos), conforme a la Política de Tratamiento de Datos Personales.`,
+    label: "Autorizo a DIZOR a usar mis datos para crear y administrar mi cuenta.",
   },
   [PURPOSES.SPECIAL_REQUEST]: {
-    version: "2",
+    version: "3",
     status: "published",
-    legalReview: "pending",
     required: true,
-    label:
-      `Autorizo a ${RESPONSIBLE} a tratar mis datos de contacto y la información de mi solicitud para responderla y cotizarla, conforme a la Política de Tratamiento de Datos Personales.`,
+    label: "Autorizo a DIZOR a usar mis datos para responder y cotizar mi solicitud.",
   },
   [PURPOSES.REVIEW_PUBLICATION]: {
-    version: "2",
+    version: "3",
     status: "published",
-    legalReview: "pending",
     required: true,
-    label:
-      "Autorizo que, si mi reseña se aprueba, se publiquen en este sitio el nombre que indique, la ciudad (si la indico), la calificación y el comentario. No se publican fotografías mías sin una autorización aparte.",
+    label: "Autorizo publicar mi nombre, ciudad, calificación y comentario si la reseña se aprueba.",
   },
   [PURPOSES.CUSTOMER_REQUEST]: {
-    version: "2",
+    version: "3",
     status: "published",
-    legalReview: "pending",
     required: true,
-    label:
-      `Autorizo a ${RESPONSIBLE} a tratar mis datos para registrar, tramitar y responder esta solicitud, conforme a la Política de Tratamiento de Datos Personales.`,
+    label: "Autorizo a DIZOR a usar mis datos para atender esta solicitud.",
   },
   [PURPOSES.MARKETING_NEWSLETTER]: {
-    version: "2",
+    version: "4",
     status: "published",
-    legalReview: "pending",
     required: false,
-    label:
-      `Quiero recibir por correo electrónico novedades y ofertas de ${BUSINESS.brand}. Es opcional, no condiciona ninguna compra y puedo darme de baja en cualquier momento desde el enlace incluido en cada correo.`,
+    label: "Quiero recibir novedades y ofertas de DIZOR por correo.",
   },
   [PURPOSES.MARKETING_CART_REMINDER]: {
-    version: "2",
+    version: "4",
     status: "published",
-    legalReview: "pending",
     required: false,
-    label:
-      `Quiero recibir por correo electrónico un recordatorio de los productos de este carrito. Es opcional y puedo darme de baja desde el enlace incluido en el correo.`,
+    label: "Quiero recibir un recordatorio de este carrito por correo.",
   },
   [PURPOSES.TERMS]: {
-    version: "1",
+    version: "2",
     status: "published",
-    legalReview: "pending",
     required: true,
     path: TERMS_PATH,
-    label:
-      "He leído y acepto los Términos y condiciones de compra, incluida la información sobre garantía, derecho de retracto, reversión del pago y cambios.",
+    label: "Acepto los Términos y condiciones de compra.",
   },
 });
 

@@ -22,8 +22,8 @@ export const BUSINESS = Object.freeze({
 // de entrada en vigor se fija al publicar (NEXT_PUBLIC_LEGAL_EFFECTIVE_DATE);
 // si no está definida no se muestra ninguna fecha.
 export const LEGAL_DOCS = Object.freeze({
-  privacy: { version: "2" },
-  cookies: { version: "3" },
+  privacy: { version: "4" },
+  cookies: { version: "4" },
   terms: { version: "1" },
   guarantees: { version: "1" },
   shipping: { version: "1" },

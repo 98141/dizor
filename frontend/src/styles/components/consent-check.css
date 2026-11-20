@@ -27,10 +27,6 @@
   text-decoration: underline;
 }
 
-.consent-check__optional {
-  opacity: 0.8;
-}
-
 .consent-check__draft {
   font-style: italic;
   opacity: 0.8;

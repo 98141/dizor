@@ -86,7 +86,7 @@ export default function CookiePreferencesPanel() {
 
         <h2 className="cookie-panel__title">Preferencias de cookies</h2>
         <p className="cookie-panel__intro">
-          Elige qué categorías opcionales quieres permitir. Puedes cambiar tu
+          Elige qué categorías quieres permitir. Puedes cambiar tu
           decisión cuando quieras desde &quot;Configurar cookies&quot; en el
           pie de página.
         </p>

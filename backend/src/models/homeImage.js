@@ -66,6 +66,20 @@ const homeImageSchema = new mongoose.Schema(
       ref: "WeaveType",
       default: null,
     },
+    /**
+     * Punto de enfoque opcional (porcentaje 0–100) para recortar la foto en
+     * marcos de proporción fija (galería Inspiración). Sin valor = centrado.
+     */
+    focalX: {
+      type: Number,
+      min: [0, "El enfoque horizontal debe estar entre 0 y 100"],
+      max: [100, "El enfoque horizontal debe estar entre 0 y 100"],
+    },
+    focalY: {
+      type: Number,
+      min: [0, "El enfoque vertical debe estar entre 0 y 100"],
+      max: [100, "El enfoque vertical debe estar entre 0 y 100"],
+    },
   },
   { timestamps: true }
 );

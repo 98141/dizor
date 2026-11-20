@@ -29,8 +29,8 @@ export default function CookieConsentBanner() {
   return (
     <div className="cookie-banner" role="region" aria-label="Aviso de cookies">
       <p className="cookie-banner__text">
-        Usamos almacenamiento necesario para que la tienda funcione y, solo
-        con tu permiso, {optionalParts.join(" y ")}.{" "}
+        Usamos cookies necesarias y, si aceptas,{" "}
+        {optionalParts.join(" y ")}.{" "}
         <a href="/politica-de-cookies">Política de cookies</a>
       </p>
       <div className="cookie-banner__actions">

@@ -1,9 +1,8 @@
 // Franja horaria para mensajes comerciales (H-05).
 //
-// INTERPRETACIÓN PENDIENTE DE REVISIÓN JURÍDICA: la aplicabilidad de la
-// Ley 2300 de 2023 (arts. 3 y 5) a los correos comerciales de DIZOR no está
-// confirmada (informe de auditoría, F.3). Se aplica de forma conservadora la
-// franja que recogen las compilaciones consultadas:
+// Criterio conservador: se aplica a los correos comerciales de DIZOR la
+// franja de la Ley 2300 de 2023 (arts. 3 y 5) que recogen las
+// compilaciones consultadas:
 //   lunes a viernes 7:00–19:00 y sábados 8:00–15:00, sin domingos ni festivos.
 //
 // Los festivos no se calculan aquí: no hay un calendario validado en el

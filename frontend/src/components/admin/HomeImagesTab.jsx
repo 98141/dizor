@@ -13,6 +13,12 @@ import {
   deleteAdminHomeImage,
 } from "@/services/adminHomeImageService";
 import { getCatalogFilters } from "@/services/productService";
+import InspirationFocalEditor from "@/components/admin/InspirationFocalEditor";
+import {
+  DEFAULT_INSPIRATION_RATIO,
+  frameRatio,
+  inspirationLayout,
+} from "@/lib/inspirationLayout";
 
 const SECTIONS = [
   { id: "hero", label: "Hero", hint: "Varias fotografías full-bleed ordenables. La de menor orden es la principal (LCP). Se muestran en crossfade en el inicio." },
@@ -44,6 +50,65 @@ function weaveOptionId(wt) {
   return String(wt._id || wt.id || "");
 }
 
+const INSPIRACION_UPLOAD_HELP =
+  "Recomendado: foto cuadrada de 2000 × 2000 px. Deja aire alrededor del producto, especialmente arriba y abajo. Revisa el encuadre en móvil y escritorio antes de guardar.";
+
+/** Ancho de la vista previa ≈ marco real a 1280 px (escritorio) y 390 px (móvil), a escala. */
+const DESKTOP_PREVIEW = {
+  lead: { width: 190, label: "protagonista" },
+  secondary: { width: 146, label: "secundaria" },
+  half: { width: 200, label: "media fila" },
+  grid: { width: 140, label: "en fila" },
+  single: { width: 200, label: "individual" },
+};
+const MOBILE_PREVIEW = {
+  pair: { width: 104, label: "en pareja" },
+  center: { width: 104, label: "centrada" },
+  wide: { width: 212, label: "a lo ancho" },
+  single: { width: 212, label: "individual" },
+};
+
+/**
+ * Marcos que tendrá la foto `index` dentro de `ratios` (fotos activas en
+ * orden), con las mismas reglas que la galería pública.
+ */
+function inspirationPreviews(ratios, index) {
+  const slot = inspirationLayout(ratios)[index];
+  if (!slot) return [];
+  const d = DESKTOP_PREVIEW[slot.desktop.kind];
+  const m = MOBILE_PREVIEW[slot.mobile.kind];
+  const pos = `posición ${index + 1} de ${ratios.length}`;
+  return [
+    {
+      key: "desktop",
+      label: `Escritorio · ${d.label} · ${slot.desktop.frame || "≈ 4:5"} · ${pos}`,
+      ratio: frameRatio(slot.desktop.frame),
+      width: d.width,
+    },
+    {
+      key: "mobile",
+      label: `Móvil · ${m.label} · ${slot.mobile.frame}`,
+      ratio: frameRatio(slot.mobile.frame),
+      width: m.width,
+    },
+  ];
+}
+
+/**
+ * Versión ligera para el editor de encuadre (misma proporción que el
+ * original): los originales pueden pesar varios MB.
+ */
+function editorPreviewUrl(url) {
+  return String(url || "").replace(
+    /^(https:\/\/res\.cloudinary\.com\/[^/]+\/image\/upload\/)/,
+    "$1c_limit,w_1200,q_auto,f_auto/"
+  );
+}
+
+function sameFocal(a, b) {
+  return (a ?? null) === (b ?? null);
+}
+
 export default function HomeImagesTab() {
   const [section, setSection] = useState("hero");
   const [images, setImages] = useState([]);
@@ -59,6 +124,22 @@ export default function HomeImagesTab() {
   const [linkHref, setLinkHref] = useState("");
   const [weaveType, setWeaveType] = useState("");
 
+  // Encuadre (solo Inspiración)
+  const [ratiosById, setRatiosById] = useState({});
+  const [savedFocalById, setSavedFocalById] = useState({});
+  const [newFocal, setNewFocal] = useState({ x: null, y: null });
+  const [newRatio, setNewRatio] = useState(null);
+  const newPreviewUrl = useMemo(
+    () => (file ? URL.createObjectURL(file) : ""),
+    [file]
+  );
+  useEffect(
+    () => () => {
+      if (newPreviewUrl) URL.revokeObjectURL(newPreviewUrl);
+    },
+    [newPreviewUrl]
+  );
+
   const load = useCallback(async () => {
     setLoading(true);
     clearMsg();
@@ -68,6 +149,14 @@ export default function HomeImagesTab() {
         getCatalogFilters().catch(() => null),
       ]);
       setImages(imagesData.images || []);
+      setSavedFocalById(
+        Object.fromEntries(
+          (imagesData.images || []).map((img) => [
+            img.id,
+            { focalX: img.focalX ?? null, focalY: img.focalY ?? null },
+          ])
+        )
+      );
       setWeaveTypes(filtersData?.filters?.weaveTypes || []);
     } catch (err) {
       showMsg(err.response?.data?.message || "Error al cargar imágenes", true);
@@ -103,7 +192,27 @@ export default function HomeImagesTab() {
     setTitulo("");
     setLinkHref("");
     setWeaveType("");
+    setNewFocal({ x: null, y: null });
+    setNewRatio(null);
   };
+
+  /** Fotos que verá el público (activas, en orden), con su proporción medida. */
+  const ratioOf = (img) => ratiosById[img.id] || DEFAULT_INSPIRATION_RATIO;
+  const previewsForCard = (img) => {
+    const list = sectionImages.filter((x) => x.activo || x.id === img.id);
+    return inspirationPreviews(list.map(ratioOf), list.findIndex((x) => x.id === img.id));
+  };
+  const previewsForNew = () => {
+    const list = sectionImages.filter((x) => x.activo);
+    return inspirationPreviews(
+      [...list.map(ratioOf), newRatio || DEFAULT_INSPIRATION_RATIO],
+      list.length
+    );
+  };
+  const setCardFocal = (id, focalX, focalY) =>
+    setImages((prev) =>
+      prev.map((x) => (x.id === id ? { ...x, focalX, focalY } : x))
+    );
 
   const applyWeaveSelection = (id, setTitle, setLink, setWeave) => {
     setWeave(id);
@@ -149,6 +258,8 @@ export default function HomeImagesTab() {
         linkHref,
         weaveType: section === "coleccion" ? weaveType : undefined,
         activo: true,
+        focalX: section === "inspiracion" ? newFocal.x : undefined,
+        focalY: section === "inspiracion" ? newFocal.y : undefined,
       });
       showMsg("Imagen subida");
       resetForm();
@@ -291,14 +402,41 @@ export default function HomeImagesTab() {
           </p>
         ) : null}
         <div className="auth-field">
-          <label className="auth-field__label">Archivo (obligatorio)</label>
+          <label className="auth-field__label" htmlFor="home-image-file">
+            Archivo (obligatorio)
+          </label>
           <input
+            id="home-image-file"
             type="file"
             accept="image/*"
             disabled={sectionFull || saving}
-            onChange={(e) => setFile(e.target.files?.[0] || null)}
+            aria-describedby={
+              section === "inspiracion" ? "home-image-file-help" : undefined
+            }
+            onChange={(e) => {
+              setFile(e.target.files?.[0] || null);
+              setNewFocal({ x: null, y: null });
+              setNewRatio(null);
+            }}
           />
+          {section === "inspiracion" ? (
+            <p id="home-image-file-help" className="focal-editor__note">
+              {INSPIRACION_UPLOAD_HELP}
+            </p>
+          ) : null}
         </div>
+        {section === "inspiracion" && newPreviewUrl && !sectionFull ? (
+          <InspirationFocalEditor
+            src={newPreviewUrl}
+            focalX={newFocal.x}
+            focalY={newFocal.y}
+            onChange={(x, y) => setNewFocal({ x, y })}
+            onRatio={setNewRatio}
+            previews={previewsForNew()}
+            idPrefix="focal-new"
+            disabled={saving}
+          />
+        ) : null}
         <AuthFormField
           label="Texto alternativo"
           name="altText"
@@ -376,19 +514,46 @@ export default function HomeImagesTab() {
           <div className="admin-grid-2">
             {sectionImages.map((img, idx) => (
               <article key={img.id} className="taxonomy-form-card">
-                <img
-                  src={img.url}
-                  alt={img.altText || img.titulo || "Home"}
-                  loading="lazy"
-                  decoding="async"
-                  style={{
-                    width: "100%",
-                    height: 160,
-                    objectFit: "cover",
-                    borderRadius: 4,
-                    border: "1px solid var(--color-border)",
-                  }}
-                />
+                {section === "inspiracion" ? (
+                  <>
+                    <InspirationFocalEditor
+                      src={editorPreviewUrl(img.url)}
+                      focalX={img.focalX ?? null}
+                      focalY={img.focalY ?? null}
+                      onChange={(x, y) => setCardFocal(img.id, x, y)}
+                      onRatio={(ratio) =>
+                        setRatiosById((prev) =>
+                          prev[img.id] === ratio
+                            ? prev
+                            : { ...prev, [img.id]: ratio }
+                        )
+                      }
+                      previews={previewsForCard(img)}
+                      idPrefix={`focal-${img.id}`}
+                      disabled={saving}
+                    />
+                    {!sameFocal(img.focalX, savedFocalById[img.id]?.focalX) ||
+                    !sameFocal(img.focalY, savedFocalById[img.id]?.focalY) ? (
+                      <p className="focal-editor__note" role="status">
+                        Encuadre sin guardar: pulsa «Guardar datos».
+                      </p>
+                    ) : null}
+                  </>
+                ) : (
+                  <img
+                    src={img.url}
+                    alt={img.altText || img.titulo || "Home"}
+                    loading="lazy"
+                    decoding="async"
+                    style={{
+                      width: "100%",
+                      height: 160,
+                      objectFit: "cover",
+                      borderRadius: 4,
+                      border: "1px solid var(--color-border)",
+                    }}
+                  />
+                )}
                 <p
                   style={{
                     fontSize: "0.8rem",
@@ -517,6 +682,12 @@ export default function HomeImagesTab() {
                           section === "coleccion"
                             ? img.weaveTypeId || null
                             : undefined,
+                        ...(section === "inspiracion"
+                          ? {
+                              focalX: img.focalX ?? null,
+                              focalY: img.focalY ?? null,
+                            }
+                          : {}),
                       })
                     }
                   >

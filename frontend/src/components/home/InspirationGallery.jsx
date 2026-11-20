@@ -4,29 +4,14 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { SHIMMER_BLUR_DATA_URL } from "@/lib/imagePlaceholder";
-import { DEFAULT_INSPIRATION_RATIO } from "@/lib/inspirationLayout";
+import {
+  DEFAULT_INSPIRATION_RATIO,
+  focusPosition,
+  inspirationLayout,
+  shapeOf,
+} from "@/lib/inspirationLayout";
 
 const SWIPE_THRESHOLD = 48;
-const TILE_SIZES =
-  "(max-width: 1023px) 46vw, (min-width: 1024px) 40vw";
-const TILE_SIZES_WIDE =
-  "(max-width: 1023px) 92vw, (min-width: 1024px) 40vw";
-
-/**
- * Encuadre móvil. La celda manda (1:1 o 2:1); la foto se adapta dentro.
- * Cover solo si el recorte es mínimo, o si un retrato cabe en la banda
- * ancha conservando la parte superior (sombrero y rostro).
- * Si cover cortaría un borde relevante, la foto se ve completa.
- */
-function frameFor(ratio, cellRatio) {
-  if (!ratio || ratio <= 0) return { fit: "cover", position: "center" };
-  const visible = Math.min(ratio, cellRatio) / Math.max(ratio, cellRatio);
-  if (visible >= 0.9) return { fit: "cover", position: "center" };
-  if (cellRatio > ratio && cellRatio >= 1.5 && visible >= 0.45) {
-    return { fit: "cover", position: "upper" };
-  }
-  return { fit: "contain", position: "center" };
-}
 
 function Icon({ path }) {
   return (
@@ -53,10 +38,10 @@ const ICON_NEXT = "M9 5l7 7-7 7";
 const ICON_EXTERNAL = "M14 5h5v5M19 5l-8 8M17 14v4a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h4";
 
 /**
- * Galería Inspiración. En móvil, mosaico de dos columnas (la última ocupa
- * el ancho si el total es impar). En escritorio, una foto protagonista y
- * las demás a su lado, cada una con su proporción.
- * @param {{ images: { id: string, url: string, alt: string, linkHref: string, ratio: number|null }[] }} props
+ * Galería Inspiración (reglas en lib/inspirationLayout). Marcos de
+ * proporción fija que la foto llena (cover) según su punto de enfoque.
+ * El orden del DOM es el orden editorial en todos los tamaños.
+ * @param {{ images: { id: string, url: string, alt: string, linkHref: string, ratio: number|null, focalX: number|null, focalY: number|null }[] }} props
  */
 export default function InspirationGallery({ images = [] }) {
   const [ratios, setRatios] = useState(() =>
@@ -98,22 +83,26 @@ export default function InspirationGallery({ images = [] }) {
   if (!images.length) return null;
 
   const count = images.length;
-  const grouped = count >= 3;
+  const layout = inspirationLayout(ratios);
 
   const renderItem = (img, idx) => {
-    const wide = idx === count - 1 && count % 2 === 1;
-    const frame = frameFor(ratios[idx], wide ? 2 : 1);
-    const fitClass =
-      frame.fit === "contain"
-        ? " is-contain"
-        : frame.position === "upper"
-          ? " is-upper"
-          : "";
+    const { mobile, sizes } = layout[idx];
+    const itemClass = [
+      "home-inspire__item",
+      idx === 0 ? "is-lead" : "",
+      mobile.kind === "wide" ? "is-m-wide" : "",
+      mobile.kind === "center" ? "is-m-center" : "",
+    ]
+      .filter(Boolean)
+      .join(" ");
     return (
       <div
         key={img.id}
-        className={`home-inspire__item${idx === 0 ? " is-lead" : ""}${wide ? " is-wide" : ""}`}
-        style={{ "--ar": ratios[idx].toFixed(4) }}
+        className={itemClass}
+        style={{
+          "--m-ar": mobile.css,
+          "--focus": focusPosition(img.focalX, img.focalY),
+        }}
       >
         <button
           type="button"
@@ -129,8 +118,8 @@ export default function InspirationGallery({ images = [] }) {
             src={img.url}
             alt=""
             fill
-            sizes={wide ? TILE_SIZES_WIDE : TILE_SIZES}
-            className={`home-inspire__photo${fitClass}`}
+            sizes={sizes}
+            className="home-inspire__photo"
             placeholder="blur"
             blurDataURL={SHIMMER_BLUR_DATA_URL}
             onLoad={(e) => handleLoad(idx, e)}
@@ -145,19 +134,11 @@ export default function InspirationGallery({ images = [] }) {
       <div
         className="home-inspire__gallery"
         data-count={count}
+        data-shape={count === 1 ? shapeOf(ratios[0]) : undefined}
         role="region"
         aria-label="Fotografías de inspiración"
       >
-        {grouped ? (
-          <>
-            <div className="home-inspire__lead">{renderItem(images[0], 0)}</div>
-            <div className="home-inspire__rest">
-              {images.slice(1).map((img, index) => renderItem(img, index + 1))}
-            </div>
-          </>
-        ) : (
-          images.map((img, idx) => renderItem(img, idx))
-        )}
+        {images.map((img, idx) => renderItem(img, idx))}
       </div>
 
       {openIndex !== null ? (

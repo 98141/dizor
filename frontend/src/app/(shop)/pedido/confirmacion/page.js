@@ -232,7 +232,7 @@ function RegistroPromptModal({ email, name, isOpen, onClose }) {
         </h2>
         <p className="confirm-modal__message">
           Crea una cuenta en segundos y consulta tus pedidos en cualquier
-          momento. Es opcional.
+          momento.
         </p>
         <form onSubmit={handleSubmit} noValidate>
           <AuthFormField

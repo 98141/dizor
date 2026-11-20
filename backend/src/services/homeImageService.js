@@ -11,6 +11,9 @@ exports.formatHomeImage = (doc) => ({
   titulo: doc.titulo || "",
   linkHref: doc.linkHref || "",
   weaveTypeId: doc.weaveType ? String(doc.weaveType) : null,
+  /** Enfoque 0–100; null = centrado (fotos anteriores al campo). */
+  focalX: typeof doc.focalX === "number" ? doc.focalX : null,
+  focalY: typeof doc.focalY === "number" ? doc.focalY : null,
   createdAt: doc.createdAt,
   updatedAt: doc.updatedAt,
 });

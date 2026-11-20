@@ -65,6 +65,8 @@ export default async function HomeInspiration() {
     alt: readableAlt(img.altText, idx),
     linkHref: img.linkHref || "",
     ratio: ratios[idx],
+    focalX: typeof img.focalX === "number" ? img.focalX : null,
+    focalY: typeof img.focalY === "number" ? img.focalY : null,
   }));
 
   return (

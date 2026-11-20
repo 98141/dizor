@@ -1,7 +1,7 @@
 # G. Guía de revisión jurídica — DIZOR
 
 > **Documento interno.** Punto de entrada para el abogado que revisará los textos y decisiones de la tienda en línea de DIZOR.
-> **No existe aprobación jurídica acreditada.** Los textos públicos se redactaron con los datos que confirmó el propietario el 2026-11-16 y se muestran sin marcas de borrador, pero su revisión jurídica sigue pendiente. Este documento no certifica cumplimiento.
+> **Decisión del propietario (2026-11-20):** los textos se dan por vigentes sin revisión jurídica previa; si hay que cambiarlos, los ajusta él directamente. Esta guía queda solo como referencia por si más adelante se consulta a un abogado. No existe aprobación jurídica acreditada y este documento no certifica cumplimiento.
 > Nada de lo descrito está desplegado. Fecha de preparación: 2026-11-16 (fase 3).
 
 ## 0. Cómo leer el expediente

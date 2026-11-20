@@ -23,6 +23,27 @@ async function resolveWeaveTypeId(raw) {
   return id;
 }
 
+/**
+ * Punto de enfoque (0–100). `undefined` = no se envió (no tocar);
+ * null / "" = quitarlo (vuelve a centrado). Fuera de rango → 400.
+ */
+function parseFocal(raw, label) {
+  if (raw === undefined) return undefined;
+  if (raw === null || raw === "" || raw === "null") return null;
+  const value = Number(raw);
+  if (!Number.isFinite(value) || value < 0 || value > 100) {
+    throw new AppError(`${label} debe ser un número entre 0 y 100`, 400);
+  }
+  return Math.round(value * 10) / 10;
+}
+
+function readFocalPoint(body) {
+  return {
+    focalX: parseFocal(body.focalX, "El enfoque horizontal"),
+    focalY: parseFocal(body.focalY, "El enfoque vertical"),
+  };
+}
+
 function catalogHrefForWeave(id) {
   return `/catalogo?weaveType=${id}`;
 }
@@ -60,6 +81,14 @@ exports.createHomeImage = catchAsync(async (req, res, next) => {
 
   if (!req.files?.length) {
     return next(new AppError("Debes subir una imagen desde el dispositivo", 400));
+  }
+
+  // Validar antes de subir a Cloudinary (evita archivos huérfanos).
+  let focal;
+  try {
+    focal = readFocalPoint(req.body);
+  } catch (err) {
+    return next(err);
   }
 
   if (seccion === "inspiracion") {
@@ -116,6 +145,8 @@ exports.createHomeImage = catchAsync(async (req, res, next) => {
     titulo: req.body.titulo || "",
     linkHref,
     weaveType: weaveTypeId,
+    ...(typeof focal.focalX === "number" ? { focalX: focal.focalX } : {}),
+    ...(typeof focal.focalY === "number" ? { focalY: focal.focalY } : {}),
   });
 
   safeLog(
@@ -144,6 +175,17 @@ exports.updateHomeImage = catchAsync(async (req, res, next) => {
   }
 
   const previous = formatHomeImage(image);
+
+  let focal;
+  try {
+    focal = readFocalPoint(req.body);
+  } catch (err) {
+    return next(err);
+  }
+  for (const key of ["focalX", "focalY"]) {
+    if (focal[key] === undefined) continue; // no enviado: se conserva
+    image[key] = focal[key] === null ? undefined : focal[key];
+  }
 
   if (req.body.altText !== undefined) image.altText = String(req.body.altText);
   if (req.body.titulo !== undefined) image.titulo = String(req.body.titulo);

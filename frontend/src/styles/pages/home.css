@@ -1098,6 +1098,86 @@
   display: contents;
 }
 
+/* Escritorio (1024): nombres, acción y cabecera. La cuadrícula sigue en 900px. */
+@media (min-width: 1024px) {
+  .home-section--craft .home-section__intro {
+    max-width: 40rem;
+    margin-inline: 0;
+    margin-bottom: 1.75rem;
+    text-align: start;
+  }
+
+  .home-section--craft .home-section__heading {
+    color: var(--color-text);
+  }
+
+  .home-section--craft .home-section__lead {
+    color: var(--color-text-muted);
+  }
+
+  .home-section--craft .home-collection-card__meta {
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.85rem 1rem;
+    margin-top: 1rem;
+  }
+
+  .home-section--craft .home-collection-card__name {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: var(--weight-regular);
+    line-height: 1.3;
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-text);
+    overflow-wrap: break-word;
+  }
+
+  .home-section--craft .home-collection-card__cta {
+    flex: 0 0 auto;
+    margin-left: auto;
+    font-family: var(--font-ui);
+    font-size: 0.9rem;
+    line-height: 1.3;
+    color: var(--color-accent-text);
+    text-decoration: none;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat;
+    background-position: left 100%;
+    background-size: 0% 1px;
+    padding-bottom: 0.1em;
+    transition: background-size 200ms var(--ease-out);
+  }
+
+  .home-section--craft .home-collection-card:hover .home-collection-card__cta,
+  .home-section--craft .home-collection-card:focus-visible .home-collection-card__cta {
+    color: var(--color-accent-text);
+    background-size: 100% 1px;
+  }
+
+  .home-section--craft .home-collection-card:focus-visible {
+    outline: 2px solid var(--color-accent-text);
+    outline-offset: 3px;
+  }
+
+  .home-section--craft .home-collection-card__media img,
+  .home-section--craft .home-collection-card__media span {
+    transition: none;
+  }
+
+  .home-section--craft .home-collection-card:hover .home-collection-card__media img {
+    transform: none;
+  }
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+  .home-section--craft .home-collection-card__cta {
+    transition: none;
+    background-size: 100% 1px;
+  }
+}
+
 /* ─── Historia (banda editorial) ─── */
 
 .home-section--story {
@@ -1216,8 +1296,8 @@
     align-items: center;
     min-height: 42.5rem;
     padding-block: clamp(5.75rem, 7vh, 8rem);
-    background-color: #201e19;
-    color: var(--color-text-inverse, #ffffff);
+    background-color: var(--color-surface-dark);
+    color: var(--color-text-inverse);
   }
 
   .home-section--story > .home-container {
@@ -1237,33 +1317,19 @@
 
   .home-story__light {
     position: absolute;
-    inset: -12% -8%;
+    inset: -10% -6%;
     background: radial-gradient(
-      ellipse 125% 95% at 28% 46%,
-      rgba(245, 195, 123, 0.16) 0%,
-      rgba(184, 115, 5, 0.07) 38%,
-      transparent 68%
+      ellipse 42% 70% at 26% 50%,
+      color-mix(in srgb, var(--color-accent-soft) 16%, transparent) 0%,
+      color-mix(in srgb, var(--color-accent-soft) 5%, transparent) 32%,
+      transparent 56%
     );
-    transform: translateX(-1.75rem);
-    transition: transform 3.6s var(--ease-out);
+    transform: none;
+    pointer-events: none;
   }
 
   .home-story__light.is-visible {
-    transform: translateX(0);
-  }
-
-  .home-story__fiber {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: min(46%, 36rem);
-    height: 5.25rem;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 720 96' fill='none'%3E%3Cpath d='M-30 22c120-14 210 12 340-4s210-6 340 8' stroke='%23f5c37b' stroke-opacity='.55' stroke-width='.8'/%3E%3Cpath d='M-20 44c140 10 220-16 360-2s200 14 330-8' stroke='%23f5c37b' stroke-opacity='.38' stroke-width='.7'/%3E%3Cpath d='M20 66c110-12 240 16 360 2s180-14 300 10' stroke='%23b87305' stroke-opacity='.4' stroke-width='.6'/%3E%3Cpath d='M-10 84c160-8 250 10 390 0s190-4 280 6' stroke='%23f5c37b' stroke-opacity='.22' stroke-width='.5'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    opacity: 0.7;
-    -webkit-mask-image: radial-gradient(125% 170% at 100% 0%, #000 0%, transparent 74%);
-    mask-image: radial-gradient(125% 170% at 100% 0%, #000 0%, transparent 74%);
+    animation: home-story-light-in 3s var(--ease-out) both;
   }
 
   .home-story--with-image {
@@ -1314,7 +1380,7 @@
     max-width: none;
     font-size: 1.133rem;
     line-height: 1.75;
-    color: color-mix(in srgb, #ffffff 90%, var(--color-accent-soft) 10%);
+    color: var(--color-text-inverse-muted);
   }
 
   .home-section--story .home-text-link {
@@ -1323,6 +1389,7 @@
     gap: 0.55rem;
     margin-top: 1.85rem;
     padding-bottom: 0.12rem;
+    color: var(--color-accent-soft);
     background-image: none;
     border-bottom: 1px solid currentColor;
     line-height: 1.2;
@@ -1353,29 +1420,45 @@
     outline-offset: 5px;
   }
 
-  .home-section--story .motion-reveal--photo {
-    opacity: 0;
-    transform: translateY(16px);
-    transition:
-      opacity var(--motion-image) var(--ease-image),
-      transform var(--motion-image) var(--ease-image);
+  .home-section--story .motion-reveal--photo,
+  .home-section--story .motion-reveal--editorial {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 
   .home-section--story .motion-reveal--photo.is-visible {
-    opacity: 1;
-    transform: none;
-  }
-
-  .home-section--story .motion-reveal--editorial {
-    opacity: 0;
-    transform: translateY(12px);
-    transition:
-      opacity var(--motion-image) var(--ease-out) 160ms,
-      transform var(--motion-image) var(--ease-out) 160ms;
+    animation: home-story-photo-in 600ms var(--ease-image) both;
   }
 
   .home-section--story .motion-reveal--editorial.is-visible {
-    opacity: 1;
+    animation: home-story-copy-in 600ms var(--ease-out) 120ms both;
+  }
+}
+
+@keyframes home-story-photo-in {
+  from {
+    transform: translateY(12px);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes home-story-copy-in {
+  from {
+    transform: translateY(10px);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes home-story-light-in {
+  from {
+    transform: translateX(-1.25rem);
+  }
+  to {
     transform: none;
   }
 }
@@ -1388,19 +1471,31 @@
 
 @media (scripting: none) {
   .home-section--story .motion-reveal--photo,
+  .home-section--story .motion-reveal--photo.is-visible,
   .home-section--story .motion-reveal--editorial,
-  .home-section--story .motion-reveal--drift {
+  .home-section--story .motion-reveal--editorial.is-visible,
+  .home-section--story .motion-reveal--drift,
+  .home-section--story .home-story__light,
+  .home-section--story .home-story__light.is-visible {
     opacity: 1;
     transform: none;
     transition: none;
+    animation: none;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .home-section--story .motion-reveal--photo,
+  .home-section--story .motion-reveal--photo.is-visible,
+  .home-section--story .motion-reveal--editorial,
+  .home-section--story .motion-reveal--editorial.is-visible,
   .home-section--story .motion-reveal--drift,
-  .home-section--story .home-story__light {
-    transform: none;
-    transition: none;
+  .home-section--story .home-story__light,
+  .home-section--story .home-story__light.is-visible {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
   }
 
   .home-section--story .home-text-link::after,
@@ -2292,8 +2387,10 @@
 }
 
 /* ─── Inspiración ───
-   Móvil: mosaico de dos columnas. Celdas 1:1; la última, 2:1 si el total es impar.
-   Escritorio: una protagonista y el resto a su lado, con su proporción. */
+   Reglas de composición en lib/inspirationLayout.js (mismo punto de cambio).
+   Móvil: dos columnas iguales; marcos 1:1 (4:3 si la fila es horizontal),
+   última impar 3:2 a lo ancho o 4:5 centrada. La foto llena el marco.
+   Desde 768 px: 5 fotos → protagonista + 2×2 (5:4); 2–4 → fila de iguales. */
 
 .home-section--inspire {
   border-top: 1px solid var(--color-border);
@@ -2317,24 +2414,25 @@
   min-width: 0;
 }
 
-.home-inspire__lead,
-.home-inspire__rest {
-  display: contents;
-}
-
 .home-inspire__item {
   min-width: 0;
 }
 
-.home-inspire__item.is-wide {
+.home-inspire__item.is-m-wide {
   grid-column: 1 / -1;
+}
+
+.home-inspire__item.is-m-center {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: calc((100% - var(--inspire-gap)) / 2);
 }
 
 .home-inspire__tile {
   position: relative;
   display: block;
   width: 100%;
-  aspect-ratio: 1;
+  aspect-ratio: var(--m-ar, 1 / 1);
   padding: 0;
   margin: 0;
   overflow: hidden;
@@ -2345,10 +2443,6 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-.home-inspire__item.is-wide .home-inspire__tile {
-  aspect-ratio: 2 / 1;
-}
-
 .home-inspire__tile:focus-visible,
 .home-inspire__follow a:focus-visible {
   outline: 2px solid var(--color-primary);
@@ -2357,16 +2451,22 @@
 
 .home-inspire__photo {
   object-fit: cover;
-  object-position: center;
+  object-position: var(--focus, 50% 50%);
 }
 
-.home-inspire__photo.is-contain {
-  object-fit: contain;
+/* Una sola foto: presentación individual centrada */
+.home-inspire__gallery[data-count="1"] {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 28rem;
+  margin-inline: auto;
 }
 
-.home-inspire__photo.is-upper {
-  object-fit: cover;
-  object-position: center 12%;
+.home-inspire__gallery[data-count="1"][data-shape="square"] {
+  max-width: 34rem;
+}
+
+.home-inspire__gallery[data-count="1"][data-shape="landscape"] {
+  max-width: 52rem;
 }
 
 .home-inspire__follow {
@@ -2377,67 +2477,54 @@
   margin-top: 0.85rem;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   .home-inspire__gallery {
     --inspire-gap: 0.75rem;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    align-items: start;
-    overflow: visible;
   }
 
-  .home-inspire__gallery[data-count="1"] {
-    max-width: 34rem;
-  }
-
-  .home-inspire__gallery[data-count="2"] {
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
-    max-width: none;
-  }
-
-  .home-inspire__gallery[data-count="3"],
-  .home-inspire__gallery[data-count="4"],
-  .home-inspire__gallery[data-count="5"] {
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.15fr);
-    max-width: none;
-  }
-
-  .home-inspire__lead,
-  .home-inspire__rest {
-    display: block;
-    min-width: 0;
-  }
-
-  .home-inspire__item,
-  .home-inspire__item.is-wide {
+  .home-inspire__item.is-m-wide,
+  .home-inspire__item.is-m-center {
     grid-column: auto;
+    justify-self: stretch;
     width: auto;
   }
 
-  .home-inspire__tile,
-  .home-inspire__item.is-wide .home-inspire__tile {
-    aspect-ratio: var(--ar, 4 / 5);
+  .home-inspire__gallery[data-count="2"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .home-inspire__photo.is-contain,
-  .home-inspire__photo.is-upper {
-    object-fit: cover;
-    object-position: center;
+  .home-inspire__gallery[data-count="3"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .home-inspire__rest {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--inspire-gap);
-    align-items: start;
+  .home-inspire__gallery[data-count="4"] {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
-  .home-inspire__rest .home-inspire__item:last-child:nth-child(odd) {
-    grid-column: 1 / -1;
+  .home-inspire__gallery[data-count="2"] .home-inspire__tile,
+  .home-inspire__gallery[data-count="5"] .home-inspire__tile {
+    aspect-ratio: 5 / 4;
   }
 
-  .home-section--inspire .home-container--wide {
-    max-width: min(1280px, 100%);
+  .home-inspire__gallery[data-count="3"] .home-inspire__tile,
+  .home-inspire__gallery[data-count="4"] .home-inspire__tile {
+    aspect-ratio: 1 / 1;
+  }
+
+  /* Protagonista: ocupa exactamente las dos filas y su separación,
+     sea cual sea la proporción del original. */
+  .home-inspire__gallery[data-count="5"] {
+    grid-template-columns: minmax(0, 1.3fr) repeat(2, minmax(0, 1fr));
+  }
+
+  .home-inspire__gallery[data-count="5"] .home-inspire__item.is-lead {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+
+  .home-inspire__gallery[data-count="5"] .is-lead .home-inspire__tile {
+    aspect-ratio: auto;
+    height: 100%;
   }
 }
 

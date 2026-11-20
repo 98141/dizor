@@ -34,7 +34,7 @@ const TREATMENTS = [
   },
   {
     what: "Reseñas",
-    data: "Nombre que indiques, ciudad (opcional), calificación y comentario.",
+    data: "Nombre que indiques, ciudad (si la indicas), calificación y comentario.",
     purpose: "Publicar la reseña en el sitio, solo si la apruebas al enviarla y tras su revisión.",
   },
   {
@@ -43,9 +43,9 @@ const TREATMENTS = [
     purpose: "Registrar, tramitar y responder la solicitud, y conservar su trazabilidad.",
   },
   {
-    what: "Novedades por correo (opcional)",
+    what: "Novedades por correo",
     data: "Correo y, si lo indicas, tu nombre.",
-    purpose: "Enviarte novedades y ofertas de DIZOR. Solo con tu autorización expresa; puedes darte de baja en cualquier momento.",
+    purpose: "Enviarte novedades y ofertas, solo si lo autorizas. Puedes darte de baja cuando quieras.",
   },
   {
     what: "Prueba de tus autorizaciones",
@@ -133,8 +133,7 @@ export default function PoliticaPrivacidadPage() {
         </p>
         <p className="content-page__body-p">
           El sitio no usa analítica de terceros ni publicidad personalizada. Las
-          estadísticas propias de visitas son opcionales y solo se activan si
-          las aceptas; el detalle está en la{" "}
+          estadísticas propias de visitas solo se activan si las aceptas; el detalle está en la{" "}
           <Link href="/politica-de-cookies">Política de Cookies</Link>.
         </p>
 

@@ -17,7 +17,6 @@ export default async function HomeStory() {
     <section className="home-section home-section--story">
       <div className="home-story__stage" aria-hidden="true">
         <MotionReveal variant="drift" className="home-story__light" />
-        <div className="home-story__fiber" />
       </div>
       <div className="home-container home-container--wide">
         <div
@@ -30,6 +29,7 @@ export default async function HomeStory() {
                   src={historiaImage}
                   alt={primary?.altText || "Historia Dizor"}
                   fill
+                  priority
                   sizes="(max-width: 899px) 100vw, (max-width: 1023px) 50vw, 600px"
                   className="home-story__img"
                 />

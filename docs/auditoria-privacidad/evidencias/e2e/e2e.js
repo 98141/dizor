@@ -631,7 +631,7 @@ async function checkout(page, buyer, { fillBuyer = true } = {}) {
       }
       await page.goto(FE + "/politica-de-cookies");
       const t = await page.textContent("body");
-      assert(t.includes("Estadísticas propias (opcionales)") && t.includes("dizor_visit_day"), "política sin inventario actualizado");
+      assert(t.includes("Estadísticas propias") && t.includes("dizor_visit_day"), "política sin inventario actualizado");
       const MARKS = /PLACEHOLDER|Texto en revisi[oó]n|pendiente de (revisi[oó]n|abogado)|NO PUBLICAR|\bborrador\b|\[PENDIENTE/i;
       for (const p of ["/politica-de-privacidad", "/politica-de-cookies", "/terminos-y-condiciones", "/garantias-y-devoluciones", "/pagina/envios"]) {
         await page.goto(FE + p);

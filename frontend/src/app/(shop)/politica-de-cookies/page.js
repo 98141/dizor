@@ -22,7 +22,7 @@ const NECESSARY = [
   { name: "dizor_pending_popup_coupon", type: "Almacenamiento local", purpose: "Aplicar en el carrito el cupón mostrado en una promoción.", duration: "Hasta que se aplica" },
   { name: "dizor_favorites_v1", type: "Almacenamiento local", purpose: "Guardar tus favoritos cuando navegas sin iniciar sesión.", duration: "Hasta que los quites o borres los datos del navegador" },
   { name: "dizor_order_access", type: "Almacenamiento de sesión", purpose: "Mostrarte la confirmación del pedido que acabas de hacer. Contiene el número de pedido y un código de acceso temporal; no contiene tu nombre ni tu correo.", duration: "Hasta cerrar la pestaña (el código vence en el servidor a las 72 horas)" },
-  { name: "dizor_cookie_preferences", type: "Almacenamiento local", purpose: "Recordar tu decisión sobre las cookies opcionales.", duration: "Hasta que la cambies o borres los datos del navegador" },
+  { name: "dizor_cookie_preferences", type: "Almacenamiento local", purpose: "Recordar tu decisión sobre las estadísticas de visitas.", duration: "Hasta que la cambies o borres los datos del navegador" },
 ];
 
 const PREFERENCES = [
@@ -100,7 +100,7 @@ export default function PoliticaCookiesPage() {
         <h2 className="content-page__section-title">Preferencias que tú eliges</h2>
         <InventoryTable rows={PREFERENCES} />
 
-        <h2 className="content-page__section-title">Estadísticas propias (opcionales)</h2>
+        <h2 className="content-page__section-title">Estadísticas propias</h2>
         <p className="content-page__body-p">
           Solo se usan si las aceptas en el aviso de cookies o en el panel de
           preferencias. Si no las aceptas, el contador no registra tu visita.

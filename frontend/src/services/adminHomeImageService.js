@@ -15,6 +15,8 @@ export const createAdminHomeImage = async ({
   linkHref,
   weaveType,
   activo,
+  focalX,
+  focalY,
 }) => {
   const formData = new FormData();
   formData.append("images", file);
@@ -24,6 +26,8 @@ export const createAdminHomeImage = async ({
   if (linkHref) formData.append("linkHref", linkHref);
   if (weaveType) formData.append("weaveType", weaveType);
   if (activo !== undefined) formData.append("activo", String(activo));
+  if (Number.isFinite(focalX)) formData.append("focalX", String(focalX));
+  if (Number.isFinite(focalY)) formData.append("focalY", String(focalY));
 
   const res = await api.post("/admin/home-images", formData, {
     headers: { "Content-Type": "multipart/form-data" },

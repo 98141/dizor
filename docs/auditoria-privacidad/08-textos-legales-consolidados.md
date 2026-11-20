@@ -1,7 +1,7 @@
 # H. Textos legales consolidados — DIZOR
 
-> **Documento interno para revisión jurídica.** Reproduce el texto **exacto** que verá el cliente en la versión local preparada el 2026-11-16 (fase 3). Las páginas se extrajeron del HTML generado por el build aislado, y las casillas de `backend/src/config/legalTexts.js`; por eso coinciden con lo publicado y con lo que queda registrado como evidencia.
-> Estado: textos `published` (sin marcas públicas), **revisión jurídica pendiente**. Nada está desplegado. Las preguntas abiertas están en `07-guia-revision-juridica.md` §3.
+> **Documento interno.** Reproduce el texto **exacto** que verá el cliente en la versión local preparada el 2026-11-16 (fase 3). Las páginas se extrajeron del HTML generado por el build aislado, y las casillas de `backend/src/config/legalTexts.js`; por eso coinciden con lo publicado y con lo que queda registrado como evidencia.
+> Estado: textos `published` y **vigentes por decisión del propietario (2026-11-20)**; los ajustes futuros los hace él directamente (subiendo la versión). Sin aprobación de un abogado. Política de privacidad v3 y de cookies v4: se quitó la palabra "opcional" sin cambiar el tratamiento (siguen requiriendo permiso).
 
 ## Reglas de versión y vigencia
 
@@ -16,14 +16,14 @@ Ninguna viene marcada. Las obligatorias impiden enviar el formulario si no se ma
 
 | Formulario | Finalidad | Versión | Tipo | Texto exacto |
 |---|---|---|---|---|
-| Checkout: tratamiento para gestionar el pedido | `order_processing` | 2 | Obligatoria | Autorizo a COMERCIALIZADORA DE ARTESANIAS SANDONEÑA PARRA S SAS (DIZOR) a tratar mis datos de identificación y contacto (nombre, correo, teléfono y dirección) para gestionar mi pedido: confirmación, pago, facturación, envío, atención, garantía y solicitudes relacionadas, conforme a la Política de Tratamiento de Datos Personales. *(enlace: «Ver política»)* |
-| Checkout: aceptación de términos | `terms` | 1 | Obligatoria | He leído y acepto los Términos y condiciones de compra, incluida la información sobre garantía, derecho de retracto, reversión del pago y cambios. *(enlace: «Ver términos»)* |
-| Registro de cuenta y registro opcional tras la compra | `account` | 2 | Obligatoria | Autorizo a COMERCIALIZADORA DE ARTESANIAS SANDONEÑA PARRA S SAS (DIZOR) a tratar mis datos para crear y administrar mi cuenta (inicio de sesión, direcciones, historial de pedidos y favoritos), conforme a la Política de Tratamiento de Datos Personales. *(enlace: «Ver política»)* |
-| Encargos personalizados y pedidos por mayor | `special_request` | 2 | Obligatoria | Autorizo a COMERCIALIZADORA DE ARTESANIAS SANDONEÑA PARRA S SAS (DIZOR) a tratar mis datos de contacto y la información de mi solicitud para responderla y cotizarla, conforme a la Política de Tratamiento de Datos Personales. *(enlace: «Ver política»)* |
-| Reseñas de producto | `review_publication` | 2 | Obligatoria | Autorizo que, si mi reseña se aprueba, se publiquen en este sitio el nombre que indique, la ciudad (si la indico), la calificación y el comentario. No se publican fotografías mías sin una autorización aparte. *(enlace: «Ver política»)* |
-| PQR y solicitudes sobre datos personales | `customer_request` | 2 | Obligatoria | Autorizo a COMERCIALIZADORA DE ARTESANIAS SANDONEÑA PARRA S SAS (DIZOR) a tratar mis datos para registrar, tramitar y responder esta solicitud, conforme a la Política de Tratamiento de Datos Personales. *(enlace: «Ver política»)* |
-| Newsletter (pie de página, inicio y ventana emergente) | `marketing_newsletter` | 2 | Opcional | Quiero recibir por correo electrónico novedades y ofertas de DIZOR. Es opcional, no condiciona ninguna compra y puedo darme de baja en cualquier momento desde el enlace incluido en cada correo. *(enlace: «Ver política»)* |
-| Recordatorio de carrito (función desactivada: no se muestra) | `marketing_cart_reminder` | 2 | Opcional | Quiero recibir por correo electrónico un recordatorio de los productos de este carrito. Es opcional y puedo darme de baja desde el enlace incluido en el correo. *(enlace: «Ver política»)* |
+| Checkout: tratamiento para gestionar el pedido | `order_processing` | 3 | Obligatoria | Autorizo a DIZOR a usar mis datos para gestionar mi pedido. *(enlace: «Ver política»)* |
+| Checkout: aceptación de términos | `terms` | 2 | Obligatoria | Acepto los Términos y condiciones de compra. *(enlace: «Ver términos»)* |
+| Registro de cuenta y registro opcional tras la compra | `account` | 3 | Obligatoria | Autorizo a DIZOR a usar mis datos para crear y administrar mi cuenta. *(enlace: «Ver política»)* |
+| Encargos personalizados y pedidos por mayor | `special_request` | 3 | Obligatoria | Autorizo a DIZOR a usar mis datos para responder y cotizar mi solicitud. *(enlace: «Ver política»)* |
+| Reseñas de producto | `review_publication` | 3 | Obligatoria | Autorizo publicar mi nombre, ciudad, calificación y comentario si la reseña se aprueba. *(enlace: «Ver política»)* |
+| PQR y solicitudes sobre datos personales | `customer_request` | 3 | Obligatoria | Autorizo a DIZOR a usar mis datos para atender esta solicitud. *(enlace: «Ver política»)* |
+| Newsletter (pie de página, inicio y ventana emergente) | `marketing_newsletter` | 4 | Opcional | Quiero recibir novedades y ofertas de DIZOR por correo. *(enlace: «Ver política»)* |
+| Recordatorio de carrito (función desactivada: no se muestra) | `marketing_cart_reminder` | 4 | Opcional | Quiero recibir un recordatorio de este carrito por correo. *(enlace: «Ver política»)* |
 
 ## 2. Identificación del vendedor (pie de página de todas las páginas públicas)
 
@@ -245,15 +245,15 @@ Solo pedimos los datos necesarios para cada trámite. Cada formulario te muestra
 | Compras | Nombre, correo, teléfono, dirección de entrega, ciudad, departamento y notas del pedido. | Confirmar, cobrar, facturar, preparar y entregar tu pedido; enviarte el acuse de recibo y los avisos del pedido; atender garantías, retractos, reversiones y cambios. |
 | Cuenta de cliente | Nombre, correo, contraseña (guardada cifrada), teléfono, direcciones, favoritos e historial de pedidos. | Crear y administrar tu cuenta y mostrarte tus pedidos. |
 | Encargos personalizados y pedidos por mayor | Datos de contacto, empresa (si la indicas) y detalles de la solicitud. | Responder y cotizar tu solicitud. |
-| Reseñas | Nombre que indiques, ciudad (opcional), calificación y comentario. | Publicar la reseña en el sitio, solo si la apruebas al enviarla y tras su revisión. |
+| Reseñas | Nombre que indiques, ciudad (si la indicas), calificación y comentario. | Publicar la reseña en el sitio, solo si la apruebas al enviarla y tras su revisión. |
 | Peticiones, quejas, reclamos y solicitudes sobre tus datos | Datos de contacto, número de pedido (si aplica) y la descripción de la solicitud. | Registrar, tramitar y responder la solicitud, y conservar su trazabilidad. |
-| Novedades por correo (opcional) | Correo y, si lo indicas, tu nombre. | Enviarte novedades y ofertas de DIZOR. Solo con tu autorización expresa; puedes darte de baja en cualquier momento. |
+| Novedades por correo | Correo y, si lo indicas, tu nombre. | Enviarte novedades y ofertas, solo si lo autorizas. Puedes darte de baja cuando quieras. |
 | Prueba de tus autorizaciones | Finalidad autorizada, versión del texto aceptado, fecha, formulario de origen y correo. | Demostrar cuándo y para qué diste tu autorización, y respetar tus bajas y revocaciones. |
 | Seguridad del sitio | Dirección IP, navegador y páginas solicitadas (registros técnicos del servidor). | Operar el sitio, prevenir abusos y diagnosticar errores. |
 
 No pedimos datos sensibles ni datos de niñas, niños o adolescentes. Te pedimos no incluirlos en notas, reseñas o solicitudes.
 
-El sitio no usa analítica de terceros ni publicidad personalizada. Las estadísticas propias de visitas son opcionales y solo se activan si las aceptas; el detalle está en la Política de Cookies.
+El sitio no usa analítica de terceros ni publicidad personalizada. Las estadísticas propias de visitas solo se activan si las aceptas; el detalle está en la Política de Cookies.
 
 ### 3. Con quién compartimos tus datos
 
@@ -325,7 +325,7 @@ Se usan para prestarte el servicio que solicitas (carrito, sesión, compra). No 
 | dizor_pending_popup_coupon | Almacenamiento local | Aplicar en el carrito el cupón mostrado en una promoción. | Hasta que se aplica |
 | dizor_favorites_v1 | Almacenamiento local | Guardar tus favoritos cuando navegas sin iniciar sesión. | Hasta que los quites o borres los datos del navegador |
 | dizor_order_access | Almacenamiento de sesión | Mostrarte la confirmación del pedido que acabas de hacer. Contiene el número de pedido y un código de acceso temporal; no contiene tu nombre ni tu correo. | Hasta cerrar la pestaña (el código vence en el servidor a las 72 horas) |
-| dizor_cookie_preferences | Almacenamiento local | Recordar tu decisión sobre las cookies opcionales. | Hasta que la cambies o borres los datos del navegador |
+| dizor_cookie_preferences | Almacenamiento local | Recordar tu decisión sobre las estadísticas de visitas. | Hasta que la cambies o borres los datos del navegador |
 
 ### Preferencias que tú eliges
 
@@ -333,7 +333,7 @@ Se usan para prestarte el servicio que solicitas (carrito, sesión, compra). No 
 |---|---|---|---|
 | dizor_promo_popup_seen | Almacenamiento de sesión | Recordar que cerraste la ventana promocional para no volver a mostrártela en la misma visita. | Hasta cerrar la pestaña |
 
-### Estadísticas propias (opcionales)
+### Estadísticas propias
 
 Solo se usan si las aceptas en el aviso de cookies o en el panel de preferencias. Si no las aceptas, el contador no registra tu visita. Si retiras el permiso, se eliminan de tu navegador.
 
