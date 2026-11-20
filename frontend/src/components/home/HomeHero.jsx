@@ -3,12 +3,27 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { focusPosition } from "@/lib/inspirationLayout";
 
 const SLIDE_MS = 7000;
 const CROSSFADE_MS = 1400;
+/** Desplazamiento horizontal mínimo (px) para contar un gesto como swipe. */
+const SWIPE_MIN = 44;
 
 function padIndex(n) {
   return String(n).padStart(2, "0");
+}
+
+function Chevron({ dir }) {
+  return (
+    <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+      <path
+        d={dir === "prev" ? "M10 3.5 5.5 8l4.5 4.5" : "M6 3.5 10.5 8 6 12.5"}
+        stroke="currentColor"
+        strokeWidth="1.4"
+      />
+    </svg>
+  );
 }
 
 /**
@@ -78,6 +93,27 @@ export default function HomeHero({
   const goNext = useCallback(() => goTo(active + 1), [active, goTo]);
   const goPrev = useCallback(() => goTo(active - 1), [active, goTo]);
 
+  // Swipe táctil (solo con 2+ fotos). Se ignora si el gesto es vertical
+  // (scroll de la página) o empieza sobre un enlace/botón.
+  const touchRef = useRef(null);
+  const onTouchStart = (e) => {
+    if (!multi || e.touches.length !== 1) return;
+    if (e.target.closest?.("a, button")) return;
+    const t = e.touches[0];
+    touchRef.current = { x: t.clientX, y: t.clientY };
+  };
+  const onTouchEnd = (e) => {
+    const start = touchRef.current;
+    touchRef.current = null;
+    if (!start || !e.changedTouches.length) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - start.x;
+    const dy = t.clientY - start.y;
+    if (Math.abs(dx) < SWIPE_MIN || Math.abs(dx) < Math.abs(dy) * 1.2) return;
+    if (dx < 0) goNext();
+    else goPrev();
+  };
+
   useEffect(() => {
     if (!multi || reduceMotion || paused) return undefined;
 
@@ -126,6 +162,8 @@ export default function HomeHero({
       aria-label="Presentación Dizor"
       onMouseEnter={() => multi && setPaused(true)}
       onMouseLeave={() => multi && setPaused(false)}
+      onTouchStart={multi ? onTouchStart : undefined}
+      onTouchEnd={multi ? onTouchEnd : undefined}
       onFocusCapture={() => multi && setPaused(true)}
       onBlurCapture={(e) => {
         if (!multi) return;
@@ -150,7 +188,11 @@ export default function HomeHero({
                   priority={index === 0}
                   sizes="100vw"
                   className="home-hero__bg-image"
-                  style={{ objectFit: "cover", objectPosition: "center 72%" }}
+                  style={
+                    Number.isFinite(img.focalX) || Number.isFinite(img.focalY)
+                      ? { "--hero-focus": focusPosition(img.focalX, img.focalY) }
+                      : undefined
+                  }
                 />
               </div>
             );
@@ -217,7 +259,7 @@ export default function HomeHero({
                     index === active && !reduceMotion && !paused
                       ? { animationDuration: `${SLIDE_MS}ms` }
                       : index === active
-                        ? { width: "100%" }
+                        ? { transform: "scaleX(1)" }
                         : undefined
                   }
                 />
@@ -232,7 +274,7 @@ export default function HomeHero({
               aria-label="Fotografía anterior"
               onClick={goPrev}
             >
-              ←
+              <Chevron dir="prev" />
             </button>
             <button
               type="button"
@@ -240,7 +282,7 @@ export default function HomeHero({
               aria-label="Fotografía siguiente"
               onClick={goNext}
             >
-              →
+              <Chevron dir="next" />
             </button>
           </div>
 

@@ -8,6 +8,7 @@ import {
   getAdminOrder,
   updateOrderStatus,
   confirmPayment,
+  reconcileWompi,
   updateOrderShipping,
 } from "@/services/orderAdminService";
 import { formatCOP } from "@/lib/formatCurrency";
@@ -19,6 +20,21 @@ import {
   getStatusBadgeClass,
 } from "@/lib/orderLabels";
 
+const INCIDENT_LABELS = {
+  checkout_completion_failed: "Pedido registrado pendiente de completar",
+  approved_without_stock: "Pago recibido sin inventario disponible",
+  approved_after_cancellation: "Pago recibido después del cierre del pedido",
+  payment_amount_or_currency_mismatch: "El monto o la moneda recibidos requieren conciliación",
+  additional_approved_payment: "Hay un pago aprobado adicional",
+  payment_processing_failed: "Aplicación del pago pendiente de reintento",
+  received_payment_pending_resolution: "Dinero recibido pendiente de tratamiento administrativo",
+  cancelled_wompi_watch: "Cancelación pendiente de vigilancia de pagos tardíos",
+  cancellation_verification_pending: "Cancelación pendiente de verificar el pago",
+  payment_link_creation_failed: "Enlace de pago pendiente de revisión",
+  approval_on_refunded_order: "Aprobación recibida sobre un pago con reembolso histórico",
+  coupon_reconciliation: "Cupón pendiente de conciliación",
+};
+
 export default function OrderDetail({ orderId, backHref }) {
   const { user } = useAuth();
   const { siteName } = useSiteConfig();
@@ -29,18 +45,14 @@ export default function OrderDetail({ orderId, backHref }) {
 
   const [newStatus, setNewStatus] = useState("");
   const [statusNote, setStatusNote] = useState("");
+  const [collectionReference, setCollectionReference] = useState("");
+  const [receivedAt, setReceivedAt] = useState("");
   const [paymentProofUrl, setPaymentProofUrl] = useState("");
   const [trackingNumber, setTrackingNumber] = useState("");
   const [carrier, setCarrier] = useState("");
 
-  const allowedStatuses =
-    user?.role === "vendedor"
-      ? ["pago_pendiente", "pagado", "en_preparacion", "enviado"]
-      : Object.keys(ORDER_STATUS_LABELS);
-
-  const canConfirm =
-    order?.paymentStatus === "pendiente" &&
-    ["nequi_manual", "contra_entrega", "wompi"].includes(order?.paymentMethod);
+  const allowedStatuses = order ? [order.orderStatus, ...(order.allowedTransitions || [])] : [];
+  const canConfirm = !!order?.canConfirmCollection;
 
   const load = async () => {
     setLoading(true);
@@ -49,7 +61,7 @@ export default function OrderDetail({ orderId, backHref }) {
       setOrder(data.order);
       setNewStatus(data.order.orderStatus);
       setTrackingNumber(data.order.trackingNumber || "");
-      setCarrier(data.order.carrier || "interrapidisimo");
+      setCarrier(data.order.carrier || "");
       setPaymentProofUrl(data.order.paymentProofUrl || "");
     } catch {
       setOrder(null);
@@ -68,9 +80,11 @@ export default function OrderDetail({ orderId, backHref }) {
     try {
       await confirmPayment(orderId, {
         paymentProofUrl,
+        reference: collectionReference,
+        receivedAt: receivedAt ? new Date(receivedAt).toISOString() : "",
         note: "Pago confirmado desde panel",
       });
-      setMessage("Pago confirmado");
+      setMessage("Recaudo registrado");
       load();
     } catch (err) {
       setError(err.response?.data?.message || "Error al confirmar pago");
@@ -143,6 +157,14 @@ export default function OrderDetail({ orderId, backHref }) {
     } catch (err) {
       setError(err.response?.data?.message || "Error al actualizar envío");
     }
+  };
+
+  const handleReconcile = async () => {
+    setError(""); setMessage("");
+    try {
+      const result = await reconcileWompi(orderId);
+      setMessage(result.message); load();
+    } catch (err) { setError(err.response?.data?.message || "No se pudo consultar a Wompi"); }
   };
 
   if (loading) return <p className="auth-loading">Cargando pedido...</p>;
@@ -320,7 +342,7 @@ export default function OrderDetail({ orderId, backHref }) {
               </span>
             </div>
             <div className="order-detail-row order-pricing__total">
-              <span>Total pagado</span>
+              <span>Total del pedido</span>
               <span>{formatCOP(order.total)}</span>
             </div>
           </div>
@@ -335,8 +357,21 @@ export default function OrderDetail({ orderId, backHref }) {
                 {PAYMENT_STATUS_LABELS[order.paymentStatus]}
               </span>
             </p>
+            {order.requiresReview && <p role="alert">Requiere revisión y conciliación administrativa.</p>}
+            {order.paymentMethod === "wompi" && order.wompi?.transactionId && ["admin", "superadmin"].includes(user?.role) && (
+              <button type="button" className="admin-btn" onClick={handleReconcile}>Consultar y conciliar con Wompi</button>
+            )}
+            {order.incidents?.map((incident) => <p key={incident._id}>{INCIDENT_LABELS[incident.code] || "Incidencia administrativa"}: {incident.detail}{incident.resolvedAt ? " (conciliado)" : ""}</p>)}
+            {order.wompi?.expiresAt && <p>Vigencia del enlace: {new Date(order.wompi.expiresAt).toLocaleString("es-CO", { timeZone: "America/Bogota" })}</p>}
+            {order.collection?.reference && <p>Recaudo: {order.collection.reference} · {new Date(order.collection.receivedAt).toLocaleString("es-CO")}</p>}
             {canConfirm && (
               <>
+                <label className="auth-field__label">Referencia de recaudo
+                  <input value={collectionReference} onChange={(e) => setCollectionReference(e.target.value)} required />
+                </label>
+                <label className="auth-field__label">Fecha del recaudo
+                  <input type="datetime-local" value={receivedAt} onChange={(e) => setReceivedAt(e.target.value)} required />
+                </label>
                 <label className="auth-field__label" style={{ marginTop: "1rem" }}>
                   URL comprobante (opcional)
                 </label>
@@ -351,7 +386,7 @@ export default function OrderDetail({ orderId, backHref }) {
                   style={{ marginTop: "0.75rem", width: "100%" }}
                   onClick={handleConfirmPayment}
                 >
-                  Confirmar pago
+                  Registrar recaudo
                 </button>
               </>
             )}
@@ -393,7 +428,7 @@ export default function OrderDetail({ orderId, backHref }) {
 
           <div className="order-detail-card">
             <h2>Guía de envío</h2>
-            <select value={carrier} onChange={(e) => setCarrier(e.target.value)}>
+            <select disabled={!order.canUpdateShipping} value={carrier} onChange={(e) => setCarrier(e.target.value)}>
               {Object.entries(CARRIER_LABELS).map(([k, v]) => (
                 <option key={k} value={k}>
                   {v}
@@ -410,6 +445,7 @@ export default function OrderDetail({ orderId, backHref }) {
               type="button"
               className="admin-btn"
               style={{ marginTop: "0.5rem", width: "100%" }}
+              disabled={!order.canUpdateShipping}
               onClick={handleUpdateShipping}
             >
               Guardar guía

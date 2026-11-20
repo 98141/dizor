@@ -153,7 +153,7 @@ export default function OrdersList({ basePath = "/admin/pedidos" }) {
                   </td>
                   <td>
                     <span className={`status-badge ${getStatusBadgeClass(order.orderStatus)}`}>
-                      {ORDER_STATUS_LABELS[order.orderStatus]}
+                      {ORDER_STATUS_LABELS[order.orderStatus]}{order.requiresReview && " · Requiere revisión"}
                     </span>
                   </td>
                   <td>{new Date(order.createdAt).toLocaleDateString("es-CO")}</td>

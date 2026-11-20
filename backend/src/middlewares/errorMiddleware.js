@@ -88,7 +88,7 @@ const globalErrorHandler = (err, req, res, next) => {
     });
   }
 
-  if (process.env.NODE_ENV === "development") {
+  if (process.env.NODE_ENV === "development" && !req.originalUrl?.startsWith("/api/checkout")) {
     return sendErrorDev(error, res);
   }
 

@@ -14,7 +14,7 @@ const orderItemSchema = new mongoose.Schema(
     sizeName: String,
     colorName: String,
     sku: String,
-    quantity: { type: Number, required: true, min: 1 },
+    quantity: { type: Number, required: true, min: 1, validate: Number.isSafeInteger },
     unitPrice: { type: Number, required: true },
     lineTotal: { type: Number, required: true },
     unitCost: { type: Number, default: null, min: 0 },
@@ -83,6 +83,14 @@ const orderSchema = new mongoose.Schema(
     },
     paymentProofUrl: { type: String, default: "" },
     paymentConfirmedAt: { type: Date, default: null },
+    deliveredAt: { type: Date, default: null },
+    deliveredBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null },
+    collection: {
+      receivedAt: Date, recordedAt: Date, reference: String, proofUrl: String,
+      recordedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    },
+    requiresReview: { type: Boolean, default: false },
+    incidents: [{ code: String, detail: String, createdAt: { type: Date, default: Date.now }, resolvedAt: { type: Date, default: null } }],
     paymentConfirmedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -124,6 +132,7 @@ const orderSchema = new mongoose.Schema(
       transactionId: { type: String, default: "" },
       reference: { type: String, default: "" },
       status: { type: String, default: "" },
+      expiresAt: { type: Date, default: null },
     },
     nequi: {
       paymentToken:      { type: String, default: "" },
@@ -133,7 +142,9 @@ const orderSchema = new mongoose.Schema(
       chargeInitiatedAt: { type: Date,   default: null },
     },
     stockDeducted: { type: Boolean, default: false },
-    idempotencyKey: { type: String, default: null },
+    idempotencyKey: { type: String, default: undefined },
+    checkoutFingerprint: { type: String, default: "", select: false },
+    checkoutState: { type: String, enum: ["processing", "ready", "failed"], default: "ready" },
     couponCode: { type: String, default: "" },
     couponConsumed: { type: Boolean, default: false },
     ivaEnabled: { type: Boolean, default: false },
@@ -176,9 +187,8 @@ const orderSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-orderSchema.index({ orderNumber: 1 });
 orderSchema.index({ user: 1, createdAt: -1 });
 orderSchema.index({ "buyer.email": 1 });
-orderSchema.index({ idempotencyKey: 1 }, { sparse: true, unique: true });
+orderSchema.index({ idempotencyKey: 1 }, { unique: true, partialFilterExpression: { idempotencyKey: { $type: "string" } } });
 
 module.exports = mongoose.model("Order", orderSchema);

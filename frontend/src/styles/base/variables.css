@@ -19,6 +19,9 @@
   --color-surface-muted: #f7f7f7;
   --color-surface-sand: #fdf3e3;
   --color-surface-dark: #1a1a1a;
+  /* Superficie cálida derivada solo de Arena Dizor sobre blanco (transparencia). */
+  --color-surface-arena: color-mix(in srgb, var(--dizor-arena) 16%, var(--dizor-blanco));
+  --color-line-arena: color-mix(in srgb, var(--dizor-oro) 22%, transparent);
 
   /* ── Texto ── */
   --color-text: #1a1a1a;
@@ -92,6 +95,15 @@
   --text-display-sm: clamp(1.7rem, 1.35rem + 1.8vw, 2.4rem);
   --text-display-md: clamp(1.95rem, 1.4rem + 2.6vw, 3.1rem);
   --text-display-lg: clamp(2.15rem, 1.45rem + 3.2vw, 3.55rem);
+
+  /* Escala editorial del inicio (raíz = 15 px). Objetivos medidos a 375 px
+     y 1440 px: hero 38 → 76 px · editorial 32 → 50 px · comercial 28 → 39 px. */
+  --text-home-hero: clamp(2.4rem, 1.64rem + 3.57vw, 5.2rem);
+  --text-home-editorial: clamp(2.05rem, 1.71rem + 1.69vw, 3.4rem);
+  --text-home-commercial: clamp(1.8rem, 1.61rem + 1.03vw, 2.6rem);
+  --text-home-lead: clamp(16px, 15.3px + 0.12vw, 17px);
+  --text-home-hero-lead: clamp(16px, 15px + 0.21vw, 18px);
+  --text-home-eyebrow: clamp(12px, 11.6px + 0.1vw, 13px);
 
   /* Ritmo */
   --leading-tight: 1.12;

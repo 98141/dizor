@@ -15,7 +15,7 @@ exports.resolveCartItems = async (rawItems) => {
   for (const item of rawItems) {
     const { productId, variantId, quantity } = item;
 
-    if (!productId || !variantId || !quantity || quantity < 1) {
+    if (!productId || !variantId || !Number.isSafeInteger(quantity) || quantity < 1) {
       throw new AppError("Ítem de carrito inválido", 400);
     }
 

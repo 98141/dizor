@@ -247,10 +247,10 @@ export default function AlertasPage() {
               </div>
             </AlertSection>
 
-            {/* ── Pagos Nequi por confirmar ── */}
+            {/* ── Pedidos por conciliar ── */}
             <AlertSection
               id="pendingPayments"
-              title="Pagos Nequi por confirmar"
+              title="Pedidos por conciliar"
               count={alerts.pendingPayments?.count ?? 0}
               color="#d97706"
               dot="🟡"
@@ -258,7 +258,7 @@ export default function AlertasPage() {
               actionLabel="Gestionar pedidos →"
             >
               <p className="alert-hint">
-                Estos pedidos fueron pagados por Nequi y esperan confirmación manual del pago.
+                Estos pedidos tienen incidencias de pago o inventario que requieren revisión administrativa.
               </p>
               <div className="alert-table-wrap">
                 <table className="admin-table">

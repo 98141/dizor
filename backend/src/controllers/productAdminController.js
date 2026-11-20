@@ -14,6 +14,9 @@ const {
   safeLogProductHistory,
 } = require("../services/productHistoryService");
 
+const { inTransaction } = require("../services/transactionService");
+const ProductHistory = require("../models/productHistory");
+
 const cloudinaryConfigured = () => isCloudinaryConfigured();
 
 const populateAll =
@@ -215,20 +218,21 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
   }
   normalizeOptionalRefs(req.body);
 
-  let query = Product.findById(req.params.id);
+  const { product, productBefore } = await inTransaction(async (session) => {
+    let query = Product.findById(req.params.id).session(session);
 
-  if (canViewCosts(req.user.role)) {
-    query = query.select("+internalCost");
-  }
+    if (canViewCosts(req.user.role)) {
+      query = query.select("+internalCost");
+    }
 
-  const product = await query;
+    const product = await query;
 
-  if (!product) {
-    return next(new AppError("Producto no encontrado", 404));
-  }
+    if (!product) {
+      throw new AppError("Producto no encontrado", 404);
+    }
 
-  await assertUniqueVariantSkus(req.body.variants, {
-    excludeProductId: product._id,
+    await assertUniqueVariantSkus(req.body.variants, {
+      excludeProductId: product._id,
   });
 
   await product.populate(populateAll);
@@ -247,12 +251,13 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
       const vid = incoming.id || incoming._id;
       const existing = vid ? product.variants.id(vid) : null;
 
+      if (incoming.stock !== undefined && (!Number.isSafeInteger(incoming.stock) || incoming.stock < 0)) throw new AppError("Stock entero no negativo requerido", 400);
+      if (vid && !existing) throw new AppError("La variante ya no existe; recarga el producto", 409);
       if (existing) {
         existing.set({
           size: incoming.size,
           color: incoming.color,
           sku: incoming.sku,
-          stock: incoming.stock,
           price: incoming.price,
           isActive: incoming.isActive,
         });
@@ -272,40 +277,23 @@ exports.updateProduct = catchAsync(async (req, res, next) => {
 
     for (const v of [...product.variants]) {
       if (!keepIds.includes(String(v._id))) {
-        product.variants.pull(v._id);
+        v.isActive = false; // retain historical variant references and its stock
       }
     }
 
-    delete req.body.variants;
+
   }
 
-  Object.assign(product, req.body);
-  await product.save();
+  const fields = ["name", "shortDescription", "fullDescription", "category", "weaveType", "style", "material", "salePrice", "internalCost", "discountPercent", "promotionEndsAt", "images", "mainImage", "seoTitle", "seoDescription", "isActive", "isFeatured", "isNew", "onPromotion", "allowsCustomization", "customizationOptions"];
+  for (const key of fields) if (req.body[key] !== undefined) product[key] = req.body[key];
+  await product.save({ session, validateModifiedOnly: true });
   await product.populate(populateAll);
 
-  const productAfter = snapshotProductForHistory(product);
-
-  safeLog(
-    logAuditEvent({
-      req,
-      action: "product_updated",
-      module: "catalog",
-      user: req.user,
-      entityId: product._id,
-      entityType: "product",
-      summary: `Producto actualizado · ${product.name}`,
-      previousData: { name: productBefore.name },
-      newData: { name: product.name, isActive: product.isActive },
-    })
-  );
-
-  safeLogProductHistory(
-    logProductUpdates({
-      productBefore,
-      productAfter,
-      user: req.user,
-    })
-  );
+  return { product, productBefore };
+  });
+  safeLogProductHistory(logProductUpdates({ productBefore, productAfter: snapshotProductForHistory(product), user: req.user }));
+  safeLog(logAuditEvent({ req, user: req.user, action: "product_updated", module: "catalog",
+    entityId: product._id, entityType: "product", summary: `Producto actualizado · ${product.name}` }));
 
   res.status(200).json({
     status: "success",
@@ -498,4 +486,33 @@ exports.getInventorySummary = catchAsync(async (req, res) => {
     results: inventory.length,
     inventory,
   });
+});
+
+exports.adjustStock = catchAsync(async (req, res) => {
+  const { variantId, delta, reason, operationKey } = req.body;
+  if (!Number.isSafeInteger(delta) || delta === 0 || typeof reason !== "string" || !reason.trim()
+      || typeof operationKey !== "string" || !/^[A-Za-z0-9_-]{16,128}$/.test(operationKey)) {
+    throw new AppError("Registra ajuste entero, motivo y clave de operación válida", 400);
+  }
+  const result = await inTransaction(async (session) => {
+    const old = await ProductHistory.findOne({ movementKey: operationKey }).session(session);
+    if (old) {
+      if (String(old.productId) !== req.params.id || String(old.variantId) !== variantId || old.quantityChange !== delta || old.summary !== reason.trim() || String(old.userId) !== String(req.user.id)) throw new AppError("Clave usada para otro movimiento", 409);
+      return { stock: old.stockAfter, repeated: true };
+    }
+    const product = await Product.findOneAndUpdate({ _id: req.params.id,
+      variants: { $elemMatch: { _id: variantId, stock: { $gte: Math.max(0, -delta) } } } },
+      { $inc: { "variants.$.stock": delta } }, { session, new: true });
+    if (!product) throw new AppError("Variante no disponible o stock insuficiente", 409);
+    const variant = product.variants.id(variantId);
+    if (!Number.isSafeInteger(variant.stock)) throw new AppError("El stock histórico requiere conciliación previa", 409);
+    await ProductHistory.create([{
+      movementKey: operationKey, productId: product._id, productName: product.name, variantId,
+      sku: variant.sku, eventType: "stock_adjustment", quantityChange: delta,
+      stockBefore: variant.stock - delta, stockAfter: variant.stock, summary: reason.trim(),
+      userId: req.user.id, role: req.user.role, referenceType: "admin",
+    }], { session });
+    return { stock: variant.stock, repeated: false };
+  });
+  res.json({ status: "success", ...result });
 });

@@ -24,6 +24,7 @@ const variantSchema = new mongoose.Schema(
       type: Number,
       required: true,
       min: [0, "El stock no puede ser negativo"],
+      validate: { validator: Number.isSafeInteger, message: "El stock debe ser entero" },
       default: 0,
     },
     price: {
@@ -179,7 +180,6 @@ const productSchema = new mongoose.Schema(
   { timestamps: true, suppressReservedKeysWarning: true }
 );
 
-productSchema.index({ slug: 1 });
 productSchema.index({ isActive: 1, isFeatured: 1 });
 productSchema.index({ category: 1, weaveType: 1, style: 1 });
 productSchema.index({ salePrice: 1 });

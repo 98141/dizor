@@ -80,9 +80,10 @@ exports.getDashboard = catchAsync(async (req, res) => {
     Order.countDocuments(),
     Order.countDocuments({
       paymentStatus: "pendiente",
+      paymentMethod: "wompi",
       orderStatus: { $nin: ["cancelado", "rechazado"] },
     }),
-    Order.countDocuments({ orderStatus: "pagado" }),
+    Order.countDocuments({ requiresReview: { $ne: true }, stockDeducted: true, $or: [{ orderStatus: "pagado", paymentStatus: "pagado" }, { orderStatus: "pendiente", paymentMethod: "contra_entrega" }] }),
     Order.countDocuments({
       orderStatus: "enviado",
       updatedAt: { $gte: today },
@@ -92,8 +93,9 @@ exports.getDashboard = catchAsync(async (req, res) => {
       {
         $match: {
           paymentStatus: "pagado",
+          requiresReview: { $ne: true },
           createdAt: { $gte: monthStart },
-          orderStatus: { $nin: ["cancelado", "rechazado"] },
+          orderStatus: { $nin: ["cancelado", "rechazado", "devuelto"] },
         },
       },
       { $group: { _id: null, total: { $sum: "$total" } } },

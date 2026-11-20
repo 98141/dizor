@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import {
+  adjustProductStock,
   createAdminProduct,
   getCatalogMeta,
   getAdminProduct,
@@ -371,12 +372,28 @@ export default function ProductForm({ productId }) {
       size: v.size,
       color: v.color,
       sku: String(v.sku).trim().toUpperCase(),
-      stock: Number(v.stock) || 0,
+      ...(!v.id ? { stock: Number(v.stock) || 0 } : {}),
       price:
         v.price === "" || v.price == null ? null : Number(v.price),
       isActive: v.isActive !== false,
     })),
   });
+
+  const handleStockAdjustment = async (index) => {
+    const variant = form.variants[index];
+    const delta = Number(variant.adjustmentDelta);
+    if (!Number.isSafeInteger(delta) || delta === 0 || !variant.adjustmentReason?.trim()) { setError("Registra una cantidad entera distinta de cero y el motivo del ajuste"); return; }
+    // Keep the same key after an ambiguous failure; retries cannot duplicate a movement.
+    const operationKey = variant.adjustmentKey || crypto.randomUUID();
+    setVariant(index, "adjustmentKey", operationKey);
+    try {
+      const result = await adjustProductStock(productId, { variantId: variant.id, delta,
+        reason: variant.adjustmentReason, operationKey });
+      setForm((prev) => ({ ...prev, variants: prev.variants.map((v, i) => i === index
+        ? { ...v, stock: result.stock, adjustmentDelta: "", adjustmentReason: "", adjustmentKey: null } : v) }));
+      setError("");
+    } catch (err) { setError(err.response?.data?.message || "No se pudo registrar el ajuste. Conserva los datos para reintentar."); }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -710,6 +727,9 @@ Fibra natural de Sandoná, Nariño.
                     type="number"
                     min="0"
                     placeholder="0"
+                    step="1"
+                    readOnly={!!variant.id}
+                    title={variant.id ? "El stock se cambia mediante un ajuste con motivo" : "Stock inicial"}
                     value={variant.stock}
                     onChange={(e) => setVariant(index, "stock", e.target.value)}
                     required
@@ -733,6 +753,13 @@ Fibra natural de Sandoná, Nariño.
                     />
                     <span className="variant-row__active-label">Activa</span>
                   </label>
+                  {variant.id && <div>
+                    <input type="number" step="1" placeholder="Ajuste + / −" aria-label="Cantidad del ajuste"
+                      value={variant.adjustmentDelta || ""} onChange={(e) => setVariant(index, "adjustmentDelta", e.target.value)} />
+                    <input placeholder="Motivo del ajuste" aria-label="Motivo del ajuste"
+                      value={variant.adjustmentReason || ""} onChange={(e) => setVariant(index, "adjustmentReason", e.target.value)} />
+                    <button type="button" className="admin-btn" onClick={() => handleStockAdjustment(index)}>Registrar ajuste</button>
+                  </div>}
                   {form.variants.length > 1 ? (
                     <button
                       type="button"

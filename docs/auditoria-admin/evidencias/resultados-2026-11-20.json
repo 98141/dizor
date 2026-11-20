@@ -1,0 +1,323 @@
+[
+  {
+    "id": "A0",
+    "ok": false,
+    "detail": {
+      "initError": "An existing index has the same name as the requested index. When index names are not specified, they are auto generated and can cause conflicts. Please refer to",
+      "indexesCreated": [
+        {
+          "key": {
+            "_id": 1
+          },
+          "unique": false,
+          "sparse": false
+        },
+        {
+          "key": {
+            "orderNumber": 1
+          },
+          "unique": true,
+          "sparse": false
+        },
+        {
+          "key": {
+            "user": 1,
+            "createdAt": -1
+          },
+          "unique": false,
+          "sparse": false
+        },
+        {
+          "key": {
+            "buyer.email": 1
+          },
+          "unique": false,
+          "sparse": false
+        },
+        {
+          "key": {
+            "idempotencyKey": 1
+          },
+          "unique": true,
+          "sparse": true
+        }
+      ]
+    }
+  },
+  {
+    "id": "A1",
+    "ok": false,
+    "detail": {
+      "index": {
+        "v": 2,
+        "key": {
+          "idempotencyKey": 1
+        },
+        "name": "idempotencyKey_1",
+        "unique": true,
+        "sparse": true
+      },
+      "first": 201,
+      "second": 400,
+      "msg": "E11000 duplicate key error collection: test.orders index: idempotencyKey_1 dup key: { idempotencyKey: null }"
+    }
+  },
+  {
+    "id": "A2",
+    "ok": false,
+    "detail": {
+      "statuses": [
+        201,
+        201,
+        400,
+        400,
+        400,
+        400
+      ],
+      "errors": [
+        "E11000 duplicate key error collection: test.orders index: orderNumber_1 dup key: { orderNumber: \"DIZ",
+        "E11000 duplicate key error collection: test.orders index: orderNumber_1 dup key: { orderNumber: \"DIZ",
+        "E11000 duplicate key error collection: test.orders index: orderNumber_1 dup key: { orderNumber: \"DIZ",
+        "E11000 duplicate key error collection: test.orders index: orderNumber_1 dup key: { orderNumber: \"DIZ"
+      ]
+    }
+  },
+  {
+    "id": "B1",
+    "ok": false,
+    "detail": {
+      "viaGuia": {
+        "s1": 200,
+        "s2": 200,
+        "orderStatus": "enviado",
+        "paymentStatus": "pendiente"
+      },
+      "viaSelector": {
+        "status": 200,
+        "orderStatus": "enviado",
+        "paymentStatus": "pagado",
+        "paymentConfirmedAt": null
+      }
+    }
+  },
+  {
+    "id": "B2",
+    "ok": false,
+    "detail": {
+      "status": 200,
+      "orderStatus": "enviado",
+      "paymentStatus": "pagado",
+      "stockDeducted": false,
+      "stockBefore": 95,
+      "stockAfter": 95
+    }
+  },
+  {
+    "id": "B3",
+    "ok": false,
+    "detail": {
+      "status": 200,
+      "orderStatus": "pagado",
+      "paymentStatus": "pendiente"
+    }
+  },
+  {
+    "id": "B4",
+    "ok": false,
+    "detail": {
+      "wompiManualByVendor": {
+        "status": 200,
+        "paymentStatus": "pagado",
+        "orderStatus": "pagado"
+      },
+      "cancelledThenConfirmed": {
+        "status": 200,
+        "orderStatus": "cancelado",
+        "paymentStatus": "pagado",
+        "stockDeducted": true,
+        "stockBefore": 94,
+        "stockAfter": 93
+      }
+    }
+  },
+  {
+    "id": "B5",
+    "ok": false,
+    "detail": {
+      "pendienteAEntregado": {
+        "status": 200,
+        "orderStatus": "entregado",
+        "paymentStatus": "pendiente",
+        "stockDeducted": true
+      },
+      "rechazadoYVuelta": {
+        "r2": 200,
+        "r3": 200,
+        "orderStatus": "pendiente",
+        "stockDeducted": true
+      },
+      "estadoInventado": {
+        "status": 400,
+        "msg": "`inventado` is not a valid enum value for path `orderStatus`."
+      }
+    }
+  },
+  {
+    "id": "B6",
+    "ok": false,
+    "detail": {
+      "status": 200,
+      "tracking": "X-9"
+    }
+  },
+  {
+    "id": "C1",
+    "ok": false,
+    "detail": {
+      "declined": 200,
+      "afterDecline": {
+        "orderStatus": "cancelado",
+        "paymentStatus": "rechazado"
+      },
+      "approved": 200,
+      "final": {
+        "orderStatus": "cancelado",
+        "paymentStatus": "pagado",
+        "stockDeducted": true
+      },
+      "stockBefore": 91,
+      "stockAfter": 90
+    }
+  },
+  {
+    "id": "C2",
+    "ok": false,
+    "detail": {
+      "code": 200,
+      "orderStatus": "pago_pendiente",
+      "paymentStatus": "pendiente",
+      "wompiStatus": "APPROVED",
+      "lastHistory": "ALERTA: Pago aprobado pero stock insuficiente al confirmar. Revisión manual requerida.",
+      "emailAttempts": []
+    }
+  },
+  {
+    "id": "C3",
+    "ok": false,
+    "detail": {
+      "codes": [
+        200,
+        200,
+        200
+      ],
+      "stockBefore": 90,
+      "stockAfter": 87,
+      "deducted": 3,
+      "paymentStatus": "pagado"
+    }
+  },
+  {
+    "id": "C4",
+    "ok": false,
+    "detail": {
+      "status": 200,
+      "orderStatus": "cancelado",
+      "paymentStatus": "pagado",
+      "notifications": []
+    }
+  },
+  {
+    "id": "C5",
+    "ok": false,
+    "detail": {
+      "status": 200,
+      "leaked": true
+    }
+  },
+  {
+    "id": "D1",
+    "ok": null,
+    "detail": {
+      "creacion": [
+        "[Dizor] Nuevo pedido: DIZ-20261120-0018"
+      ],
+      "en_preparacion": [],
+      "enviado_por_guia": [
+        "[Dizor] (sin RESEND_API_KEY) Correo de despacho no enviado: DIZ-20261120-0018"
+      ],
+      "entregado": [],
+      "cancelado": [],
+      "wompi_aprobado": [],
+      "wompi_rechazado": []
+    }
+  },
+  {
+    "id": "D2",
+    "ok": false,
+    "detail": {
+      "sentAt": "2026-11-20T19:14:16.906Z",
+      "attempts": 1,
+      "lastError": ""
+    }
+  },
+  {
+    "id": "E1",
+    "ok": false,
+    "detail": {
+      "status": 200,
+      "stockAlAbrirForm": 83,
+      "trasVenta": 82,
+      "trasGuardar": 83
+    }
+  },
+  {
+    "id": "E2",
+    "ok": false,
+    "detail": {
+      "status": 201,
+      "stockBefore": 83,
+      "stockAfter": 81.5,
+      "total": 150000
+    }
+  },
+  {
+    "id": "E3",
+    "ok": false,
+    "detail": {
+      "flagged": false
+    }
+  },
+  {
+    "id": "F1",
+    "ok": null,
+    "detail": {
+      "pendingPaymentDelta": 1,
+      "toPrepareDelta": 0,
+      "alertasPagosPendientes": 0,
+      "alertasPedidosNuevos": 17
+    }
+  },
+  {
+    "id": "G1",
+    "ok": false,
+    "detail": {
+      "status": 200,
+      "unitCostVisibleToVendor": 40000
+    }
+  },
+  {
+    "id": "G2",
+    "ok": false,
+    "detail": {
+      "status": 500,
+      "msg": "Error interno del servidor"
+    }
+  },
+  {
+    "id": "G3",
+    "ok": false,
+    "detail": {
+      "status": 200
+    }
+  }
+]

@@ -365,11 +365,11 @@ function CuentaContent() {
           await cancelOrder(orderId);
           setOrders((prev) =>
             prev.map((o) =>
-              o._id === orderId ? { ...o, orderStatus: "cancelado" } : o
+              o._id === orderId ? { ...o, orderStatus: "cancelado", canSelfCancel: false } : o
             )
           );
         } catch {
-          setCancelError("No se pudo cancelar el pedido. Inténtalo de nuevo.");
+          setCancelError("No se pudo cancelar el pedido. Puede requerir revisión administrativa; consulta su estado antes de reintentar.");
         }
       },
     });
@@ -662,7 +662,7 @@ function CuentaContent() {
                         >
                           {isExpanded ? "Cerrar" : "Ver detalle"}
                         </button>
-                        {!NON_CANCELLABLE.includes(order.orderStatus) && (
+                        {order.canSelfCancel === true && (
                           <button
                             type="button"
                             className="cuenta-order-cancel"

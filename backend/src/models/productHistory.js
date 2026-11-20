@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const productHistorySchema = new mongoose.Schema(
   {
+    movementKey: { type: String, default: undefined },
     productId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Product",
@@ -103,6 +104,7 @@ const productHistorySchema = new mongoose.Schema(
 );
 
 productHistorySchema.index({ createdAt: -1 });
+productHistorySchema.index({ movementKey: 1 }, { unique: true, partialFilterExpression: { movementKey: { $type: "string" } } });
 productHistorySchema.index({ productId: 1, createdAt: -1 });
 productHistorySchema.index({ eventType: 1, createdAt: -1 });
 productHistorySchema.index({ referenceLabel: 1 });

@@ -14,8 +14,8 @@ const {
 } = require("../services/settingsService");
 const { getEnabledPaymentMethods, isPaymentMethodEnabled } = require("../services/paymentMethods");
 const { getPublicDeliveryTerms } = require("../config/deliveryTerms");
-const { createOrder, restoreOrderStock } = require("../services/orderService");
-const { isWompiConfigured, createPaymentLink } = require("../services/wompiService");
+const { createOrder } = require("../services/orderService");
+const { isWompiConfigured, createPaymentLink, getTransaction } = require("../services/wompiService");
 const {
   isNequiDirectEnabled,
   createNequiCharge,
@@ -31,6 +31,12 @@ const { issueAccessToken, matchesHash } = require("../utils/opaqueTokens");
 // Vigencia del token de acceso del comprador a la confirmación de su pedido
 // (H-06). Cubre el retorno desde la pasarela y la consulta inmediata; después,
 // el seguimiento se hace con número de pedido + correo o desde la cuenta.
+const crypto = require("crypto");
+const { mutateOrder, transition, addIncident } = require("../services/orderOperations");
+const { canSelfCancel } = require("../services/orderTransitions");
+const { processTransaction } = require("../services/wompiPaymentService");
+const stable = (value) => Array.isArray(value) ? value.map(stable) : value && typeof value === "object"
+  ? Object.fromEntries(Object.keys(value).sort().map((k) => [k, stable(value[k])])) : value;
 const ORDER_ACCESS_TTL_MS = 72 * 60 * 60 * 1000;
 
 const grantOrderAccess = async (orderId) => {
@@ -80,6 +86,7 @@ const formatOrderConfirmation = (order) => ({
 
 // DTO seguro: nunca expone unitCost, internalCost ni datos administrativos al cliente
 const formatOrderForClient = (order) => ({
+  canSelfCancel: canSelfCancel(order),
   id: order._id,
   orderNumber: order.orderNumber,
   orderStatus: order.orderStatus,
@@ -115,7 +122,7 @@ const formatOrderForClient = (order) => ({
   })),
   statusHistory: (order.statusHistory || []).map((h) => ({
     status: h.status,
-    note: h.note,
+
     changedAt: h.changedAt,
   })),
 });
@@ -189,7 +196,7 @@ exports.calculateCheckout = catchAsync(async (req, res) => {
   });
 });
 
-exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
+const createCheckoutOrder = async (req, res, next) => {
   const {
     items,
     buyer,
@@ -259,45 +266,32 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
     }
   }
 
+  if (idempotencyKey !== undefined && (typeof idempotencyKey !== "string" || !/^[A-Za-z0-9_-]{16,128}$/.test(idempotencyKey))) {
+    throw new AppError("Clave de idempotencia inválida", 400);
+  }
+  const fingerprint = crypto.createHash("sha256").update(JSON.stringify(stable({
+    actor: req.user?.id || null, items, buyer, shippingAddress, paymentMethod, carrier: carrier || "",
+    customerNotes: customerNotes || "", couponCode: couponCode || "",
+  }))).digest("hex");
+  const replay = async (existing) => {
+    const owner = req.user?.id ? String(existing.user) === String(req.user.id)
+      : !existing.user && existing.buyer?.email === buyer.email.trim().toLowerCase();
+    if (!owner || !existing.checkoutFingerprint || existing.checkoutFingerprint !== fingerprint) {
+      throw new AppError("La clave ya se usó para otra solicitud", 409);
+    }
+    if (existing.checkoutState !== "ready") throw new AppError("Pedido en proceso o pendiente de revisión. Conserva la misma clave e inténtalo después.", 409);
+    return res.status(200).json({ status: "success", accessToken: await grantOrderAccess(existing._id),
+      order: { id: existing._id, orderNumber: existing.orderNumber, total: existing.total,
+        paymentMethod: existing.paymentMethod, orderStatus: existing.orderStatus, paymentStatus: existing.paymentStatus },
+      paymentUrl: existing.wompi?.paymentLinkUrl || null, message: "Pedido ya registrado." });
+  };
+  if (idempotencyKey) {
+    const existing = await Order.findOne({ idempotencyKey }).select("+checkoutFingerprint");
+    if (existing) return replay(existing);
+  }
   const resolved = await resolveCartItems(items);
   const settings = await getStoreSettings();
-  const totals = calculateTotals(
-    resolved,
-    settings,
-    shippingAddress.department
-  );
-
-  // Idempotencia: si ya existe una orden con esta clave, devolverla solo si pertenece al mismo actor
-  if (idempotencyKey) {
-    const existing = await Order.findOne({ idempotencyKey });
-    if (existing) {
-      const ownerUserId = req.user?.id?.toString() || null;
-      const ownerEmail = buyer?.email?.toLowerCase() || "";
-      const sameUser = ownerUserId && existing.user?.toString() === ownerUserId;
-      const sameEmail = !ownerUserId && existing.buyer?.email === ownerEmail;
-
-      if (sameUser || sameEmail) {
-        // Reintento del mismo pedido: no se crea otro ni se reenvía el acuse;
-        // se rota el token de acceso (el anterior deja de servir).
-        const accessToken = await grantOrderAccess(existing._id);
-        return res.status(200).json({
-          accessToken,
-          status: "success",
-          order: {
-            id: existing._id,
-            orderNumber: existing.orderNumber,
-            total: existing.total,
-            paymentMethod: existing.paymentMethod,
-            orderStatus: existing.orderStatus,
-            paymentStatus: existing.paymentStatus,
-          },
-          paymentUrl: existing.wompi?.paymentLinkUrl || null,
-          message: "Pedido ya registrado.",
-        });
-      }
-      // Key no pertenece a este actor: ignorar y continuar (la BD rechazará por unique index)
-    }
-  }
+  const totals = calculateTotals(resolved, settings, shippingAddress.department);
 
   // Validar y aplicar cupón (sin consumirlo todavía)
   let appliedCoupon = null;
@@ -353,37 +347,19 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
       customerNotes,
       couponCode: appliedCoupon?.code || "",
       deductStock,
-      idempotencyKey: idempotencyKey || null,
+      idempotencyKey: idempotencyKey || undefined,
+      checkoutFingerprint: fingerprint, checkoutState: "processing",
       req,
     });
   } catch (err) {
-    return next(new AppError(err.message || "No se pudo crear el pedido", 400));
-  }
-
-  // Consumir cupón solo para métodos de pago que no sean Wompi
-  // (Wompi lo consume el webhook cuando confirma el pago)
-  // Incremento atómico con condición: evita race condition si dos requests
-  // concurrentes usan el mismo cupón al mismo tiempo
-  if (appliedCoupon && deductStock) {
-    const consumed = await Coupon.findOneAndUpdate(
-      {
-        _id: appliedCoupon._id,
-        isActive: true,
-        $or: [
-          { maxUses: null },
-          { $expr: { $lt: ["$usedCount", "$maxUses"] } },
-        ],
-      },
-      { $inc: { usedCount: 1 } },
-      { new: true }
-    );
-    if (!consumed) {
-      return next(new AppError("El cupón ya no está disponible.", 400));
+    if (err.code === 11000 && idempotencyKey) {
+      const existing = await Order.findOne({ idempotencyKey }).select("+checkoutFingerprint");
+      if (existing) return replay(existing);
     }
-    order.couponConsumed = true;
-    await order.save({ validateBeforeSave: false });
+    return next(err.isOperational ? err : new AppError("No se pudo crear el pedido. Intenta nuevamente con la misma clave.", 503));
   }
 
+  req.createdCheckoutOrderId = order._id;
   if (req.user) {
     await Cart.findOneAndUpdate(
       { user: req.user.id },
@@ -399,7 +375,7 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
   if (paymentMethod === "wompi") {
     if (!isWompiConfigured()) {
       // Limpiar la orden si Wompi no está configurado
-      await Order.findByIdAndDelete(order._id).catch(() => {});
+      await Order.updateOne({ _id: order._id }, { $set: { checkoutState: "failed", requiresReview: true }, $push: { incidents: { code: "payment_link_creation_failed", detail: "Verificar con el proveedor antes de reintentar" } } });
       return next(
         new AppError("Wompi no está configurado en el servidor", 503)
       );
@@ -409,13 +385,14 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
       order.wompi = {
         paymentLinkId: wompi.paymentLinkId,
         paymentLinkUrl: wompi.paymentLinkUrl,
+        expiresAt: wompi.expiresAt,
       };
       await order.save();
       paymentUrl = wompi.paymentLinkUrl;
     } catch (err) {
-      await Order.findByIdAndDelete(order._id).catch(() => {});
+      await Order.updateOne({ _id: order._id }, { $set: { checkoutState: "failed", requiresReview: true }, $push: { incidents: { code: "payment_link_creation_failed", detail: "Verificar con el proveedor antes de reintentar" } } });
       return next(
-        new AppError(err.message || "No se pudo iniciar el pago con Wompi", 502)
+        new AppError("No se pudo iniciar el pago con Wompi. El pedido queda pendiente de revisión.", 502)
       );
     }
   }
@@ -439,7 +416,7 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
       });
       await order.save();
     } catch (err) {
-      await Order.findByIdAndDelete(order._id).catch(() => {});
+      await Order.updateOne({ _id: order._id }, { $set: { checkoutState: "failed", requiresReview: true }, $push: { incidents: { code: "payment_link_creation_failed", detail: "Verificar con el proveedor antes de reintentar" } } });
       return next(
         new AppError(err.message || "No se pudo iniciar el pago con Nequi", 502)
       );
@@ -483,6 +460,7 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
     });
   }
 
+  await Order.updateOne({ _id: order._id }, { $set: { checkoutState: "ready" } });
   const accessToken = await grantOrderAccess(order._id);
 
   // Acuse de recibo al comprador (H-20): idempotente; un fallo no bloquea el
@@ -514,6 +492,20 @@ exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
           ? "Pedido creado. Aprueba el pago en tu app Nequi."
           : "Pedido creado. Pagarás al recibir tu pedido.",
   });
+};
+
+exports.createCheckoutOrder = catchAsync(async (req, res, next) => {
+  try {
+    return await createCheckoutOrder(req, res, (error) => { throw error; });
+  } catch (error) {
+    if (req.createdCheckoutOrderId) {
+      await Order.updateOne({ _id: req.createdCheckoutOrderId, checkoutState: "processing" }, {
+        $set: { checkoutState: "failed", requiresReview: true },
+        $push: { incidents: { code: "checkout_completion_failed", detail: "Pedido registrado; completar o conciliar antes de crear otra compra" } },
+      }).catch(() => {});
+    }
+    return next(error);
+  }
 });
 
 // Seguimiento por número de pedido + correo. Ahora por POST con cuerpo para
@@ -615,7 +607,7 @@ exports.getMyOrders = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     results: orders.length,
-    orders,
+    orders: orders.map((o) => ({ ...o.toObject(), canSelfCancel: canSelfCancel(o) })),
   });
 });
 
@@ -653,31 +645,24 @@ exports.cancelMyOrder = catchAsync(async (req, res, next) => {
     return next(new AppError("Pedido no encontrado", 404));
   }
 
-  if (["enviado", "entregado", "cancelado"].includes(order.orderStatus)) {
-    return next(
-      new AppError("Este pedido no puede cancelarse en su estado actual", 400)
-    );
+  if (!canSelfCancel(order)) throw new AppError("La cancelación requiere intervención administrativa", 409);
+  if (order.paymentMethod === "wompi") {
+    // The link API does not enumerate all transactions. Unknown/unavailable payment state
+    // must be reviewed, never treated as evidence of non-payment.
+    if (!order.wompi?.transactionId) {
+      await Order.updateOne({ _id: order._id, "incidents.code": { $ne: "cancellation_verification_pending" } }, { $set: { requiresReview: true }, $push: { incidents: { code: "cancellation_verification_pending", detail: "Sin transacción consultable: revisión administrativa requerida" } } });
+      throw new AppError("No se puede verificar aún el pago. La cancelación requiere revisión administrativa.", 409);
+    }
+    let tx;
+    try { tx = await getTransaction(order.wompi.transactionId); }
+    catch { throw new AppError("No se pudo verificar con Wompi. Reintenta o solicita revisión administrativa.", 503); }
+    if (tx.id !== order.wompi.transactionId) throw new AppError("Verificación de pago inválida", 409);
+    await processTransaction(order._id, tx, { environment: process.env.WOMPI_ENV === "production" ? "prod" : "test" });
+    if (tx.status === "APPROVED") throw new AppError("El pago está aprobado; solicita intervención administrativa", 409);
   }
-
-  // Restaurar stock si ya fue descontado
-  if (order.stockDeducted) {
-    await restoreOrderStock(order.items);
-    order.stockDeducted = false;
-  }
-
-  order.orderStatus = "cancelado";
-  order.statusHistory.push({
-    status: "cancelado",
-    note: "Cancelado por el cliente",
+  await mutateOrder(order._id, async (current, session) => {
+    if (String(current.user) !== String(req.user.id) || !canSelfCancel(current)) throw new AppError("El pedido ya no puede autocancelarse", 409);
+    await transition(current, "cancelado", { ...req.user.toObject?.(), id: req.user.id, role: "admin" }, "Cancelado por el cliente antes de preparación", session);
   });
-  await order.save();
-
-  res.status(200).json({
-    status: "success",
-    message: "Pedido cancelado",
-    order: {
-      orderNumber: order.orderNumber,
-      orderStatus: order.orderStatus,
-    },
-  });
+  res.status(200).json({ status: "success", message: "Pedido cancelado", order: { orderNumber: order.orderNumber, orderStatus: "cancelado" } });
 });

@@ -24,11 +24,9 @@ exports.getAlerts = catchAsync(async (req, res) => {
         .sort({ createdAt: -1 })
         .lean(),
       Order.find({
-        paymentMethod: "nequi_manual",
-        paymentStatus: "pendiente",
-        orderStatus: { $nin: ["cancelado", "rechazado"] },
+        requiresReview: true,
       })
-        .select("orderNumber buyer total createdAt")
+        .select("orderNumber buyer total createdAt incidents requiresReview")
         .sort({ createdAt: 1 })
         .lean(),
       SpecialRequest.find({ status: "pendiente" })
@@ -52,9 +50,10 @@ exports.getAlerts = catchAsync(async (req, res) => {
       (s, v) => s + (v.isActive !== false ? v.stock || 0 : 0),
       0
     );
-    if (totalStock === 0) {
+    const active = (p.variants || []).filter((v) => v.isActive !== false);
+    if (active.some((v) => v.stock === 0)) {
       outOfStockProducts.push({ id: p._id, name: p.name, slug: p.slug, totalStock: 0 });
-    } else if (totalStock <= LOW_STOCK_THRESHOLD) {
+    } else if (active.some((v) => v.stock <= LOW_STOCK_THRESHOLD)) {
       lowStockProducts.push({ id: p._id, name: p.name, slug: p.slug, totalStock });
     }
   }

@@ -32,6 +32,7 @@ exports.createPaymentLink = async (order) => {
 
   const res = await fetch(`${getBaseUrl()}/payment_links`, {
     method: "POST",
+    signal: AbortSignal.timeout(10000),
     headers: {
       Authorization: `Bearer ${privateKey}`,
       "Content-Type": "application/json",
@@ -57,6 +58,7 @@ exports.createPaymentLink = async (order) => {
   return {
     paymentLinkId: linkId,
     paymentLinkUrl: `https://checkout.wompi.co/l/${linkId}`,
+    expiresAt: exports.parseProviderExpiry(json.data.expires_at),
   };
 };
 
@@ -81,13 +83,14 @@ exports.verifyEventChecksum = (eventBody, checksumHeader) => {
 
   // Anti-replay: rechazar eventos demasiado antiguos o del futuro.
   const eventTimestamp = eventBody.timestamp;
-  if (!eventTimestamp) return false;
+  if (!Number.isSafeInteger(eventTimestamp) || eventTimestamp <= 0) return false;
   const ageMs = Date.now() - eventTimestamp * 1000;
   if (ageMs > EVENT_MAX_AGE_MS || ageMs < -60 * 1000) {
     return false;
   }
 
   const { properties } = eventBody.signature;
+  if (!Array.isArray(properties) || !["transaction.id", "transaction.status", "transaction.amount_in_cents"].every((p) => properties.includes(p)) || !properties.every((p) => typeof p === "string")) return false;
   const timestamp = eventBody.timestamp;
   let chain = "";
 
@@ -113,4 +116,22 @@ exports.verifyEventChecksum = (eventBody, checksumHeader) => {
   const b = Buffer.from(received, "utf8");
   if (a.length !== b.length) return false;
   return crypto.timingSafeEqual(a, b);
+};
+
+// Wompi documents timezone-less link timestamps as UTC. Never use host timezone.
+exports.parseProviderExpiry = (value) => {
+  if (typeof value !== "string" || !value) return null;
+  const utc = /(?:Z|[+-]\d{2}:?\d{2})$/i.test(value) ? value : `${value.replace(" ", "T")}Z`;
+  const date = new Date(utc);
+  return Number.isFinite(date.getTime()) ? date : null;
+};
+exports.getTransaction = async (id) => {
+  if (!process.env.WOMPI_PRIVATE_KEY) throw new Error("Wompi unavailable");
+  const res = await fetch(`${getBaseUrl()}/transactions/${encodeURIComponent(id)}`, {
+    headers: { Authorization: `Bearer ${process.env.WOMPI_PRIVATE_KEY}` }, signal: AbortSignal.timeout(10000),
+  });
+  if (!res.ok) throw new Error("Wompi verification unavailable");
+  const json = await res.json();
+  if (json?.data?.id !== id) throw new Error("Invalid provider response");
+  return json.data;
 };

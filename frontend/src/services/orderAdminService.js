@@ -1,5 +1,7 @@
 import api from "./api";
 
+export const reconcileWompi = async (id) => (await api.post(`/admin/orders/${id}/reconcile-wompi`)).data;
+
 export const getOrderStats = async () => {
   const res = await api.get("/admin/orders/stats");
   return res.data;

@@ -236,6 +236,8 @@ const buildMonthlyTrend = async (products, months = 6) => {
 
     const orders = await Order.find({
       paymentStatus: "pagado",
+      requiresReview: { $ne: true },
+      orderStatus: { $nin: ["cancelado", "rechazado", "devuelto"] },
       createdAt: { $gte: start, $lte: end },
     })
       .select("items total unitCost")
@@ -268,7 +270,7 @@ exports.buildFinanceReport = async (query = {}) => {
   const { start, end, label } = parseRangeParam(query);
   const dateFilter = buildDateFilter(start, end);
 
-  const paidFilter = { paymentStatus: "pagado", ...dateFilter };
+  const paidFilter = { paymentStatus: "pagado", requiresReview: { $ne: true }, orderStatus: { $nin: ["cancelado", "rechazado", "devuelto"] }, ...dateFilter };
   const pendingFilter = {
     paymentStatus: "pendiente",
     orderStatus: { $nin: ["cancelado", "rechazado"] },
@@ -393,6 +395,7 @@ exports.buildFinanceReport = async (query = {}) => {
     monthlyTrend,
     salesLines,
     notes: [
+      "Las ventas conciliadas excluyen pedidos cancelados, devueltos o con incidencias; el dinero recibido se conserva como evidencia para conciliación.",
       "La ganancia bruta usa el costo registrado en cada pedido cuando existe; si no, el costo actual del producto.",
       "Asigna costo interno en todos los productos para métricas precisas.",
       "Sin ventas en el período los totales aparecen en cero.",

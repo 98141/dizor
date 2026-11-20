@@ -4,10 +4,10 @@ const catchAsync = require("../utils/catchAsync");
 const { logAuditEvent, safeLog } = require("../services/auditService");
 const {
   isAdmin,
-  canUpdateOrderStatus,
   canConfirmPayment,
 } = require("../utils/orderPermissions");
-const { restoreOrderStock, deductOrderStock } = require("../services/orderService");
+const { mutateOrder, transition, history } = require("../services/orderOperations");
+const { allowedTransitions, assertCollection } = require("../services/orderTransitions");
 const { sendOrderShippedEmail } = require("../services/emailService");
 
 const formatOrderList = (order) => ({
@@ -26,25 +26,18 @@ const formatOrderList = (order) => ({
   shippingRequired: order.shippingRequired !== false,
   createdAt: order.createdAt,
   itemCount: order.items?.length || 0,
+  requiresReview: !!order.requiresReview,
 });
-
-const pushStatusHistory = (order, status, note, userId) => {
-  order.statusHistory.push({
-    status,
-    note: note || "",
-    changedBy: userId || null,
-    changedAt: new Date(),
-  });
-};
 
 exports.getOrderStats = catchAsync(async (req, res) => {
   const [total, pendingPayment, toPrepare, shippedToday] = await Promise.all([
     Order.countDocuments(),
     Order.countDocuments({
       paymentStatus: "pendiente",
+      paymentMethod: "wompi",
       orderStatus: { $nin: ["cancelado", "rechazado"] },
     }),
-    Order.countDocuments({ orderStatus: "pagado" }),
+    Order.countDocuments({ requiresReview: { $ne: true }, stockDeducted: true, $or: [{ orderStatus: "pagado", paymentStatus: "pagado" }, { orderStatus: "pendiente", paymentMethod: "contra_entrega" }] }),
     Order.countDocuments({
       orderStatus: "enviado",
       updatedAt: { $gte: new Date(new Date().setHours(0, 0, 0, 0)) },
@@ -75,7 +68,7 @@ exports.getOrders = catchAsync(async (req, res) => {
   if (req.query.source) filter.source = req.query.source;
 
   if (req.query.q?.trim()) {
-    const q = req.query.q.trim();
+    const q = req.query.q.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     filter.$or = [
       { orderNumber: { $regex: q, $options: "i" } },
       { "buyer.name": { $regex: q, $options: "i" } },
@@ -115,227 +108,72 @@ exports.getOrder = catchAsync(async (req, res, next) => {
     return next(new AppError("Pedido no encontrado", 404));
   }
 
-  res.status(200).json({
-    status: "success",
-    order,
-  });
+  const dto = order.toObject();
+  if (!isAdmin(req.user.role)) for (const item of dto.items) delete item.unitCost;
+  dto.allowedTransitions = allowedTransitions(dto, req.user.role);
+  dto.canConfirmCollection = isAdmin(req.user.role) && dto.paymentMethod === "contra_entrega"
+    && dto.orderStatus === "entregado" && dto.paymentStatus === "pendiente";
+  dto.canUpdateShipping = ["en_preparacion", "enviado"].includes(dto.orderStatus)
+    && !dto.requiresReview && (dto.paymentMethod === "contra_entrega" || dto.paymentStatus === "pagado");
+  res.status(200).json({ status: "success", order: dto });
 });
 
-exports.updateOrderStatus = catchAsync(async (req, res, next) => {
-  const { orderStatus, note } = req.body;
-
-  if (!orderStatus) {
-    return next(new AppError("El estado del pedido es obligatorio", 400));
+exports.updateOrderStatus = catchAsync(async (req, res) => {
+  const { order, changed } = await mutateOrder(req.params.id, async (order, session) => {
+    const changed = await transition(order, req.body.orderStatus, req.user, req.body.note, session);
+    return { changed };
+  });
+  if (changed) safeLog(logAuditEvent({ req, user: req.user, action: "order_status_changed", module: "orders",
+    entityId: order._id, entityType: "order", summary: `Pedido ${order.orderNumber}: ${order.orderStatus}` }));
+  if (changed && order.orderStatus === "enviado") {
+    try { await sendOrderShippedEmail(order); } catch (err) { console.error("[Dizor] Correo de despacho pendiente", err.message); }
   }
+  res.status(200).json({ status: "success", message: "Estado actualizado", order: formatOrderList(order) });
+});
 
-  if (!canUpdateOrderStatus(req.user.role, orderStatus)) {
-    return next(
-      new AppError("No tienes permiso para asignar este estado", 403)
-    );
-  }
-
-  const order = await Order.findById(req.params.id);
-
-  if (!order) {
-    return next(new AppError("Pedido no encontrado", 404));
-  }
-
-  if (["cancelado", "entregado", "devuelto"].includes(order.orderStatus)) {
-    return next(
-      new AppError("No se puede modificar un pedido en estado final", 400)
-    );
-  }
-
-  const previousStatus = order.orderStatus;
-
-  // Para marcar como enviado se requieren transportadora y número de guía
-  if (orderStatus === "enviado") {
-    if (!order.carrier?.trim() || !order.trackingNumber?.trim()) {
-      return next(
-        new AppError(
-          "Para marcar este pedido como enviado debes ingresar transportadora y número de guía.",
-          400
-        )
-      );
-    }
-  }
-
-  // Restaurar stock al cancelar o marcar como devuelto
-  if (["cancelado", "devuelto"].includes(orderStatus) && order.stockDeducted) {
-    await restoreOrderStock(order.items);
-    order.stockDeducted = false;
-  }
-
-  order.orderStatus = orderStatus;
-  pushStatusHistory(order, orderStatus, note, req.user.id);
-
-  if (orderStatus === "enviado" && order.paymentStatus === "pendiente") {
+exports.confirmPayment = catchAsync(async (req, res) => {
+  const { order, changed } = await mutateOrder(req.params.id, async (order) => {
+    // Check role and method even on retries; payment is never an operational transition.
+    if (!canConfirmPayment(req.user.role)) throw new AppError("Solo administradores pueden registrar recaudos", 403);
+    if (order.paymentMethod !== "contra_entrega") throw new AppError("Wompi no admite confirmación manual", 409);
+    if (["cancelado", "devuelto", "rechazado"].includes(order.orderStatus)) throw new AppError("Pedido cerrado", 409);
+    if (order.paymentStatus === "pagado") return;
+    assertCollection(order, req.user.role, req.body);
+    order.collection = { receivedAt: new Date(req.body.receivedAt), recordedAt: new Date(),
+      reference: req.body.reference.trim(), proofUrl: req.body.paymentProofUrl || "", recordedBy: req.user.id };
     order.paymentStatus = "pagado";
-  }
-
-  await order.save();
-
-  if (orderStatus === "enviado" && previousStatus !== "enviado") {
-    try {
-      await sendOrderShippedEmail(order);
-    } catch (err) {
-      console.error("[Dizor] No se pudo enviar el correo de pedido enviado:", err.message);
-    }
-  }
-
-  safeLog(
-    logAuditEvent({
-      req,
-      action: "order_status_changed",
-      module: "orders",
-      user: req.user,
-      entityId: order._id,
-      entityType: "order",
-      summary: `Pedido ${order.orderNumber}: ${previousStatus} → ${orderStatus}`,
-      previousData: { status: previousStatus },
-      newData: { status: orderStatus, orderNumber: order.orderNumber },
-    })
-  );
-
-  res.status(200).json({
-    status: "success",
-    message: "Estado actualizado",
-    order: formatOrderList(order),
+    order.paymentConfirmedAt = new Date(); order.paymentConfirmedBy = req.user.id;
+    order.paymentProofUrl = req.body.paymentProofUrl || "";
+    history(order, `Recaudo confirmado: ${order.collection.reference}`, req.user);
+    return { changed: true };
   });
+  if (changed) safeLog(logAuditEvent({ req, user: req.user, action: "payment_confirmed", module: "orders",
+    entityId: order._id, entityType: "order", summary: `Recaudo registrado · ${order.orderNumber}` }));
+  res.status(200).json({ status: "success", message: "Recaudo registrado", order: formatOrderList(order) });
 });
 
-exports.confirmPayment = catchAsync(async (req, res, next) => {
-  if (!canConfirmPayment(req.user.role)) {
-    return next(new AppError("No autorizado", 403));
-  }
-
-  const { paymentProofUrl, note } = req.body;
-  const order = await Order.findById(req.params.id);
-
-  if (!order) {
-    return next(new AppError("Pedido no encontrado", 404));
-  }
-
-  if (order.paymentStatus === "pagado") {
-    return next(new AppError("El pago ya fue confirmado", 400));
-  }
-
-  // Pedidos Wompi/Nequi API llegan aquí con stockDeducted=false (solo se
-  // descuenta automáticamente vía webhook); si un admin confirma el pago a
-  // mano hay que descontar el stock aquí también para no dejarlo sin ajustar.
-  if (!order.stockDeducted) {
-    try {
-      await deductOrderStock(order.items, {
-        orderId: order._id,
-        orderNumber: order.orderNumber,
-        user: req.user,
-      });
-      order.stockDeducted = true;
-    } catch (err) {
-      return next(
-        new AppError(
-          err.message || "No se pudo confirmar el pago: stock insuficiente",
-          400
-        )
-      );
+exports.updateShipping = catchAsync(async (req, res) => {
+  const { order, changed } = await mutateOrder(req.params.id, async (order, session) => {
+    if (!["en_preparacion", "enviado"].includes(order.orderStatus) || order.requiresReview
+        || (order.paymentMethod !== "contra_entrega" && order.paymentStatus !== "pagado")) {
+      throw new AppError("No se puede registrar una guía en este estado", 409);
     }
-  }
-
-  order.paymentStatus = "pagado";
-  order.paymentProofUrl = paymentProofUrl || order.paymentProofUrl;
-  order.paymentConfirmedAt = new Date();
-  order.paymentConfirmedBy = req.user.id;
-
-  if (order.orderStatus === "pago_pendiente" || order.orderStatus === "pendiente") {
-    order.orderStatus = "pagado";
-    pushStatusHistory(order, "pagado", note || "Pago confirmado", req.user.id);
-  } else {
-    pushStatusHistory(
-      order,
-      order.orderStatus,
-      note || "Pago confirmado",
-      req.user.id
-    );
-  }
-
-  await order.save();
-
-  safeLog(
-    logAuditEvent({
-      req,
-      action: "payment_confirmed",
-      module: "orders",
-      user: req.user,
-      entityId: order._id,
-      entityType: "order",
-      summary: `Pago confirmado · ${order.orderNumber}`,
-      newData: {
-        orderNumber: order.orderNumber,
-        paymentMethod: order.paymentMethod,
-      },
-    })
-  );
-
-  res.status(200).json({
-    status: "success",
-    message: "Pago confirmado correctamente",
-    order: formatOrderList(order),
-  });
-});
-
-exports.updateShipping = catchAsync(async (req, res, next) => {
-  const { carrier, trackingNumber, shippingNotes } = req.body;
-
-  const order = await Order.findById(req.params.id);
-
-  if (!order) {
-    return next(new AppError("Pedido no encontrado", 404));
-  }
-
-  if (carrier) order.carrier = carrier;
-  if (trackingNumber !== undefined) order.trackingNumber = trackingNumber;
-  if (shippingNotes !== undefined) order.shippingNotes = shippingNotes;
-
-  const justShipped = trackingNumber && order.orderStatus === "en_preparacion";
-
-  if (justShipped) {
-    order.orderStatus = "enviado";
-    pushStatusHistory(
-      order,
-      "enviado",
-      `Guía registrada: ${trackingNumber}`,
-      req.user.id
-    );
-  }
-
-  await order.save();
-
-  if (justShipped) {
-    try {
-      await sendOrderShippedEmail(order);
-    } catch (err) {
-      console.error("[Dizor] No se pudo enviar el correo de pedido enviado:", err.message);
+    const previous = `${order.carrier}|${order.trackingNumber}|${order.shippingNotes}`;
+    for (const key of ["carrier", "trackingNumber", "shippingNotes"]) {
+      if (req.body[key] !== undefined) {
+        if (typeof req.body[key] !== "string") throw new AppError("Información de envío inválida", 400);
+        order[key] = req.body[key].trim();
+      }
     }
-  }
-
-  safeLog(
-    logAuditEvent({
-      req,
-      action: "tracking_registered",
-      module: "orders",
-      user: req.user,
-      entityId: order._id,
-      entityType: "order",
-      summary: `Guía ${trackingNumber || "—"} · ${order.orderNumber}`,
-      newData: { orderNumber: order.orderNumber, trackingNumber },
-    })
-  );
-
-  res.status(200).json({
-    status: "success",
-    message: "Información de envío actualizada",
-    order: formatOrderList(order),
+    if (!order.carrier || !order.trackingNumber) throw new AppError("Registra transportadora y guía", 400);
+    const changed = await transition(order, "enviado", req.user, `Guía registrada: ${order.trackingNumber}`, session);
+    if (!changed && previous !== `${order.carrier}|${order.trackingNumber}|${order.shippingNotes}`) history(order, `Guía corregida: ${order.trackingNumber}`, req.user);
+    return { changed };
   });
+  if (changed) {
+    try { await sendOrderShippedEmail(order); } catch (err) { console.error("[Dizor] Correo de despacho pendiente", err.message); }
+  }
+  res.status(200).json({ status: "success", message: "Guía guardada", order: formatOrderList(order) });
 });
 
 exports.exportOrdersPdf = catchAsync(async (req, res) => {
@@ -345,7 +183,7 @@ exports.exportOrdersPdf = catchAsync(async (req, res) => {
   if (req.query.orderStatus) filter.orderStatus = req.query.orderStatus;
   if (req.query.paymentStatus) filter.paymentStatus = req.query.paymentStatus;
   if (req.query.q?.trim()) {
-    const q = req.query.q.trim();
+    const q = req.query.q.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     filter.$or = [
       { orderNumber: { $regex: q, $options: "i" } },
       { "buyer.name": { $regex: q, $options: "i" } },
@@ -416,6 +254,12 @@ exports.assignOrder = catchAsync(async (req, res, next) => {
   }
 
   const { assignedTo } = req.body;
+  if (assignedTo) {
+    const User = require("../models/user");
+    if (!await User.exists({ _id: assignedTo, isActive: true, role: { $in: ["admin", "superadmin", "vendedor"] } })) {
+      throw new AppError("El responsable debe ser personal activo", 400);
+    }
+  }
   const order = await Order.findByIdAndUpdate(
     req.params.id,
     { assignedTo: assignedTo || null },
@@ -431,5 +275,18 @@ exports.assignOrder = catchAsync(async (req, res, next) => {
     message: "Pedido asignado",
     order: formatOrderList(order),
   });
+});
+
+exports.reconcileWompi = catchAsync(async (req, res) => {
+  if (!isAdmin(req.user.role)) throw new AppError("Solo administradores pueden conciliar", 403);
+  const order = await Order.findById(req.params.id);
+  if (!order) throw new AppError("Pedido no encontrado", 404);
+  if (order.paymentMethod !== "wompi" || !order.wompi?.transactionId) throw new AppError("No hay transacción Wompi consultable", 409);
+  const { getTransaction, getExpectedEventEnvironment } = require("../services/wompiService");
+  let tx;
+  try { tx = await getTransaction(order.wompi.transactionId); }
+  catch { throw new AppError("No se pudo consultar a Wompi. Conserva el pedido para revisión.", 503); }
+  await require("../services/wompiPaymentService").processTransaction(order._id, tx, { environment: getExpectedEventEnvironment(), reconcile: true });
+  res.json({ status: "success", message: "Transacción consultada y conciliada según evidencia del proveedor" });
 });
 

@@ -153,7 +153,8 @@ const sendOrderReceiptOnce = async (orderId) => {
 
   const { subject, html } = buildOrderReceivedEmail(claimed);
   try {
-    await (transport || defaultTransport)({ to: claimed.buyer.email, subject, html });
+    const result = await (transport || defaultTransport)({ to: claimed.buyer.email, subject, html });
+    if (result?.devMode) throw new Error("Proveedor de correo no configurado; acuse no enviado");
     await Order.updateOne(
       { _id: orderId },
       { $set: { "buyerReceipt.sentAt": new Date(), "buyerReceipt.lastError": "" } }

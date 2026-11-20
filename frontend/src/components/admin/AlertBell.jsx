@@ -9,7 +9,7 @@ const DISMISSED_KEY = "dizor_dismissed_alerts";
 
 const ALERT_META = {
   newOrders:       { label: "Pedidos nuevos (24h)",        color: "#dc2626", dot: "🔴" },
-  pendingPayments: { label: "Pagos Nequi por confirmar",   color: "#d97706", dot: "🟡" },
+  pendingPayments: { label: "Pedidos por conciliar",   color: "#d97706", dot: "🟡" },
   lowStock:        { label: "Stock bajo",                  color: "#d97706", dot: "🟡" },
   outOfStock:      { label: "Sin stock",                   color: "#dc2626", dot: "🔴" },
   specialRequests: { label: "Solicitudes sin atender",     color: "#d97706", dot: "🟡" },

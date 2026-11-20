@@ -81,3 +81,8 @@ export const deleteTaxonomyItem = async (type, id) => {
   const res = await api.delete(`/admin/catalog/${type}/${id}`);
   return res.data;
 };
+
+export const adjustProductStock = async (id, data) => {
+  const res = await api.post(`/admin/catalog/products/${id}/stock`, data);
+  return res.data;
+};

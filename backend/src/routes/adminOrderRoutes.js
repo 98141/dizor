@@ -16,6 +16,7 @@ router.get("/", orderAdminController.getOrders);
 router.get("/:id", orderAdminController.getOrder);
 router.patch("/:id/status", orderAdminController.updateOrderStatus);
 router.patch("/:id/payment", orderAdminController.confirmPayment);
+router.post("/:id/reconcile-wompi", authorizeRoles("superadmin", "admin"), orderAdminController.reconcileWompi);
 router.patch("/:id/shipping", orderAdminController.updateShipping);
 router.patch("/:id/assign", orderAdminController.assignOrder);
 
