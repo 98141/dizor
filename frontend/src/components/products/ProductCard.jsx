@@ -74,7 +74,10 @@ export default function ProductCard({
   index,
   presentation = "default",
   sizes: sizesProp,
+  // Nivel del título: 2 en catálogo/home; 3 bajo un h2 de sección (PDP).
+  headingLevel = 2,
 }) {
+  const TitleTag = headingLevel === 3 ? "h3" : "h2";
   const [loadSecondary, setLoadSecondary] = useState(false);
 
   const hasPromo =
@@ -179,11 +182,11 @@ export default function ProductCard({
       />
 
       <div className="product-card__body">
-        <h2 className="product-card__title">
+        <TitleTag className="product-card__title">
           <Link href={productHref} onClick={handleSelect}>
             {product.name}
           </Link>
-        </h2>
+        </TitleTag>
 
         <div
           className="product-card__colors"

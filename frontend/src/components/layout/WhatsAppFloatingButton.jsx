@@ -2,17 +2,26 @@
 
 import { getWhatsAppUrl } from "@/lib/whatsapp";
 import { trackWhatsAppClick } from "@/lib/analytics/events";
+import { useWhatsAppContext } from "@/lib/whatsappContext";
 
 const WA_MESSAGE = "Hola! Tengo una pregunta sobre sus sombreros artesanales.";
 
 export default function WhatsAppFloatingButton() {
+  // La PDP puede aportar un mensaje con el nombre del producto, pedir que
+  // el botón ceda la esquina mientras pasa el botón de compra, o subirlo
+  // por encima de su barra de compra móvil. Fuera de la PDP: sin cambios.
+  const { message, yieldTo, offset } = useWhatsAppContext();
+
   return (
     <a
-      href={getWhatsAppUrl(WA_MESSAGE)}
+      href={getWhatsAppUrl(message || WA_MESSAGE)}
       target="_blank"
       rel="noopener noreferrer"
-      className="whatsapp-float"
+      className={`whatsapp-float${yieldTo ? " is-yielding" : ""}`}
+      style={offset ? { "--wa-offset": `${offset}px` } : undefined}
       aria-label="Contáctanos por WhatsApp"
+      aria-hidden={yieldTo ? "true" : undefined}
+      tabIndex={yieldTo ? -1 : undefined}
       title="WhatsApp"
       onClick={() =>
         trackWhatsAppClick({ linkLocation: "floating_button", purpose: "general_inquiry" })

@@ -4,14 +4,13 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { SHIMMER_BLUR_DATA_URL } from "@/lib/imagePlaceholder";
+import useLightboxControls from "@/hooks/useLightboxControls";
 import {
   DEFAULT_INSPIRATION_RATIO,
   focusPosition,
   inspirationLayout,
   shapeOf,
 } from "@/lib/inspirationLayout";
-
-const SWIPE_THRESHOLD = 48;
 
 function Icon({ path }) {
   return (
@@ -157,7 +156,6 @@ export default function InspirationGallery({ images = [] }) {
 function InspirationLightbox({ images, ratios, index, onIndexChange, onClose }) {
   const dialogRef = useRef(null);
   const closeRef = useRef(null);
-  const touchX = useRef(null);
   const total = images.length;
   const img = images[index];
 
@@ -166,57 +164,16 @@ function InspirationLightbox({ images, ratios, index, onIndexChange, onClose }) 
     [onIndexChange, total]
   );
 
-  // Bloqueo de scroll (sin salto por la barra), foco inicial y teclado.
-  useEffect(() => {
-    const { body, documentElement } = document;
-    const prevOverflow = body.style.overflow;
-    const prevPadding = body.style.paddingRight;
-    const scrollbar = window.innerWidth - documentElement.clientWidth;
-    body.style.overflow = "hidden";
-    if (scrollbar > 0) body.style.paddingRight = `${scrollbar}px`;
-    closeRef.current?.focus();
-
-    const onKeyDown = (e) => {
-      if (e.key === "Escape") {
-        e.preventDefault();
-        onClose();
-      } else if (e.key === "ArrowRight" && total > 1) {
-        go(1);
-      } else if (e.key === "ArrowLeft" && total > 1) {
-        go(-1);
-      } else if (e.key === "Tab") {
-        const focusables = dialogRef.current?.querySelectorAll(
-          'button, a[href], [tabindex]:not([tabindex="-1"])'
-        );
-        if (!focusables?.length) return;
-        const first = focusables[0];
-        const last = focusables[focusables.length - 1];
-        if (e.shiftKey && document.activeElement === first) {
-          e.preventDefault();
-          last.focus();
-        } else if (!e.shiftKey && document.activeElement === last) {
-          e.preventDefault();
-          first.focus();
-        }
-      }
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => {
-      window.removeEventListener("keydown", onKeyDown);
-      body.style.overflow = prevOverflow;
-      body.style.paddingRight = prevPadding;
-    };
-  }, [onClose, go, total]);
-
-  const onTouchStart = (e) => {
-    touchX.current = e.touches[0]?.clientX ?? null;
-  };
-  const onTouchEnd = (e) => {
-    if (touchX.current === null || total < 2) return;
-    const dx = (e.changedTouches[0]?.clientX ?? touchX.current) - touchX.current;
-    touchX.current = null;
-    if (Math.abs(dx) > SWIPE_THRESHOLD) go(dx < 0 ? 1 : -1);
-  };
+  // Bloqueo de scroll, foco inicial, teclado, foco atrapado y swipe:
+  // arquitectura compartida con el visor de la PDP.
+  const { onTouchStart, onTouchEnd } = useLightboxControls({
+    dialogRef,
+    initialFocusRef: closeRef,
+    onClose,
+    onPrev: () => go(-1),
+    onNext: () => go(1),
+    total,
+  });
 
   return createPortal(
     <div

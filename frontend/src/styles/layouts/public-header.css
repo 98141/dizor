@@ -1019,8 +1019,25 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 14px rgba(37, 211, 102, 0.45);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease,
+    bottom 0.2s ease;
   text-decoration: none;
+}
+
+/* PDP: --wa-offset sube el botón sobre la barra de compra móvil (0 en el
+   resto del sitio); .is-yielding lo oculta mientras el botón de compra
+   pasa por la esquina inferior (ver ProductoClient). */
+.whatsapp-float {
+  bottom: calc(24px + var(--wa-offset, 0px));
+}
+
+.whatsapp-float.is-yielding {
+  opacity: 0;
+  transform: scale(0.85);
+  pointer-events: none;
 }
 
 .whatsapp-float:hover {
@@ -1044,7 +1061,7 @@
   .whatsapp-float {
     width: 50px;
     height: 50px;
-    bottom: 20px;
+    bottom: calc(20px + var(--wa-offset, 0px));
     right: 16px;
   }
 

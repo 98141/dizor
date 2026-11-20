@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import ProductoClient from "@/components/products/ProductoClient";
 import ProductCard from "@/components/products/ProductCard";
 import ProductReviews from "@/components/products/ProductReviews";
-import SimpleRichText from "@/components/content/SimpleRichText";
+import ProductDescription from "@/components/products/ProductDescription";
 import { BreadcrumbJsonLd } from "@/components/seo/Breadcrumbs";
 import ViewItemListTracker from "@/components/analytics/ViewItemListTracker";
 
@@ -162,20 +162,20 @@ export default async function ProductoPage({ params }) {
           </p>
         )}
 
-        <ProductoClient product={p} />
-
-        {p.fullDescription && (
-          <div className="product-detail__description">
-            <h2>Descripción</h2>
-            <SimpleRichText
+        {/* La descripción se renderiza en el servidor y se coloca en la
+            columna de compra (bajo el botón) como nodo ya resuelto. */}
+        <ProductoClient
+          product={p}
+          description={
+            <ProductDescription
               text={p.fullDescription}
-              className="simple-content product-detail__description-body"
+              shortDescription={p.shortDescription}
             />
-          </div>
-        )}
+          }
+        />
 
-        <ProductReviews productId={p.id} productName={p.name} />
-
+        {/* Orden: compra + descripción → recomendaciones → reseñas, para
+            descubrir otras piezas sin recorrer antes todas las opiniones. */}
         {data.related?.length > 0 && (
           <section className="product-detail__related">
             <h2 className="product-detail__related-title">
@@ -194,6 +194,8 @@ export default async function ProductoPage({ params }) {
                 <ProductCard
                   key={related.id}
                   product={related}
+                  headingLevel={3}
+                  sizes="(max-width: 767px) 50vw, (max-width: 1279px) 25vw, 280px"
                   itemListId="related_products"
                   itemListName="También te puede gustar"
                   index={i}
@@ -202,6 +204,8 @@ export default async function ProductoPage({ params }) {
             </div>
           </section>
         )}
+
+        <ProductReviews productId={p.id} productName={p.name} />
       </article>
     </>
   );

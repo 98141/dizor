@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import { formatCOP } from "@/lib/formatCurrency";
@@ -10,7 +8,21 @@ import { trackAddToCart, trackViewItem } from "@/lib/analytics/events";
 import { mapProductToItem } from "@/lib/analytics/productMapper";
 import SizeGuide from "@/components/products/SizeGuide";
 import FavoriteButton from "@/components/products/FavoriteButton";
-import { SHIMMER_BLUR_DATA_URL } from "@/lib/imagePlaceholder";
+import ProductGallery from "@/components/products/ProductGallery";
+import MobileBuyBar from "@/components/products/MobileBuyBar";
+import {
+  findVariant,
+  getColorOptions,
+  getSizeOptions,
+  initialSelection,
+  isMixedColor,
+  selectSize,
+  variantPricing,
+} from "@/lib/productVariants";
+import {
+  resetWhatsAppContext,
+  setWhatsAppContext,
+} from "@/lib/whatsappContext";
 
 const LOW_STOCK_THRESHOLD = 5;
 
@@ -19,22 +31,16 @@ function isHatCategory(category) {
     .filter(Boolean)
     .join(" ")
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[̀-ͯ]/g, "")
     .toLowerCase();
   return haystack.includes("sombrero");
-}
-
-function findFirstAvailableVariant(product) {
-  return product.variants?.find((v) => v.isActive && v.stock > 0) || null;
 }
 
 function StockAlert({ stock }) {
   if (!stock || stock > LOW_STOCK_THRESHOLD) return null;
   return (
     <p className="product-detail__stock-alert">
-      {stock === 1
-        ? "Última unidad disponible"
-        : `Últimas ${stock} unidades`}
+      {stock === 1 ? "Última unidad disponible" : `Últimas ${stock} unidades`}
     </p>
   );
 }
@@ -42,30 +48,17 @@ function StockAlert({ stock }) {
 // Recibe `product` ya resuelto por el Server Component (page.js) — sin
 // fetch propio, sin estado de carga inicial: el contenido llega listo en
 // el HTML servido por el servidor.
-export default function ProductoClient({ product }) {
-  const router = useRouter();
-  const { addItem } = useCart();
-  const [activeImage, setActiveImage] = useState(0);
-  const [selectedSize, setSelectedSize] = useState(
-    () => {
-      const first = findFirstAvailableVariant(product);
-      return first ? first.size?._id || first.size : null;
-    }
-  );
-  const [selectedColor, setSelectedColor] = useState(
-    () => {
-      const first = findFirstAvailableVariant(product);
-      return first ? first.color?._id || first.color : null;
-    }
-  );
+export default function ProductoClient({ product, description = null }) {
+  const { addItem, items: cartItems, hydrated: cartHydrated } = useCart();
+  const [selection, setSelection] = useState(() => initialSelection(product));
+  const [variantNotice, setVariantNotice] = useState("");
   const [quantity, setQuantity] = useState(1);
-  const [addedMsg, setAddedMsg] = useState("");
-  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [cartStatus, setCartStatus] = useState(null); // { kind, text }
   const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
   const sizeGuideRef = useRef(null);
-  const imagesLengthRef = useRef(0);
+  const addBtnRef = useRef(null);
 
-  const closeLightbox = () => setLightboxOpen(false);
+  const { sizeId: selectedSize, colorId: selectedColor } = selection;
 
   // Dispara view_item una sola vez por producto visto (depende de
   // product.id, no de la variante seleccionada — cambiar talla/color no
@@ -78,342 +71,382 @@ export default function ProductoClient({ product }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product.id]);
 
+  // WhatsApp: consulta con el nombre real del producto mientras se ve la PDP.
   useEffect(() => {
-    // Reset cantidad al cambiar variante (comportamiento PDP previo).
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- variant change resets qty
-    setQuantity(1);
-  }, [selectedSize, selectedColor]);
+    setWhatsAppContext({
+      message: `Hola! Tengo una pregunta sobre el producto: ${product.name}.`,
+    });
+    return () => resetWhatsAppContext();
+  }, [product.name]);
 
+  // WhatsApp cede la esquina inferior mientras el botón de compra pasa por
+  // ella (en móvil el botón ocupa todo el ancho y quedaba tapado).
+  // Medición por scroll (rAF) y no IntersectionObserver: la "zona" es una
+  // franja fija del viewport, que IO no expresa sin un elemento propio.
   useEffect(() => {
-    if (!lightboxOpen) return;
-    document.body.style.overflow = "hidden";
-    const handle = (e) => {
-      if (e.key === "Escape") closeLightbox();
-      if (e.key === "ArrowRight")
-        setActiveImage((i) =>
-          i === imagesLengthRef.current - 1 ? 0 : i + 1
-        );
-      if (e.key === "ArrowLeft")
-        setActiveImage((i) =>
-          i === 0 ? imagesLengthRef.current - 1 : i - 1
-        );
+    const btn = addBtnRef.current;
+    if (!btn) return;
+    const mq = window.matchMedia("(max-width: 767px)");
+    let raf = 0;
+    const check = () => {
+      raf = 0;
+      if (!mq.matches) {
+        setWhatsAppContext({ yieldTo: null });
+        return;
+      }
+      const r = btn.getBoundingClientRect();
+      const vh = window.innerHeight;
+      // El botón flotante ocupa ~[vh-70, vh-20] (50 px, bottom 20): se cede
+      // con margen mientras el botón de compra cruza esa franja.
+      const overlaps = r.bottom > vh - 84 && r.top < vh - 12;
+      setWhatsAppContext({ yieldTo: overlaps ? "pdp-cta" : null });
     };
-    window.addEventListener("keydown", handle);
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(check);
+    };
+    check();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
     return () => {
-      window.removeEventListener("keydown", handle);
-      document.body.style.overflow = "";
+      if (raf) cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      setWhatsAppContext({ yieldTo: null });
     };
-  }, [lightboxOpen]);
+  }, []);
 
-  const selectedVariant = useMemo(() => {
-    if (!product?.variants) return null;
-    return product.variants.find((v) => {
-      const sizeId = v.size?._id || v.size;
-      const colorId = v.color?._id || v.color;
-      return (
-        String(sizeId) === String(selectedSize) &&
-        String(colorId) === String(selectedColor) &&
-        v.isActive
-      );
-    });
-  }, [product, selectedSize, selectedColor]);
+  const sizeOptions = useMemo(() => getSizeOptions(product), [product]);
+  const singleSize = sizeOptions.length === 1 ? sizeOptions[0] : null;
+  const colorOptions = useMemo(
+    () => getColorOptions(product, selectedSize),
+    [product, selectedSize]
+  );
+  const selectedVariant = useMemo(
+    () => findVariant(product, selectedSize, selectedColor),
+    [product, selectedSize, selectedColor]
+  );
+  const selectedColorName = colorOptions.find((c) => c.id === selectedColor)?.name;
+  const selectedSizeName = sizeOptions.find((s) => s.id === selectedSize)?.name;
 
-  const availableSizes = useMemo(() => {
-    if (!product?.variants) return [];
-    const map = new Map();
-    product.variants.forEach((v) => {
-      if (!v.isActive) return;
-      const size = v.size;
-      if (size?._id) map.set(String(size._id), size);
-    });
-    return [...map.values()];
-  }, [product]);
+  const pricing = variantPricing(product, selectedVariant);
+  const stock = selectedVariant?.stock || 0;
+  const inCartQty = cartHydrated
+    ? cartItems.find(
+        (i) =>
+          i.productId === product.id &&
+          String(i.variantId) === String(selectedVariant?.id)
+      )?.quantity || 0
+    : 0;
+  const remaining = Math.max(0, stock - inCartQty);
+  const maxQty = Math.max(1, remaining);
+  const isOutOfStock = !!selectedVariant && stock < 1;
+  const needsSelection = !selectedVariant;
+  const productHasStock = sizeOptions.some((s) => s.available) ||
+    (sizeOptions.length === 0 && colorOptions.some((c) => c.available));
+  const allInCart = !!selectedVariant && stock > 0 && remaining < 1;
 
-  const availableColors = useMemo(() => {
-    if (!product?.variants) return [];
-    const map = new Map();
-    product.variants.forEach((v) => {
-      if (!v.isActive) return;
-      const sizeId = v.size?._id || v.size;
-      if (selectedSize && String(sizeId) !== String(selectedSize)) return;
-      const color = v.color;
-      if (color?._id) map.set(String(color._id), color);
-    });
-    return [...map.values()];
-  }, [product, selectedSize]);
+  const changeVariant = (next, notice = "") => {
+    setSelection({ sizeId: next.sizeId, colorId: next.colorId });
+    setVariantNotice(notice || "");
+    setQuantity(1);
+    setCartStatus(null);
+  };
 
-  const hasPromo =
-    product.onPromotion &&
-    product.discountPercent > 0 &&
-    product.effectivePrice < product.salePrice;
+  const handleSize = (size) => {
+    if (!size.available || size.id === selectedSize) return;
+    const next = selectSize(product, size.id, selectedColor);
+    changeVariant(next, next.notice);
+  };
 
-  const images = product.images?.length
-    ? product.images
-    : [{ url: product.mainImage, alt: product.name }];
-
-  useEffect(() => {
-    imagesLengthRef.current = images.length;
-  }, [images.length]);
-
-  const variantPrice = selectedVariant?.price || product.effectivePrice;
-  const maxQty = selectedVariant?.stock || 1;
+  const handleColor = (color) => {
+    if (!color.available || color.id === selectedColor) return;
+    changeVariant({ sizeId: selectedSize, colorId: color.id });
+  };
 
   const handleAddToCart = () => {
-    if (!selectedVariant) return;
+    if (!selectedVariant || isOutOfStock) return;
+    if (remaining < 1) {
+      setCartStatus({
+        kind: "error",
+        text: `Ya tienes en el carrito las ${stock} unidades disponibles de esta variante.`,
+      });
+      return;
+    }
+    const qty = Math.min(quantity, remaining);
 
     addItem({
       productId: product.id,
       variantId: selectedVariant.id,
-      quantity,
+      quantity: qty,
       productName: product.name,
       productSlug: product.slug,
       productImage: product.mainImage,
       sizeName: selectedVariant.size?.name || "",
       colorName: selectedVariant.color?.name || "",
       sku: selectedVariant.sku,
-      unitPrice: variantPrice,
+      unitPrice: pricing.price,
       maxStock: selectedVariant.stock,
     });
 
     trackAddToCart({
       items: [
-        mapProductToItem(product, { variant: selectedVariant, quantity }),
+        mapProductToItem(product, { variant: selectedVariant, quantity: qty }),
       ].filter(Boolean),
-      value: variantPrice * quantity,
+      value: pricing.price * qty,
     });
 
-    setAddedMsg("Producto agregado al carrito");
-    setTimeout(() => setAddedMsg(""), 3000);
+    setQuantity(1);
+    setCartStatus({
+      kind: "success",
+      text:
+        qty === 1
+          ? "Producto agregado al carrito."
+          : `${qty} unidades agregadas al carrito.`,
+    });
   };
 
-  const isOutOfStock = !selectedVariant || selectedVariant.stock < 1;
   const showSizeGuide = isHatCategory(product.category);
+
+  let ctaLabel = "Agregar al carrito";
+  if (!productHasStock) ctaLabel = "Agotado";
+  else if (isOutOfStock) ctaLabel = "Agotado en esta combinación";
+  else if (needsSelection)
+    ctaLabel = !selectedSize && sizeOptions.length > 1 ? "Elige una talla" : "Elige un color";
+  const ctaDisabled = needsSelection || isOutOfStock || !productHasStock;
+
+  // Barra móvil: mismas acciones; si falta elegir, lleva a los selectores.
+  const missingSize = !selectedSize && sizeOptions.length > 1;
+  const barCtaLabel = !productHasStock || isOutOfStock
+    ? "Agotado"
+    : needsSelection
+      ? missingSize ? "Elegir talla" : "Elegir color"
+      : "Agregar";
+  const barSummary = [selectedColorName, selectedSizeName].filter(Boolean).join(" · ");
+  const goToSelectors = () => {
+    const box = document.getElementById("pdp-variantes");
+    if (!box) return;
+    box.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      block: "start",
+    });
+    const group = box.querySelector(
+      missingSize ? ".product-detail__variant-group--size" : ".product-detail__variant-group:not(.product-detail__variant-group--size)"
+    );
+    group?.querySelector("button:not([aria-disabled='true'])")?.focus({ preventScroll: true });
+  };
+
+  const sizeGuideButton = showSizeGuide ? (
+    <button
+      type="button"
+      className={`product-detail__size-guide${sizeGuideOpen ? " product-detail__size-guide--open" : ""}`}
+      onClick={() => {
+        setSizeGuideOpen((open) => {
+          const next = !open;
+          if (next) {
+            requestAnimationFrame(() => {
+              sizeGuideRef.current?.scrollIntoView({
+                behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+                  ? "auto"
+                  : "smooth",
+                block: "nearest",
+              });
+            });
+          }
+          return next;
+        });
+      }}
+      aria-expanded={sizeGuideOpen}
+      aria-controls="product-size-guide"
+    >
+      Guía de tallas
+    </button>
+  ) : null;
 
   return (
     <>
       <div className="product-detail__grid">
         {/* ─── GALERÍA ─── */}
-        <div className="product-detail__gallery">
-          <div
-            className="product-detail__main-image product-detail__main-image--clickable"
-            onClick={() => setLightboxOpen(true)}
-            role="button"
-            tabIndex={0}
-            aria-label="Ver imagen ampliada"
-            onKeyDown={(e) => e.key === "Enter" && setLightboxOpen(true)}
-          >
-            <Image
-              src={images[activeImage]?.url || product.mainImage}
-              alt={images[activeImage]?.alt || product.name}
-              fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              style={{ objectFit: "cover" }}
-              priority
-              placeholder="blur"
-              blurDataURL={SHIMMER_BLUR_DATA_URL}
-            />
-          </div>
-          {images.length > 1 && (
-            <div className="product-detail__thumbs">
-              {images.map((img, i) => (
-                <button
-                  key={img.url}
-                  type="button"
-                  className={`product-detail__thumb${activeImage === i ? " product-detail__thumb--active" : ""}`}
-                  onClick={() => setActiveImage(i)}
-                >
-                  <Image
-                    src={img.url}
-                    alt={img.alt || product.name}
-                    width={72}
-                    height={72}
-                    style={{ objectFit: "cover" }}
-                    placeholder="blur"
-                    blurDataURL={SHIMMER_BLUR_DATA_URL}
-                  />
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+        <ProductGallery product={product} />
 
         {/* ─── INFO ─── */}
         <div className="product-detail__info">
-          <p className="product-detail__breadcrumb">
-            <Link href="/catalogo">Catálogo</Link>
-            {product.category?.name ? ` / ${product.category.name}` : ""} /{" "}
-            {product.name}
-          </p>
+          <nav className="product-detail__breadcrumb" aria-label="Ruta de navegación">
+            <ol>
+              <li>
+                <Link href="/catalogo">Catálogo</Link>
+              </li>
+              {product.category?.name ? <li>{product.category.name}</li> : null}
+              <li aria-current="page">{product.name}</li>
+            </ol>
+          </nav>
 
           <div className="product-detail__title-row">
             <h1 className="product-detail__title">{product.name}</h1>
             <FavoriteButton
               product={product}
               className="product-detail__favorite"
-              size={24}
+              size={22}
             />
           </div>
 
           <div className="product-detail__price-row">
             <span className="product-detail__price">
-              {formatCOP(variantPrice)}
+              {pricing.oldPrice ? <span className="sr-only">Precio actual: </span> : null}
+              {formatCOP(pricing.price)}
             </span>
-            {hasPromo && (
+            {pricing.oldPrice ? (
               <span className="product-detail__price-old">
-                {formatCOP(product.salePrice)}
+                <span className="sr-only">Precio anterior: </span>
+                {formatCOP(pricing.oldPrice)}
               </span>
-            )}
-            {hasPromo && (
+            ) : null}
+            {pricing.discountPercent ? (
               <span className="product-detail__discount-badge">
-                -{product.discountPercent}%
+                <span className="sr-only">Descuento de </span>-{pricing.discountPercent}%
               </span>
-            )}
+            ) : null}
           </div>
 
           {product.shortDescription ? (
-            <p className="product-detail__short-desc">
-              {product.shortDescription}
-            </p>
+            <p className="product-detail__short-desc">{product.shortDescription}</p>
           ) : null}
 
-          <div className="product-detail__attrs">
-            {product.weaveType?.name && (
-              <div className="product-detail__attr">
-                <span className="product-detail__attr-label">Tejido</span>
-                <span>{product.weaveType.name}</span>
-              </div>
-            )}
-            {product.style?.name && (
-              <div className="product-detail__attr">
-                <span className="product-detail__attr-label">Horma</span>
-                <span>{product.style.name}</span>
-              </div>
-            )}
-            {product.material && (
-              <div className="product-detail__attr">
-                <span className="product-detail__attr-label">Material</span>
-                <span>{product.material}</span>
-              </div>
-            )}
-          </div>
+          {(product.weaveType?.name || product.style?.name || product.material || singleSize) && (
+            <dl className="product-detail__attrs">
+              {product.weaveType?.name && (
+                <div className="product-detail__attr">
+                  <dt className="product-detail__attr-label">Tejido</dt>
+                  <dd>{product.weaveType.name}</dd>
+                </div>
+              )}
+              {product.style?.name && (
+                <div className="product-detail__attr">
+                  <dt className="product-detail__attr-label">Horma</dt>
+                  <dd>{product.style.name}</dd>
+                </div>
+              )}
+              {product.material && (
+                <div className="product-detail__attr">
+                  <dt className="product-detail__attr-label">Material</dt>
+                  <dd>{product.material}</dd>
+                </div>
+              )}
+              {singleSize && (
+                <div className="product-detail__attr">
+                  <dt className="product-detail__attr-label">Talla</dt>
+                  <dd>
+                    {singleSize.name}
+                    {sizeGuideButton ? <> · {sizeGuideButton}</> : null}
+                  </dd>
+                </div>
+              )}
+            </dl>
+          )}
 
           {/* ─── VARIANTES ─── */}
-          <div className="product-detail__variants">
-            {/* Talla */}
-            <div className="product-detail__variant-group">
-              <div className="product-detail__variant-header">
-                <label>
+          <div className="product-detail__variants" id="pdp-variantes">
+            {sizeOptions.length > 1 && (
+              <fieldset className="product-detail__variant-group product-detail__variant-group--size">
+                <legend className="product-detail__legend">
                   Talla
-                  {selectedSize && (
-                    <span className="product-detail__selected-label">
-                      {" "}—{" "}
-                      {availableSizes.find(
-                        (s) => String(s._id) === String(selectedSize)
-                      )?.name}
-                    </span>
-                  )}
-                </label>
-                {showSizeGuide ? (
-                  <button
-                    type="button"
-                    className={`product-detail__size-guide${sizeGuideOpen ? " product-detail__size-guide--open" : ""}`}
-                    onClick={() => {
-                      setSizeGuideOpen((open) => {
-                        const next = !open;
-                        if (next) {
-                          requestAnimationFrame(() => {
-                            sizeGuideRef.current?.scrollIntoView({
-                              behavior: "smooth",
-                              block: "nearest",
-                            });
-                          });
-                        }
-                        return next;
-                      });
-                    }}
-                    aria-expanded={sizeGuideOpen}
-                    aria-controls="product-size-guide"
-                  >
-                    Guía de tallas
-                  </button>
-                ) : null}
-              </div>
-              <div className="product-detail__variant-options">
-                {availableSizes.map((size) => {
-                  const hasStock = product.variants?.some(
-                    (v) =>
-                      v.isActive &&
-                      String(v.size?._id || v.size) === String(size._id) &&
-                      v.stock > 0
-                  );
-                  return (
-                    <button
-                      key={size._id}
-                      type="button"
-                      className={`product-detail__variant-btn${String(selectedSize) === String(size._id) ? " product-detail__variant-btn--active" : ""}${!hasStock ? " product-detail__variant-btn--unavailable" : ""}`}
-                      onClick={() => {
-                        setSelectedSize(size._id);
-                        setSelectedColor(null);
-                      }}
-                      title={!hasStock ? "Sin stock en esta talla" : size.name}
-                    >
-                      {size.name}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Color */}
-            {availableColors.length > 0 && (
-              <div className="product-detail__variant-group">
-                <label>
-                  Color
-                  {selectedColor && (
-                    <span className="product-detail__selected-label">
-                      {" "}—{" "}
-                      {availableColors.find(
-                        (c) => String(c._id) === String(selectedColor)
-                      )?.name}
-                    </span>
-                  )}
-                </label>
+                  {selectedSizeName ? (
+                    <span className="product-detail__selected-label"> — {selectedSizeName}</span>
+                  ) : null}
+                </legend>
+                {sizeGuideButton}
                 <div className="product-detail__variant-options">
-                  {availableColors.map((color) =>
-                    color.hexCode ? (
+                  {sizeOptions.map((size) => {
+                    const active = size.id === selectedSize;
+                    return (
                       <button
-                        key={color._id}
+                        key={size.id}
+                        type="button"
+                        className={`product-detail__variant-btn${active ? " product-detail__variant-btn--active" : ""}${!size.available ? " product-detail__variant-btn--unavailable" : ""}`}
+                        aria-pressed={active}
+                        aria-disabled={!size.available || undefined}
+                        onClick={() => handleSize(size)}
+                      >
+                        {size.name}
+                        {!size.available ? <span className="sr-only"> (agotada)</span> : null}
+                      </button>
+                    );
+                  })}
+                </div>
+              </fieldset>
+            )}
+
+            {colorOptions.length > 0 && (
+              <fieldset className="product-detail__variant-group">
+                <legend className="product-detail__legend">
+                  Color
+                  {selectedColorName ? (
+                    <span className="product-detail__selected-label"> — {selectedColorName}</span>
+                  ) : null}
+                </legend>
+                <div className="product-detail__variant-options product-detail__variant-options--colors">
+                  {colorOptions.map((color) => {
+                    const active = color.id === selectedColor;
+                    const mixed = isMixedColor(color);
+                    const stateClass = `${active ? " is-active" : ""}${!color.available ? " is-unavailable" : ""}`;
+                    if (mixed || !color.hexCode) {
+                      return (
+                        <button
+                          key={color.id}
+                          type="button"
+                          className={`product-detail__color-chip${stateClass}`}
+                          aria-pressed={active}
+                          aria-disabled={!color.available || undefined}
+                          onClick={() => handleColor(color)}
+                        >
+                          {mixed ? (
+                            <span className="product-detail__color-chip-dot" aria-hidden="true" />
+                          ) : null}
+                          {color.name}
+                          {!color.available ? <span className="sr-only"> (agotado)</span> : null}
+                        </button>
+                      );
+                    }
+                    return (
+                      <button
+                        key={color.id}
                         type="button"
                         title={color.name}
-                        aria-label={color.name}
-                        className={`product-detail__color-swatch${String(selectedColor) === String(color._id) ? " product-detail__color-swatch--active" : ""}`}
-                        style={{ backgroundColor: color.hexCode }}
-                        onClick={() => setSelectedColor(color._id)}
-                      />
-                    ) : (
-                      <button
-                        key={color._id}
-                        type="button"
-                        className={`product-detail__variant-btn${String(selectedColor) === String(color._id) ? " product-detail__variant-btn--active" : ""}`}
-                        onClick={() => setSelectedColor(color._id)}
+                        aria-label={`${color.name}${!color.available ? " (agotado)" : ""}`}
+                        aria-pressed={active}
+                        aria-disabled={!color.available || undefined}
+                        className={`product-detail__color-swatch${stateClass}`}
+                        onClick={() => handleColor(color)}
                       >
-                        {color.name}
+                        <span
+                          className="product-detail__color-swatch-fill"
+                          style={{ backgroundColor: color.hexCode }}
+                          aria-hidden="true"
+                        />
                       </button>
-                    )
-                  )}
+                    );
+                  })}
                 </div>
-              </div>
+              </fieldset>
             )}
+
+            <p className="product-detail__variant-notice" role="status" aria-live="polite">
+              {variantNotice}
+            </p>
           </div>
 
-          {/* ─── STOCK ALERT ─── */}
           <StockAlert stock={selectedVariant?.stock} />
 
-          {/* ─── CANTIDAD ─── */}
-          {!isOutOfStock && (
-            <div className="product-detail__qty-row">
-              <span className="product-detail__qty-label">Cantidad</span>
-              <div className="product-detail__qty">
+          {/* ─── CANTIDAD + COMPRA ─── */}
+          <div className="product-detail__buy">
+            {!ctaDisabled && (
+              <div
+                className="product-detail__qty"
+                role="group"
+                aria-labelledby="pdp-qty-label"
+              >
+                <span id="pdp-qty-label" className="sr-only">
+                  Cantidad
+                </span>
                 <button
                   type="button"
                   className="product-detail__qty-btn"
@@ -423,7 +456,9 @@ export default function ProductoClient({ product }) {
                 >
                   −
                 </button>
-                <span className="product-detail__qty-value">{quantity}</span>
+                <output className="product-detail__qty-value" aria-live="polite">
+                  {quantity}
+                </output>
                 <button
                   type="button"
                   className="product-detail__qty-btn"
@@ -434,119 +469,71 @@ export default function ProductoClient({ product }) {
                   +
                 </button>
               </div>
-              {selectedVariant?.sku && (
-                <span className="product-detail__sku">
-                  SKU: {selectedVariant.sku}
-                </span>
+            )}
+            <button
+              ref={addBtnRef}
+              type="button"
+              className="product-detail__add-btn"
+              disabled={ctaDisabled}
+              onClick={handleAddToCart}
+            >
+              {ctaLabel}
+            </button>
+          </div>
+
+          <div className="product-detail__cart-status" role="status" aria-live="polite">
+            {cartStatus ? (
+              <p
+                className={`product-detail__added-msg${cartStatus.kind === "error" ? " is-error" : ""}`}
+              >
+                {cartStatus.text}{" "}
+                {cartStatus.kind === "success" || allInCart ? (
+                  <Link href="/carrito" className="product-detail__go-cart">
+                    Ver carrito
+                  </Link>
+                ) : null}
+              </p>
+            ) : null}
+          </div>
+
+          {(selectedVariant?.sku || product.allowsCustomization) && (
+            <div className="product-detail__meta">
+              {selectedVariant?.sku ? (
+                <span className="product-detail__sku">SKU: {selectedVariant.sku}</span>
+              ) : null}
+              {product.allowsCustomization && (
+                <Link
+                  href={`/personalizar?producto=${encodeURIComponent(product.slug)}`}
+                  className="product-detail__custom-btn"
+                >
+                  Solicitar personalización
+                </Link>
               )}
             </div>
           )}
 
-          {/* ─── ACCIONES ─── */}
-          <div className="product-detail__actions">
-            <button
-              type="button"
-              className="product-detail__add-btn"
-              disabled={isOutOfStock}
-              onClick={handleAddToCart}
-            >
-              {isOutOfStock
-                ? selectedVariant
-                  ? "Sin stock"
-                  : "Selecciona talla y color"
-                : "Agregar al carrito"}
-            </button>
-
-            {product.allowsCustomization && (
-              <Link
-                href={`/personalizar?producto=${encodeURIComponent(product.slug)}`}
-                className="product-detail__custom-btn"
-              >
-                Solicitar personalización
-              </Link>
-            )}
-          </div>
-
-          {addedMsg && (
-            <p className="product-detail__added-msg">
-              {addedMsg}{" "}
-              <button
-                type="button"
-                className="product-detail__go-cart"
-                onClick={() => router.push("/carrito")}
-              >
-                Ver carrito
-              </button>
-            </p>
-          )}
+          {description}
         </div>
       </div>
 
       {showSizeGuide && sizeGuideOpen && (
         <div id="product-size-guide" ref={sizeGuideRef}>
-          <SizeGuide
-            variant="panel"
-            onClose={() => setSizeGuideOpen(false)}
-          />
+          <SizeGuide variant="panel" onClose={() => setSizeGuideOpen(false)} />
         </div>
       )}
 
-      {/* ─── LIGHTBOX ─── */}
-      {lightboxOpen && (
-        <div
-          className="lightbox-backdrop"
-          onClick={closeLightbox}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Imagen ampliada"
-        >
-          <button
-            className="lightbox-close"
-            onClick={closeLightbox}
-            aria-label="Cerrar"
-          >
-            ✕
-          </button>
-
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={images[activeImage]?.url}
-            alt={images[activeImage]?.alt || product.name}
-            className="lightbox-img"
-            onClick={(e) => e.stopPropagation()}
-          />
-
-          {images.length > 1 && (
-            <>
-              <button
-                className="lightbox-nav lightbox-nav--prev"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setActiveImage((i) => (i === 0 ? images.length - 1 : i - 1));
-                }}
-                aria-label="Imagen anterior"
-              >
-                ‹
-              </button>
-              <button
-                className="lightbox-nav lightbox-nav--next"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setActiveImage((i) =>
-                    i === images.length - 1 ? 0 : i + 1
-                  );
-                }}
-                aria-label="Imagen siguiente"
-              >
-                ›
-              </button>
-              <p className="lightbox-counter">
-                {activeImage + 1} / {images.length}
-              </p>
-            </>
-          )}
-        </div>
-      )}
+      <MobileBuyBar
+        anchorRef={addBtnRef}
+        productName={product.name}
+        priceLabel={formatCOP(pricing.price)}
+        summary={barSummary}
+        ctaLabel={barCtaLabel}
+        ctaDisabled={ctaDisabled}
+        needsSelection={needsSelection && productHasStock}
+        status={cartStatus}
+        onAdd={handleAddToCart}
+        onChoose={goToSelectors}
+      />
     </>
   );
 }
