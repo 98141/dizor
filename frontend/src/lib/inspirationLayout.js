@@ -6,6 +6,8 @@
  *   orden editorial. Marco 1:1; 4:3 si las dos fotos de la fila son
  *   horizontales (≥ 1,2). Última sin pareja: 3:2 a dos columnas si es cuadrada
  *   u horizontal; 4:5 centrada a una columna si es vertical.
+ *   5 fotos: la primera es protagonista a ancho completo (marco según su
+ *   orientación: 4:5, 1:1 o 3:2) y las otras cuatro siguen en parejas (2×2).
  * Escritorio/tablet: 5 fotos → protagonista + 2×2 en 5:4 (la protagonista
  *   ocupa la altura de las dos filas); 4 → cuatro 1:1; 3 → tres 1:1;
  *   2 → dos 5:4. Una sola foto: marco según su orientación, centrada.
@@ -58,12 +60,19 @@ function mobileSlot(ratios, i) {
   if (n === 1) {
     return { kind: "single", frame: singleFrame(ratios[i]) };
   }
-  if (i === n - 1 && n % 2 === 1) {
+  // 5 fotos: protagonista a lo ancho; el resto se empareja desde la segunda.
+  const offset = n === 5 ? 1 : 0;
+  if (offset && i === 0) {
+    return { kind: "lead", frame: singleFrame(ratios[0]) };
+  }
+  const j = i - offset;
+  const m = n - offset;
+  if (j === m - 1 && m % 2 === 1) {
     return ratios[i] >= SQUARE_MIN
       ? { kind: "wide", frame: "3:2" }
       : { kind: "center", frame: "4:5" };
   }
-  const partner = i % 2 === 0 ? i + 1 : i - 1;
+  const partner = (j % 2 === 0 ? j + 1 : j - 1) + offset;
   const bothLandscape =
     ratios[i] >= LANDSCAPE_MIN && ratios[partner] >= LANDSCAPE_MIN;
   return { kind: "pair", frame: bothLandscape ? "4:3" : "1:1" };
@@ -97,7 +106,7 @@ function desktopWidth(n, kind) {
   }
 }
 
-const MOBILE_VW = { pair: 47, center: 47, wide: 94, single: 94 };
+const MOBILE_VW = { pair: 47, center: 47, wide: 94, single: 94, lead: 94 };
 
 /** Cuánto más ancha que el marco se dibuja la foto al llenarlo (cover). */
 function overscan(ratio, frameAr) {

@@ -34,6 +34,7 @@ function Icon({ path }) {
 const ICON_CLOSE = "M6 6l12 12M18 6L6 18";
 const ICON_PREV = "M15 5l-7 7 7 7";
 const ICON_NEXT = "M9 5l7 7-7 7";
+const ICON_EXPAND = "M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7";
 const ICON_EXTERNAL = "M14 5h5v5M19 5l-8 8M17 14v4a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h4";
 
 /**
@@ -91,6 +92,7 @@ export default function InspirationGallery({ images = [] }) {
       idx === 0 ? "is-lead" : "",
       mobile.kind === "wide" ? "is-m-wide" : "",
       mobile.kind === "center" ? "is-m-center" : "",
+      mobile.kind === "lead" ? "is-m-lead" : "",
     ]
       .filter(Boolean)
       .join(" ");
@@ -123,6 +125,9 @@ export default function InspirationGallery({ images = [] }) {
             blurDataURL={SHIMMER_BLUR_DATA_URL}
             onLoad={(e) => handleLoad(idx, e)}
           />
+          <span className="home-inspire__zoom" aria-hidden="true">
+            <Icon path={ICON_EXPAND} />
+          </span>
         </button>
       </div>
     );

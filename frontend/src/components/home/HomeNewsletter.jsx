@@ -6,15 +6,21 @@ const NewsletterSignup = dynamic(
   { ssr: true }
 );
 
-/** Newsletter Home — Server shell + formulario cliente (dynamic). */
+/** Newsletter — cierre del inicio (Negro Dizor). Server shell + formulario cliente. */
 export default async function HomeNewsletter() {
   const cmsData = await getHomeContent().catch(() => null);
   const newsletterSection = cmsData?.home?.newsletterSection || {};
 
   return (
-    <section className="home-newsletter">
+    <section className="home-newsletter" aria-labelledby="home-newsletter-heading">
       <div className="home-container home-newsletter__inner">
-        <h2 className="home-section__heading">
+        {newsletterSection.eyebrow ? (
+          <p className="home-eyebrow">{newsletterSection.eyebrow}</p>
+        ) : null}
+        <h2
+          id="home-newsletter-heading"
+          className="home-section__heading home-section__heading--editorial"
+        >
           {newsletterSection.title || "Entérate de las piezas nuevas"}
         </h2>
         <p className="home-section__lead">

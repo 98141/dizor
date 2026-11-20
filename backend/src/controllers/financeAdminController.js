@@ -1,5 +1,6 @@
 const catchAsync = require("../utils/catchAsync");
 const { buildFinanceReport } = require("../services/financeService");
+const { reconciledSalesFilter } = require("../services/financeCriteria");
 const {
   buildFinanceCsv,
   buildFinanceXlsx,
@@ -233,7 +234,7 @@ exports.getFinanceHistory = catchAsync(async (req, res) => {
 
   const [products, orders] = await Promise.all([
     Product.find().select("+internalCost _id").lean(),
-    Order.find({ paymentStatus: "pagado", createdAt: { $gte: start, $lte: end } })
+    Order.find(reconciledSalesFilter({ createdAt: { $gte: start, $lte: end } }))
       .select("items total subtotal createdAt")
       .lean(),
   ]);
@@ -264,6 +265,7 @@ exports.getFinanceHistory = catchAsync(async (req, res) => {
   for (const order of orders) {
     const row = getOrCreate(getPeriodKey(order.createdAt, groupBy));
     row.ordersCount += 1;
+    row.totalRevenue += order.total || 0;
     for (const item of order.items || []) {
       const qty = item.quantity || 0;
       const lineRev = item.lineTotal != null ? item.lineTotal : (item.unitPrice || 0) * qty;
@@ -277,18 +279,19 @@ exports.getFinanceHistory = catchAsync(async (req, res) => {
   const rows = [...periodMap.values()]
     .map((row) => {
       row.onlineRevenue = round(row.onlineRevenue);
-      row.totalRevenue = row.onlineRevenue;
+      row.totalRevenue = round(row.totalRevenue);
       row.cogs = round(row.cogs);
-      row.grossProfit = row.totalRevenue - row.cogs;
+      row.grossProfit = row.onlineRevenue - row.cogs;
       row.grossMarginPct =
-        row.totalRevenue > 0
-          ? Math.round((row.grossProfit / row.totalRevenue) * 1000) / 10
+        row.onlineRevenue > 0
+          ? Math.round((row.grossProfit / row.onlineRevenue) * 1000) / 10
           : 0;
       return row;
     })
     .sort((a, b) => a.periodKey.localeCompare(b.periodKey));
 
   const totalRevenue = rows.reduce((s, r) => s + r.totalRevenue, 0);
+  const productRevenue = rows.reduce((s, r) => s + r.onlineRevenue, 0);
   const totalProfit = rows.reduce((s, r) => s + r.grossProfit, 0);
   const totalOrders = rows.reduce((s, r) => s + r.ordersCount, 0);
 
@@ -301,8 +304,8 @@ exports.getFinanceHistory = catchAsync(async (req, res) => {
       totalRevenue: round(totalRevenue),
       totalProfit: round(totalProfit),
       grossMarginPct:
-        totalRevenue > 0
-          ? Math.round((totalProfit / totalRevenue) * 1000) / 10
+        productRevenue > 0
+          ? Math.round((totalProfit / productRevenue) * 1000) / 10
           : 0,
       totalOrders,
       periodsWithSales: rows.filter((r) => r.totalRevenue > 0).length,

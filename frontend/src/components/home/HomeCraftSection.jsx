@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import HomeSectionIntro, { ArrowIcon } from "./HomeSectionIntro";
 
 function MediaPlaceholder({ label = "Imagen próximamente" }) {
   return (
@@ -10,19 +11,17 @@ function MediaPlaceholder({ label = "Imagen próximamente" }) {
 }
 
 /**
- * Una imagen base siempre (mobile).
- * Galería multi-imagen solo visible en desktop (≥900px) vía CSS
+ * Una imagen base siempre (móvil).
+ * Galería multi-imagen solo visible en escritorio (≥900px) vía CSS
  * para evitar scroll horizontal anidado en móvil.
  */
-function CraftCardMedia({ images, name, featured }) {
+function CraftCardMedia({ images, name }) {
   const list = (images || []).filter((img) => img?.url);
   if (!list.length) {
     return <MediaPlaceholder label={name} />;
   }
 
-  const sizes = featured
-    ? "(max-width: 899px) 78vw, 50vw"
-    : "(max-width: 899px) 78vw, 25vw";
+  const sizes = "(max-width: 899px) 80vw, 31vw";
 
   return (
     <>
@@ -32,7 +31,6 @@ function CraftCardMedia({ images, name, featured }) {
         fill
         sizes={sizes}
         className="home-collection-card__primary"
-        style={{ objectFit: "cover" }}
       />
       {list.length > 1 ? (
         <div
@@ -49,7 +47,6 @@ function CraftCardMedia({ images, name, featured }) {
                 alt={img.altText || `${name} ${i + 1}`}
                 fill
                 sizes={sizes}
-                style={{ objectFit: "cover" }}
               />
             </div>
           ))}
@@ -60,7 +57,9 @@ function CraftCardMedia({ images, name, featured }) {
 }
 
 /**
- * Sección "Nuestros tejidos": editorial en desktop, scroll-snap en móvil.
+ * «Nuestros tejidos»: paneles editoriales en escritorio, carrusel con
+ * scroll-snap en móvil. Nombre y descripción salen del tipo de tejido
+ * administrado (sin textos inventados); fotos de Inicio → Colección.
  * `cards`: [{ wt, img, images, href }]
  */
 export default function HomeCraftSection({
@@ -76,65 +75,76 @@ export default function HomeCraftSection({
   const count = cards.length;
 
   return (
-    <section className="home-section home-section--craft">
+    <section
+      className="home-section home-section--editorial home-section--craft"
+      aria-labelledby="home-craft-heading"
+    >
       <div className="home-container home-container--wide">
-        <header className="home-section__intro">
-          <h2 className="home-section__heading">{title}</h2>
-          <p className="home-section__lead">{subtitle}</p>
-        </header>
+        <div className="home-craft">
+        <div className="home-craft__copy">
+          <HomeSectionIntro
+            id="home-craft-heading"
+            eyebrow={craftSection.eyebrow}
+            title={title}
+            lead={subtitle}
+            tone="editorial"
+          />
+        </div>
 
         {count > 0 ? (
-          <div
+          <ul
             className={`home-collection__track home-collection__track--n${Math.min(count, 4)}`}
             data-count={count}
-            role="list"
           >
-            {cards.map(({ wt, img, images, href }, index) => {
+            {cards.map(({ wt, img, images, href }) => {
               const name = wt.name || "Tejido";
+              const description = (wt.description || "").trim();
               const media = images?.length ? images : img ? [img] : [];
-              const featured = index === 0 && count === 3;
               return (
-                <Link
-                  key={wt._id || wt.id || href}
-                  href={href}
-                  className={`home-collection-card${
-                    media.length ? "" : " home-collection-card--text"
-                  }${featured ? " home-collection-card--featured" : ""}`}
-                  role="listitem"
-                >
-                  <div
-                    className={`home-collection-card__media${
-                      media.length ? "" : " home-collection-card__media--fallback"
+                <li key={wt._id || wt.id || href} className="home-collection__item">
+                  <Link
+                    href={href}
+                    className={`home-collection-card${
+                      media.length ? "" : " home-collection-card--text"
                     }`}
                   >
-                    <CraftCardMedia
-                      images={media}
-                      name={name}
-                      featured={featured || index === 0}
-                    />
-                    {media.length > 1 ? (
-                      <span
-                        className="home-collection-card__count"
-                        aria-hidden="true"
-                      >
-                        {media.length} fotos
+                    <div
+                      className={`home-collection-card__media${
+                        media.length ? "" : " home-collection-card__media--fallback"
+                      }`}
+                    >
+                      <CraftCardMedia images={media} name={name} />
+                      {media.length > 1 ? (
+                        <span
+                          className="home-collection-card__count"
+                          aria-hidden="true"
+                        >
+                          {media.length} fotos
+                        </span>
+                      ) : null}
+                    </div>
+                    <div className="home-collection-card__meta">
+                      <h3 className="home-collection-card__name">{name}</h3>
+                      {description ? (
+                        <p className="home-collection-card__desc">{description}</p>
+                      ) : null}
+                      <span className="home-collection-card__cta">
+                        <span>{cta}</span>
+                        <ArrowIcon />
                       </span>
-                    ) : null}
-                  </div>
-                  <div className="home-collection-card__meta">
-                    <span className="home-collection-card__name">{name}</span>
-                    <span className="home-collection-card__cta">{cta}</span>
-                  </div>
-                </Link>
+                    </div>
+                  </Link>
+                </li>
               );
             })}
-          </div>
+          </ul>
         ) : (
           <p className="home-section__empty">
             Pronto verás nuestras colecciones.{" "}
             <Link href="/catalogo">Ir al catálogo</Link>
           </p>
         )}
+        </div>
       </div>
     </section>
   );

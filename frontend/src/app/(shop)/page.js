@@ -5,11 +5,9 @@ import HomeNewArrivals from "@/components/home/HomeNewArrivals";
 import HomeCraftBlock from "@/components/home/HomeCraftBlock";
 import HomeStory from "@/components/home/HomeStory";
 import HomeDiscover from "@/components/home/HomeDiscover";
-import HomePersonalization from "@/components/home/HomePersonalization";
 import HomeReviews from "@/components/home/HomeReviews";
-import HomeExploreScroll from "@/components/home/HomeExploreScroll";
 import HomeInspiration from "@/components/home/HomeInspiration";
-import HomeWholesale from "@/components/home/HomeWholesale";
+import HomeServices from "@/components/home/HomeServices";
 import HomeNewsletter from "@/components/home/HomeNewsletter";
 import HomeEditorialBreak from "@/components/home/HomeEditorialBreak";
 import HomeSectionFallback from "@/components/home/HomeSectionFallback";
@@ -51,8 +49,21 @@ export const metadata = {
 };
 
 /**
- * Home — P0 (Hero + Benefits) resuelto antes de stream;
+ * Home — P0 (Hero + Beneficios) resuelto antes de stream;
  * secciones inferiores en Suspense independientes (SSR + streaming).
+ *
+ * Orden (Atelier artesanal premium):
+ *  1 Hero · 2 Beneficios · 3 Nuestros tejidos · 4 Novedades · 5 Historia ·
+ *  6 Descubre hoy · 7 Pausa editorial · 8 La pieza en la vida real ·
+ *  9 Reseñas · 10 Hecho para ti (Personalización + Por mayor) · 11 Newsletter
+ *
+ * «También en el catálogo» (HomeExploreScroll, lista de analítica
+ * `home_explore_scroll`, GET /products/random-sample) ya no se renderiza:
+ * «Descubre hoy» asume su función. El componente y el fetch se conservan
+ * sin cambios hasta confirmar la migración de métricas.
+ *
+ * Alturas de reserva = alto medido de cada sección a 390 px (la vista más
+ * alta) para limitar saltos mientras llega cada sección.
  */
 export default async function HomePage() {
   const [cmsData, appearance] = await Promise.all([
@@ -103,55 +114,40 @@ export default async function HomePage() {
       <HomeBenefits features={features} />
 
       {/* P2 — below the fold: streaming por sección */}
-      <Suspense fallback={<HomeSectionFallback minHeight={500} />}>
-        <HomeNewArrivals />
-      </Suspense>
-
-      <Suspense fallback={<HomeSectionFallback minHeight={520} />}>
+      <Suspense fallback={<HomeSectionFallback minHeight={820} />}>
         <HomeCraftBlock />
       </Suspense>
 
-      <Suspense fallback={<HomeSectionFallback minHeight={440} />}>
+      <Suspense fallback={<HomeSectionFallback minHeight={530} />}>
+        <HomeNewArrivals />
+      </Suspense>
+
+      <Suspense fallback={<HomeSectionFallback minHeight={800} />}>
         <HomeStory />
       </Suspense>
 
-      <Suspense fallback={<HomeSectionFallback minHeight={520} />}>
+      <Suspense fallback={<HomeSectionFallback minHeight={1320} />}>
         <HomeDiscover />
       </Suspense>
 
-      {/* Pausa visual: Descubre hoy → Personalización (null si CMS vacío) */}
+      {/* Pausa editorial única (editorial1 → editorial2); null si no hay fotos */}
       <Suspense fallback={null}>
-        <HomeEditorialBreak slot="editorial1" />
+        <HomeEditorialBreak />
       </Suspense>
 
-      <Suspense fallback={<HomeSectionFallback minHeight={460} />}>
-        <HomePersonalization />
-      </Suspense>
-
-      {/* Descubre hoy (carrusel): catálogo sin nuevos/destacados */}
-      <Suspense fallback={<HomeSectionFallback minHeight={500} />}>
-        <HomeExploreScroll />
-      </Suspense>
-
-      {/* Pausa visual: Descubre hoy → Inspiración (null si CMS vacío) */}
-      <Suspense fallback={null}>
-        <HomeEditorialBreak slot="editorial2" />
-      </Suspense>
-
-      <Suspense fallback={<HomeSectionFallback minHeight={440} />}>
+      <Suspense fallback={<HomeSectionFallback minHeight={1100} />}>
         <HomeInspiration />
       </Suspense>
 
-      <Suspense fallback={<HomeSectionFallback minHeight={460} />}>
-        <HomeWholesale />
-      </Suspense>
-
-      {/* Voces: después de Inspiración / mayor, antes del newsletter */}
-      <Suspense fallback={<HomeSectionFallback minHeight={240} />}>
+      <Suspense fallback={<HomeSectionFallback minHeight={840} />}>
         <HomeReviews />
       </Suspense>
 
-      <Suspense fallback={<HomeSectionFallback minHeight={260} />}>
+      <Suspense fallback={<HomeSectionFallback minHeight={1550} />}>
+        <HomeServices />
+      </Suspense>
+
+      <Suspense fallback={<HomeSectionFallback minHeight={480} />}>
         <HomeNewsletter />
       </Suspense>
     </>

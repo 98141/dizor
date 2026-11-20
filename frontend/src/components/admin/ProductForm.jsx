@@ -119,6 +119,10 @@ export default function ProductForm({ productId }) {
   const [uploading, setUploading] = useState(false);
   const [uploadingCount, setUploadingCount] = useState(0);
   const [error, setError] = useState("");
+  const [adjustmentStates, setAdjustmentStates] = useState({});
+  // Refs are updated synchronously: a second click in the same render sees
+  // the pending operation, including its immutable payload and idempotency key.
+  const inFlightAdjustmentsRef = useRef(new Map());
 
   const MAX_IMAGES = 10;
   const MAX_BATCH = 3;
@@ -381,18 +385,46 @@ export default function ProductForm({ productId }) {
 
   const handleStockAdjustment = async (index) => {
     const variant = form.variants[index];
+    if (!variant?.id) return;
+    const operations = inFlightAdjustmentsRef.current;
+    let operation = operations.get(variant.id);
+    if (operation?.inFlight || operation?.completed) return;
     const delta = Number(variant.adjustmentDelta);
     if (!Number.isSafeInteger(delta) || delta === 0 || !variant.adjustmentReason?.trim()) { setError("Registra una cantidad entera distinta de cero y el motivo del ajuste"); return; }
-    // Keep the same key after an ambiguous failure; retries cannot duplicate a movement.
-    const operationKey = variant.adjustmentKey || crypto.randomUUID();
-    setVariant(index, "adjustmentKey", operationKey);
+    if (!operation) {
+      operation = { payload: { variantId: variant.id, delta,
+        reason: variant.adjustmentReason.trim(), operationKey: crypto.randomUUID() } };
+      operations.set(variant.id, operation);
+    }
+    operation.inFlight = true;
+    setAdjustmentStates((prev) => ({ ...prev, [variant.id]: { status: "processing", message: "Registrando ajuste…" } }));
     try {
-      const result = await adjustProductStock(productId, { variantId: variant.id, delta,
-        reason: variant.adjustmentReason, operationKey });
-      setForm((prev) => ({ ...prev, variants: prev.variants.map((v, i) => i === index
-        ? { ...v, stock: result.stock, adjustmentDelta: "", adjustmentReason: "", adjustmentKey: null } : v) }));
+      const result = await adjustProductStock(productId, operation.payload);
+      operation.completed = true;
+      setForm((prev) => ({ ...prev, variants: prev.variants.map((v) => v.id === variant.id
+        ? { ...v, stock: result.stock, adjustmentDelta: "", adjustmentReason: "" } : v) }));
+      setAdjustmentStates((prev) => ({ ...prev, [variant.id]: { status: "success", message: `Ajuste registrado. Stock: ${result.stock}.` } }));
       setError("");
-    } catch (err) { setError(err.response?.data?.message || "No se pudo registrar el ajuste. Conserva los datos para reintentar."); }
+    } catch (err) {
+      const status = err.response?.status;
+      // Explicit business rejections permit correcting the form. Ambiguous
+      // network/5xx errors retain the original key AND payload for a safe retry.
+      const retryPending = ![400, 403, 404, 409, 422].includes(status);
+      if (!retryPending) operations.delete(variant.id);
+      const message = err.response?.data?.message || "No se pudo confirmar el ajuste. Reintenta la misma operación.";
+      setAdjustmentStates((prev) => ({ ...prev, [variant.id]: { status: "error", message, retryPending } }));
+    } finally {
+      operation.inFlight = false;
+    }
+  };
+
+  const setAdjustmentField = (index, key, value) => {
+    const variant = form.variants[index];
+    const operation = inFlightAdjustmentsRef.current.get(variant.id);
+    if (operation?.inFlight || (operation && !operation.completed)) return;
+    inFlightAdjustmentsRef.current.delete(variant.id);
+    setAdjustmentStates((prev) => ({ ...prev, [variant.id]: null }));
+    setVariant(index, key, value);
   };
 
   const handleSubmit = async (e) => {
@@ -755,10 +787,18 @@ Fibra natural de Sandoná, Nariño.
                   </label>
                   {variant.id && <div>
                     <input type="number" step="1" placeholder="Ajuste + / −" aria-label="Cantidad del ajuste"
-                      value={variant.adjustmentDelta || ""} onChange={(e) => setVariant(index, "adjustmentDelta", e.target.value)} />
+                      disabled={adjustmentStates[variant.id]?.status === "processing" || adjustmentStates[variant.id]?.retryPending}
+                      value={variant.adjustmentDelta || ""} onChange={(e) => setAdjustmentField(index, "adjustmentDelta", e.target.value)} />
                     <input placeholder="Motivo del ajuste" aria-label="Motivo del ajuste"
-                      value={variant.adjustmentReason || ""} onChange={(e) => setVariant(index, "adjustmentReason", e.target.value)} />
-                    <button type="button" className="admin-btn" onClick={() => handleStockAdjustment(index)}>Registrar ajuste</button>
+                      disabled={adjustmentStates[variant.id]?.status === "processing" || adjustmentStates[variant.id]?.retryPending}
+                      value={variant.adjustmentReason || ""} onChange={(e) => setAdjustmentField(index, "adjustmentReason", e.target.value)} />
+                    <button type="button" className="admin-btn" onClick={() => handleStockAdjustment(index)}
+                      disabled={adjustmentStates[variant.id]?.status === "processing"}>
+                      {adjustmentStates[variant.id]?.status === "processing" ? "Registrando…" : adjustmentStates[variant.id]?.retryPending ? "Reintentar ajuste" : "Registrar ajuste"}
+                    </button>
+                    {adjustmentStates[variant.id] && <p role={adjustmentStates[variant.id].status === "error" ? "alert" : "status"}>
+                      {adjustmentStates[variant.id].message}
+                    </p>}
                   </div>}
                   {form.variants.length > 1 ? (
                     <button

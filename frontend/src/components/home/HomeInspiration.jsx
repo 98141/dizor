@@ -1,5 +1,7 @@
 import { getHomeContent } from "@/services/cmsService";
 import InspirationGallery from "@/components/home/InspirationGallery";
+import MotionReveal from "@/components/motion/MotionReveal";
+import { HomeArrowLink } from "./HomeSectionIntro";
 
 const MAX_IMAGES = 5;
 const DIZOR_INSTAGRAM_URL = "https://www.instagram.com/sombrereriadizor/";
@@ -45,7 +47,11 @@ function readableAlt(altText, index) {
     : `Inspiración Dizor — fotografía ${index + 1}`;
 }
 
-/** Inspiración — galería editorial (1–5 imágenes del CMS). */
+/**
+ * «La pieza en la vida real» — galería editorial (1–5 imágenes del CMS).
+ * Encabezado en dos columnas: eyebrow + título | texto de apoyo + Instagram.
+ * Todo el texto sale del CMS (`inspiracion`).
+ */
 export default async function HomeInspiration() {
   const cmsData = await getHomeContent().catch(() => null);
   const inspiracion = cmsData?.home?.inspiracion || {};
@@ -69,30 +75,41 @@ export default async function HomeInspiration() {
     focalY: typeof img.focalY === "number" ? img.focalY : null,
   }));
 
+  const subtitle = (inspiracion.subtitle || "").trim();
+
   return (
     <section
-      className="home-section home-section--inspire"
+      className="home-section home-section--editorial home-section--inspire"
       aria-labelledby="home-inspire-heading"
     >
       <div className="home-container home-container--wide">
-        <header className="home-inspire__header">
-          <h2 id="home-inspire-heading" className="home-section__heading">
-            {inspiracion.title || "Inspiración"}
-          </h2>
-        </header>
+        <div className="home-inspire-layout">
+        <MotionReveal as="header" variant="editorial" className="home-inspire__header">
+          <div className="home-inspire__title">
+            {inspiracion.eyebrow ? (
+              <p className="home-eyebrow">{inspiracion.eyebrow}</p>
+            ) : null}
+            <h2
+              id="home-inspire-heading"
+              className="home-section__heading home-section__heading--editorial"
+            >
+              {inspiracion.title || "Inspiración"}
+            </h2>
+          </div>
+          <div className="home-inspire__aside">
+            {subtitle ? <p className="home-section__lead">{subtitle}</p> : null}
+            <HomeArrowLink
+              href={resolveInstagramUrl(inspiracion.instagramUrl)}
+              external
+              className="home-inspire__follow"
+            >
+              {inspiracion.ctaLabel || "Síguenos en Instagram"}
+            </HomeArrowLink>
+          </div>
+        </MotionReveal>
 
         <InspirationGallery images={images} />
-
-        <p className="home-inspire__follow">
-          <a
-            href={resolveInstagramUrl(inspiracion.instagramUrl)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="home-text-link"
-          >
-            {inspiracion.ctaLabel || "Síguenos en Instagram"}
-          </a>
-        </p>
+        </div>
       </div>
     </section>
   );

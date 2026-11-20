@@ -1,8 +1,7 @@
-import Link from "next/link";
-import Image from "next/image";
 import { getHomeContent } from "@/services/cmsService";
+import HomeServiceCard from "./HomeServiceCard";
 
-/** Pedidos al por mayor — Server Component (reutiliza layout personalize). */
+/** Pedidos al por mayor — composición dentro de «Hecho para ti» (HomeServices). */
 export default async function HomeWholesale() {
   const cmsData = await getHomeContent().catch(() => null);
   const porMayor = cmsData?.home?.porMayor || {};
@@ -11,57 +10,22 @@ export default async function HomeWholesale() {
     homeImages.pormayor?.[0]?.url || porMayor.imageUrl || "";
 
   return (
-    <section className="home-section home-section--wholesale home-section--border">
-      <div className="home-container home-container--wide">
-        <div
-          className={`home-personalize home-wholesale${
-            porMayor.imageOnLeft !== false
-              ? " home-personalize--image-left"
-              : ""
-          }${!porMayorImage ? " home-personalize--no-media" : ""}`}
-        >
-          <div className="home-personalize__content">
-            <h2 className="home-section__heading">
-              {porMayor.title || "Pedidos al por mayor"}
-            </h2>
-            <p className="home-section__lead">
-              {porMayor.body ||
-                "Para tiendas, eventos o distribución. Cotizamos según cantidades y referencias."}
-            </p>
-            {Array.isArray(porMayor.bullets) && porMayor.bullets.length > 0 && (
-              <ul className="home-personalize__list">
-                {porMayor.bullets.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            )}
-            <div className="home-personalize__actions">
-              <Link
-                href={porMayor.ctaHref || "/pedido-mayor"}
-                className="home-btn home-btn--primary home-btn--solid"
-              >
-                {porMayor.ctaLabel || "Solicitar cotización"}
-              </Link>
-            </div>
-          </div>
-          {porMayorImage && (
-            <div className="home-personalize__media">
-              <div className="home-personalize__image-wrap">
-                <Image
-                  src={porMayorImage}
-                  alt={
-                    homeImages.pormayor?.[0]?.altText ||
-                    "Pedido al por mayor Dizor"
-                  }
-                  fill
-                  sizes="(max-width: 899px) 100vw, 42vw"
-                  className="home-personalize__img"
-                />
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </section>
+    <HomeServiceCard
+      id="home-service-wholesale"
+      variant="wholesale"
+      eyebrow={porMayor.eyebrow}
+      title={porMayor.title || "Pedidos al por mayor"}
+      body={
+        porMayor.body ||
+        "Para tiendas, eventos o distribución. Cotizamos según cantidades y referencias."
+      }
+      bullets={porMayor.bullets}
+      image={porMayorImage}
+      imageAlt={homeImages.pormayor?.[0]?.altText || "Pedido al por mayor Dizor"}
+      cta={{
+        href: porMayor.ctaHref || "/pedido-mayor",
+        label: porMayor.ctaLabel || "Solicitar cotización",
+      }}
+    />
   );
 }

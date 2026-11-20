@@ -1,0 +1,616 @@
+16:19:52 [[32mhttp[39m]: POST /api/auth/login 200 375.726 ms - 154
+16:19:52 [[32mhttp[39m]: POST /api/auth/login 200 373.865 ms - 155
+16:19:53 [[32mhttp[39m]: POST /api/auth/login 200 440.252 ms - 160
+16:19:53 [[32mhttp[39m]: POST /api/checkout/orders 201 162.240 ms - 371
+16:19:53 [[32mhttp[39m]: POST /api/checkout/orders 201 214.577 ms - 371
+✔ A1 índice idempotencyKey: dos pedidos sin clave (8280.5696ms)
+16:19:53 [[32mhttp[39m]: POST /api/checkout/orders 201 230.548 ms - 371
+16:19:53 [[32mhttp[39m]: POST /api/checkout/orders 201 275.840 ms - 371
+16:19:53 [[32mhttp[39m]: POST /api/checkout/orders 201 300.097 ms - 371
+16:19:53 [[32mhttp[39m]: POST /api/checkout/orders 201 327.206 ms - 371
+16:19:53 [[32mhttp[39m]: POST /api/checkout/orders 201 355.789 ms - 371
+16:19:53 [[32mhttp[39m]: POST /api/checkout/orders 201 390.550 ms - 371
+✔ A2 número de pedido con peticiones concurrentes (419.2081ms)
+16:19:54 [[32mhttp[39m]: POST /api/checkout/orders 201 138.365 ms - 371
+16:19:54 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b9799ac632901395a3cc/status 200 28.559 ms - 537
+16:19:54 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b9799ac632901395a3cc/shipping 200 29.470 ms - 529
+16:19:54 [[32mhttp[39m]: POST /api/checkout/orders 201 77.964 ms - 371
+16:19:54 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97a9ac632901395a3de/status 200 17.299 ms - 537
+16:19:54 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97a9ac632901395a3de/shipping 200 14.818 ms - 529
+16:19:54 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97a9ac632901395a3de/status 200 14.027 ms - 533
+✔ B1 contraentrega despachada conserva pago pendiente por ambas rutas (391.3431ms)
+16:19:54 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97a9ac632901395a3f3/status 409 7.602 ms - 84
+16:19:54 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97a9ac632901395a3f3/shipping 409 7.865 ms - 76
+16:19:54 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97a9ac632901395a3f3/status 409 7.029 ms - 64
+✔ B2 Wompi pendiente no puede prepararse ni enviarse (57.9393ms)
+16:19:54 [[33mwarn[39m]: Auth failure El vendedor solo puede actualizar estados operativos autorizados {"method":"PATCH","url":"/api/admin/orders/6b00b97a9ac632901395a400/status","statusCode":403,"ip":"127.0.0.1"}
+16:19:54 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97a9ac632901395a400/status 403 11.403 ms - 94
+✔ B3 vendedor no puede asignar estado financiero (42.5293ms)
+16:19:54 [[33mwarn[39m]: Auth failure Solo administradores pueden registrar recaudos {"method":"PATCH","url":"/api/admin/orders/6b00b97a9ac632901395a409/payment","statusCode":403,"ip":"127.0.0.1"}
+16:19:54 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97a9ac632901395a409/payment 403 9.503 ms - 76
+16:19:54 [[32mhttp[39m]: POST /api/checkout/orders 201 76.386 ms - 371
+16:19:54 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97a9ac632901395a412/status 200 21.215 ms - 532
+16:19:54 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97a9ac632901395a412/payment 409 8.178 ms - 44
+✔ B4 Wompi manual y recaudo sobre cancelado se rechazan (180.5051ms)
+16:19:54 [[32mhttp[39m]: POST /api/checkout/orders 201 79.668 ms - 371
+16:19:54 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97a9ac632901395a42b/status 409 7.694 ms - 64
+16:19:54 [[32mhttp[39m]: POST /api/checkout/orders 201 83.071 ms - 371
+16:19:54 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97a9ac632901395a43b/status 409 6.164 ms - 64
+16:19:54 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97a9ac632901395a43b/status 200 12.923 ms - 532
+16:19:54 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97a9ac632901395a43b/status 409 8.339 ms - 64
+✔ B5 saltos operativos, reactivaciones y estados inventados se rechazan (226.433ms)
+16:19:54 [[32mhttp[39m]: POST /api/checkout/orders 201 75.409 ms - 371
+16:19:54 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97a9ac632901395a44d/status 200 20.807 ms - 532
+16:19:54 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97a9ac632901395a44d/shipping 409 7.865 ms - 76
+✔ B6 guía de pedido cancelado no se puede editar (119.2722ms)
+16:19:55 [[32mhttp[39m]: POST /api/webhooks/wompi 200 34.237 ms - 2
+16:19:55 [[32mhttp[39m]: POST /api/webhooks/wompi 200 41.488 ms - 2
+✔ C1 Wompi rechazado y luego aprobado (reintento en el mismo enlace) (114.3919ms)
+16:19:55 [[32mhttp[39m]: POST /api/webhooks/wompi 200 35.576 ms - 2
+✔ C2 Wompi aprobado sin stock disponible (76.2302ms)
+16:19:55 [[32mhttp[39m]: POST /api/webhooks/wompi 200 54.203 ms - 2
+16:19:55 [[32mhttp[39m]: POST /api/webhooks/wompi 200 63.986 ms - 2
+16:19:55 [[32mhttp[39m]: POST /api/webhooks/wompi 200 84.270 ms - 2
+✔ C3 dos eventos APPROVED simultáneos (138.9929ms)
+16:19:55 [[32mhttp[39m]: POST /api/checkout/orders 201 77.980 ms - 371
+16:19:55 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97b9ac632901395a49a/payment 409 7.653 ms - 68
+16:19:55 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97b9ac632901395a49a/status 200 14.176 ms - 538
+16:19:55 [[32mhttp[39m]: PATCH /api/checkout/orders/6b00b97b9ac632901395a49a/cancel 409 7.251 ms - 83
+✔ C4 cliente no cancela pedidos en preparación (123.8689ms)
+16:19:55 [[32mhttp[39m]: POST /api/checkout/orders 201 89.782 ms - 371
+16:19:55 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97b9ac632901395a4ae/status 200 18.779 ms - 538
+16:19:55 [[32mhttp[39m]: GET /api/checkout/orders/6b00b97b9ac632901395a4ae 200 10.026 ms - 937
+✔ C5 notas internas nunca se exponen al comprador (133.7399ms)
+16:19:55 [[32mhttp[39m]: POST /api/checkout/orders 201 95.012 ms - 371
+16:19:55 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97b9ac632901395a4c0/status 200 17.913 ms - 537
+16:19:55 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97b9ac632901395a4c0/shipping 200 15.741 ms - 527
+16:19:55 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97b9ac632901395a4c0/status 200 15.990 ms - 533
+16:19:55 [[32mhttp[39m]: POST /api/checkout/orders 201 70.938 ms - 371
+16:19:55 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97b9ac632901395a4d3/status 200 25.766 ms - 532
+16:19:55 [[32mhttp[39m]: POST /api/webhooks/wompi 200 37.696 ms - 2
+16:19:55 [[32mhttp[39m]: POST /api/webhooks/wompi 200 24.270 ms - 2
+✔ D1 flujos operativos usan transportes ficticios sin red externa (387.1835ms)
+16:19:56 [[32mhttp[39m]: POST /api/checkout/orders 201 67.927 ms - 371
+✔ D2 sin proveedor no se registra acuse como enviado (77.0212ms)
+16:19:56 [[32mhttp[39m]: GET /api/admin/catalog/products/6b00b9769ac632901395a337 200 11.927 ms - 1070
+16:19:56 [[32mhttp[39m]: POST /api/checkout/orders 201 71.332 ms - 371
+16:19:56 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b00b9769ac632901395a337 200 22.802 ms - 1337
+✔ E1 edición obsoleta conserva stock descontado por una venta (123.6938ms)
+16:19:56 [[32mhttp[39m]: POST /api/checkout/orders 400 2.674 ms - 56
+✔ E2 cantidad fraccionaria se rechaza (9.2533ms)
+16:19:56 [[32mhttp[39m]: GET /api/admin/alerts 200 9.160 ms - 3942
+✔ E3 agotamiento de variante aparece en alertas (30.5941ms)
+16:19:56 [[32mhttp[39m]: GET /api/admin/dashboard 200 26.684 ms - 4215
+16:19:56 [[32mhttp[39m]: POST /api/checkout/orders 201 73.226 ms - 371
+16:19:56 [[32mhttp[39m]: GET /api/admin/dashboard 200 31.526 ms - 4210
+16:19:56 [[32mhttp[39m]: GET /api/admin/alerts 200 6.921 ms - 3942
+✔ F1 contraentrega aparece por preparar y no como pago Wompi pendiente (148.2287ms)
+16:19:56 [[32mhttp[39m]: POST /api/checkout/orders 201 77.891 ms - 371
+16:19:56 [[32mhttp[39m]: GET /api/admin/orders/6b00b97c9ac632901395a53a 200 6.201 ms - 2283
+✔ G1 vendedor no recibe costos internos (91.3491ms)
+16:19:56 [[32mhttp[39m]: GET /api/admin/orders?q=[redactado] 200 6.664 ms - 78
+✔ G2 búsqueda con caracteres especiales (9.2933ms)
+16:19:56 [[32mhttp[39m]: POST /api/checkout/orders 201 72.454 ms - 371
+16:19:56 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97c9ac632901395a549/assign 400 4.553 ms - 69
+✔ G3 solo se asigna personal activo (85.4463ms)
+16:19:56 [[32mhttp[39m]: POST /api/checkout/orders 201 72.918 ms - 371
+16:19:56 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97c9ac632901395a557/status 200 12.306 ms - 537
+16:19:56 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97c9ac632901395a557/shipping 200 14.839 ms - 531
+16:19:56 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97c9ac632901395a557/status 200 14.831 ms - 537
+16:19:56 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97c9ac632901395a557/shipping 409 6.989 ms - 76
+✔ P01 entrega contraentrega conserva pago pendiente y evidencia de entrega (140.2095ms)
+16:19:56 [[32mhttp[39m]: POST /api/checkout/orders 201 70.786 ms - 371
+16:19:56 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97c9ac632901395a56c/status 200 12.640 ms - 537
+16:19:56 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97c9ac632901395a56c/shipping 200 11.519 ms - 531
+16:19:56 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97c9ac632901395a56c/status 200 13.220 ms - 537
+16:19:56 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97c9ac632901395a56c/payment 200 26.164 ms - 534
+16:19:56 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97c9ac632901395a56c/payment 200 69.794 ms - 534
+16:19:56 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97c9ac632901395a56c/payment 200 72.219 ms - 534
+✔ P02 recaudo explícito por admin, repetido y concurrente se registra una vez (207.5775ms)
+16:19:56 [[32mhttp[39m]: POST /api/checkout/orders 201 78.857 ms - 371
+16:19:56 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97c9ac632901395a58b/status 200 11.531 ms - 537
+16:19:56 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97c9ac632901395a58b/shipping 200 12.650 ms - 531
+16:19:56 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97c9ac632901395a58b/status 200 13.228 ms - 537
+16:19:57 [[33mwarn[39m]: Auth failure Solo administradores pueden registrar recaudos {"method":"PATCH","url":"/api/admin/orders/6b00b97c9ac632901395a58b/payment","statusCode":403,"ip":"127.0.0.1"}
+16:19:57 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97c9ac632901395a58b/payment 403 6.138 ms - 76
+16:19:57 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97c9ac632901395a58b/payment 400 7.210 ms - 87
+16:19:57 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97c9ac632901395a58b/payment 400 6.281 ms - 87
+16:19:57 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97c9ac632901395a58b/payment 400 6.775 ms - 87
+✔ P03 vendedor no recauda; evidencia incompleta y fecha futura se rechazan (171.1065ms)
+16:19:57 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97d9ac632901395a5a4/payment 409 6.197 ms - 66
+16:19:57 [[32mhttp[39m]: POST /api/webhooks/wompi 200 31.799 ms - 2
+16:19:57 [[32mhttp[39m]: POST /api/webhooks/wompi 200 9.581 ms - 2
+16:19:57 [[32mhttp[39m]: POST /api/webhooks/wompi 200 8.401 ms - 2
+✔ P04 ni admin confirma Wompi manualmente; pago aprobado deja una venta (95.4164ms)
+16:19:57 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97d9ac632901395a5b9/status 200 14.746 ms - 499
+16:19:57 [[32mhttp[39m]: POST /api/webhooks/wompi 200 29.283 ms - 2
+16:19:57 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97d9ac632901395a5b9/status 409 5.929 ms - 64
+16:19:57 [[32mhttp[39m]: GET /api/admin/alerts 200 6.522 ms - 4593
+✔ P05 aprobación después de cancelar reconoce dinero, conserva cancelación y alerta (93.9836ms)
+16:19:57 [[32mhttp[39m]: POST /api/webhooks/wompi 200 31.776 ms - 2
+16:19:57 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97d9ac632901395a5d2/status 409 18.369 ms - 83
+16:19:57 [[32mhttp[39m]: POST /api/webhooks/wompi 200 29.255 ms - 2
+16:19:57 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97d9ac632901395a5e4/status 409 7.317 ms - 83
+✔ P06 diferencias de monto y moneda conservan el hecho financiero y bloquean preparación (150.7587ms)
+16:19:57 [[31merror[39m]: Server error FALLO FICTICIO DE ALMACENAMIENTO
+Error: FALLO FICTICIO DE ALMACENAMIENTO
+    at History.create (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\test\phase1.test.js:575:40)
+    at exports.moveStock (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\inventoryService.js:26:26)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:63:13
+    at async ClientSession.withTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\sessions.js:568:30)
+    at async exports.inTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\transactionService.js:7:12)
+    at async exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:34:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:19:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":500,"userId":null,"ip":"127.0.0.1"}
+16:19:57 [[32mhttp[39m]: POST /api/webhooks/wompi 500 42.832 ms - 57
+16:19:57 [[32mhttp[39m]: POST /api/webhooks/wompi 200 40.249 ms - 2
+16:19:57 [[32mhttp[39m]: POST /api/webhooks/wompi 200 10.453 ms - 2
+✔ P07 fallo tras recibir pago conserva evidencia; reintento aplica stock una sola vez (139.8788ms)
+16:19:57 [[32mhttp[39m]: POST /api/checkout/orders 201 80.840 ms - 371
+16:19:57 [[32mhttp[39m]: PATCH /api/checkout/orders/6b00b97d9ac632901395a619/cancel 200 30.137 ms - 135
+16:19:57 [[32mhttp[39m]: PATCH /api/checkout/orders/6b00b97d9ac632901395a619/cancel 409 33.645 ms - 66
+16:19:57 [[32mhttp[39m]: PATCH /api/checkout/orders/6b00b97d9ac632901395a619/cancel 409 36.166 ms - 66
+✔ P08 autocancelación contraentrega antes de preparación repone una sola vez (131.0041ms)
+16:19:57 [[32mhttp[39m]: POST /api/checkout/orders 201 79.400 ms - 371
+16:19:57 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97d9ac632901395a636/status 200 13.424 ms - 538
+16:19:57 [[32mhttp[39m]: PATCH /api/checkout/orders/6b00b97d9ac632901395a636/cancel 409 5.872 ms - 83
+16:19:57 [[32mhttp[39m]: POST /api/webhooks/wompi 200 55.133 ms - 2
+16:19:57 [[32mhttp[39m]: PATCH /api/checkout/orders/6b00b97d9ac632901395a648/cancel 409 15.951 ms - 83
+✔ P09 autocancelación en preparación y Wompi pagado se rechazan (215.8161ms)
+16:19:57 [[32mhttp[39m]: PATCH /api/checkout/orders/6b00b97d9ac632901395a656/cancel 409 12.467 ms - 116
+✔ P10 Wompi sin transacción verificable conserva pedido e incidencia (47.4063ms)
+16:19:57 [[32mhttp[39m]: POST /api/checkout/orders 201 69.012 ms - 371
+16:19:57 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97d9ac632901395a662/status 200 13.537 ms - 537
+16:19:58 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97d9ac632901395a662/shipping 200 13.006 ms - 531
+16:19:58 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97d9ac632901395a662/status 200 14.729 ms - 537
+16:19:58 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97d9ac632901395a662/payment 200 13.943 ms - 534
+16:19:58 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97d9ac632901395a662/status 200 21.113 ms - 532
+16:19:58 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97d9ac632901395a662/status 200 10.373 ms - 532
+✔ P11 contraentrega pagado cancelado administrativamente conserva dinero sin reembolso (186.9652ms)
+16:19:58 [[32mhttp[39m]: POST /api/admin/catalog/products/6b00b9769ac632901395a337/stock 200 23.709 ms - 48
+16:19:58 [[32mhttp[39m]: POST /api/admin/catalog/products/6b00b9769ac632901395a337/stock 200 30.214 ms - 47
+16:19:58 [[32mhttp[39m]: POST /api/admin/catalog/products/6b00b9769ac632901395a337/stock 200 31.138 ms - 47
+16:19:58 [[32mhttp[39m]: POST /api/admin/catalog/products/6b00b9769ac632901395a337/stock 409 6.070 ms - 62
+16:19:58 [[32mhttp[39m]: POST /api/admin/catalog/products/6b00b9769ac632901395a337/stock 400 2.489 ms - 90
+16:19:58 [[32mhttp[39m]: POST /api/admin/catalog/products/6b00b9769ac632901395a337/stock 409 6.399 ms - 73
+16:19:58 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"POST","url":"/api/admin/catalog/products/6b00b9769ac632901395a337/stock","statusCode":403,"ip":"127.0.0.1"}
+16:19:58 [[32mhttp[39m]: POST /api/admin/catalog/products/6b00b9769ac632901395a337/stock 403 2.639 ms - 75
+✔ P12 ajustes de stock enteros y concurrentes tienen motivo y no se duplican (69.6974ms)
+16:19:58 [[32mhttp[39m]: GET /api/admin/catalog/products/6b00b9769ac632901395a337 200 8.219 ms - 1070
+16:19:58 [[32mhttp[39m]: POST /api/admin/catalog/products/6b00b9769ac632901395a337/stock 200 33.396 ms - 48
+16:19:58 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b00b9769ac632901395a337 200 91.330 ms - 1337
+16:19:58 [[32mhttp[39m]: POST /api/checkout/orders 201 100.724 ms - 371
+✔ P13 formulario obsoleto guardado en paralelo a venta y ajuste conserva stock (124.3794ms)
+16:19:58 [[32mhttp[39m]: POST /api/checkout/orders 409 71.277 ms - 120
+16:19:58 [[32mhttp[39m]: POST /api/checkout/orders 409 75.892 ms - 120
+16:19:58 [[32mhttp[39m]: POST /api/checkout/orders 201 109.762 ms - 371
+16:19:58 [[32mhttp[39m]: POST /api/checkout/orders 200 8.851 ms - 347
+16:19:58 [[32mhttp[39m]: POST /api/checkout/orders 409 3.528 ms - 69
+✔ P14 idempotencia checkout secuencial y concurrente, y conflicto de contenido (137.1147ms)
+16:19:58 [[32mhttp[39m]: POST /api/checkout/orders 400 0.723 ms - 61
+16:19:58 [[32mhttp[39m]: POST /api/checkout/orders 400 0.689 ms - 61
+16:19:58 [[32mhttp[39m]: POST /api/checkout/orders 400 0.838 ms - 61
+16:19:58 [[32mhttp[39m]: POST /api/checkout/orders 400 2.970 ms - 56
+16:19:58 [[32mhttp[39m]: POST /api/checkout/orders 400 2.656 ms - 56
+16:19:58 [[32mhttp[39m]: POST /api/checkout/orders 400 3.143 ms - 56
+16:19:58 [[32mhttp[39m]: POST /api/checkout/orders 400 2.555 ms - 56
+16:19:58 [[32mhttp[39m]: POST /api/checkout/orders 400 2.761 ms - 56
+✔ P15 claves malformadas y cantidades fraccionarias se rechazan sin datos internos (36.8052ms)
+16:19:58 [[32mhttp[39m]: POST /api/checkout/orders 201 77.872 ms - 371
+16:19:58 [[32mhttp[39m]: GET /api/admin/orders/6b00b97e9ac632901395a6d2 200 7.612 ms - 2290
+16:19:58 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97e9ac632901395a6d2/status 200 11.597 ms - 518
+✔ P16 pedido histórico conserva número, estado, costos y evidencia sin inferir entrega (115.1517ms)
+✔ P17 números simultáneos únicos usan fecha Colombia; índices sin duplicado de orderNumber (141.1201ms)
+✔ P18 expiración viene del proveedor; nunca se calcula desde createdAt (24.8895ms)
+16:19:58 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.705 ms - 48
+16:19:58 [[32mhttp[39m]: POST /api/webhooks/wompi 200 0.812 ms - 2
+16:19:58 [[32mhttp[39m]: POST /api/webhooks/wompi 200 0.599 ms - 2
+✔ P19 checksum inválido, entorno incorrecto y evento sin referencia no alteran pedidos (36.5504ms)
+16:19:58 [[32mhttp[39m]: POST /api/webhooks/wompi 200 37.826 ms - 2
+16:19:58 [[32mhttp[39m]: POST /api/webhooks/wompi 200 57.244 ms - 2
+16:19:58 [[32mhttp[39m]: POST /api/webhooks/wompi 200 24.510 ms - 2
+✔ P20 evento rechazado posterior no degrada aprobado y pago adicional genera incidencia (156.289ms)
+16:19:58 [[31merror[39m]: Server error No se pudo crear el pedido. Intenta nuevamente con la misma clave.
+Error: No se pudo crear el pedido. Intenta nuevamente con la misma clave.
+    at createCheckoutOrder (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\checkoutController.js:359:43)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\checkoutController.js:499:12 {"method":"POST","url":"/api/checkout/orders","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+16:19:58 [[32mhttp[39m]: POST /api/checkout/orders 503 26.972 ms - 97
+16:19:59 [[32mhttp[39m]: POST /api/checkout/orders 201 72.231 ms - 371
+✔ P21 fallo de checkout revierte pedido, stock y movimientos; no filtra error de BD (111.8298ms)
+16:19:59 [[32mhttp[39m]: PATCH /api/checkout/orders/6b00b97f9ac632901395a72a/cancel 409 40.259 ms - 91
+✔ P22 consulta proveedor antes de cancelar descubre aprobación aún no local (84.5754ms)
+16:19:59 [[32mhttp[39m]: PATCH /api/checkout/orders/6b00b97f9ac632901395a73c/cancel 200 36.005 ms - 135
+16:19:59 [[32mhttp[39m]: POST /api/webhooks/wompi 200 31.183 ms - 2
+✔ P23 Wompi pendiente consultado permite cancelar y aprobación tardía queda visible (113.108ms)
+16:19:59 [[31merror[39m]: Server error No se pudo verificar con Wompi. Reintenta o solicita revisión administrativa.
+Error: No se pudo verificar con Wompi. Reintenta o solicita revisión administrativa.
+    at C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\checkoutController.js:658:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {"method":"PATCH","url":"/api/checkout/orders/6b00b97f9ac632901395a754/cancel","statusCode":503,"userId":"6b00b9779ac632901395a33c","ip":"127.0.0.1"}
+16:19:59 [[32mhttp[39m]: PATCH /api/checkout/orders/6b00b97f9ac632901395a754/cancel 503 5.864 ms - 109
+✔ P24 fallo al consultar proveedor impide autocancelación sin perder pedido (44.0695ms)
+16:19:59 [[32mhttp[39m]: POST /api/webhooks/wompi 200 28.261 ms - 2
+16:19:59 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"POST","url":"/api/admin/orders/6b00b97f9ac632901395a75e/reconcile-wompi","statusCode":403,"ip":"127.0.0.1"}
+16:19:59 [[32mhttp[39m]: POST /api/admin/orders/6b00b97f9ac632901395a75e/reconcile-wompi 403 3.297 ms - 75
+16:19:59 [[32mhttp[39m]: POST /api/admin/orders/6b00b97f9ac632901395a75e/reconcile-wompi 200 37.058 ms - 100
+16:19:59 [[32mhttp[39m]: POST /api/admin/orders/6b00b97f9ac632901395a75e/reconcile-wompi 200 23.002 ms - 100
+✔ P25 conciliación consulta Wompi y recupera pago sin stock una vez repuesto (136.064ms)
+16:19:59 [[32mhttp[39m]: POST /api/checkout/orders 201 73.066 ms - 425
+16:19:59 [[32mhttp[39m]: POST /api/checkout/orders 200 13.784 ms - 382
+✔ P26 API enlace ficticio conserva expires_at y retry checkout reutiliza enlace (96.9922ms)
+16:19:59 [[31merror[39m]: Server error No se pudo iniciar el pago con Wompi. El pedido queda pendiente de revisión.
+Error: No se pudo iniciar el pago con Wompi. El pedido queda pendiente de revisión.
+    at createCheckoutOrder (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\checkoutController.js:395:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\checkoutController.js:499:12 {"method":"POST","url":"/api/checkout/orders","statusCode":502,"userId":null,"ip":"127.0.0.1"}
+16:19:59 [[32mhttp[39m]: POST /api/checkout/orders 502 51.996 ms - 108
+16:19:59 [[32mhttp[39m]: POST /api/checkout/orders 409 4.459 ms - 120
+✔ P27 fallo creando enlace conserva orden para conciliación y no expone error proveedor (79.7193ms)
+16:19:59 [[32mhttp[39m]: POST /api/checkout/orders 409 56.049 ms - 73
+16:19:59 [[32mhttp[39m]: POST /api/checkout/orders 201 93.867 ms - 371
+✔ P28 dos pedidos compiten por la última unidad y no hay sobreventa (120.0578ms)
+16:19:59 [[32mhttp[39m]: POST /api/checkout/orders 409 37.413 ms - 73
+✔ P29 líneas repetidas no permiten descuento parcial al agotarse stock (58.4848ms)
+16:19:59 [[32mhttp[39m]: POST /api/webhooks/wompi 200 33.715 ms - 2
+16:19:59 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97f9ac632901395a7c4/status 200 35.082 ms - 496
+16:19:59 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97f9ac632901395a7c4/status 200 39.868 ms - 496
+16:19:59 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b97f9ac632901395a7c4/status 200 38.950 ms - 496
+✔ P30 cancelación administrativa concurrente de pedido pagado repone stock una vez (113.1505ms)
+16:19:59 [[32mhttp[39m]: POST /api/webhooks/wompi 200 50.843 ms - 2
+✔ P31 un reembolso histórico no se borra por una aprobación tardía (86.7288ms)
+16:20:00 [[32mhttp[39m]: POST /api/webhooks/wompi 200 31.780 ms - 2
+16:20:00 [[32mhttp[39m]: POST /api/webhooks/wompi 200 33.468 ms - 2
+16:20:00 [[32mhttp[39m]: PATCH /api/admin/orders/6b00b9809ac632901395a800/status 200 18.006 ms - 496
+✔ P32 ventas conciliadas excluyen cobros con incidencia y cancelaciones sin borrar evidencia (220.6347ms)
+16:20:00 [[31merror[39m]: Server error Fallo ficticio al limpiar carrito
+Error: Fallo ficticio al limpiar carrito
+    at Cart.findOneAndUpdate (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\test\phase1.test.js:886:47)
+    at createCheckoutOrder (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\checkoutController.js:364:16)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\checkoutController.js:499:12 {"method":"POST","url":"/api/checkout/orders","statusCode":500,"userId":"6b00b9779ac632901395a33c","ip":"127.0.0.1"}
+16:20:00 [[32mhttp[39m]: POST /api/checkout/orders 500 37.636 ms - 57
+16:20:00 [[32mhttp[39m]: POST /api/checkout/orders 409 5.165 ms - 120
+✔ P33 fallo posterior a crear pedido conserva idempotencia y genera incidencia visible (52.4781ms)
+16:20:00 [[32mhttp[39m]: POST /api/checkout/orders 409 63.008 ms - 62
+16:20:00 [[32mhttp[39m]: POST /api/checkout/orders 201 91.623 ms - 370
+✔ P34 último uso de cupón concurrente no deja pedidos ni descuentos huérfanos (107.7934ms)
+16:20:00 [[32mhttp[39m]: POST /api/webhooks/wompi 200 53.235 ms - 2
+16:20:00 [[32mhttp[39m]: POST /api/webhooks/wompi 200 56.424 ms - 2
+16:20:00 [[32mhttp[39m]: POST /api/webhooks/wompi 200 80.635 ms - 2
+✔ P35 tres aprobaciones concurrentes consumen cupón Wompi una vez (120.4937ms)
+
+=== RESULTADOS ===
+[
+  {
+    "id": "unrelated-indexes",
+    "failures": [
+      "An existing index has the same name as the requested index. When index names are not specified, they are auto generated and can cause conflicts. Please refer to our documentation. Requested index: { v: 2, key: { requestNumber: 1 }, name: \"requestNumber_1\" }, existing index: { v: 2, unique: true, key: { requestNumber: 1 }, name: \"requestNumber_1\" }"
+    ]
+  },
+  {
+    "id": "A0",
+    "ok": true,
+    "detail": {
+      "initError": null,
+      "indexesCreated": [
+        {
+          "key": {
+            "_id": 1
+          },
+          "unique": false,
+          "sparse": false
+        },
+        {
+          "key": {
+            "orderNumber": 1
+          },
+          "unique": true,
+          "sparse": false
+        },
+        {
+          "key": {
+            "user": 1,
+            "createdAt": -1
+          },
+          "unique": false,
+          "sparse": false
+        },
+        {
+          "key": {
+            "buyer.email": 1
+          },
+          "unique": false,
+          "sparse": false
+        },
+        {
+          "key": {
+            "idempotencyKey": 1
+          },
+          "unique": true,
+          "sparse": false
+        }
+      ]
+    }
+  },
+  {
+    "id": "A1",
+    "ok": true,
+    "detail": {
+      "index": {
+        "v": 2,
+        "key": {
+          "idempotencyKey": 1
+        },
+        "name": "idempotencyKey_1",
+        "unique": true,
+        "partialFilterExpression": {
+          "idempotencyKey": {
+            "$type": "string"
+          }
+        }
+      },
+      "first": 201,
+      "second": 201,
+      "msg": "Pedido creado. Pagarás al recibir tu pedido."
+    }
+  },
+  {
+    "id": "A2",
+    "ok": true,
+    "detail": {
+      "statuses": [
+        201,
+        201,
+        201,
+        201,
+        201,
+        201
+      ],
+      "errors": []
+    }
+  },
+  {
+    "id": "B1",
+    "ok": true,
+    "detail": {
+      "viaGuia": {
+        "s1": 200,
+        "s2": 200,
+        "orderStatus": "enviado",
+        "paymentStatus": "pendiente"
+      },
+      "viaSelector": {
+        "status": 200,
+        "orderStatus": "enviado",
+        "paymentStatus": "pendiente",
+        "paymentConfirmedAt": null
+      }
+    }
+  },
+  {
+    "id": "B2",
+    "ok": true,
+    "detail": {
+      "status": 409,
+      "orderStatus": "pago_pendiente",
+      "paymentStatus": "pendiente",
+      "stockDeducted": false,
+      "stockBefore": 90,
+      "stockAfter": 90
+    }
+  },
+  {
+    "id": "B3",
+    "ok": true,
+    "detail": {
+      "status": 403,
+      "orderStatus": "pago_pendiente",
+      "paymentStatus": "pendiente"
+    }
+  },
+  {
+    "id": "B4",
+    "ok": true,
+    "detail": {
+      "wompiManualByVendor": {
+        "status": 403,
+        "paymentStatus": "pendiente",
+        "orderStatus": "pago_pendiente"
+      },
+      "cancelledThenConfirmed": {
+        "status": 409,
+        "orderStatus": "cancelado",
+        "paymentStatus": "pendiente",
+        "stockDeducted": false,
+        "stockBefore": 90,
+        "stockAfter": 90
+      }
+    }
+  },
+  {
+    "id": "B5",
+    "ok": true,
+    "detail": {
+      "pendienteAEntregado": {
+        "status": 409,
+        "orderStatus": "pendiente",
+        "paymentStatus": "pendiente",
+        "stockDeducted": true
+      },
+      "rechazadoYVuelta": {
+        "r2": 409,
+        "r3": 200,
+        "orderStatus": "pendiente",
+        "stockDeducted": true
+      },
+      "estadoInventado": {
+        "status": 409,
+        "msg": "Transición de pedido no permitida"
+      }
+    }
+  },
+  {
+    "id": "B6",
+    "ok": true,
+    "detail": {
+      "status": 409,
+      "tracking": ""
+    }
+  },
+  {
+    "id": "C1",
+    "ok": true,
+    "detail": {
+      "declined": 200,
+      "afterDecline": {
+        "orderStatus": "pago_pendiente",
+        "paymentStatus": "rechazado"
+      },
+      "approved": 200,
+      "final": {
+        "orderStatus": "pagado",
+        "paymentStatus": "pagado",
+        "stockDeducted": true
+      },
+      "stockBefore": 88,
+      "stockAfter": 87
+    }
+  },
+  {
+    "id": "C2",
+    "ok": true,
+    "detail": {
+      "code": 200,
+      "orderStatus": "pago_pendiente",
+      "paymentStatus": "pagado",
+      "wompiStatus": "APPROVED",
+      "lastHistory": "Wompi APPROVED verificado: tx-4a9d3704-8ffe-427f-b9d8-623f47cadaa0; requiere conciliación",
+      "emailAttempts": []
+    }
+  },
+  {
+    "id": "C3",
+    "ok": true,
+    "detail": {
+      "codes": [
+        200,
+        200,
+        200
+      ],
+      "stockBefore": 87,
+      "stockAfter": 86,
+      "deducted": 1,
+      "paymentStatus": "pagado"
+    }
+  },
+  {
+    "id": "C4",
+    "ok": true,
+    "detail": {
+      "status": 409,
+      "orderStatus": "en_preparacion",
+      "paymentStatus": "pendiente",
+      "notifications": []
+    }
+  },
+  {
+    "id": "C5",
+    "ok": true,
+    "detail": {
+      "status": 200,
+      "leaked": false
+    }
+  },
+  {
+    "id": "D1",
+    "ok": true,
+    "detail": {
+      "creacion": [
+        "[Dizor] Nuevo pedido: DIZ-20261120-5129D84673E404B4010D"
+      ],
+      "en_preparacion": [],
+      "enviado_por_guia": [
+        "[Dizor] (sin RESEND_API_KEY) Correo de despacho no enviado: DIZ-20261120-5129D84673E404B4010D"
+      ],
+      "entregado": [],
+      "cancelado": [],
+      "wompi_aprobado": [],
+      "wompi_rechazado": []
+    }
+  },
+  {
+    "id": "D2",
+    "ok": true,
+    "detail": {
+      "sentAt": null,
+      "attempts": 1,
+      "lastError": "Proveedor de correo no configurado; acuse no enviado"
+    }
+  },
+  {
+    "id": "E1",
+    "ok": true,
+    "detail": {
+      "status": 200,
+      "stockAlAbrirForm": 81,
+      "trasVenta": 80,
+      "trasGuardar": 80
+    }
+  },
+  {
+    "id": "E2",
+    "ok": true,
+    "detail": {
+      "status": 400,
+      "stockBefore": 80,
+      "stockAfter": 80
+    }
+  },
+  {
+    "id": "E3",
+    "ok": true,
+    "detail": {
+      "flagged": true
+    }
+  },
+  {
+    "id": "F1",
+    "ok": true,
+    "detail": {
+      "pendingPaymentDelta": 0,
+      "toPrepareDelta": 1,
+      "alertasPagosPendientes": 1,
+      "alertasPedidosNuevos": 25
+    }
+  },
+  {
+    "id": "G1",
+    "ok": true,
+    "detail": {
+      "status": 200
+    }
+  },
+  {
+    "id": "G2",
+    "ok": true,
+    "detail": {
+      "status": 200
+    }
+  },
+  {
+    "id": "G3",
+    "ok": true,
+    "detail": {
+      "status": 400
+    }
+  }
+]
+Intentos de red saliente bloqueados: []
+ℹ tests 57
+ℹ suites 0
+ℹ pass 57
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 18054.1289

@@ -1,9 +1,8 @@
-import Link from "next/link";
-import Image from "next/image";
 import { getHomeContent } from "@/services/cmsService";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
+import HomeServiceCard from "./HomeServiceCard";
 
-/** Personalización — Server Component. */
+/** Personalización — composición dentro de «Hecho para ti» (HomeServices). */
 export default async function HomePersonalization() {
   const cmsData = await getHomeContent().catch(() => null);
   const personalizacion = cmsData?.home?.personalizacion || {};
@@ -15,67 +14,31 @@ export default async function HomePersonalization() {
   );
 
   return (
-    <section className="home-section home-section--personalize home-section--border">
-      <div className="home-container home-container--wide">
-        <div
-          className={`home-personalize${
-            personalizacion.imageOnLeft !== false
-              ? " home-personalize--image-left"
-              : ""
-          }${!personalizacionImage ? " home-personalize--no-media" : ""}`}
-        >
-          <div className="home-personalize__content">
-            <h2 className="home-section__heading">
-              {personalizacion.title || "Personaliza tu sombrero"}
-            </h2>
-            <p className="home-section__lead">
-              {personalizacion.body ||
-                "Iniciales, monogramas y detalles que hacen única tu pieza."}
-            </p>
-            {Array.isArray(personalizacion.bullets) &&
-              personalizacion.bullets.length > 0 && (
-                <ul className="home-personalize__list">
-                  {personalizacion.bullets.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              )}
-            <div className="home-personalize__actions">
-              <Link
-                href={personalizacion.ctaHref || "/personalizar"}
-                className="home-btn home-btn--primary home-btn--solid"
-              >
-                {personalizacion.ctaLabel || "Personalizar"}
-              </Link>
-              <a
-                href={waPersonalizar}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="home-personalize__wa-hint"
-              >
-                {personalizacion.whatsappHint ||
-                  "También puedes escribirnos por WhatsApp"}
-              </a>
-            </div>
-          </div>
-          {personalizacionImage && (
-            <div className="home-personalize__media">
-              <div className="home-personalize__image-wrap">
-                <Image
-                  src={personalizacionImage}
-                  alt={
-                    homeImages.personalizacion?.[0]?.altText ||
-                    "Personalización Dizor"
-                  }
-                  fill
-                  sizes="(max-width: 899px) 100vw, 42vw"
-                  className="home-personalize__img"
-                />
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </section>
+    <HomeServiceCard
+      id="home-service-personalize"
+      variant="personalize"
+      eyebrow={personalizacion.eyebrow}
+      title={personalizacion.title || "Personaliza tu sombrero"}
+      body={
+        personalizacion.body ||
+        "Iniciales, monogramas y detalles que hacen única tu pieza."
+      }
+      bullets={personalizacion.bullets}
+      image={personalizacionImage}
+      imageAlt={homeImages.personalizacion?.[0]?.altText || "Personalización Dizor"}
+      cta={{
+        href: personalizacion.ctaHref || "/personalizar",
+        label: personalizacion.ctaLabel || "Personalizar",
+      }}
+    >
+      <a
+        href={waPersonalizar}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="home-service__wa"
+      >
+        {personalizacion.whatsappHint || "También puedes escribirnos por WhatsApp"}
+      </a>
+    </HomeServiceCard>
   );
 }

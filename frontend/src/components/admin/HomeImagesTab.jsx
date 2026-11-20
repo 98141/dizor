@@ -66,6 +66,7 @@ const MOBILE_PREVIEW = {
   center: { width: 104, label: "centrada" },
   wide: { width: 212, label: "a lo ancho" },
   single: { width: 212, label: "individual" },
+  lead: { width: 212, label: "protagonista a lo ancho" },
 };
 
 /**

@@ -1,9 +1,13 @@
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { getHomeContent } from "@/services/cmsService";
 import MotionReveal from "@/components/motion/MotionReveal";
 
-/** Historia / origen — bloque editorial fuerte. */
+/**
+ * Historia / origen — banda editorial inmersiva (Negro Dizor).
+ * Texto, imagen y enlace 100 % del CMS. La foto queda lejos de la primera
+ * pantalla: carga diferida (sin `priority`) para no competir con el LCP del hero.
+ */
 export default async function HomeStory() {
   const cmsData = await getHomeContent().catch(() => null);
   const historia = cmsData?.home?.historia || {};
@@ -14,46 +18,52 @@ export default async function HomeStory() {
   const hasImage = Boolean(historiaImage);
 
   return (
-    <section className="home-section home-section--story">
+    <section
+      className={`home-section home-section--editorial home-section--story${
+        hasImage ? " home-section--story-media" : ""
+      }`}
+      aria-labelledby="home-story-heading"
+    >
       <div className="home-story__stage" aria-hidden="true">
         <MotionReveal variant="drift" className="home-story__light" />
       </div>
-      <div className="home-container home-container--wide">
-        <div
-          className={`home-story${hasImage ? " home-story--with-image" : ""}`}
-        >
-          {hasImage ? (
-            <MotionReveal variant="photo" className="home-story__media">
-              <div className="home-story__image-wrap">
-                <Image
-                  src={historiaImage}
-                  alt={primary?.altText || "Historia Dizor"}
-                  fill
-                  priority
-                  sizes="(max-width: 899px) 100vw, (max-width: 1023px) 50vw, 600px"
-                  className="home-story__img"
-                />
-              </div>
-            </MotionReveal>
-          ) : null}
-          <MotionReveal variant="editorial" className="home-story__content">
-            <h2 className="home-section__heading">
-              {historia.title || "Del oficio a tu cotidianidad"}
-            </h2>
-            <p className="home-story__body">
-              {historia.body ||
-                "Desde las manos de las artesanas de Sandoná nace cada sombrero Dizor."}
-            </p>
-            {historia.ctaLabel ? (
-              <Link
-                href={historia.ctaHref || "/pagina/sobre-dizor"}
-                className="home-text-link"
-              >
-                {historia.ctaLabel}
-              </Link>
-            ) : null}
+      <div className={`home-story${hasImage ? " home-story--with-image" : ""}`}>
+        {hasImage ? (
+          <MotionReveal variant="photo" className="home-story__media">
+            <div className="home-story__image-wrap">
+              <Image
+                src={historiaImage}
+                alt={primary?.altText || "Historia Dizor"}
+                fill
+                sizes="(max-width: 899px) 100vw, 62vw"
+                className="home-story__img"
+              />
+            </div>
           </MotionReveal>
-        </div>
+        ) : null}
+        <MotionReveal variant="editorial" className="home-story__content">
+          {historia.eyebrow ? (
+            <p className="home-eyebrow">{historia.eyebrow}</p>
+          ) : null}
+          <h2
+            id="home-story-heading"
+            className="home-section__heading home-section__heading--editorial"
+          >
+            {historia.title || "Del oficio a tu cotidianidad"}
+          </h2>
+          <p className="home-story__body">
+            {historia.body ||
+              "Desde las manos de las artesanas de Sandoná nace cada sombrero Dizor."}
+          </p>
+          {historia.ctaLabel ? (
+            <Link
+              href={historia.ctaHref || "/pagina/sobre-dizor"}
+              className="home-btn home-btn--arena home-story__cta"
+            >
+              {historia.ctaLabel}
+            </Link>
+          ) : null}
+        </MotionReveal>
       </div>
     </section>
   );

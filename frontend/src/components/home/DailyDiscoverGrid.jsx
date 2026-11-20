@@ -85,8 +85,8 @@ export default function DailyDiscoverGrid({
                 fill
                 sizes={
                   featured
-                    ? "(max-width: 1023px) 50vw, 40vw"
-                    : "(max-width: 1023px) 50vw, 30vw"
+                    ? "(max-width: 767px) 92vw, (max-width: 1099px) 46vw, 38vw"
+                    : "(max-width: 767px) 46vw, 22vw"
                 }
                 className="home-discover__image"
                 placeholder="blur"

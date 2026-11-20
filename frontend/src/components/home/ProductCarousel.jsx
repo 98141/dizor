@@ -95,6 +95,7 @@ export default function ProductCarousel({
               itemListId={listId}
               itemListName={listName}
               index={i}
+              sizes="(max-width: 767px) 78vw, (max-width: 1099px) 46vw, 24vw"
             />
           </div>
         ))}

@@ -1,5 +1,6 @@
 const Order = require("../models/order");
 const Product = require("../models/product");
+const { reconciledSalesFilter } = require("./financeCriteria");
 const {
   parseFinancePeriod,
   buildDateFilter,
@@ -234,12 +235,9 @@ const buildMonthlyTrend = async (products, months = 6) => {
       999
     );
 
-    const orders = await Order.find({
-      paymentStatus: "pagado",
-      requiresReview: { $ne: true },
-      orderStatus: { $nin: ["cancelado", "rechazado", "devuelto"] },
+    const orders = await Order.find(reconciledSalesFilter({
       createdAt: { $gte: start, $lte: end },
-    })
+    }))
       .select("items total unitCost")
       .lean();
 
@@ -270,7 +268,7 @@ exports.buildFinanceReport = async (query = {}) => {
   const { start, end, label } = parseRangeParam(query);
   const dateFilter = buildDateFilter(start, end);
 
-  const paidFilter = { paymentStatus: "pagado", requiresReview: { $ne: true }, orderStatus: { $nin: ["cancelado", "rechazado", "devuelto"] }, ...dateFilter };
+  const paidFilter = reconciledSalesFilter(dateFilter);
   const pendingFilter = {
     paymentStatus: "pendiente",
     orderStatus: { $nin: ["cancelado", "rechazado"] },

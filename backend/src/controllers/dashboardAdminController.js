@@ -6,6 +6,7 @@ const NewsletterSubscriber = require("../models/newsletterSubscriber");
 const AuditLog = require("../models/AuditLog");
 const Coupon = require("../models/coupon");
 const catchAsync = require("../utils/catchAsync");
+const { reconciledSalesFilter } = require("../services/financeCriteria");
 
 const startOfToday = () => {
   const d = new Date();
@@ -91,12 +92,9 @@ exports.getDashboard = catchAsync(async (req, res) => {
     Order.countDocuments({ createdAt: { $gte: today } }),
     Order.aggregate([
       {
-        $match: {
-          paymentStatus: "pagado",
-          requiresReview: { $ne: true },
+        $match: reconciledSalesFilter({
           createdAt: { $gte: monthStart },
-          orderStatus: { $nin: ["cancelado", "rechazado", "devuelto"] },
-        },
+        }),
       },
       { $group: { _id: null, total: { $sum: "$total" } } },
     ]),

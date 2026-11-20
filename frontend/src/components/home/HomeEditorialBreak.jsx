@@ -1,39 +1,35 @@
 import Image from "next/image";
 import { getHomeContent } from "@/services/cmsService";
 import MotionReveal from "@/components/motion/MotionReveal";
-
-const SLOTS = {
-  editorial1: {
-    section: "editorial1",
-    label: "Pausa editorial",
-  },
-  editorial2: {
-    section: "editorial2",
-    label: "Pausa editorial",
-  },
-};
+import { focusPosition } from "@/lib/inspirationLayout";
 
 /**
- * Pausa visual Home — solo fotografía (sin título / CTA / overlay).
- * slot: "editorial1" | "editorial2"
+ * Pausa editorial del inicio — una sola por página.
+ * Usa el primer espacio del administrador que tenga fotos (editorial1 y,
+ * si está vacío, editorial2), así ninguna foto cargada queda sin mostrarse.
+ * La frase solo aparece si la foto tiene `titulo` en el CMS (nunca se inventa).
+ * Sin fotos en ningún espacio → no se renderiza.
  */
-export default async function HomeEditorialBreak({ slot = "editorial1" }) {
-  const meta = SLOTS[slot];
-  if (!meta) return null;
-
+export default async function HomeEditorialBreak({
+  slots = ["editorial1", "editorial2"],
+}) {
   const cmsData = await getHomeContent().catch(() => null);
-  const images = (cmsData?.homeImages?.[meta.section] || [])
-    .filter((img) => img?.url)
-    .slice(0, 2);
+  const homeImages = cmsData?.homeImages || {};
+  const slot = slots.find((s) =>
+    (homeImages[s] || []).some((img) => img?.url)
+  );
+  if (!slot) return null;
 
-  if (!images.length) return null;
-
+  const images = homeImages[slot].filter((img) => img?.url).slice(0, 2);
   const count = images.length;
+  const caption = (images[0]?.titulo || "").trim();
 
   return (
     <section
-      className={`home-editorial home-editorial--${slot} home-editorial--n${count}`}
-      aria-label={meta.label}
+      className={`home-editorial home-editorial--n${count}${
+        caption ? " home-editorial--caption" : ""
+      }`}
+      aria-label={caption || "Pausa editorial"}
       data-slot={slot}
       data-count={count}
     >
@@ -47,15 +43,15 @@ export default async function HomeEditorialBreak({ slot = "editorial1" }) {
               src={img.url}
               alt={img.altText || "Dizor — fotografía editorial"}
               fill
-              sizes={
-                count === 1
-                  ? "100vw"
-                  : "(max-width: 767px) 85vw, 50vw"
-              }
+              sizes={count === 1 ? "100vw" : "(max-width: 767px) 85vw, 50vw"}
               className="home-editorial__img"
+              style={{ "--focus": focusPosition(img.focalX, img.focalY) }}
             />
           </div>
         ))}
+        {caption ? (
+          <p className="home-editorial__caption">{caption}</p>
+        ) : null}
       </MotionReveal>
     </section>
   );

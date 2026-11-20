@@ -1,22 +1,25 @@
-import Link from "next/link";
 import dynamic from "next/dynamic";
 import ViewItemListTracker from "@/components/analytics/ViewItemListTracker";
 import { getHomeContent } from "@/services/cmsService";
 import { fetchNewProducts } from "@/lib/homeFetches";
+import HomeSectionIntro from "./HomeSectionIntro";
 
 const ProductCarousel = dynamic(() => import("./ProductCarousel"), {
   ssr: true,
 });
 
+/** Productos consultados para la vitrina (el resto, en «Ver novedades»). */
+const NEW_ARRIVALS_LIMIT = 8;
+
 /** Novedades — Server Component; island cliente del carrusel vía dynamic. */
 export default async function HomeNewArrivals() {
   const [cmsData, newProductsData] = await Promise.all([
     getHomeContent().catch(() => null),
-    fetchNewProducts(12),
+    fetchNewProducts(NEW_ARRIVALS_LIMIT),
   ]);
 
   const newSection = cmsData?.home?.newSection || {};
-  const newProducts = newProductsData?.products || [];
+  const newProducts = (newProductsData?.products || []).slice(0, NEW_ARRIVALS_LIMIT);
   const subtitle = (newSection.subtitle || "").trim();
   const subtitleRepiteElTitulo =
     subtitle ===
@@ -24,17 +27,28 @@ export default async function HomeNewArrivals() {
 
   if (newSection.isActive === false || newProducts.length === 0) return null;
 
+  const showLink = Boolean(newSection.linkLabel || newSection.linkHref);
+
   return (
-    <section className="home-section home-section--arrivals home-section--border">
+    <section
+      className="home-section home-section--arrivals"
+      aria-labelledby="home-arrivals-heading"
+    >
       <div className="home-container">
-        <header className="home-section__intro home-section__intro--compact">
-          <h2 className="home-section__heading">
-            {newSection.title || "Novedades"}
-          </h2>
-          {subtitle && !subtitleRepiteElTitulo ? (
-            <p className="home-section__lead">{subtitle}</p>
-          ) : null}
-        </header>
+        <HomeSectionIntro
+          id="home-arrivals-heading"
+          eyebrow={newSection.eyebrow}
+          title={newSection.title || "Novedades"}
+          lead={subtitle && !subtitleRepiteElTitulo ? subtitle : ""}
+          action={
+            showLink
+              ? {
+                  href: newSection.linkHref || "/catalogo?isNew=true",
+                  label: newSection.linkLabel || "Ver novedades",
+                }
+              : null
+          }
+        />
         <ViewItemListTracker
           products={newProducts}
           listId="home_new"
@@ -45,16 +59,6 @@ export default async function HomeNewArrivals() {
           listId="home_new"
           listName="Novedades"
         />
-        {(newSection.linkLabel || newSection.linkHref) && (
-          <p className="home-section__more">
-            <Link
-              href={newSection.linkHref || "/catalogo?isNew=true"}
-              className="home-text-link"
-            >
-              {newSection.linkLabel || "Ver novedades"}
-            </Link>
-          </p>
-        )}
       </div>
     </section>
   );
