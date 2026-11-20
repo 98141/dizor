@@ -1,23 +1,30 @@
+/* Móvil y tablet (<1024): una sola barra sticky de --header-height (60 px
+   con el borde), blanca y opaca siempre. Al hacer scroll solo aparece una
+   sombra (propiedad de pintado): ninguna dimensión cambia. */
 .site-header {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: var(--color-bg-card);
+  background: #fff;
   border-bottom: 1px solid var(--color-border);
   color: var(--color-text);
-  transition:
-    background var(--motion-normal) var(--ease-standard),
-    backdrop-filter var(--motion-normal) var(--ease-standard),
-    border-color var(--motion-normal) var(--ease-standard),
-    box-shadow var(--motion-normal) var(--ease-standard);
+  transition: box-shadow var(--motion-normal) var(--ease-standard);
 }
 
 .site-header.is-scrolled {
-  background: rgba(255, 255, 255, 0.78);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom-color: rgba(0, 0, 0, 0.06);
-  box-shadow: 0 6px 24px rgba(26, 26, 26, 0.06);
+  box-shadow: 0 4px 16px rgba(26, 26, 26, 0.06);
+}
+
+/* Fallback de Suspense (HTML estático antes de hidratar): misma altura que el
+   header final (box-sizing: border-box). */
+.site-header--pending {
+  height: var(--header-height);
+}
+
+@media (min-width: 1024px) {
+  .site-header--pending {
+    height: var(--header-height-desktop);
+  }
 }
 
 .site-header__top,
@@ -35,9 +42,24 @@
   gap: var(--space-md);
 }
 
+/* Grid simétrico: [menú + búsqueda] · logo centrado · [acciones]. Las
+   columnas laterales nunca bajan de su contenido; si falta espacio, cede el
+   logo (se escala proporcionalmente). */
 .site-header__inner--top {
-  height: var(--header-height);
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(max-content, 1fr) minmax(0, auto) minmax(
+      max-content,
+      1fr
+    );
+  column-gap: 0.5rem;
+  height: calc(var(--header-height) - 1px);
+}
+
+.site-header__lead {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  justify-self: start;
 }
 
 .site-header__inner--bottom {
@@ -52,7 +74,14 @@
   text-transform: uppercase;
   color: var(--color-primary);
   flex-shrink: 0;
+  justify-self: center;
+  min-width: 0;
   transition: opacity 0.2s ease, transform 0.28s ease;
+}
+
+.site-header__logo:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 4px;
 }
 
 .site-header__logo.is-active {
@@ -69,21 +98,16 @@
   text-decoration: none;
 }
 
+/* Logo: PNG con transparencia, sin fondo propio; tamaño fijo por breakpoint
+   (no cambia con el scroll). */
 .site-header__logo-img {
   display: block;
-  height: 56px;
   width: auto;
-  max-width: 260px;
-  background: #ffffff;
+  height: auto;
+  max-height: 40px;
+  max-width: 100%;
+  background: transparent;
   object-fit: contain;
-  transition:
-    height var(--motion-normal) var(--ease-out),
-    max-width var(--motion-normal) var(--ease-out);
-}
-
-.site-header.is-scrolled .site-header__logo-img {
-  height: 48px;
-  max-width: 225px;
 }
 
 .site-header__search-wrap {
@@ -158,8 +182,8 @@
 .site-header__actions {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
-  margin-left: auto;
+  gap: 0.25rem;
+  justify-self: end;
   flex-shrink: 0;
 }
 
@@ -215,10 +239,13 @@
   position: relative;
 }
 
+/* Contadores en la esquina superior derecha del área de 44 px, con un anillo
+   blanco que los separa del icono. */
 .site-header__favorites-badge {
   position: absolute;
-  top: 4px;
-  right: 4px;
+  top: 5px;
+  right: 3px;
+  box-shadow: 0 0 0 2px #fff;
   min-width: 16px;
   height: 16px;
   padding: 0 3px;
@@ -235,7 +262,8 @@
 .site-header__cart-badge {
   position: absolute;
   top: 4px;
-  right: 4px;
+  right: 2px;
+  box-shadow: 0 0 0 2px #fff;
   min-width: 18px;
   height: 18px;
   padding: 0 4px;
@@ -457,43 +485,67 @@
   transform: rotate(180deg);
 }
 
-/* ── Desktop (≥1024): dos niveles ── */
-@media (min-width: 1024px) {
-  .site-header__inner--top {
-    height: var(--header-row-top);
+/* Tablet (768–1023): mismo patrón que móvil (hamburguesa + drawer), con logo
+   algo mayor y acceso directo a la cuenta. */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .site-header__logo-img {
+    max-height: 44px;
   }
 
-  .site-header.is-scrolled .site-header__inner--top {
-    height: 60px;
+  .site-header__account-btn {
+    display: inline-flex;
+  }
+}
+
+/* ── Desktop (≥1024) ──
+   Header completo: 68 (fila superior) + 1 (separador) + 44 (categorías) +
+   1 (borde) = 114 px, en el flujo normal (se desplaza con la página y nunca
+   cambia de tamaño). Al salir de la vista entra la barra compacta fija
+   (.site-header-compact). */
+@media (min-width: 1024px) {
+  .site-header,
+  .site-header.is-scrolled {
+    position: relative;
+    box-shadow: none;
+    /* Red de seguridad: un menú que aún no se ha medido (antes de hidratar)
+       nunca genera scroll horizontal de la página. */
+    overflow-x: clip;
+  }
+
+  .site-header__lead {
+    display: none;
+  }
+
+  /* Grid de 3 columnas simétricas: el buscador queda en el eje del header
+     (mismo centro que la fila de categorías), logo a la izquierda, acciones a
+     la derecha. */
+  .site-header__inner--top {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 440px) minmax(0, 1fr);
+    column-gap: var(--space-lg);
+    height: var(--header-row-top);
   }
 
   .site-header__inner--bottom {
     display: flex;
     height: var(--header-row-bottom);
     justify-content: center;
-    border-top: 1px solid transparent;
-  }
-
-  .site-header.is-scrolled .site-header__inner--bottom {
-    height: 40px;
   }
 
   .site-header__bottom {
     border-top: 1px solid var(--color-border);
   }
 
-  .site-header.is-scrolled .site-header__bottom {
-    border-top-color: rgba(0, 0, 0, 0.05);
+  .site-header__logo {
+    justify-self: start;
   }
 
+  /* Logo: 52 px de alto (≈187 px de ancho, proporción del PNG), 8 px de aire
+     arriba y abajo. */
   .site-header__logo-img {
-    height: 66px;
-    max-width: 280px;
-  }
-
-  .site-header.is-scrolled .site-header__logo-img {
     height: 52px;
-    max-width: 225px;
+    max-height: none;
+    max-width: 240px;
   }
 
   .site-header__menu-btn,
@@ -507,64 +559,89 @@
 
   .site-header__search-wrap {
     display: flex;
+    width: 100%;
+    max-width: 440px;
+    margin: 0;
+    justify-self: center;
   }
 
-  .site-header__actions {
-    margin-left: 0;
-    gap: 0.25rem;
+  .site-header__search input {
+    height: 40px;
+    padding-block: 0;
   }
 
+  .site-header__search input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.12);
+  }
+
+  /* Categorías: peso estable (500) en ambos estados; 16 px en escritorio
+     amplio, 15 px en escritorio estrecho. Lo que no cabe pasa a «Más» (se
+     mide en SiteHeader.jsx). */
   .site-header__nav {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: clamp(1.1rem, 2.2vw, 2.25rem);
+    justify-content: safe center;
+    gap: clamp(0.85rem, 1.8vw, 1.85rem);
     width: 100%;
+    min-width: 0;
+    height: 100%;
     font-family: var(--font-ui);
-    font-size: var(--text-lg);
+    /* px explícitos: la raíz del sitio es 15 px (html { font-size:
+       var(--text-base) }), así que 1rem ≠ 16 px. */
+    font-size: 15px;
     font-weight: var(--weight-medium);
     letter-spacing: var(--tracking-wide);
   }
 
-  .site-header.is-scrolled .site-header__nav > a,
-  .site-header.is-scrolled .site-header__nav > a.is-active,
-  .site-header.is-scrolled .site-header__nav > a[aria-current="page"],
-  .site-header.is-scrolled .site-header__tejidos-trigger {
-    font-weight: var(--weight-bold);
+  .site-header__nav > a,
+  .site-header__nav-measure > span {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    height: 44px;
+    padding: 0 0.25rem;
+    color: var(--color-text);
+    white-space: nowrap;
   }
 
   .site-header__nav > a {
-    position: relative;
-    color: var(--color-text);
-    padding: 0.35rem 0;
+    border-radius: 2px;
     transition: color var(--motion-fast) var(--ease-standard);
-    white-space: nowrap;
+  }
+
+  /* Réplica invisible de la fila completa para medir anchos naturales. */
+  .site-header__nav-measure {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    width: max-content;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .site-header__nav-measure > .site-header__tejidos-trigger {
+    flex-shrink: 0;
   }
 
   .site-header__nav > a:hover {
     color: var(--color-primary);
   }
 
-  .site-header__nav > a.is-active::after,
-  .site-header__nav > a[aria-current="page"]::after {
+  /* Hover: subrayado fino que crece desde el centro.
+     Activo: subrayado de 2 px en el acento de marca. */
+  .site-header__nav > a::after {
     content: "";
     position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 1px;
-    background: currentColor;
-    transform: scaleX(1);
-    transform-origin: center;
-    transition: transform var(--motion-fast) var(--ease-out);
-  }
-
-  .site-header__nav > a:not(.is-active):not([aria-current="page"])::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    left: 0.25rem;
+    right: 0.25rem;
+    bottom: 9px;
     height: 1px;
     background: currentColor;
     transform: scaleX(0);
@@ -572,37 +649,46 @@
     transition: transform var(--motion-fast) var(--ease-out);
   }
 
-  .site-header__nav > a:not(.is-active):not([aria-current="page"]):hover::after {
+  .site-header__nav > a:hover::after {
+    transform: scaleX(1);
+  }
+
+  .site-header__nav > a.is-active::after,
+  .site-header__nav > a[aria-current="page"]::after {
+    height: 2px;
+    background: var(--color-accent);
     transform: scaleX(1);
   }
 
   .site-header__nav > a:focus-visible {
     outline: 2px solid var(--color-primary);
-    outline-offset: 4px;
+    outline-offset: -2px;
   }
 
   .site-header__nav > a.is-active,
   .site-header__nav > a[aria-current="page"] {
     color: var(--color-primary);
-    font-weight: var(--weight-medium);
   }
 
   .site-header__tejidos {
     position: relative;
+    flex-shrink: 0;
   }
 
   .site-header__tejidos-trigger {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
+    height: 44px;
     border: none;
+    border-radius: 2px;
     background: transparent;
     color: var(--color-text);
     font: inherit;
     font-size: inherit;
     font-weight: inherit;
     letter-spacing: inherit;
-    padding: 0.35rem 0;
+    padding: 0 0.25rem;
     cursor: pointer;
     white-space: nowrap;
   }
@@ -614,12 +700,13 @@
 
   .site-header__tejidos-trigger:focus-visible {
     outline: 2px solid var(--color-primary);
-    outline-offset: 4px;
+    outline-offset: -2px;
   }
 
+  /* Panel anclado justo bajo el borde inferior del header. */
   .site-header__tejidos-panel {
     position: absolute;
-    top: calc(100% + 0.85rem);
+    top: calc(100% + 1px);
     left: 50%;
     min-width: 280px;
     max-width: 360px;
@@ -712,54 +799,209 @@
   .site-header__backdrop {
     display: none !important;
   }
+
+  /* El panel recibe foco (tabIndex -1) solo para que un clic dentro no lo
+     cierre; no necesita anillo propio. */
+  .site-header__tejidos-panel:focus {
+    outline: none;
+  }
 }
 
-/* Tablet intermedia: evitar overflow sin forzar nav denso */
-@media (min-width: 900px) and (max-width: 1023px) {
-  .site-header__logo-img {
-    height: 60px;
-    max-width: 260px;
+/* ── Barra compacta de escritorio ──
+   Fija e independiente del header completo: aparece/desaparece solo con
+   transform (sin afectar al layout de la página).
+   · 1 fila (72 px): logo 36 px · categorías · lupa + cuenta + favoritos + carrito
+   · 2 filas (93 px): logo · buscador · iconos (52 px) / categorías (40 px),
+     cuando una fila no puede mostrar las mismas categorías que el header. */
+.site-header-compact {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .site-header-compact {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    background: #fff;
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: 0 4px 16px rgba(26, 26, 26, 0.06);
+    transform: translateY(calc(-100% - 24px));
+    visibility: hidden;
+    transition:
+      transform var(--motion-normal) var(--ease-out),
+      visibility 0s linear var(--motion-normal);
   }
 
-  .site-header__actions {
-    gap: 0.2rem;
+  .site-header-compact.is-visible {
+    transform: translateY(0);
+    visibility: visible;
+    transition: transform var(--motion-normal) var(--ease-out);
+  }
+
+  .site-header-compact__inner {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 var(--space-md);
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas: "logo nav actions";
+    align-items: center;
+    column-gap: 24px;
+    height: 71px; /* + 1 px de borde = 72 */
+  }
+
+  .site-header-compact .site-header__logo {
+    grid-area: logo;
+  }
+
+  .site-header-compact .site-header__logo-img {
+    height: 36px;
+  }
+
+  .site-header-compact .site-header__nav {
+    grid-area: nav;
+    height: 44px;
+    gap: 18px;
+  }
+
+  .site-header-compact .site-header__actions {
+    grid-area: actions;
+  }
+
+  /* Búsqueda en 1 fila: la lupa abre el campo en el hueco de las categorías */
+  .site-header-compact__search {
+    grid-area: nav;
+    display: none;
+    align-items: center;
+    gap: 0.5rem;
+    justify-self: center;
+    width: 100%;
+    max-width: 560px;
+  }
+
+  .site-header-compact.is-searching .site-header-compact__search {
+    display: flex;
+  }
+
+  .site-header-compact.is-searching .site-header__nav {
+    visibility: hidden;
+  }
+
+  .site-header-compact__search .site-header__search {
+    flex: 1;
+  }
+
+  .site-header-compact__search-close {
+    flex-shrink: 0;
+  }
+
+  /* Más: el panel arranca bajo el borde de la barra (71 px de fila, botón de
+     44 px centrado → 13.5 px + 1 px de borde). */
+  .site-header-compact .site-header__tejidos-panel {
+    top: calc(100% + 14.5px);
+  }
+
+  /* Variante de 2 filas */
+  .site-header-compact--two-rows .site-header-compact__inner {
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 400px) minmax(0, 1fr);
+    grid-template-areas:
+      "logo search actions"
+      "nav nav nav";
+    grid-template-rows: 52px 40px;
+    height: auto;
+  }
+
+  .site-header-compact--two-rows .site-header-compact__search {
+    grid-area: search;
+    display: flex;
+    max-width: none;
+  }
+
+  .site-header-compact--two-rows .site-header__search input {
+    height: 36px;
+  }
+
+  .site-header-compact--two-rows .site-header__nav {
+    visibility: inherit; /* anula .is-searching sin mostrarla si la barra está oculta */
+    height: 40px;
+  }
+
+  .site-header-compact--two-rows .site-header__nav > a,
+  .site-header-compact--two-rows .site-header__tejidos-trigger {
+    height: 40px;
+  }
+
+  .site-header-compact--two-rows .site-header__nav > a::after {
+    bottom: 7px;
+  }
+
+  .site-header-compact--two-rows .site-header-compact__search-toggle,
+  .site-header-compact--two-rows .site-header-compact__search-close {
+    display: none;
+  }
+
+  .site-header-compact--two-rows .site-header__tejidos-panel {
+    top: calc(100% + 1px);
+  }
+}
+
+/* Escritorio amplio: categorías a 16 px. */
+@media (min-width: 1280px) {
+  .site-header__nav {
+    font-size: 16px;
+  }
+
+  .site-header-compact .site-header__nav {
+    gap: 22px;
+  }
+}
+
+/* ── Enlace «Saltar al contenido» (visible solo al recibir foco) ── */
+.skip-link {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 1000;
+  padding: 0.65rem 1rem;
+  background: var(--color-primary);
+  color: var(--color-text-inverse, #ffffff);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  transform: translateY(calc(-100% - 1rem));
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Destino del salto: compensa el header sticky y evita el anillo de foco
+   sobre todo el bloque principal. */
+#contenido {
+  scroll-margin-top: var(--header-height);
+}
+
+#contenido:focus {
+  outline: none;
+}
+
+@media (min-width: 1024px) {
+  #contenido {
+    scroll-margin-top: var(--header-height-desktop);
   }
 }
 
 @media (max-width: 1023px) {
   .site-header__favorites-btn {
     display: inline-flex;
-  }
-}
-
-/* Móvil: el logo cede espacio (proporcional) para que menú + logo + acciones
-   quepan en el ancho de pantalla, sin scroll horizontal. */
-@media (max-width: 767px) {
-  .site-header__inner--top {
-    gap: 0.5rem;
-  }
-
-  .site-header__logo {
-    flex-shrink: 1;
-    min-width: 0;
-  }
-
-  .site-header__logo-img,
-  .site-header.is-scrolled .site-header__logo-img {
-    height: auto;
-    max-height: 48px;
-    max-width: 100%;
-  }
-
-  .site-header__actions {
-    gap: 0.15rem;
-  }
-}
-
-@media (max-width: 380px) {
-  .site-header__actions .site-header__icon-btn {
-    width: 40px;
-    height: 40px;
   }
 }
 
@@ -814,6 +1056,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .site-header,
+  .site-header-compact,
+  .site-header-compact.is-visible,
   .site-header__logo-img,
   .site-header__chevron,
   .site-header__tejidos-panel,

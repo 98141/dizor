@@ -556,6 +556,11 @@
   .products-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+
+  /* En escritorio el header mide --header-height-desktop (constante). */
+  .catalog-sidebar-desktop .catalog-filters {
+    top: calc(var(--header-height-desktop) + var(--space-md));
+  }
 }
 
 /* ─── Shop skeleton loader ─── */

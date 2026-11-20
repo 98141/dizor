@@ -11,7 +11,7 @@ const BRAND_FALLBACK = "Dizor";
  * Logo del navbar: usa el recurso horizontal incluido en public.
  * Si el recurso no está disponible, muestra el nombre de la marca en texto.
  */
-export default function SiteLogo({ active = false }) {
+export default function SiteLogo({ active = false, ...rest }) {
   const { siteName } = useSiteConfig();
   const [imgFailed, setImgFailed] = useState(false);
 
@@ -25,6 +25,7 @@ export default function SiteLogo({ active = false }) {
       }`}
       aria-current={active ? "page" : undefined}
       aria-label={siteName}
+      {...rest}
     >
       {showImg ? (
         // El manejo de error habilita el respaldo textual si el asset local no existe.

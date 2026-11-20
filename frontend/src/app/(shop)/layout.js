@@ -21,10 +21,15 @@ import "@/styles/components/auth-form.css";
 export default function ShopLayout({ children }) {
   return (
     <>
+      <a href="#contenido" className="skip-link">
+        Saltar al contenido
+      </a>
       <PromoPopup />
       <SiteAnnouncement />
       <SiteHeaderServer />
-      <main>{children}</main>
+      <main id="contenido" tabIndex={-1}>
+        {children}
+      </main>
       <Suspense
         fallback={
           <footer className="site-footer" aria-hidden="true" style={{ minHeight: 220 }} />

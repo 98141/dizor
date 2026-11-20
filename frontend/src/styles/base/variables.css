@@ -143,10 +143,12 @@
 
   /* ── Layout ── */
   --container-max: 1200px;
-  --header-height: 64px;
-  --header-height-desktop: 118px;
-  --header-row-top: 72px;
-  --header-row-bottom: 46px;
+  /* Móvil/tablet: altura total del header (fila 59 + borde 1) */
+  --header-height: 60px;
+  /* Escritorio: 68 + 1 (separador) + 44 + 1 (borde) — constante con scroll */
+  --header-height-desktop: 114px;
+  --header-row-top: 68px;
+  --header-row-bottom: 44px;
   --bp-sm: 480px;
   --bp-md: 768px;
   --bp-lg: 1024px;

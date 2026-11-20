@@ -19,8 +19,13 @@ export const metadata = {
 export default function AuthLayout({ children }) {
   return (
     <>
+      <a href="#contenido" className="skip-link">
+        Saltar al contenido
+      </a>
       <SiteHeaderServer />
-      <main>{children}</main>
+      <main id="contenido" tabIndex={-1}>
+        {children}
+      </main>
       <Suspense
         fallback={
           <footer className="site-footer" aria-hidden="true" style={{ minHeight: 220 }} />
