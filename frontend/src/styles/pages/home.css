@@ -2758,10 +2758,19 @@ body:has(.site-announcement) .home-hero {
 
 .home-newsletter {
   padding-block: clamp(4rem, 3rem + 3vw, 6.25rem);
+  padding-bottom: clamp(2.75rem, 2rem + 1.6vw, 3.75rem);
   background: var(--color-surface-dark);
   color: var(--color-text-inverse);
   text-align: left;
+  /* Divisor fino sobre Negro Dizor: separa el formulario del footer legal. */
   border-bottom: 1px solid color-mix(in srgb, var(--dizor-arena) 28%, transparent);
+}
+
+/* El footer global usa margin-top para separarse de las páginas claras.
+   En el inicio ese margen deja ver el fondo blanco del body entre dos
+   bloques negros. Se anula solo cuando esta sección está en la página. */
+body:has(.home-newsletter) > .site-footer {
+  margin-top: 0;
 }
 
 .home-newsletter__inner {
