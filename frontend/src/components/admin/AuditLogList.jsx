@@ -93,13 +93,15 @@ export default function AuditLogList() {
       )}
 
       <form className="orders-filters audit-filters" onSubmit={handleSearch}>
-        <input
+        <label>Buscar eventos<input
+          aria-label="Buscar por correo, acción o módulo"
           className="orders-filters__search"
           placeholder="Buscar por correo, acción, módulo..."
           value={filters.term}
           onChange={(e) => setFilters((f) => ({ ...f, term: e.target.value }))}
-        />
-        <select
+        /></label>
+        <label>Módulo<select
+          aria-label="Módulo"
           value={filters.module}
           onChange={(e) => {
             setFilters((f) => ({ ...f, module: e.target.value }));
@@ -112,8 +114,9 @@ export default function AuditLogList() {
               {getAuditModuleLabel(m)}
             </option>
           ))}
-        </select>
-        <select
+        </select></label>
+        <label>Acción<select
+          aria-label="Acción"
           value={filters.action}
           onChange={(e) => {
             setFilters((f) => ({ ...f, action: e.target.value }));
@@ -126,8 +129,9 @@ export default function AuditLogList() {
               {getAuditActionLabel(a)}
             </option>
           ))}
-        </select>
-        <select
+        </select></label>
+        <label>Resultado<select
+          aria-label="Resultado"
           value={filters.success}
           onChange={(e) => {
             setFilters((f) => ({ ...f, success: e.target.value }));
@@ -137,19 +141,19 @@ export default function AuditLogList() {
           <option value="">Éxito / fallo</option>
           <option value="true">Exitosos</option>
           <option value="false">Fallidos</option>
-        </select>
-        <input
+        </select></label>
+        <label>Desde<input
           type="date"
           value={filters.from}
           onChange={(e) => setFilters((f) => ({ ...f, from: e.target.value }))}
           aria-label="Desde"
-        />
-        <input
+        /></label>
+        <label>Hasta<input
           type="date"
           value={filters.to}
           onChange={(e) => setFilters((f) => ({ ...f, to: e.target.value }))}
           aria-label="Hasta"
-        />
+        /></label>
         <button type="submit" className="admin-btn admin-btn--primary">
           Buscar
         </button>
@@ -171,19 +175,19 @@ export default function AuditLogList() {
                 <th>Acción</th>
                 <th>Estado</th>
                 <th>Detalle</th>
-                <th />
+                <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
               {logs.map((log) => (
                 <Fragment key={log.id}>
                   <tr>
-                    <td>{formatDateTime(log.createdAt)}</td>
-                    <td>{log.userEmail || "—"}</td>
-                    <td>{log.role || "—"}</td>
-                    <td>{getAuditModuleLabel(log.module)}</td>
-                    <td>{getAuditActionLabel(log.action)}</td>
-                    <td>
+                    <td data-label="Fecha">{formatDateTime(log.createdAt)}</td>
+                    <td data-label="Usuario">{log.userEmail || "—"}</td>
+                    <td data-label="Rol">{log.role || "—"}</td>
+                    <td data-label="Módulo">{getAuditModuleLabel(log.module)}</td>
+                    <td data-label="Acción">{getAuditActionLabel(log.action)}</td>
+                    <td data-label="Estado">
                       <span
                         className={`audit-badge audit-badge--${
                           log.success ? "ok" : "fail"
@@ -192,11 +196,14 @@ export default function AuditLogList() {
                         {log.success ? "OK" : "Error"}
                       </span>
                     </td>
-                    <td>{log.summary || "—"}</td>
-                    <td>
+                    <td data-label="Detalle">{log.summary || "—"}</td>
+                    <td data-label="Acciones">
                       <button
                         type="button"
                         className="admin-btn admin-btn--sm"
+                        aria-expanded={expandedId === log.id}
+                        aria-label={`${expandedId === log.id ? "Ocultar" : "Ver"} detalles: ${getAuditActionLabel(log.action)}`}
+                        aria-controls={`audit-detail-${log.id}`}
                         onClick={() =>
                           setExpandedId(expandedId === log.id ? null : log.id)
                         }
@@ -206,7 +213,7 @@ export default function AuditLogList() {
                     </td>
                   </tr>
                   {expandedId === log.id && (
-                    <tr key={`${log.id}-detail`} className="audit-detail-row">
+                    <tr id={`audit-detail-${log.id}`} key={`${log.id}-detail`} className="audit-detail-row">
                       <td colSpan={8}>
                         <div className="audit-detail-grid">
                           <div>

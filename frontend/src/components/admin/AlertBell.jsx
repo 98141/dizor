@@ -68,8 +68,8 @@ export default function AlertBell() {
   }, []);
 
   useEffect(() => {
-    setDismissed(loadDismissed());
-    load();
+    // Read browser storage after the external request settles, keeping hydration deterministic.
+    getAlerts().then(res => { setData(res); setDismissed(loadDismissed()); }).catch(() => {});
     const id = setInterval(load, REFRESH_INTERVAL);
     return () => clearInterval(id);
   }, [load]);
@@ -80,7 +80,9 @@ export default function AlertBell() {
       if (ref.current && !ref.current.contains(e.target)) setOpen(false);
     };
     document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
+    const escape = e => { if (e.key === "Escape") { setOpen(false); ref.current?.querySelector("button")?.focus(); } };
+    document.addEventListener("keydown", escape);
+    return () => { document.removeEventListener("mousedown", handler); document.removeEventListener("keydown", escape); };
   }, [open]);
 
   const dismissItem = useCallback((category, id) => {
@@ -109,9 +111,11 @@ export default function AlertBell() {
         className="alert-bell__btn"
         onClick={() => setOpen((v) => !v)}
         aria-label="Alertas del sistema"
+        aria-expanded={open}
+        aria-controls="admin-alerts-popover"
         title="Alertas"
       >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
           <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
         </svg>
@@ -121,7 +125,7 @@ export default function AlertBell() {
       </button>
 
       {open && (
-        <div className="alert-bell__dropdown">
+        <div id="admin-alerts-popover" className="alert-bell__dropdown" role="region" aria-label="Alertas activas">
           <div className="alert-bell__header">
             <span className="alert-bell__title">Alertas activas</span>
             {total > 0 && (

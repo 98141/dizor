@@ -1,0 +1,41 @@
+"use strict";
+const test=require('node:test'),assert=require('node:assert/strict');
+const fixture=require('./helpers/phase2Fixture.cjs');
+const {summarize}=require('../src/services/inventoryCriteria');
+test.before(()=>fixture.setup());test.after(()=>fixture.close());
+test('F6-01 contador histórico del dashboard coincide con clasificación por variante',async()=>{
+ const {Product,adminCookie}=fixture.context;
+ await Product.deleteMany({});
+ const {product}=await fixture.makeProduct(15);
+ product.variants.push({sku:'F6-OUT',stock:0,isActive:true});await product.save();
+ const {product:low}=await fixture.makeProduct(3);low.variants.push({sku:'F6-HIGH',stock:20,isActive:true});await low.save();
+ const {product:inactive}=await fixture.makeProduct(10);inactive.variants[0].isActive=false;await inactive.save();
+ const {product:review}=await fixture.makeProduct(8);await Product.collection.updateOne({_id:review._id},{$set:{'variants.0.stock':1.5}});
+ const {product:missing}=await fixture.makeProduct(6);await Product.collection.updateOne({_id:missing._id},{$unset:{'variants.0.stock':''}});
+ const {product:unpublished}=await fixture.makeProduct(0);unpublished.isActive=false;await unpublished.save();
+ const before=await Product.find().lean();
+ const response=await fixture.api('GET','/api/admin/dashboard',{cookie:adminCookie});assert.equal(response.status,200);
+ const statuses=before.filter(p=>p.isActive).map(p=>summarize(p).stockStatus);
+ assert.equal(response.json.dashboard.catalog.outOfStock,statuses.filter(s=>s==='out').length);
+ assert.equal(response.json.dashboard.catalog.lowStock,statuses.filter(s=>s==='low').length);
+ assert.equal(response.json.dashboard.catalog.outOfStock,2);assert.equal(response.json.dashboard.catalog.lowStock,1);
+ assert.deepEqual(await Product.find().lean(),before,'La consulta nunca normaliza ni modifica el stock histórico');
+});
+test('F6-02 consultar dashboard conserva pedidos, cobros, historial y notificaciones',async()=>{
+ const {Product,Order,ProductHistory,adminCookie,mongoose}=fixture.context;
+ const Notification=mongoose.model('Notification');
+ const {product}=await fixture.makeProduct(8);
+ const checkout=await fixture.api('POST','/api/checkout/orders',{body:fixture.orderBody(product,product.variants[0]._id)});assert.equal(checkout.status,201);
+ const before=await Promise.all([Product.find().lean(),Order.find().lean(),ProductHistory.find().lean(),Notification.find().lean()]);
+ await fixture.api('GET','/api/admin/dashboard',{cookie:adminCookie});
+ const after=await Promise.all([Product.find().lean(),Order.find().lean(),ProductHistory.find().lean(),Notification.find().lean()]);assert.deepEqual(after,before);
+});
+test('F6-07 repetición idempotente informa que no hubo transición ni comunicación adicional',async()=>{
+ const {Order,adminCookie,mongoose}=fixture.context,Notification=mongoose.model('Notification');
+ const {product}=await fixture.makeProduct(6);
+ const checkout=await fixture.api('POST','/api/checkout/orders',{body:fixture.orderBody(product,product.variants[0]._id)}),id=checkout.json.order.id;
+ const first=await fixture.api('PATCH',`/api/admin/orders/${id}/status`,{cookie:adminCookie,body:{orderStatus:'en_preparacion'}});assert.equal(first.status,200);assert.equal(first.json.message,'Estado actualizado');
+ const before=await Order.findById(id).lean(),notifications=await Notification.find({order:id}).lean();
+ const second=await fixture.api('PATCH',`/api/admin/orders/${id}/status`,{cookie:adminCookie,body:{orderStatus:'en_preparacion'}});assert.equal(second.status,200);assert.equal(second.json.message,'El pedido ya tenía este estado. No se registró una nueva transición.');
+ const after=await Order.findById(id).lean();assert.deepEqual(after.statusHistory,before.statusHistory);assert.deepEqual(after.collection,before.collection);assert.deepEqual(await Notification.find({order:id}).lean(),notifications);
+});

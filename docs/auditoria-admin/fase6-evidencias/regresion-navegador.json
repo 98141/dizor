@@ -1,0 +1,51 @@
+[
+  {
+    "suite": "comunicaciones",
+    "file": "frontend/test/communications-browser.cjs",
+    "expected": 8,
+    "exitCode": 0,
+    "ms": 5601
+  },
+  {
+    "suite": "pedidos",
+    "file": "frontend/test/orders-workspace-browser.cjs",
+    "expected": 20,
+    "exitCode": 0,
+    "ms": 15084
+  },
+  {
+    "suite": "catalogo",
+    "file": "frontend/test/catalog-workspace-browser.cjs",
+    "expected": 20,
+    "exitCode": 0,
+    "ms": 17375
+  },
+  {
+    "suite": "navegacion",
+    "file": "frontend/test/navigation-next-browser.cjs",
+    "expected": 35,
+    "exitCode": 0,
+    "ms": 79188
+  },
+  {
+    "suite": "independiente",
+    "file": "docs/auditoria-admin/cierre-fase5/navegador-independiente.cjs",
+    "expected": 10,
+    "exitCode": 0,
+    "ms": 60653
+  },
+  {
+    "suite": "marketing",
+    "file": "frontend/test/content-settings-next-browser.cjs",
+    "expected": 25,
+    "exitCode": 0,
+    "ms": 98799
+  },
+  {
+    "suite": "revalidacion",
+    "file": "docs/auditoria-admin/cierre-fase5/revalidacion-evidencias/navegador-revalidacion.cjs",
+    "expected": 18,
+    "exitCode": 0,
+    "ms": 86663
+  }
+]

@@ -1,0 +1,234 @@
+[
+  {
+    "file": "frontend\\src\\components\\admin\\AuditLogList.jsx",
+    "headers": [
+      "Fecha",
+      "Usuario",
+      "Rol",
+      "Módulo",
+      "Acción",
+      "Estado",
+      "Detalle",
+      "Acciones"
+    ]
+  },
+  {
+    "file": "frontend\\src\\components\\admin\\ContentWorkspace.jsx",
+    "headers": [
+      "Título",
+      "Estado",
+      "Acciones"
+    ]
+  },
+  {
+    "file": "frontend\\src\\components\\admin\\ContentWorkspace.jsx",
+    "headers": [
+      "Correo",
+      "Nombre",
+      "Fuente",
+      "Fecha"
+    ]
+  },
+  {
+    "file": "frontend\\src\\components\\admin\\ContentWorkspace.jsx",
+    "headers": [
+      "Correo",
+      "Ítems",
+      "Subtotal",
+      "Recordatorios",
+      "Actualizado"
+    ]
+  },
+  {
+    "file": "frontend\\src\\components\\admin\\FinanceDashboard.jsx",
+    "headers": [
+      "Producto",
+      "Uds",
+      "Ingresos",
+      "Ganancia est."
+    ]
+  },
+  {
+    "file": "frontend\\src\\components\\admin\\FinanceDashboard.jsx",
+    "headers": [
+      "Producto",
+      "Margen",
+      "Ganancia"
+    ]
+  },
+  {
+    "file": "frontend\\src\\components\\admin\\FinanceDashboard.jsx",
+    "headers": [
+      "Producto",
+      "Stock",
+      "Margen"
+    ]
+  },
+  {
+    "file": "frontend\\src\\components\\admin\\FinanceDashboard.jsx",
+    "headers": [
+      "Método",
+      "Pedidos",
+      "Total"
+    ]
+  },
+  {
+    "file": "frontend\\src\\components\\admin\\FinanceDashboard.jsx",
+    "headers": [
+      "Producto",
+      "Stock",
+      "Costo u.",
+      "Inversión",
+      "Venta pot.",
+      "Ganancia pot."
+    ]
+  },
+  {
+    "file": "frontend\\src\\components\\admin\\ProductHistoryList.jsx",
+    "headers": [
+      "Fecha y tipo",
+      "Producto / variante",
+      "Cantidad / stock",
+      "Responsable y origen"
+    ]
+  },
+  {
+    "file": "frontend\\src\\components\\admin\\SpecialRequestsList.jsx",
+    "headers": [
+      "Número",
+      "Tipo",
+      "Cliente",
+      "Estado",
+      "Fecha"
+    ]
+  },
+  {
+    "file": "frontend\\src\\components\\admin\\TaxonomyManager.jsx",
+    "headers": [
+      "Nombre",
+      "Estado",
+      "Acciones"
+    ]
+  },
+  {
+    "file": "frontend\\src\\app\\admin\\alertas\\page.js",
+    "headers": [
+      "Pedido",
+      "Cliente",
+      "Total",
+      "Estado pedido",
+      "Estado pago",
+      "Método",
+      "Fecha"
+    ]
+  },
+  {
+    "file": "frontend\\src\\app\\admin\\alertas\\page.js",
+    "headers": [
+      "Pedido",
+      "Cliente",
+      "Total",
+      "Fecha",
+      "Espera"
+    ]
+  },
+  {
+    "file": "frontend\\src\\app\\admin\\alertas\\page.js",
+    "headers": [
+      "Producto",
+      "Stock total",
+      "Acción"
+    ]
+  },
+  {
+    "file": "frontend\\src\\app\\admin\\alertas\\page.js",
+    "headers": [
+      "Producto",
+      "Stock",
+      "Acción"
+    ]
+  },
+  {
+    "file": "frontend\\src\\app\\admin\\alertas\\page.js",
+    "headers": [
+      "N° solicitud",
+      "Tipo",
+      "Cliente",
+      "Fecha"
+    ]
+  },
+  {
+    "file": "frontend\\src\\app\\admin\\alertas\\page.js",
+    "headers": [
+      "Código",
+      "Vence",
+      "Usos"
+    ]
+  },
+  {
+    "file": "frontend\\src\\app\\admin\\cupones\\page.js",
+    "headers": [
+      "Código",
+      "Descuento",
+      "Usos",
+      "Vence",
+      "Estado",
+      "Acciones"
+    ]
+  },
+  {
+    "file": "frontend\\src\\app\\admin\\finanzas\\page.js",
+    "headers": [
+      "Producto",
+      "Stock",
+      "Costo compra",
+      "Precio venta",
+      "Margen",
+      "Valor stock",
+      "Acciones"
+    ]
+  },
+  {
+    "file": "frontend\\src\\app\\admin\\finanzas\\page.js",
+    "headers": [
+      "Producto",
+      "Talla",
+      "Color",
+      "SKU",
+      "Stock",
+      "Precio variante"
+    ]
+  },
+  {
+    "file": "frontend\\src\\app\\admin\\finanzas\\page.js",
+    "headers": [
+      "Período",
+      "Pedidos",
+      "Ingresos",
+      "COGS",
+      "Ganancia bruta",
+      "Margen",
+      "Uds. vendidas"
+    ]
+  },
+  {
+    "file": "frontend\\src\\app\\admin\\pqr\\page.js",
+    "headers": [
+      "Radicado",
+      "Recibida",
+      "Categoría",
+      "Motivo",
+      "Estado",
+      "Acciones"
+    ]
+  },
+  {
+    "file": "frontend\\src\\app\\admin\\usuarios\\page.js",
+    "headers": [
+      "Nombre",
+      "Rol",
+      "Estado",
+      "Acciones"
+    ]
+  }
+]

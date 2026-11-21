@@ -1,0 +1,159 @@
+{
+  "generatedAt": "2026-11-21T17:26:15.267Z",
+  "results": [
+    {
+      "id": "R-A01",
+      "verdict": "corregida",
+      "detail": {
+        "seen": [
+          {
+            "step": "carga",
+            "status": "ready",
+            "title": "Promoción artesanal de temporada",
+            "canSave": true,
+            "writes": 0,
+            "stored": "Promoción artesanal de temporada",
+            "enabled": true
+          },
+          {
+            "step": "500",
+            "status": "load-error",
+            "title": "Promoción artesanal de temporada",
+            "canSave": false,
+            "writes": 0,
+            "stored": "Promoción artesanal de temporada",
+            "enabled": true
+          },
+          {
+            "step": "offline",
+            "status": "load-error",
+            "title": "Promoción artesanal de temporada",
+            "canSave": false,
+            "writes": 0,
+            "stored": "Promoción artesanal de temporada",
+            "enabled": true
+          },
+          {
+            "step": "abort",
+            "status": "load-error",
+            "title": "Promoción artesanal de temporada",
+            "canSave": false,
+            "writes": 0,
+            "stored": "Promoción artesanal de temporada",
+            "enabled": true
+          },
+          {
+            "step": "invalid-json",
+            "status": "load-error",
+            "title": "Promoción artesanal de temporada",
+            "canSave": false,
+            "writes": 0,
+            "stored": "Promoción artesanal de temporada",
+            "enabled": true
+          },
+          {
+            "step": "incomplete",
+            "status": "load-error",
+            "title": "Promoción artesanal de temporada",
+            "canSave": false,
+            "writes": 0,
+            "stored": "Promoción artesanal de temporada",
+            "enabled": true
+          },
+          {
+            "step": "timeout",
+            "status": "load-error",
+            "title": "Promoción artesanal de temporada",
+            "canSave": false,
+            "writes": 0,
+            "stored": "Promoción artesanal de temporada",
+            "enabled": true
+          },
+          {
+            "step": "reintento",
+            "status": "ready",
+            "title": "Promoción artesanal de temporada",
+            "canSave": true,
+            "writes": 0,
+            "stored": "Promoción artesanal de temporada",
+            "enabled": true
+          },
+          {
+            "step": "fuera-de-orden",
+            "status": "ready",
+            "title": "Título reciente",
+            "canSave": true,
+            "writes": 0,
+            "stored": "Título reciente",
+            "enabled": true
+          },
+          {
+            "step": "doble-clic",
+            "status": "saved",
+            "title": "Edición válida de temporada",
+            "canSave": true,
+            "writes": 1,
+            "stored": "Edición válida de temporada",
+            "enabled": true
+          },
+          {
+            "step": "error-guardado",
+            "status": "save-error",
+            "title": "Borrador rechazado",
+            "canSave": true,
+            "writes": 2,
+            "stored": "Edición válida de temporada",
+            "enabled": true
+          },
+          {
+            "step": "ambiguo-no-aplicado",
+            "status": "uncertain",
+            "title": "No aplicado",
+            "canSave": false,
+            "writes": 3,
+            "stored": "Edición válida de temporada",
+            "enabled": true
+          },
+          {
+            "step": "vacio-legitimo",
+            "status": "saved",
+            "title": "",
+            "canSave": true,
+            "writes": 4,
+            "stored": "",
+            "enabled": false
+          }
+        ],
+        "finalStored": {
+          "enabled": false,
+          "delaySeconds": 4,
+          "showNewsletterForm": true,
+          "variant": "newsletter",
+          "couponCode": "",
+          "title": "",
+          "text": "",
+          "ctaLabel": "Ver colección",
+          "ctaHref": "/catalogo",
+          "imageUrl": ""
+        }
+      }
+    },
+    {
+      "id": "R-B03",
+      "verdict": "corregida",
+      "detail": {
+        "shippingMode": "included",
+        "cost": 15000,
+        "carriers": [
+          "interrapidisimo",
+          "servientrega"
+        ],
+        "nequiStatus": 400,
+        "methods": [
+          "wompi",
+          "contra_entrega"
+        ]
+      }
+    }
+  ]
+}

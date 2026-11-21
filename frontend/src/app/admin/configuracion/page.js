@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import RoleRoute from "@/guards/RoleRoute";
 import AdminShell from "@/components/admin/AdminShell";
 import AuthSubmitButton from "@/components/auth/AuthSubmitButton";
-import AuthErrorAlert from "@/components/auth/AuthErrorAlert";
+import AuthErrorAlert from "@/components/admin/AdminFeedback";
 import {
   getStoreSettings,
   updateStoreSettings,
@@ -17,6 +17,7 @@ function AdminConfigContent() {
   const [form, setForm] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const lock = useRef(false);
   const { message, error, flashKey, showMsg, clearMsg } = useFlashMessage();
 
   useEffect(() => {
@@ -32,6 +33,8 @@ function AdminConfigContent() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (lock.current || !form) return;
+    lock.current = true;
     setSaving(true);
     clearMsg();
     try {
@@ -45,6 +48,7 @@ function AdminConfigContent() {
     } catch (err) {
       showMsg(err.response?.data?.message || "No se pudo guardar", true);
     } finally {
+      lock.current = false;
       setSaving(false);
     }
   };
@@ -54,7 +58,7 @@ function AdminConfigContent() {
   }
 
   if (!form) {
-    return <p>No se pudo cargar la configuración de la tienda.</p>;
+    return <p role="alert">No se pudo cargar la configuración de la tienda. Recarga esta página para reintentar.</p>;
   }
 
   return (
@@ -64,7 +68,7 @@ function AdminConfigContent() {
         Envíos, impuestos y transportadoras usadas en el checkout.
       </p>
 
-      <form className="admin-form store-settings-form" onSubmit={handleSubmit}>
+      <form className="admin-form store-settings-form" onSubmit={handleSubmit} aria-busy={saving}>
         <section className="product-form__section">
           <h2>Impuestos</h2>
           <label className="admin-checkbox">

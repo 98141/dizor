@@ -1,0 +1,27 @@
+warning: in the working copy of 'backend/src/controllers/dashboardAdminController.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/controllers/orderAdminController.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/app/admin/alertas/page.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/app/admin/configuracion/page.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/app/admin/cupones/page.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/app/admin/finanzas/page.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/app/admin/layout.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/app/admin/pqr/page.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/app/admin/usuarios/page.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/app/vendedor/layout.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/admin/AlertBell.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/admin/AuditLogList.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/admin/CatalogWorkspace.module.css', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/admin/ContentWorkspace.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/admin/FinanceDashboard.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/admin/HomeTextsTab.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/admin/OrderDetail.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/admin/OrderWorkspace.module.css', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/admin/ProductHistoryList.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/admin/SpecialRequestDetail.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/admin/SpecialRequestsList.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/admin/TaxonomyManager.jsx', LF will be replaced by CRLF the next time Git touches it
+{
+  "files": 530,
+  "protectedFiles": 511,
+  "changedProtected": []
+}

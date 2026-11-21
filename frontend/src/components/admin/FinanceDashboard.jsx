@@ -137,7 +137,8 @@ export default function FinanceDashboard() {
                 key={opt.value}
                 type="button"
                 className={`finance-period-tabs__btn${range === opt.value ? " finance-period-tabs__btn--active" : ""}`}
-                onClick={() => setRange(opt.value)}
+                aria-pressed={range === opt.value}
+              onClick={() => setRange(opt.value)}
               >
                 {opt.label}
               </button>
@@ -306,10 +307,10 @@ export default function FinanceDashboard() {
                 {sales.topByRevenue?.length ? (
                   sales.topByRevenue.map((row) => (
                     <tr key={row.productId}>
-                      <td>{row.name}</td>
-                      <td>{row.units}</td>
-                      <td>{formatCOP(row.revenue)}</td>
-                      <td>{formatCOP(row.profit)}</td>
+                      <td data-label="Producto">{row.name}</td>
+                      <td data-label="Uds">{row.units}</td>
+                      <td data-label="Ingresos">{formatCOP(row.revenue)}</td>
+                      <td data-label="Ganancia est.">{formatCOP(row.profit)}</td>
                     </tr>
                   ))
                 ) : (
@@ -337,9 +338,9 @@ export default function FinanceDashboard() {
                 {sales.topByProfit?.length ? (
                   sales.topByProfit.map((row) => (
                     <tr key={`${row.productId}-profit`}>
-                      <td>{row.name}</td>
-                      <td>{row.marginPct}%</td>
-                      <td>{formatCOP(row.profit)}</td>
+                      <td data-label="Producto">{row.name}</td>
+                      <td data-label="Margen">{row.marginPct}%</td>
+                      <td data-label="Ganancia">{formatCOP(row.profit)}</td>
                     </tr>
                   ))
                 ) : (
@@ -369,9 +370,9 @@ export default function FinanceDashboard() {
                 {inventory.lowMarginProducts?.length ? (
                   inventory.lowMarginProducts.map((row) => (
                     <tr key={row.id}>
-                      <td>{row.name}</td>
-                      <td>{row.unitsInStock}</td>
-                      <td className="finance-warn">{row.marginPct}%</td>
+                      <td data-label="Producto">{row.name}</td>
+                      <td data-label="Stock">{row.unitsInStock}</td>
+                      <td data-label="Margen" className="finance-warn">{row.marginPct}%</td>
                     </tr>
                   ))
                 ) : (
@@ -398,11 +399,11 @@ export default function FinanceDashboard() {
               <tbody>
                 {paymentMethods?.map((row) => (
                   <tr key={row.method}>
-                    <td>
+                    <td data-label="Método">
                       {PAYMENT_METHOD_LABELS[row.method] || row.method || "—"}
                     </td>
-                    <td>{row.count}</td>
-                    <td>{formatCOP(row.total)}</td>
+                    <td data-label="Pedidos">{row.count}</td>
+                    <td data-label="Total">{formatCOP(row.total)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -430,16 +431,16 @@ export default function FinanceDashboard() {
             <tbody>
               {inventory.catalogSummary?.map((row) => (
                 <tr key={row.id}>
-                  <td>{row.name}</td>
-                  <td>{row.unitsInStock}</td>
-                  <td>
+                  <td data-label="Producto">{row.name}</td>
+                  <td data-label="Stock">{row.unitsInStock}</td>
+                  <td data-label="Costo u.">
                     {row.internalCost != null
                       ? formatCOP(row.internalCost)
                       : "—"}
                   </td>
-                  <td>{formatCOP(row.investmentAtCost)}</td>
-                  <td>{formatCOP(row.potentialRetail)}</td>
-                  <td>{formatCOP(row.potentialProfit)}</td>
+                  <td data-label="Inversión">{formatCOP(row.investmentAtCost)}</td>
+                  <td data-label="Venta pot.">{formatCOP(row.potentialRetail)}</td>
+                  <td data-label="Ganancia pot.">{formatCOP(row.potentialProfit)}</td>
                 </tr>
               ))}
             </tbody>

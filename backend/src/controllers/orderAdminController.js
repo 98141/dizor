@@ -55,7 +55,7 @@ exports.updateOrderStatus = catchAsync(async (req, res) => {
   });
   if (changed) safeLog(logAuditEvent({ req, user: req.user, action: "order_status_changed", module: "orders",
     entityId: order._id, entityType: "order", summary: `Pedido ${order.orderNumber}: ${order.orderStatus}` }));
-  res.status(200).json({ status: "success", message: "Estado actualizado", order: formatOrderList(order, req.user.role) });
+  res.status(200).json({ status: "success", message: changed ? "Estado actualizado" : "El pedido ya tenía este estado. No se registró una nueva transición.", order: formatOrderList(order, req.user.role) });
 });
 
 exports.confirmPayment = catchAsync(async (req, res) => {

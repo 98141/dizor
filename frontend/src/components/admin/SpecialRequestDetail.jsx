@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import AdminFeedback from "./AdminFeedback";
 import { formatCOP } from "@/lib/formatCurrency";
 import {
   REQUEST_STATUS_LABELS,
@@ -22,8 +23,12 @@ export default function SpecialRequestDetail({ request: initial, onUpdated }) {
   const [adminNotes, setAdminNotes] = useState(request.adminNotes || "");
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
+  const [error, setError] = useState(false);
+  const lock = useRef(false);
 
   const handleStatus = async () => {
+    if (lock.current) return;
+    lock.current = true; setError(false);
     setSaving(true);
     setMessage("");
     try {
@@ -35,13 +40,17 @@ export default function SpecialRequestDetail({ request: initial, onUpdated }) {
       onUpdated?.(data.request);
       setMessage("Estado actualizado");
     } catch (err) {
+      setError(true);
       setMessage(err.response?.data?.message || "Error al actualizar");
     } finally {
+      lock.current = false;
       setSaving(false);
     }
   };
 
   const handleQuote = async () => {
+    if (lock.current) return;
+    lock.current = true; setError(false);
     setSaving(true);
     setMessage("");
     try {
@@ -53,8 +62,10 @@ export default function SpecialRequestDetail({ request: initial, onUpdated }) {
       onUpdated?.(data.request);
       setMessage("Cotización guardada");
     } catch (err) {
+      setError(true);
       setMessage(err.response?.data?.message || "Error al guardar");
     } finally {
+      lock.current = false;
       setSaving(false);
     }
   };
@@ -135,7 +146,7 @@ export default function SpecialRequestDetail({ request: initial, onUpdated }) {
 
       <section className="order-detail-card">
         <h2>Gestionar</h2>
-        {message && <p className="admin-muted">{message}</p>}
+        <AdminFeedback message={message} variant={error ? "error" : "success"} />
         <div className="admin-form__group">
           <label htmlFor="status">Estado</label>
           <select

@@ -10,8 +10,8 @@
 .tasks { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:.8rem; }
 .task { display:grid; gap:.4rem; text-decoration:none; color:inherit; padding:1.25rem; border:1px solid var(--color-border,#ddd); border-radius:8px; background:var(--color-bg-card,#fff); }
 .task:hover { border-color:var(--color-primary,#4d463b); background:var(--color-bg,#faf8f5); }
-.task strong { font-family:var(--font-serif,Georgia,serif); font-size:2.25rem; font-weight:500; }
-.task span { font-weight:600; font-size:.95rem; }
+.task strong { font-family:var(--font-ui,Arial,sans-serif); font-size:2rem; font-weight:600; }
+.task span { font-family:var(--font-ui,Arial,sans-serif); font-weight:600; font-size:.95rem; }
 .task small { font-size:.8rem; color:var(--color-text-muted,#606060); }
 .metrics { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:1rem; border-block:1px solid var(--color-border,#ddd); padding:1.2rem 0; }
 .metrics strong { display:block; font-size:1.25rem; }

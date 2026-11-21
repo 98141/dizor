@@ -1,9 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
-import AuthFormField from "@/components/auth/AuthFormField";
-import AuthErrorAlert from "@/components/auth/AuthErrorAlert";
-import ConfirmModal from "@/components/ui/ConfirmModal";
+import { useCallback, useEffect, useRef, useMemo, useState } from "react";
+import AuthFormField from "@/components/admin/AdminFormField";
+import AuthErrorAlert from "@/components/admin/AdminFeedback";
+import ConfirmModal from "@/components/admin/AdminConfirmModal";
 import { useFlashMessage } from "@/hooks/useFlashMessage";
 import {
   getAdminHomeImages,
@@ -116,6 +116,7 @@ export default function HomeImagesTab() {
   const [weaveTypes, setWeaveTypes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const savingLock = useRef(false);
   const [confirmModal, setConfirmModal] = useState(null);
   const { message, error, flashKey, showMsg, clearMsg } = useFlashMessage();
 
@@ -142,9 +143,7 @@ export default function HomeImagesTab() {
   );
 
   const load = useCallback(async () => {
-    setLoading(true);
-    clearMsg();
-    try {
+    setLoading(true);    try {
       const [imagesData, filtersData] = await Promise.all([
         getAdminHomeImages(),
         getCatalogFilters().catch(() => null),
@@ -164,7 +163,7 @@ export default function HomeImagesTab() {
     } finally {
       setLoading(false);
     }
-  }, [clearMsg, showMsg]);
+  }, [showMsg]);
 
   useEffect(() => {
     load();
@@ -248,6 +247,10 @@ export default function HomeImagesTab() {
       showMsg("Selecciona el tejido al que pertenece esta imagen", true);
       return;
     }
+    if (savingLock.current) return;
+
+    savingLock.current = true;
+
     setSaving(true);
     clearMsg();
     try {
@@ -268,7 +271,7 @@ export default function HomeImagesTab() {
     } catch (err) {
       showMsg(err.response?.data?.message || "No se pudo subir", true);
     } finally {
-      setSaving(false);
+      savingLock.current = false; setSaving(false);
     }
   };
 
@@ -282,6 +285,12 @@ export default function HomeImagesTab() {
     [reordered[idx], reordered[swapIdx]] = [reordered[swapIdx], reordered[idx]];
     const items = reordered.map((img, i) => ({ id: img.id, orden: i }));
 
+    if (savingLock.current) return;
+
+
+    savingLock.current = true;
+
+
     setSaving(true);
     try {
       await reorderAdminHomeImages(items);
@@ -289,11 +298,15 @@ export default function HomeImagesTab() {
     } catch (err) {
       showMsg(err.response?.data?.message || "No se pudo reordenar", true);
     } finally {
-      setSaving(false);
+      savingLock.current = false; setSaving(false);
     }
   };
 
   const toggleActive = async (img) => {
+    if (savingLock.current) return;
+
+    savingLock.current = true;
+
     setSaving(true);
     try {
       await updateAdminHomeImage(img.id, { activo: !img.activo });
@@ -301,11 +314,15 @@ export default function HomeImagesTab() {
     } catch (err) {
       showMsg(err.response?.data?.message || "No se pudo actualizar", true);
     } finally {
-      setSaving(false);
+      savingLock.current = false; setSaving(false);
     }
   };
 
   const saveMeta = async (img, patch) => {
+    if (savingLock.current) return;
+
+    savingLock.current = true;
+
     setSaving(true);
     try {
       await updateAdminHomeImage(img.id, patch);
@@ -314,7 +331,7 @@ export default function HomeImagesTab() {
     } catch (err) {
       showMsg(err.response?.data?.message || "No se pudo guardar", true);
     } finally {
-      setSaving(false);
+      savingLock.current = false; setSaving(false);
     }
   };
 
@@ -324,6 +341,10 @@ export default function HomeImagesTab() {
         "¿Eliminar esta imagen? También se borrará de Cloudinary si tiene publicId.",
       onConfirm: async () => {
         setConfirmModal(null);
+        if (savingLock.current) return;
+
+        savingLock.current = true;
+
         setSaving(true);
         try {
           await deleteAdminHomeImage(id);
@@ -332,7 +353,7 @@ export default function HomeImagesTab() {
         } catch (err) {
           showMsg(err.response?.data?.message || "No se pudo eliminar", true);
         } finally {
-          setSaving(false);
+          savingLock.current = false; setSaving(false);
         }
       },
     });
@@ -579,7 +600,7 @@ export default function HomeImagesTab() {
                     : ""}
                 </p>
                 <div className="auth-field">
-                  <label className="auth-field__label">Alt</label>
+                  <label className="auth-field__label">Alt
                   <input
                     className="auth-field__input"
                     value={img.altText || ""}
@@ -592,11 +613,11 @@ export default function HomeImagesTab() {
                         )
                       )
                     }
-                  />
+                  /></label>
                 </div>
                 {section === "coleccion" && (
                   <div className="auth-field">
-                    <label className="auth-field__label">Tejido</label>
+                    <label className="auth-field__label">Tejido
                     <select
                       className="auth-field__input"
                       value={img.weaveTypeId || ""}
@@ -630,13 +651,13 @@ export default function HomeImagesTab() {
                           {wt.name}
                         </option>
                       ))}
-                    </select>
+                    </select></label>
                   </div>
                 )}
                 {(section === "coleccion" || section === "inspiracion") && (
                   <>
                     <div className="auth-field">
-                      <label className="auth-field__label">Título</label>
+                      <label className="auth-field__label">Título
                       <input
                         className="auth-field__input"
                         value={img.titulo || ""}
@@ -649,10 +670,10 @@ export default function HomeImagesTab() {
                             )
                           )
                         }
-                      />
+                      /></label>
                     </div>
                     <div className="auth-field">
-                      <label className="auth-field__label">Enlace</label>
+                      <label className="auth-field__label">Enlace
                       <input
                         className="auth-field__input"
                         value={img.linkHref || ""}
@@ -665,7 +686,7 @@ export default function HomeImagesTab() {
                             )
                           )
                         }
-                      />
+                      /></label>
                     </div>
                   </>
                 )}

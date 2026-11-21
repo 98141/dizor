@@ -54,7 +54,7 @@ function AlertSection({ id, title, count, color, dot, children, actionHref, acti
   if (count === 0) return null;
   return (
     <section className="alert-section">
-      <div className="alert-section__header" onClick={() => setOpen((v) => !v)}>
+      <div className="alert-section__header">
         <div className="alert-section__title-row">
           <span className="alert-section__dot">{dot}</span>
           <h2 className="alert-section__title">{title}</h2>
@@ -62,12 +62,12 @@ function AlertSection({ id, title, count, color, dot, children, actionHref, acti
             {count}
           </span>
         </div>
-        <button type="button" className="alert-section__toggle">
+        <button type="button" className="alert-section__toggle" aria-label={`${open ? "Contraer" : "Expandir"} ${title}`} aria-expanded={open} aria-controls={`alert-group-${id}`} onClick={() => setOpen(v => !v)}>
           {open ? "▲" : "▼"}
         </button>
       </div>
       {open && (
-        <div className="alert-section__body">
+        <div id={`alert-group-${id}`} className="alert-section__body">
           {children}
           {actionHref && (
             <div className="alert-section__footer">
@@ -92,8 +92,8 @@ export default function AlertasPage() {
 
   const load = useCallback(async () => {
     try {
-      setError(null);
       const res = await getAlerts();
+      setError(null);
       setData(res);
       setLastRefresh(new Date());
       setCountdown(REFRESH_INTERVAL / 1000);
@@ -230,17 +230,17 @@ export default function AlertasPage() {
                   <tbody>
                     {alerts.newOrders.items.map((o) => (
                       <tr key={o._id}>
-                        <td>
+                        <td data-label="Pedido">
                           <Link href={`/admin/pedidos/${o._id}`} className="alert-link">
                             #{o.orderNumber}
                           </Link>
                         </td>
-                        <td>{o.buyer?.name}<br /><small>{o.buyer?.email}</small></td>
-                        <td>{fmt(o.total)}</td>
-                        <td><span className={`alert-status alert-status--${o.orderStatus}`}>{o.orderStatus}</span></td>
-                        <td><span className={`alert-status alert-status--pay-${o.paymentStatus}`}>{o.paymentStatus}</span></td>
-                        <td>{o.paymentMethod === "nequi_manual" ? "Nequi" : o.paymentMethod === "wompi" ? "Wompi" : "Contraentrega"}</td>
-                        <td>{fmtDate(o.createdAt)}</td>
+                        <td data-label="Cliente">{o.buyer?.name}<br /><small>{o.buyer?.email}</small></td>
+                        <td data-label="Total">{fmt(o.total)}</td>
+                        <td data-label="Estado pedido"><span className={`alert-status alert-status--${o.orderStatus}`}>{o.orderStatus}</span></td>
+                        <td data-label="Estado pago"><span className={`alert-status alert-status--pay-${o.paymentStatus}`}>{o.paymentStatus}</span></td>
+                        <td data-label="Método">{o.paymentMethod === "nequi_manual" ? "Nequi" : o.paymentMethod === "wompi" ? "Wompi" : "Contraentrega"}</td>
+                        <td data-label="Fecha">{fmtDate(o.createdAt)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -277,19 +277,19 @@ export default function AlertasPage() {
                   <tbody>
                     {alerts.pendingPayments.items.map((o) => {
                       const horasEspera = Math.floor(
-                        (Date.now() - new Date(o.createdAt).getTime()) / 3_600_000
+                        ((lastRefresh?.getTime() || new Date(o.createdAt).getTime()) - new Date(o.createdAt).getTime()) / 3_600_000
                       );
                       return (
                         <tr key={o._id}>
-                          <td>
+                          <td data-label="Pedido">
                             <Link href={`/admin/pedidos/${o._id}`} className="alert-link">
                               #{o.orderNumber}
                             </Link>
                           </td>
-                          <td>{o.buyer?.name}<br /><small>{o.buyer?.phone}</small></td>
-                          <td>{fmt(o.total)}</td>
-                          <td>{fmtDate(o.createdAt)}</td>
-                          <td>
+                          <td data-label="Cliente">{o.buyer?.name}<br /><small>{o.buyer?.phone}</small></td>
+                          <td data-label="Total">{fmt(o.total)}</td>
+                          <td data-label="Fecha">{fmtDate(o.createdAt)}</td>
+                          <td data-label="Espera">
                             <span className={horasEspera > 12 ? "alert-warn-text" : ""}>
                               {horasEspera}h
                             </span>
@@ -324,13 +324,13 @@ export default function AlertasPage() {
                   <tbody>
                     {alerts.lowStock.items.map((p) => (
                       <tr key={p.id}>
-                        <td>{p.name}{p.affectedVariants?.length > 0 && <small style={{ display: "block" }}>{p.affectedVariants.map((v) => <Link key={v.id} href={`/admin/productos?view=stock&productId=${p.id}&variantId=${v.id}`} style={{ display: "inline-block", marginRight: ".75rem", textDecoration: "underline" }}>{v.sku}: {v.stock} uds</Link>)}</small>}</td>
-                        <td>
+                        <td data-label="Producto">{p.name}{p.affectedVariants?.length > 0 && <small style={{ display: "block" }}>{p.affectedVariants.map((v) => <Link key={v.id} href={`/admin/productos?view=stock&productId=${p.id}&variantId=${v.id}`} style={{ display: "inline-block", marginRight: ".75rem", textDecoration: "underline" }}>{v.sku}: {v.stock} uds</Link>)}</small>}</td>
+                        <td data-label="Stock total">
                           <span className="alert-stock alert-stock--low">
                             {p.totalStock} ud{p.totalStock !== 1 ? "s" : ""}
                           </span>
                         </td>
-                        <td>
+                        <td data-label="Acción">
                           <Link href={`/admin/productos?view=stock&productId=${p.id}${p.affectedVariants?.[0]?.id ? `&variantId=${p.affectedVariants[0].id}` : ""}`} className="alert-link">
                             Ajustar →
                           </Link>
@@ -364,11 +364,11 @@ export default function AlertasPage() {
                   <tbody>
                     {alerts.outOfStock.items.map((p) => (
                       <tr key={p.id}>
-                        <td>{p.name}{p.affectedVariants?.length > 0 && <small style={{ display: "block" }}>{p.affectedVariants.map((v) => <Link key={v.id} href={`/admin/productos?view=stock&productId=${p.id}&variantId=${v.id}`} style={{ display: "inline-block", marginRight: ".75rem", textDecoration: "underline" }}>{v.sku}: {v.stock} uds</Link>)}</small>}</td>
-                        <td>
+                        <td data-label="Producto">{p.name}{p.affectedVariants?.length > 0 && <small style={{ display: "block" }}>{p.affectedVariants.map((v) => <Link key={v.id} href={`/admin/productos?view=stock&productId=${p.id}&variantId=${v.id}`} style={{ display: "inline-block", marginRight: ".75rem", textDecoration: "underline" }}>{v.sku}: {v.stock} uds</Link>)}</small>}</td>
+                        <td data-label="Stock">
                           <span className="alert-stock alert-stock--out">{p.unavailable ? "Sin variantes disponibles" : "Variante agotada"}</span>
                         </td>
-                        <td>
+                        <td data-label="Acción">
                           <Link href={`/admin/productos?view=stock&productId=${p.id}${p.affectedVariants?.[0]?.id ? `&variantId=${p.affectedVariants[0].id}` : ""}`} className="alert-link">
                             Reabastecer →
                           </Link>
@@ -403,16 +403,16 @@ export default function AlertasPage() {
                   <tbody>
                     {alerts.specialRequests.items.map((r) => (
                       <tr key={r._id}>
-                        <td>
+                        <td data-label="N° solicitud">
                           <Link href="/admin/solicitudes" className="alert-link">
                             #{r.requestNumber}
                           </Link>
                         </td>
-                        <td>
+                        <td data-label="Tipo">
                           {r.type === "customization" ? "Personalización" : "Pedido mayor"}
                         </td>
-                        <td>{r.contact?.name}<br /><small>{r.contact?.email}</small></td>
-                        <td>{fmtDate(r.createdAt)}</td>
+                        <td data-label="Cliente">{r.contact?.name}<br /><small>{r.contact?.email}</small></td>
+                        <td data-label="Fecha">{fmtDate(r.createdAt)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -442,9 +442,9 @@ export default function AlertasPage() {
                   <tbody>
                     {alerts.expiringCoupons.items.map((c) => (
                       <tr key={c._id}>
-                        <td><code className="alert-code">{c.code}</code></td>
-                        <td>{fmtExpires(c.expiresAt)}</td>
-                        <td>
+                        <td data-label="Código"><code className="alert-code">{c.code}</code></td>
+                        <td data-label="Vence">{fmtExpires(c.expiresAt)}</td>
+                        <td data-label="Usos">
                           {c.usedCount}
                           {c.maxUses ? ` / ${c.maxUses}` : " / ∞"}
                         </td>

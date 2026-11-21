@@ -1,0 +1,3803 @@
+[
+  {
+    "name": "inicio",
+    "url": "/admin",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "Resumen de pedidos",
+        "font": "46.5px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "inicio",
+    "url": "/admin",
+    "width": 1024,
+    "document": 1024,
+    "h1": [
+      {
+        "text": "Resumen de pedidos",
+        "font": "46.5px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "inicio",
+    "url": "/admin",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "Resumen de pedidos",
+        "font": "42.32px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "inicio",
+    "url": "/admin",
+    "width": 390,
+    "document": 390,
+    "h1": [
+      {
+        "text": "Resumen de pedidos",
+        "font": "31.14px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "inicio",
+    "url": "/admin",
+    "width": 360,
+    "document": 360,
+    "h1": [
+      {
+        "text": "Resumen de pedidos",
+        "font": "30.36px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "pedidos",
+    "url": "/admin/pedidos",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "Pedidos",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "pedidos",
+    "url": "/admin/pedidos",
+    "width": 1024,
+    "document": 1024,
+    "h1": [
+      {
+        "text": "Pedidos",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "pedidos",
+    "url": "/admin/pedidos",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "Pedidos",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "pedidos",
+    "url": "/admin/pedidos",
+    "width": 390,
+    "document": 390,
+    "h1": [
+      {
+        "text": "Pedidos",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "pedidos",
+    "url": "/admin/pedidos",
+    "width": 360,
+    "document": 360,
+    "h1": [
+      {
+        "text": "Pedidos",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "pedido",
+    "url": "/admin/pedidos/6b01c2ce78677ee5535bbc86",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "DIZ-20261121-CD0B93864B8E4F2C645A",
+        "font": "46.5px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "pedido",
+    "url": "/admin/pedidos/6b01c2ce78677ee5535bbc86",
+    "width": 1024,
+    "document": 1024,
+    "h1": [
+      {
+        "text": "DIZ-20261121-CD0B93864B8E4F2C645A",
+        "font": "46.5px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "pedido",
+    "url": "/admin/pedidos/6b01c2ce78677ee5535bbc86",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "DIZ-20261121-CD0B93864B8E4F2C645A",
+        "font": "42.32px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "pedido",
+    "url": "/admin/pedidos/6b01c2ce78677ee5535bbc86",
+    "width": 390,
+    "document": 390,
+    "h1": [
+      {
+        "text": "DIZ-20261121-CD0B93864B8E4F2C645A",
+        "font": "31.14px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "pedido",
+    "url": "/admin/pedidos/6b01c2ce78677ee5535bbc86",
+    "width": 360,
+    "document": 360,
+    "h1": [
+      {
+        "text": "DIZ-20261121-CD0B93864B8E4F2C645A",
+        "font": "30.36px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "comunicaciones",
+    "url": "/admin/pedidos?tray=communications",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "Pedidos",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "comunicaciones",
+    "url": "/admin/pedidos?tray=communications",
+    "width": 1024,
+    "document": 1024,
+    "h1": [
+      {
+        "text": "Pedidos",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "comunicaciones",
+    "url": "/admin/pedidos?tray=communications",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "Pedidos",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "comunicaciones",
+    "url": "/admin/pedidos?tray=communications",
+    "width": 390,
+    "document": 390,
+    "h1": [
+      {
+        "text": "Pedidos",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "comunicaciones",
+    "url": "/admin/pedidos?tray=communications",
+    "width": 360,
+    "document": 360,
+    "h1": [
+      {
+        "text": "Pedidos",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "productos",
+    "url": "/admin/productos",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "Productos",
+        "font": "46.5px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "productos",
+    "url": "/admin/productos",
+    "width": 1024,
+    "document": 1024,
+    "h1": [
+      {
+        "text": "Productos",
+        "font": "46.5px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "productos",
+    "url": "/admin/productos",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "Productos",
+        "font": "42.32px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "productos",
+    "url": "/admin/productos",
+    "width": 390,
+    "document": 390,
+    "h1": [
+      {
+        "text": "Productos",
+        "font": "31.14px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "productos",
+    "url": "/admin/productos",
+    "width": 360,
+    "document": 360,
+    "h1": [
+      {
+        "text": "Productos",
+        "font": "30.36px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "existencias",
+    "url": "/admin/productos?view=stock&productId=6b01c2ce78677ee5535bbc77&variantId=6b01c2ce78677ee5535bbc78",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "Productos",
+        "font": "46.5px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "existencias",
+    "url": "/admin/productos?view=stock&productId=6b01c2ce78677ee5535bbc77&variantId=6b01c2ce78677ee5535bbc78",
+    "width": 1024,
+    "document": 1024,
+    "h1": [
+      {
+        "text": "Productos",
+        "font": "46.5px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "existencias",
+    "url": "/admin/productos?view=stock&productId=6b01c2ce78677ee5535bbc77&variantId=6b01c2ce78677ee5535bbc78",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "Productos",
+        "font": "42.32px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "existencias",
+    "url": "/admin/productos?view=stock&productId=6b01c2ce78677ee5535bbc77&variantId=6b01c2ce78677ee5535bbc78",
+    "width": 390,
+    "document": 390,
+    "h1": [
+      {
+        "text": "Productos",
+        "font": "31.14px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "existencias",
+    "url": "/admin/productos?view=stock&productId=6b01c2ce78677ee5535bbc77&variantId=6b01c2ce78677ee5535bbc78",
+    "width": 360,
+    "document": 360,
+    "h1": [
+      {
+        "text": "Productos",
+        "font": "30.36px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "movimientos",
+    "url": "/admin/productos?view=movements",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "Productos",
+        "font": "46.5px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "movimientos",
+    "url": "/admin/productos?view=movements",
+    "width": 1024,
+    "document": 1024,
+    "h1": [
+      {
+        "text": "Productos",
+        "font": "46.5px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "movimientos",
+    "url": "/admin/productos?view=movements",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "Productos",
+        "font": "42.32px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "movimientos",
+    "url": "/admin/productos?view=movements",
+    "width": 390,
+    "document": 390,
+    "h1": [
+      {
+        "text": "Productos",
+        "font": "31.14px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "movimientos",
+    "url": "/admin/productos?view=movements",
+    "width": 360,
+    "document": 360,
+    "h1": [
+      {
+        "text": "Productos",
+        "font": "30.36px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "producto-nuevo",
+    "url": "/admin/productos/nuevo",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "Nuevo producto",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "producto-nuevo",
+    "url": "/admin/productos/nuevo",
+    "width": 1024,
+    "document": 1024,
+    "h1": [
+      {
+        "text": "Nuevo producto",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "producto-nuevo",
+    "url": "/admin/productos/nuevo",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "Nuevo producto",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "producto-nuevo",
+    "url": "/admin/productos/nuevo",
+    "width": 390,
+    "document": 390,
+    "h1": [
+      {
+        "text": "Nuevo producto",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "producto-nuevo",
+    "url": "/admin/productos/nuevo",
+    "width": 360,
+    "document": 360,
+    "h1": [
+      {
+        "text": "Nuevo producto",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "producto-editar",
+    "url": "/admin/productos/6b01c2ce78677ee5535bbc77/editar",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "Editar producto",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "producto-editar",
+    "url": "/admin/productos/6b01c2ce78677ee5535bbc77/editar",
+    "width": 1024,
+    "document": 1024,
+    "h1": [
+      {
+        "text": "Editar producto",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "producto-editar",
+    "url": "/admin/productos/6b01c2ce78677ee5535bbc77/editar",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "Editar producto",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "producto-editar",
+    "url": "/admin/productos/6b01c2ce78677ee5535bbc77/editar",
+    "width": 390,
+    "document": 390,
+    "h1": [
+      {
+        "text": "Editar producto",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "producto-editar",
+    "url": "/admin/productos/6b01c2ce78677ee5535bbc77/editar",
+    "width": 360,
+    "document": 360,
+    "h1": [
+      {
+        "text": "Editar producto",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "taxonomias",
+    "url": "/admin/catalogo",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "Configuración del catálogo",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": [
+      {
+        "tag": "TABLE",
+        "class": "admin-table"
+      },
+      {
+        "tag": "THEAD",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TBODY",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TD",
+        "class": "admin-table__actions"
+      }
+    ]
+  },
+  {
+    "name": "taxonomias",
+    "url": "/admin/catalogo",
+    "width": 1024,
+    "document": 1024,
+    "h1": [
+      {
+        "text": "Configuración del catálogo",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": [
+      {
+        "tag": "TABLE",
+        "class": "admin-table"
+      },
+      {
+        "tag": "THEAD",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TBODY",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TD",
+        "class": "admin-table__actions"
+      },
+      {
+        "tag": "BUTTON",
+        "class": "admin-btn admin-btn--sm"
+      }
+    ]
+  },
+  {
+    "name": "taxonomias",
+    "url": "/admin/catalogo",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "Configuración del catálogo",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "taxonomias",
+    "url": "/admin/catalogo",
+    "width": 390,
+    "document": 390,
+    "h1": [
+      {
+        "text": "Configuración del catálogo",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": [
+      {
+        "tag": "TABLE",
+        "class": "admin-table"
+      },
+      {
+        "tag": "THEAD",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TBODY",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TD",
+        "class": "admin-table__actions"
+      },
+      {
+        "tag": "BUTTON",
+        "class": "admin-btn admin-btn--sm"
+      }
+    ]
+  },
+  {
+    "name": "taxonomias",
+    "url": "/admin/catalogo",
+    "width": 360,
+    "document": 360,
+    "h1": [
+      {
+        "text": "Configuración del catálogo",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": [
+      {
+        "tag": "TABLE",
+        "class": "admin-table"
+      },
+      {
+        "tag": "THEAD",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TBODY",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TD",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "solicitudes",
+    "url": "/admin/solicitudes",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "Solicitudes especiales",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "solicitudes",
+    "url": "/admin/solicitudes",
+    "width": 1024,
+    "document": 1024,
+    "h1": [
+      {
+        "text": "Solicitudes especiales",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "solicitudes",
+    "url": "/admin/solicitudes",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "Solicitudes especiales",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "solicitudes",
+    "url": "/admin/solicitudes",
+    "width": 390,
+    "document": 390,
+    "h1": [
+      {
+        "text": "Solicitudes especiales",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": [
+      {
+        "tag": "TABLE",
+        "class": "admin-table"
+      },
+      {
+        "tag": "THEAD",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TBODY",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "solicitudes",
+    "url": "/admin/solicitudes",
+    "width": 360,
+    "document": 360,
+    "h1": [
+      {
+        "text": "Solicitudes especiales",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": [
+      {
+        "tag": "TABLE",
+        "class": "admin-table"
+      },
+      {
+        "tag": "THEAD",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TBODY",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "solicitud",
+    "url": "/admin/solicitudes/6b01c2ce78677ee5535bbc9b",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "F6-001",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "solicitud",
+    "url": "/admin/solicitudes/6b01c2ce78677ee5535bbc9b",
+    "width": 1024,
+    "document": 1024,
+    "h1": [
+      {
+        "text": "F6-001",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "solicitud",
+    "url": "/admin/solicitudes/6b01c2ce78677ee5535bbc9b",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "F6-001",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "solicitud",
+    "url": "/admin/solicitudes/6b01c2ce78677ee5535bbc9b",
+    "width": 390,
+    "document": 390,
+    "h1": [
+      {
+        "text": "F6-001",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "solicitud",
+    "url": "/admin/solicitudes/6b01c2ce78677ee5535bbc9b",
+    "width": 360,
+    "document": 360,
+    "h1": [
+      {
+        "text": "F6-001",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "pqr",
+    "url": "/admin/pqr",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "PQR y solicitudes de datos",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "SELECT",
+        "name": ""
+      },
+      {
+        "tag": "SELECT",
+        "name": ""
+      }
+    ],
+    "overflow": []
+  },
+  {
+    "name": "pqr",
+    "url": "/admin/pqr",
+    "width": 1024,
+    "document": 1024,
+    "h1": [
+      {
+        "text": "PQR y solicitudes de datos",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "SELECT",
+        "name": ""
+      },
+      {
+        "tag": "SELECT",
+        "name": ""
+      }
+    ],
+    "overflow": []
+  },
+  {
+    "name": "pqr",
+    "url": "/admin/pqr",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "PQR y solicitudes de datos",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "SELECT",
+        "name": ""
+      },
+      {
+        "tag": "SELECT",
+        "name": ""
+      }
+    ],
+    "overflow": []
+  },
+  {
+    "name": "pqr",
+    "url": "/admin/pqr",
+    "width": 390,
+    "document": 390,
+    "h1": [
+      {
+        "text": "PQR y solicitudes de datos",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "SELECT",
+        "name": ""
+      },
+      {
+        "tag": "SELECT",
+        "name": ""
+      }
+    ],
+    "overflow": [
+      {
+        "tag": "TABLE",
+        "class": "admin-table"
+      },
+      {
+        "tag": "THEAD",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TBODY",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "pqr",
+    "url": "/admin/pqr",
+    "width": 360,
+    "document": 384,
+    "h1": [
+      {
+        "text": "PQR y solicitudes de datos",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "SELECT",
+        "name": ""
+      },
+      {
+        "tag": "SELECT",
+        "name": ""
+      }
+    ],
+    "overflow": [
+      {
+        "tag": "SELECT",
+        "class": ""
+      },
+      {
+        "tag": "TABLE",
+        "class": "admin-table"
+      },
+      {
+        "tag": "THEAD",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "tienda-home",
+    "url": "/admin/contenido?tab=home",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "TEXTAREA",
+        "name": "",
+        "placeholder": ""
+      }
+    ],
+    "overflow": []
+  },
+  {
+    "name": "tienda-home",
+    "url": "/admin/contenido?tab=home",
+    "width": 1024,
+    "document": 1024,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "TEXTAREA",
+        "name": "",
+        "placeholder": ""
+      }
+    ],
+    "overflow": []
+  },
+  {
+    "name": "tienda-home",
+    "url": "/admin/contenido?tab=home",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "TEXTAREA",
+        "name": "",
+        "placeholder": ""
+      }
+    ],
+    "overflow": [
+      {
+        "tag": "BUTTON",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "tienda-home",
+    "url": "/admin/contenido?tab=home",
+    "width": 390,
+    "document": 390,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "TEXTAREA",
+        "name": "",
+        "placeholder": ""
+      }
+    ],
+    "overflow": [
+      {
+        "tag": "A",
+        "class": ""
+      },
+      {
+        "tag": "A",
+        "class": ""
+      },
+      {
+        "tag": "A",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "tienda-home",
+    "url": "/admin/contenido?tab=home",
+    "width": 360,
+    "document": 360,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "TEXTAREA",
+        "name": "",
+        "placeholder": ""
+      }
+    ],
+    "overflow": [
+      {
+        "tag": "A",
+        "class": ""
+      },
+      {
+        "tag": "A",
+        "class": ""
+      },
+      {
+        "tag": "A",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "tienda-imagenes",
+    "url": "/admin/contenido?tab=imagenes",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "tienda-imagenes",
+    "url": "/admin/contenido?tab=imagenes",
+    "width": 1024,
+    "document": 1024,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "tienda-imagenes",
+    "url": "/admin/contenido?tab=imagenes",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": [
+      {
+        "tag": "BUTTON",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "tienda-imagenes",
+    "url": "/admin/contenido?tab=imagenes",
+    "width": 390,
+    "document": 390,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": [
+      {
+        "tag": "A",
+        "class": ""
+      },
+      {
+        "tag": "A",
+        "class": ""
+      },
+      {
+        "tag": "A",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "tienda-imagenes",
+    "url": "/admin/contenido?tab=imagenes",
+    "width": 360,
+    "document": 360,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": [
+      {
+        "tag": "A",
+        "class": ""
+      },
+      {
+        "tag": "A",
+        "class": ""
+      },
+      {
+        "tag": "A",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "tienda-banners",
+    "url": "/admin/contenido?tab=banners",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "https://res.cloudinary.com/…"
+      }
+    ],
+    "overflow": []
+  },
+  {
+    "name": "tienda-banners",
+    "url": "/admin/contenido?tab=banners",
+    "width": 1024,
+    "document": 1024,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "https://res.cloudinary.com/…"
+      }
+    ],
+    "overflow": []
+  },
+  {
+    "name": "tienda-banners",
+    "url": "/admin/contenido?tab=banners",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "https://res.cloudinary.com/…"
+      }
+    ],
+    "overflow": []
+  },
+  {
+    "name": "tienda-banners",
+    "url": "/admin/contenido?tab=banners",
+    "width": 390,
+    "document": 390,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "https://res.cloudinary.com/…"
+      }
+    ],
+    "overflow": [
+      {
+        "tag": "A",
+        "class": ""
+      },
+      {
+        "tag": "A",
+        "class": ""
+      },
+      {
+        "tag": "A",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "tienda-banners",
+    "url": "/admin/contenido?tab=banners",
+    "width": 360,
+    "document": 360,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "https://res.cloudinary.com/…"
+      }
+    ],
+    "overflow": [
+      {
+        "tag": "A",
+        "class": ""
+      },
+      {
+        "tag": "A",
+        "class": ""
+      },
+      {
+        "tag": "A",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "tienda-pages",
+    "url": "/admin/contenido?tab=pages",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "https://res.cloudinary.com/…"
+      },
+      {
+        "tag": "TEXTAREA",
+        "name": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "TEXTAREA",
+        "name": "",
+        "placeholder": ""
+      }
+    ],
+    "overflow": [
+      {
+        "tag": "TABLE",
+        "class": "admin-table"
+      },
+      {
+        "tag": "THEAD",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TBODY",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "tienda-pages",
+    "url": "/admin/contenido?tab=pages",
+    "width": 1024,
+    "document": 1024,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "https://res.cloudinary.com/…"
+      },
+      {
+        "tag": "TEXTAREA",
+        "name": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "TEXTAREA",
+        "name": "",
+        "placeholder": ""
+      }
+    ],
+    "overflow": [
+      {
+        "tag": "TABLE",
+        "class": "admin-table"
+      },
+      {
+        "tag": "THEAD",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TBODY",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "tienda-pages",
+    "url": "/admin/contenido?tab=pages",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "https://res.cloudinary.com/…"
+      },
+      {
+        "tag": "TEXTAREA",
+        "name": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "TEXTAREA",
+        "name": "",
+        "placeholder": ""
+      }
+    ],
+    "overflow": []
+  },
+  {
+    "name": "tienda-pages",
+    "url": "/admin/contenido?tab=pages",
+    "width": 390,
+    "document": 390,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "https://res.cloudinary.com/…"
+      },
+      {
+        "tag": "TEXTAREA",
+        "name": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "TEXTAREA",
+        "name": "",
+        "placeholder": ""
+      }
+    ],
+    "overflow": [
+      {
+        "tag": "A",
+        "class": "active"
+      },
+      {
+        "tag": "A",
+        "class": ""
+      },
+      {
+        "tag": "A",
+        "class": ""
+      },
+      {
+        "tag": "TABLE",
+        "class": "admin-table"
+      },
+      {
+        "tag": "THEAD",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "tienda-pages",
+    "url": "/admin/contenido?tab=pages",
+    "width": 360,
+    "document": 360,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "https://res.cloudinary.com/…"
+      },
+      {
+        "tag": "TEXTAREA",
+        "name": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "TEXTAREA",
+        "name": "",
+        "placeholder": ""
+      }
+    ],
+    "overflow": [
+      {
+        "tag": "A",
+        "class": "active"
+      },
+      {
+        "tag": "A",
+        "class": ""
+      },
+      {
+        "tag": "A",
+        "class": ""
+      },
+      {
+        "tag": "TABLE",
+        "class": "admin-table"
+      },
+      {
+        "tag": "THEAD",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "tienda-resenas",
+    "url": "/admin/contenido?tab=resenas",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "tienda-resenas",
+    "url": "/admin/contenido?tab=resenas",
+    "width": 1024,
+    "document": 1024,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "tienda-resenas",
+    "url": "/admin/contenido?tab=resenas",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "tienda-resenas",
+    "url": "/admin/contenido?tab=resenas",
+    "width": 390,
+    "document": 390,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": [
+      {
+        "tag": "A",
+        "class": ""
+      },
+      {
+        "tag": "A",
+        "class": "active"
+      },
+      {
+        "tag": "A",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "tienda-resenas",
+    "url": "/admin/contenido?tab=resenas",
+    "width": 360,
+    "document": 360,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": [
+      {
+        "tag": "A",
+        "class": ""
+      },
+      {
+        "tag": "A",
+        "class": "active"
+      },
+      {
+        "tag": "A",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "tienda-appearance",
+    "url": "/admin/contenido?tab=appearance",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "https://res.cloudinary.com/…/logo-dizor-horizontal.png"
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "Vacío = color por defecto"
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "Vacío = color por defecto"
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "Vacío = color por defecto"
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "https://tudominio.com/favicon.ico"
+      }
+    ],
+    "overflow": []
+  },
+  {
+    "name": "tienda-appearance",
+    "url": "/admin/contenido?tab=appearance",
+    "width": 1024,
+    "document": 1024,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "https://res.cloudinary.com/…/logo-dizor-horizontal.png"
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "Vacío = color por defecto"
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "Vacío = color por defecto"
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "Vacío = color por defecto"
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "https://tudominio.com/favicon.ico"
+      }
+    ],
+    "overflow": []
+  },
+  {
+    "name": "tienda-appearance",
+    "url": "/admin/contenido?tab=appearance",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "https://res.cloudinary.com/…/logo-dizor-horizontal.png"
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "Vacío = color por defecto"
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "Vacío = color por defecto"
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "Vacío = color por defecto"
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "https://tudominio.com/favicon.ico"
+      }
+    ],
+    "overflow": []
+  },
+  {
+    "name": "tienda-appearance",
+    "url": "/admin/contenido?tab=appearance",
+    "width": 390,
+    "document": 390,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "https://res.cloudinary.com/…/logo-dizor-horizontal.png"
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "Vacío = color por defecto"
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "Vacío = color por defecto"
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "Vacío = color por defecto"
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "https://tudominio.com/favicon.ico"
+      }
+    ],
+    "overflow": [
+      {
+        "tag": "A",
+        "class": ""
+      },
+      {
+        "tag": "A",
+        "class": ""
+      },
+      {
+        "tag": "A",
+        "class": "active"
+      }
+    ]
+  },
+  {
+    "name": "tienda-appearance",
+    "url": "/admin/contenido?tab=appearance",
+    "width": 360,
+    "document": 360,
+    "h1": [
+      {
+        "text": "Tienda online",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "https://res.cloudinary.com/…/logo-dizor-horizontal.png"
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "Vacío = color por defecto"
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "Vacío = color por defecto"
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": ""
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "Vacío = color por defecto"
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "https://tudominio.com/favicon.ico"
+      }
+    ],
+    "overflow": [
+      {
+        "tag": "A",
+        "class": ""
+      },
+      {
+        "tag": "A",
+        "class": ""
+      },
+      {
+        "tag": "A",
+        "class": "active"
+      }
+    ]
+  },
+  {
+    "name": "marketing-popup",
+    "url": "/admin/marketing?tab=popup",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "Marketing",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "https://res.cloudinary.com/…"
+      }
+    ],
+    "overflow": []
+  },
+  {
+    "name": "marketing-popup",
+    "url": "/admin/marketing?tab=popup",
+    "width": 1024,
+    "document": 1024,
+    "h1": [
+      {
+        "text": "Marketing",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "https://res.cloudinary.com/…"
+      }
+    ],
+    "overflow": []
+  },
+  {
+    "name": "marketing-popup",
+    "url": "/admin/marketing?tab=popup",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "Marketing",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "https://res.cloudinary.com/…"
+      }
+    ],
+    "overflow": []
+  },
+  {
+    "name": "marketing-popup",
+    "url": "/admin/marketing?tab=popup",
+    "width": 390,
+    "document": 390,
+    "h1": [
+      {
+        "text": "Marketing",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "https://res.cloudinary.com/…"
+      }
+    ],
+    "overflow": []
+  },
+  {
+    "name": "marketing-popup",
+    "url": "/admin/marketing?tab=popup",
+    "width": 360,
+    "document": 360,
+    "h1": [
+      {
+        "text": "Marketing",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "https://res.cloudinary.com/…"
+      }
+    ],
+    "overflow": [
+      {
+        "tag": "A",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "marketing-newsletter",
+    "url": "/admin/marketing?tab=newsletter",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "Marketing",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "marketing-newsletter",
+    "url": "/admin/marketing?tab=newsletter",
+    "width": 1024,
+    "document": 1024,
+    "h1": [
+      {
+        "text": "Marketing",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "marketing-newsletter",
+    "url": "/admin/marketing?tab=newsletter",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "Marketing",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "marketing-newsletter",
+    "url": "/admin/marketing?tab=newsletter",
+    "width": 390,
+    "document": 390,
+    "h1": [
+      {
+        "text": "Marketing",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "marketing-newsletter",
+    "url": "/admin/marketing?tab=newsletter",
+    "width": 360,
+    "document": 360,
+    "h1": [
+      {
+        "text": "Marketing",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": [
+      {
+        "tag": "A",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "marketing-carritos",
+    "url": "/admin/marketing?tab=carritos",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "Marketing",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "marketing-carritos",
+    "url": "/admin/marketing?tab=carritos",
+    "width": 1024,
+    "document": 1024,
+    "h1": [
+      {
+        "text": "Marketing",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "marketing-carritos",
+    "url": "/admin/marketing?tab=carritos",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "Marketing",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "marketing-carritos",
+    "url": "/admin/marketing?tab=carritos",
+    "width": 390,
+    "document": 516,
+    "h1": [
+      {
+        "text": "Marketing",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": [
+      {
+        "tag": "TABLE",
+        "class": "marketing-admin__table"
+      },
+      {
+        "tag": "THEAD",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TBODY",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "marketing-carritos",
+    "url": "/admin/marketing?tab=carritos",
+    "width": 360,
+    "document": 516,
+    "h1": [
+      {
+        "text": "Marketing",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": [
+      {
+        "tag": "A",
+        "class": "active"
+      },
+      {
+        "tag": "TABLE",
+        "class": "marketing-admin__table"
+      },
+      {
+        "tag": "THEAD",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TBODY",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "exportaciones",
+    "url": "/admin/marketing?tab=exports",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "Exportaciones históricas",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "exportaciones",
+    "url": "/admin/marketing?tab=exports",
+    "width": 1024,
+    "document": 1024,
+    "h1": [
+      {
+        "text": "Exportaciones históricas",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "exportaciones",
+    "url": "/admin/marketing?tab=exports",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "Exportaciones históricas",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "exportaciones",
+    "url": "/admin/marketing?tab=exports",
+    "width": 390,
+    "document": 390,
+    "h1": [
+      {
+        "text": "Exportaciones históricas",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": [
+      {
+        "tag": "A",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "exportaciones",
+    "url": "/admin/marketing?tab=exports",
+    "width": 360,
+    "document": 360,
+    "h1": [
+      {
+        "text": "Exportaciones históricas",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": [
+      {
+        "tag": "A",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "cupones",
+    "url": "/admin/cupones",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "Cupones de descuento",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "cupones",
+    "url": "/admin/cupones",
+    "width": 1024,
+    "document": 1024,
+    "h1": [
+      {
+        "text": "Cupones de descuento",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "cupones",
+    "url": "/admin/cupones",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "Cupones de descuento",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "cupones",
+    "url": "/admin/cupones",
+    "width": 390,
+    "document": 390,
+    "h1": [
+      {
+        "text": "Cupones de descuento",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "cupones",
+    "url": "/admin/cupones",
+    "width": 360,
+    "document": 360,
+    "h1": [
+      {
+        "text": "Cupones de descuento",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "finanzas",
+    "url": "/admin/finanzas",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "Control financiero",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": [
+      {
+        "tag": "TABLE",
+        "class": "admin-table"
+      },
+      {
+        "tag": "THEAD",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TBODY",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TD",
+        "class": ""
+      },
+      {
+        "tag": "TABLE",
+        "class": "admin-table"
+      }
+    ]
+  },
+  {
+    "name": "finanzas",
+    "url": "/admin/finanzas",
+    "width": 1024,
+    "document": 1310,
+    "h1": [
+      {
+        "text": "Control financiero",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": [
+      {
+        "tag": "DIV",
+        "class": "admin-stat-card"
+      },
+      {
+        "tag": "P",
+        "class": "admin-stat-card__value"
+      },
+      {
+        "tag": "P",
+        "class": "admin-stat-card__label"
+      },
+      {
+        "tag": "DIV",
+        "class": "admin-stat-card"
+      },
+      {
+        "tag": "P",
+        "class": "admin-stat-card__value"
+      },
+      {
+        "tag": "P",
+        "class": "admin-stat-card__label"
+      },
+      {
+        "tag": "TABLE",
+        "class": "admin-table"
+      },
+      {
+        "tag": "THEAD",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "finanzas",
+    "url": "/admin/finanzas",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "Control financiero",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "finanzas",
+    "url": "/admin/finanzas",
+    "width": 390,
+    "document": 506,
+    "h1": [
+      {
+        "text": "Control financiero",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": [
+      {
+        "tag": "DIV",
+        "class": "admin-stat-card"
+      },
+      {
+        "tag": "P",
+        "class": "admin-stat-card__value"
+      },
+      {
+        "tag": "P",
+        "class": "admin-stat-card__label"
+      },
+      {
+        "tag": "DIV",
+        "class": "admin-stat-card"
+      },
+      {
+        "tag": "P",
+        "class": "admin-stat-card__value"
+      },
+      {
+        "tag": "P",
+        "class": "admin-stat-card__label"
+      },
+      {
+        "tag": "TABLE",
+        "class": "admin-table"
+      },
+      {
+        "tag": "THEAD",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "finanzas",
+    "url": "/admin/finanzas",
+    "width": 360,
+    "document": 506,
+    "h1": [
+      {
+        "text": "Control financiero",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": [
+      {
+        "tag": "DIV",
+        "class": "admin-stat-card"
+      },
+      {
+        "tag": "P",
+        "class": "admin-stat-card__value"
+      },
+      {
+        "tag": "P",
+        "class": "admin-stat-card__label"
+      },
+      {
+        "tag": "DIV",
+        "class": "admin-stat-card"
+      },
+      {
+        "tag": "P",
+        "class": "admin-stat-card__value"
+      },
+      {
+        "tag": "P",
+        "class": "admin-stat-card__label"
+      },
+      {
+        "tag": "TABLE",
+        "class": "admin-table"
+      },
+      {
+        "tag": "THEAD",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "usuarios",
+    "url": "/admin/usuarios",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "Usuarios del equipo",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": [
+      {
+        "tag": "TABLE",
+        "class": "admin-table"
+      },
+      {
+        "tag": "THEAD",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TBODY",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TD",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "usuarios",
+    "url": "/admin/usuarios",
+    "width": 1024,
+    "document": 1024,
+    "h1": [
+      {
+        "text": "Usuarios del equipo",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": [
+      {
+        "tag": "TABLE",
+        "class": "admin-table"
+      },
+      {
+        "tag": "THEAD",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TBODY",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "usuarios",
+    "url": "/admin/usuarios",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "Usuarios del equipo",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "usuarios",
+    "url": "/admin/usuarios",
+    "width": 390,
+    "document": 390,
+    "h1": [
+      {
+        "text": "Usuarios del equipo",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": [
+      {
+        "tag": "TABLE",
+        "class": "admin-table"
+      },
+      {
+        "tag": "THEAD",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TBODY",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "usuarios",
+    "url": "/admin/usuarios",
+    "width": 360,
+    "document": 360,
+    "h1": [
+      {
+        "text": "Usuarios del equipo",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": [
+      {
+        "tag": "TABLE",
+        "class": "admin-table"
+      },
+      {
+        "tag": "THEAD",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TBODY",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "configuracion",
+    "url": "/admin/configuracion",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "Configuración de tienda",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "configuracion",
+    "url": "/admin/configuracion",
+    "width": 1024,
+    "document": 1024,
+    "h1": [
+      {
+        "text": "Configuración de tienda",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "configuracion",
+    "url": "/admin/configuracion",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "Configuración de tienda",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "configuracion",
+    "url": "/admin/configuracion",
+    "width": 390,
+    "document": 390,
+    "h1": [
+      {
+        "text": "Configuración de tienda",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "configuracion",
+    "url": "/admin/configuracion",
+    "width": 360,
+    "document": 360,
+    "h1": [
+      {
+        "text": "Configuración de tienda",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "auditoria",
+    "url": "/admin/auditoria",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "Historial de auditoría",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "Buscar por correo, acción, módulo..."
+      },
+      {
+        "tag": "SELECT",
+        "name": ""
+      },
+      {
+        "tag": "SELECT",
+        "name": ""
+      },
+      {
+        "tag": "SELECT",
+        "name": ""
+      }
+    ],
+    "overflow": []
+  },
+  {
+    "name": "auditoria",
+    "url": "/admin/auditoria",
+    "width": 1024,
+    "document": 1024,
+    "h1": [
+      {
+        "text": "Historial de auditoría",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "Buscar por correo, acción, módulo..."
+      },
+      {
+        "tag": "SELECT",
+        "name": ""
+      },
+      {
+        "tag": "SELECT",
+        "name": ""
+      },
+      {
+        "tag": "SELECT",
+        "name": ""
+      }
+    ],
+    "overflow": []
+  },
+  {
+    "name": "auditoria",
+    "url": "/admin/auditoria",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "Historial de auditoría",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "Buscar por correo, acción, módulo..."
+      },
+      {
+        "tag": "SELECT",
+        "name": ""
+      },
+      {
+        "tag": "SELECT",
+        "name": ""
+      },
+      {
+        "tag": "SELECT",
+        "name": ""
+      }
+    ],
+    "overflow": []
+  },
+  {
+    "name": "auditoria",
+    "url": "/admin/auditoria",
+    "width": 390,
+    "document": 390,
+    "h1": [
+      {
+        "text": "Historial de auditoría",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "Buscar por correo, acción, módulo..."
+      },
+      {
+        "tag": "SELECT",
+        "name": ""
+      },
+      {
+        "tag": "SELECT",
+        "name": ""
+      },
+      {
+        "tag": "SELECT",
+        "name": ""
+      }
+    ],
+    "overflow": [
+      {
+        "tag": "TABLE",
+        "class": "admin-table"
+      },
+      {
+        "tag": "THEAD",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "auditoria",
+    "url": "/admin/auditoria",
+    "width": 360,
+    "document": 360,
+    "h1": [
+      {
+        "text": "Historial de auditoría",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [
+      {
+        "tag": "INPUT",
+        "name": "",
+        "placeholder": "Buscar por correo, acción, módulo..."
+      },
+      {
+        "tag": "SELECT",
+        "name": ""
+      },
+      {
+        "tag": "SELECT",
+        "name": ""
+      },
+      {
+        "tag": "SELECT",
+        "name": ""
+      }
+    ],
+    "overflow": [
+      {
+        "tag": "TABLE",
+        "class": "admin-table"
+      },
+      {
+        "tag": "THEAD",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "alertas",
+    "url": "/admin/alertas",
+    "width": 1440,
+    "document": 1440,
+    "h1": [
+      {
+        "text": "Alertas del sistema",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": []
+  },
+  {
+    "name": "alertas",
+    "url": "/admin/alertas",
+    "width": 1024,
+    "document": 1024,
+    "h1": [
+      {
+        "text": "Alertas del sistema",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": [
+      {
+        "tag": "TABLE",
+        "class": "admin-table"
+      },
+      {
+        "tag": "THEAD",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TBODY",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TD",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "alertas",
+    "url": "/admin/alertas",
+    "width": 820,
+    "document": 820,
+    "h1": [
+      {
+        "text": "Alertas del sistema",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": [
+      {
+        "tag": "TABLE",
+        "class": "admin-table"
+      },
+      {
+        "tag": "THEAD",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TBODY",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TD",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "alertas",
+    "url": "/admin/alertas",
+    "width": 390,
+    "document": 390,
+    "h1": [
+      {
+        "text": "Alertas del sistema",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": [
+      {
+        "tag": "TABLE",
+        "class": "admin-table"
+      },
+      {
+        "tag": "THEAD",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "alertas",
+    "url": "/admin/alertas",
+    "width": 360,
+    "document": 360,
+    "h1": [
+      {
+        "text": "Alertas del sistema",
+        "font": "26.25px"
+      }
+    ],
+    "unlabelled": [],
+    "overflow": [
+      {
+        "tag": "TABLE",
+        "class": "admin-table"
+      },
+      {
+        "tag": "THEAD",
+        "class": ""
+      },
+      {
+        "tag": "TR",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      },
+      {
+        "tag": "TH",
+        "class": ""
+      }
+    ]
+  },
+  {
+    "name": "vendedor",
+    "width": 1440,
+    "document": 1440
+  },
+  {
+    "name": "vendedor",
+    "width": 1024,
+    "document": 1024
+  },
+  {
+    "name": "vendedor",
+    "width": 820,
+    "document": 820
+  },
+  {
+    "name": "vendedor",
+    "width": 390,
+    "document": 390
+  },
+  {
+    "name": "vendedor",
+    "width": 360,
+    "document": 360
+  },
+  {
+    "name": "vendedor-pedidos",
+    "width": 1440,
+    "document": 1440
+  },
+  {
+    "name": "vendedor-pedidos",
+    "width": 1024,
+    "document": 1024
+  },
+  {
+    "name": "vendedor-pedidos",
+    "width": 820,
+    "document": 820
+  },
+  {
+    "name": "vendedor-pedidos",
+    "width": 390,
+    "document": 390
+  },
+  {
+    "name": "vendedor-pedidos",
+    "width": 360,
+    "document": 360
+  },
+  {
+    "name": "vendedor-pedido",
+    "width": 1440,
+    "document": 1440
+  },
+  {
+    "name": "vendedor-pedido",
+    "width": 1024,
+    "document": 1024
+  },
+  {
+    "name": "vendedor-pedido",
+    "width": 820,
+    "document": 820
+  },
+  {
+    "name": "vendedor-pedido",
+    "width": 390,
+    "document": 390
+  },
+  {
+    "name": "vendedor-pedido",
+    "width": 360,
+    "document": 360
+  },
+  {
+    "name": "vendedor-solicitudes",
+    "width": 1440,
+    "document": 1440
+  },
+  {
+    "name": "vendedor-solicitudes",
+    "width": 1024,
+    "document": 1024
+  },
+  {
+    "name": "vendedor-solicitudes",
+    "width": 820,
+    "document": 820
+  },
+  {
+    "name": "vendedor-solicitudes",
+    "width": 390,
+    "document": 390
+  },
+  {
+    "name": "vendedor-solicitudes",
+    "width": 360,
+    "document": 360
+  }
+]

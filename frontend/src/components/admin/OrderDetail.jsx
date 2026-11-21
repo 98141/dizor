@@ -40,6 +40,7 @@ function OrderWorkspaceDetail({ orderId, backHref = "/admin/pedidos" }) {
     if (inFlightRef.current || locked) return false;
     inFlightRef.current = true; setBusy(true); setError(""); setMessage("");
     let recorded = false;
+    let actionResult;
     try {
       if (code === "collect") await confirmPayment(orderId, values);
       else if (code === "reconcile") await reconcileWompi(orderId);
@@ -47,13 +48,13 @@ function OrderWorkspaceDetail({ orderId, backHref = "/admin/pedidos" }) {
       else {
         const status = { prepare: "en_preparacion", deliver: "entregado", cancel: "cancelado", return: "devuelto" }[code];
         if (!status) throw new Error("Acción no disponible");
-        await updateOrderStatus(orderId, { orderStatus: status, note: values.note || "" });
+        actionResult = await updateOrderStatus(orderId, { orderStatus: status, note: values.note || "" });
       }
       recorded = true;
       const result = await getAdminOrder(orderId);
       setState({ key, order: result.order });
       setCommunicationsVersion((v) => v + 1);
-      setMessage(code === "collect" ? "Recaudo verificado en el registro. El despacho y la entrega no se modificaron." : code === "reconcile" ? "Consulta completada. Revisa el estado y las incidencias resultantes." : "Operación registrada. La siguiente acción y las comunicaciones se actualizaron.");
+      setMessage(actionResult?.message === "El pedido ya tenía este estado. No se registró una nueva transición." ? actionResult.message : code === "collect" ? "Recaudo verificado en el registro. El despacho y la entrega no se modificaron." : code === "reconcile" ? "Consulta completada. Revisa el estado y las incidencias resultantes." : "Operación registrada. La siguiente acción y las comunicaciones se actualizaron.");
       return true;
     } catch (err) {
       const uncertain = recorded || !err.response || err.response.status >= 500;

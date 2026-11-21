@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import RoleRoute from "@/guards/RoleRoute";
 import AdminShell from "@/components/admin/AdminShell";
-import AuthErrorAlert from "@/components/auth/AuthErrorAlert";
+import AuthErrorAlert from "@/components/admin/AdminFeedback";
 import { formatCOP } from "@/lib/formatCurrency";
 import {
   getCoupons,
@@ -52,28 +52,21 @@ function AdminCuponesContent() {
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(null);
+  const lock = useRef(false);
+  const [loadError, setLoadError] = useState("");
 
-  const load = async () => {
-    setLoading(true);
-    try {
-      const data = await getCoupons();
-      setCoupons(data.coupons || []);
-    } catch {
-      setCoupons([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const load = useCallback(() => getCoupons().then(data => {
+    setCoupons(data.coupons || []); setLoadError("");
+  }).catch(() => setLoadError("No se pudieron cargar los cupones. Reintenta para consultar la lista real.")).finally(() => setLoading(false)), []);
 
   useEffect(() => {
     load();
-  }, []);
+  }, [load]);
 
-  const resetForm = () => {
+  const resetForm = (keepMessage = false) => {
     setForm(EMPTY_FORM);
     setEditingId(null);
-    setMessage("");
-    setIsError(false);
+    if (keepMessage !== true) { setMessage(""); setIsError(false); }
   };
 
   const handleChange = (e) => {
@@ -83,6 +76,8 @@ function AdminCuponesContent() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (lock.current) return;
+    lock.current = true;
     setSaving(true);
     setMessage("");
     setIsError(false);
@@ -106,12 +101,13 @@ function AdminCuponesContent() {
         setMessage("Cupón creado correctamente");
       }
       setIsError(false);
-      resetForm();
+      resetForm(true);
       await load();
     } catch (err) {
       setMessage(err.response?.data?.message || "No se pudo guardar el cupón");
       setIsError(true);
     } finally {
+      lock.current = false;
       setSaving(false);
     }
   };
@@ -135,21 +131,29 @@ function AdminCuponesContent() {
   };
 
   const handleToggle = async (id) => {
+    if (lock.current) return;
+    lock.current = true; setSaving(true);
     try {
       await toggleCoupon(id);
+      setIsError(false); setMessage("Estado del cupón actualizado");
       await load();
     } catch (err) {
-      alert(err.response?.data?.message || "No se pudo actualizar");
+      setIsError(true); setMessage(err.response?.data?.message || "No se pudo actualizar");
+    } finally { lock.current = false; setSaving(false);
     }
   };
 
   const handleDelete = async (id) => {
+    if (lock.current) return;
+    lock.current = true; setSaving(true);
     try {
       await deleteCoupon(id);
       setConfirmDelete(null);
+      setIsError(false); setMessage("Cupón eliminado");
       await load();
     } catch (err) {
-      alert(err.response?.data?.message || "No se pudo eliminar");
+      setIsError(true); setMessage(err.response?.data?.message || "No se pudo eliminar");
+    } finally { lock.current = false; setSaving(false);
     }
   };
 
@@ -160,6 +164,7 @@ function AdminCuponesContent() {
         Crea y gestiona códigos de descuento para tus clientes.
       </p>
 
+      {loadError && <><AuthErrorAlert message={loadError} /><button type="button" className="admin-btn" onClick={() => { setLoading(true); load(); }}>Reintentar cupones</button></>}
       <div className="admin-grid-2">
         {/* ── Formulario ── */}
         <section className="taxonomy-form-card">
@@ -322,7 +327,7 @@ function AdminCuponesContent() {
                     <th>Usos</th>
                     <th>Vence</th>
                     <th>Estado</th>
-                    <th />
+                    <th>Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -331,7 +336,7 @@ function AdminCuponesContent() {
                       key={c._id}
                       style={{ opacity: c.isActive ? 1 : 0.55 }}
                     >
-                      <td>
+                      <td data-label="Código">
                         <strong style={{ letterSpacing: "0.05em" }}>{c.code}</strong>
                         {c.description && (
                           <>
@@ -348,12 +353,12 @@ function AdminCuponesContent() {
                           </>
                         )}
                       </td>
-                      <td>{formatValue(c)}</td>
-                      <td>
+                      <td data-label="Descuento">{formatValue(c)}</td>
+                      <td data-label="Usos">
                         {c.usedCount}
                         {c.maxUses != null && ` / ${c.maxUses}`}
                       </td>
-                      <td
+                      <td data-label="Vence"
                         style={
                           isExpired(c.expiresAt)
                             ? { color: "var(--color-error)", fontWeight: 600 }
@@ -363,7 +368,7 @@ function AdminCuponesContent() {
                         {formatExpiry(c.expiresAt)}
                         {isExpired(c.expiresAt) && " ✕"}
                       </td>
-                      <td>
+                      <td data-label="Estado">
                         <span
                           style={{
                             display: "inline-block",
@@ -378,7 +383,7 @@ function AdminCuponesContent() {
                           {c.isActive ? "Activo" : "Inactivo"}
                         </span>
                       </td>
-                      <td>
+                      <td data-label="Acciones">
                         <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
                           <button
                             type="button"
@@ -390,7 +395,8 @@ function AdminCuponesContent() {
                           <button
                             type="button"
                             className="admin-btn admin-btn--sm"
-                            onClick={() => handleToggle(c._id)}
+                            disabled={saving || !!loadError}
+                          onClick={() => handleToggle(c._id)}
                           >
                             {c.isActive ? "Desactivar" : "Activar"}
                           </button>
@@ -399,7 +405,8 @@ function AdminCuponesContent() {
                               <button
                                 type="button"
                                 className="admin-btn admin-btn--sm admin-btn--danger"
-                                onClick={() => handleDelete(c._id)}
+                                disabled={saving || !!loadError}
+                              onClick={() => handleDelete(c._id)}
                               >
                                 Confirmar
                               </button>

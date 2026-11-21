@@ -1,10 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import AuthFormField from "@/components/auth/AuthFormField";
+import { useCallback, useEffect, useRef, useState } from "react";
+import AuthFormField from "@/components/admin/AdminFormField";
 import AuthSubmitButton from "@/components/auth/AuthSubmitButton";
-import AuthErrorAlert from "@/components/auth/AuthErrorAlert";
-import ConfirmModal from "@/components/ui/ConfirmModal";
+import AuthErrorAlert from "@/components/admin/AdminFeedback";
+import ConfirmModal from "@/components/admin/AdminConfirmModal";
 import { useFlashMessage } from "@/hooks/useFlashMessage";
 import {
   getAdminReviews,
@@ -24,6 +24,7 @@ export default function ReviewsTab() {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const savingLock = useRef(false);
   const [confirmModal, setConfirmModal] = useState(null);
   const { message, error, flashKey, showMsg, clearMsg } = useFlashMessage();
 
@@ -40,9 +41,7 @@ export default function ReviewsTab() {
       setLoading(false);
       return;
     }
-    setLoading(true);
-    clearMsg();
-    try {
+    setLoading(true);    try {
       const params = { aprobado: subTab === "pending" ? "false" : "true" };
       const data = await getAdminReviews(params);
       setReviews(data.reviews || []);
@@ -51,13 +50,17 @@ export default function ReviewsTab() {
     } finally {
       setLoading(false);
     }
-  }, [subTab, clearMsg, showMsg]);
+  }, [subTab, showMsg]);
 
   useEffect(() => {
     load();
   }, [load]);
 
   const approve = async (id) => {
+    if (savingLock.current) return;
+
+    savingLock.current = true;
+
     setSaving(true);
     try {
       await approveAdminReview(id);
@@ -66,7 +69,7 @@ export default function ReviewsTab() {
     } catch (err) {
       showMsg(err.response?.data?.message || "No se pudo aprobar", true);
     } finally {
-      setSaving(false);
+      savingLock.current = false; setSaving(false);
     }
   };
 
@@ -76,6 +79,10 @@ export default function ReviewsTab() {
         "¿Rechazar y eliminar esta reseña? El cliente podrá volver a escribir una si aplica.",
       onConfirm: async () => {
         setConfirmModal(null);
+        if (savingLock.current) return;
+
+        savingLock.current = true;
+
         setSaving(true);
         try {
           await rejectAdminReview(id);
@@ -84,7 +91,7 @@ export default function ReviewsTab() {
         } catch (err) {
           showMsg(err.response?.data?.message || "No se pudo eliminar", true);
         } finally {
-          setSaving(false);
+          savingLock.current = false; setSaving(false);
         }
       },
     });
@@ -92,6 +99,10 @@ export default function ReviewsTab() {
 
   const submitBrand = async (e) => {
     e.preventDefault();
+    if (savingLock.current) return;
+
+    savingLock.current = true;
+
     setSaving(true);
     clearMsg();
     try {
@@ -114,7 +125,7 @@ export default function ReviewsTab() {
     } catch (err) {
       showMsg(err.response?.data?.message || "No se pudo crear", true);
     } finally {
-      setSaving(false);
+      savingLock.current = false; setSaving(false);
     }
   };
 

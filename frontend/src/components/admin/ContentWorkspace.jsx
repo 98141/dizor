@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState, Suspense } from "react";
+import { useCallback, useEffect, useId, useRef, useState, Suspense } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { CONTENT_TABS, contentTab, contentHref } from "@/lib/adminNavigation.mjs";
 import DataExports from "./DataExports";
@@ -10,10 +11,10 @@ import useConfirmedSettings from "@/hooks/useConfirmedSettings";
 import { readMarketing, marketingPayload, validMarketing, readAppearance, validAppearance, readRows } from "@/lib/confirmedSettings.mjs";
 import RoleRoute from "@/guards/RoleRoute";
 import AdminShell from "@/components/admin/AdminShell";
-import AuthFormField from "@/components/auth/AuthFormField";
+import AuthFormField from "@/components/admin/AdminFormField";
 import AuthSubmitButton from "@/components/auth/AuthSubmitButton";
-import AuthErrorAlert from "@/components/auth/AuthErrorAlert";
-import ConfirmModal from "@/components/ui/ConfirmModal";
+import AuthErrorAlert from "@/components/admin/AdminFeedback";
+import ConfirmModal from "@/components/admin/AdminConfirmModal";
 import {
   getAdminHomeContent,
   updateAdminHomeContent,
@@ -79,18 +80,21 @@ const cartsOptions = { read: config => getAbandonedCarts({ limit: 30 }, config),
 const couponsOptions = { read: () => getCoupons(), parse: readRows("coupons", false) };
 
 function ColorField({ label, value, onChange }) {
+  const id = useId();
   return (
     <div className="appearance-color-field">
-      <label className="auth-field__label">{label}</label>
+      <label className="auth-field__label" htmlFor={id}>{label}</label>
       <div className="appearance-color-row">
         <input
           type="color"
+          aria-label={`${label}: selector de color`}
           value={value || "#1A1A1A"}
           onChange={(e) => onChange(e.target.value)}
           className="appearance-color-picker"
         />
         <input
           type="text"
+          id={id}
           className="auth-field__input"
           value={value}
           placeholder="Vacío = color por defecto"
@@ -112,6 +116,8 @@ function ColorField({ label, value, onChange }) {
 }
 
 function CmsImageField({ label, value, onChange, placeholder = "https://res.cloudinary.com/…" }) {
+  const id = useId();
+  const uploadLock = useRef(false);
   const [uploading, setUploading] = useState(false);
   const [uploadErr, setUploadErr] = useState("");
 
@@ -119,10 +125,12 @@ function CmsImageField({ label, value, onChange, placeholder = "https://res.clou
     const file = e.target.files?.[0];
     e.target.value = "";
     if (!file) return;
+    if (uploadLock.current) return;
     if (file.size > 10 * 1024 * 1024) {
       setUploadErr("La imagen supera el límite de 10 MB");
       return;
     }
+    uploadLock.current = true;
     setUploading(true);
     setUploadErr("");
     try {
@@ -131,13 +139,14 @@ function CmsImageField({ label, value, onChange, placeholder = "https://res.clou
     } catch (err) {
       setUploadErr(err.response?.data?.message || "Error al subir imagen");
     } finally {
+      uploadLock.current = false;
       setUploading(false);
     }
   };
 
   return (
     <div className="auth-field">
-      <label className="auth-field__label">{label}</label>
+      <label className="auth-field__label" htmlFor={id}>{label}</label>
       <div className="image-upload-block">
         <label className={`admin-btn admin-btn--sm image-upload-label${uploading ? " is-uploading" : ""}`}>
           {uploading ? (
@@ -148,7 +157,7 @@ function CmsImageField({ label, value, onChange, placeholder = "https://res.clou
           <input
             type="file"
             accept="image/*"
-            hidden
+            aria-label={`${label}: subir desde equipo`}
             disabled={uploading}
             onChange={handleFile}
           />
@@ -159,23 +168,27 @@ function CmsImageField({ label, value, onChange, placeholder = "https://res.clou
       <input
         className="auth-field__input"
         type="url"
+        id={id}
+        aria-invalid={uploadErr ? true : undefined}
+        aria-describedby={uploadErr ? `${id}-error` : undefined}
         placeholder={placeholder}
         value={value}
         onChange={(e) => { setUploadErr(""); onChange(e.target.value); }}
       />
       {uploadErr && (
-        <p style={{ color: "var(--color-error)", fontSize: "0.82rem", marginTop: "0.25rem" }}>
+        <p id={`${id}-error`} role="alert" style={{ color: "var(--color-error)", fontSize: "0.82rem", marginTop: "0.25rem" }}>
           {uploadErr}
         </p>
       )}
       {value && (
         <div style={{ marginTop: "0.5rem" }}>
-          <img
+          <Image
+            unoptimized width={320} height={160}
             src={value}
             alt="Vista previa"
             loading="lazy"
             decoding="async"
-            style={{ maxWidth: "100%", maxHeight: 160, objectFit: "cover", borderRadius: 6, border: "1px solid var(--color-border)" }}
+            style={{ width: "auto", maxWidth: "100%", height: "auto", maxHeight: 160, objectFit: "cover", borderRadius: 6, border: "1px solid var(--color-border)" }}
           />
         </div>
       )}
@@ -212,30 +225,26 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
   const appearance = appearanceState.value, setAppearance = appearanceState.resource.edit;
 
   const [loading, setLoading] = useState(true);
+  const [cmsError, setCmsError] = useState("");
+  const cmsGeneration = useRef(0);
   const [saving, setSaving] = useState(false);
+  const savingLock = useRef(false);
   const [confirmModal, setConfirmModal] = useState(null);
   const { message, error, flashKey, showMsg, clearMsg } = useFlashMessage();
 
-  const load = async () => {
-    setLoading(true);
-    clearMsg();
-    try {
-      const [homeRes, pagesRes, bannersRes] = await Promise.all([
-        getAdminHomeContent(),
-        getAdminPages(),
-        getAdminBanners(),
-      ]);
-      setHome(homeRes.home);
-      setPages(pagesRes.pages || []);
-      setBanners(bannersRes.banners || []);
-    } catch {
-      showMsg("Error al cargar contenido CMS", true);
-    }
-
-    setLoading(false);
-  };
-
-  useEffect(() => { load(); }, []);
+  const load = useCallback(() => {
+    const generation = ++cmsGeneration.current;
+    return Promise.all([getAdminHomeContent(), getAdminPages(), getAdminBanners()])
+      .then(([homeRes, pagesRes, bannersRes]) => {
+        if (generation !== cmsGeneration.current) return;
+        if (!homeRes.home || !Array.isArray(pagesRes.pages) || !Array.isArray(bannersRes.banners)) throw new Error("Respuesta CMS incompleta");
+        setCmsError(""); setHome(homeRes.home); setPages(pagesRes.pages); setBanners(bannersRes.banners);
+      }).catch(() => {
+        if (generation === cmsGeneration.current) setCmsError("Error al cargar contenido CMS. Los formularios de contenido permanecen bloqueados hasta recuperar la información.");
+      }).finally(() => { if (generation === cmsGeneration.current) setLoading(false); });
+  }, []);
+  const cancelCmsLoad = useCallback(() => { cmsGeneration.current++; }, []);
+  useEffect(() => { load(); return cancelCmsLoad; }, [load, cancelCmsLoad]);
 
   // ── CMS handlers ──────────────────────────────────────
   const cleanBullets = (bullets) =>
@@ -246,6 +255,8 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
 
   const saveHome = async (e) => {
     e.preventDefault();
+    if (savingLock.current) return;
+    savingLock.current = true;
     setSaving(true);
     clearMsg();
     try {
@@ -266,7 +277,7 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
     } catch (err) {
       showMsg(err.response?.data?.message || "Error al guardar", true);
     } finally {
-      setSaving(false);
+      savingLock.current = false; setSaving(false);
     }
   };
 
@@ -339,6 +350,8 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
 
   const savePage = async (e) => {
     e.preventDefault();
+    if (savingLock.current) return;
+    savingLock.current = true;
     setSaving(true);
     clearMsg();
     try {
@@ -351,7 +364,7 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
     } catch (err) {
       showMsg(err.response?.data?.message || "Error al guardar página", true);
     } finally {
-      setSaving(false);
+      savingLock.current = false; setSaving(false);
     }
   };
 
@@ -375,6 +388,8 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
 
   const saveBanner = async (e) => {
     e.preventDefault();
+    if (savingLock.current) return;
+    savingLock.current = true;
     setSaving(true);
     clearMsg();
     try {
@@ -386,7 +401,7 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
     } catch (err) {
       showMsg(err.response?.data?.message || "Error al guardar banner", true);
     } finally {
-      setSaving(false);
+      savingLock.current = false; setSaving(false);
     }
   };
 
@@ -414,6 +429,8 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
 
   const handleSendReminders = async () => {
     if (!marketingState.resource.canEdit() || !marketing?.abandonedCart?.featureEnabled) return;
+    if (savingLock.current) return;
+    savingLock.current = true;
     setSaving(true);
     try {
       const data = await sendAbandonedReminders();
@@ -422,7 +439,7 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
     } catch (err) {
       showMsg(err.response?.data?.message || "Error al enviar", true);
     } finally {
-      setSaving(false);
+      savingLock.current = false; setSaving(false);
     }
   };
 
@@ -433,6 +450,7 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
     setAppearance((a) => ({ ...a, [key]: value }));
 
   if (loading && ["home", "banners", "pages"].includes(tab)) return <p className="auth-loading" role="status">Cargando…</p>;
+  if (cmsError && ["home", "banners", "pages"].includes(tab)) return <section><AuthErrorAlert message={cmsError} /><button type="button" className="admin-btn" onClick={() => { setLoading(true); load(); }}>Reintentar contenido CMS</button></section>;
 
   return (
     <div className="admin-page">
@@ -561,25 +579,25 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
                 onChange={(e) => setPageForm((p) => ({ ...p, imageAlt: e.target.value }))} />
 
               <div className="auth-field">
-                <label className="auth-field__label">
+                <label className="auth-field__label" htmlFor="cms-page-body">
                   Contenido
                   <span style={{ fontWeight: 400, color: "var(--color-text-muted)", marginLeft: "0.5rem", fontSize: "0.78rem" }}>
                     Usa # para títulos de sección · Talla X — NN cm para tabla · - para listas
                   </span>
                 </label>
-                <textarea className="auth-field__input" rows={10} value={pageForm.body}
+                <textarea id="cms-page-body" className="auth-field__input" rows={10} value={pageForm.body}
                   onChange={(e) => setPageForm((p) => ({ ...p, body: e.target.value }))} />
               </div>
 
               <div className="auth-field">
-                <label className="auth-field__label">Título SEO <span style={{ fontWeight: 400, color: "var(--color-text-muted)", fontSize: "0.78rem" }}>(máx. 70 caracteres)</span></label>
+                <label className="auth-field__label">Título SEO <span style={{ fontWeight: 400, color: "var(--color-text-muted)", fontSize: "0.78rem" }}>(máx. 70 caracteres)</span>
                 <input className="auth-field__input" maxLength={70} value={pageForm.seoTitle}
-                  onChange={(e) => setPageForm((p) => ({ ...p, seoTitle: e.target.value }))} />
+                  onChange={(e) => setPageForm((p) => ({ ...p, seoTitle: e.target.value }))} /></label>
               </div>
               <div className="auth-field">
-                <label className="auth-field__label">Descripción SEO <span style={{ fontWeight: 400, color: "var(--color-text-muted)", fontSize: "0.78rem" }}>(máx. 160 caracteres)</span></label>
+                <label className="auth-field__label">Descripción SEO <span style={{ fontWeight: 400, color: "var(--color-text-muted)", fontSize: "0.78rem" }}>(máx. 160 caracteres)</span>
                 <textarea className="auth-field__input" rows={2} maxLength={160} value={pageForm.seoDescription}
-                  onChange={(e) => setPageForm((p) => ({ ...p, seoDescription: e.target.value }))} />
+                  onChange={(e) => setPageForm((p) => ({ ...p, seoDescription: e.target.value }))} /></label>
               </div>
 
               <label className="admin-checkbox">
@@ -609,14 +627,14 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
             <div className="admin-table-wrap">
               <table className="admin-table">
                 <thead>
-                  <tr><th>Título</th><th>Estado</th><th /></tr>
+                  <tr><th>Título</th><th>Estado</th><th>Acciones</th></tr>
                 </thead>
                 <tbody>
                   {pages.map((p) => (
                     <tr key={p.id}>
-                      <td>{p.title}<br /><span className="admin-muted">/pagina/{p.slug}</span></td>
-                      <td>{p.isPublished ? "Publicada" : "Borrador"}</td>
-                      <td className="admin-table__actions">
+                      <td data-label="Título">{p.title}<br /><span className="admin-muted">/pagina/{p.slug}</span></td>
+                      <td data-label="Estado">{p.isPublished ? "Publicada" : "Borrador"}</td>
+                      <td data-label="Acciones" className="admin-table__actions">
                         <button type="button" className="admin-btn admin-btn--sm" onClick={() => startEditPage(p.id)}>Editar</button>
                         <button type="button" className="admin-btn admin-btn--sm admin-btn--danger" onClick={() => removePage(p.id)}>Eliminar</button>
                       </td>
@@ -708,13 +726,14 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
             onChange={(url) => setPopup("imageUrl", url)}
           />
 
-          <h2 style={{ marginTop: "1.5rem" }}>Newsletter (footer)</h2>
+          <fieldset className="admin-form-section"><legend>Newsletter · pie de página</legend>
+          <p className="admin-muted">Estos textos pertenecen al formulario de suscripción del pie de página. Se guardan junto con la configuración del popup.</p>
           <AuthFormField label="Título footer" name="nlTitle" value={marketing.newsletter?.footerTitle || ""}
             onChange={(e) => setNl("footerTitle", e.target.value)} />
           <AuthFormField label="Texto footer" name="nlText" value={marketing.newsletter?.footerText || ""}
             onChange={(e) => setNl("footerText", e.target.value)} />
 
-          <h2 style={{ marginTop: "1.5rem" }}>Carrito abandonado</h2>
+          </fieldset><fieldset className="admin-form-section"><legend>Carrito abandonado · configuración histórica</legend>
           {!marketing.abandonedCart?.featureEnabled && (
             <p className="admin-muted">
               Los recordatorios están desactivados. Se conserva la configuración histórica; no se muestran formularios ni se envían recordatorios.
@@ -732,7 +751,7 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
             value={marketing.abandonedCart?.maxReminders ?? 2}
             onChange={(e) => setAbandoned("maxReminders", Number(e.target.value))} />
 
-          <AuthSubmitButton loading={marketingState.status === "saving"} disabled={!marketingState.resource.canSave()}>Guardar configuración</AuthSubmitButton>
+          </fieldset><AuthSubmitButton loading={marketingState.status === "saving"} disabled={!marketingState.resource.canSave()}>Guardar configuración</AuthSubmitButton>
           </fieldset>
         </form>
       )}
@@ -751,10 +770,10 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
             <tbody>
               {subscribers.map((s) => (
                 <tr key={s._id}>
-                  <td>{s.email}</td>
-                  <td>{s.name || "—"}</td>
-                  <td>{s.source}</td>
-                  <td>{new Date(s.createdAt).toLocaleDateString("es-CO")}</td>
+                  <td data-label="Correo">{s.email}</td>
+                  <td data-label="Nombre">{s.name || "—"}</td>
+                  <td data-label="Fuente">{s.source}</td>
+                  <td data-label="Fecha">{new Date(s.createdAt).toLocaleDateString("es-CO")}</td>
                 </tr>
               ))}
             </tbody>
@@ -782,11 +801,11 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
             <tbody>
               {carts.map((c) => (
                 <tr key={c._id}>
-                  <td>{c.email}</td>
-                  <td>{c.itemCount}</td>
-                  <td>{formatCOP(c.subtotal)}</td>
-                  <td>{c.remindersSent}</td>
-                  <td>{new Date(c.updatedAt).toLocaleString("es-CO")}</td>
+                  <td data-label="Correo">{c.email}</td>
+                  <td data-label="Ítems">{c.itemCount}</td>
+                  <td data-label="Subtotal">{formatCOP(c.subtotal)}</td>
+                  <td data-label="Recordatorios">{c.remindersSent}</td>
+                  <td data-label="Actualizado">{new Date(c.updatedAt).toLocaleString("es-CO")}</td>
                 </tr>
               ))}
             </tbody>

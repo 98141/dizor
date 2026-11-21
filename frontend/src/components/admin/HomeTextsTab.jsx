@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import AuthFormField from "@/components/auth/AuthFormField";
+import AuthFormField from "@/components/admin/AdminFormField";
 import AuthSubmitButton from "@/components/auth/AuthSubmitButton";
 
 const MAX_BULLETS = 5;
@@ -142,7 +142,7 @@ export default function HomeTextsTab({
             }
           />
           <div className="auth-field">
-            <label className="auth-field__label">Subtítulo</label>
+            <label className="auth-field__label">Subtítulo
             <textarea
               className="auth-field__input"
               rows={3}
@@ -153,7 +153,7 @@ export default function HomeTextsTab({
                   hero: { ...h.hero, subtitle: e.target.value },
                 }))
               }
-            />
+            /></label>
           </div>
           <AuthFormField
             label="CTA principal"
@@ -359,7 +359,7 @@ export default function HomeTextsTab({
             }
           />
           <div className="auth-field">
-            <label className="auth-field__label">Subtítulo</label>
+            <label className="auth-field__label">Subtítulo
             <textarea
               className="auth-field__input"
               rows={2}
@@ -373,7 +373,7 @@ export default function HomeTextsTab({
                   },
                 }))
               }
-            />
+            /></label>
           </div>
           <AuthFormField
             label="Texto enlace"
@@ -432,7 +432,7 @@ export default function HomeTextsTab({
             }
           />
           <div className="auth-field">
-            <label className="auth-field__label">Subtítulo</label>
+            <label className="auth-field__label">Subtítulo
             <textarea
               className="auth-field__input"
               rows={2}
@@ -446,7 +446,7 @@ export default function HomeTextsTab({
                   },
                 }))
               }
-            />
+            /></label>
           </div>
           <AuthFormField
             label="Texto enlace en tarjetas"
@@ -488,7 +488,7 @@ export default function HomeTextsTab({
             }
           />
           <div className="auth-field">
-            <label className="auth-field__label">Texto</label>
+            <label className="auth-field__label">Texto
             <textarea
               className="auth-field__input"
               rows={4}
@@ -499,7 +499,7 @@ export default function HomeTextsTab({
                   historia: { ...h.historia, body: e.target.value },
                 }))
               }
-            />
+            /></label>
           </div>
           <AuthFormField
             label="CTA"
@@ -558,7 +558,7 @@ export default function HomeTextsTab({
             }
           />
           <div className="auth-field">
-            <label className="auth-field__label">Texto</label>
+            <label className="auth-field__label">Texto
             <textarea
               className="auth-field__input"
               rows={3}
@@ -572,13 +572,13 @@ export default function HomeTextsTab({
                   },
                 }))
               }
-            />
+            /></label>
           </div>
           <div className="auth-field">
             <label className="auth-field__label">
               Bullets (uno por línea, máx. {MAX_BULLETS}) ·{" "}
               {filledBulletCount(home.personalizacion?.bullets)}/{MAX_BULLETS}
-            </label>
+
             <textarea
               className="auth-field__input"
               rows={5}
@@ -592,7 +592,7 @@ export default function HomeTextsTab({
                   },
                 }))
               }
-            />
+            /></label>
           </div>
           <AuthFormField
             label="CTA"
@@ -637,7 +637,7 @@ export default function HomeTextsTab({
             }
           />
           <div className="auth-field">
-            <label className="auth-field__label">Posición de la imagen</label>
+            <label className="auth-field__label">Posición de la imagen
             <select
               className="auth-field__input"
               value={
@@ -655,7 +655,7 @@ export default function HomeTextsTab({
             >
               <option value="left">Izquierda (texto a la derecha)</option>
               <option value="right">Derecha (texto a la izquierda)</option>
-            </select>
+            </select></label>
           </div>
         </>
       )}
@@ -686,7 +686,7 @@ export default function HomeTextsTab({
             }
           />
           <div className="auth-field">
-            <label className="auth-field__label">Texto</label>
+            <label className="auth-field__label">Texto
             <textarea
               className="auth-field__input"
               rows={3}
@@ -697,13 +697,13 @@ export default function HomeTextsTab({
                   porMayor: { ...(h.porMayor || {}), body: e.target.value },
                 }))
               }
-            />
+            /></label>
           </div>
           <div className="auth-field">
             <label className="auth-field__label">
               Bullets (uno por línea, máx. {MAX_BULLETS}) ·{" "}
               {filledBulletCount(home.porMayor?.bullets)}/{MAX_BULLETS}
-            </label>
+
             <textarea
               className="auth-field__input"
               rows={5}
@@ -717,7 +717,7 @@ export default function HomeTextsTab({
                   },
                 }))
               }
-            />
+            /></label>
           </div>
           <AuthFormField
             label="CTA"
@@ -742,7 +742,7 @@ export default function HomeTextsTab({
             }
           />
           <div className="auth-field">
-            <label className="auth-field__label">Posición de la imagen</label>
+            <label className="auth-field__label">Posición de la imagen
             <select
               className="auth-field__input"
               value={home.porMayor?.imageOnLeft === false ? "right" : "left"}
@@ -758,7 +758,7 @@ export default function HomeTextsTab({
             >
               <option value="left">Izquierda (texto a la derecha)</option>
               <option value="right">Derecha (texto a la izquierda)</option>
-            </select>
+            </select></label>
           </div>
         </>
       )}
@@ -829,7 +829,7 @@ export default function HomeTextsTab({
             }
           />
           <div className="auth-field">
-            <label className="auth-field__label">Subtítulo</label>
+            <label className="auth-field__label">Subtítulo
             <textarea
               className="auth-field__input"
               rows={2}
@@ -843,7 +843,7 @@ export default function HomeTextsTab({
                   },
                 }))
               }
-            />
+            /></label>
           </div>
           <AuthFormField
             label="Texto enlace «Ver más»"
@@ -924,7 +924,7 @@ export default function HomeTextsTab({
             }
           />
           <div className="auth-field">
-            <label className="auth-field__label">Subtítulo</label>
+            <label className="auth-field__label">Subtítulo
             <textarea
               className="auth-field__input"
               rows={2}
@@ -938,7 +938,7 @@ export default function HomeTextsTab({
                   },
                 }))
               }
-            />
+            /></label>
           </div>
           <AuthFormField
             label="URL Instagram"
@@ -1003,7 +1003,7 @@ export default function HomeTextsTab({
             }
           />
           <div className="auth-field">
-            <label className="auth-field__label">Subtítulo</label>
+            <label className="auth-field__label">Subtítulo
             <textarea
               className="auth-field__input"
               rows={2}
@@ -1017,7 +1017,7 @@ export default function HomeTextsTab({
                   },
                 }))
               }
-            />
+            /></label>
           </div>
         </>
       )}

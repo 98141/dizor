@@ -1,0 +1,524 @@
+[
+  {
+    "name": "inicio",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "inicio",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "pedidos",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "pedidos",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "pedido",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "pedido",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "comunicaciones",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "comunicaciones",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "productos",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "productos",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "existencias",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "existencias",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "movimientos",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "movimientos",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "producto-nuevo",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "producto-nuevo",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "producto-editar",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "producto-editar",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "taxonomias",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "taxonomias",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "solicitudes",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "solicitudes",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "solicitud",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "solicitud",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "pqr",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "pqr",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "tienda-home",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "tienda-home",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "tienda-imagenes",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "tienda-imagenes",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "tienda-banners",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "tienda-banners",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "tienda-pages",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "tienda-pages",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "tienda-resenas",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "tienda-resenas",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "tienda-appearance",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "tienda-appearance",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "marketing-popup",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "marketing-popup",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "marketing-newsletter",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "marketing-newsletter",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "marketing-carritos",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "marketing-carritos",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "exportaciones",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "exportaciones",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "cupones",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "cupones",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "finanzas",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "finanzas",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "usuarios",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "usuarios",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "configuracion",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "configuracion",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "auditoria",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "auditoria",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "alertas",
+    "width": 1440,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  },
+  {
+    "name": "alertas",
+    "width": 360,
+    "contrast": {
+      "text": [],
+      "controls": []
+    },
+    "unnamedButtons": 0
+  }
+]

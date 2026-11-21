@@ -1,0 +1,9 @@
+{
+  "exitCode": 0,
+  "signal": null,
+  "isolatedCopy": true,
+  "envFilesCopied": false,
+  "inheritedCredentials": false,
+  "network": "build fetch/TCP blocked; runtime loopback only",
+  "compiler": "Next.js --webpack"
+}

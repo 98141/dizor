@@ -1,0 +1,12 @@
+✔ F6-03 campo obligatorio tiene etiqueta visible y asociación de ayuda (9.6596ms)
+✔ F6-04 error del campo es anunciado y asociado, sin ocultar el borrador (0.7468ms)
+✔ F6-05 error y éxito usan regiones distintas y mensajes persistentes en contexto (1.2524ms)
+✔ F6-06 contraseña permite control de teclado con nombre y estado (0.6339ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 225.0961

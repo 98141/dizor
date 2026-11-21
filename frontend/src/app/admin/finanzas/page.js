@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import AdminFeedback from "@/components/admin/AdminFeedback";
 import Link from "next/link";
 import RoleRoute from "@/guards/RoleRoute";
 import AdminShell from "@/components/admin/AdminShell";
@@ -29,15 +30,20 @@ function CostPricesPanel() {
   const [editValue, setEditValue] = useState("");
   const [saving, setSaving] = useState(false);
   const [filter, setFilter] = useState("all"); // all | missing | active
+  const [message, setMessage] = useState("");
+  const [isError, setIsError] = useState(false);
+  const [loadError, setLoadError] = useState("");
+  const lock = useRef(false);
+  const costTrigger = useRef(null);
 
   const load = useCallback(async () => {
-    setLoading(true);
     try {
       const data = await getFinanceProducts();
       setRows(data.products || []);
       setSummary(data.summary || null);
+      setLoadError("");
     } catch {
-      setRows([]);
+      setLoadError("No se pudieron consultar los costos. No se presentan importes vacíos como datos confirmados.");
     } finally {
       setLoading(false);
     }
@@ -46,29 +52,34 @@ function CostPricesPanel() {
   useEffect(() => { load(); }, [load]);
 
   const handleSaveCost = async (id) => {
+    if (lock.current) return;
     const val = editValue.trim();
     const numVal = val === "" ? null : Number(val);
     if (val !== "" && (Number.isNaN(numVal) || numVal < 0)) {
-      alert("Ingresa un valor válido (número ≥ 0)");
+      setIsError(true); setMessage("Ingresa un valor válido (número ≥ 0)");
       return;
     }
-    setSaving(true);
+    lock.current = true; setSaving(true); setMessage("");
     try {
       await updateProductCost(id, numVal);
+      setIsError(false); setMessage("Costo guardado");
       setEditingId(null);
       setEditValue("");
       await load();
     } catch (err) {
-      alert(err.response?.data?.message || "No se pudo guardar");
+      setIsError(true); setMessage(err.response?.data?.message || "No se pudo guardar");
     } finally {
+      lock.current = false;
       setSaving(false);
     }
   };
 
   const startEdit = (row) => {
+    setMessage(""); setIsError(false);
     setEditingId(row.id);
     setEditValue(row.internalCost != null ? String(row.internalCost) : "");
   };
+  const cancelCost = () => { if (lock.current) return; setEditingId(null); setEditValue(""); costTrigger.current?.focus(); };
 
   const filteredRows = rows.filter((r) => {
     if (filter === "missing") return r.internalCost == null;
@@ -77,9 +88,11 @@ function CostPricesPanel() {
   });
 
   if (loading) return <p className="auth-loading">Cargando productos…</p>;
+  if (loadError) return <><AdminFeedback message={loadError} /><button type="button" className="admin-btn" onClick={load}>Reintentar costos</button></>;
 
   return (
     <div>
+      <AdminFeedback id="finance-cost-feedback" message={message} variant={isError ? "error" : "success"} />
       {/* ── Stats ── */}
       {summary && (
         <div className="admin-stats admin-stats--compact" style={{ marginBottom: "var(--space-lg)" }}>
@@ -141,7 +154,7 @@ function CostPricesPanel() {
               <th>Precio venta</th>
               <th>Margen</th>
               <th>Valor stock</th>
-              <th />
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -154,7 +167,7 @@ function CostPricesPanel() {
             )}
             {filteredRows.map((row) => (
               <tr key={row.id} style={{ opacity: row.isActive ? 1 : 0.55 }}>
-                <td>
+                <td data-label="Producto">
                   <strong>{row.name}</strong>
                   {!row.isActive && (
                     <span className="admin-muted"> (inactivo)</span>
@@ -162,7 +175,7 @@ function CostPricesPanel() {
                   <br />
                   <span className="admin-muted">{row.salesCount} vendido(s)</span>
                 </td>
-                <td>
+                <td data-label="Stock">
                   <span
                     style={{
                       fontWeight: 600,
@@ -177,10 +190,14 @@ function CostPricesPanel() {
                     {row.totalStock}
                   </span>
                 </td>
-                <td>
+                <td data-label="Costo compra">
                   {editingId === row.id ? (
-                    <div style={{ display: "flex", gap: "0.35rem", alignItems: "center" }}>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem", alignItems: "center" }}>
                       <input
+                        aria-label="Costo de compra (COP)"
+                        aria-invalid={isError ? true : undefined}
+                        aria-describedby={message ? "finance-cost-feedback" : undefined}
+                        disabled={saving}
                         type="number"
                         min="0"
                         step="1000"
@@ -192,7 +209,7 @@ function CostPricesPanel() {
                         autoFocus
                         onKeyDown={(e) => {
                           if (e.key === "Enter") handleSaveCost(row.id);
-                          if (e.key === "Escape") { setEditingId(null); setEditValue(""); }
+                          if (e.key === "Escape") cancelCost();
                         }}
                       />
                       <button
@@ -201,14 +218,15 @@ function CostPricesPanel() {
                         onClick={() => handleSaveCost(row.id)}
                         disabled={saving}
                       >
-                        OK
+                        Guardar costo
                       </button>
                       <button
                         type="button"
                         className="admin-btn admin-btn--sm"
-                        onClick={() => { setEditingId(null); setEditValue(""); }}
+                        disabled={saving}
+                        onClick={cancelCost}
                       >
-                        ✕
+                        Cancelar edición
                       </button>
                     </div>
                   ) : (
@@ -221,8 +239,8 @@ function CostPricesPanel() {
                     </span>
                   )}
                 </td>
-                <td>{formatCOP(row.salePrice)}</td>
-                <td>
+                <td data-label="Precio venta">{formatCOP(row.salePrice)}</td>
+                <td data-label="Margen">
                   <MarginBadge pct={row.marginPct} />
                   {row.margin != null && (
                     <div className="admin-muted" style={{ fontSize: "0.75rem" }}>
@@ -230,17 +248,18 @@ function CostPricesPanel() {
                     </div>
                   )}
                 </td>
-                <td>
+                <td data-label="Valor stock">
                   {row.stockValue != null ? formatCOP(row.stockValue) : (
                     <span className="admin-muted">—</span>
                   )}
                 </td>
-                <td>
+                <td data-label="Acciones">
                   {editingId !== row.id && (
                     <button
                       type="button"
                       className="admin-btn admin-btn--sm"
-                      onClick={() => startEdit(row)}
+                      disabled={saving}
+                      onClick={(e) => { costTrigger.current = e.currentTarget; startEdit(row); }}
                     >
                       Editar costo
                     </button>
@@ -280,11 +299,11 @@ function CostPricesPanel() {
               {filteredRows.flatMap((row) =>
                 row.variants.map((v) => (
                   <tr key={`${row.id}-${v.id}`}>
-                    <td>{row.name}</td>
-                    <td>{v.sizeName}</td>
-                    <td>{v.colorName}</td>
-                    <td style={{ fontFamily: "monospace", fontSize: "0.8rem" }}>{v.sku}</td>
-                    <td
+                    <td data-label="Producto">{row.name}</td>
+                    <td data-label="Talla">{v.sizeName}</td>
+                    <td data-label="Color">{v.colorName}</td>
+                    <td data-label="SKU" style={{ fontFamily: "monospace", fontSize: "0.8rem" }}>{v.sku}</td>
+                    <td data-label="Stock"
                       style={{
                         fontWeight: 600,
                         color: v.stock === 0 ? "var(--color-error)" : "inherit",
@@ -292,7 +311,7 @@ function CostPricesPanel() {
                     >
                       {v.stock}
                     </td>
-                    <td>
+                    <td data-label="Precio variante">
                       {v.price != null ? formatCOP(v.price) : (
                         <span className="admin-muted">Base ({formatCOP(row.salePrice)})</span>
                       )}
@@ -401,6 +420,7 @@ function FinanceHistoryPanel() {
               key={opt.value}
               type="button"
               className={`finance-period-tabs__btn${groupBy === opt.value ? " finance-period-tabs__btn--active" : ""}`}
+              aria-pressed={groupBy === opt.value}
               onClick={() => setGroupBy(opt.value)}
             >
               {opt.label}
@@ -408,16 +428,18 @@ function FinanceHistoryPanel() {
           ))}
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-xs)", alignItems: "center", fontSize: "0.85rem" }}>
-          <label style={{ color: "var(--color-text-muted)" }}>Desde</label>
+          <label htmlFor="finance-history-from" style={{ color: "var(--color-text-muted)" }}>Desde</label>
           <input
+            id="finance-history-from"
             type="date"
             className="auth-field__input"
             style={{ padding: "0.3rem 0.5rem", fontSize: "0.82rem" }}
             value={from}
             onChange={(e) => setFrom(e.target.value)}
           />
-          <label style={{ color: "var(--color-text-muted)" }}>Hasta</label>
+          <label htmlFor="finance-history-to" style={{ color: "var(--color-text-muted)" }}>Hasta</label>
           <input
+            id="finance-history-to"
             type="date"
             className="auth-field__input"
             style={{ padding: "0.3rem 0.5rem", fontSize: "0.82rem" }}
@@ -494,21 +516,21 @@ function FinanceHistoryPanel() {
               <tbody>
                 {rows.map((row) => (
                   <tr key={row.periodKey}>
-                    <td style={{ fontWeight: 600 }}>{row.label}</td>
-                    <td>{row.ordersCount}</td>
-                    <td style={{ fontWeight: 600 }}>{formatCOP(row.totalRevenue)}</td>
-                    <td>{formatCOP(row.cogs)}</td>
-                    <td style={{ color: row.grossProfit >= 0 ? "#065f46" : "#b91c1c", fontWeight: 600 }}>
+                    <td data-label="Período" style={{ fontWeight: 600 }}>{row.label}</td>
+                    <td data-label="Pedidos">{row.ordersCount}</td>
+                    <td data-label="Ingresos" style={{ fontWeight: 600 }}>{formatCOP(row.totalRevenue)}</td>
+                    <td data-label="COGS">{formatCOP(row.cogs)}</td>
+                    <td data-label="Ganancia bruta" style={{ color: row.grossProfit >= 0 ? "#065f46" : "#b91c1c", fontWeight: 600 }}>
                       {formatCOP(row.grossProfit)}
                     </td>
-                    <td>
+                    <td data-label="Margen">
                       {row.totalRevenue > 0 ? (
                         <MarginBadge pct={row.grossMarginPct} />
                       ) : (
                         <span className="admin-muted">—</span>
                       )}
                     </td>
-                    <td>{row.unitsSold}</td>
+                    <td data-label="Uds. vendidas">{row.unitsSold}</td>
                   </tr>
                 ))}
               </tbody>
@@ -550,6 +572,7 @@ export default function FinanzasPage() {
             <button
               type="button"
               className={`admin-btn${tab === "resumen" ? " admin-btn--primary" : ""}`}
+              aria-pressed={tab === "resumen"}
               onClick={() => setTab("resumen")}
             >
               Panel financiero
@@ -557,6 +580,7 @@ export default function FinanzasPage() {
             <button
               type="button"
               className={`admin-btn${tab === "costos" ? " admin-btn--primary" : ""}`}
+              aria-pressed={tab === "costos"}
               onClick={() => setTab("costos")}
             >
               Costos y precios
@@ -564,6 +588,7 @@ export default function FinanzasPage() {
             <button
               type="button"
               className={`admin-btn${tab === "historial" ? " admin-btn--primary" : ""}`}
+              aria-pressed={tab === "historial"}
               onClick={() => setTab("historial")}
             >
               Historial

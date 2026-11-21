@@ -8,20 +8,20 @@ const Coupon = require("../models/coupon");
 const catchAsync = require("../utils/catchAsync");
 const { reconciledSalesFilter } = require("../services/financeCriteria");
 const workspace = require("../services/orderWorkspace");
+const { summarize } = require("../services/inventoryCriteria");
 
 const countProductStockHealth = async () => {
   const products = await Product.find({ isActive: true }).select(
     "variants.stock variants.isActive"
-  );
+  ).lean();
 
   let outOfStock = 0;
   let lowStock = 0;
 
   products.forEach((product) => {
-    const activeVariants = product.variants.filter((v) => v.isActive);
-    const total = activeVariants.reduce((sum, v) => sum + (v.stock || 0), 0);
-    if (total === 0) outOfStock += 1;
-    else if (total <= 5) lowStock += 1;
+    const { stockStatus } = summarize(product);
+    if (stockStatus === "out") outOfStock += 1;
+    else if (stockStatus === "low") lowStock += 1;
   });
 
   return { active: products.length, outOfStock, lowStock };

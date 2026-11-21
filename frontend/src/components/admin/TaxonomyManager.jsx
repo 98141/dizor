@@ -1,13 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   createTaxonomyItem,
   deleteTaxonomyItem,
   getTaxonomy,
   updateTaxonomyItem,
 } from "@/services/adminCatalogService";
-import ConfirmModal from "@/components/ui/ConfirmModal";
+import ConfirmModal from "@/components/admin/AdminConfirmModal";
 
 const TABS = [
   {
@@ -82,31 +82,30 @@ export default function TaxonomyManager({ initialTab = "categories", onTabChange
   const [editingId, setEditingId] = useState(null);
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const savingLock = useRef(false);
   const [savedMsg, setSavedMsg] = useState("");
   const [confirmModal, setConfirmModal] = useState(null);
 
   const currentTab = TABS.find((t) => t.type === activeType) || TABS[0];
 
-  const loadItems = useCallback(async () => {
-    setLoading(true);
-    setError("");
-    try {
-      const data = await getTaxonomy(activeType);
+  const loadItems = useCallback(() => getTaxonomy(activeType).then(data => {
       setItems(data.items || []);
-    } catch (err) {
+      setError("");
+    }).catch(err => {
       setItems([]);
       setError(err.response?.data?.message || "No se pudo cargar el catálogo");
-    } finally {
-      setLoading(false);
-    }
-  }, [activeType]);
+    }).finally(() => setLoading(false)), [activeType, setItems, setLoading, setError]);
 
   useEffect(() => {
     loadItems();
-    setForm(emptyForm(currentTab.fields));
-    setEditingId(null);
-    setSavedMsg("");
-  }, [activeType, loadItems, currentTab.fields]);
+  }, [loadItems]);
+
+  const changeTab = (type) => {
+    if (savingLock.current) return;
+    setForm(emptyForm(TABS.find(t => t.type === type).fields));
+    setEditingId(null); setSavedMsg(""); setError(""); setLoading(true);
+    if (onTabChange) onTabChange(type); else setActiveType(type);
+  };
 
   const handleChange = (key, value) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -144,6 +143,10 @@ export default function TaxonomyManager({ initialTab = "categories", onTabChange
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (savingLock.current) return;
+
+    savingLock.current = true;
+
     setSaving(true);
     setError("");
     try {
@@ -159,7 +162,7 @@ export default function TaxonomyManager({ initialTab = "categories", onTabChange
     } catch (err) {
       setError(err.response?.data?.message || "Error al guardar");
     } finally {
-      setSaving(false);
+      savingLock.current = false; setSaving(false);
     }
   };
 
@@ -195,7 +198,8 @@ export default function TaxonomyManager({ initialTab = "categories", onTabChange
             type="button"
             className={activeType === tab.type ? "active" : ""}
             aria-pressed={activeType === tab.type}
-            onClick={() => onTabChange ? onTabChange(tab.type) : setActiveType(tab.type)}
+            disabled={saving}
+            onClick={() => changeTab(tab.type)}
           >
             {tab.label}
           </button>
@@ -235,9 +239,10 @@ export default function TaxonomyManager({ initialTab = "categories", onTabChange
                   <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
                     <input
                       type="color"
+                      aria-label="Selector de color"
                       value={form[field.key] || "#000000"}
                       onChange={(e) => handleChange(field.key, e.target.value)}
-                      style={{ width: "48px", height: "38px", cursor: "pointer", padding: "2px", border: "1px solid var(--color-border)", borderRadius: "var(--radius-sm)", flexShrink: 0 }}
+                      style={{ width: "48px", height: "44px", cursor: "pointer", padding: "2px", border: "1px solid var(--admin-line)", borderRadius: "var(--radius-sm)", flexShrink: 0 }}
                       title="Selecciona un color"
                     />
                     <input
@@ -294,13 +299,13 @@ export default function TaxonomyManager({ initialTab = "categories", onTabChange
                   <tr>
                     <th>Nombre</th>
                     <th>Estado</th>
-                    <th />
+                    <th>Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
                   {items.map((item) => (
                     <tr key={item._id}>
-                      <td>
+                      <td data-label="Nombre">
                         {item.name}
                         {item.hexCode && (
                           <span
@@ -310,8 +315,8 @@ export default function TaxonomyManager({ initialTab = "categories", onTabChange
                           />
                         )}
                       </td>
-                      <td>{item.isActive !== false ? "Activo" : "Inactivo"}</td>
-                      <td className="admin-table__actions">
+                      <td data-label="Estado">{item.isActive !== false ? "Activo" : "Inactivo"}</td>
+                      <td data-label="Acciones" className="admin-table__actions">
                         <button
                           type="button"
                           className="admin-btn admin-btn--sm"

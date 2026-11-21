@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import RoleRoute from "@/guards/RoleRoute";
 import AdminShell from "@/components/admin/AdminShell";
-import AuthFormField from "@/components/auth/AuthFormField";
+import AuthFormField from "@/components/admin/AdminFormField";
 import AuthSubmitButton from "@/components/auth/AuthSubmitButton";
-import AuthErrorAlert from "@/components/auth/AuthErrorAlert";
+import AuthErrorAlert from "@/components/admin/AdminFeedback";
 import {
   createAdminUser,
   getAdminUsers,
@@ -25,25 +25,21 @@ function AdminUsuariosContent() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
+  const lock = useRef(false);
+  const [loadError, setLoadError] = useState("");
 
-  const load = async () => {
-    setLoading(true);
-    try {
-      const data = await getAdminUsers();
-      setUsers(data.users || []);
-    } catch {
-      setUsers([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const load = useCallback(() => getAdminUsers().then(data => {
+    setUsers(data.users || []); setLoadError("");
+  }).catch(() => setLoadError("No se pudo cargar el equipo. Reintenta para consultar los usuarios reales.")).finally(() => setLoading(false)), []);
 
   useEffect(() => {
     load();
-  }, []);
+  }, [load]);
 
   const handleCreate = async (e) => {
     e.preventDefault();
+    if (lock.current) return;
+    lock.current = true;
     setSaving(true);
     setMessage("");
     setError(false);
@@ -62,16 +58,27 @@ function AdminUsuariosContent() {
       setMessage(err.response?.data?.message || "No se pudo crear el usuario");
       setError(true);
     } finally {
+      lock.current = false;
       setSaving(false);
     }
   };
 
   const toggleStatus = async (id, isActive) => {
+    if (lock.current) return;
+    lock.current = true;
+    setSaving(true);
+    setMessage("");
     try {
       await updateAdminUserStatus(id, !isActive);
+      setError(false);
+      setMessage("Estado del usuario actualizado");
       await load();
     } catch (err) {
-      alert(err.response?.data?.message || "No se pudo actualizar");
+      setError(true);
+      setMessage(err.response?.data?.message || "No se pudo actualizar");
+    } finally {
+      lock.current = false;
+      setSaving(false);
     }
   };
 
@@ -85,7 +92,7 @@ function AdminUsuariosContent() {
       <div className="admin-grid-2">
         <section className="taxonomy-form-card">
           <h2>Nuevo usuario</h2>
-          <form className="admin-form" onSubmit={handleCreate}>
+          <form className="admin-form" onSubmit={handleCreate} aria-busy={saving}>
             <AuthFormField
               label="Nombre"
               name="name"
@@ -135,6 +142,7 @@ function AdminUsuariosContent() {
 
         <section className="taxonomy-list-card">
           <h2>Equipo activo</h2>
+          {loadError && <><AuthErrorAlert message={loadError} /><button type="button" className="admin-btn" onClick={() => { setLoading(true); load(); }}>Reintentar equipo</button></>}
           {loading ? (
             <p className="auth-loading">Cargando…</p>
           ) : (
@@ -145,23 +153,24 @@ function AdminUsuariosContent() {
                     <th>Nombre</th>
                     <th>Rol</th>
                     <th>Estado</th>
-                    <th />
+                    <th>Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
                   {users.map((u) => (
                     <tr key={u._id}>
-                      <td>
+                      <td data-label="Nombre">
                         {u.name}
                         <br />
                         <span className="admin-muted">{u.email}</span>
                       </td>
-                      <td>{u.role}</td>
-                      <td>{u.isActive ? "Activo" : "Inactivo"}</td>
-                      <td>
+                      <td data-label="Rol">{u.role}</td>
+                      <td data-label="Estado">{u.isActive ? "Activo" : "Inactivo"}</td>
+                      <td data-label="Acciones">
                         <button
                           type="button"
                           className="admin-btn admin-btn--sm"
+                          disabled={saving || !!loadError}
                           onClick={() => toggleStatus(u._id, u.isActive)}
                         >
                           {u.isActive ? "Desactivar" : "Activar"}

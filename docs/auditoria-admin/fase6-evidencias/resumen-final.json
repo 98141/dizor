@@ -1,0 +1,77 @@
+{
+  "date": "2026-11-21",
+  "status": "Implementación verificada localmente; auditoría independiente pendiente",
+  "node": {
+    "previous": 285,
+    "new": 7,
+    "total": 292,
+    "failures": 0
+  },
+  "browser": {
+    "previous": 136,
+    "new": 59,
+    "total": 195,
+    "failures": 0
+  },
+  "screens": {
+    "main": 33,
+    "widths": [
+      1440,
+      1024,
+      820,
+      390,
+      360
+    ],
+    "measurements": 165,
+    "additional": 28
+  },
+  "accessibility": {
+    "axeVersion": "4.11.4",
+    "runs": 58,
+    "automaticViolations": 0,
+    "textZoom": {
+      "before": 15,
+      "after": 30,
+      "viewport": 720
+    },
+    "certification": false
+  },
+  "static": {
+    "syntaxFiles": 37,
+    "cssFiles": 3,
+    "frontend": {
+      "files": 23,
+      "errors": 7,
+      "warnings": 3,
+      "newDiagnostics": [],
+      "cms": []
+    },
+    "node": {
+      "files": 14,
+      "errors": 0,
+      "warnings": 0
+    },
+    "diffCheck": 0
+  },
+  "build": {
+    "exitCode": 0,
+    "signal": null,
+    "isolatedCopy": true,
+    "envFilesCopied": false,
+    "inheritedCredentials": false,
+    "network": "build fetch/TCP blocked; runtime loopback only",
+    "compiler": "Next.js --webpack"
+  },
+  "restrictions": {
+    "realDatabases": false,
+    "envModified": false,
+    "production": false,
+    "deploy": false,
+    "migrations": false,
+    "realPayments": false,
+    "realEmails": false,
+    "commits": false,
+    "pushes": false,
+    "phase7": false
+  }
+}

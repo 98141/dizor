@@ -9,6 +9,7 @@ import "@/styles/pages/admin-alertas.css";
 import "@/styles/components/auth-form.css";
 import "@/styles/components/auth-card.css";
 import "@/styles/pages/special-requests.css";
+import "@/styles/layouts/admin-polish.css";
 
 export const metadata = {
   robots: { index: false, follow: false },

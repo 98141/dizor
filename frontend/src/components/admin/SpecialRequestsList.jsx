@@ -61,23 +61,23 @@ function RequestsWorkspace({ basePath = "/admin/solicitudes" }) {
             <tbody>
               {requests.map((r) => (
                 <tr key={r.id}>
-                  <td>
+                  <td data-label="Número">
                     <Link href={`${basePath}/${r.id}?returnTo=${encodeURIComponent(returnTo)}`}>{r.requestNumber}</Link>
                   </td>
-                  <td>{REQUEST_TYPE_LABELS[r.type]}</td>
-                  <td>
+                  <td data-label="Tipo">{REQUEST_TYPE_LABELS[r.type]}</td>
+                  <td data-label="Cliente">
                     {r.contact.name}
                     <br />
                     <span className="admin-muted">{r.contact.email}</span>
                   </td>
-                  <td>
+                  <td data-label="Estado">
                     <span
                       className={`request-badge ${getRequestBadgeClass(r.status)}`}
                     >
                       {REQUEST_STATUS_LABELS[r.status]}
                     </span>
                   </td>
-                  <td>
+                  <td data-label="Fecha">
                     {new Date(r.createdAt).toLocaleDateString("es-CO")}
                   </td>
                 </tr>
