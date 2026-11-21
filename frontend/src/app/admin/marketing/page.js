@@ -1,5 +1,3 @@
-import { redirect } from "next/navigation";
-
-export default function AdminMarketingRedirect() {
-  redirect("/admin/contenido");
-}
+"use client";
+import ContentWorkspace from "@/components/admin/ContentWorkspace";
+export default function AdminMarketingPage() { return <ContentWorkspace defaultTab="popup" />; }

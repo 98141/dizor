@@ -1,0 +1,611 @@
+{
+  "at": "2026-11-21T15:24:36.358Z",
+  "algorithm": "SHA-256; bytes en disco",
+  "comparison": "base capturada antes de la corrección; árbol Fase 5 sin commit",
+  "protectedOriginalFiles": 3687,
+  "changedExistingFiles": [
+    "backend/src/controllers/settingsAdminController.js",
+    "frontend/src/components/admin/AdminShell.jsx",
+    "frontend/src/components/admin/ContentWorkspace.jsx",
+    "frontend/src/lib/adminNavigation.mjs",
+    "frontend/src/services/adminMarketingService.js",
+    "frontend/src/services/adminSettingsService.js"
+  ],
+  "newApplicationFiles": [
+    "frontend/src/lib/confirmedSettings.mjs",
+    "frontend/src/hooks/useConfirmedSettings.js",
+    "frontend/src/components/admin/SettingsLoadState.jsx"
+  ],
+  "files": [
+    {
+      "file": "backend/src/controllers/settingsAdminController.js",
+      "bytes": 3103,
+      "sha256": "3bc63328b403f985975c768320b01abcd4a51f31d62764beabd68f88e6ad1830"
+    },
+    {
+      "file": "backend/test/phase5-corrections.test.js",
+      "bytes": 13397,
+      "sha256": "ef987c592070cd8656d443b09d4de319f2fb607b535947fef990f64388b74a6f"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/INFORME_CORRECCIONES.md",
+      "bytes": 19877,
+      "sha256": "575c126459dfe01dcc161a477d580bdad48fe2b0d5096575b6026c4a67bcfdf4"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/F5-A01-antes.json",
+      "bytes": 1954,
+      "sha256": "aea568845711b346b21a004724af25eff8c0a32a066487cd04c617a4404a3cb3"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/F5-A01-antes.png",
+      "bytes": 74965,
+      "sha256": "4fca2b2f2850e4d1c544c7af44ce354a972c2caad71e4d0cf10cbd87d23d653e"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/F5-A01-carga.png",
+      "bytes": 44785,
+      "sha256": "bce553e86d352f41dea43ebdcb207483a8c4ddb628876f08643682f2eb001f65"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/README.md",
+      "bytes": 5664,
+      "sha256": "7de7a20049439f307a0e4487d1355e305a524327dd47b3ccc7f62768a62b11b5"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/archivos-modificados-desde-base.json",
+      "bytes": 310,
+      "sha256": "ed2aadcfbcb741aab4cbf3021f7c9c3db57c75107fd646a77a2cd501055fbc3b"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/base-hashes.json",
+      "bytes": 651372,
+      "sha256": "cba7e2a7cda985f8eedee4af7deba0b03c094f5b8584184cd174f770c6ae0766"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/base/backend/src/controllers/settingsAdminController.js",
+      "bytes": 2952,
+      "sha256": "048d66ad7f75e5561a8dcb67dfd92648b3c8a9debddcf2322e9f66bac5707049"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/base/frontend/src/components/admin/AdminShell.jsx",
+      "bytes": 8242,
+      "sha256": "350d606e4997d1229e9eb5675c7cd3e31624b2a17178d05bc143d3c0bd46d6ea"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/base/frontend/src/components/admin/ContentWorkspace.jsx",
+      "bytes": 36511,
+      "sha256": "67c025f980d777b12f595549903fce06071c6e203238bc9ee4c895abba21598e"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/base/frontend/src/lib/adminNavigation.mjs",
+      "bytes": 6253,
+      "sha256": "e0fb917b5cfa22c09104d02790caf87f37374b4b540a44260d51bf01809eae54"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/base/frontend/src/services/adminMarketingService.js",
+      "bytes": 1674,
+      "sha256": "07b66b70e3c9e6d68d81e7129750a6ce958f5bf579e6a65e78f8cb2c3be8519f"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/base/frontend/src/services/adminSettingsService.js",
+      "bytes": 285,
+      "sha256": "2f586bf859091e4455d51fc00647178b7f06149e72c2ae0ac29c4a799790d75c"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/build-fase5.json",
+      "bytes": 219,
+      "sha256": "e9ecf27ff890ccbc4d3372dd2c2b3c48012620e62995cbf61bf27bae1e306f7e"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/build-fase5.txt",
+      "bytes": 3486,
+      "sha256": "b202c6bff2d9448edc27aa337b3a4b2021675e3637106d1db9218577a8b39fd3"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/cierre-fase1-resultados.json",
+      "bytes": 2554,
+      "sha256": "a3fb3e9a43fd122573524f0e1ecf88ee6e94d4b5bdb667e69cb78ac8e2a0fc1d"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/cierre-fase2-resultados.json",
+      "bytes": 5687,
+      "sha256": "c788a15b089b93ae9a14ec9cf30cfd92f52b58f97f8b778ecf699807a2ac8d18"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/cierre-fase3-resultados.json",
+      "bytes": 2370,
+      "sha256": "ee2c14eee991dfff7e025fa2186d3d65a17455de0ea90d3dfaaa7b574d241cba"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/cierre-fase4-resultados.json",
+      "bytes": 2710,
+      "sha256": "e9e68e04ca050de72b2cfff9a0cde641ae5dbba109891570d6ced8ad0a0e39e9"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/error-marketing-escritorio.png",
+      "bytes": 44785,
+      "sha256": "bce553e86d352f41dea43ebdcb207483a8c4ddb628876f08643682f2eb001f65"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/error-marketing-movil-360.png",
+      "bytes": 22675,
+      "sha256": "28aa19ef682422eda3384f23e95e131cc91e828cbaabd8b2a0c497162919e724"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/error-marketing-movil.png",
+      "bytes": 23267,
+      "sha256": "6b7d46cb623807d11defcf8850ec9864c4a0d395ace5121217520f0e432c8a9c"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/eslint-frontend-antes.json",
+      "bytes": 3099,
+      "sha256": "11452c65b8cd9dc4e81bc02d6ebfc96c0e3c09d1c7d145f400f7ad09fb10cd8c"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/eslint-frontend.json",
+      "bytes": 3494,
+      "sha256": "f7384c90e758252289fa943779dde82ba39610359d485bec0272a426b8b7730c"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/eslint-node-antes.json",
+      "bytes": 141,
+      "sha256": "9b1b058305f08ad9fbbb769af5f9f452a156c76a89121c1fea5295f40b1ede66"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/eslint-node.json",
+      "bytes": 881,
+      "sha256": "3c173b8259c2cee1cf06b1b12e79c5f275454a886e53f2e0ce3e049d11cb777b"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/estatico-resumen.json",
+      "bytes": 299,
+      "sha256": "2669559575e737f98597e8298a456740505559311cd78dd371f9be10e3d04e85"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/independiente-resultados.json",
+      "bytes": 2330,
+      "sha256": "76e7b076dd7dd5db203add9632bf1aa85f8aabb28bb3eea6836b22006e260a2f"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/independiente/build-independiente.txt",
+      "bytes": 3484,
+      "sha256": "faac91e16b466eec25cc04cc57482621c10fa504887eddca5734032537c1b6f8"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/independiente/marketing-error-carga.png",
+      "bytes": 44103,
+      "sha256": "1d6df3b3bfc67cb4e4ad3cbba6a07610ad1982222435c8c128bd23a0c26d86be"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/independiente/navegador-independiente-servidor.txt",
+      "bytes": 118,
+      "sha256": "4d4e8678260690613c28ffbacf9267d917c69aa77d38a07314d6c42064a96869"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/independiente/navegador-independiente.json",
+      "bytes": 2609,
+      "sha256": "ccf0596da37d451437bdd6e948e5250dffda901e59cdf68f33b6caa7fe55dc00"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/marketing-recuperado-escritorio.png",
+      "bytes": 78881,
+      "sha256": "2d6076b42eb9897049a2d9d705e3fb6e274c849673e8006c7d0b84228cb65b40"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/marketing-recuperado-movil-360.png",
+      "bytes": 51916,
+      "sha256": "1b9cd63fabdd69108693fdc16616528f7d5511c2dcab8f81f39b394a5d5147b2"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/marketing-recuperado-movil.png",
+      "bytes": 52879,
+      "sha256": "db3064b51b8d1d2294e5818ee3a2007ca17366b35d5295657bb101802a052ea3"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/navegador-correcciones.txt",
+      "bytes": 35196,
+      "sha256": "60e2e8d5b83c6361f302588068d41076f095e72d128d580e3b9a1b5012fd436b"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/next-navegador.json",
+      "bytes": 15380,
+      "sha256": "933fe2a7ffbbca898128df85049a6862407e0f533e11593e21dceb5fdea90bb2"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/next-servidor.txt",
+      "bytes": 118,
+      "sha256": "e2175ffa3c85a5ca2aec2ca86bda1cd463c74ed1ca836eefa1bcd5f7c1da0728"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/preservar-evidencias.cjs",
+      "bytes": 1946,
+      "sha256": "c129eae36867974b1d899e3133e139bde179600e8957aa3d01cc5f913033f919"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/pruebas-nuevas.txt",
+      "bytes": 5379,
+      "sha256": "3e439e5a31b7df454c7b51f0417b8e56f70b29333f35ba272d910abcbf257ce8"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-252.txt",
+      "bytes": 183637,
+      "sha256": "f31858f747e5904bcad66546ce5a8ceada8c22268cd8cc2566d2c323c0013941"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase2/comunicaciones-escritorio.png",
+      "bytes": 44086,
+      "sha256": "48cd125c7d62589924695dcc3766259763a45c9ad1610f3a0566794aa5a86d49"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase2/comunicaciones-movil.png",
+      "bytes": 50056,
+      "sha256": "5604635c1972de5ce33f5ae447b7709dfa9bee5932c97c98918432c155dd94f6"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase2/correo-despacho-movil.html",
+      "bytes": 1581,
+      "sha256": "cf0e0e1556bfc487ebb95d824659076d7aa53cf6f82a734d7f7d7acd5335c6e5"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase2/correo-despacho-movil.png",
+      "bytes": 27071,
+      "sha256": "a6d2f1d26f1276f4b01a8900be74e37bb9d2397478fa6e0589b552a46309130c"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase2/correo-despacho-movil.txt",
+      "bytes": 426,
+      "sha256": "35be0f8f837eb07bd37825be864401db95f041a3f81024ebdc2fa324625c3026"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase2/correo-recepcion-escritorio.html",
+      "bytes": 1745,
+      "sha256": "947eba316716e1395f5007ebe9704fa769cc7fbe2b903af317924b3b57a59f48"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase2/correo-recepcion-escritorio.png",
+      "bytes": 32489,
+      "sha256": "a3f6010622b51b82f84b432366a138f50afb442a62282f1deb7e9ff27b70fd77"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase2/correo-recepcion-escritorio.txt",
+      "bytes": 500,
+      "sha256": "7931cfa4b10f9c313169861dd879d422ed2f0d626b17b38187238d1682fa54c0"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase2/navegador.json",
+      "bytes": 408,
+      "sha256": "505fb6c31e011e70daf6f08a875e5c989ff6a83e68ab1a76d7be68fb0717bdb6"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase3/dashboard-escritorio.png",
+      "bytes": 102510,
+      "sha256": "3518eb1839d161e94428e71bc9c9a202aca6e7041e09711effe331d30e9b35e6"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase3/dashboard-movil-360.png",
+      "bytes": 83263,
+      "sha256": "556e373d2223cbfec1459b6ae4106cacecdeebbc7abbe4ac62e5af59db9a6a5c"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase3/dashboard-movil.png",
+      "bytes": 82263,
+      "sha256": "0d736cd98b63b83ae6d4a385a6058d1e8a3de0c71748552dbd3d1e8f7765730c"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase3/dashboard-tablet.png",
+      "bytes": 80697,
+      "sha256": "12a2a9884d0646e7959a3e8dc4c45aa85ec35a5608a2be49a95858713ecb2c21"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase3/detalle-escritorio.png",
+      "bytes": 107498,
+      "sha256": "0b8960bc9a7535d7d500697d4abe929d286e0727d71fee57dd055534614ada89"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase3/detalle-movil-360.png",
+      "bytes": 86070,
+      "sha256": "7a93185cea8139339bad2832789683a084002d3d75875aea62a9fa197afb4e52"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase3/detalle-movil.png",
+      "bytes": 86000,
+      "sha256": "8550e410fb54fec6eba3bd34e70b88ca3cf5fa6abe31979f7c607b6dae6f1557"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase3/detalle-tablet.png",
+      "bytes": 92156,
+      "sha256": "d72cc7a336c74643ad57c8b15093ccc932e8b0698c3a79ada4272e6250a25d53"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase3/navegador.json",
+      "bytes": 2434,
+      "sha256": "b4018b6121fa7e808a8ba64255ab50d369f8a5fa24d55fe258680c1d9c1dcba3"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase3/pedidos-escritorio.png",
+      "bytes": 69575,
+      "sha256": "0ae7b539208e90aaf2a9911c1eb3f8092d7effe82241f9dd641bde5717cbffcd"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase3/pedidos-movil-360.png",
+      "bytes": 159337,
+      "sha256": "aebbf20915d4ad2fc54f1922b65f11426b614ddd9a66cdf155ef21500fb41880"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase3/pedidos-movil.png",
+      "bytes": 161557,
+      "sha256": "eb86bf2320ce3ab828f07fe2f2536465866786855b592e65576bcce074ff09bc"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase3/pedidos-tablet.png",
+      "bytes": 154261,
+      "sha256": "e9db256eb1392bec133b2a136d6e46dd7063fa2cff92888d58a26b468c99091f"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase4/existencias-escritorio.png",
+      "bytes": 95682,
+      "sha256": "68de19ee4e16d10b9aeec514cb42aaeea941d4bbf88e3da8b374e27f9c363f3c"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase4/existencias-movil-360.png",
+      "bytes": 71890,
+      "sha256": "2caa2e6fc8c75d7abf10f58fc19a48ca1b59fa1db2e86705bbf446ab533cdcb3"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase4/existencias-movil.png",
+      "bytes": 72176,
+      "sha256": "640c9580040636677c729c8d488abd1ee7b03a4438d035747aea93edc36e15f2"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase4/existencias-tablet.png",
+      "bytes": 70264,
+      "sha256": "7da2c62b299eae3d34b2bab6bafdb1f18fa01d6ce645ba497f924d6513830d52"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase4/formulario-escritorio.png",
+      "bytes": 135129,
+      "sha256": "8febb8d8b56ed6646cd69c8f7569871721d3437663c4dd3b0163db1816347d58"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase4/formulario-movil-360.png",
+      "bytes": 104223,
+      "sha256": "69a85ca61c0c823c8a4603d0c81cb5392e481a0cf5a5bb225178f1db3aa483c8"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase4/formulario-movil.png",
+      "bytes": 103367,
+      "sha256": "85f8b46c2743a7db7b71f6f7b7bc2d22f5d3ce091a1dd9f2d7d703b8bc9f0883"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase4/formulario-tablet.png",
+      "bytes": 108371,
+      "sha256": "c772ced112422d368a707814f4009aec01a8118db47b0c07d998254684f3113a"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase4/movimientos-escritorio.png",
+      "bytes": 115240,
+      "sha256": "4b97c5da83fde30dc21fa765591d0d750d7d059dc7be28691f56405c2b24eb41"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase4/movimientos-movil-360.png",
+      "bytes": 93854,
+      "sha256": "944e434be17bfe183563aa368fa15b8d68aaf90f597861c1ee5211f56295acaa"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase4/movimientos-movil.png",
+      "bytes": 94809,
+      "sha256": "598e3a38d826ad778a10ee0332dee482b1dfc3a03fca50f9f14092d31f5f3ec3"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase4/movimientos-tablet.png",
+      "bytes": 84123,
+      "sha256": "dec63c9fb68ef9ab449dd654ae941b7ce3c2b68f4632a24ca42c85067d36f46d"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase4/navegador.json",
+      "bytes": 4358,
+      "sha256": "2df1e86e4bb56c9da5c310ef6dee90438661a38a9d3c6254aa39804353041cfc"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase4/productos-escritorio.png",
+      "bytes": 100170,
+      "sha256": "ab1f5afb1f1a2faaf44e2a1c76d0dff3a889110898e240bb4a91a080202f414a"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase4/productos-movil-360.png",
+      "bytes": 84381,
+      "sha256": "bcbe4799cee7c88044d56d586ee9a499b9551bda6e54939e9961cb25ad061f4a"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase4/productos-movil.png",
+      "bytes": 83348,
+      "sha256": "5ce94794db5dbe9c84fe897dfaee375563e730aa1e86c881ac5cf0aafb71d645"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase4/productos-tablet.png",
+      "bytes": 81328,
+      "sha256": "6fd74df12395773a9c555761d5c0dd95cad5ba507b384ab778d693d4c47cec10"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase4/rendimiento.json",
+      "bytes": 29391,
+      "sha256": "e80504cc79a2e7760cf1ef121b37e3b4901d11a2a0a4b8667dca2824bcb1d253"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase5/build-fase5.json",
+      "bytes": 219,
+      "sha256": "e9ecf27ff890ccbc4d3372dd2c2b3c48012620e62995cbf61bf27bae1e306f7e"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase5/build-fase5.txt",
+      "bytes": 3484,
+      "sha256": "5c84f87b67b049b4c78a7007da264604330e2266bcbb75fd5db58256a8d4cf07"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase5/configuracion-escritorio.png",
+      "bytes": 66562,
+      "sha256": "e28ea798344c5f534c16120ea23d10d62df4e6af1b1d32c88c8cefa7fe9b32ee"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase5/contenido-escritorio.png",
+      "bytes": 76820,
+      "sha256": "033b1a7bd36840bd8eb006d9e0c45435ee2ca71ff8e47b3ef105f7ce5df9cd21"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase5/contenido-movil-360.png",
+      "bytes": 51534,
+      "sha256": "b4b0b4c8b3ba24daa3043c566d20d59266b33b29574c1b8275b2f39fd9ce76d2"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase5/contenido-movil.png",
+      "bytes": 50992,
+      "sha256": "0950363309d041ce1f301e9153ec94f67d00e1d0793112cb7359acb1384f3446"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase5/contenido-tablet.png",
+      "bytes": 52563,
+      "sha256": "8a47178e1fc7bb37015d6d3d674cabefe77bf748b4eaaaf171e5c0b616895c59"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase5/marketing-escritorio.png",
+      "bytes": 49608,
+      "sha256": "a268b19802849e31f56c4f58ae9e2f9945bc8961168e1f3180bf0f51622f7169"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase5/menu-escritorio.png",
+      "bytes": 76820,
+      "sha256": "033b1a7bd36840bd8eb006d9e0c45435ee2ca71ff8e47b3ef105f7ce5df9cd21"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase5/menu-movil-360.png",
+      "bytes": 22043,
+      "sha256": "49d02ab41057cc83e5950cfe33b9fed7432c7343a9e785d8ae6f4f921048ab2c"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase5/menu-movil.png",
+      "bytes": 23478,
+      "sha256": "8c7c683dde7b177ac08789d346698e84dcb070d229fca5ec76dba5efb2471587"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase5/menu-tablet.png",
+      "bytes": 53219,
+      "sha256": "2cd479d183fe2cf363b9bb2cff37bc6226cce753a9549633e16d80eb4cfb52e0"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase5/next-navegador.json",
+      "bytes": 4901,
+      "sha256": "ab8bdd7dcf3bde178e4945cbb894c7f974bbfa313ca8ed89e984f1e9cb169044"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase5/next-servidor.txt",
+      "bytes": 118,
+      "sha256": "cdcaa1575a3f6ef1a80e7b059cc5ae5868bf8e8789b683ad2857be6c00f839d1"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase5/tienda-escritorio.png",
+      "bytes": 46759,
+      "sha256": "6af1a3739ebc49d17f0fbca5f842f55f0a3e50ea649eabd874a93a95dab10f6e"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-fase5/vendedor-escritorio.png",
+      "bytes": 43490,
+      "sha256": "a83ba1452b7db5bba1c97cc3319d87c88fe6c0495fe6dc866950ffde46248cb2"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-independiente-10.txt",
+      "bytes": 13803,
+      "sha256": "4e6baa099891688855e82dc9faf4407c7730360a1c61e956e8e3ac94b0c3bb70"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-navegador-fase2.txt",
+      "bytes": 409,
+      "sha256": "f56a10bec5242cfb778ce2b18b0102c3b4a1e8e856963538ebd856ab1ffcb3d8"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-navegador-fase3.txt",
+      "bytes": 2434,
+      "sha256": "b4018b6121fa7e808a8ba64255ab50d369f8a5fa24d55fe258680c1d9c1dcba3"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-navegador-fase4.txt",
+      "bytes": 4358,
+      "sha256": "2df1e86e4bb56c9da5c310ef6dee90438661a38a9d3c6254aa39804353041cfc"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/regresion-next-35.txt",
+      "bytes": 26685,
+      "sha256": "08da9330f425d77efdf1834885b7abf734f0ce31644b855febb6082dc09899c4"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/reproduccion-previa.txt",
+      "bytes": 1210,
+      "sha256": "44efdced158575bb2b54a903a067663126632103140e4417d380b09f64aeb593"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/resultados-finales.json",
+      "bytes": 2124,
+      "sha256": "4e393d880a1b6d8bc41e193029d26735eec8a497adefa86f9efd85dd2b83b285"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/sintaxis.json",
+      "bytes": 907,
+      "sha256": "6148360a1e8f545fe2fc066531bd028778018244287747d27a47c98aa0688287"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase5/correcciones-evidencias/verificar-estatico.cjs",
+      "bytes": 4358,
+      "sha256": "1bd1beb71fdf012859d79b0724686d43ff456224bff6cdc9ee107be994d5157b"
+    },
+    {
+      "file": "frontend/src/components/admin/AdminShell.jsx",
+      "bytes": 8330,
+      "sha256": "61d948d871e3c03e8eb2c19db23c2ce5b6bd494f7be7f813e2c7ee1cc8eef17b"
+    },
+    {
+      "file": "frontend/src/components/admin/ContentWorkspace.jsx",
+      "bytes": 37089,
+      "sha256": "f9ace315dbadf4b53ed23a8312c08300c2211ef1923b55508903e5e4d1c58bc2"
+    },
+    {
+      "file": "frontend/src/components/admin/SettingsLoadState.jsx",
+      "bytes": 1864,
+      "sha256": "3cce3b6a442307f8079f5fbad741252fc3a230949b372ecfdc1d76c4bc35c574"
+    },
+    {
+      "file": "frontend/src/hooks/useConfirmedSettings.js",
+      "bytes": 493,
+      "sha256": "841b1cde062bbf83a237e2d18f04ca384c2bd7fe00bbe3899ace24f728abb099"
+    },
+    {
+      "file": "frontend/src/lib/adminNavigation.mjs",
+      "bytes": 6425,
+      "sha256": "c047fe1702e9ff4de2954b56461de8793d59a7e335bfe3c1c57e5eb56a1cc8e6"
+    },
+    {
+      "file": "frontend/src/lib/confirmedSettings.mjs",
+      "bytes": 7674,
+      "sha256": "9cf360c8f2133a3e84df470924965ec0505a45f14fe094920e259c7768222236"
+    },
+    {
+      "file": "frontend/src/services/adminMarketingService.js",
+      "bytes": 1762,
+      "sha256": "14ac7aaf1ee8c5ea2a8be578196c20aea65ad1280c44680c46f5d2248b67da77"
+    },
+    {
+      "file": "frontend/src/services/adminSettingsService.js",
+      "bytes": 325,
+      "sha256": "cc12d80ff961b79443d5a728be92ea8b45a581d227749b5b111dfe424eb4726d"
+    },
+    {
+      "file": "frontend/test/content-settings-next-browser.cjs",
+      "bytes": 8959,
+      "sha256": "dd2e8dc2a1f90dbf0b90d48e594b00875ae1dfc8e071c02a6b6c4d4a7cf1739c"
+    },
+    {
+      "file": "frontend/test/helpers/contentSettingsBrowserFlow.cjs",
+      "bytes": 16394,
+      "sha256": "4043a556f9a34ca1385555f8fbd968e03e7a7e163e2e8497b0ea5f238a39fd9a"
+    }
+  ]
+}

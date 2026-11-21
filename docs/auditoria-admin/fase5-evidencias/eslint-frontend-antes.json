@@ -1,0 +1,269 @@
+[
+  {
+    "file": "frontend/src/components/admin/ContentWorkspace.jsx",
+    "messages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 218,
+        "column": 11,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 224,
+        "endColumn": 13
+      },
+      {
+        "ruleId": "react-hooks/set-state-in-effect",
+        "severity": 2,
+        "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).\n\n  237 |\n  238 |   useEffect(() => {\n> 239 |     if (VALID_TABS.has(tabFromUrl)) setTab(tabFromUrl);\n      |                                     ^^^^^^ Avoid calling setState() directly within an effect\n  240 |   }, [tabFromUrl]);\n  241 |\n  242 |   // CMS state",
+        "line": 239,
+        "column": 37,
+        "nodeType": null,
+        "endLine": 239,
+        "endColumn": 43
+      },
+      {
+        "ruleId": "react-hooks/set-state-in-effect",
+        "severity": 2,
+        "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).\n\n  315 |   };\n  316 |\n> 317 |   useEffect(() => { load(); }, []);\n      |                     ^^^^ Avoid calling setState() directly within an effect\n  318 |\n  319 |   // ── CMS handlers ──────────────────────────────────────\n  320 |   const cleanBullets = (bullets) =>",
+        "line": 317,
+        "column": 21,
+        "nodeType": null,
+        "endLine": 317,
+        "endColumn": 25
+      },
+      {
+        "ruleId": "react-hooks/exhaustive-deps",
+        "severity": 1,
+        "message": "React Hook useEffect has a missing dependency: 'load'. Either include it or remove the dependency array.",
+        "line": 317,
+        "column": 32,
+        "nodeType": "ArrayExpression",
+        "endLine": 317,
+        "endColumn": 34,
+        "suggestions": [
+          {
+            "desc": "Update the dependencies array to be: [load]",
+            "fix": {
+              "range": [
+                8778,
+                8780
+              ],
+              "text": "[load]"
+            }
+          }
+        ]
+      }
+    ],
+    "errorCount": 2,
+    "warningCount": 2
+  },
+  {
+    "file": "frontend/src/app/admin/catalogo/page.js",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "frontend/src/app/admin/configuracion/page.js",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "frontend/src/app/admin/contenido/page.js",
+    "messages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 218,
+        "column": 11,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 224,
+        "endColumn": 13
+      },
+      {
+        "ruleId": "react-hooks/set-state-in-effect",
+        "severity": 2,
+        "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).\n\n  237 |\n  238 |   useEffect(() => {\n> 239 |     if (VALID_TABS.has(tabFromUrl)) setTab(tabFromUrl);\n      |                                     ^^^^^^ Avoid calling setState() directly within an effect\n  240 |   }, [tabFromUrl]);\n  241 |\n  242 |   // CMS state",
+        "line": 239,
+        "column": 37,
+        "nodeType": null,
+        "endLine": 239,
+        "endColumn": 43
+      },
+      {
+        "ruleId": "react-hooks/set-state-in-effect",
+        "severity": 2,
+        "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).\n\n  315 |   };\n  316 |\n> 317 |   useEffect(() => { load(); }, []);\n      |                     ^^^^ Avoid calling setState() directly within an effect\n  318 |\n  319 |   // ── CMS handlers ──────────────────────────────────────\n  320 |   const cleanBullets = (bullets) =>",
+        "line": 317,
+        "column": 21,
+        "nodeType": null,
+        "endLine": 317,
+        "endColumn": 25
+      },
+      {
+        "ruleId": "react-hooks/exhaustive-deps",
+        "severity": 1,
+        "message": "React Hook useEffect has a missing dependency: 'load'. Either include it or remove the dependency array.",
+        "line": 317,
+        "column": 32,
+        "nodeType": "ArrayExpression",
+        "endLine": 317,
+        "endColumn": 34,
+        "suggestions": [
+          {
+            "desc": "Update the dependencies array to be: [load]",
+            "fix": {
+              "range": [
+                8778,
+                8780
+              ],
+              "text": "[load]"
+            }
+          }
+        ]
+      }
+    ],
+    "errorCount": 2,
+    "warningCount": 2
+  },
+  {
+    "file": "frontend/src/app/admin/home-imagenes/page.js",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "frontend/src/app/admin/marketing/page.js",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "frontend/src/app/admin/resenas/page.js",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "frontend/src/app/admin/solicitudes/[id]/page.js",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "frontend/src/components/admin/AdminShell.jsx",
+    "messages": [
+      {
+        "ruleId": "react-hooks/set-state-in-effect",
+        "severity": 2,
+        "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).\n\n  42 |\n  43 |   useEffect(() => {\n> 44 |     setMobileOpen(false);\n     |     ^^^^^^^^^^^^^ Avoid calling setState() directly within an effect\n  45 |   }, [pathname]);\n  46 |\n  47 |   useEffect(() => {",
+        "line": 44,
+        "column": 5,
+        "nodeType": null,
+        "endLine": 44,
+        "endColumn": 18
+      },
+      {
+        "ruleId": "react-hooks/static-components",
+        "severity": 2,
+        "message": "Error: Cannot create components during render\n\nComponents created during render will reset their state each time they are created. Declare components outside of render.\n\n  102 |           {user?.name}\n  103 |         </p>\n> 104 |         <NavLinks className=\"admin-sidebar__nav\" />\n      |          ^^^^^^^^ This component is created during render\n  105 |       </aside>\n  106 |\n  107 |       <div className=\"admin-main\">\n\n  62 |   };\n  63 |\n> 64 |   const NavLinks = ({ className, onNavigate }) => (\n     |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n> 65 |     <nav className={className}>\n     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n> 66 |       {onNavigate && (\n     …\n     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n> 94 |     </nav>\n     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n> 95 |   );\n     | ^^^^ The component is created during render here\n  96 |\n  97 |   return (\n  98 |     <div className=\"admin-shell\">",
+        "line": 104,
+        "column": 10,
+        "nodeType": null,
+        "endLine": 104,
+        "endColumn": 18
+      },
+      {
+        "ruleId": "react-hooks/static-components",
+        "severity": 2,
+        "message": "Error: Cannot create components during render\n\nComponents created during render will reset their state each time they are created. Declare components outside of render.\n\n  130 |             />\n  131 |           )}\n> 132 |           <NavLinks\n      |            ^^^^^^^^ This component is created during render\n  133 |             className=\"admin-mobile-nav__links\"\n  134 |             onNavigate={() => setMobileOpen(false)}\n  135 |           />\n\n  62 |   };\n  63 |\n> 64 |   const NavLinks = ({ className, onNavigate }) => (\n     |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n> 65 |     <nav className={className}>\n     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n> 66 |       {onNavigate && (\n     …\n     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n> 94 |     </nav>\n     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n> 95 |   );\n     | ^^^^ The component is created during render here\n  96 |\n  97 |   return (\n  98 |     <div className=\"admin-shell\">",
+        "line": 132,
+        "column": 12,
+        "nodeType": null,
+        "endLine": 132,
+        "endColumn": 20
+      }
+    ],
+    "errorCount": 3,
+    "warningCount": 0
+  },
+  {
+    "file": "frontend/src/components/admin/SpecialRequestsList.jsx",
+    "messages": [
+      {
+        "ruleId": "react-hooks/set-state-in-effect",
+        "severity": 2,
+        "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).\n\n  37 |\n  38 |   useEffect(() => {\n> 39 |     load();\n     |     ^^^^ Avoid calling setState() directly within an effect\n  40 |   }, [page, filters.type, filters.status]);\n  41 |\n  42 |   const handleSearch = (e) => {",
+        "line": 39,
+        "column": 5,
+        "nodeType": null,
+        "endLine": 39,
+        "endColumn": 9
+      },
+      {
+        "ruleId": "react-hooks/exhaustive-deps",
+        "severity": 1,
+        "message": "React Hook useEffect has a missing dependency: 'load'. Either include it or remove the dependency array.",
+        "line": 40,
+        "column": 6,
+        "nodeType": "ArrayExpression",
+        "endLine": 40,
+        "endColumn": 42,
+        "suggestions": [
+          {
+            "desc": "Update the dependencies array to be: [page, filters.type, filters.status, load]",
+            "fix": {
+              "range": [
+                1023,
+                1059
+              ],
+              "text": "[page, filters.type, filters.status, load]"
+            }
+          }
+        ]
+      }
+    ],
+    "errorCount": 1,
+    "warningCount": 1
+  },
+  {
+    "file": "frontend/src/components/admin/TaxonomyManager.jsx",
+    "messages": [
+      {
+        "ruleId": "react-hooks/preserve-manual-memoization",
+        "severity": 2,
+        "message": "Compilation Skipped: Existing memoization could not be preserved\n\nReact Compiler has skipped optimizing this component because the existing manual memoization could not be preserved. The inferred dependencies did not match the manually specified dependencies, which could cause the value to change more or less frequently than expected. The inferred dependency was `setLoading`, but the source dependencies were [activeType]. Inferred different dependency than source.\n\n   88 |   const currentTab = TABS.find((t) => t.type === activeType) || TABS[0];\n   89 |\n>  90 |   const loadItems = useCallback(async () => {\n      |                                 ^^^^^^^^^^^^^\n>  91 |     setLoading(true);\n      | ^^^^^^^^^^^^^^^^^^^^^\n>  92 |     setError(\"\");\n      …\n      | ^^^^^^^^^^^^^^^^^^^^^\n> 101 |     }\n      | ^^^^^^^^^^^^^^^^^^^^^\n> 102 |   }, [activeType]);\n      | ^^^^ Could not preserve existing manual memoization\n  103 |\n  104 |   useEffect(() => {\n  105 |     loadItems();",
+        "line": 90,
+        "column": 33,
+        "nodeType": null,
+        "endLine": 102,
+        "endColumn": 4
+      },
+      {
+        "ruleId": "react-hooks/preserve-manual-memoization",
+        "severity": 2,
+        "message": "Compilation Skipped: Existing memoization could not be preserved\n\nReact Compiler has skipped optimizing this component because the existing manual memoization could not be preserved. The inferred dependencies did not match the manually specified dependencies, which could cause the value to change more or less frequently than expected. The inferred dependency was `setItems`, but the source dependencies were [activeType]. Inferred different dependency than source.\n\n   88 |   const currentTab = TABS.find((t) => t.type === activeType) || TABS[0];\n   89 |\n>  90 |   const loadItems = useCallback(async () => {\n      |                                 ^^^^^^^^^^^^^\n>  91 |     setLoading(true);\n      | ^^^^^^^^^^^^^^^^^^^^^\n>  92 |     setError(\"\");\n      …\n      | ^^^^^^^^^^^^^^^^^^^^^\n> 101 |     }\n      | ^^^^^^^^^^^^^^^^^^^^^\n> 102 |   }, [activeType]);\n      | ^^^^ Could not preserve existing manual memoization\n  103 |\n  104 |   useEffect(() => {\n  105 |     loadItems();",
+        "line": 90,
+        "column": 33,
+        "nodeType": null,
+        "endLine": 102,
+        "endColumn": 4
+      },
+      {
+        "ruleId": "react-hooks/set-state-in-effect",
+        "severity": 2,
+        "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).\n\n  103 |\n  104 |   useEffect(() => {\n> 105 |     loadItems();\n      |     ^^^^^^^^^ Avoid calling setState() directly within an effect\n  106 |     setForm(emptyForm(currentTab.fields));\n  107 |     setEditingId(null);\n  108 |     setSavedMsg(\"\");",
+        "line": 105,
+        "column": 5,
+        "nodeType": null,
+        "endLine": 105,
+        "endColumn": 14
+      }
+    ],
+    "errorCount": 3,
+    "warningCount": 0
+  }
+]

@@ -1,0 +1,37 @@
+[
+  {
+    "file": "backend/test/phase5.test.js",
+    "exitCode": 0,
+    "error": ""
+  },
+  {
+    "file": "docs/auditoria-admin/cierre-fase5/navegador-independiente.cjs",
+    "exitCode": 0,
+    "error": ""
+  },
+  {
+    "file": "docs/auditoria-admin/fase5-evidencias/build-fase5.cjs",
+    "exitCode": 0,
+    "error": ""
+  },
+  {
+    "file": "docs/auditoria-admin/fase5-evidencias/preservar-evidencias.cjs",
+    "exitCode": 0,
+    "error": ""
+  },
+  {
+    "file": "docs/auditoria-admin/fase5-evidencias/verificar-estatico.cjs",
+    "exitCode": 0,
+    "error": ""
+  },
+  {
+    "file": "frontend/src/lib/adminNavigation.mjs",
+    "exitCode": 0,
+    "error": ""
+  },
+  {
+    "file": "frontend/test/navigation-next-browser.cjs",
+    "exitCode": 0,
+    "error": ""
+  }
+]

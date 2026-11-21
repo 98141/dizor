@@ -1,0 +1,16 @@
+09:53:52 [[32mhttp[39m]: POST /api/auth/login 200 473.633 ms - 168
+09:53:52 [[32mhttp[39m]: POST /api/auth/login 200 419.862 ms - 169
+09:53:53 [[32mhttp[39m]: POST /api/auth/login 200 351.048 ms - 174
+09:53:53 [[32mhttp[39m]: POST /api/auth/login 200 377.335 ms - 173
+09:54:42 [[32mhttp[39m]: PATCH /api/admin/marketing/settings 200 29.795 ms - 658
+09:54:42 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 6.756 ms - 606
+09:54:43 [[32mhttp[39m]: GET /api/auth/me 200 9.454 ms - 207
+09:54:43 [[32mhttp[39m]: GET /api/admin/content/pages 200 33.191 ms - 43
+09:54:43 [[32mhttp[39m]: GET /api/admin/alerts 200 56.750 ms - 438
+09:54:43 [[32mhttp[39m]: GET /api/admin/content/banners 200 36.779 ms - 45
+09:54:43 [[32mhttp[39m]: GET /api/favorites/ids 200 38.005 ms - 47
+09:54:43 [[32mhttp[39m]: GET /api/admin/content/home 200 63.815 ms - 3679
+09:54:43 [[32mhttp[39m]: GET /api/admin/coupons 200 4.818 ms - 14
+09:54:43 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 200 11.014 ms - 68
+09:54:43 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 200 10.983 ms - 62
+09:54:43 [[32mhttp[39m]: GET /api/admin/settings 200 11.788 ms - 489

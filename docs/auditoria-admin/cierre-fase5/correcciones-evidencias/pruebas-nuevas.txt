@@ -1,0 +1,61 @@
+✔ C01 carga pendiente no permite guardar; carga válida conserva valores (5.5326ms)
+✔ C02 HTTP fallido no crea valores vacíos ni permite una escritura (1.2749ms)
+✔ C03 timeout cancela y bloquea la edición (13.0503ms)
+✔ C04 solicitud abortada no significa configuración vacía (0.8411ms)
+✔ C05 respuesta inválida: null (0.649ms)
+✔ C05 respuesta inválida: sin settings (0.7549ms)
+✔ C05 respuesta inválida: vacío sin contrato (0.3201ms)
+✔ C05 respuesta inválida: parcial (0.4186ms)
+✔ C05 respuesta inválida: tipo incorrecto (0.6472ms)
+✔ C05 respuesta inválida: HTTP 200 con error (0.4472ms)
+✔ C06 Reintentar recupera los valores reales (0.9408ms)
+✔ C07 un fallo de actualización conserva datos previos pero bloquea guardar (0.7877ms)
+✔ C08 vacío legítimo: strings vacíos confirmados siguen siendo editables (1.7079ms)
+✔ C09 una respuesta anterior no reemplaza una carga más reciente (1.547ms)
+✔ C10 desmontar cancela sin publicar una respuesta tardía (1.287ms)
+✔ C11 doble clic y envíos simultáneos generan un solo PATCH (1.1468ms)
+✔ C12 un borrador inválido no llega al endpoint (0.6555ms)
+✔ C13 error 400 mantiene el borrador y no declara éxito (0.9031ms)
+✔ C14 respuesta perdida después de aplicar: verifica por GET sin repetir PATCH (1.478ms)
+✔ C15 respuesta ambigua no aplicada: bloqueo, conservación y cero reenvíos automáticos (0.8517ms)
+✔ C16 respuesta PATCH inválida y verificación fallida no son éxito (0.6479ms)
+✔ C17 Comprobar resultado recupera una operación ambigua sin nuevo PATCH (1.4242ms)
+✔ C18 recargar descarta borrador incierto solo con un GET válido (1.5507ms)
+✔ C19 una lectura vieja no reemplaza los cambios guardados (1.2429ms)
+✔ C20 apariencia fallida no crea un reemplazo vacío (0.4215ms)
+✔ C21 apariencia vacía explícita del backend es legítima; parcial se rechaza (1.8858ms)
+✔ C22 subscribers: error no es lista vacía, recuperación [] sí es válida (0.9172ms)
+✔ C22 carts: error no es lista vacía, recuperación [] sí es válida (0.6823ms)
+✔ C23 los cupones respetan su contrato existente sin status (0.2303ms)
+✔ C24 exportaciones históricas tienen un hijo visible coherente (3.7637ms)
+(node:12700) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:12700) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:12700) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:12700) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:12700) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:12700) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+10:00:58 [[32mhttp[39m]: POST /api/auth/login 200 384.836 ms - 168
+10:00:58 [[32mhttp[39m]: POST /api/auth/login 200 338.038 ms - 169
+10:00:58 [[32mhttp[39m]: POST /api/auth/login 200 409.325 ms - 174
+10:00:59 [[32mhttp[39m]: POST /api/auth/login 200 395.432 ms - 173
+10:00:59 [[32mhttp[39m]: GET /api/admin/settings 200 16.155 ms - 489
+10:00:59 [[32mhttp[39m]: PATCH /api/admin/settings 200 11.357 ms - 489
+10:00:59 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"PATCH","url":"/api/admin/settings","statusCode":403,"ip":"127.0.0.1"}
+10:00:59 [[32mhttp[39m]: PATCH /api/admin/settings 403 3.982 ms - 75
+10:00:59 [[32mhttp[39m]: PATCH /api/admin/settings 200 12.675 ms - 504
+10:00:59 [[32mhttp[39m]: PATCH /api/admin/marketing/settings 200 18.959 ms - 669
+10:00:59 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"PATCH","url":"/api/admin/marketing/settings","statusCode":403,"ip":"127.0.0.1"}
+10:00:59 [[32mhttp[39m]: PATCH /api/admin/marketing/settings 403 3.533 ms - 75
+10:00:59 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 3.705 ms - 617
+10:00:59 [[32mhttp[39m]: PATCH /api/admin/settings 200 10.851 ms - 484
+10:00:59 [[33mwarn[39m]: Audit log save failed {"action":"settings_updated","module":"settings","error":"Operation interrupted because client was closed"}
+✔ C25 envío incluido: PATCH directo no cambia históricos; impuestos, apariencia y permisos se conservan (9380.9877ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11009.9819

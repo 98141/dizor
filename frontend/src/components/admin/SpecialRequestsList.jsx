@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { getAdminSpecialRequests } from "@/services/specialRequestAdminService";
 import {
   REQUEST_STATUS_LABELS,
@@ -9,83 +10,42 @@ import {
   getRequestBadgeClass,
 } from "@/lib/specialRequestLabels";
 
-export default function SpecialRequestsList({
-  basePath = "/admin/solicitudes",
-}) {
-  const [requests, setRequests] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState({ q: "", type: "", status: "" });
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-
-  const load = async () => {
-    setLoading(true);
-    try {
-      const data = await getAdminSpecialRequests({
-        ...filters,
-        page,
-        limit: 15,
-      });
-      setRequests(data.requests || []);
-      setTotalPages(data.totalPages || 1);
-    } catch {
-      setRequests([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+export default function SpecialRequestsList(props) {
+  return <Suspense fallback={<p role="status">Cargando solicitudes…</p>}><RequestsWorkspace {...props} /></Suspense>;
+}
+function RequestFilters({ query, onApply }) {
+  const params = new URLSearchParams(query), [filters, setFilters] = useState({ q: params.get("q") || "", type: params.get("type") || "", status: params.get("status") || "" });
+  return <form className="orders-filters" onSubmit={e => { e.preventDefault(); onApply(filters); }}>
+    <input className="orders-filters__search" aria-label="Buscar solicitudes" placeholder="Número, nombre o correo" value={filters.q} onChange={e => setFilters(f => ({ ...f, q: e.target.value }))} />
+    <select aria-label="Tipo de solicitud" value={filters.type} onChange={e => setFilters(f => ({ ...f, type: e.target.value }))}><option value="">Todos los tipos</option><option value="customization">Personalización</option><option value="wholesale">Por mayor</option></select>
+    <select aria-label="Estado de solicitud" value={filters.status} onChange={e => setFilters(f => ({ ...f, status: e.target.value }))}><option value="">Todos los estados</option>{Object.entries(REQUEST_STATUS_LABELS).map(([key,label]) => <option key={key} value={key}>{label}</option>)}</select>
+    <button type="submit" className="admin-btn">Buscar</button>
+  </form>;
+}
+function RequestsWorkspace({ basePath = "/admin/solicitudes" }) {
+  const params = useSearchParams(), pathname = usePathname(), router = useRouter(), query = params.toString();
+  const [state, setState] = useState(null), [version, setVersion] = useState(0);
+  const page = Math.max(1, Number(params.get("page")) || 1), requestKey = query + ":" + version;
   useEffect(() => {
-    load();
-  }, [page, filters.type, filters.status]);
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    setPage(1);
-    load();
-  };
+    let active = true;
+    const filters = new URLSearchParams(query);
+    getAdminSpecialRequests({ q: filters.get("q") || "", type: filters.get("type") || "", status: filters.get("status") || "", page, limit: 15 })
+      .then(data => { if (active) setState({ key: requestKey, data }); })
+      .catch(() => { if (active) setState({ key: requestKey, error: "No se pudieron cargar las solicitudes." }); });
+    return () => { active = false; };
+  // query is the stable identity of all URL parameters used by this request.
+  }, [query, page, requestKey]);
+  const loading = state?.key !== requestKey, error = state?.key === requestKey && state.error;
+  const requests = !loading && !error ? state.data.requests || [] : [], totalPages = state?.data?.totalPages || 1;
+  const href = changes => { const next = new URLSearchParams(query); Object.entries(changes).forEach(([key,value]) => value ? next.set(key,String(value)) : next.delete(key)); return pathname + (next.size ? "?" + next : ""); };
+  const returnTo = pathname + (query ? "?" + query : "");
 
   return (
     <div>
-      <form className="orders-filters" onSubmit={handleSearch}>
-        <input
-          className="orders-filters__search"
-          placeholder="Buscar por número, nombre, correo..."
-          value={filters.q}
-          onChange={(e) => setFilters((f) => ({ ...f, q: e.target.value }))}
-        />
-        <select
-          value={filters.type}
-          onChange={(e) => {
-            setFilters((f) => ({ ...f, type: e.target.value }));
-            setPage(1);
-          }}
-        >
-          <option value="">Tipo</option>
-          <option value="customization">Personalización</option>
-          <option value="wholesale">Por mayor</option>
-        </select>
-        <select
-          value={filters.status}
-          onChange={(e) => {
-            setFilters((f) => ({ ...f, status: e.target.value }));
-            setPage(1);
-          }}
-        >
-          <option value="">Estado</option>
-          {Object.entries(REQUEST_STATUS_LABELS).map(([k, v]) => (
-            <option key={k} value={k}>
-              {v}
-            </option>
-          ))}
-        </select>
-        <button type="submit" className="admin-btn">
-          Buscar
-        </button>
-      </form>
+      <RequestFilters key={query} query={query} onApply={filters => router.push(href({ ...filters, page: 1 }))} />
 
-      {loading ? (
-        <p className="auth-loading">Cargando…</p>
+      {error ? <p role="alert">{error} <button type="button" className="admin-btn" onClick={() => setVersion(v => v + 1)}>Reintentar solicitudes</button></p> : loading ? (
+        <p className="auth-loading" role="status">Cargando solicitudes…</p>
       ) : (
         <div className="admin-table-wrap">
           <table className="admin-table">
@@ -102,7 +62,7 @@ export default function SpecialRequestsList({
               {requests.map((r) => (
                 <tr key={r.id}>
                   <td>
-                    <Link href={`${basePath}/${r.id}`}>{r.requestNumber}</Link>
+                    <Link href={`${basePath}/${r.id}?returnTo=${encodeURIComponent(returnTo)}`}>{r.requestNumber}</Link>
                   </td>
                   <td>{REQUEST_TYPE_LABELS[r.type]}</td>
                   <td>
@@ -127,13 +87,14 @@ export default function SpecialRequestsList({
         </div>
       )}
 
-      {totalPages > 1 && (
+      {!loading && !error && requests.length === 0 && <p>No hay solicitudes con estos filtros.</p>}
+      {!loading && !error && totalPages > 1 && (
         <div style={{ display: "flex", gap: "0.5rem", marginTop: "1rem" }}>
           <button
             type="button"
             className="admin-btn"
             disabled={page <= 1}
-            onClick={() => setPage((p) => p - 1)}
+            onClick={() => router.push(href({ page: page - 1 }))}
           >
             Anterior
           </button>
@@ -144,7 +105,7 @@ export default function SpecialRequestsList({
             type="button"
             className="admin-btn"
             disabled={page >= totalPages}
-            onClick={() => setPage((p) => p + 1)}
+            onClick={() => router.push(href({ page: page + 1 }))}
           >
             Siguiente
           </button>

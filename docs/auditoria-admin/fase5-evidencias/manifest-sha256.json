@@ -1,0 +1,604 @@
+{
+  "generatedAt": "2026-11-21T14:07:29.461Z",
+  "baseCommit": "2e607fde4347ca8bc12618d559de6a59dc9c585b",
+  "algorithm": "SHA-256; bytes en disco",
+  "protectedChecks": [
+    {
+      "file": "backend/src/app.js",
+      "unchangedFromHEADIgnoringCRLF": true,
+      "sha256": "adbc197156f989d06090f14eaa854f43565cf76506678acfe0b738253c786267"
+    },
+    {
+      "file": "backend/src/services/financeCriteria.js",
+      "unchangedFromHEADIgnoringCRLF": true,
+      "sha256": "e48a4a84f3da859408f38312bdcd62feda82c43ca70bb17ac855556d78f73e98"
+    },
+    {
+      "file": "backend/src/services/inventoryService.js",
+      "unchangedFromHEADIgnoringCRLF": true,
+      "sha256": "c30b3a00092975f34cf60eb70331f03bd67725c347fe950db0260a34f108ee7e"
+    },
+    {
+      "file": "backend/src/services/notificationDelivery.js",
+      "unchangedFromHEADIgnoringCRLF": true,
+      "sha256": "19b96bcf86df16f1c1dd9942d7b9803ff02e005ea762fc854d4cf1cada22f7fb"
+    },
+    {
+      "file": "backend/src/services/notificationTemplates.js",
+      "unchangedFromHEADIgnoringCRLF": true,
+      "sha256": "bb6a847ffa0f8554ec3476f91aeb698540aa4fecb930e40280ef8d8bdcf769b4"
+    },
+    {
+      "file": "backend/src/services/orderTransitions.js",
+      "unchangedFromHEADIgnoringCRLF": true,
+      "sha256": "9f540b86fdebc0284957e6125f495a3a2780d0cb8714ff05969d28102c9ede64"
+    },
+    {
+      "file": "backend/src/services/orderWorkspace.js",
+      "unchangedFromHEADIgnoringCRLF": true,
+      "sha256": "dab1912e3716f70b3d1ee06c0842fd462c050c9085a761428bd6a67c7433a921"
+    },
+    {
+      "file": "frontend/src/guards/RoleRoute.jsx",
+      "unchangedFromHEADIgnoringCRLF": true,
+      "sha256": "78ef7b276431ab8972955038389e9a11b345faf30365ac22bf16229b3c4fda76"
+    },
+    {
+      "file": "frontend/src/components/admin/AdminDashboard.jsx",
+      "unchangedFromHEADIgnoringCRLF": true,
+      "sha256": "292aa646b14a9d3cf5853fb75bbc88d9c809c306b57f95b0d0d806c7429299f3"
+    },
+    {
+      "file": "frontend/src/components/admin/OrdersList.jsx",
+      "unchangedFromHEADIgnoringCRLF": true,
+      "sha256": "712e4224ca74cd4f37a7e1fd2927751722443dc64e50a5aed8c4b3de81a2c257"
+    },
+    {
+      "file": "frontend/src/components/admin/OrderDetail.jsx",
+      "unchangedFromHEADIgnoringCRLF": true,
+      "sha256": "116200d6cb8f3cdf437ce96e2e9221b8f5e03012c1d1ae206ee77d534e8ed65c"
+    },
+    {
+      "file": "frontend/src/components/admin/ProductForm.jsx",
+      "unchangedFromHEADIgnoringCRLF": true,
+      "sha256": "eb5ecd83e586a61a6e10e0af9c81d2fe6c62e19611f620c8d1f3f9052d69e6f2"
+    },
+    {
+      "file": "frontend/src/components/admin/CatalogWorkspace.jsx",
+      "unchangedFromHEADIgnoringCRLF": true,
+      "sha256": "8dc803dacacfd2fe90ac68a10a09d806d015052a2c75b4e91221e76d55b904b1"
+    },
+    {
+      "file": "frontend/src/components/admin/QuickStockAdjustment.jsx",
+      "unchangedFromHEADIgnoringCRLF": true,
+      "sha256": "c6f04ffd87620dca6243412203d9d267e5ef1b53fdcbd91ea19ba6f32d74c460"
+    },
+    {
+      "file": "frontend/src/components/admin/OrderCommunications.jsx",
+      "unchangedFromHEADIgnoringCRLF": true,
+      "sha256": "9c7a603c2d0000a5b9bb53043a2282ac59146f8d93f8bc97d56aa828d020b99d"
+    },
+    {
+      "file": "backend/test/phase1.test.js",
+      "unchangedFromHEADIgnoringCRLF": true,
+      "sha256": "25cb4d5a7d0d585a09571f4a32da4b3dafd0b3d1ac865368e058ee7cda3bbacd"
+    },
+    {
+      "file": "backend/test/phase2.test.js",
+      "unchangedFromHEADIgnoringCRLF": true,
+      "sha256": "6fd871c487b7aba9445810031fa83e66aabec26b5a8f1c16edeb9a06cda3686a"
+    },
+    {
+      "file": "backend/test/phase2-compatibility.test.js",
+      "unchangedFromHEADIgnoringCRLF": true,
+      "sha256": "b158f68e8e88963173a6cd97c16f69466acccb9e87269faf60bbc0801826f3f1"
+    },
+    {
+      "file": "backend/test/phase3.test.js",
+      "unchangedFromHEADIgnoringCRLF": true,
+      "sha256": "bcf447740d0b4424eb9aaeab72c3f1ab3cc15752686b6f0b4f51a2f1a3155b93"
+    },
+    {
+      "file": "backend/test/phase4.test.js",
+      "unchangedFromHEADIgnoringCRLF": true,
+      "sha256": "ebdb7773bdcfa1447dfc2d88c20efb23c06751e951bc7b1e7398b84662d8c1a0"
+    },
+    {
+      "file": "frontend/test/stock-adjustment.test.cjs",
+      "unchangedFromHEADIgnoringCRLF": true,
+      "sha256": "a7a6a458371b72750ef1238ecae4e4cf5a7d3d69721b1771277b5ca5240e0e31"
+    },
+    {
+      "file": "frontend/test/catalog-workspace-browser.cjs",
+      "unchangedFromHEADIgnoringCRLF": true,
+      "sha256": "e61dd2ec5874e6ccc40d27aeba61b5e7f6aa09fcd36a5d0449919f94c705db1a"
+    },
+    {
+      "file": "frontend/test/orders-workspace-browser.cjs",
+      "unchangedFromHEADIgnoringCRLF": true,
+      "sha256": "e36f75a65245267447145fcbc214efc89d454f860c3a629c5b06cde8b04c1488"
+    },
+    {
+      "file": "frontend/test/communications-browser.cjs",
+      "unchangedFromHEADIgnoringCRLF": true,
+      "sha256": "e0a5c5e246ca6d1fa93fc5b852e94eeaf37f027ec61ad2980084225891487cd2"
+    }
+  ],
+  "files": [
+    {
+      "file": "backend/test/phase5.test.js",
+      "bytes": 5312,
+      "sha256": "06c58f311fe4a8ee456ea676f2d23c3ad091fbfcefae491ebe6d73fe4222b478"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/README.md",
+      "bytes": 6162,
+      "sha256": "c0a362c381566fb6ef3d92bb25dad72faa9bcaa79a67c25aada5a46c42a2753d"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/build-fase5.cjs",
+      "bytes": 3139,
+      "sha256": "086f4560abad44f16eff4a4984de7b1450a1db362827323ff81f17e8bdb56c21"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/build-fase5.json",
+      "bytes": 219,
+      "sha256": "e9ecf27ff890ccbc4d3372dd2c2b3c48012620e62995cbf61bf27bae1e306f7e"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/build-fase5.txt",
+      "bytes": 3486,
+      "sha256": "b91d80c0d0407cb73da7dace82f741abd4c87463048aa8e6d3f3d2e7b81e6afe"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/cierre-fase1-resultados.json",
+      "bytes": 2554,
+      "sha256": "a3fb3e9a43fd122573524f0e1ecf88ee6e94d4b5bdb667e69cb78ac8e2a0fc1d"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/cierre-fase2-resultados.json",
+      "bytes": 5687,
+      "sha256": "b127dd23edff7a4efae5daaf4bea2c083fff68f923d2d3053810f181311839e1"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/cierre-fase3-resultados.json",
+      "bytes": 2370,
+      "sha256": "947e0d96033892344f8068f518ddf819208a66237eba5072d5307d6f27115f0e"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/cierre-fase4-resultados.json",
+      "bytes": 2710,
+      "sha256": "1393f32e9e89dc0a503b1a519b7b5c6e199e906dbbee3a49c6f9da41b36f5c7e"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/configuracion-escritorio.png",
+      "bytes": 67047,
+      "sha256": "aeac816e8bc2ce8174caee2e889a6fdd678d0c48fe024b618160cdb03e888195"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/contenido-escritorio.png",
+      "bytes": 76866,
+      "sha256": "98d7bca59c4ac401301cb952aa5d7cb6ff74b6d1edb8cd3d41c2d576a5d9580a"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/contenido-movil-360.png",
+      "bytes": 51530,
+      "sha256": "4595e106072f2a742a0d481aaa8dcaba75c1565e65155832800f34bbef8f654a"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/contenido-movil.png",
+      "bytes": 50974,
+      "sha256": "0b30e1e0785ac5561b8722d5a0d501a38f7349871191ae4ba7706c9305cae905"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/contenido-tablet.png",
+      "bytes": 52612,
+      "sha256": "839c25bfdd2d9d54627485c3b71ab7bfa3281f8a1a4876d49f1f27c6f5b1249f"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/eslint-frontend-antes.json",
+      "bytes": 17751,
+      "sha256": "045003dab1f8d0c0bb91a6dcf0207d74c3942a408c4fdd1bba802869cb0c3d8f"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/eslint-frontend.json",
+      "bytes": 7827,
+      "sha256": "571393b831c16a47508125c8ed9ffbc5463a75af1e694fc2b50f3b6b291d7462"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/eslint-node-antes.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/eslint-node.json",
+      "bytes": 686,
+      "sha256": "0ec9068dae70ee761b4b3ddd4f29cd704adcda1139807a0370c57690513c47b2"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/estatico-resumen.json",
+      "bytes": 300,
+      "sha256": "c1569be63c630078f51005af7d5e1fc63ee970e6de64580e169a424f15748d07"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/marketing-escritorio.png",
+      "bytes": 46779,
+      "sha256": "1db5e72136cd0fa270a8a21394bd5d342b255ef1cab09db2e48b61507795a745"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/menu-escritorio.png",
+      "bytes": 76866,
+      "sha256": "98d7bca59c4ac401301cb952aa5d7cb6ff74b6d1edb8cd3d41c2d576a5d9580a"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/menu-movil-360.png",
+      "bytes": 22043,
+      "sha256": "49d02ab41057cc83e5950cfe33b9fed7432c7343a9e785d8ae6f4f921048ab2c"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/menu-movil.png",
+      "bytes": 23478,
+      "sha256": "8c7c683dde7b177ac08789d346698e84dcb070d229fca5ec76dba5efb2471587"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/menu-tablet.png",
+      "bytes": 52987,
+      "sha256": "df63ec8a55ba825ee48db8c59129fee09223924973af323cc47efe4b67855053"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/next-ejecucion.txt",
+      "bytes": 26304,
+      "sha256": "65821522c74178741f245932c8be434fef050bc3e04cef285f8b2490fd351fae"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/next-navegador.json",
+      "bytes": 4901,
+      "sha256": "296856ea112e5b29bd65c02e3eaf25f46bafd28c6c23a17d4b8727f75770ac01"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/next-servidor.txt",
+      "bytes": 118,
+      "sha256": "914837cb0167462757a4eed99485b843b6e867af070e33affd63eed9b028b4ee"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/preservar-evidencias.cjs",
+      "bytes": 1533,
+      "sha256": "4c2a7ebcfab9b5779bb5fed2f1698cacbf4c0d8ef0f804083b49f51f8b6bf413"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/pruebas-fase5.txt",
+      "bytes": 8007,
+      "sha256": "4626c723ea04365da101787bc6d52bea8838bdb2a35f535bcc44c839707ccf25"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-completa.txt",
+      "bytes": 166500,
+      "sha256": "0309edbeb562d75545db5a99001585bce6d3770f54b5abfb11e259699270549c"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase2/comunicaciones-escritorio.png",
+      "bytes": 44147,
+      "sha256": "0fa1b7bd6366819bdd7fbbdce521ffb92da3c3aa7fc9203045c5130bf064a93d"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase2/comunicaciones-movil.png",
+      "bytes": 50071,
+      "sha256": "ec633f475d33ac15c37824dbdef71c259448c980c21991d730a957e86e5b45ae"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase2/correo-despacho-movil.html",
+      "bytes": 1581,
+      "sha256": "cf0e0e1556bfc487ebb95d824659076d7aa53cf6f82a734d7f7d7acd5335c6e5"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase2/correo-despacho-movil.png",
+      "bytes": 27071,
+      "sha256": "a6d2f1d26f1276f4b01a8900be74e37bb9d2397478fa6e0589b552a46309130c"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase2/correo-despacho-movil.txt",
+      "bytes": 426,
+      "sha256": "35be0f8f837eb07bd37825be864401db95f041a3f81024ebdc2fa324625c3026"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase2/correo-recepcion-escritorio.html",
+      "bytes": 1745,
+      "sha256": "947eba316716e1395f5007ebe9704fa769cc7fbe2b903af317924b3b57a59f48"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase2/correo-recepcion-escritorio.png",
+      "bytes": 32489,
+      "sha256": "a3f6010622b51b82f84b432366a138f50afb442a62282f1deb7e9ff27b70fd77"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase2/correo-recepcion-escritorio.txt",
+      "bytes": 500,
+      "sha256": "7931cfa4b10f9c313169861dd879d422ed2f0d626b17b38187238d1682fa54c0"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase2/navegador.json",
+      "bytes": 408,
+      "sha256": "505fb6c31e011e70daf6f08a875e5c989ff6a83e68ab1a76d7be68fb0717bdb6"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase3/dashboard-escritorio.png",
+      "bytes": 102510,
+      "sha256": "3518eb1839d161e94428e71bc9c9a202aca6e7041e09711effe331d30e9b35e6"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase3/dashboard-movil-360.png",
+      "bytes": 83263,
+      "sha256": "556e373d2223cbfec1459b6ae4106cacecdeebbc7abbe4ac62e5af59db9a6a5c"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase3/dashboard-movil.png",
+      "bytes": 82263,
+      "sha256": "0d736cd98b63b83ae6d4a385a6058d1e8a3de0c71748552dbd3d1e8f7765730c"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase3/dashboard-tablet.png",
+      "bytes": 80697,
+      "sha256": "12a2a9884d0646e7959a3e8dc4c45aa85ec35a5608a2be49a95858713ecb2c21"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase3/detalle-escritorio.png",
+      "bytes": 107498,
+      "sha256": "0b8960bc9a7535d7d500697d4abe929d286e0727d71fee57dd055534614ada89"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase3/detalle-movil-360.png",
+      "bytes": 86070,
+      "sha256": "7a93185cea8139339bad2832789683a084002d3d75875aea62a9fa197afb4e52"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase3/detalle-movil.png",
+      "bytes": 86000,
+      "sha256": "8550e410fb54fec6eba3bd34e70b88ca3cf5fa6abe31979f7c607b6dae6f1557"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase3/detalle-tablet.png",
+      "bytes": 92156,
+      "sha256": "d72cc7a336c74643ad57c8b15093ccc932e8b0698c3a79ada4272e6250a25d53"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase3/navegador.json",
+      "bytes": 2434,
+      "sha256": "b4018b6121fa7e808a8ba64255ab50d369f8a5fa24d55fe258680c1d9c1dcba3"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase3/pedidos-escritorio.png",
+      "bytes": 69575,
+      "sha256": "0ae7b539208e90aaf2a9911c1eb3f8092d7effe82241f9dd641bde5717cbffcd"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase3/pedidos-movil-360.png",
+      "bytes": 159337,
+      "sha256": "aebbf20915d4ad2fc54f1922b65f11426b614ddd9a66cdf155ef21500fb41880"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase3/pedidos-movil.png",
+      "bytes": 161557,
+      "sha256": "eb86bf2320ce3ab828f07fe2f2536465866786855b592e65576bcce074ff09bc"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase3/pedidos-tablet.png",
+      "bytes": 154261,
+      "sha256": "e9db256eb1392bec133b2a136d6e46dd7063fa2cff92888d58a26b468c99091f"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase4/existencias-escritorio.png",
+      "bytes": 95682,
+      "sha256": "68de19ee4e16d10b9aeec514cb42aaeea941d4bbf88e3da8b374e27f9c363f3c"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase4/existencias-movil-360.png",
+      "bytes": 71890,
+      "sha256": "2caa2e6fc8c75d7abf10f58fc19a48ca1b59fa1db2e86705bbf446ab533cdcb3"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase4/existencias-movil.png",
+      "bytes": 72176,
+      "sha256": "640c9580040636677c729c8d488abd1ee7b03a4438d035747aea93edc36e15f2"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase4/existencias-tablet.png",
+      "bytes": 70264,
+      "sha256": "7da2c62b299eae3d34b2bab6bafdb1f18fa01d6ce645ba497f924d6513830d52"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase4/formulario-escritorio.png",
+      "bytes": 135129,
+      "sha256": "8febb8d8b56ed6646cd69c8f7569871721d3437663c4dd3b0163db1816347d58"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase4/formulario-movil-360.png",
+      "bytes": 104223,
+      "sha256": "69a85ca61c0c823c8a4603d0c81cb5392e481a0cf5a5bb225178f1db3aa483c8"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase4/formulario-movil.png",
+      "bytes": 103367,
+      "sha256": "85f8b46c2743a7db7b71f6f7b7bc2d22f5d3ce091a1dd9f2d7d703b8bc9f0883"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase4/formulario-tablet.png",
+      "bytes": 108371,
+      "sha256": "c772ced112422d368a707814f4009aec01a8118db47b0c07d998254684f3113a"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase4/movimientos-escritorio.png",
+      "bytes": 115240,
+      "sha256": "4b97c5da83fde30dc21fa765591d0d750d7d059dc7be28691f56405c2b24eb41"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase4/movimientos-movil-360.png",
+      "bytes": 93854,
+      "sha256": "944e434be17bfe183563aa368fa15b8d68aaf90f597861c1ee5211f56295acaa"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase4/movimientos-movil.png",
+      "bytes": 94809,
+      "sha256": "598e3a38d826ad778a10ee0332dee482b1dfc3a03fca50f9f14092d31f5f3ec3"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase4/movimientos-tablet.png",
+      "bytes": 84123,
+      "sha256": "dec63c9fb68ef9ab449dd654ae941b7ce3c2b68f4632a24ca42c85067d36f46d"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase4/navegador.json",
+      "bytes": 4358,
+      "sha256": "c9c3496d0df64e398e0bfca9cbcf31a0786b80badaf098ab057cb3a648a5576e"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase4/productos-escritorio.png",
+      "bytes": 100170,
+      "sha256": "ab1f5afb1f1a2faaf44e2a1c76d0dff3a889110898e240bb4a91a080202f414a"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase4/productos-movil-360.png",
+      "bytes": 84381,
+      "sha256": "bcbe4799cee7c88044d56d586ee9a499b9551bda6e54939e9961cb25ad061f4a"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase4/productos-movil.png",
+      "bytes": 83348,
+      "sha256": "5ce94794db5dbe9c84fe897dfaee375563e730aa1e86c881ac5cf0aafb71d645"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase4/productos-tablet.png",
+      "bytes": 81328,
+      "sha256": "6fd74df12395773a9c555761d5c0dd95cad5ba507b384ab778d693d4c47cec10"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-fase4/rendimiento.json",
+      "bytes": 29393,
+      "sha256": "4d011795edffd461d26b9f559e27173e4753fda168e39dbece88721dbb0c7122"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-navegador-fase2.txt",
+      "bytes": 409,
+      "sha256": "f56a10bec5242cfb778ce2b18b0102c3b4a1e8e856963538ebd856ab1ffcb3d8"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-navegador-fase3.txt",
+      "bytes": 2434,
+      "sha256": "b4018b6121fa7e808a8ba64255ab50d369f8a5fa24d55fe258680c1d9c1dcba3"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/regresion-navegador-fase4.txt",
+      "bytes": 4358,
+      "sha256": "c9c3496d0df64e398e0bfca9cbcf31a0786b80badaf098ab057cb3a648a5576e"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/resultados-finales.json",
+      "bytes": 2771,
+      "sha256": "c5dbb9c3392390e42eb88aac6fbf7db632c442a84f5d3d4c6ad7608df897c2ad"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/sintaxis.json",
+      "bytes": 642,
+      "sha256": "05c0c9922ee406299e5775f511646f664dc3b79294ccc89f1b37f7d20e705252"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/tienda-escritorio.png",
+      "bytes": 46759,
+      "sha256": "6af1a3739ebc49d17f0fbca5f842f55f0a3e50ea649eabd874a93a95dab10f6e"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/vendedor-escritorio.png",
+      "bytes": 43490,
+      "sha256": "a83ba1452b7db5bba1c97cc3319d87c88fe6c0495fe6dc866950ffde46248cb2"
+    },
+    {
+      "file": "docs/auditoria-admin/fase5-evidencias/verificar-estatico.cjs",
+      "bytes": 4141,
+      "sha256": "8f443e7382712eac9db9fd91bb2e01bbdb702896f421dfdd3673892fc6362a39"
+    },
+    {
+      "file": "docs/auditoria-admin/informe-fase5-navegacion-2026-11-21.md",
+      "bytes": 28662,
+      "sha256": "ce3478a040d59378300dd6527b518fa82364d79e0328d014913fc9a861e90cbc"
+    },
+    {
+      "file": "frontend/src/app/admin/catalogo/page.js",
+      "bytes": 1399,
+      "sha256": "41ea93e5c998e73eff64c88fd702ad212db4765c990fe29452966554ec0edb49"
+    },
+    {
+      "file": "frontend/src/app/admin/configuracion/page.js",
+      "bytes": 6401,
+      "sha256": "037103987a836033c79e58878d29edabbc346bdeb13b58ab6217c5ec192c90b1"
+    },
+    {
+      "file": "frontend/src/app/admin/contenido/page.js",
+      "bytes": 160,
+      "sha256": "b66643f2ee0a89c749a525ddba788f18610a4b16a678c56823ab457fbcbb67bb"
+    },
+    {
+      "file": "frontend/src/app/admin/home-imagenes/page.js",
+      "bytes": 427,
+      "sha256": "caa9389129c11c1e82dfbb727813a4ac29ff5f2822ce94d09b08ee4d4073d504"
+    },
+    {
+      "file": "frontend/src/app/admin/marketing/page.js",
+      "bytes": 179,
+      "sha256": "601e6c0a03509a88c47f91e1a2b0e621b7c93a57a76377c372a809dde634733c"
+    },
+    {
+      "file": "frontend/src/app/admin/resenas/page.js",
+      "bytes": 426,
+      "sha256": "9fbdeb683ffc4978b7a788a02a06e854e8fa2972682290c08d6582a4aff481c4"
+    },
+    {
+      "file": "frontend/src/app/admin/solicitudes/[id]/page.js",
+      "bytes": 1848,
+      "sha256": "fe6870af18ba4d5fdcc3e32cc5183b169da38cb6f64ff48db7440234277e79e1"
+    },
+    {
+      "file": "frontend/src/components/admin/AdminShell.jsx",
+      "bytes": 8242,
+      "sha256": "350d606e4997d1229e9eb5675c7cd3e31624b2a17178d05bc143d3c0bd46d6ea"
+    },
+    {
+      "file": "frontend/src/components/admin/ContentWorkspace.jsx",
+      "bytes": 36511,
+      "sha256": "67c025f980d777b12f595549903fce06071c6e203238bc9ee4c895abba21598e"
+    },
+    {
+      "file": "frontend/src/components/admin/DataExports.jsx",
+      "bytes": 1884,
+      "sha256": "37cf285a458abc62bd9882ea1ab4edc16d17025ffe98767b782c2ec9cbd35bb9"
+    },
+    {
+      "file": "frontend/src/components/admin/SpecialRequestsList.jsx",
+      "bytes": 5734,
+      "sha256": "52c57b8ead9531e11e4fbecd9b29a5dfe7314f3bb1f27f2da856530841f507c0"
+    },
+    {
+      "file": "frontend/src/components/admin/TaxonomyManager.jsx",
+      "bytes": 11874,
+      "sha256": "ba647594dc3d817fd8f79b02ff5e24d3fa9931a2404f880159f9f2d1b68084d9"
+    },
+    {
+      "file": "frontend/src/lib/adminNavigation.mjs",
+      "bytes": 6253,
+      "sha256": "e0fb917b5cfa22c09104d02790caf87f37374b4b540a44260d51bf01809eae54"
+    },
+    {
+      "file": "frontend/src/styles/layouts/admin-layout.css",
+      "bytes": 6135,
+      "sha256": "6068c86cb71737e2fa05bc21935834b1bc3636b933d209bbf98dd81316e477ab"
+    },
+    {
+      "file": "frontend/src/styles/pages/admin-cms.css",
+      "bytes": 7074,
+      "sha256": "d921949e5913f60d46066f0e8b2718287d9b9deeb58df140ef80c9dadb8b34cc"
+    },
+    {
+      "file": "frontend/test/navigation-next-browser.cjs",
+      "bytes": 25183,
+      "sha256": "519bec22bc218ce51dda55c143c7d63fe580b451fb3115db07d4d85b25424697"
+    }
+  ]
+}

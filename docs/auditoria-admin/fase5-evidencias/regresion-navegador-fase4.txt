@@ -1,0 +1,130 @@
+{
+  "checks": [
+    "C01 listado paginado, imagen, publicación y disponibilidad",
+    "C02 búsqueda SKU, categoría y URL conservada",
+    "C03 edición preserva stock, filtros y recuperación de página fuera de rango",
+    "C04 variantes y enfoque directo desde alerta",
+    "C05 confirmación, teclado, doble clic y una petición relativa",
+    "C06 retiro y actualización confirmada de existencias",
+    "C07 cantidades fraccionarias no habilitan confirmación",
+    "C08 respuesta perdida: intención persiste y se comprueba sin reenviar",
+    "C09 resultado desconocido conserva clave y contenido al reintentar",
+    "C10 rechazo definitivo permite corregir sin ocultar el error",
+    "C11 historial por variante, responsable y exportación conservada",
+    "C12 carga y error de API distintos de lista vacía",
+    "C13 vacío real y ausencia de coincidencias diferenciados",
+    "C14 ruta histórica Inventario y recuperación de movimientos",
+    "C15 vendedor consulta variantes sin costos ni controles de edición",
+    "C16 desactivación confirmada conserva variantes y cantidades",
+    "C17 formulario recuperable y ejes de talla/color opcionales",
+    "C18 controles etiquetados y foco de confirmación comprobado",
+    "C19 escritorio, tablet, móvil 390 y 360 sin desbordamiento",
+    "C20 componentes React y shell reales, sin errores ni peticiones externas"
+  ],
+  "externalRequests": [],
+  "pageErrors": [],
+  "mutations": [],
+  "requests": [
+    {
+      "path": "/mock/products/000000000000000000000003",
+      "body": {
+        "name": "Producto editado de prueba",
+        "shortDescription": "",
+        "fullDescription": "",
+        "category": "c1",
+        "weaveType": "w1",
+        "style": null,
+        "material": "Palma de iraca",
+        "salePrice": 80000,
+        "internalCost": 32000,
+        "discountPercent": 0,
+        "onPromotion": false,
+        "isActive": true,
+        "isFeatured": false,
+        "isNew": false,
+        "allowsCustomization": false,
+        "seoTitle": "Producto editado de prueba",
+        "seoDescription": "",
+        "images": [
+          {
+            "url": "/fixture-image.svg",
+            "publicId": null,
+            "alt": "Producto ficticio"
+          }
+        ],
+        "mainImage": "/fixture-image.svg",
+        "variants": [
+          {
+            "id": "000000000000000000000102",
+            "size": null,
+            "color": null,
+            "sku": "DIZ-2",
+            "price": null,
+            "isActive": false
+          }
+        ]
+      }
+    },
+    {
+      "path": "/mock/products/000000000000000000000001/stock",
+      "body": {
+        "variantId": "000000000000000000001011",
+        "delta": 5,
+        "reason": "Reposición de prueba",
+        "operationKey": "351e5db7-cd66-41b7-8524-fda83015b65f"
+      }
+    },
+    {
+      "path": "/mock/products/000000000000000000000001/stock",
+      "body": {
+        "variantId": "000000000000000000001011",
+        "delta": -2,
+        "reason": "Retiro físico de prueba",
+        "operationKey": "bc8184b4-a2b7-4ef1-b66b-e39556a211a8"
+      }
+    },
+    {
+      "path": "/mock/products/000000000000000000000001/stock",
+      "body": {
+        "variantId": "000000000000000000001011",
+        "delta": 1,
+        "reason": "Respuesta perdida de prueba",
+        "operationKey": "3fdb506b-ff4b-4ef8-96a2-6239d99bcbaa"
+      }
+    },
+    {
+      "path": "/mock/products/000000000000000000000001/stock",
+      "body": {
+        "variantId": "000000000000000000001011",
+        "delta": 1,
+        "reason": "Reintento seguro de prueba",
+        "operationKey": "53cd063c-0c9b-4c9d-a995-ee2d5927931b"
+      }
+    },
+    {
+      "path": "/mock/products/000000000000000000000001/stock",
+      "body": {
+        "variantId": "000000000000000000001011",
+        "delta": 1,
+        "reason": "Reintento seguro de prueba",
+        "operationKey": "53cd063c-0c9b-4c9d-a995-ee2d5927931b"
+      }
+    },
+    {
+      "path": "/mock/products/000000000000000000000001/stock",
+      "body": {
+        "variantId": "000000000000000000001011",
+        "delta": 1,
+        "reason": "Conflicto de prueba",
+        "operationKey": "db04e276-8be1-4100-8a44-b1eab4041e20"
+      }
+    },
+    {
+      "path": "/mock/products/000000000000000000000002",
+      "body": {
+        "isActive": false
+      }
+    }
+  ],
+  "passed": true
+}

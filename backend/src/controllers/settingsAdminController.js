@@ -44,7 +44,8 @@ exports.getSettings = catchAsync(async (req, res) => {
 
 exports.updateSettings = catchAsync(async (req, res, next) => {
   const settings = await getStoreSettings();
-  const allowed = [
+  // Inactive shipping values are historical evidence, not writable controls.
+  const allowed = isShippingIncluded(settings) ? ["taxEnabled", "taxRate", "appearance"] : [
     "taxEnabled",
     "taxRate",
     "shippingMode",

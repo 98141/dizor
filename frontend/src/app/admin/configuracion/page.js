@@ -9,6 +9,7 @@ import {
   getStoreSettings,
   updateStoreSettings,
 } from "@/services/adminSettingsService";
+import { CARRIER_LABELS } from "@/lib/orderLabels";
 import { formatCOP } from "@/lib/formatCurrency";
 import { useFlashMessage } from "@/hooks/useFlashMessage";
 
@@ -37,10 +38,7 @@ function AdminConfigContent() {
       const data = await updateStoreSettings({
         taxEnabled: form.taxEnabled,
         taxRate: Number(form.taxRate),
-        shippingMode: form.shippingMode,
-        shippingFixedCost: Number(form.shippingFixedCost),
-        freeShippingMinAmount: Number(form.freeShippingMinAmount),
-        carriers: form.carriers,
+        ...(!form.shippingIncluded ? { shippingMode: form.shippingMode, shippingFixedCost: Number(form.shippingFixedCost), freeShippingMinAmount: Number(form.freeShippingMinAmount) } : {}),
       });
       setForm(data.settings);
       showMsg("Configuración guardada");
@@ -92,12 +90,11 @@ function AdminConfigContent() {
 
         <section className="product-form__section">
           <h2>Envíos</h2>
-          {form.shippingIncluded && (
-            <p className="admin-muted">
-              El envío está incluido en el precio de los productos: el checkout no suma
-              costo de envío, sin importar el modo guardado (SHIPPING_INCLUDED_IN_PRICE).
-            </p>
-          )}
+          {form.shippingIncluded ? <>
+            <p role="status"><strong>Envío incluido en el precio.</strong> El cliente no paga un cargo adicional de envío en el checkout.</p>
+            <p className="admin-muted">Los importes guardados de otras políticas no se aplican mientras esta política esté vigente.</p>
+            <details><summary>Consultar configuración histórica de envío</summary><dl><dt>Modo guardado</dt><dd>{({ included: "Incluido", fixed: "Costo fijo", free_threshold: "Gratis desde monto mínimo", by_department: "Por departamento" })[form.shippingMode] || form.shippingMode}</dd><dt>Costo guardado (sin efecto actual)</dt><dd>{formatCOP(form.shippingFixedCost)}</dd><dt>Mínimo guardado (sin efecto actual)</dt><dd>{formatCOP(form.freeShippingMinAmount)}</dd></dl></details>
+          </> : <>
           <div className="admin-form__group">
             <label htmlFor="shippingMode">Modo de envío</label>
             <select
@@ -141,12 +138,13 @@ function AdminConfigContent() {
               </p>
             </div>
           </div>
+          </>}
         </section>
 
         <section className="product-form__section">
           <h2>Transportadoras</h2>
           <p className="admin-muted">
-            {(form.activeCarriers || form.carriers)?.join(", ") || "Sin transportadoras"}
+            {(form.activeCarriers || form.carriers)?.map(id => CARRIER_LABELS[id] || id).join(", ") || "Sin transportadoras"}
           </p>
         </section>
 

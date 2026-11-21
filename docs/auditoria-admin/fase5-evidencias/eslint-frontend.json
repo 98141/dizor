@@ -1,0 +1,154 @@
+[
+  {
+    "file": "frontend/src/components/admin/ContentWorkspace.jsx",
+    "messages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 204,
+        "column": 11,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 210,
+        "endColumn": 13
+      },
+      {
+        "ruleId": "react-hooks/set-state-in-effect",
+        "severity": 2,
+        "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).\n\n  296 |   };\n  297 |\n> 298 |   useEffect(() => { load(); }, []);\n      |                     ^^^^ Avoid calling setState() directly within an effect\n  299 |\n  300 |   // ── CMS handlers ──────────────────────────────────────\n  301 |   const cleanBullets = (bullets) =>",
+        "line": 298,
+        "column": 21,
+        "nodeType": null,
+        "endLine": 298,
+        "endColumn": 25
+      },
+      {
+        "ruleId": "react-hooks/exhaustive-deps",
+        "severity": 1,
+        "message": "React Hook useEffect has a missing dependency: 'load'. Either include it or remove the dependency array.",
+        "line": 298,
+        "column": 32,
+        "nodeType": "ArrayExpression",
+        "endLine": 298,
+        "endColumn": 34,
+        "suggestions": [
+          {
+            "desc": "Update the dependencies array to be: [load]",
+            "fix": {
+              "range": [
+                8395,
+                8397
+              ],
+              "text": "[load]"
+            }
+          }
+        ]
+      }
+    ],
+    "errorCount": 1,
+    "warningCount": 2
+  },
+  {
+    "file": "frontend/src/components/admin/DataExports.jsx",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "frontend/src/lib/adminNavigation.mjs",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "frontend/src/app/admin/catalogo/page.js",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "frontend/src/app/admin/configuracion/page.js",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "frontend/src/app/admin/contenido/page.js",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "frontend/src/app/admin/home-imagenes/page.js",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "frontend/src/app/admin/marketing/page.js",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "frontend/src/app/admin/resenas/page.js",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "frontend/src/app/admin/solicitudes/[id]/page.js",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "frontend/src/components/admin/AdminShell.jsx",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "frontend/src/components/admin/SpecialRequestsList.jsx",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "frontend/src/components/admin/TaxonomyManager.jsx",
+    "messages": [
+      {
+        "ruleId": "react-hooks/preserve-manual-memoization",
+        "severity": 2,
+        "message": "Compilation Skipped: Existing memoization could not be preserved\n\nReact Compiler has skipped optimizing this component because the existing manual memoization could not be preserved. The inferred dependencies did not match the manually specified dependencies, which could cause the value to change more or less frequently than expected. The inferred dependency was `setLoading`, but the source dependencies were [activeType]. Inferred different dependency than source.\n\n   88 |   const currentTab = TABS.find((t) => t.type === activeType) || TABS[0];\n   89 |\n>  90 |   const loadItems = useCallback(async () => {\n      |                                 ^^^^^^^^^^^^^\n>  91 |     setLoading(true);\n      | ^^^^^^^^^^^^^^^^^^^^^\n>  92 |     setError(\"\");\n      …\n      | ^^^^^^^^^^^^^^^^^^^^^\n> 101 |     }\n      | ^^^^^^^^^^^^^^^^^^^^^\n> 102 |   }, [activeType]);\n      | ^^^^ Could not preserve existing manual memoization\n  103 |\n  104 |   useEffect(() => {\n  105 |     loadItems();",
+        "line": 90,
+        "column": 33,
+        "nodeType": null,
+        "endLine": 102,
+        "endColumn": 4
+      },
+      {
+        "ruleId": "react-hooks/preserve-manual-memoization",
+        "severity": 2,
+        "message": "Compilation Skipped: Existing memoization could not be preserved\n\nReact Compiler has skipped optimizing this component because the existing manual memoization could not be preserved. The inferred dependencies did not match the manually specified dependencies, which could cause the value to change more or less frequently than expected. The inferred dependency was `setItems`, but the source dependencies were [activeType]. Inferred different dependency than source.\n\n   88 |   const currentTab = TABS.find((t) => t.type === activeType) || TABS[0];\n   89 |\n>  90 |   const loadItems = useCallback(async () => {\n      |                                 ^^^^^^^^^^^^^\n>  91 |     setLoading(true);\n      | ^^^^^^^^^^^^^^^^^^^^^\n>  92 |     setError(\"\");\n      …\n      | ^^^^^^^^^^^^^^^^^^^^^\n> 101 |     }\n      | ^^^^^^^^^^^^^^^^^^^^^\n> 102 |   }, [activeType]);\n      | ^^^^ Could not preserve existing manual memoization\n  103 |\n  104 |   useEffect(() => {\n  105 |     loadItems();",
+        "line": 90,
+        "column": 33,
+        "nodeType": null,
+        "endLine": 102,
+        "endColumn": 4
+      },
+      {
+        "ruleId": "react-hooks/set-state-in-effect",
+        "severity": 2,
+        "message": "Error: Calling setState synchronously within an effect can trigger cascading renders\n\nEffects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:\n* Update external systems with the latest state from React.\n* Subscribe for updates from some external system, calling setState in a callback function when external state changes.\n\nCalling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).\n\n  103 |\n  104 |   useEffect(() => {\n> 105 |     loadItems();\n      |     ^^^^^^^^^ Avoid calling setState() directly within an effect\n  106 |     setForm(emptyForm(currentTab.fields));\n  107 |     setEditingId(null);\n  108 |     setSavedMsg(\"\");",
+        "line": 105,
+        "column": 5,
+        "nodeType": null,
+        "endLine": 105,
+        "endColumn": 14
+      }
+    ],
+    "errorCount": 3,
+    "warningCount": 0
+  }
+]

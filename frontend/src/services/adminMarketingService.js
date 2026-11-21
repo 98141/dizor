@@ -1,22 +1,22 @@
 import api from "./api";
 
-export const getMarketingSettings = async () => {
-  const res = await api.get("/admin/marketing/settings");
+export const getMarketingSettings = async (config = {}) => {
+  const res = await api.get("/admin/marketing/settings", config);
   return res.data;
 };
 
-export const updateMarketingSettings = async (data) => {
-  const res = await api.patch("/admin/marketing/settings", data);
+export const updateMarketingSettings = async (data, config = {}) => {
+  const res = await api.patch("/admin/marketing/settings", data, config);
   return res.data;
 };
 
-export const getNewsletterSubscribers = async (params = {}) => {
-  const res = await api.get("/admin/marketing/newsletter", { params });
+export const getNewsletterSubscribers = async (params = {}, config = {}) => {
+  const res = await api.get("/admin/marketing/newsletter", { ...config, params });
   return res.data;
 };
 
-export const getAbandonedCarts = async (params = {}) => {
-  const res = await api.get("/admin/marketing/abandoned-carts", { params });
+export const getAbandonedCarts = async (params = {}, config = {}) => {
+  const res = await api.get("/admin/marketing/abandoned-carts", { ...config, params });
   return res.data;
 };
 

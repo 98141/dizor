@@ -72,7 +72,7 @@ const emptyForm = (fields) => {
   return data;
 };
 
-export default function TaxonomyManager({ initialTab = "categories" }) {
+export default function TaxonomyManager({ initialTab = "categories", onTabChange }) {
   const tabConfig =
     TABS.find((t) => t.type === initialTab) || TABS[0];
   const [activeType, setActiveType] = useState(tabConfig.type);
@@ -194,7 +194,8 @@ export default function TaxonomyManager({ initialTab = "categories" }) {
             key={tab.type}
             type="button"
             className={activeType === tab.type ? "active" : ""}
-            onClick={() => setActiveType(tab.type)}
+            aria-pressed={activeType === tab.type}
+            onClick={() => onTabChange ? onTabChange(tab.type) : setActiveType(tab.type)}
           >
             {tab.label}
           </button>

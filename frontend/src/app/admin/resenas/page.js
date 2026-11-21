@@ -1,15 +1,7 @@
-"use client";
-
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-
-/** Ruta legacy → pestaña Reseñas en Contenido */
-export default function ReviewsRedirectPage() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.replace("/admin/contenido?tab=resenas");
-  }, [router]);
-
-  return <p className="auth-loading">Redirigiendo…</p>;
+import { redirect } from "next/navigation";
+import { contentHref } from "@/lib/adminNavigation.mjs";
+export default async function LegacyPage({ searchParams }) {
+  const raw = await searchParams || {}, params = new URLSearchParams();
+  for (const [key, value] of Object.entries(raw)) for (const item of Array.isArray(value) ? value : [value]) params.append(key, item);
+  redirect(contentHref("resenas", params.toString()));
 }
