@@ -1,5 +1,6 @@
 const AppError = require("../utils/AppError");
 const { isAdmin, isStaff } = require("../utils/orderPermissions");
+const { canFulfill } = require("./orderReadiness");
 
 const next = {
   pendiente: ["en_preparacion", "cancelado"],
@@ -22,7 +23,7 @@ exports.assertTransition = (order, status, role) => {
     if (order.paymentMethod !== "contra_entrega" && order.paymentStatus !== "pagado") {
       throw new AppError("Se requiere pago verificado antes de preparar o enviar", 409);
     }
-    if (order.requiresReview || !order.stockDeducted) throw new AppError("El pedido requiere conciliación de pago o inventario", 409);
+    if (!canFulfill(order)) throw new AppError("El pedido requiere conciliación de pago o inventario", 409);
   }
   if (status === "enviado" && (!order.carrier?.trim() || !order.trackingNumber?.trim())) {
     throw new AppError("Debes registrar transportadora y guía antes de enviar", 400);

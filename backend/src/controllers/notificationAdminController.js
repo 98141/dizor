@@ -94,7 +94,7 @@ exports.resend = catchAsync(async (req, res) => {
 });
 
 exports.communicationAlerts = async () => {
-  const filter = { supersededBy: null, $or: [{ status: "failed" }, { status: "skipped", errorCode: { $ne: "superseded" } }] };
+  const filter = require("../services/communicationCriteria").communicationFailureFilter();
   const [groups, total] = await Promise.all([
     Notification.aggregate([{ $match: filter }, { $group: { _id: { order: "$order", code: "$errorCode" }, count: { $sum: 1 }, at: { $max: "$updatedAt" } } },
       { $sort: { at: -1 } }, { $limit: 10 }, { $lookup: { from: "orders", localField: "_id.order", foreignField: "_id", as: "order" } },

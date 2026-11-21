@@ -7,19 +7,7 @@ const AuditLog = require("../models/AuditLog");
 const Coupon = require("../models/coupon");
 const catchAsync = require("../utils/catchAsync");
 const { reconciledSalesFilter } = require("../services/financeCriteria");
-
-const startOfToday = () => {
-  const d = new Date();
-  d.setHours(0, 0, 0, 0);
-  return d;
-};
-
-const startOfMonth = () => {
-  const d = new Date();
-  d.setDate(1);
-  d.setHours(0, 0, 0, 0);
-  return d;
-};
+const workspace = require("../services/orderWorkspace");
 
 const countProductStockHealth = async () => {
   const products = await Product.find({ isActive: true }).select(
@@ -51,8 +39,8 @@ const formatAuditPreview = (log) => ({
 });
 
 exports.getDashboard = catchAsync(async (req, res) => {
-  const today = startOfToday();
-  const monthStart = startOfMonth();
+  const { today, tomorrow, monthStart } = workspace.bogotaPeriod();
+  const operational = await workspace.queryWorkspace({ limit: 8 }, req.user.role);
   const now = new Date();
   const in3Days = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
 
@@ -82,18 +70,15 @@ exports.getDashboard = catchAsync(async (req, res) => {
     Order.countDocuments({
       paymentStatus: "pendiente",
       paymentMethod: "wompi",
-      orderStatus: { $nin: ["cancelado", "rechazado"] },
+      orderStatus: { $nin: ["cancelado", "rechazado", "devuelto"] },
     }),
-    Order.countDocuments({ requiresReview: { $ne: true }, stockDeducted: true, $or: [{ orderStatus: "pagado", paymentStatus: "pagado" }, { orderStatus: "pendiente", paymentMethod: "contra_entrega" }] }),
-    Order.countDocuments({
-      orderStatus: "enviado",
-      updatedAt: { $gte: today },
-    }),
-    Order.countDocuments({ createdAt: { $gte: today } }),
+    Promise.resolve(operational.counts.prepare),
+    workspace.countDispatches(today, tomorrow),
+    Order.countDocuments({ createdAt: { $gte: today, $lt: tomorrow } }),
     Order.aggregate([
       {
         $match: reconciledSalesFilter({
-          createdAt: { $gte: monthStart },
+          createdAt: { $gte: monthStart, $lte: now },
         }),
       },
       { $group: { _id: null, total: { $sum: "$total" } } },
@@ -133,6 +118,10 @@ exports.getDashboard = catchAsync(async (req, res) => {
   res.status(200).json({
     status: "success",
     dashboard: {
+      attention: operational.counts,
+      operationalOrders: operational.orders,
+      timeZone: "America/Bogota",
+      deliveredToday: await workspace.countDeliveries(today, tomorrow),
       communications: await require("./notificationAdminController").communicationAlerts(),
       orders: {
         total: ordersTotal,

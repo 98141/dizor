@@ -23,9 +23,7 @@ exports.getAlerts = catchAsync(async (req, res) => {
         .select("orderNumber buyer total createdAt orderStatus paymentStatus paymentMethod")
         .sort({ createdAt: -1 })
         .lean(),
-      Order.find({
-        requiresReview: true,
-      })
+      Order.find(require("../services/orderWorkspace").trayFilter("review"))
         .select("orderNumber buyer total createdAt incidents requiresReview")
         .sort({ createdAt: 1 })
         .lean(),

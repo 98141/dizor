@@ -37,6 +37,17 @@ export default async function SiteFooter() {
           <p className="site-footer__tagline">
             Sombreros artesanales en palma de iraca · Sandoná, Nariño, Colombia
           </p>
+                  {/* Identificación del vendedor (Ley 1480, art. 50 lit. a). */}
+        <div className="site-footer__seller">
+          <p>
+            {BUSINESS.brand} es una marca de {BUSINESS.legalName} · NIT {BUSINESS.nit}
+          </p>
+          <p>
+            Domicilio registrado: {BUSINESS.registeredAddress} ·{" "}
+            <a href={`mailto:${BUSINESS.email}`}>{BUSINESS.email}</a> · Atención:{" "}
+            {BUSINESS.attentionHours}
+          </p>
+        </div>
         </div>
 
         <div className="site-footer__grid">
@@ -69,7 +80,6 @@ export default async function SiteFooter() {
                 {p.title}
               </Link>
             ))}
-            <Link href="/pagina/envios">Envíos y entregas</Link>
             <Link href="/garantias-y-devoluciones">Garantías, retracto y devoluciones</Link>
             <Link href="/terminos-y-condiciones">Términos y condiciones</Link>
             <Link href="/politica-de-privacidad">Política de privacidad</Link>
@@ -88,18 +98,6 @@ export default async function SiteFooter() {
               Superintendencia de Industria y Comercio (SIC)
             </a>
           </div>
-        </div>
-
-        {/* Identificación del vendedor (Ley 1480, art. 50 lit. a). */}
-        <div className="site-footer__seller">
-          <p>
-            {BUSINESS.brand} es una marca de {BUSINESS.legalName} · NIT {BUSINESS.nit}
-          </p>
-          <p>
-            Domicilio registrado: {BUSINESS.registeredAddress} ·{" "}
-            <a href={`mailto:${BUSINESS.email}`}>{BUSINESS.email}</a> · Atención:{" "}
-            {BUSINESS.attentionHours}
-          </p>
         </div>
 
         <div className="site-footer__bottom">

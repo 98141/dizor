@@ -1,0 +1,21 @@
+{
+  "syntaxFiles": 13,
+  "syntaxFailures": 0,
+  "node": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "nodeBaseline": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "frontend": {
+    "errors": 0,
+    "warnings": 1
+  },
+  "frontendBaseline": {
+    "errors": 2,
+    "warnings": 3
+  },
+  "newMessages": []
+}

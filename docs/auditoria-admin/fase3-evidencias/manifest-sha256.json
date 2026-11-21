@@ -1,0 +1,106 @@
+[
+  {
+    "file": "backend/package.json",
+    "sha256": "afe30fc5b7d7ad765bad9e0eac6bdf9ea4a635ac83570d593c9b30a03518c17c"
+  },
+  {
+    "file": "backend/src/controllers/adminAlertController.js",
+    "sha256": "afd7b67217d7f0946ff1af767d644a719d69a2dc18fe57babd4e42729cfe83b7"
+  },
+  {
+    "file": "backend/src/controllers/dashboardAdminController.js",
+    "sha256": "a6fc515b9d9f914f626d4ee8467761a6d58a22f5304eae78038e69f89d138205"
+  },
+  {
+    "file": "backend/src/controllers/notificationAdminController.js",
+    "sha256": "8aad20c02030bd26fd3e37758f21d668f6f4fc8504458342cd8af93fe0ccc5fa"
+  },
+  {
+    "file": "backend/src/controllers/orderAdminController.js",
+    "sha256": "e148072dd5323c3b187ea965098cc1b132baa4386759671f6b51d5cdc11e5e83"
+  },
+  {
+    "file": "backend/src/services/communicationCriteria.js",
+    "sha256": "11721b96fda7b22d23158c2a55fb037861e06d36d17300e3cbf4dff13e234f30"
+  },
+  {
+    "file": "backend/src/services/orderReadiness.js",
+    "sha256": "cbab69a30076157c559c1cef4963016830f955d89478e8b82d4a5e76819f15d0"
+  },
+  {
+    "file": "backend/src/services/orderTransitions.js",
+    "sha256": "9f540b86fdebc0284957e6125f495a3a2780d0cb8714ff05969d28102c9ede64"
+  },
+  {
+    "file": "backend/src/services/orderWorkspace.js",
+    "sha256": "dab1912e3716f70b3d1ee06c0842fd462c050c9085a761428bd6a67c7433a921"
+  },
+  {
+    "file": "backend/test/phase3.test.js",
+    "sha256": "bcf447740d0b4424eb9aaeab72c3f1ab3cc15752686b6f0b4f51a2f1a3155b93"
+  },
+  {
+    "file": "docs/auditoria-admin/fase3-evidencias/build-fase3.cjs",
+    "sha256": "1ea0468d0044db1f6daffc91726d7bdaf63304a90e128d5ce056f1a042134f75"
+  },
+  {
+    "file": "docs/auditoria-admin/fase3-evidencias/preservar-evidencias.cjs",
+    "sha256": "b07f9ec0f3a96190a7f48410254a8903ac70053a9809864e73e3879bc9a07519"
+  },
+  {
+    "file": "docs/auditoria-admin/fase3-evidencias/verificar-estatico.cjs",
+    "sha256": "36c342ea3fb574ef57e3b64d57b232d51f8d36cb18370847bb9dcced06ff3a1f"
+  },
+  {
+    "file": "docs/auditoria-admin/informe-fase3-operacion-pedidos-2026-11-20.md",
+    "sha256": "9134f0a43f6fb2f2b6d8d5749b81e298642360da13d861a34cf6ce398c55d303"
+  },
+  {
+    "file": "docs/auditoria-admin/fase3-evidencias/README.md",
+    "sha256": "da69d651e932c863ddeac0c7d9aded3c4d36a79e0d4aa88af938f429256e1421"
+  },
+  {
+    "file": "frontend/src/app/vendedor/page.js",
+    "sha256": "c304d777e46bff4ce4a8fa6424b8c5a8901d2f6ddae8a2203d4f8b87c497adbb"
+  },
+  {
+    "file": "frontend/src/components/admin/AdminDashboard.jsx",
+    "sha256": "292aa646b14a9d3cf5853fb75bbc88d9c809c306b57f95b0d0d806c7429299f3"
+  },
+  {
+    "file": "frontend/src/components/admin/AdminShell.jsx",
+    "sha256": "ed0a04b5cf2220ed9a1756bd9d0e49714beb61dcb5a79d9a0690297eaa30b3fa"
+  },
+  {
+    "file": "frontend/src/components/admin/OrderCommunications.jsx",
+    "sha256": "9c7a603c2d0000a5b9bb53043a2282ac59146f8d93f8bc97d56aa828d020b99d"
+  },
+  {
+    "file": "frontend/src/components/admin/OrderCommunications.module.css",
+    "sha256": "dddc2716368a662b096133289f9ba4c8a145f34c0ef428dda79f91ec0075bdc3"
+  },
+  {
+    "file": "frontend/src/components/admin/OrderDetail.jsx",
+    "sha256": "116200d6cb8f3cdf437ce96e2e9221b8f5e03012c1d1ae206ee77d534e8ed65c"
+  },
+  {
+    "file": "frontend/src/components/admin/OrderNextAction.jsx",
+    "sha256": "3c06799cfe63706eddbfc8c001cfab2876f9c0fe4024a47ddf51f5e2c1f2cb3a"
+  },
+  {
+    "file": "frontend/src/components/admin/OrderWorkspace.module.css",
+    "sha256": "b08bb539f646b35a44fa343f670aab1b2acb14e1a0201f4e0e942a1ce905bc8a"
+  },
+  {
+    "file": "frontend/src/components/admin/OrdersList.jsx",
+    "sha256": "712e4224ca74cd4f37a7e1fd2927751722443dc64e50a5aed8c4b3de81a2c257"
+  },
+  {
+    "file": "frontend/src/lib/orderWorkspace.js",
+    "sha256": "75b3b48bc26534f8c1a8f35b508f2b227c6427c074f0ffab124e71deba9df3e0"
+  },
+  {
+    "file": "frontend/test/orders-workspace-browser.cjs",
+    "sha256": "e36f75a65245267447145fcbc214efc89d454f860c3a629c5b06cde8b04c1488"
+  }
+]

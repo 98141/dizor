@@ -9,92 +9,22 @@ const {
 const { mutateOrder, transition, history } = require("../services/orderOperations");
 const { allowedTransitions, assertCollection } = require("../services/orderTransitions");
 
-const formatOrderList = (order) => ({
-  id: order._id,
-  orderNumber: order.orderNumber,
-  buyer: order.buyer,
-  total: order.total,
-  paymentMethod: order.paymentMethod,
-  paymentStatus: order.paymentStatus,
-  orderStatus: order.orderStatus,
-  carrier: order.carrier,
-  trackingNumber: order.trackingNumber,
-  isGuest: order.isGuest,
-  source: order.source || "web",
-  channelOrigin: order.channelOrigin || "",
-  shippingRequired: order.shippingRequired !== false,
-  createdAt: order.createdAt,
-  itemCount: order.items?.length || 0,
-  requiresReview: !!order.requiresReview,
-});
+const workspace = require("../services/orderWorkspace");
+const formatOrderList = workspace.listDTO;
 
 exports.getOrderStats = catchAsync(async (req, res) => {
-  const [total, pendingPayment, toPrepare, shippedToday] = await Promise.all([
-    Order.countDocuments(),
-    Order.countDocuments({
-      paymentStatus: "pendiente",
-      paymentMethod: "wompi",
-      orderStatus: { $nin: ["cancelado", "rechazado"] },
-    }),
-    Order.countDocuments({ requiresReview: { $ne: true }, stockDeducted: true, $or: [{ orderStatus: "pagado", paymentStatus: "pagado" }, { orderStatus: "pendiente", paymentMethod: "contra_entrega" }] }),
-    Order.countDocuments({
-      orderStatus: "enviado",
-      updatedAt: { $gte: new Date(new Date().setHours(0, 0, 0, 0)) },
-    }),
+  const result = await workspace.queryWorkspace({ limit: 1 }, req.user.role);
+  const { today, tomorrow } = workspace.bogotaPeriod();
+  const [pendingPayment, shippedToday] = await Promise.all([
+    Order.countDocuments({ paymentMethod: "wompi", paymentStatus: "pendiente", orderStatus: { $nin: ["cancelado", "devuelto", "rechazado"] } }),
+    workspace.countDispatches(today, tomorrow),
   ]);
-
-  res.status(200).json({
-    status: "success",
-    stats: {
-      total,
-      pendingPayment,
-      toPrepare,
-      shippedToday,
-    },
-  });
+  res.json({ status: "success", counts: result.counts, stats: { total: result.counts.all,
+    pendingPayment, toPrepare: result.counts.prepare, shippedToday } });
 });
 
 exports.getOrders = catchAsync(async (req, res) => {
-  const page = Math.max(1, parseInt(req.query.page, 10) || 1);
-  const limit = Math.min(50, parseInt(req.query.limit, 10) || 20);
-  const skip = (page - 1) * limit;
-
-  const filter = {};
-
-  if (req.query.orderStatus) filter.orderStatus = req.query.orderStatus;
-  if (req.query.paymentStatus) filter.paymentStatus = req.query.paymentStatus;
-  if (req.query.paymentMethod) filter.paymentMethod = req.query.paymentMethod;
-  if (req.query.source) filter.source = req.query.source;
-
-  if (req.query.q?.trim()) {
-    const q = req.query.q.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    filter.$or = [
-      { orderNumber: { $regex: q, $options: "i" } },
-      { "buyer.name": { $regex: q, $options: "i" } },
-      { "buyer.email": { $regex: q, $options: "i" } },
-      { "buyer.phone": { $regex: q, $options: "i" } },
-    ];
-  }
-
-  if (req.query.from || req.query.to) {
-    filter.createdAt = {};
-    if (req.query.from) filter.createdAt.$gte = new Date(req.query.from);
-    if (req.query.to) filter.createdAt.$lte = new Date(req.query.to);
-  }
-
-  const [orders, total] = await Promise.all([
-    Order.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
-    Order.countDocuments(filter),
-  ]);
-
-  res.status(200).json({
-    status: "success",
-    results: orders.length,
-    total,
-    page,
-    totalPages: Math.ceil(total / limit) || 1,
-    orders: orders.map(formatOrderList),
-  });
+  res.json(await workspace.queryWorkspace(req.query, req.user.role));
 });
 
 exports.getOrder = catchAsync(async (req, res, next) => {
@@ -109,11 +39,12 @@ exports.getOrder = catchAsync(async (req, res, next) => {
 
   const dto = order.toObject();
   if (!isAdmin(req.user.role)) for (const item of dto.items) delete item.unitCost;
+  dto.operation = workspace.operationalActions(dto, req.user.role);
   dto.allowedTransitions = allowedTransitions(dto, req.user.role);
   dto.canConfirmCollection = isAdmin(req.user.role) && dto.paymentMethod === "contra_entrega"
     && dto.orderStatus === "entregado" && dto.paymentStatus === "pendiente";
   dto.canUpdateShipping = ["en_preparacion", "enviado"].includes(dto.orderStatus)
-    && !dto.requiresReview && (dto.paymentMethod === "contra_entrega" || dto.paymentStatus === "pagado");
+    && require("../services/orderReadiness").canFulfill(dto);
   res.status(200).json({ status: "success", order: dto });
 });
 
@@ -124,7 +55,7 @@ exports.updateOrderStatus = catchAsync(async (req, res) => {
   });
   if (changed) safeLog(logAuditEvent({ req, user: req.user, action: "order_status_changed", module: "orders",
     entityId: order._id, entityType: "order", summary: `Pedido ${order.orderNumber}: ${order.orderStatus}` }));
-  res.status(200).json({ status: "success", message: "Estado actualizado", order: formatOrderList(order) });
+  res.status(200).json({ status: "success", message: "Estado actualizado", order: formatOrderList(order, req.user.role) });
 });
 
 exports.confirmPayment = catchAsync(async (req, res) => {
@@ -145,13 +76,13 @@ exports.confirmPayment = catchAsync(async (req, res) => {
   });
   if (changed) safeLog(logAuditEvent({ req, user: req.user, action: "payment_confirmed", module: "orders",
     entityId: order._id, entityType: "order", summary: `Recaudo registrado · ${order.orderNumber}` }));
-  res.status(200).json({ status: "success", message: "Recaudo registrado", order: formatOrderList(order) });
+  res.status(200).json({ status: "success", message: "Recaudo registrado", order: formatOrderList(order, req.user.role) });
 });
 
 exports.updateShipping = catchAsync(async (req, res) => {
   const { order } = await mutateOrder(req.params.id, async (order, session) => {
-    if (!["en_preparacion", "enviado"].includes(order.orderStatus) || order.requiresReview
-        || (order.paymentMethod !== "contra_entrega" && order.paymentStatus !== "pagado")) {
+    if (!["en_preparacion", "enviado"].includes(order.orderStatus)
+        || !require("../services/orderReadiness").canFulfill(order)) {
       throw new AppError("No se puede registrar una guía en este estado", 409);
     }
     const previous = `${order.carrier}|${order.trackingNumber}|${order.shippingNotes}`;
@@ -166,30 +97,20 @@ exports.updateShipping = catchAsync(async (req, res) => {
     if (!changed && previous !== `${order.carrier}|${order.trackingNumber}|${order.shippingNotes}`) history(order, `Guía corregida: ${order.trackingNumber}`, req.user);
     return { changed };
   });
-  res.status(200).json({ status: "success", message: "Guía guardada", order: formatOrderList(order) });
+  res.status(200).json({ status: "success", message: "Guía guardada", order: formatOrderList(order, req.user.role) });
 });
 
 exports.exportOrdersPdf = catchAsync(async (req, res) => {
   const PDFDocument = require("pdfkit");
 
-  const filter = {};
-  if (req.query.orderStatus) filter.orderStatus = req.query.orderStatus;
-  if (req.query.paymentStatus) filter.paymentStatus = req.query.paymentStatus;
-  if (req.query.q?.trim()) {
-    const q = req.query.q.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    filter.$or = [
-      { orderNumber: { $regex: q, $options: "i" } },
-      { "buyer.name": { $regex: q, $options: "i" } },
-      { "buyer.email": { $regex: q, $options: "i" } },
-    ];
+  const all = [];
+  // Export is bounded, paginated on the server and shares the list predicate.
+  for (let page = 1; page <= 10; page++) {
+    const result = await workspace.queryWorkspace({ ...req.query, page, limit: 50 }, req.user.role);
+    all.push(...result.orders);
+    if (page >= result.totalPages) break;
   }
-  if (req.query.from || req.query.to) {
-    filter.createdAt = {};
-    if (req.query.from) filter.createdAt.$gte = new Date(req.query.from);
-    if (req.query.to) filter.createdAt.$lte = new Date(req.query.to);
-  }
-
-  const orders = await Order.find(filter).sort({ createdAt: -1 }).limit(500);
+  const orders = all;
 
   const STATUS_ES = {
     pendiente: "Pendiente",
@@ -216,14 +137,14 @@ exports.exportOrdersPdf = catchAsync(async (req, res) => {
 
     doc.fontSize(16).text("Listado de pedidos — Dizor", { align: "center" });
     doc.fontSize(10).text(
-      `Generado: ${new Date().toLocaleString("es-CO")}   Total: ${orders.length} pedido(s)`,
+      `Generado: ${new Date().toLocaleString("es-CO", { timeZone: "America/Bogota" })}   Total: ${orders.length} pedido(s)`,
       { align: "center" }
     );
     doc.moveDown(1);
 
     for (const order of orders) {
       const date = new Date(order.createdAt).toLocaleDateString("es-CO", {
-        day: "2-digit", month: "short", year: "numeric",
+        day: "2-digit", month: "short", year: "numeric", timeZone: "America/Bogota",
       });
       doc
         .fontSize(10)
@@ -266,7 +187,7 @@ exports.assignOrder = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     message: "Pedido asignado",
-    order: formatOrderList(order),
+    order: formatOrderList(order, req.user.role),
   });
 });
 
