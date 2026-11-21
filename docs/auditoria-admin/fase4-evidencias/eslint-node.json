@@ -1,0 +1,120 @@
+[
+  {
+    "file": "backend/src/controllers/adminAlertController.js",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "backend/src/controllers/productAdminController.js",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "backend/src/controllers/productHistoryAdminController.js",
+    "messages": [
+      {
+        "ruleId": "no-unused-vars",
+        "severity": 1,
+        "message": "'fmt' is assigned a value but never used.",
+        "line": 19,
+        "column": 7,
+        "nodeType": "Identifier",
+        "messageId": "unusedVar",
+        "endLine": 19,
+        "endColumn": 10,
+        "suggestions": [
+          {
+            "messageId": "removeVar",
+            "data": {
+              "varName": "fmt"
+            },
+            "fix": {
+              "range": [
+                636,
+                789
+              ],
+              "text": ""
+            },
+            "desc": "Remove unused variable 'fmt'."
+          }
+        ]
+      }
+    ],
+    "errorCount": 0,
+    "warningCount": 1
+  },
+  {
+    "file": "backend/src/services/catalogWorkspace.js",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "backend/src/services/inventoryCriteria.js",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "backend/src/services/catalogMutationService.js",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "backend/src/services/productHistoryService.js",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "backend/src/models/product.js",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "backend/src/models/stockAdjustment.js",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "backend/src/routes/adminCatalogRoutes.js",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "backend/test/phase4.test.js",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "frontend/test/catalog-workspace-browser.cjs",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "docs/auditoria-admin/fase4-evidencias/preservar-evidencias.cjs",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "docs/auditoria-admin/fase4-evidencias/build-fase4.cjs",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  },
+  {
+    "file": "docs/auditoria-admin/fase4-evidencias/verificar-estatico.cjs",
+    "messages": [],
+    "errorCount": 0,
+    "warningCount": 0
+  }
+]

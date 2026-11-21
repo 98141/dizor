@@ -12,6 +12,7 @@ const ALERT_META = {
   newOrders:       { label: "Pedidos nuevos (24h)",        color: "#dc2626", dot: "🔴" },
   pendingPayments: { label: "Pedidos por conciliar",   color: "#d97706", dot: "🟡" },
   lowStock:        { label: "Stock bajo",                  color: "#d97706", dot: "🟡" },
+  inventoryReview: { label: "Existencias por revisar", color: "#b87305", dot: "!" },
   outOfStock:      { label: "Variantes agotadas",                   color: "#dc2626", dot: "🔴" },
   specialRequests: { label: "Solicitudes sin atender",     color: "#d97706", dot: "🟡" },
   expiringCoupons: { label: "Cupones por vencer (3 días)", color: "#7c3aed", dot: "🟣" },
@@ -173,16 +174,16 @@ export default function AlertBell() {
                       </Link>
                     ))}
 
-                    {(key === "lowStock" || key === "outOfStock") && group.items.slice(0, 3).map((p) => (
+                    {(key === "lowStock" || key === "outOfStock" || key === "inventoryReview") && group.items.slice(0, 3).map((p) => (
                       <Link
                         key={p.id}
-                        href="/admin/inventario"
+                        href={`/admin/productos?view=stock&productId=${p.id}${p.affectedVariants?.[0]?.id ? `&variantId=${p.affectedVariants[0].id}` : ""}`}
                         className="alert-bell__item"
                         onClick={() => { dismissItem(key, p.id || p._id); setOpen(false); }}
                       >
                         <span className="alert-bell__item-main">{p.name}</span>
                         <span className="alert-bell__item-sub">
-                          {key === "outOfStock" ? "Sin stock" : `${p.totalStock} ud${p.totalStock !== 1 ? "s" : ""}`}
+                          {key === "inventoryReview" ? "Revisar datos de stock" : key === "outOfStock" ? "Hay variantes agotadas" : `${p.totalStock} ud${p.totalStock !== 1 ? "s" : ""}`}
                         </span>
                       </Link>
                     ))}

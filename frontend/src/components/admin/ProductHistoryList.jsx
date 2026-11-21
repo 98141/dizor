@@ -1,324 +1,51 @@
 "use client";
-
-import { useEffect, useState, useCallback } from "react";
-import {
-  getProductHistory,
-  getProductHistoryStats,
-  exportProductHistoryPdf,
-} from "@/services/productHistoryService";
-import {
-  getProductEventLabel,
-  PRODUCT_EVENT_CLASSES,
-} from "@/lib/productHistoryLabels";
-
-function formatDateTime(value) {
-  if (!value) return "—";
-  return new Date(value).toLocaleString("es-CO", {
-    dateStyle: "short",
-    timeStyle: "short",
-  });
+import { Suspense, useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { getProductHistory, getProductHistoryStats, exportProductHistoryPdf } from "@/services/productHistoryService";
+import { movementLabel } from "@/lib/catalogWorkspace";
+import { formatOrderDate } from "@/lib/orderWorkspace";
+import { getProductEventLabel } from "@/lib/productHistoryLabels";
+import styles from "./CatalogWorkspace.module.css";
+export default function ProductHistoryList(){return <Suspense fallback={<p role="status">Cargando movimientos…</p>}><History /></Suspense>;}
+function History(){
+  const params=useSearchParams(),pathname=usePathname(),router=useRouter(),query=params.toString();
+  const [version,setVersion]=useState(0),[state,setState]=useState(null),[stats,setStats]=useState(null),[statsError,setStatsError]=useState(false),[exporting,setExporting]=useState(false),[exportError,setExportError]=useState("");
+  const key=`${query}:${version}`;
+  useEffect(()=>{let active=true;getProductHistory(Object.fromEntries(new URLSearchParams(query))).then(data=>{if(active)setState({key,data});}).catch(()=>{if(active)setState({key,error:"No se pudieron cargar los movimientos. Conservamos tus filtros."});});return()=>{active=false;};},[key,query]);
+  useEffect(()=>{let active=true;getProductHistoryStats().then(r=>{if(active){setStats(r.stats);setStatsError(false);}}).catch(()=>{if(active)setStatsError(true);});return()=>{active=false;};},[version]);
+  const loading=state?.key!==key,data=loading?null:state?.data;
+  const href=(changes)=>{const next=new URLSearchParams(query);Object.entries(changes).forEach(([k,v])=>v?next.set(k,v):next.delete(k));return `${pathname}?${next}`;};
+  return <section className={styles.stack} aria-labelledby="movement-title">
+    <div className={styles.header}><div><h2 id="movement-title">Movimientos e historial</h2><p className={styles.muted}>Solo lectura · conserva ventas, ajustes y registros históricos. Fechas en Colombia.</p></div><button type="button" className="admin-btn" disabled={loading} onClick={()=>setVersion(n=>n+1)}>Actualizar movimientos</button></div>
+    <HistoryFilters key={query} params={params} data={data} pathname={pathname} onSubmit={(values) => router.push(href({ ...values, page: "", ...(values.productId !== (params.get("productId") || "") ? { variantId: "" } : {}) }))} />
+    {params.get("variantId")&&<p className={styles.notice}>Historial de la variante seleccionada. <Link href={href({variantId:""})}>Ver todas las variantes del producto</Link></p>}
+    <div className={styles.header}><p>{data?`${data.total} registros`:"Registros"}</p><button type="button" className="admin-btn" disabled={exporting||!data} onClick={async()=>{setExporting(true);setExportError("");try{await exportProductHistoryPdf(Object.fromEntries(new URLSearchParams(query)));}catch{setExportError("No se pudo generar el PDF. Puedes volver a intentarlo.");}finally{setExporting(false);}}}>{exporting?"Generando PDF…":"Exportar PDF (máx. 5000)"}</button></div>
+    {exportError&&<p role="alert" className={styles.error}>{exportError}</p>}
+    {loading&&<p role="status">Cargando movimientos…</p>}
+    {!loading&&state?.error&&<div role="alert" className={styles.error}><p>{state.error}</p><button type="button" className="admin-btn" onClick={()=>setVersion(n=>n+1)}>Reintentar movimientos</button></div>}
+    {data?.history.length===0&&<p role="status">{data.total>0?<>No hay registros en esta página. <Link href={href({page:"1"})}>Volver a primera página</Link></>:"No hay movimientos registrados con estos filtros. No se reconstruyen movimientos antiguos que no tengan evidencia."}</p>}
+    {data?.history.length>0&&<table className={styles.table}><caption>Movimientos registrados · no modificables</caption><thead><tr><th>Fecha y tipo</th><th>Producto / variante</th><th>Cantidad / stock</th><th>Responsable y origen</th></tr></thead><tbody>{data.history.map(row=><tr key={row.id}>
+      <td>{formatOrderDate(row.createdAt)}<small><strong>{movementLabel(row)}</strong></small></td>
+      <td>{row.productName}<small>{[row.sizeName,row.colorName].filter(Boolean).join(" / ")||"Sin talla/color registrados"} · {row.sku||"Sin SKU registrado"}</small>{row.productId&&<Link className="admin-btn" href={`/admin/productos?view=stock&productId=${row.productId}${row.variantId?`&variantId=${row.variantId}`:""}`}>Consultar existencias</Link>}</td>
+      <td>{row.quantityChange>0?"+":""}{row.quantityChange||"—"} uds<small>Stock: {row.stockBefore??"sin registro"} → {row.stockAfter??"sin registro"}</small></td>
+      <td>{row.userEmail||(row.userId?"Responsable registrado":row.role==="system"?"Sistema":"Responsable no registrado")}<small>{row.referenceLabel||row.referenceType||"Sin origen registrado"}</small><p>{row.summary}</p></td>
+    </tr>)}</tbody></table>}
+    {data?.totalPages>1&&<nav className={styles.pagination} aria-label="Páginas de movimientos">{data.page>1&&<Link className="admin-btn" href={href({page:data.page-1})}>Anterior</Link>}<span>Página {data.page} de {data.totalPages}</span>{data.page<data.totalPages&&<Link className="admin-btn" href={href({page:data.page+1})}>Siguiente</Link>}</nav>}
+    <details><summary>Resumen general de registros</summary>{statsError?<p>Los indicadores generales no están disponibles.</p>:stats?<div className={styles.metrics}><div><strong>{stats.total}</strong><span>Registros totales</span></div><div><strong>{stats.today}</strong><span>Registros de hoy</span></div><div><strong>{stats.unitsSoldToday}</strong><span>Unidades vendidas hoy</span></div><div><strong>{stats.stockAdjustmentsToday}</strong><span>Ajustes registrados hoy</span></div></div>:<p role="status">Cargando indicadores…</p>}</details>
+  </section>;
 }
 
-function QtyCell({ change }) {
-  if (change == null || change === 0) return <span>—</span>;
-  const color = change > 0 ? "#166534" : "#991b1b";
-  return (
-    <span className="product-history-qty" style={{ color }}>
-      {change > 0 ? `+${change}` : change}
-    </span>
-  );
-}
-
-function RefCell({ referenceType, referenceLabel }) {
-  if (!referenceLabel && !referenceType) return <span>—</span>;
-
-  const channelBadge =
-    referenceType === "pos" ? (
-      <span style={{
-        display: "inline-block", padding: "0.1rem 0.35rem",
-        background: "#e0e7ff", color: "#3730a3", borderRadius: "3px",
-        fontSize: "0.65rem", fontWeight: 700, marginRight: "0.3rem", verticalAlign: "middle",
-      }}>POS</span>
-    ) : referenceType === "order" ? (
-      <span style={{
-        display: "inline-block", padding: "0.1rem 0.35rem",
-        background: "#dcfce7", color: "#166534", borderRadius: "3px",
-        fontSize: "0.65rem", fontWeight: 700, marginRight: "0.3rem", verticalAlign: "middle",
-      }}>Web</span>
-    ) : null;
-
-  return <span>{channelBadge}{referenceLabel || "—"}</span>;
-}
-
-const EMPTY_FILTERS = { term: "", productId: "", eventType: "", from: "", to: "" };
-
-export default function ProductHistoryList() {
-  const [history, setHistory] = useState([]);
-  const [stats, setStats] = useState(null);
-  const [filterOptions, setFilterOptions] = useState({ eventTypes: [], products: [] });
-  const [loading, setLoading] = useState(true);
-  const [exporting, setExporting] = useState(false);
-  const [page, setPage] = useState(1);
-  const [total, setTotal] = useState(0);
-  const [totalPages, setTotalPages] = useState(1);
-  const [filters, setFilters] = useState(EMPTY_FILTERS);
-
-  const buildParams = useCallback((pg = page) => {
-    const params = { page: pg, limit: 30 };
-    if (filters.term.trim()) params.term = filters.term.trim();
-    if (filters.productId) params.productId = filters.productId;
-    if (filters.eventType) params.eventType = filters.eventType;
-    if (filters.from) params.from = filters.from;
-    if (filters.to) params.to = filters.to;
-    return params;
-  }, [page, filters]);
-
-  const load = useCallback(async (pg = page) => {
-    setLoading(true);
-    try {
-      const data = await getProductHistory(buildParams(pg));
-      setHistory(data.history || []);
-      setTotal(data.total || 0);
-      setTotalPages(data.totalPages || 1);
-      setFilterOptions(data.filters || { eventTypes: [], products: [] });
-    } catch {
-      setHistory([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [buildParams, page]);
-
-  useEffect(() => {
-    getProductHistoryStats()
-      .then((res) => setStats(res.stats))
-      .catch(() => setStats(null));
-  }, []);
-
-  useEffect(() => {
-    load(page);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, filters.productId, filters.eventType]);
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    setPage(1);
-    load(1);
-  };
-
-  const handleClear = () => {
-    setFilters(EMPTY_FILTERS);
-    setPage(1);
-  };
-
-  const handleExportPdf = async () => {
-    setExporting(true);
-    try {
-      const params = { ...buildParams() };
-      delete params.page;
-      delete params.limit;
-      await exportProductHistoryPdf(params);
-    } catch {
-      alert("No se pudo generar el PDF. Intenta de nuevo.");
-    } finally {
-      setExporting(false);
-    }
-  };
-
-  const hasActiveFilters =
-    filters.term || filters.productId || filters.eventType || filters.from || filters.to;
-
-  return (
-    <div>
-      {/* ── Stats ── */}
-      {stats && (
-        <div className="admin-stats admin-stats--compact" style={{ marginBottom: "1.5rem" }}>
-          <div className="admin-stat-card">
-            <p className="admin-stat-card__value">{stats.total.toLocaleString("es-CO")}</p>
-            <p className="admin-stat-card__label">Movimientos totales</p>
-          </div>
-          <div className="admin-stat-card">
-            <p className="admin-stat-card__value">{stats.today}</p>
-            <p className="admin-stat-card__label">Hoy</p>
-          </div>
-          <div className="admin-stat-card admin-stat-card--highlight">
-            <p className="admin-stat-card__value">{stats.unitsSoldToday}</p>
-            <p className="admin-stat-card__label">Unidades vendidas hoy</p>
-          </div>
-          <div className="admin-stat-card">
-            <p className="admin-stat-card__value">{stats.stockAdjustmentsToday}</p>
-            <p className="admin-stat-card__label">Ajustes de stock hoy</p>
-          </div>
-        </div>
-      )}
-
-      {/* ── Filters + Export button ── */}
-      <form
-        className="orders-filters audit-filters"
-        onSubmit={handleSearch}
-        style={{ marginBottom: "0.75rem", alignItems: "center" }}
-      >
-        <input
-          className="orders-filters__search"
-          placeholder="Buscar producto, SKU, pedido, usuario..."
-          value={filters.term}
-          onChange={(e) => setFilters((f) => ({ ...f, term: e.target.value }))}
-        />
-        <select
-          value={filters.productId}
-          onChange={(e) => { setFilters((f) => ({ ...f, productId: e.target.value })); setPage(1); }}
-        >
-          <option value="">Todos los productos</option>
-          {filterOptions.products.map((p) => (
-            <option key={p.id} value={p.id}>{p.name} ({p.count})</option>
-          ))}
-        </select>
-        <select
-          value={filters.eventType}
-          onChange={(e) => { setFilters((f) => ({ ...f, eventType: e.target.value })); setPage(1); }}
-        >
-          <option value="">Todos los tipos</option>
-          {filterOptions.eventTypes.map((t) => (
-            <option key={t} value={t}>{getProductEventLabel(t)}</option>
-          ))}
-        </select>
-        <input
-          type="date"
-          value={filters.from}
-          onChange={(e) => setFilters((f) => ({ ...f, from: e.target.value }))}
-          aria-label="Desde"
-        />
-        <input
-          type="date"
-          value={filters.to}
-          onChange={(e) => setFilters((f) => ({ ...f, to: e.target.value }))}
-          aria-label="Hasta"
-        />
-        <button type="submit" className="admin-btn admin-btn--primary">Buscar</button>
-        {hasActiveFilters && (
-          <button type="button" className="admin-btn" onClick={handleClear}>Limpiar</button>
-        )}
-        <button
-          type="button"
-          className="admin-btn admin-btn--secondary"
-          onClick={handleExportPdf}
-          disabled={exporting}
-          title="Descarga el historial actual (con los filtros aplicados) como PDF no modificable"
-          style={{ marginLeft: "auto", whiteSpace: "nowrap" }}
-        >
-          {exporting ? "Generando PDF…" : "⬇ Descargar PDF"}
-        </button>
-      </form>
-
-      {/* ── Result count + readonly notice ── */}
-      {!loading && (
-        <p style={{ fontSize: "0.8rem", color: "var(--color-text-muted)", marginBottom: "0.75rem" }}>
-          {total.toLocaleString("es-CO")} registro{total !== 1 ? "s" : ""}
-          {hasActiveFilters ? " con los filtros aplicados" : " en total"}
-          {" · "}
-          <span style={{ fontStyle: "italic" }}>
-            Solo lectura — este historial no es modificable
-          </span>
-        </p>
-      )}
-
-      {/* ── Table ── */}
-      {loading ? (
-        <p className="auth-loading">Cargando historial...</p>
-      ) : history.length === 0 ? (
-        <p className="admin-page__subtitle">
-          No hay movimientos registrados con los filtros actuales.
-          Los nuevos productos, ventas y cambios de stock aparecerán aquí automáticamente.
-        </p>
-      ) : (
-        <div className="admin-table-wrap">
-          <table className="admin-table product-history-table">
-            <thead>
-              <tr>
-                <th>Fecha</th>
-                <th>Tipo</th>
-                <th>Producto</th>
-                <th>Variante / SKU</th>
-                <th>Mov.</th>
-                <th>Stock</th>
-                <th>Referencia</th>
-                <th>Detalle</th>
-                <th>Usuario</th>
-              </tr>
-            </thead>
-            <tbody>
-              {history.map((row) => (
-                <tr key={row.id}>
-                  <td style={{ whiteSpace: "nowrap", fontSize: "0.78rem" }}>
-                    {formatDateTime(row.createdAt)}
-                  </td>
-                  <td>
-                    <span className={`product-event-badge ${PRODUCT_EVENT_CLASSES[row.eventType] || ""}`}>
-                      {getProductEventLabel(row.eventType)}
-                    </span>
-                  </td>
-                  <td>
-                    <strong style={{ fontSize: "0.83rem" }}>{row.productName}</strong>
-                    {row.productSlug && (
-                      <div className="product-history-meta">{row.productSlug}</div>
-                    )}
-                  </td>
-                  <td>
-                    {row.sku ? (
-                      <>
-                        <div style={{ fontSize: "0.82rem", fontFamily: "monospace" }}>{row.sku}</div>
-                        {(row.sizeName || row.colorName) && (
-                          <div className="product-history-meta">
-                            {[row.sizeName, row.colorName].filter(Boolean).join(" / ")}
-                          </div>
-                        )}
-                      </>
-                    ) : (
-                      <span className="product-history-meta">—</span>
-                    )}
-                  </td>
-                  <td style={{ textAlign: "center" }}>
-                    <QtyCell change={row.quantityChange} />
-                  </td>
-                  <td style={{ whiteSpace: "nowrap", fontSize: "0.82rem" }}>
-                    {row.stockBefore != null || row.stockAfter != null ? (
-                      <span>
-                        {row.stockBefore ?? "—"}{" "}
-                        <span style={{ color: "var(--color-text-muted)" }}>→</span>{" "}
-                        {row.stockAfter ?? "—"}
-                      </span>
-                    ) : "—"}
-                  </td>
-                  <td style={{ fontSize: "0.82rem" }}>
-                    <RefCell referenceType={row.referenceType} referenceLabel={row.referenceLabel} />
-                  </td>
-                  <td
-                    style={{ fontSize: "0.78rem", color: "var(--color-text-muted)", maxWidth: "200px" }}
-                    title={row.summary || ""}
-                  >
-                    {row.summary || "—"}
-                  </td>
-                  <td style={{ fontSize: "0.78rem", color: "var(--color-text-muted)" }}>
-                    {row.userEmail || "Sistema / cliente"}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {/* ── Pagination ── */}
-      {totalPages > 1 && (
-        <div className="catalog-pagination" style={{ marginTop: "1.5rem" }}>
-          <button type="button" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
-            Anterior
-          </button>
-          <span>Página {page} de {totalPages}</span>
-          <button type="button" disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)}>
-            Siguiente
-          </button>
-        </div>
-      )}
-    </div>
-  );
+function HistoryFilters({ params, data, pathname, onSubmit }) {
+  const [draft, setDraft] = useState(() => Object.fromEntries(["term", "productId", "movementKind", "eventType", "userId", "from", "to"].map((key) => [key, params.get(key) || ""])));
+  const field = (key) => ({ name: key, value: draft[key], onChange: (e) => setDraft((old) => ({ ...old, [key]: e.target.value })) });
+  return <form className={styles.filters} aria-label="Filtrar movimientos" onSubmit={(e) => { e.preventDefault(); onSubmit(draft); }}>
+    <label className={styles.search}>Producto, SKU, pedido o motivo<input type="search" {...field("term")} maxLength={160} /></label>
+    <label>Producto<select {...field("productId")}><option value="">Todos</option>{draft.productId && !data?.filters.products.some((p) => p.id === draft.productId) && <option value={draft.productId}>Producto seleccionado</option>}{data?.filters.products.filter((p) => p.id).map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}</select></label>
+    <label>Tipo de movimiento<select {...field("movementKind")}><option value="">Todos</option><option value="restock">Reposición</option><option value="withdrawal">Retiro administrativo</option><option value="sale">Venta</option><option value="restoration">Restauración por pedido</option><option value="other">Otros registros</option></select></label>
+    <label>Tipo de registro histórico<select {...field("eventType")}><option value="">Todos</option>{data?.filters.eventTypes.map((t) => <option key={t} value={t}>{getProductEventLabel(t)}</option>)}</select></label>
+    <label>Responsable<select {...field("userId")}><option value="">Todos</option>{draft.userId && !data?.filters.actors?.some((a) => a.id === draft.userId) && <option value={draft.userId}>Responsable seleccionado</option>}{data?.filters.actors?.map((a) => <option key={a.id} value={a.id}>{a.email || "Personal registrado"}</option>)}</select></label>
+    <label>Desde (Colombia)<input type="date" {...field("from")} /></label><label>Hasta (Colombia)<input type="date" {...field("to")} /></label>
+    <div className={styles.actions}><button type="submit" className="admin-btn admin-btn--primary">Aplicar filtros de movimientos</button><Link className="admin-btn" href={`${pathname}?view=movements`}>Limpiar filtros</Link></div>
+  </form>;
 }

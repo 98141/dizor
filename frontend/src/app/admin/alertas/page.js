@@ -175,13 +175,13 @@ export default function AlertasPage() {
                 count={alerts.lowStock?.count ?? 0}
                 label="Stock bajo"
                 color="#d97706"
-                href="/admin/inventario"
+                href="/admin/productos?view=stock&stock=low"
               />
               <SummaryCard
                 count={alerts.outOfStock?.count ?? 0}
                 label="Sin stock"
                 color="#dc2626"
-                href="/admin/inventario"
+                href="/admin/productos?view=stock&stock=out"
               />
               <SummaryCard
                 count={alerts.specialRequests?.count ?? 0}
@@ -248,6 +248,7 @@ export default function AlertasPage() {
               </div>
             </AlertSection>
 
+            {alerts.inventoryReview?.count > 0 && <div role="status"><p>{alerts.inventoryReview.count} productos con existencias que requieren revisión; no se modificaron automáticamente.</p><Link href="/admin/productos?view=stock&stock=review" className="admin-btn">Revisar existencias históricas</Link></div>}
             <CommunicationAlerts alerts={alerts.communications} />
             {/* ── Pedidos por conciliar ── */}
             <AlertSection
@@ -308,7 +309,7 @@ export default function AlertasPage() {
               count={alerts.lowStock?.count ?? 0}
               color="#d97706"
               dot="🟡"
-              actionHref="/admin/inventario"
+              actionHref="/admin/productos?view=stock&stock=low"
               actionLabel="Ir a Inventario →"
             >
               <div className="alert-table-wrap">
@@ -323,14 +324,14 @@ export default function AlertasPage() {
                   <tbody>
                     {alerts.lowStock.items.map((p) => (
                       <tr key={p.id}>
-                        <td>{p.name}{p.affectedVariants?.length > 0 && <small style={{ display: "block" }}>{p.affectedVariants.map((v) => `${v.sku}: ${v.stock} uds`).join(" · ")}</small>}</td>
+                        <td>{p.name}{p.affectedVariants?.length > 0 && <small style={{ display: "block" }}>{p.affectedVariants.map((v) => <Link key={v.id} href={`/admin/productos?view=stock&productId=${p.id}&variantId=${v.id}`} style={{ display: "inline-block", marginRight: ".75rem", textDecoration: "underline" }}>{v.sku}: {v.stock} uds</Link>)}</small>}</td>
                         <td>
                           <span className="alert-stock alert-stock--low">
                             {p.totalStock} ud{p.totalStock !== 1 ? "s" : ""}
                           </span>
                         </td>
                         <td>
-                          <Link href="/admin/inventario" className="alert-link">
+                          <Link href={`/admin/productos?view=stock&productId=${p.id}${p.affectedVariants?.[0]?.id ? `&variantId=${p.affectedVariants[0].id}` : ""}`} className="alert-link">
                             Ajustar →
                           </Link>
                         </td>
@@ -348,7 +349,7 @@ export default function AlertasPage() {
               count={alerts.outOfStock?.count ?? 0}
               color="#dc2626"
               dot="🔴"
-              actionHref="/admin/inventario"
+              actionHref="/admin/productos?view=stock&stock=out"
               actionLabel="Ir a Inventario →"
             >
               <div className="alert-table-wrap">
@@ -363,12 +364,12 @@ export default function AlertasPage() {
                   <tbody>
                     {alerts.outOfStock.items.map((p) => (
                       <tr key={p.id}>
-                        <td>{p.name}{p.affectedVariants?.length > 0 && <small style={{ display: "block" }}>{p.affectedVariants.map((v) => `${v.sku}: ${v.stock} uds`).join(" · ")}</small>}</td>
+                        <td>{p.name}{p.affectedVariants?.length > 0 && <small style={{ display: "block" }}>{p.affectedVariants.map((v) => <Link key={v.id} href={`/admin/productos?view=stock&productId=${p.id}&variantId=${v.id}`} style={{ display: "inline-block", marginRight: ".75rem", textDecoration: "underline" }}>{v.sku}: {v.stock} uds</Link>)}</small>}</td>
                         <td>
                           <span className="alert-stock alert-stock--out">{p.unavailable ? "Sin variantes disponibles" : "Variante agotada"}</span>
                         </td>
                         <td>
-                          <Link href="/admin/inventario" className="alert-link">
+                          <Link href={`/admin/productos?view=stock&productId=${p.id}${p.affectedVariants?.[0]?.id ? `&variantId=${p.affectedVariants[0].id}` : ""}`} className="alert-link">
                             Reabastecer →
                           </Link>
                         </td>

@@ -38,6 +38,7 @@ router.get("/products/:id", productAdminController.getProduct);
 router.post("/products", authorizeRoles(...adminRoles), productAdminController.createProduct);
 router.patch("/products/:id", authorizeRoles(...adminRoles), productAdminController.updateProduct);
 router.post("/products/:id/stock", authorizeRoles(...adminRoles), productAdminController.adjustStock);
+router.get("/products/:id/stock-operations/:operationKey", authorizeRoles(...adminRoles), productAdminController.getStockOperation);
 router.delete(
   "/products/:id",
   authorizeRoles(...adminRoles),

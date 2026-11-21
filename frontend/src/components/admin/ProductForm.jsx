@@ -99,7 +99,7 @@ const defaultForm = () => ({
   variants: [emptyVariant()],
 });
 
-export default function ProductForm({ productId }) {
+export default function ProductForm({ productId, returnTo = "/admin/productos" }) {
   const router = useRouter();
   const isEdit = Boolean(productId);
 
@@ -107,6 +107,9 @@ export default function ProductForm({ productId }) {
   const [initialSkuSeed] = useState(generateSeed);
   const skuSeedRef = useRef(initialSkuSeed);
 
+  const saveRef = useRef(false), savedRef = useRef(false);
+  const [loadFailed, setLoadFailed] = useState(false);
+  const [loadAttempt, setLoadAttempt] = useState(0);
   const [meta, setMeta] = useState(null);
   const [form, setForm] = useState(() => {
     const initial = defaultForm();
@@ -167,6 +170,7 @@ export default function ProductForm({ productId }) {
             seoDescription: product.seoDescription || "",
             images: (product.images || []).map((img) => ({
               url: img.url,
+              publicId: img.publicId || null,
               alt: img.alt || product.name,
             })),
             mainImage: product.mainImage || "",
@@ -178,33 +182,24 @@ export default function ProductForm({ productId }) {
                     size: v.size?.toString?.() || v.size || "",
                     color: v.color?.toString?.() || v.color || "",
                     sku: v.sku || "",
-                    stock: v.stock ?? 0,
+                    stock: v.stock ?? "",
                     price: v.price ?? "",
                     isActive: v.isActive !== false,
                   }))
-                : [
-                    {
-                      ...emptyVariant(),
-                      sku: generateUniqueSku(
-                        product.name || "",
-                        skuSeedRef.current,
-                        []
-                      ),
-                    },
-                  ],
+                : [],
           });
           const firstSku = product.variants?.[0]?.sku;
           const extracted = extractSeedFromSku(firstSku);
           if (extracted) skuSeedRef.current = extracted;
         }
       } catch (err) {
-        setError(err.response?.data?.message || "Error al cargar datos");
+        setError(err.response?.data?.message || "Error al cargar datos"); setLoadFailed(true);
       } finally {
         setLoading(false);
       }
     };
     load();
-  }, [productId, isEdit]);
+  }, [productId, isEdit, loadAttempt]);
 
   const setField = (key, value) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -250,7 +245,7 @@ export default function ProductForm({ productId }) {
       if (prev.variants.length <= 1) return prev;
       return {
         ...prev,
-        variants: prev.variants.filter((_, i) => i !== index),
+        variants: prev.variants[index]?.id ? prev.variants.map((v, i) => i === index ? { ...v, isActive: false } : v) : prev.variants.filter((_, i) => i !== index),
       };
     });
   };
@@ -368,13 +363,14 @@ export default function ProductForm({ productId }) {
     seoDescription: form.seoDescription.trim(),
     images: form.images.map((img) => ({
       url: img.url,
+      publicId: img.publicId || null,
       alt: img.alt || form.name,
     })),
     mainImage: form.mainImage || form.images[0]?.url,
     variants: form.variants.map((v) => ({
       ...(v.id ? { id: v.id } : {}),
-      size: v.size,
-      color: v.color,
+      size: v.size || null,
+      color: v.color || null,
       sku: String(v.sku).trim().toUpperCase(),
       ...(!v.id ? { stock: Number(v.stock) || 0 } : {}),
       price:
@@ -402,8 +398,8 @@ export default function ProductForm({ productId }) {
       const result = await adjustProductStock(productId, operation.payload);
       operation.completed = true;
       setForm((prev) => ({ ...prev, variants: prev.variants.map((v) => v.id === variant.id
-        ? { ...v, stock: result.stock, adjustmentDelta: "", adjustmentReason: "" } : v) }));
-      setAdjustmentStates((prev) => ({ ...prev, [variant.id]: { status: "success", message: `Ajuste registrado. Stock: ${result.stock}.` } }));
+        ? { ...v, stock: result.currentStock ?? result.stock, adjustmentDelta: "", adjustmentReason: "" } : v) }));
+      setAdjustmentStates((prev) => ({ ...prev, [variant.id]: { status: "success", message: `Ajuste registrado. Stock: ${result.currentStock ?? result.stock}.` } }));
       setError("");
     } catch (err) {
       const status = err.response?.status;
@@ -429,18 +425,20 @@ export default function ProductForm({ productId }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (saveRef.current || savedRef.current) return;
+    saveRef.current = true;
     setSaving(true);
     setError("");
 
     if (!form.images.length) {
       setError("Agrega al menos una imagen antes de guardar");
-      setSaving(false);
+      setSaving(false); saveRef.current = false;
       return;
     }
 
     if (!form.category) {
       setError("Selecciona la categoría");
-      setSaving(false);
+      setSaving(false); saveRef.current = false;
       return;
     }
 
@@ -449,18 +447,18 @@ export default function ProductForm({ productId }) {
     );
     if (skus.some((sku) => !sku)) {
       setError("Cada variante necesita un SKU");
-      setSaving(false);
+      setSaving(false); saveRef.current = false;
       return;
     }
     if (new Set(skus).size !== skus.length) {
       setError("Hay SKUs duplicados. Cada variante debe tener un código único.");
-      setSaving(false);
+      setSaving(false); saveRef.current = false;
       return;
     }
-    const combos = form.variants.map((v) => `${v.size}|${v.color}`);
+    const combos = form.variants.filter((v) => v.isActive !== false).map((v) => `${v.size || ""}|${v.color || ""}`);
     if (new Set(combos).size !== combos.length) {
       setError("Hay variantes con la misma talla y color");
-      setSaving(false);
+      setSaving(false); saveRef.current = false;
       return;
     }
 
@@ -468,10 +466,10 @@ export default function ProductForm({ productId }) {
       const payload = buildPayload();
       if (isEdit) {
         await updateAdminProduct(productId, payload);
-        router.push("/admin/productos");
+        savedRef.current = true; router.push(returnTo);
       } else {
         await createAdminProduct(payload);
-        router.push("/admin/productos");
+        savedRef.current = true; router.push(returnTo);
       }
     } catch (err) {
       setError(
@@ -480,13 +478,15 @@ export default function ProductForm({ productId }) {
           "No se pudo guardar el producto"
       );
     } finally {
-      setSaving(false);
+      setSaving(false); saveRef.current = false;
     }
   };
 
   if (loading) {
     return <p className="auth-loading">Cargando producto…</p>;
   }
+
+  if (loadFailed) return <div role="alert"><p>{error}</p><button type="button" className="admin-btn" onClick={() => { setLoadFailed(false); setLoading(true); setLoadAttempt((n) => n + 1); }}>Reintentar carga del producto</button><Link href={returnTo}>Volver a productos</Link></div>;
 
   const categories = meta?.categories || [];
   const colors = meta?.colors || [];
@@ -505,8 +505,8 @@ export default function ProductForm({ productId }) {
     form.variants.forEach((v) => {
       const sku = String(v.sku || "").trim().toUpperCase();
       if (sku) skuCount[sku] = (skuCount[sku] || 0) + 1;
-      if (v.size && v.color) {
-        const combo = `${v.size}|${v.color}`;
+      if (v.isActive !== false) {
+        const combo = `${v.size || ""}|${v.color || ""}`;
         comboCount[combo] = (comboCount[combo] || 0) + 1;
       }
     });
@@ -520,14 +520,15 @@ export default function ProductForm({ productId }) {
 
   return (
     <form className="product-form admin-form" onSubmit={handleSubmit}>
-      {error && <p className="admin-form-error">{error}</p>}
+      {error && <p role="alert" className="admin-form-error">{error}</p>}
 
+      <div className="product-form__navigation"><Link href={returnTo}>← Volver a la lista filtrada</Link><nav aria-label="Secciones del producto"><a href="#product-general">Información</a><a href="#product-images">Imágenes</a><a href="#product-price">Precio y promoción</a><a href="#product-variants">Variantes</a><a href="#product-publication">Publicación</a></nav></div>
       <p className="product-form__hint">
         Configura taxonomías en{" "}
         <Link href="/admin/catalogo">Catálogo base</Link> si faltan opciones.
       </p>
 
-      <section className="product-form__section">
+      <section id="product-general" className="product-form__section">
         <h2>Información general</h2>
         <div className="admin-form__row">
           <div className="admin-form__group admin-form__group--wide">
@@ -646,190 +647,7 @@ Fibra natural de Sandoná, Nariño.
         </p>
       </section>
 
-      <section className="product-form__section">
-        <h2>Precios</h2>
-        <div className="admin-form__row">
-          <div className="admin-form__group">
-            <label htmlFor="salePrice">Precio venta (COP) *</label>
-            <input
-              id="salePrice"
-              type="number"
-              min="0"
-              value={form.salePrice}
-              onChange={(e) => setField("salePrice", e.target.value)}
-              required
-            />
-          </div>
-          <div className="admin-form__group">
-            <label htmlFor="internalCost">Costo interno (COP)</label>
-            <input
-              id="internalCost"
-              type="number"
-              min="0"
-              value={form.internalCost}
-              onChange={(e) => setField("internalCost", e.target.value)}
-            />
-          </div>
-          <div className="admin-form__group">
-            <label htmlFor="discountPercent">Descuento %</label>
-            <input
-              id="discountPercent"
-              type="number"
-              min="0"
-              max="100"
-              value={form.discountPercent}
-              onChange={(e) => setField("discountPercent", e.target.value)}
-            />
-          </div>
-        </div>
-        <label className="admin-checkbox">
-          <input
-            type="checkbox"
-            checked={form.onPromotion}
-            onChange={(e) => setField("onPromotion", e.target.checked)}
-          />
-          En promoción
-        </label>
-      </section>
-
-      <section className="product-form__section">
-        <h2>Variantes (talla + color)</h2>
-        <p className="product-form__hint product-form__hint--tight">
-          El SKU se genera solo y no se reutiliza al agregar una variante.
-        </p>
-        <div className="variant-table-wrap">
-          <div className="variant-table">
-            <div className="variant-table__head" aria-hidden="true">
-              <span>Talla</span>
-              <span>Color</span>
-              <span>SKU</span>
-              <span>Stock</span>
-              <span>Precio</span>
-              <span>Activa</span>
-              <span />
-            </div>
-            {form.variants.map((variant, index) => {
-              const skuKey = String(variant.sku || "").trim().toUpperCase();
-              const comboKey =
-                variant.size && variant.color
-                  ? `${variant.size}|${variant.color}`
-                  : "";
-              const hasError =
-                skuDupSet.has(skuKey) || comboDupSet.has(comboKey);
-              return (
-                <div
-                  key={variant.clientKey || variant.id || `variant-${index}`}
-                  className={`variant-row${hasError ? " variant-row--error" : ""}`}
-                >
-                  <select
-                    value={variant.size}
-                    onChange={(e) => setVariant(index, "size", e.target.value)}
-                    required
-                    aria-label={`Talla variante ${index + 1}`}
-                  >
-                    <option value="">Talla</option>
-                    {sizes.map((s) => (
-                      <option key={s._id} value={s._id}>
-                        {s.name}
-                      </option>
-                    ))}
-                  </select>
-                  <select
-                    value={variant.color}
-                    onChange={(e) => setVariant(index, "color", e.target.value)}
-                    required
-                    aria-label={`Color variante ${index + 1}`}
-                  >
-                    <option value="">Color</option>
-                    {colors.map((c) => (
-                      <option key={c._id} value={c._id}>
-                        {c.name}
-                      </option>
-                    ))}
-                  </select>
-                  <input
-                    className="variant-row__sku"
-                    readOnly
-                    value={variant.sku}
-                    aria-label={`SKU variante ${index + 1}`}
-                    title="SKU generado automáticamente"
-                    autoComplete="off"
-                  />
-                  <input
-                    type="number"
-                    min="0"
-                    placeholder="0"
-                    step="1"
-                    readOnly={!!variant.id}
-                    title={variant.id ? "El stock se cambia mediante un ajuste con motivo" : "Stock inicial"}
-                    value={variant.stock}
-                    onChange={(e) => setVariant(index, "stock", e.target.value)}
-                    required
-                    aria-label={`Stock variante ${index + 1}`}
-                  />
-                  <input
-                    type="number"
-                    min="0"
-                    placeholder="Opcional"
-                    value={variant.price}
-                    onChange={(e) => setVariant(index, "price", e.target.value)}
-                    aria-label={`Precio variante ${index + 1}`}
-                  />
-                  <label className="admin-checkbox admin-checkbox--inline">
-                    <input
-                      type="checkbox"
-                      checked={variant.isActive}
-                      onChange={(e) =>
-                        setVariant(index, "isActive", e.target.checked)
-                      }
-                    />
-                    <span className="variant-row__active-label">Activa</span>
-                  </label>
-                  {variant.id && <div>
-                    <input type="number" step="1" placeholder="Ajuste + / −" aria-label="Cantidad del ajuste"
-                      disabled={adjustmentStates[variant.id]?.status === "processing" || adjustmentStates[variant.id]?.retryPending}
-                      value={variant.adjustmentDelta || ""} onChange={(e) => setAdjustmentField(index, "adjustmentDelta", e.target.value)} />
-                    <input placeholder="Motivo del ajuste" aria-label="Motivo del ajuste"
-                      disabled={adjustmentStates[variant.id]?.status === "processing" || adjustmentStates[variant.id]?.retryPending}
-                      value={variant.adjustmentReason || ""} onChange={(e) => setAdjustmentField(index, "adjustmentReason", e.target.value)} />
-                    <button type="button" className="admin-btn" onClick={() => handleStockAdjustment(index)}
-                      disabled={adjustmentStates[variant.id]?.status === "processing"}>
-                      {adjustmentStates[variant.id]?.status === "processing" ? "Registrando…" : adjustmentStates[variant.id]?.retryPending ? "Reintentar ajuste" : "Registrar ajuste"}
-                    </button>
-                    {adjustmentStates[variant.id] && <p role={adjustmentStates[variant.id].status === "error" ? "alert" : "status"}>
-                      {adjustmentStates[variant.id].message}
-                    </p>}
-                  </div>}
-                  {form.variants.length > 1 ? (
-                    <button
-                      type="button"
-                      className="variant-row__remove"
-                      onClick={() => removeVariant(index)}
-                      aria-label={`Quitar variante ${index + 1}`}
-                    >
-                      Quitar
-                    </button>
-                  ) : (
-                    <span className="variant-row__remove-placeholder" />
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-        {(skuDupSet.size > 0 || comboDupSet.size > 0) && (
-          <p className="admin-form-error variant-table__alert">
-            {skuDupSet.size > 0
-              ? "Hay SKUs duplicados. Quita la variante repetida o recarga para generar uno nuevo."
-              : "Hay variantes con la misma talla y color."}
-          </p>
-        )}
-        <button type="button" className="admin-btn admin-btn--sm" onClick={addVariant}>
-          + Variante
-        </button>
-      </section>
-
-      <section className="product-form__section">
+<section id="product-images" className="product-form__section">
         <h2>
           Imágenes
           <span
@@ -867,11 +685,7 @@ Fibra natural de Sandoná, Nariño.
           </div>
         ) : (
           <p className="image-upload-hint image-upload-hint--info">
-            Para subir archivos desde tu equipo, agrega{" "}
-            <strong>CLOUDINARY_CLOUD_NAME</strong>,{" "}
-            <strong>CLOUDINARY_API_KEY</strong> y{" "}
-            <strong>CLOUDINARY_API_SECRET</strong> en el <code>.env</code> del
-            backend y reinicia el servidor.
+            La carga de archivos no está disponible en este entorno. Puedes agregar imágenes por enlace o consultar al responsable de configuración.
           </p>
         )}
 
@@ -882,6 +696,7 @@ Fibra natural de Sandoná, Nariño.
         <div className="image-url-add">
           <input
             type="url"
+            aria-label="URL de imagen"
             placeholder="https://… URL de imagen"
             value={newImageUrl}
             onChange={(e) => setNewImageUrl(e.target.value)}
@@ -940,8 +755,189 @@ Fibra natural de Sandoná, Nariño.
         )}
       </section>
 
-      <section className="product-form__section">
-        <h2>Visibilidad y SEO</h2>
+<section id="product-price" className="product-form__section">
+        <h2>Precio y promoción</h2>
+        <div className="admin-form__row">
+          <div className="admin-form__group">
+            <label htmlFor="salePrice">Precio venta (COP) *</label>
+            <input
+              id="salePrice"
+              type="number"
+              min="0"
+              value={form.salePrice}
+              onChange={(e) => setField("salePrice", e.target.value)}
+              required
+            />
+          </div>
+          <div className="admin-form__group">
+            <label htmlFor="internalCost">Costo interno (COP)</label>
+            <input
+              id="internalCost"
+              type="number"
+              min="0"
+              value={form.internalCost}
+              onChange={(e) => setField("internalCost", e.target.value)}
+            />
+          </div>
+          <div className="admin-form__group">
+            <label htmlFor="discountPercent">Descuento %</label>
+            <input
+              id="discountPercent"
+              type="number"
+              min="0"
+              max="100"
+              value={form.discountPercent}
+              onChange={(e) => setField("discountPercent", e.target.value)}
+            />
+          </div>
+        </div>
+        <label className="admin-checkbox">
+          <input
+            type="checkbox"
+            checked={form.onPromotion}
+            onChange={(e) => setField("onPromotion", e.target.checked)}
+          />
+          En promoción
+        </label>
+      </section>
+
+<section id="product-variants" className="product-form__section">
+        <h2>Presentaciones y variantes</h2>
+        <p className="product-form__hint product-form__hint--tight">
+          El SKU identifica cada presentación. Talla y color son opcionales: no agregues opciones que el producto no necesita. El stock existente se modifica con ajustes relativos, no al guardar estos datos.
+        </p>
+        <div className="variant-table-wrap">
+          <div className="variant-table">
+            <div className="variant-table__head" aria-hidden="true">
+              <span>Talla</span>
+              <span>Color</span>
+              <span>SKU</span>
+              <span>Stock</span>
+              <span>Precio</span>
+              <span>Activa</span>
+              <span />
+            </div>
+            {form.variants.map((variant, index) => {
+              const skuKey = String(variant.sku || "").trim().toUpperCase();
+              const comboKey =
+                variant.isActive !== false
+                  ? `${variant.size || ""}|${variant.color || ""}`
+                  : "";
+              const hasError =
+                skuDupSet.has(skuKey) || comboDupSet.has(comboKey);
+              return (
+                <div
+                  key={variant.clientKey || variant.id || `variant-${index}`}
+                  className={`variant-row${hasError ? " variant-row--error" : ""}`}
+                >
+                  <label>Talla (opcional)<select
+                    value={variant.size}
+                    onChange={(e) => setVariant(index, "size", e.target.value)}
+                    aria-label={`Talla variante ${index + 1}`}
+                  >
+                    <option value="">No aplica</option>
+                    {sizes.map((s) => (
+                      <option key={s._id} value={s._id}>
+                        {s.name}
+                      </option>
+                    ))}
+                  </select></label>
+                  <label>Color (opcional)<select
+                    value={variant.color}
+                    onChange={(e) => setVariant(index, "color", e.target.value)}
+                    aria-label={`Color variante ${index + 1}`}
+                  >
+                    <option value="">No aplica</option>
+                    {colors.map((c) => (
+                      <option key={c._id} value={c._id}>
+                        {c.name}
+                      </option>
+                    ))}
+                  </select></label>
+                  <label>SKU<input
+                    className="variant-row__sku"
+                    onChange={(e) => setVariant(index, "sku", e.target.value.toUpperCase())}
+                    value={variant.sku}
+                    aria-label={`SKU variante ${index + 1}`}
+                    title="SKU único de la presentación"
+                    autoComplete="off"
+                  /></label>
+                  <label>Existencias<input
+                    type="number"
+                    min="0"
+                    placeholder="0"
+                    step="1"
+                    readOnly={!!variant.id}
+                    title={variant.id ? "El stock se cambia mediante un ajuste con motivo" : "Stock inicial"}
+                    value={variant.stock}
+                    onChange={(e) => setVariant(index, "stock", e.target.value)}
+                    required={!variant.id}
+                    aria-label={`Stock variante ${index + 1}`}
+                  /></label>
+                  <label>Precio propio (opcional)<input
+                    type="number"
+                    min="0"
+                    placeholder="Opcional"
+                    value={variant.price}
+                    onChange={(e) => setVariant(index, "price", e.target.value)}
+                    aria-label={`Precio variante ${index + 1}`}
+                  /></label>
+                  <label className="admin-checkbox admin-checkbox--inline">
+                    <input
+                      type="checkbox"
+                      checked={variant.isActive}
+                      onChange={(e) =>
+                        setVariant(index, "isActive", e.target.checked)
+                      }
+                    />
+                    <span className="variant-row__active-label">Activa</span>
+                  </label>
+                  {variant.id && <details className="variant-adjustment-legacy"><summary>Ajuste relativo en este formulario</summary><p>Al registrar confirmas el ajuste con motivo. Stock previsto: {variant.stock + (Number(variant.adjustmentDelta) || 0)}. El resultado se comprueba en el servidor.</p>
+                    <input type="number" step="1" placeholder="Ajuste + / −" aria-label="Cantidad del ajuste"
+                      disabled={adjustmentStates[variant.id]?.status === "processing" || adjustmentStates[variant.id]?.retryPending}
+                      value={variant.adjustmentDelta || ""} onChange={(e) => setAdjustmentField(index, "adjustmentDelta", e.target.value)} />
+                    <input placeholder="Motivo del ajuste" aria-label="Motivo del ajuste"
+                      disabled={adjustmentStates[variant.id]?.status === "processing" || adjustmentStates[variant.id]?.retryPending}
+                      value={variant.adjustmentReason || ""} onChange={(e) => setAdjustmentField(index, "adjustmentReason", e.target.value)} />
+                    <button type="button" className="admin-btn" onClick={() => handleStockAdjustment(index)}
+                      disabled={adjustmentStates[variant.id]?.status === "processing"}>
+                      {adjustmentStates[variant.id]?.status === "processing" ? "Registrando…" : adjustmentStates[variant.id]?.retryPending ? "Reintentar ajuste" : "Registrar ajuste"}
+                    </button>
+                    {adjustmentStates[variant.id] && <p role={adjustmentStates[variant.id].status === "error" ? "alert" : "status"}>
+                      {adjustmentStates[variant.id].message}
+                    </p>}
+                  </details>}
+                  {form.variants.length > 1 ? (
+                    <button
+                      type="button"
+                      className="variant-row__remove"
+                      onClick={() => removeVariant(index)}
+                      aria-label={`Quitar variante ${index + 1}`}
+                    >
+                      {variant.id ? "Desactivar variante" : "Quitar variante nueva"}
+                    </button>
+                  ) : (
+                    <span className="variant-row__remove-placeholder" />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        {(skuDupSet.size > 0 || comboDupSet.size > 0) && (
+          <p className="admin-form-error variant-table__alert">
+            {skuDupSet.size > 0
+              ? "Hay SKUs duplicados. Quita la variante repetida o recarga para generar uno nuevo."
+              : "Hay variantes con la misma talla y color."}
+          </p>
+        )}
+        <button type="button" className="admin-btn admin-btn--sm" onClick={addVariant}>
+          + Variante
+        </button>
+      </section>
+
+<section id="product-publication" className="product-form__section">
+        <h2>Publicación y posicionamiento</h2>
         <div className="admin-form__flags">
           <label className="admin-checkbox">
             <input
@@ -1005,7 +1001,7 @@ Fibra natural de Sandoná, Nariño.
         >
           {saving ? "Guardando…" : isEdit ? "Guardar cambios" : "Crear producto"}
         </button>
-        <Link href="/admin/productos" className="admin-btn">
+        <Link href={returnTo} className="admin-btn">
           Cancelar
         </Link>
       </div>

@@ -1,0 +1,384 @@
+{
+  "generatedAt": "2026-11-21T01:16:36.028Z",
+  "baseCommit": "a1e167df2f29d602ef84e018a398f9d09781bca3",
+  "algorithm": "SHA-256; bytes en disco",
+  "protectedChecks": [
+    {
+      "file": "backend/test/phase1.test.js",
+      "unchangedFromHEAD": true,
+      "sha256": "25cb4d5a7d0d585a09571f4a32da4b3dafd0b3d1ac865368e058ee7cda3bbacd"
+    },
+    {
+      "file": "backend/test/phase2.test.js",
+      "unchangedFromHEAD": true,
+      "sha256": "6fd871c487b7aba9445810031fa83e66aabec26b5a8f1c16edeb9a06cda3686a"
+    },
+    {
+      "file": "backend/test/phase2-compatibility.test.js",
+      "unchangedFromHEAD": true,
+      "sha256": "b158f68e8e88963173a6cd97c16f69466acccb9e87269faf60bbc0801826f3f1"
+    },
+    {
+      "file": "backend/test/phase3.test.js",
+      "unchangedFromHEAD": true,
+      "sha256": "bcf447740d0b4424eb9aaeab72c3f1ab3cc15752686b6f0b4f51a2f1a3155b93"
+    },
+    {
+      "file": "frontend/test/stock-adjustment.test.cjs",
+      "unchangedFromHEAD": true,
+      "sha256": "a7a6a458371b72750ef1238ecae4e4cf5a7d3d69721b1771277b5ca5240e0e31"
+    },
+    {
+      "file": "backend/src/services/orderWorkspace.js",
+      "unchangedFromHEAD": true,
+      "sha256": "dab1912e3716f70b3d1ee06c0842fd462c050c9085a761428bd6a67c7433a921"
+    },
+    {
+      "file": "backend/src/services/inventoryService.js",
+      "unchangedFromHEAD": true,
+      "sha256": "c30b3a00092975f34cf60eb70331f03bd67725c347fe950db0260a34f108ee7e"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase2/independiente.test.js",
+      "unchangedFromHEAD": true,
+      "sha256": "ab07cf3ab4abae21960a66931133f74d6f0a41f1c8bfc7c77281e29fe06836af"
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase3/independiente.test.js",
+      "unchangedFromHEAD": true,
+      "sha256": "1f8fc81818b1580cbff52cfe316b2798b33f3cdc64df54aa2281c5e25f782394"
+    }
+  ],
+  "files": [
+    {
+      "file": "backend/package.json",
+      "bytes": 1898,
+      "sha256": "2c3a1db85d2e87d7466944aca30e6bf6c6dcb27df25cd06611e288b9918d2192"
+    },
+    {
+      "file": "backend/src/controllers/adminAlertController.js",
+      "bytes": 2292,
+      "sha256": "64d2e2fd702d96f07c8059d6f7303b4d84f434bee5d13ca33a0419dcacb49059"
+    },
+    {
+      "file": "backend/src/controllers/productAdminController.js",
+      "bytes": 22280,
+      "sha256": "7d00bf67ccbcd76fec1e708b1d8e6faf39f6fe14b035441cb076ae0fd89ce16e"
+    },
+    {
+      "file": "backend/src/controllers/productHistoryAdminController.js",
+      "bytes": 13489,
+      "sha256": "95ed1e74e368bcc364cd198c1160686b31a0af24f728728085a139076e537096"
+    },
+    {
+      "file": "backend/src/models/product.js",
+      "bytes": 5539,
+      "sha256": "cb3bd28af70ae585121413fc80f16b7b564fc65efc8000f2348a3ccd5225c1d4"
+    },
+    {
+      "file": "backend/src/models/stockAdjustment.js",
+      "bytes": 560,
+      "sha256": "824e9e14c33f973effac20e7f34d0c3c4bc23ace60cc98139620c6f4dec5b6d2"
+    },
+    {
+      "file": "backend/src/routes/adminCatalogRoutes.js",
+      "bytes": 2425,
+      "sha256": "1c77c110d9ceecb98242a39fa2313e596543bbb7113145c7cd28851494e5cb2d"
+    },
+    {
+      "file": "backend/src/services/catalogMutationService.js",
+      "bytes": 755,
+      "sha256": "2964e05e0448a83ed65f0d5d5cf160a867e42265d26e040a44eb9c714f7ac014"
+    },
+    {
+      "file": "backend/src/services/catalogWorkspace.js",
+      "bytes": 3394,
+      "sha256": "953f77ca97ac8bc6a9d195bfa06f85d18dc0819d22282e3a81f3ba0983663e50"
+    },
+    {
+      "file": "backend/src/services/inventoryCriteria.js",
+      "bytes": 3832,
+      "sha256": "2505469767e8250513859c3dad56bf62feca782337b381d2deb1629de953788c"
+    },
+    {
+      "file": "backend/src/services/productHistoryService.js",
+      "bytes": 9626,
+      "sha256": "992d731ea41e7645dfe0e8ca2283b173273d9cda16cd8b690f4a4766aa0a10f1"
+    },
+    {
+      "file": "backend/test/phase4.test.js",
+      "bytes": 24344,
+      "sha256": "ebdb7773bdcfa1447dfc2d88c20efb23c06751e951bc7b1e7398b84662d8c1a0"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/README.md",
+      "bytes": 6758,
+      "sha256": "7122d657e028a3c9ebafad67de8217d69a30f85cbc65a774dd1a34f80ea48bc1"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/build-fase4.cjs",
+      "bytes": 3139,
+      "sha256": "1b0263b8c1a0fb07824b1c649c3c7b83cfc8ccfdbd34f4df0958ff4cf6eb8b4e"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/build-fase4.json",
+      "bytes": 190,
+      "sha256": "94ace3dec3caeae031ef60aada1281df54a7491657c94e17597d48a4ec1a4315"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/build-fase4.txt",
+      "bytes": 3552,
+      "sha256": "1457b88de60be6994b3446ef2a2ca30532b64f828330e5b5ba0e3f31fc456144"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/cierre-fase1-resultados.json",
+      "bytes": 2554,
+      "sha256": "a3fb3e9a43fd122573524f0e1ecf88ee6e94d4b5bdb667e69cb78ac8e2a0fc1d"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/cierre-fase2-resultados.json",
+      "bytes": 5687,
+      "sha256": "de08762fc1ad3d21d4fcb905577ea1d3117b1104be4eb14710011b930b20bd67"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/cierre-fase3-resultados.json",
+      "bytes": 2370,
+      "sha256": "7f49f929ae9f4a25ff106767d2c7d913301c00c011c693c78a101cf14fc356a8"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/eslint-frontend-antes.json",
+      "bytes": 7941,
+      "sha256": "d33a5a8bea428cf71d1e341f400c9c362c01bfd846af1323c44fdf626ac7c21d"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/eslint-frontend.json",
+      "bytes": 5624,
+      "sha256": "1a35aaa48b42bde31afbe66f846cdb278460292f2c1cee8514aec34f4249539a"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/eslint-node-antes.json",
+      "bytes": 2143,
+      "sha256": "40dfebbca04e49dfa3b8a0fcacd87acff22a65ecbeb7239bb3281b4b767c793c"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/eslint-node.json",
+      "bytes": 2660,
+      "sha256": "683083632d25c89b75872659f9b822f155fd9facffec750393372e7b3ccbfcbc"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/estatico-resumen.json",
+      "bytes": 300,
+      "sha256": "18030b33460d52c02366ee634b8be6dac47d05b88036976e305de407fd5fc7f7"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/existencias-escritorio.png",
+      "bytes": 83623,
+      "sha256": "99c8b21e48eeafbd362f95761dcc9e8eff543306df72cfd6690ec5d36fb27779"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/existencias-movil-360.png",
+      "bytes": 69240,
+      "sha256": "a8450d544a75f89a025a13ce6ba97c8a6b885dcf1fbf54d15a7baa373912bbbc"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/existencias-movil.png",
+      "bytes": 69528,
+      "sha256": "dcd6a5ee722f90a9093f208e77c4f106a3b64003783ac807190ecda05eabb735"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/existencias-tablet.png",
+      "bytes": 67346,
+      "sha256": "481a9c604392eb1378428742894f1a8b14d262349ae2d2abb52f21c9d0b8fef6"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/formulario-escritorio.png",
+      "bytes": 125738,
+      "sha256": "803499e6a3d009074900c03fa4090680fc908cebd95455bba58c9a11cc8d207a"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/formulario-movil-360.png",
+      "bytes": 102155,
+      "sha256": "2c3bd107263383c805439ab4f5729291de65d45050f6e5cb4e0d5e7e1181e0d0"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/formulario-movil.png",
+      "bytes": 101331,
+      "sha256": "7be60ab9c82f190a6e08e85ddb1c225692362743ca8db35f47b78ef4ebc88bfd"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/formulario-tablet.png",
+      "bytes": 106233,
+      "sha256": "31de9c23b41de809e97d5cb1acda6c927b36247c45f7823a511051f2f8797b75"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/movimientos-escritorio.png",
+      "bytes": 105515,
+      "sha256": "0bc6b66e9d4626fc6b84f0e7a9704e789aea6ae5e5baa3360ddc5fbf0392eb79"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/movimientos-movil-360.png",
+      "bytes": 91136,
+      "sha256": "09b3418c8238b8de896ac049eae509ff0f88a0ed46a55a44b6f2d65f72209a6e"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/movimientos-movil.png",
+      "bytes": 92102,
+      "sha256": "542a1e5d1bd5d85399d18a0bb0a8ab30c08d702873b5e1df1ed932131848e6dd"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/movimientos-tablet.png",
+      "bytes": 81172,
+      "sha256": "e167009a0607b164d2ea71495b4bc9fc7625310cb0eec61389502e939445a5af"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/navegador.json",
+      "bytes": 4358,
+      "sha256": "2c38e31e17ff49d6b9e727131ac1555c6a73a3a0ea41ab901b5f8971124d9b98"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/navegador.txt",
+      "bytes": 4358,
+      "sha256": "b92f9daef0dc2341875131357f9631a7e50eceae0365e5e786bdee7a0a56573d"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/preservar-evidencias.cjs",
+      "bytes": 767,
+      "sha256": "77dd208b6b4c65af90f536d44e89c21c94c1b02a2068fdacdc74c4588cafd8c6"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/productos-escritorio.png",
+      "bytes": 90170,
+      "sha256": "624ed3ce62cec2008e2fd15ae2fea0dd04d6f79ef5b10c27d0914fe3cd8ae576"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/productos-movil-360.png",
+      "bytes": 82307,
+      "sha256": "f8585e1f962bea43f227942333b9b023f9bf7996289b9df64f6622c162808dc1"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/productos-movil.png",
+      "bytes": 81254,
+      "sha256": "db61047afd9046245fe97cd513745752278d31d086bb2621bb170dd99faca0a3"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/productos-tablet.png",
+      "bytes": 79106,
+      "sha256": "1faa078d601d28adb9c7e9131fa871d6f0409512bbc894bf088b5167dba9fe20"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/pruebas-fase4.txt",
+      "bytes": 25491,
+      "sha256": "d4c194006aaa1da9d76e0ad748417ae94e341f5fc71381c6a63562006ab31fec"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/regresion-completa.txt",
+      "bytes": 153413,
+      "sha256": "d6bbf73c843f6db243496eeab342e462e4a701beff90b7e8422832c4d4d967ff"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/rendimiento.json",
+      "bytes": 29393,
+      "sha256": "37953cbe7b8450e4d192cc16abc3b18e6a108ec106370b5270fbf9cc4aa4b0ac"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/resultados-finales.json",
+      "bytes": 1500,
+      "sha256": "1b21a92e8d54a06de091782e8f77265434b49fd1b6e2fb4ff13a52a4ed29ff64"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/sintaxis.json",
+      "bytes": 1578,
+      "sha256": "a86de50b2d82faccbbc1d1e647fcc9ab6ff28da4ec9378b9929b4e1f95bd3a1c"
+    },
+    {
+      "file": "docs/auditoria-admin/fase4-evidencias/verificar-estatico.cjs",
+      "bytes": 4730,
+      "sha256": "97c684c10922eb8192b34de44dc0aca15b5f14f0ffde7b396d7591ebc47fe979"
+    },
+    {
+      "file": "docs/auditoria-admin/informe-fase4-productos-inventario-2026-11-20.md",
+      "bytes": 32453,
+      "sha256": "e5e5a5381249bddf61a6d923e01107063d14c50f9748313ef561a1bfd04cf2e5"
+    },
+    {
+      "file": "frontend/src/app/admin/alertas/page.js",
+      "bytes": 18423,
+      "sha256": "767035462394e9fe694ef696a89d0980ad25d43836c44571db8f587cd1f7b8a5"
+    },
+    {
+      "file": "frontend/src/app/admin/inventario/page.js",
+      "bytes": 380,
+      "sha256": "c51aae7263aa2b22398cdb6d68ff9b70635e6a44dfbd9421dc57e66873a14c62"
+    },
+    {
+      "file": "frontend/src/app/admin/productos/[id]/editar/page.js",
+      "bytes": 626,
+      "sha256": "20457bbd1804d99a2b9f97f399b88d6211a7a8dc4723a7b34e147006bff6d829"
+    },
+    {
+      "file": "frontend/src/app/admin/productos/nuevo/page.js",
+      "bytes": 536,
+      "sha256": "0206b26e62e1a1c366f83afe29dae80241e415d64936facc5320463917f2cbae"
+    },
+    {
+      "file": "frontend/src/app/admin/productos/page.js",
+      "bytes": 371,
+      "sha256": "7c666782c5d4981afa456112e1bad45dafcb1d9ebc4c75948189ea2813247a0f"
+    },
+    {
+      "file": "frontend/src/components/admin/AlertBell.jsx",
+      "bytes": 9429,
+      "sha256": "f0cf2560c6daade5878e2ce1a2a4e00c7e64e83207f1a29cc41bfa6160eeb216"
+    },
+    {
+      "file": "frontend/src/components/admin/CatalogWorkspace.jsx",
+      "bytes": 13791,
+      "sha256": "8dc803dacacfd2fe90ac68a10a09d806d015052a2c75b4e91221e76d55b904b1"
+    },
+    {
+      "file": "frontend/src/components/admin/CatalogWorkspace.module.css",
+      "bytes": 8676,
+      "sha256": "ba25bd2197744fe63882e9c1a2384964a7ae8067597c6c8df33cc78e4890f2f1"
+    },
+    {
+      "file": "frontend/src/components/admin/ProductEditor.jsx",
+      "bytes": 494,
+      "sha256": "68bffdd51666a2b683eddacb37ced75db902be82dddcc14eb9255860f7797eac"
+    },
+    {
+      "file": "frontend/src/components/admin/ProductForm.jsx",
+      "bytes": 38026,
+      "sha256": "eb5ecd83e586a61a6e10e0af9c81d2fe6c62e19611f620c8d1f3f9052d69e6f2"
+    },
+    {
+      "file": "frontend/src/components/admin/ProductHistoryList.jsx",
+      "bytes": 8212,
+      "sha256": "44783096e0d606ec520aeaa79ae843b788a40dd43885f4530b15de5eb3ba404b"
+    },
+    {
+      "file": "frontend/src/components/admin/QuickStockAdjustment.jsx",
+      "bytes": 7032,
+      "sha256": "c6f04ffd87620dca6243412203d9d267e5ef1b53fdcbd91ea19ba6f32d74c460"
+    },
+    {
+      "file": "frontend/src/lib/catalogWorkspace.js",
+      "bytes": 1109,
+      "sha256": "5d4c76c9b8c14079e899efdea62d526da834792bd732dfa96fccfc74b874059f"
+    },
+    {
+      "file": "frontend/src/services/adminCatalogService.js",
+      "bytes": 2737,
+      "sha256": "2c85315f8b9114b3b9a3607f8902076a9726a32c941793670326fab51ad65f60"
+    },
+    {
+      "file": "frontend/src/styles/pages/admin-products.css",
+      "bytes": 17983,
+      "sha256": "275738821ceec379eaa3be8c8bef303bfe33f8ab770a054533536b74956a6c42"
+    },
+    {
+      "file": "frontend/test/catalog-workspace-browser.cjs",
+      "bytes": 26457,
+      "sha256": "e61dd2ec5874e6ccc40d27aeba61b5e7f6aa09fcd36a5d0449919f94c705db1a"
+    }
+  ]
+}

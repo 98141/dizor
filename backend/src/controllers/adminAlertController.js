@@ -1,21 +1,19 @@
 const catchAsync = require("../utils/catchAsync");
-const Product = require("../models/product");
+
 const Order = require("../models/order");
 const SpecialRequest = require("../models/specialRequest");
 const Coupon = require("../models/coupon");
 
-const LOW_STOCK_THRESHOLD = 5;
+const { alertGroups } = require("../services/inventoryCriteria");
 
 exports.getAlerts = catchAsync(async (req, res) => {
   const now = new Date();
   const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);
   const in3Days = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
 
-  const [products, newOrders, pendingPaymentOrders, specialRequests, expiringCoupons] =
+  const [inventoryAlerts, newOrders, pendingPaymentOrders, specialRequests, expiringCoupons] =
     await Promise.all([
-      Product.find({ isActive: true })
-        .select("name slug variants")
-        .lean(),
+      alertGroups(),
       Order.find({
         createdAt: { $gte: yesterday },
         orderStatus: { $nin: ["cancelado", "rechazado", "entregado"] },
@@ -40,26 +38,6 @@ exports.getAlerts = catchAsync(async (req, res) => {
         .lean(),
     ]);
 
-  const lowStockProducts = [];
-  const outOfStockProducts = [];
-
-  for (const p of products) {
-    const totalStock = (p.variants || []).reduce(
-      (s, v) => s + (v.isActive !== false ? v.stock || 0 : 0),
-      0
-    );
-    const active = (p.variants || []).filter((v) => v.isActive !== false);
-    const affectedVariants = active.filter((v) => v.stock <= LOW_STOCK_THRESHOLD).map((v) => ({ id: v._id, sku: v.sku, stock: v.stock }));
-    if (active.length === 0 || active.some((v) => v.stock === 0)) {
-      outOfStockProducts.push({ id: p._id, name: p.name, slug: p.slug, totalStock, affectedVariants, unavailable: active.every((v) => v.stock === 0) });
-    } else if (active.some((v) => v.stock <= LOW_STOCK_THRESHOLD)) {
-      lowStockProducts.push({ id: p._id, name: p.name, slug: p.slug, totalStock, affectedVariants });
-    }
-  }
-
-  outOfStockProducts.sort((a, b) => a.name.localeCompare(b.name));
-  lowStockProducts.sort((a, b) => a.totalStock - b.totalStock);
-
   const alerts = {
     communications: await require("./notificationAdminController").communicationAlerts(),
     newOrders: {
@@ -70,15 +48,7 @@ exports.getAlerts = catchAsync(async (req, res) => {
       count: pendingPaymentOrders.length,
       items: pendingPaymentOrders.slice(0, 10),
     },
-    lowStock: {
-      count: lowStockProducts.length,
-      threshold: LOW_STOCK_THRESHOLD,
-      items: lowStockProducts.slice(0, 10),
-    },
-    outOfStock: {
-      count: outOfStockProducts.length,
-      items: outOfStockProducts.slice(0, 10),
-    },
+    ...inventoryAlerts,
     specialRequests: {
       count: specialRequests.length,
       items: specialRequests.slice(0, 10),

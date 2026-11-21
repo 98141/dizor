@@ -57,8 +57,8 @@ export const uploadTempImages = async (files) => {
   return res.data;
 };
 
-export const getInventory = async () => {
-  const res = await api.get("/admin/catalog/products/inventory");
+export const getInventory = async (params = {}) => {
+  const res = await api.get("/admin/catalog/products/inventory", { params });
   return res.data;
 };
 
@@ -86,3 +86,4 @@ export const adjustProductStock = async (id, data) => {
   const res = await api.post(`/admin/catalog/products/${id}/stock`, data);
   return res.data;
 };
+export const getStockOperation = async (id, key) => (await api.get(`/admin/catalog/products/${id}/stock-operations/${key}`)).data;

@@ -1,5 +1,8 @@
 const ProductHistory = require("../models/productHistory");
 const catchAsync = require("../utils/catchAsync");
+const AppError = require("../utils/AppError");
+const catalog = require("../services/catalogWorkspace");
+const { dateBoundary, bogotaPeriod } = require("../services/orderWorkspace");
 
 const EVENT_LABELS = {
   created: "Registro nuevo",
@@ -22,19 +25,29 @@ const fmt = (n) =>
 
 const buildHistoryFilter = (query) => {
   const filter = {};
-  if (query.productId) filter.productId = query.productId;
-  if (query.eventType) filter.eventType = query.eventType;
-  if (query.referenceType) filter.referenceType = query.referenceType;
+  if (query.productId) filter.productId = catalog.objectId(query.productId);
+  if (query.variantId) filter.variantId = catalog.objectId(query.variantId);
+  if (query.userId) filter.userId = catalog.objectId(query.userId);
+  if (query.sku) { if (typeof query.sku !== "string" || query.sku.length > 160) throw new AppError("SKU inválido", 400); filter.sku = query.sku.trim().toUpperCase(); }
+  // Exact bounded strings also allow legacy event types not written by today's enum.
+  if (query.eventType) { if (typeof query.eventType !== "string" || query.eventType.length > 80) throw new AppError("Tipo de movimiento inválido", 400); filter.eventType = query.eventType; }
+  if (query.referenceType) { if (!["order", "admin", "system", "pos"].includes(query.referenceType)) throw new AppError("Origen inválido", 400); filter.referenceType = query.referenceType; }
+  if (query.movementKind) {
+    const kinds = { restock: { eventType: "stock_adjustment", quantityChange: { $gt: 0 }, referenceType: { $ne: "order" } },
+      withdrawal: { eventType: "stock_adjustment", quantityChange: { $lt: 0 }, referenceType: { $ne: "order" } },
+      restoration: { eventType: "stock_adjustment", referenceType: "order", quantityChange: { $gt: 0 } }, sale: { eventType: "sale" },
+      other: { $or: [{ eventType: { $nin: ["sale", "stock_adjustment"] } }, { eventType: "stock_adjustment", quantityChange: 0 }, { eventType: "stock_adjustment", referenceType: "order", quantityChange: { $lt: 0 } }] } };
+    if (!Object.hasOwn(kinds, query.movementKind)) throw new AppError("Tipo de movimiento inválido", 400);
+    filter.$and = [kinds[query.movementKind]];
+  }
 
   if (query.from || query.to) {
     filter.createdAt = {};
-    if (query.from) filter.createdAt.$gte = new Date(query.from);
-    if (query.to) {
-      const to = new Date(query.to);
-      to.setHours(23, 59, 59, 999);
-      filter.createdAt.$lte = to;
-    }
+    if (query.from) filter.createdAt.$gte = dateBoundary(query.from);
+    if (query.to) filter.createdAt.$lt = dateBoundary(query.to, true);
+    if (filter.createdAt.$gte >= filter.createdAt.$lt) throw new AppError("Intervalo inválido", 400);
   }
+  if (query.term && (typeof query.term !== "string" || query.term.length > 160)) throw new AppError("Búsqueda inválida", 400);
 
   const term = query.term?.trim();
   if (term) {
@@ -66,7 +79,9 @@ const formatEntry = (doc) => ({
   referenceType: doc.referenceType,
   referenceId: doc.referenceId,
   referenceLabel: doc.referenceLabel,
+  userId: doc.userId,
   userEmail: doc.userEmail,
+  movementKind: doc.eventType === "sale" ? "sale" : doc.eventType === "stock_adjustment" ? doc.referenceType === "order" && doc.quantityChange > 0 ? "restoration" : doc.referenceType === "order" ? "other" : doc.quantityChange > 0 ? "restock" : doc.quantityChange < 0 ? "withdrawal" : "other" : "other",
   role: doc.role,
   summary: doc.summary,
   details: doc.details,
@@ -74,15 +89,14 @@ const formatEntry = (doc) => ({
 });
 
 exports.getHistory = catchAsync(async (req, res) => {
-  const page = Math.max(1, parseInt(req.query.page, 10) || 1);
-  const limit = Math.min(100, parseInt(req.query.limit, 10) || 30);
+  const { page, limit } = catalog.page(req.query);
   const skip = (page - 1) * limit;
 
   const filter = buildHistoryFilter(req.query);
 
-  const [entries, total, eventTypes, productsAgg] = await Promise.all([
+  const [entries, total, eventTypes, productsAgg, actors] = await Promise.all([
     ProductHistory.find(filter)
-      .sort({ createdAt: -1 })
+      .sort({ createdAt: -1, _id: -1 })
       .skip(skip)
       .limit(limit)
       .lean(),
@@ -100,6 +114,8 @@ exports.getHistory = catchAsync(async (req, res) => {
       { $sort: { count: -1 } },
       { $limit: 50 },
     ]),
+    ProductHistory.aggregate([{ $match: { userId: { $ne: null } } },
+      { $group: { _id: "$userId", email: { $last: "$userEmail" } } }, { $sort: { _id: 1 } }, { $limit: 50 }]),
   ]);
 
   res.status(200).json({
@@ -110,6 +126,7 @@ exports.getHistory = catchAsync(async (req, res) => {
     totalPages: Math.ceil(total / limit) || 1,
     filters: {
       eventTypes: eventTypes.sort(),
+      actors: actors.map((a) => ({ id: a._id, email: a.email })),
       products: productsAgg.map((p) => ({
         id: p._id,
         name: p.productName,
@@ -121,8 +138,7 @@ exports.getHistory = catchAsync(async (req, res) => {
 });
 
 exports.getStats = catchAsync(async (req, res) => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const { today } = bogotaPeriod();
 
   const [total, todayCount, salesToday, stockMovesToday, byType] =
     await Promise.all([
@@ -176,17 +192,19 @@ exports.exportPdf = catchAsync(async (req, res) => {
 
   const filter = buildHistoryFilter(req.query);
   const entries = await ProductHistory.find(filter)
-    .sort({ createdAt: -1 })
+    .sort({ createdAt: -1, _id: -1 })
     .limit(5000)
     .lean();
 
   const now = new Date();
   const dateLabel = now.toLocaleDateString("es-CO", {
+    timeZone: "America/Bogota",
     day: "2-digit",
     month: "long",
     year: "numeric",
   });
   const timeLabel = now.toLocaleTimeString("es-CO", {
+    timeZone: "America/Bogota",
     hour: "2-digit",
     minute: "2-digit",
   });
@@ -267,7 +285,7 @@ exports.exportPdf = catchAsync(async (req, res) => {
       }
 
       const dateStr = new Date(row.createdAt).toLocaleString("es-CO", {
-        day: "2-digit", month: "2-digit", year: "2-digit",
+        timeZone: "America/Bogota", day: "2-digit", month: "2-digit", year: "2-digit",
         hour: "2-digit", minute: "2-digit",
       });
 

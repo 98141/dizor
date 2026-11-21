@@ -1,0 +1,75 @@
+{
+  "generatedAt": "2026-11-21T01:16:34.625Z",
+  "scope": "Fase 4; entorno local aislado; pendiente auditoría independiente",
+  "regression": {
+    "tests": 210,
+    "passed": 210,
+    "failed": 0,
+    "skipped": 0,
+    "durationMs": 108144.7087,
+    "original": 162,
+    "independentPhase3": 6,
+    "newPhase4": 42
+  },
+  "browser": {
+    "passed": true,
+    "checks": 20,
+    "externalRequests": 0,
+    "pageErrors": 0,
+    "screenshots": 16,
+    "widths": [
+      1440,
+      820,
+      390,
+      360
+    ]
+  },
+  "static": {
+    "syntaxFiles": 15,
+    "syntaxFailures": 0,
+    "node": {
+      "errors": 0,
+      "warnings": 1
+    },
+    "nodeBaseline": {
+      "errors": 0,
+      "warnings": 2
+    },
+    "frontend": {
+      "errors": 3,
+      "warnings": 1
+    },
+    "frontendBaseline": {
+      "errors": 5,
+      "warnings": 2
+    },
+    "newMessages": []
+  },
+  "build": {
+    "exitCode": 0,
+    "signal": null,
+    "isolatedCopy": true,
+    "envFilesCopied": false,
+    "inheritedCredentials": false,
+    "network": "fetch/TCP blocked",
+    "compiler": "Next.js --webpack"
+  },
+  "performance": {
+    "products": 1201,
+    "variants": 3601,
+    "returned": 20,
+    "totalMatches": 400,
+    "elapsedMs": 42.310199999999895,
+    "productionBenchmark": false
+  },
+  "restrictions": {
+    "productionUsed": false,
+    "envModified": false,
+    "realPayments": false,
+    "realEmails": false,
+    "deployed": false,
+    "committed": false,
+    "pushed": false,
+    "phase5Started": false
+  }
+}

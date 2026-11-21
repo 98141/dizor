@@ -7,12 +7,12 @@ const variantSchema = new mongoose.Schema(
     size: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Size",
-      required: true,
+      default: null,
     },
     color: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Color",
-      required: true,
+      default: null,
     },
     sku: {
       type: String,

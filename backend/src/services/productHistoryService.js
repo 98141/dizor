@@ -23,7 +23,7 @@ const buildActor = (user) => ({
 exports.logProductHistory = async (entry) => {
   if (!entry?.eventType || !entry?.productName) return;
 
-  await ProductHistory.create({
+  await ProductHistory.create([{
     productId: entry.productId || null,
     productName: entry.productName,
     productSlug: entry.productSlug || null,
@@ -41,14 +41,14 @@ exports.logProductHistory = async (entry) => {
     ...buildActor(entry.user),
     summary: entry.summary ? String(entry.summary).slice(0, 500) : null,
     details: entry.details || null,
-  });
+  }], entry.session ? { session: entry.session } : {});
 };
 
 exports.safeLogProductHistory = (promise) => {
   if (promise?.catch) promise.catch(() => {});
 };
 
-exports.logProductCreated = async ({ product, user, req }) => {
+exports.logProductCreated = async ({ product, user, req, session }) => {
   const variants = snapshotVariants(product);
   const totalStock = variants.reduce((s, v) => s + v.stock, 0);
 
@@ -59,7 +59,7 @@ exports.logProductCreated = async ({ product, user, req }) => {
     eventType: "created",
     stockAfter: totalStock,
     referenceType: "admin",
-    user,
+    user, session,
     summary: `Producto registrado · stock inicial ${totalStock} uds`,
     details: { variants, salePrice: product.salePrice },
   });
@@ -78,14 +78,14 @@ exports.logProductCreated = async ({ product, user, req }) => {
       stockBefore: 0,
       stockAfter: v.stock,
       referenceType: "admin",
-      user,
+      user, session,
       summary: `Stock inicial ${v.stock} · ${v.sku}`,
       details: { reason: "initial_stock" },
     });
   }
 };
 
-exports.logProductDeleted = async ({ product, user }) => {
+exports.logProductDeleted = async ({ product, user, session }) => {
   const variants = snapshotVariants(product);
   const totalStock = variants.reduce((s, v) => s + v.stock, 0);
 
@@ -97,7 +97,7 @@ exports.logProductDeleted = async ({ product, user }) => {
     stockBefore: totalStock,
     stockAfter: 0,
     referenceType: "admin",
-    user,
+    user, session,
     summary: `Producto eliminado · ${product.name}`,
     details: { variants },
   });
@@ -109,7 +109,7 @@ exports.logProductSale = async ({
   quantity,
   orderId,
   orderNumber,
-  user,
+  user, session,
   sizeName = null,
   colorName = null,
 }) => {
@@ -131,7 +131,7 @@ exports.logProductSale = async ({
     referenceType: "order",
     referenceId: orderId,
     referenceLabel: orderNumber,
-    user,
+    user, session,
     summary: `Venta ${quantity} uds · ${orderNumber} · quedan ${stockAfter}`,
     details: {
       orderNumber,
@@ -140,7 +140,7 @@ exports.logProductSale = async ({
   });
 };
 
-exports.logProductUpdates = async ({ productBefore, productAfter, user }) => {
+exports.logProductUpdates = async ({ productBefore, productAfter, user, session }) => {
   const before = snapshotVariants(productBefore);
   const after = snapshotVariants(productAfter);
   const beforeMap = new Map(before.map((v) => [v.variantId, v]));
@@ -166,7 +166,7 @@ exports.logProductUpdates = async ({ productBefore, productAfter, user }) => {
         stockBefore: prev.stock,
         stockAfter: next.stock,
         referenceType: "admin",
-        user,
+        user, session,
         summary:
           delta > 0
             ? `Ingreso +${delta} uds · ${next.sku}${next.sizeName ? ` · ${next.sizeName}` : ""}${next.colorName ? ` / ${next.colorName}` : ""}`
@@ -186,7 +186,7 @@ exports.logProductUpdates = async ({ productBefore, productAfter, user }) => {
         colorName: next.colorName,
         eventType: "price_change",
         referenceType: "admin",
-        user,
+        user, session,
         summary: `Precio variante ${next.sku}: ${prev.price ?? "—"} → ${next.price}`,
         details: { field: "variant_price", before: prev.price, after: next.price },
       });
@@ -203,7 +203,7 @@ exports.logProductUpdates = async ({ productBefore, productAfter, user }) => {
         colorName: next.colorName,
         eventType: "status_change",
         referenceType: "admin",
-        user,
+        user, session,
         summary: next.isActive
           ? `Variante activada · ${next.sku}`
           : `Variante desactivada · ${next.sku}`,
@@ -228,7 +228,7 @@ exports.logProductUpdates = async ({ productBefore, productAfter, user }) => {
         stockBefore: 0,
         stockAfter: next.stock,
         referenceType: "admin",
-        user,
+        user, session,
         summary: `Nueva variante agregada · ${next.sku} · stock inicial ${next.stock}`,
         details: { reason: "new_variant" },
       });
@@ -242,7 +242,7 @@ exports.logProductUpdates = async ({ productBefore, productAfter, user }) => {
       productSlug: productAfter.slug,
       eventType: "price_change",
       referenceType: "admin",
-      user,
+      user, session,
       summary: `Precio base: ${productBefore.salePrice ?? "—"} → ${productAfter.salePrice ?? "—"}`,
       details: { field: "salePrice", before: productBefore.salePrice, after: productAfter.salePrice },
     });
@@ -255,7 +255,7 @@ exports.logProductUpdates = async ({ productBefore, productAfter, user }) => {
       productSlug: productAfter.slug,
       eventType: "status_change",
       referenceType: "admin",
-      user,
+      user, session,
       summary: productAfter.isActive
         ? "Producto activado en tienda"
         : "Producto desactivado en tienda",
@@ -270,7 +270,7 @@ exports.logProductUpdates = async ({ productBefore, productAfter, user }) => {
       productSlug: productAfter.slug,
       eventType: "updated",
       referenceType: "admin",
-      user,
+      user, session,
       summary: `Nombre: "${productBefore.name}" → "${productAfter.name}"`,
       details: { field: "name", before: productBefore.name, after: productAfter.name },
     });

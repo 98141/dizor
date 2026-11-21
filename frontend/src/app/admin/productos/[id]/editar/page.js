@@ -3,7 +3,7 @@
 import { use } from "react";
 import RoleRoute from "@/guards/RoleRoute";
 import AdminShell from "@/components/admin/AdminShell";
-import ProductForm from "@/components/admin/ProductForm";
+import ProductEditor from "@/components/admin/ProductEditor";
 
 export default function AdminProductoEditarPage({ params }) {
   const { id } = use(params);
@@ -13,7 +13,7 @@ export default function AdminProductoEditarPage({ params }) {
       <AdminShell variant="admin">
         <div className="admin-page">
           <h1 className="admin-page__title">Editar producto</h1>
-          <ProductForm productId={id} />
+          <ProductEditor productId={id} />
         </div>
       </AdminShell>
     </RoleRoute>

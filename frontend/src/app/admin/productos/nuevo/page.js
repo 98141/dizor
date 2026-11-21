@@ -2,7 +2,7 @@
 
 import RoleRoute from "@/guards/RoleRoute";
 import AdminShell from "@/components/admin/AdminShell";
-import ProductForm from "@/components/admin/ProductForm";
+import ProductEditor from "@/components/admin/ProductEditor";
 
 export default function AdminProductoNuevoPage() {
   return (
@@ -10,7 +10,7 @@ export default function AdminProductoNuevoPage() {
       <AdminShell variant="admin">
         <div className="admin-page">
           <h1 className="admin-page__title">Nuevo producto</h1>
-          <ProductForm />
+          <ProductEditor />
         </div>
       </AdminShell>
     </RoleRoute>
