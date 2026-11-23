@@ -1,0 +1,260 @@
+{
+  "at": "2026-11-21T19:35:49.897Z",
+  "blocked": [],
+  "results": [
+    {
+      "id": "F2-I01",
+      "verdict": "pass",
+      "detail": {
+        "race": [
+          200,
+          200,
+          200,
+          200
+        ],
+        "pay": "pagado",
+        "deducted": true,
+        "approved": [
+          "sent"
+        ],
+        "declined": [],
+        "ready": 1
+      }
+    },
+    {
+      "id": "F2-I02",
+      "verdict": "pass",
+      "detail": {
+        "calls": 2,
+        "keys": [
+          "5ef566e37eaecb80e0e7b1c8585209c9af8d10ee7e82ee2a08204d31310d39f6",
+          "5ef566e37eaecb80e0e7b1c8585209c9af8d10ee7e82ee2a08204d31310d39f6"
+        ],
+        "status": [
+          "sent"
+        ],
+        "payment": "pendiente"
+      }
+    },
+    {
+      "id": "F2-I03",
+      "verdict": "pass",
+      "detail": {
+        "recovered": "sent",
+        "ambiguous": "result_ambiguous",
+        "retryKeys": [
+          "2d45a1945f93d5b5703e0f563856e67da18bcb9c32c3ba38b8c8e333276237c8",
+          "2d45a1945f93d5b5703e0f563856e67da18bcb9c32c3ba38b8c8e333276237c8"
+        ],
+        "final": "sent",
+        "payment": "pendiente"
+      }
+    },
+    {
+      "id": "F2-I04",
+      "verdict": "pass",
+      "detail": {
+        "permanent": "permanent_error",
+        "expired": "review_required",
+        "jump": 409,
+        "shipped": 0
+      }
+    },
+    {
+      "id": "F2-I05",
+      "verdict": "pass",
+      "detail": {
+        "collected": 200,
+        "resend": 202,
+        "copy": "skipped",
+        "copyError": "superseded",
+        "delivered": "Entrega registrada\n\nPedido DIZ-20261121-26C8F3719F754217B77E\n\nRegistramos la entrega de tu pedido. La entrega y la confirmación de recaudo son hechos separados; el recaudo aún figu"
+      }
+    },
+    {
+      "id": "F2-I06",
+      "verdict": "pass",
+      "detail": {
+        "page": [
+          20,
+          23
+        ],
+        "vendor": 200,
+        "client": 403,
+        "race": [
+          202,
+          409
+        ],
+        "extraSends": 1,
+        "copies": 0,
+        "sentCopies": 0,
+        "original": "sent",
+        "superseded": false,
+        "newline": true
+      }
+    },
+    {
+      "id": "F2-I09",
+      "verdict": "pass",
+      "detail": {
+        "duplicated": 0,
+        "misleading": 0,
+        "outcomes": [
+          {
+            "http": [
+              202,
+              409
+            ],
+            "sends": 1,
+            "copies": 0,
+            "status": "sent",
+            "superseded": false
+          },
+          {
+            "http": [
+              202,
+              409
+            ],
+            "sends": 1,
+            "copies": 0,
+            "status": "sent",
+            "superseded": false
+          },
+          {
+            "http": [
+              202,
+              409
+            ],
+            "sends": 1,
+            "copies": 0,
+            "status": "sent",
+            "superseded": false
+          },
+          {
+            "http": [
+              202,
+              409
+            ],
+            "sends": 1,
+            "copies": 0,
+            "status": "sent",
+            "superseded": false
+          },
+          {
+            "http": [
+              202,
+              409
+            ],
+            "sends": 1,
+            "copies": 0,
+            "status": "sent",
+            "superseded": false
+          },
+          {
+            "http": [
+              202,
+              409
+            ],
+            "sends": 1,
+            "copies": 0,
+            "status": "sent",
+            "superseded": false
+          },
+          {
+            "http": [
+              202,
+              409
+            ],
+            "sends": 1,
+            "copies": 0,
+            "status": "sent",
+            "superseded": false
+          },
+          {
+            "http": [
+              202,
+              409
+            ],
+            "sends": 1,
+            "copies": 0,
+            "status": "sent",
+            "superseded": false
+          },
+          {
+            "http": [
+              202,
+              409
+            ],
+            "sends": 1,
+            "copies": 0,
+            "status": "sent",
+            "superseded": false
+          },
+          {
+            "http": [
+              202,
+              409
+            ],
+            "sends": 1,
+            "copies": 0,
+            "status": "sent",
+            "superseded": false
+          },
+          {
+            "http": [
+              202,
+              409
+            ],
+            "sends": 1,
+            "copies": 0,
+            "status": "sent",
+            "superseded": false
+          },
+          {
+            "http": [
+              202,
+              409
+            ],
+            "sends": 1,
+            "copies": 0,
+            "status": "sent",
+            "superseded": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "F2-I07",
+      "verdict": "pass",
+      "detail": {
+        "groups": [
+          {
+            "id": "6b01f295c4d421ad58225cd4:temporary_error",
+            "orderId": "6b01f295c4d421ad58225cd4",
+            "orderNumber": "DIZ-20261121-CD76724D35E0D49E9D6B",
+            "count": 2,
+            "message": "Fallo temporal del proveedor",
+            "at": "2026-11-21T19:35:49.343Z"
+          }
+        ],
+        "otherGroups": 0,
+        "vendor": 403,
+        "mixedOut": true,
+        "mixedLow": false
+      }
+    },
+    {
+      "id": "F2-I08",
+      "verdict": "pass",
+      "detail": {
+        "kept": true,
+        "skipped": "delivery_disabled",
+        "reportDelta": 1,
+        "historyDelta": 1,
+        "moneyReport": 80000,
+        "moneyHistory": 80000,
+        "blocked": []
+      }
+    }
+  ]
+}

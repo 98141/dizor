@@ -1,0 +1,57 @@
+(node:38048) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:38048) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:38048) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:38048) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:38048) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:38048) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+14:35:08 [[32mhttp[39m]: POST /api/auth/login 200 797.016 ms - 168
+14:35:09 [[32mhttp[39m]: POST /api/auth/login 200 700.103 ms - 169
+14:35:10 [[32mhttp[39m]: POST /api/auth/login 200 706.542 ms - 174
+14:35:10 [[32mhttp[39m]: POST /api/auth/login 200 809.882 ms - 173
+14:36:30 [[33mwarn[39m]: Auth failure No has iniciado sesión {"method":"GET","url":"/api/auth/me","statusCode":401,"ip":"127.0.0.1"}
+14:36:30 [[32mhttp[39m]: GET /api/auth/me 401 4.741 ms - 53
+14:36:30 [[33mwarn[39m]: Auth failure Refresh token requerido {"method":"POST","url":"/api/auth/refresh-token","statusCode":401,"ip":"127.0.0.1"}
+14:36:30 [[32mhttp[39m]: POST /api/auth/refresh-token 401 7.390 ms - 53
+14:36:31 [[32mhttp[39m]: POST /api/visits/forget 204 0.930 ms - -
+14:36:31 [[32mhttp[39m]: GET /api/content/appearance 200 20.941 ms - 126
+14:36:31 [[32mhttp[39m]: GET /api/content/appearance 400 25.029 ms - 65
+14:36:32 [[32mhttp[39m]: POST /api/auth/login 200 559.247 ms - 174
+14:36:32 [[32mhttp[39m]: GET /api/favorites/ids 200 13.142 ms - 47
+14:36:32 [[32mhttp[39m]: GET /api/checkout/orders 200 16.601 ms - 44
+14:36:32 [[32mhttp[39m]: GET /api/special-requests/mine 200 14.206 ms - 46
+14:36:32 [[32mhttp[39m]: GET /api/products/pieza-900b10 200 49.722 ms - 1252
+14:36:32 [[32mhttp[39m]: GET /api/content/pages 200 14.480 ms - 43
+14:36:32 [[32mhttp[39m]: GET /api/products/filters 200 35.317 ms - 957
+14:36:32 [[32mhttp[39m]: GET /api/content/home 200 55.046 ms - 3830
+14:36:32 [[32mhttp[39m]: GET /api/visits/count 200 2.768 ms - 30
+14:36:32 [[32mhttp[39m]: GET /api/marketing/config 200 17.659 ms - 510
+14:36:32 [[32mhttp[39m]: GET /api/auth/me 200 20.569 ms - 213
+14:36:32 [[32mhttp[39m]: GET /api/favorites/ids 304 7.450 ms - -
+14:36:33 [[32mhttp[39m]: GET /api/legal/notices 200 1.160 ms - 1511
+14:36:33 [[32mhttp[39m]: GET /api/reviews/product/6b01f2c001750cbb2fa95a8a 200 5.128 ms - 45
+14:36:33 [[32mhttp[39m]: GET /api/marketing/config 304 5.037 ms - -
+14:36:33 [[32mhttp[39m]: POST /api/cart/validate 200 54.024 ms - 451
+14:36:33 [[32mhttp[39m]: GET /api/marketing/config 304 8.680 ms - -
+14:36:34 [[32mhttp[39m]: GET /api/products/pieza-900b10 200 56.477 ms - 1252
+14:36:34 [[32mhttp[39m]: GET /api/checkout/config 200 3.982 ms - 830
+14:36:34 [[32mhttp[39m]: POST /api/checkout/calculate 200 23.122 ms - 537
+(node:38048) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+14:36:35 [[32mhttp[39m]: POST /api/checkout/orders 201 191.842 ms - 370
+14:36:35 [[32mhttp[39m]: POST /api/checkout/orders 200 21.205 ms - 346
+(node:38048) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+14:36:35 [[32mhttp[39m]: POST /api/favorites/remove-many 200 12.901 ms - 82
+14:36:36 [[33mwarn[39m]: Auth failure No has iniciado sesión {"method":"GET","url":"/api/auth/me","statusCode":401,"ip":"127.0.0.1"}
+14:36:36 [[32mhttp[39m]: GET /api/auth/me 401 2.309 ms - 53
+14:36:36 [[33mwarn[39m]: Auth failure Refresh token requerido {"method":"POST","url":"/api/auth/refresh-token","statusCode":401,"ip":"127.0.0.1"}
+14:36:36 [[32mhttp[39m]: POST /api/auth/refresh-token 401 1.735 ms - 53
+14:36:36 [[32mhttp[39m]: POST /api/auth/login 429 1.277 ms - 84
+TimeoutError: Waiting failed: 20000ms exceeded
+    at new WaitTask (file:///C:/Users/Asus%20ExpertBook/AppData/Local/Temp/dizor-verify-puppeteer/node_modules/puppeteer-core/lib/puppeteer/common/WaitTask.js:46:34)
+    at IsolatedWorld.waitForFunction (file:///C:/Users/Asus%20ExpertBook/AppData/Local/Temp/dizor-verify-puppeteer/node_modules/puppeteer-core/lib/puppeteer/api/Realm.js:49:26)
+    at CdpFrame.waitForFunction (file:///C:/Users/Asus%20ExpertBook/AppData/Local/Temp/dizor-verify-puppeteer/node_modules/puppeteer-core/lib/puppeteer/api/Frame.js:585:43)
+    at CdpFrame.<anonymous> (file:///C:/Users/Asus%20ExpertBook/AppData/Local/Temp/dizor-verify-puppeteer/node_modules/puppeteer-core/lib/puppeteer/util/decorators.js:101:27)
+    at CdpPage.waitForFunction (file:///C:/Users/Asus%20ExpertBook/AppData/Local/Temp/dizor-verify-puppeteer/node_modules/puppeteer-core/lib/puppeteer/api/Page.js:1464:37)
+    at login (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\frontend\test\helpers\phase7BrowserFlow.cjs:29:14)
+    at async module.exports (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\frontend\test\helpers\phase7BrowserFlow.cjs:64:2)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\frontend\test\phase7-next-browser.cjs:42:2

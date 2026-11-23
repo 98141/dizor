@@ -1,0 +1,159 @@
+{
+  "date": "2026-11-21",
+  "timezone": "America/Bogota",
+  "originalNode": {
+    "tests": 295,
+    "passed": 295
+  },
+  "originalBrowser": {
+    "checks": 195,
+    "passed": 195
+  },
+  "taxonomy": {
+    "checks": 33,
+    "passed": 33
+  },
+  "newNode": {
+    "tests": 19,
+    "passed": 19
+  },
+  "integratedBrowser": {
+    "passed": true,
+    "checks": [
+      "AUTH client: formulario y sesión HTTP reales",
+      "BUY contra_entrega respuesta perdida + reintento misma clave: PDP, carrito, checkout, stock y outbox",
+      "AUTH admin: formulario y sesión HTTP reales",
+      "OPS COD entrega pendiente + cobro con evidencia: bandeja, preparación, despacho, corrección, entrega e historial",
+      "AUTH client: formulario y sesión HTTP reales",
+      "BUY wompi doble clic una petición: PDP, carrito, checkout, stock y outbox",
+      "PAY webhook aprobado simultáneo: un descuento y una notificación",
+      "AUTH admin: formulario y sesión HTTP reales",
+      "OPS Wompi verificado: bandeja, preparación, despacho, corrección, entrega e historial",
+      "AUTH client: formulario y sesión HTTP reales",
+      "BUY wompi doble clic una petición: PDP, carrito, checkout, stock y outbox",
+      "AUTH admin: formulario y sesión HTTP reales",
+      "PAY rechazado: no cancela, no descuenta, no permite preparar/despachar",
+      "BUY dos navegadores independientes compiten por última unidad: una compra, una negativa, stock cero y un movimiento",
+      "AUTH vendor: formulario y sesión HTTP reales",
+      "ROLE vendedor: login real, pedidos y alias solicitudes sin finanzas",
+      "ROLE denegación backend de finanzas e historial inventario",
+      "MAIL outbox real: transporte simulado e idempotencia por clave; no acredita recepción real",
+      "AUTH superadmin: formulario y sesión HTTP reales",
+      "FIN finanzas después de compra real + responsive 5 anchos"
+    ],
+    "syntheticFinancialStress": {
+      "orderNumber": "DIZ-QA7-IMPORTE-EXTREMO",
+      "total": 999999999999,
+      "purpose": "Only a new fictitious display fixture, separate from the real UI purchases"
+    }
+  },
+  "build": {
+    "exitCode": 0,
+    "signal": null,
+    "isolatedCopy": true,
+    "envFilesCopied": false,
+    "inheritedCredentials": false,
+    "network": "build fetch/TCP blocked; runtime loopback only",
+    "compiler": "Next.js --webpack"
+  },
+  "static": {
+    "syntax": [
+      {
+        "file": "backend/src/utils/financePeriod.js",
+        "passed": true
+      },
+      {
+        "file": "backend/src/services/financeService.js",
+        "passed": true
+      },
+      {
+        "file": "backend/src/controllers/financeAdminController.js",
+        "passed": true
+      },
+      {
+        "file": "backend/test/phase7.test.js",
+        "passed": true
+      },
+      {
+        "file": "frontend/test/phase7-next-browser.cjs",
+        "passed": true
+      },
+      {
+        "file": "frontend/test/helpers/phase7BrowserFlow.cjs",
+        "passed": true
+      },
+      {
+        "file": "frontend/test/helpers/phase7LastUnitFlow.cjs",
+        "passed": true
+      },
+      {
+        "file": "docs\\auditoria-admin\\fase7-evidencias\\crear-harness.cjs",
+        "passed": true
+      },
+      {
+        "file": "docs\\auditoria-admin\\fase7-evidencias\\preparar.cjs",
+        "passed": true
+      },
+      {
+        "file": "docs\\auditoria-admin\\fase7-evidencias\\preservar-salidas.cjs",
+        "passed": true
+      },
+      {
+        "file": "docs\\auditoria-admin\\fase7-evidencias\\regresion-navegador.cjs",
+        "passed": true
+      },
+      {
+        "file": "docs\\auditoria-admin\\fase7-evidencias\\regresion-node.cjs",
+        "passed": true
+      },
+      {
+        "file": "docs\\auditoria-admin\\fase7-evidencias\\resumir.cjs",
+        "passed": true
+      },
+      {
+        "file": "docs\\auditoria-admin\\fase7-evidencias\\verificar-estatico.cjs",
+        "passed": true
+      }
+    ],
+    "lintNode": {
+      "errors": 1,
+      "warnings": 0,
+      "previousErrors": 1,
+      "newErrors": 0
+    },
+    "previousDiagnostics": {
+      "errors": 7,
+      "warnings": 3,
+      "new": 0
+    },
+    "diffCheck": 0,
+    "preservation": {
+      "protectedFiles": 5821,
+      "changed": [
+        "backend/logs/combined-2026-11-21.log",
+        "backend/src/controllers/financeAdminController.js",
+        "backend/src/services/financeService.js",
+        "backend/src/utils/financePeriod.js"
+      ],
+      "runtimeLogs": [
+        "backend/logs/combined-2026-11-21.log"
+      ]
+    }
+  },
+  "externalValidated": false,
+  "deployed": false,
+  "independentAuditFinal": "pending",
+  "verdict": "READY WITH ISSUES",
+  "issues": [
+    "Lint frontend previo: 7 errores y 3 advertencias en alcance F6",
+    "Lint backend previo: productId sin uso en financeService",
+    "Nombres accesibles genéricos de taxonomías y PQR móvil",
+    "Planes COLLSCAN y agregación deben evaluarse con volumen real autorizado",
+    "Revisión humana con lector de pantalla y combinaciones de navegadores pendiente"
+  ],
+  "sourceChanges": [
+    "backend/src/utils/financePeriod.js",
+    "backend/src/controllers/financeAdminController.js",
+    "backend/src/services/financeService.js"
+  ]
+}

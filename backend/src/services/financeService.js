@@ -4,6 +4,7 @@ const { reconciledSalesFilter } = require("./financeCriteria");
 const {
   parseFinancePeriod,
   buildDateFilter,
+  financeMonthBounds,
 } = require("../utils/financePeriod");
 
 const round = (n) => Math.round(Number(n) || 0);
@@ -224,16 +225,7 @@ const buildMonthlyTrend = async (products, months = 6) => {
   );
 
   for (let i = months - 1; i >= 0; i -= 1) {
-    const start = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    const end = new Date(
-      now.getFullYear(),
-      now.getMonth() - i + 1,
-      0,
-      23,
-      59,
-      59,
-      999
-    );
+    const { start, end } = financeMonthBounds(i, now);
 
     const orders = await Order.find(reconciledSalesFilter({
       createdAt: { $gte: start, $lte: end },
@@ -246,6 +238,7 @@ const buildMonthlyTrend = async (products, months = 6) => {
 
     trend.push({
       month: start.toLocaleDateString("es-CO", {
+        timeZone: "America/Bogota",
         month: "short",
         year: "numeric",
       }),

@@ -1,0 +1,180 @@
+(node:29636) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:29636) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:29636) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:29636) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:29636) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:29636) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+14:42:58 [[32mhttp[39m]: POST /api/auth/login 200 606.453 ms - 168
+14:42:58 [[32mhttp[39m]: POST /api/auth/login 200 445.597 ms - 169
+14:42:58 [[32mhttp[39m]: POST /api/auth/login 200 406.577 ms - 174
+14:42:59 [[32mhttp[39m]: POST /api/auth/login 200 717.601 ms - 173
+14:44:08 [[33mwarn[39m]: Auth failure No has iniciado sesión {"method":"GET","url":"/api/auth/me","statusCode":401,"ip":"127.0.0.1"}
+14:44:08 [[32mhttp[39m]: GET /api/auth/me 401 6.686 ms - 53
+14:44:08 [[33mwarn[39m]: Auth failure Refresh token requerido {"method":"POST","url":"/api/auth/refresh-token","statusCode":401,"ip":"127.0.0.1"}
+14:44:08 [[32mhttp[39m]: POST /api/auth/refresh-token 401 3.450 ms - 53
+14:44:09 [[32mhttp[39m]: POST /api/visits/forget 204 3.969 ms - -
+14:44:09 [[32mhttp[39m]: GET /api/content/appearance 200 28.441 ms - 126
+14:44:09 [[32mhttp[39m]: GET /api/content/appearance 400 28.385 ms - 65
+14:44:10 [[32mhttp[39m]: POST /api/auth/login 200 526.726 ms - 174
+14:44:10 [[32mhttp[39m]: GET /api/favorites/ids 200 10.994 ms - 47
+14:44:10 [[32mhttp[39m]: GET /api/checkout/orders 200 20.024 ms - 44
+14:44:10 [[32mhttp[39m]: GET /api/special-requests/mine 200 17.141 ms - 46
+14:44:10 [[32mhttp[39m]: GET /api/products/pieza-d7615c 200 40.464 ms - 1252
+14:44:10 [[32mhttp[39m]: GET /api/content/pages 200 16.854 ms - 43
+14:44:10 [[32mhttp[39m]: GET /api/products/filters 200 36.250 ms - 957
+14:44:10 [[32mhttp[39m]: GET /api/content/home 200 34.535 ms - 3830
+14:44:10 [[32mhttp[39m]: GET /api/visits/count 200 3.201 ms - 30
+14:44:10 [[32mhttp[39m]: GET /api/marketing/config 200 12.707 ms - 510
+14:44:10 [[32mhttp[39m]: GET /api/auth/me 200 18.211 ms - 213
+14:44:11 [[32mhttp[39m]: GET /api/favorites/ids 304 5.929 ms - -
+14:44:11 [[32mhttp[39m]: GET /api/legal/notices 200 0.993 ms - 1511
+14:44:11 [[32mhttp[39m]: GET /api/reviews/product/6b01f48a396146621cfcdddc 200 22.313 ms - 45
+14:44:12 [[32mhttp[39m]: GET /api/marketing/config 304 3.752 ms - -
+14:44:12 [[32mhttp[39m]: POST /api/cart/validate 200 25.925 ms - 451
+14:44:12 [[32mhttp[39m]: GET /api/marketing/config 304 3.414 ms - -
+14:44:12 [[32mhttp[39m]: GET /api/products/pieza-d7615c 200 44.446 ms - 1252
+14:44:12 [[32mhttp[39m]: GET /api/checkout/config 200 4.349 ms - 830
+14:44:12 [[32mhttp[39m]: POST /api/checkout/calculate 200 27.788 ms - 537
+(node:29636) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+14:44:14 [[32mhttp[39m]: POST /api/checkout/orders 201 391.254 ms - 370
+14:44:14 [[32mhttp[39m]: POST /api/checkout/orders 200 15.456 ms - 346
+(node:29636) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+14:44:14 [[32mhttp[39m]: POST /api/favorites/remove-many 200 11.021 ms - 82
+14:44:14 [[33mwarn[39m]: Auth failure No has iniciado sesión {"method":"GET","url":"/api/auth/me","statusCode":401,"ip":"127.0.0.1"}
+14:44:14 [[32mhttp[39m]: GET /api/auth/me 401 1.428 ms - 53
+14:44:15 [[33mwarn[39m]: Auth failure Refresh token requerido {"method":"POST","url":"/api/auth/refresh-token","statusCode":401,"ip":"127.0.0.1"}
+14:44:15 [[32mhttp[39m]: POST /api/auth/refresh-token 401 1.222 ms - 53
+14:44:16 [[32mhttp[39m]: POST /api/auth/login 200 496.381 ms - 168
+14:44:16 [[32mhttp[39m]: GET /api/favorites/ids 304 13.382 ms - -
+14:44:16 [[32mhttp[39m]: GET /api/admin/alerts 200 73.192 ms - 1107
+14:44:16 [[32mhttp[39m]: GET /api/admin/dashboard 200 103.518 ms - 3104
+14:44:16 [[32mhttp[39m]: GET /api/auth/me 200 8.789 ms - 207
+14:44:16 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 20.809 ms - 990
+14:44:16 [[32mhttp[39m]: GET /api/favorites/ids 304 12.356 ms - -
+14:44:16 [[32mhttp[39m]: GET /api/admin/alerts 200 29.317 ms - 1107
+14:44:17 [[32mhttp[39m]: GET /api/admin/orders/6b01f48e396146621cfcddf2 200 12.614 ms - 2674
+14:44:17 [[32mhttp[39m]: GET /api/admin/alerts 200 25.245 ms - 1107
+14:44:17 [[32mhttp[39m]: GET /api/admin/orders/6b01f48e396146621cfcddf2/communications?page=1 200 25.513 ms - 1383
+14:44:17 [[32mhttp[39m]: PATCH /api/admin/orders/6b01f48e396146621cfcddf2/status 200 26.633 ms - 862
+14:44:17 [[32mhttp[39m]: GET /api/admin/orders/6b01f48e396146621cfcddf2 200 15.409 ms - 2824
+14:44:17 [[32mhttp[39m]: GET /api/admin/orders/6b01f48e396146621cfcddf2/communications?page=1 304 15.760 ms - -
+14:44:17 [[32mhttp[39m]: PATCH /api/admin/orders/6b01f48e396146621cfcddf2/shipping 200 28.610 ms - 849
+14:44:17 [[32mhttp[39m]: GET /api/admin/orders/6b01f48e396146621cfcddf2 200 8.208 ms - 2958
+14:44:17 [[32mhttp[39m]: GET /api/admin/orders/6b01f48e396146621cfcddf2/communications?page=1 200 25.672 ms - 1861
+14:44:18 [[32mhttp[39m]: PATCH /api/admin/orders/6b01f48e396146621cfcddf2/shipping 200 22.790 ms - 855
+14:44:18 [[32mhttp[39m]: GET /api/admin/orders/6b01f48e396146621cfcddf2 200 6.840 ms - 3111
+14:44:18 [[32mhttp[39m]: GET /api/admin/orders/6b01f48e396146621cfcddf2/communications?page=1 200 21.532 ms - 2348
+14:44:18 [[32mhttp[39m]: PATCH /api/admin/orders/6b01f48e396146621cfcddf2/status 200 20.177 ms - 892
+14:44:18 [[32mhttp[39m]: GET /api/admin/orders/6b01f48e396146621cfcddf2 200 7.796 ms - 3316
+14:44:18 [[32mhttp[39m]: GET /api/admin/orders/6b01f48e396146621cfcddf2/communications?page=1 200 19.582 ms - 2819
+14:44:18 [[32mhttp[39m]: PATCH /api/admin/orders/6b01f48e396146621cfcddf2/payment 200 22.119 ms - 874
+14:44:18 [[32mhttp[39m]: GET /api/admin/orders/6b01f48e396146621cfcddf2 200 10.754 ms - 3672
+14:44:18 [[32mhttp[39m]: GET /api/admin/orders/6b01f48e396146621cfcddf2/communications?page=1 304 19.126 ms - -
+14:44:19 [[33mwarn[39m]: Auth failure No has iniciado sesión {"method":"GET","url":"/api/auth/me","statusCode":401,"ip":"127.0.0.1"}
+14:44:19 [[32mhttp[39m]: GET /api/auth/me 401 1.381 ms - 53
+14:44:19 [[33mwarn[39m]: Auth failure Refresh token requerido {"method":"POST","url":"/api/auth/refresh-token","statusCode":401,"ip":"127.0.0.1"}
+14:44:19 [[32mhttp[39m]: POST /api/auth/refresh-token 401 2.866 ms - 53
+14:44:20 [[32mhttp[39m]: POST /api/auth/login 200 608.895 ms - 174
+14:44:20 [[32mhttp[39m]: GET /api/favorites/ids 304 12.282 ms - -
+14:44:20 [[32mhttp[39m]: GET /api/checkout/orders 200 14.310 ms - 418
+14:44:20 [[32mhttp[39m]: GET /api/special-requests/mine 304 11.281 ms - -
+14:44:21 [[32mhttp[39m]: GET /api/products/pieza-86e16c 200 40.041 ms - 2444
+14:44:21 [[32mhttp[39m]: GET /api/marketing/config 304 29.640 ms - -
+14:44:21 [[32mhttp[39m]: GET /api/reviews/product/6b01f494396146621cfcde67 200 12.623 ms - 45
+14:44:21 [[32mhttp[39m]: GET /api/auth/me 200 22.461 ms - 213
+14:44:21 [[32mhttp[39m]: GET /api/legal/notices 304 0.733 ms - -
+14:44:21 [[32mhttp[39m]: GET /api/favorites/ids 304 30.956 ms - -
+14:44:21 [[32mhttp[39m]: GET /api/products/pieza-d7615c 200 61.440 ms - 2444
+14:44:22 [[32mhttp[39m]: GET /api/marketing/config 304 3.053 ms - -
+14:44:22 [[32mhttp[39m]: POST /api/cart/validate 200 59.717 ms - 451
+14:44:22 [[32mhttp[39m]: GET /api/products/pieza-86e16c 200 96.033 ms - 2444
+14:44:22 [[32mhttp[39m]: GET /api/marketing/config 304 4.058 ms - -
+14:44:22 [[32mhttp[39m]: GET /api/checkout/config 304 4.498 ms - -
+14:44:22 [[32mhttp[39m]: POST /api/checkout/calculate 200 38.250 ms - 537
+14:44:24 [[32mhttp[39m]: POST /api/checkout/orders 201 208.149 ms - 428
+(node:29636) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:29636) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:29636) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:29636) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:29636) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:29636) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:29636) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:29636) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+14:44:24 [[32mhttp[39m]: POST /api/webhooks/wompi 200 116.899 ms - 2
+14:44:24 [[32mhttp[39m]: POST /api/webhooks/wompi 200 129.892 ms - 2
+14:44:24 [[32mhttp[39m]: POST /api/webhooks/wompi 200 145.821 ms - 2
+14:44:25 [[32mhttp[39m]: GET /api/auth/me 304 46.400 ms - -
+14:44:25 [[32mhttp[39m]: GET /api/favorites/ids 304 21.029 ms - -
+14:44:26 [[32mhttp[39m]: POST /api/auth/login 200 711.651 ms - 168
+14:44:26 [[32mhttp[39m]: GET /api/favorites/ids 304 6.969 ms - -
+14:44:27 [[32mhttp[39m]: GET /api/admin/alerts 200 49.778 ms - 1445
+14:44:27 [[32mhttp[39m]: GET /api/admin/dashboard 200 64.056 ms - 4325
+14:44:27 [[32mhttp[39m]: GET /api/auth/me 200 11.267 ms - 207
+14:44:27 [[32mhttp[39m]: GET /api/favorites/ids 304 19.988 ms - -
+14:44:27 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 28.503 ms - 962
+14:44:27 [[32mhttp[39m]: GET /api/admin/alerts 200 36.749 ms - 1445
+14:44:27 [[32mhttp[39m]: GET /api/admin/orders/6b01f498396146621cfcde86 200 16.237 ms - 2966
+14:44:27 [[32mhttp[39m]: GET /api/admin/alerts 200 21.106 ms - 1445
+14:44:27 [[32mhttp[39m]: GET /api/admin/orders/6b01f498396146621cfcde86/communications?page=1 200 17.750 ms - 1851
+14:44:27 [[32mhttp[39m]: PATCH /api/admin/orders/6b01f498396146621cfcde86/status 200 20.168 ms - 849
+14:44:27 [[32mhttp[39m]: GET /api/admin/orders/6b01f498396146621cfcde86 200 8.311 ms - 3131
+14:44:28 [[32mhttp[39m]: GET /api/admin/orders/6b01f498396146621cfcde86/communications?page=1 304 18.090 ms - -
+14:44:28 [[32mhttp[39m]: PATCH /api/admin/orders/6b01f498396146621cfcde86/shipping 200 25.778 ms - 836
+14:44:28 [[32mhttp[39m]: GET /api/admin/orders/6b01f498396146621cfcde86 200 8.150 ms - 3265
+14:44:28 [[32mhttp[39m]: GET /api/admin/orders/6b01f498396146621cfcde86/communications?page=1 200 15.071 ms - 2329
+14:44:28 [[32mhttp[39m]: PATCH /api/admin/orders/6b01f498396146621cfcde86/shipping 200 23.059 ms - 842
+14:44:28 [[32mhttp[39m]: GET /api/admin/orders/6b01f498396146621cfcde86 200 7.505 ms - 3418
+14:44:28 [[32mhttp[39m]: GET /api/admin/orders/6b01f498396146621cfcde86/communications?page=1 200 17.055 ms - 2816
+14:44:28 [[32mhttp[39m]: PATCH /api/admin/orders/6b01f498396146621cfcde86/status 200 20.427 ms - 864
+14:44:28 [[32mhttp[39m]: GET /api/admin/orders/6b01f498396146621cfcde86 200 8.033 ms - 3609
+14:44:29 [[32mhttp[39m]: GET /api/admin/orders/6b01f498396146621cfcde86/communications?page=1 200 19.996 ms - 3287
+14:44:29 [[33mwarn[39m]: Auth failure No has iniciado sesión {"method":"GET","url":"/api/auth/me","statusCode":401,"ip":"127.0.0.1"}
+14:44:29 [[32mhttp[39m]: GET /api/auth/me 401 1.756 ms - 53
+14:44:29 [[33mwarn[39m]: Auth failure Refresh token requerido {"method":"POST","url":"/api/auth/refresh-token","statusCode":401,"ip":"127.0.0.1"}
+14:44:29 [[32mhttp[39m]: POST /api/auth/refresh-token 401 1.501 ms - 53
+14:44:30 [[32mhttp[39m]: POST /api/auth/login 200 560.560 ms - 174
+14:44:30 [[32mhttp[39m]: GET /api/favorites/ids 304 5.995 ms - -
+14:44:30 [[32mhttp[39m]: GET /api/checkout/orders 200 10.718 ms - 784
+14:44:30 [[32mhttp[39m]: GET /api/special-requests/mine 304 27.439 ms - -
+14:44:30 [[32mhttp[39m]: GET /api/products/pieza-34ac44 200 166.926 ms - 3637
+14:44:31 [[32mhttp[39m]: GET /api/marketing/config 304 31.367 ms - -
+14:44:31 [[32mhttp[39m]: GET /api/auth/me 200 35.070 ms - 213
+14:44:31 [[32mhttp[39m]: GET /api/reviews/product/6b01f49e396146621cfcdefc 200 31.223 ms - 45
+14:44:31 [[32mhttp[39m]: GET /api/legal/notices 304 0.604 ms - -
+14:44:31 [[32mhttp[39m]: GET /api/favorites/ids 304 27.198 ms - -
+14:44:31 [[32mhttp[39m]: GET /api/products/pieza-86e16c 200 49.322 ms - 3637
+14:44:31 [[32mhttp[39m]: GET /api/products/pieza-d7615c 200 74.157 ms - 3637
+14:44:32 [[32mhttp[39m]: GET /api/marketing/config 304 4.385 ms - -
+14:44:32 [[32mhttp[39m]: POST /api/cart/validate 200 17.084 ms - 451
+14:44:32 [[32mhttp[39m]: GET /api/marketing/config 304 13.406 ms - -
+14:44:32 [[32mhttp[39m]: GET /api/products/pieza-34ac44 200 64.673 ms - 3637
+14:44:33 [[32mhttp[39m]: GET /api/checkout/config 304 13.340 ms - -
+14:44:33 [[32mhttp[39m]: POST /api/checkout/calculate 200 31.773 ms - 537
+14:44:34 [[32mhttp[39m]: POST /api/checkout/orders 201 89.345 ms - 428
+(node:29636) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+14:44:34 [[32mhttp[39m]: POST /api/webhooks/wompi 200 22.646 ms - 2
+14:44:34 [[32mhttp[39m]: GET /api/auth/me 304 5.055 ms - -
+14:44:34 [[32mhttp[39m]: GET /api/favorites/ids 304 18.312 ms - -
+14:44:34 [[32mhttp[39m]: GET /api/products?isNew=true&limit=8 200 13.757 ms - 80
+14:44:34 [[32mhttp[39m]: GET /api/reviews?limit=4 200 10.303 ms - 45
+14:44:34 [[32mhttp[39m]: GET /api/products/daily-random?limit=5 200 128.072 ms - 3706
+14:44:35 [[32mhttp[39m]: POST /api/auth/login 200 493.519 ms - 168
+14:44:35 [[32mhttp[39m]: GET /api/favorites/ids 304 8.514 ms - -
+14:44:36 [[32mhttp[39m]: GET /api/admin/alerts 200 51.922 ms - 1809
+14:44:36 [[32mhttp[39m]: GET /api/admin/dashboard 200 72.579 ms - 5448
+14:44:36 [[32mhttp[39m]: GET /api/auth/me 200 6.949 ms - 207
+14:44:36 [[32mhttp[39m]: GET /api/admin/orders/6b01f4a1396146621cfcdf29 200 28.034 ms - 3039
+14:44:36 [[32mhttp[39m]: GET /api/favorites/ids 304 25.781 ms - -
+14:44:36 [[32mhttp[39m]: GET /api/admin/alerts 200 44.167 ms - 1809
+14:44:36 [[32mhttp[39m]: GET /api/admin/orders/6b01f4a1396146621cfcdf29/communications?page=1 200 49.973 ms - 1228
+TimeoutError: Waiting failed: 20000ms exceeded
+    at new WaitTask (file:///C:/Users/Asus%20ExpertBook/AppData/Local/Temp/dizor-verify-puppeteer/node_modules/puppeteer-core/lib/puppeteer/common/WaitTask.js:46:34)
+    at IsolatedWorld.waitForFunction (file:///C:/Users/Asus%20ExpertBook/AppData/Local/Temp/dizor-verify-puppeteer/node_modules/puppeteer-core/lib/puppeteer/api/Realm.js:49:26)
+    at CdpFrame.waitForFunction (file:///C:/Users/Asus%20ExpertBook/AppData/Local/Temp/dizor-verify-puppeteer/node_modules/puppeteer-core/lib/puppeteer/api/Frame.js:585:43)
+    at CdpFrame.<anonymous> (file:///C:/Users/Asus%20ExpertBook/AppData/Local/Temp/dizor-verify-puppeteer/node_modules/puppeteer-core/lib/puppeteer/util/decorators.js:101:27)
+    at CdpPage.waitForFunction (file:///C:/Users/Asus%20ExpertBook/AppData/Local/Temp/dizor-verify-puppeteer/node_modules/puppeteer-core/lib/puppeteer/api/Page.js:1464:37)
+    at text (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\frontend\test\phase7-next-browser.cjs:32:31)
+    at goto (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\frontend\test\phase7-next-browser.cjs:33:171)
+    at async module.exports (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\frontend\test\helpers\phase7BrowserFlow.cjs:71:23)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\frontend\test\phase7-next-browser.cjs:42:2

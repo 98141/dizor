@@ -1,0 +1,136 @@
+{
+  "checks": [
+    "P35 autenticación en carga sin exponer enlaces antes de conocer el rol",
+    "P01 superadministrador: ocho módulos por tareas",
+    "P02 administrador sin Finanzas ni Usuarios",
+    "P03 Inicio a bandeja operativa sin opciones laterales por bandeja",
+    "P04 detalle de pedido conserva bandeja y página",
+    "P05 buscar producto, consultar agotado y abrir ajuste",
+    "P06 enlace por producto/variante conserva foco y selección Existencias",
+    "P07 regreso desde edición conserva filtros",
+    "P08 Movimientos integrado y exportación PDF conservada",
+    "P09 taxonomía por URL, cambio de pestaña y recarga",
+    "P10 reseñas editoriales separadas de Marketing",
+    "P11 Marketing y exportación de newsletter contextual",
+    "P12 carritos históricos visibles, envío de recordatorios deshabilitado",
+    "P13 exportación de pedidos en su contexto sin implementación duplicada",
+    "P14 rutas históricas reales sin 404",
+    "P15 redirecciones históricas conservan parámetros adicionales",
+    "P16 configuración efectiva, importes históricos de solo lectura y transportadoras legibles",
+    "P17 Atención conserva PQR y Solicitudes como procesos distintos",
+    "P18 Solicitudes conserva búsqueda, tipo y página al volver",
+    "P19 solicitud respondida con componente y endpoint existentes",
+    "P20 comunicaciones accesibles sin cambiar su arquitectura",
+    "P21 alertas desde Inicio y campana sin módulo principal duplicado",
+    "P22 Finanzas visible para superadministrador",
+    "P23 Usuarios accesible desde Configuración",
+    "P24 vendedor gestiona pedido y solicitudes sin perder navegación",
+    "P25 expandir y contraer grupos accesibles, sin abrir todos",
+    "P26 navegación de teclado en escritorio",
+    "P27 escritorio, tablet 820, móviles 390/360 sin desbordamiento",
+    "P28 drawer: Escape, trampa de foco, fondo inert y retorno al disparador",
+    "P29 cierre móvil al navegar y restauración del scroll",
+    "P34 campana con alertas y desplegable sin desbordamiento móvil",
+    "P30 URL exclusiva no muestra Finanzas al administrador",
+    "P31 URL de PQR denegada al vendedor por guard real",
+    "P32 Next autenticado real sin errores de hidratación ni llamadas externas",
+    "P33 enlaces internos del menú resuelven en Next real para todos los roles"
+  ],
+  "tasks": [
+    {
+      "id": 1,
+      "path": "Inicio → Listos para preparar",
+      "interactions": 1,
+      "result": "Bandeja filtrada"
+    },
+    {
+      "id": 2,
+      "path": "Productos → buscar Sombrero → variantes → ajuste de L",
+      "interactions": 5,
+      "result": "Panel contextual de variante agotada"
+    },
+    {
+      "id": 5,
+      "path": "Productos → Movimientos",
+      "interactions": 2,
+      "result": "Historial de solo lectura"
+    },
+    {
+      "id": 3,
+      "path": "Tienda online → Reseñas",
+      "interactions": 2,
+      "result": "Moderación existente"
+    },
+    {
+      "id": 4,
+      "path": "Atención al cliente → Solicitudes → detalle → En revisión",
+      "interactions": 5,
+      "result": "Respuesta operativa registrada en fixture real; no correo"
+    },
+    {
+      "id": 6,
+      "path": "Inicio → Comunicaciones por revisar → pedido",
+      "interactions": 2,
+      "result": "Fallo de comunicación del fixture consultado, sin reenvío"
+    },
+    {
+      "id": 7,
+      "path": "Inicio → Finanzas (superadministrador)",
+      "interactions": 1,
+      "result": "Panel financiero existente"
+    },
+    {
+      "id": 8,
+      "path": "Vendedor → Pedidos → Preparar → Solicitudes → detalle → Inicio",
+      "interactions": 6,
+      "result": "Preparación y shell vendedor conservados"
+    }
+  ],
+  "pageErrors": [],
+  "hydrationErrors": [],
+  "externalRequests": [],
+  "routes": [
+    "/admin",
+    "/admin",
+    "/admin/pedidos?tray=prepare&page=1",
+    "/admin/productos?view=stock&productId=6b01f2165ce8a442f953a0f7&variantId=6b01f2165ce8a442f953a0fc",
+    "/admin/productos?q=Sombrero&page=1",
+    "/admin",
+    "/admin/catalogo?tab=colors",
+    "/admin",
+    "/admin/marketing?tab=newsletter",
+    "/admin/marketing?tab=carritos",
+    "/admin/contenido?tab=exports&scope=orders",
+    "/admin/resenas?term=conservar",
+    "/admin/home-imagenes?from=historial",
+    "/admin/contenido?tab=popup",
+    "/admin/inventario",
+    "/admin/cupones",
+    "/admin/auditoria",
+    "/admin/resenas?term=conservar",
+    "/admin/configuracion",
+    "/admin/pqr",
+    "/admin/solicitudes?q=NAV&type=wholesale&page=2",
+    "/admin",
+    "/admin",
+    "/admin",
+    "/admin",
+    "/admin",
+    "/admin/usuarios",
+    "/vendedor",
+    "/admin",
+    "/admin",
+    "/admin",
+    "/admin",
+    "/admin",
+    "/admin/finanzas",
+    "/admin/pqr"
+  ],
+  "isolatedNext": true,
+  "realBackend": true,
+  "settingsPayload": {
+    "taxEnabled": false,
+    "taxRate": 0
+  },
+  "passed": true
+}

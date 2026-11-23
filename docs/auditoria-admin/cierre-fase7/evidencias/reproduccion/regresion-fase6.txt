@@ -1,0 +1,4151 @@
+(node:7684) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:7684) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:7684) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:7684) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:7684) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:7684) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+15:06:11 [[32mhttp[39m]: POST /api/auth/login 200 406.772 ms - 168
+15:06:12 [[32mhttp[39m]: POST /api/auth/login 200 371.003 ms - 169
+15:06:12 [[32mhttp[39m]: POST /api/auth/login 200 362.307 ms - 174
+15:06:12 [[32mhttp[39m]: POST /api/auth/login 200 346.614 ms - 173
+(node:7684) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+15:07:13 [[32mhttp[39m]: POST /api/checkout/orders 201 244.253 ms - 371
+15:07:13 [[32mhttp[39m]: GET /api/auth/me 200 13.285 ms - 212
+15:07:13 [[32mhttp[39m]: GET /api/admin/alerts 200 71.315 ms - 1571
+15:07:13 [[32mhttp[39m]: GET /api/favorites/ids 200 61.708 ms - 47
+15:07:14 [[32mhttp[39m]: GET /api/admin/dashboard 200 130.110 ms - 2683
+15:07:14 [[32mhttp[39m]: GET /api/content/appearance 200 6.334 ms - 126
+15:07:16 [[32mhttp[39m]: GET /api/auth/me 304 11.032 ms - -
+15:07:16 [[32mhttp[39m]: GET /api/admin/orders 200 41.537 ms - 981
+15:07:16 [[32mhttp[39m]: GET /api/favorites/ids 304 47.974 ms - -
+15:07:16 [[32mhttp[39m]: GET /api/admin/alerts 200 54.750 ms - 1571
+15:07:18 [[32mhttp[39m]: GET /api/auth/me 304 4.421 ms - -
+15:07:18 [[32mhttp[39m]: GET /api/admin/orders/6b01f9f11668063d900f70a9 200 21.011 ms - 2653
+15:07:18 [[32mhttp[39m]: GET /api/favorites/ids 304 19.219 ms - -
+15:07:18 [[32mhttp[39m]: GET /api/admin/alerts 200 29.358 ms - 1571
+15:07:18 [[32mhttp[39m]: GET /api/admin/orders/6b01f9f11668063d900f70a9/communications?page=1 200 18.525 ms - 1099
+15:07:20 [[32mhttp[39m]: GET /api/auth/me 304 8.671 ms - -
+15:07:21 [[32mhttp[39m]: GET /api/favorites/ids 304 20.745 ms - -
+15:07:21 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 24.488 ms - 992
+15:07:21 [[32mhttp[39m]: GET /api/admin/alerts 200 30.703 ms - 1571
+15:07:22 [[32mhttp[39m]: GET /api/auth/me 304 4.198 ms - -
+15:07:22 [[32mhttp[39m]: GET /api/admin/catalog/meta 200 29.607 ms - 842
+15:07:22 [[32mhttp[39m]: GET /api/admin/alerts 200 39.569 ms - 1571
+15:07:22 [[32mhttp[39m]: GET /api/favorites/ids 304 21.318 ms - -
+15:07:22 [[32mhttp[39m]: GET /api/admin/catalog/products 200 42.995 ms - 2103
+15:07:24 [[32mhttp[39m]: GET /api/auth/me 304 5.870 ms - -
+15:07:24 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 33.145 ms - -
+15:07:24 [[32mhttp[39m]: GET /api/favorites/ids 304 32.463 ms - -
+15:07:24 [[32mhttp[39m]: GET /api/admin/alerts 200 43.649 ms - 1571
+15:07:25 [[32mhttp[39m]: GET /api/admin/catalog/products?view=[redactado]&productId=[redactado]&variantId=[redactado] 200 47.037 ms - 2103
+15:07:27 [[32mhttp[39m]: GET /api/auth/me 304 6.703 ms - -
+15:07:27 [[32mhttp[39m]: GET /api/admin/inventory/history?view=[redactado] 200 38.138 ms - 796
+15:07:27 [[32mhttp[39m]: GET /api/admin/inventory/history/stats 200 43.536 ms - 152
+15:07:27 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 46.078 ms - -
+15:07:27 [[32mhttp[39m]: GET /api/admin/alerts 200 54.843 ms - 1571
+15:07:27 [[32mhttp[39m]: GET /api/favorites/ids 304 34.926 ms - -
+15:07:28 [[32mhttp[39m]: GET /api/auth/me 304 5.795 ms - -
+15:07:29 [[32mhttp[39m]: GET /api/favorites/ids 304 51.858 ms - -
+15:07:29 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 56.276 ms - -
+15:07:29 [[32mhttp[39m]: GET /api/admin/alerts 200 104.803 ms - 1571
+15:07:30 [[32mhttp[39m]: GET /api/auth/me 304 8.333 ms - -
+15:07:31 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 32.625 ms - -
+15:07:31 [[32mhttp[39m]: GET /api/favorites/ids 304 31.866 ms - -
+15:07:31 [[32mhttp[39m]: GET /api/admin/alerts 200 37.989 ms - 1571
+15:07:31 [[32mhttp[39m]: GET /api/admin/catalog/products/6b01f9f11668063d900f709a 200 15.436 ms - 1510
+15:07:33 [[32mhttp[39m]: GET /api/auth/me 304 4.188 ms - -
+15:07:33 [[32mhttp[39m]: GET /api/admin/catalog/categories 200 12.920 ms - 235
+15:07:33 [[32mhttp[39m]: GET /api/favorites/ids 304 13.241 ms - -
+15:07:33 [[32mhttp[39m]: GET /api/admin/alerts 200 19.306 ms - 1571
+15:07:35 [[32mhttp[39m]: GET /api/auth/me 304 4.665 ms - -
+15:07:35 [[32mhttp[39m]: GET /api/admin/special-requests?q=[redactado]&type=&status=&page=1&limit=15 200 29.149 ms - 379
+15:07:35 [[32mhttp[39m]: GET /api/favorites/ids 304 27.917 ms - -
+15:07:35 [[32mhttp[39m]: GET /api/admin/alerts 200 34.755 ms - 1571
+15:07:37 [[32mhttp[39m]: GET /api/auth/me 304 6.888 ms - -
+15:07:37 [[32mhttp[39m]: GET /api/admin/special-requests/6b01f9f11668063d900f70be 200 20.660 ms - 682
+15:07:37 [[32mhttp[39m]: GET /api/favorites/ids 304 15.332 ms - -
+15:07:37 [[32mhttp[39m]: GET /api/admin/alerts 200 27.514 ms - 1571
+15:07:39 [[32mhttp[39m]: GET /api/auth/me 304 5.314 ms - -
+15:07:39 [[32mhttp[39m]: GET /api/admin/pqr 200 20.622 ms - 53
+15:07:39 [[32mhttp[39m]: GET /api/favorites/ids 304 20.655 ms - -
+15:07:39 [[32mhttp[39m]: GET /api/admin/alerts 200 28.774 ms - 1571
+15:07:39 [[32mhttp[39m]: GET /api/content/pages 200 16.050 ms - 43
+15:07:39 [[32mhttp[39m]: GET /api/products/filters 200 30.749 ms - 1199
+15:07:39 [[32mhttp[39m]: GET /api/content/home 200 41.725 ms - 3830
+15:07:39 [[32mhttp[39m]: GET /api/visits/count 200 3.686 ms - 30
+15:07:39 [[32mhttp[39m]: GET /api/products?isNew=true&limit=8 200 7.589 ms - 80
+15:07:39 [[32mhttp[39m]: GET /api/reviews?limit=4 200 5.859 ms - 45
+15:07:39 [[32mhttp[39m]: GET /api/products/daily-random?limit=5 200 55.359 ms - 1822
+15:07:41 [[32mhttp[39m]: GET /api/auth/me 304 4.960 ms - -
+15:07:41 [[32mhttp[39m]: GET /api/admin/content/home 200 19.270 ms - 3679
+15:07:41 [[32mhttp[39m]: GET /api/admin/content/pages 200 18.947 ms - 43
+15:07:41 [[32mhttp[39m]: GET /api/admin/content/banners 200 22.780 ms - 45
+15:07:41 [[32mhttp[39m]: GET /api/admin/alerts 200 28.398 ms - 1571
+15:07:41 [[32mhttp[39m]: GET /api/favorites/ids 304 24.060 ms - -
+15:07:41 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 40.248 ms - 624
+15:07:41 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 200 26.037 ms - 68
+15:07:41 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 200 23.875 ms - 62
+15:07:41 [[32mhttp[39m]: GET /api/admin/coupons 200 18.666 ms - 14
+15:07:41 [[32mhttp[39m]: GET /api/admin/settings 200 19.719 ms - 489
+15:07:43 [[32mhttp[39m]: GET /api/auth/me 304 5.267 ms - -
+15:07:43 [[32mhttp[39m]: GET /api/admin/home-images 200 28.173 ms - 156
+15:07:43 [[32mhttp[39m]: GET /api/products/filters 200 28.328 ms - 1199
+15:07:43 [[32mhttp[39m]: GET /api/admin/content/home 304 21.180 ms - -
+15:07:43 [[32mhttp[39m]: GET /api/admin/alerts 200 37.906 ms - 1571
+15:07:43 [[32mhttp[39m]: GET /api/admin/content/pages 304 22.305 ms - -
+15:07:43 [[32mhttp[39m]: GET /api/admin/content/banners 304 21.864 ms - -
+15:07:43 [[32mhttp[39m]: GET /api/favorites/ids 304 22.682 ms - -
+15:07:43 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 21.774 ms - -
+15:07:43 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 21.578 ms - -
+15:07:43 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 22.151 ms - -
+15:07:43 [[32mhttp[39m]: GET /api/admin/coupons 304 20.653 ms - -
+15:07:43 [[32mhttp[39m]: GET /api/admin/settings 304 20.333 ms - -
+15:07:45 [[32mhttp[39m]: GET /api/auth/me 304 4.458 ms - -
+15:07:45 [[32mhttp[39m]: GET /api/admin/content/home 304 19.628 ms - -
+15:07:45 [[32mhttp[39m]: GET /api/admin/content/pages 304 18.274 ms - -
+15:07:45 [[32mhttp[39m]: GET /api/admin/content/banners 304 17.687 ms - -
+15:07:45 [[32mhttp[39m]: GET /api/favorites/ids 304 17.559 ms - -
+15:07:45 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 14.556 ms - -
+15:07:45 [[32mhttp[39m]: GET /api/admin/alerts 200 28.497 ms - 1571
+15:07:45 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 14.551 ms - -
+15:07:45 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 15.775 ms - -
+15:07:45 [[32mhttp[39m]: GET /api/admin/coupons 304 15.382 ms - -
+15:07:45 [[32mhttp[39m]: GET /api/admin/settings 304 18.789 ms - -
+15:07:46 [[32mhttp[39m]: GET /api/auth/me 304 5.071 ms - -
+15:07:46 [[32mhttp[39m]: GET /api/admin/content/home 304 16.485 ms - -
+15:07:46 [[32mhttp[39m]: GET /api/admin/content/pages 304 17.474 ms - -
+15:07:46 [[32mhttp[39m]: GET /api/admin/content/banners 304 17.594 ms - -
+15:07:46 [[32mhttp[39m]: GET /api/favorites/ids 304 18.999 ms - -
+15:07:46 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 19.332 ms - -
+15:07:46 [[32mhttp[39m]: GET /api/admin/alerts 200 31.687 ms - 1571
+15:07:46 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 17.978 ms - -
+15:07:46 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 17.214 ms - -
+15:07:46 [[32mhttp[39m]: GET /api/admin/coupons 304 15.598 ms - -
+15:07:46 [[32mhttp[39m]: GET /api/admin/settings 304 16.995 ms - -
+15:07:48 [[32mhttp[39m]: GET /api/auth/me 304 7.302 ms - -
+15:07:48 [[32mhttp[39m]: GET /api/admin/reviews?aprobado=[redactado] 200 22.266 ms - 45
+15:07:48 [[32mhttp[39m]: GET /api/admin/content/home 304 24.687 ms - -
+15:07:48 [[32mhttp[39m]: GET /api/admin/content/pages 304 24.656 ms - -
+15:07:48 [[32mhttp[39m]: GET /api/admin/content/banners 304 23.688 ms - -
+15:07:48 [[32mhttp[39m]: GET /api/favorites/ids 304 23.545 ms - -
+15:07:48 [[32mhttp[39m]: GET /api/admin/alerts 200 37.498 ms - 1571
+15:07:48 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 20.387 ms - -
+15:07:48 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 18.460 ms - -
+15:07:48 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 18.896 ms - -
+15:07:48 [[32mhttp[39m]: GET /api/admin/coupons 304 17.310 ms - -
+15:07:48 [[32mhttp[39m]: GET /api/admin/settings 304 18.377 ms - -
+15:07:50 [[32mhttp[39m]: GET /api/auth/me 304 5.904 ms - -
+15:07:50 [[32mhttp[39m]: GET /api/admin/content/home 304 25.774 ms - -
+15:07:50 [[32mhttp[39m]: GET /api/admin/content/pages 304 25.493 ms - -
+15:07:50 [[32mhttp[39m]: GET /api/admin/content/banners 304 25.277 ms - -
+15:07:50 [[32mhttp[39m]: GET /api/favorites/ids 304 25.552 ms - -
+15:07:50 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 21.937 ms - -
+15:07:50 [[32mhttp[39m]: GET /api/admin/alerts 200 36.066 ms - 1571
+15:07:50 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 20.685 ms - -
+15:07:50 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 18.110 ms - -
+15:07:50 [[32mhttp[39m]: GET /api/admin/coupons 304 16.410 ms - -
+15:07:50 [[32mhttp[39m]: GET /api/admin/settings 304 20.493 ms - -
+15:07:52 [[32mhttp[39m]: GET /api/auth/me 304 7.611 ms - -
+15:07:52 [[32mhttp[39m]: GET /api/admin/content/home 304 25.370 ms - -
+15:07:52 [[32mhttp[39m]: GET /api/admin/content/pages 304 23.303 ms - -
+15:07:52 [[32mhttp[39m]: GET /api/admin/content/banners 304 21.917 ms - -
+15:07:52 [[32mhttp[39m]: GET /api/favorites/ids 304 21.252 ms - -
+15:07:52 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 21.890 ms - -
+15:07:52 [[32mhttp[39m]: GET /api/admin/alerts 200 37.063 ms - 1571
+15:07:52 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 15.946 ms - -
+15:07:52 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 14.742 ms - -
+15:07:52 [[32mhttp[39m]: GET /api/admin/coupons 304 13.853 ms - -
+15:07:52 [[32mhttp[39m]: GET /api/admin/settings 304 13.939 ms - -
+15:07:52 [[32mhttp[39m]: GET /api/content/appearance 200 4.361 ms - 126
+15:07:54 [[32mhttp[39m]: GET /api/auth/me 304 6.716 ms - -
+15:07:54 [[32mhttp[39m]: GET /api/admin/content/home 304 35.802 ms - -
+15:07:54 [[32mhttp[39m]: GET /api/admin/content/pages 304 36.374 ms - -
+15:07:54 [[32mhttp[39m]: GET /api/admin/content/banners 304 29.183 ms - -
+15:07:54 [[32mhttp[39m]: GET /api/favorites/ids 304 27.533 ms - -
+15:07:54 [[32mhttp[39m]: GET /api/admin/alerts 200 46.421 ms - 1571
+15:07:54 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 30.695 ms - -
+15:07:54 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 21.037 ms - -
+15:07:54 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 19.390 ms - -
+15:07:54 [[32mhttp[39m]: GET /api/admin/coupons 304 17.816 ms - -
+15:07:54 [[32mhttp[39m]: GET /api/admin/settings 304 18.306 ms - -
+15:07:56 [[32mhttp[39m]: GET /api/auth/me 304 4.439 ms - -
+15:07:56 [[32mhttp[39m]: GET /api/admin/content/home 304 22.026 ms - -
+15:07:56 [[32mhttp[39m]: GET /api/admin/content/pages 304 19.680 ms - -
+15:07:56 [[32mhttp[39m]: GET /api/admin/content/banners 304 18.899 ms - -
+15:07:56 [[32mhttp[39m]: GET /api/favorites/ids 304 18.760 ms - -
+15:07:56 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 19.669 ms - -
+15:07:56 [[32mhttp[39m]: GET /api/admin/alerts 200 31.110 ms - 1571
+15:07:56 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 14.272 ms - -
+15:07:56 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 13.808 ms - -
+15:07:56 [[32mhttp[39m]: GET /api/admin/coupons 304 12.820 ms - -
+15:07:56 [[32mhttp[39m]: GET /api/admin/settings 304 12.070 ms - -
+15:07:58 [[32mhttp[39m]: GET /api/auth/me 304 6.429 ms - -
+15:07:58 [[32mhttp[39m]: GET /api/admin/content/home 304 17.840 ms - -
+15:07:58 [[32mhttp[39m]: GET /api/admin/content/pages 304 17.355 ms - -
+15:07:58 [[32mhttp[39m]: GET /api/admin/content/banners 304 17.185 ms - -
+15:07:58 [[32mhttp[39m]: GET /api/favorites/ids 304 18.262 ms - -
+15:07:58 [[32mhttp[39m]: GET /api/admin/alerts 200 25.365 ms - 1571
+15:07:58 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 17.031 ms - -
+15:07:58 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 11.340 ms - -
+15:07:58 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 15.551 ms - -
+15:07:58 [[32mhttp[39m]: GET /api/admin/coupons 304 13.933 ms - -
+15:07:58 [[32mhttp[39m]: GET /api/admin/settings 304 11.412 ms - -
+15:08:00 [[32mhttp[39m]: GET /api/auth/me 304 5.356 ms - -
+15:08:00 [[32mhttp[39m]: GET /api/admin/coupons 304 13.204 ms - -
+15:08:00 [[32mhttp[39m]: GET /api/favorites/ids 304 9.813 ms - -
+15:08:00 [[32mhttp[39m]: GET /api/admin/alerts 200 17.716 ms - 1571
+15:08:02 [[32mhttp[39m]: GET /api/auth/me 304 7.442 ms - -
+15:08:02 [[32mhttp[39m]: GET /api/favorites/ids 304 25.592 ms - -
+15:08:02 [[32mhttp[39m]: GET /api/admin/alerts 200 32.387 ms - 1571
+15:08:02 [[32mhttp[39m]: GET /api/admin/finance/report?range=month 200 52.603 ms - 2664
+15:08:04 [[32mhttp[39m]: GET /api/auth/me 304 5.255 ms - -
+15:08:04 [[32mhttp[39m]: GET /api/admin/users 200 15.746 ms - 451
+15:08:04 [[32mhttp[39m]: GET /api/favorites/ids 304 14.022 ms - -
+15:08:04 [[32mhttp[39m]: GET /api/admin/alerts 200 23.848 ms - 1571
+15:08:06 [[32mhttp[39m]: GET /api/auth/me 304 5.236 ms - -
+15:08:06 [[32mhttp[39m]: GET /api/admin/settings 304 18.051 ms - -
+15:08:06 [[32mhttp[39m]: GET /api/favorites/ids 304 14.778 ms - -
+15:08:06 [[32mhttp[39m]: GET /api/admin/alerts 200 24.212 ms - 1571
+15:08:07 [[32mhttp[39m]: GET /api/auth/me 304 6.048 ms - -
+15:08:07 [[32mhttp[39m]: GET /api/admin/audit/stats 200 21.396 ms - 102
+15:08:07 [[32mhttp[39m]: GET /api/admin/audit?page=1&limit=25 200 23.435 ms - 1389
+15:08:07 [[32mhttp[39m]: GET /api/favorites/ids 304 18.321 ms - -
+15:08:07 [[32mhttp[39m]: GET /api/admin/alerts 200 30.638 ms - 1571
+15:08:09 [[32mhttp[39m]: GET /api/auth/me 304 13.912 ms - -
+15:08:09 [[32mhttp[39m]: GET /api/admin/alerts 200 21.718 ms - 1571
+15:08:09 [[32mhttp[39m]: GET /api/favorites/ids 304 12.184 ms - -
+15:08:09 [[32mhttp[39m]: GET /api/admin/alerts 200 20.860 ms - 1571
+15:08:11 [[32mhttp[39m]: GET /api/auth/me 200 4.864 ms - 208
+15:08:11 [[32mhttp[39m]: GET /api/favorites/ids 304 5.303 ms - -
+15:08:11 [[32mhttp[39m]: GET /api/admin/orders/stats 200 11.213 ms - 172
+15:08:12 [[32mhttp[39m]: GET /api/auth/me 304 23.535 ms - -
+15:08:12 [[32mhttp[39m]: GET /api/admin/orders 200 28.815 ms - 964
+15:08:12 [[32mhttp[39m]: GET /api/favorites/ids 304 29.167 ms - -
+15:08:14 [[32mhttp[39m]: GET /api/auth/me 304 6.010 ms - -
+15:08:14 [[32mhttp[39m]: GET /api/admin/orders/6b01f9f11668063d900f70a9 200 13.383 ms - 2624
+15:08:14 [[32mhttp[39m]: GET /api/favorites/ids 304 13.126 ms - -
+15:08:14 [[32mhttp[39m]: GET /api/admin/orders/6b01f9f11668063d900f70a9/communications?page=1 200 24.348 ms - 495
+15:08:15 [[32mhttp[39m]: GET /api/auth/me 304 5.892 ms - -
+15:08:15 [[32mhttp[39m]: GET /api/admin/special-requests?q=[redactado]&type=&status=&page=1&limit=15 304 12.471 ms - -
+15:08:15 [[32mhttp[39m]: GET /api/favorites/ids 304 11.215 ms - -
+15:08:16 [[32mhttp[39m]: GET /api/auth/me 200 6.704 ms - 212
+15:08:16 [[32mhttp[39m]: GET /api/favorites/ids 304 10.778 ms - -
+15:08:16 [[32mhttp[39m]: GET /api/admin/alerts 200 31.846 ms - 1571
+15:08:16 [[32mhttp[39m]: GET /api/admin/dashboard 304 42.384 ms - -
+15:08:16 [[32mhttp[39m]: GET /api/auth/me 304 6.175 ms - -
+15:08:16 [[32mhttp[39m]: GET /api/admin/catalog/categories 304 16.512 ms - -
+15:08:16 [[32mhttp[39m]: GET /api/favorites/ids 304 16.285 ms - -
+15:08:16 [[32mhttp[39m]: GET /api/admin/alerts 200 24.632 ms - 1571
+15:08:17 [[32mhttp[39m]: GET /api/auth/me 304 7.877 ms - -
+15:08:17 [[32mhttp[39m]: GET /api/admin/users 304 8.884 ms - -
+15:08:17 [[32mhttp[39m]: GET /api/admin/alerts 200 19.857 ms - 1571
+15:08:17 [[32mhttp[39m]: GET /api/favorites/ids 304 10.346 ms - -
+15:08:21 [[32mhttp[39m]: POST /api/admin/users 201 390.660 ms - 262
+15:08:21 [[32mhttp[39m]: GET /api/admin/users 200 7.387 ms - 650
+15:08:21 [[32mhttp[39m]: GET /api/auth/me 304 5.180 ms - -
+15:08:21 [[32mhttp[39m]: GET /api/admin/coupons 304 10.337 ms - -
+15:08:21 [[32mhttp[39m]: GET /api/favorites/ids 304 11.510 ms - -
+15:08:21 [[32mhttp[39m]: GET /api/admin/alerts 200 18.286 ms - 1571
+15:08:21 [[32mhttp[39m]: POST /api/admin/coupons 201 18.577 ms - 276
+15:08:21 [[32mhttp[39m]: GET /api/admin/coupons 200 9.008 ms - 279
+15:08:21 [[32mhttp[39m]: GET /api/auth/me 304 6.102 ms - -
+15:08:21 [[32mhttp[39m]: GET /api/favorites/ids 304 11.002 ms - -
+15:08:21 [[32mhttp[39m]: GET /api/admin/alerts 200 16.168 ms - 1571
+15:08:21 [[32mhttp[39m]: GET /api/admin/pqr 200 10.067 ms - 519
+15:08:22 [[32mhttp[39m]: GET /api/admin/pqr/6b01fa351668063d900f70ce 200 7.403 ms - 497
+15:08:22 [[32mhttp[39m]: PATCH /api/admin/pqr/6b01fa351668063d900f70ce/status 200 19.114 ms - 666
+15:08:22 [[32mhttp[39m]: GET /api/admin/pqr 200 17.131 ms - 688
+15:08:22 [[32mhttp[39m]: GET /api/auth/me 304 11.467 ms - -
+15:08:22 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 30.256 ms - -
+15:08:22 [[32mhttp[39m]: GET /api/favorites/ids 304 23.030 ms - -
+15:08:22 [[32mhttp[39m]: GET /api/admin/alerts 200 38.245 ms - 1571
+15:08:22 [[32mhttp[39m]: GET /api/admin/catalog/products?view=[redactado] 200 41.545 ms - 2103
+15:08:22 [[32mhttp[39m]: GET /api/content/appearance 200 3.927 ms - 126
+(node:7684) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+15:08:24 [[32mhttp[39m]: POST /api/admin/catalog/products/6b01f9f11668063d900f709a/stock 200 119.789 ms - 106
+15:08:24 [[32mhttp[39m]: GET /api/admin/catalog/products?view=[redactado] 200 17.003 ms - 2103
+15:08:24 [[32mhttp[39m]: GET /api/auth/me 304 7.301 ms - -
+15:08:24 [[32mhttp[39m]: GET /api/admin/orders/6b01f9f11668063d900f70a9 200 17.275 ms - 2653
+15:08:24 [[32mhttp[39m]: GET /api/favorites/ids 304 17.062 ms - -
+15:08:24 [[32mhttp[39m]: GET /api/admin/alerts 200 21.839 ms - 1571
+15:08:24 [[32mhttp[39m]: PATCH /api/admin/orders/6b01f9f11668063d900f70a9/status 200 37.993 ms - 858
+15:08:24 [[32mhttp[39m]: GET /api/admin/orders/6b01f9f11668063d900f70a9/communications?page=1 200 37.853 ms - 1099
+15:08:25 [[32mhttp[39m]: PATCH /api/admin/orders/6b01f9f11668063d900f70a9/status 200 24.046 ms - 911
+15:08:25 [[32mhttp[39m]: GET /api/admin/orders/6b01f9f11668063d900f70a9 200 10.224 ms - 2803
+15:08:25 [[32mhttp[39m]: GET /api/admin/orders/6b01f9f11668063d900f70a9/communications?page=1 304 18.268 ms - -
+15:08:25 [[32mhttp[39m]: PATCH /api/admin/orders/6b01f9f11668063d900f70a9/shipping 200 20.042 ms - 844
+15:08:25 [[32mhttp[39m]: GET /api/admin/orders/6b01f9f11668063d900f70a9 200 5.504 ms - 2932
+15:08:25 [[32mhttp[39m]: GET /api/admin/orders/6b01f9f11668063d900f70a9/communications?page=1 200 17.213 ms - 1577
+15:08:25 [[32mhttp[39m]: PATCH /api/admin/orders/6b01f9f11668063d900f70a9/status 200 29.477 ms - 881
+15:08:25 [[32mhttp[39m]: GET /api/admin/orders/6b01f9f11668063d900f70a9 200 5.959 ms - 3137
+15:08:25 [[32mhttp[39m]: GET /api/admin/orders/6b01f9f11668063d900f70a9/communications?page=1 200 12.972 ms - 2048
+15:08:25 [[32mhttp[39m]: PATCH /api/admin/orders/6b01f9f11668063d900f70a9/payment 200 41.236 ms - 863
+15:08:26 [[32mhttp[39m]: GET /api/admin/orders/6b01f9f11668063d900f70a9 200 13.110 ms - 3481
+15:08:26 [[32mhttp[39m]: GET /api/admin/orders/6b01f9f11668063d900f70a9/communications?page=1 304 17.697 ms - -
+15:08:26 [[32mhttp[39m]: GET /api/auth/me 304 7.418 ms - -
+15:08:26 [[32mhttp[39m]: GET /api/favorites/ids 304 23.716 ms - -
+15:08:26 [[32mhttp[39m]: GET /api/admin/alerts 200 29.139 ms - 1257
+15:08:26 [[32mhttp[39m]: GET /api/admin/finance/report?range=month 200 116.471 ms - 3454
+15:08:26 [[32mhttp[39m]: GET /api/admin/finance/products 200 10.674 ms - 595
+15:08:27 [[32mhttp[39m]: GET /api/admin/finance/history?groupBy=[redactado] 200 9.986 ms - 398
+15:08:27 [[32mhttp[39m]: GET /api/admin/finance/history?groupBy=[redactado]&from=2026-11-01 400 4.263 ms - 56
+15:08:27 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 4.303 ms - 624
+15:08:27 [[32mhttp[39m]: GET /api/auth/me 304 5.156 ms - -
+15:08:28 [[32mhttp[39m]: GET /api/admin/content/home 304 28.851 ms - -
+15:08:28 [[32mhttp[39m]: GET /api/admin/content/pages 304 27.958 ms - -
+15:08:28 [[32mhttp[39m]: GET /api/admin/content/banners 304 26.949 ms - -
+15:08:28 [[32mhttp[39m]: GET /api/favorites/ids 304 20.135 ms - -
+15:08:28 [[32mhttp[39m]: GET /api/admin/alerts 200 35.640 ms - 1257
+15:08:28 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 22.712 ms - -
+15:08:28 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 15.433 ms - -
+15:08:28 [[32mhttp[39m]: GET /api/admin/coupons 304 13.825 ms - -
+15:08:28 [[32mhttp[39m]: GET /api/admin/settings 304 11.559 ms - -
+15:08:28 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 5.185 ms - -
+15:08:28 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 5.568 ms - 624
+15:08:28 [[32mhttp[39m]: GET /api/auth/me 304 7.196 ms - -
+15:08:28 [[32mhttp[39m]: GET /api/admin/catalog/categories 304 11.645 ms - -
+15:08:28 [[32mhttp[39m]: GET /api/favorites/ids 304 8.157 ms - -
+15:08:28 [[32mhttp[39m]: GET /api/admin/alerts 200 18.468 ms - 1257
+15:08:28 [[32mhttp[39m]: GET /api/auth/me 304 5.147 ms - -
+15:08:28 [[32mhttp[39m]: GET /api/admin/catalog/colors 200 10.522 ms - 223
+15:08:28 [[32mhttp[39m]: GET /api/favorites/ids 304 9.601 ms - -
+15:08:28 [[32mhttp[39m]: GET /api/admin/alerts 200 17.883 ms - 1257
+15:08:29 [[32mhttp[39m]: GET /api/auth/me 304 4.264 ms - -
+15:08:29 [[32mhttp[39m]: GET /api/admin/catalog/sizes 200 14.933 ms - 388
+15:08:29 [[32mhttp[39m]: GET /api/favorites/ids 304 14.497 ms - -
+15:08:29 [[32mhttp[39m]: GET /api/admin/alerts 200 19.047 ms - 1257
+15:08:29 [[32mhttp[39m]: GET /api/auth/me 304 4.456 ms - -
+15:08:29 [[32mhttp[39m]: GET /api/admin/catalog/weave-types 200 11.185 ms - 43
+15:08:29 [[32mhttp[39m]: GET /api/favorites/ids 304 10.252 ms - -
+15:08:29 [[32mhttp[39m]: GET /api/admin/alerts 200 19.411 ms - 1257
+15:08:29 [[32mhttp[39m]: GET /api/auth/me 304 6.301 ms - -
+15:08:29 [[32mhttp[39m]: GET /api/admin/catalog/styles 200 13.870 ms - 43
+15:08:29 [[32mhttp[39m]: GET /api/favorites/ids 304 13.374 ms - -
+15:08:29 [[32mhttp[39m]: GET /api/admin/alerts 200 18.473 ms - 1257
+15:08:29 [[32mhttp[39m]: GET /api/auth/me 304 6.494 ms - -
+15:08:29 [[32mhttp[39m]: GET /api/admin/content/home 304 20.937 ms - -
+15:08:29 [[32mhttp[39m]: GET /api/admin/content/pages 304 20.690 ms - -
+15:08:29 [[32mhttp[39m]: GET /api/admin/content/banners 304 16.128 ms - -
+15:08:29 [[32mhttp[39m]: GET /api/admin/alerts 200 33.178 ms - 1257
+15:08:29 [[32mhttp[39m]: GET /api/favorites/ids 304 23.329 ms - -
+15:08:29 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 23.245 ms - -
+15:08:29 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 13.989 ms - -
+15:08:29 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 12.487 ms - -
+15:08:29 [[32mhttp[39m]: GET /api/admin/coupons 304 12.502 ms - -
+15:08:29 [[32mhttp[39m]: GET /api/admin/settings 304 17.893 ms - -
+15:08:33 [[32mhttp[39m]: GET /api/auth/me 304 5.299 ms - -
+15:08:33 [[32mhttp[39m]: GET /api/admin/home-images 200 24.812 ms - 2833
+15:08:33 [[32mhttp[39m]: GET /api/products/filters 304 24.814 ms - -
+15:08:33 [[32mhttp[39m]: GET /api/admin/content/home 304 24.349 ms - -
+15:08:33 [[32mhttp[39m]: GET /api/admin/content/pages 304 21.680 ms - -
+15:08:33 [[32mhttp[39m]: GET /api/admin/content/banners 304 22.161 ms - -
+15:08:33 [[32mhttp[39m]: GET /api/admin/alerts 200 35.774 ms - 1257
+15:08:33 [[32mhttp[39m]: GET /api/favorites/ids 304 20.777 ms - -
+15:08:33 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 21.248 ms - -
+15:08:33 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 20.823 ms - -
+15:08:33 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 21.355 ms - -
+15:08:33 [[32mhttp[39m]: GET /api/admin/coupons 304 21.561 ms - -
+15:08:33 [[32mhttp[39m]: GET /api/admin/settings 304 21.327 ms - -
+15:08:36 [[32mhttp[39m]: GET /api/auth/me 304 6.220 ms - -
+15:08:36 [[32mhttp[39m]: GET /api/admin/content/home 304 19.585 ms - -
+15:08:36 [[32mhttp[39m]: GET /api/admin/content/pages 304 18.337 ms - -
+15:08:36 [[32mhttp[39m]: GET /api/admin/content/banners 304 17.350 ms - -
+15:08:36 [[32mhttp[39m]: GET /api/favorites/ids 304 16.561 ms - -
+15:08:36 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 16.901 ms - -
+15:08:36 [[32mhttp[39m]: GET /api/admin/alerts 200 28.532 ms - 1257
+15:08:36 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 200 17.154 ms - 360
+15:08:36 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 200 18.355 ms - 402
+15:08:36 [[32mhttp[39m]: GET /api/admin/coupons 304 19.804 ms - -
+15:08:36 [[32mhttp[39m]: GET /api/admin/settings 304 21.214 ms - -
+15:08:36 [[32mhttp[39m]: GET /api/auth/me 304 9.602 ms - -
+15:08:36 [[32mhttp[39m]: GET /api/admin/content/pages 304 24.515 ms - -
+15:08:36 [[32mhttp[39m]: GET /api/admin/content/banners 304 24.486 ms - -
+15:08:36 [[32mhttp[39m]: GET /api/admin/content/home 304 36.190 ms - -
+15:08:36 [[32mhttp[39m]: GET /api/favorites/ids 304 32.851 ms - -
+15:08:36 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 33.136 ms - -
+15:08:36 [[32mhttp[39m]: GET /api/admin/alerts 200 48.829 ms - 1257
+15:08:36 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 24.551 ms - -
+15:08:36 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 24.047 ms - -
+15:08:36 [[32mhttp[39m]: GET /api/admin/coupons 304 22.420 ms - -
+15:08:36 [[32mhttp[39m]: GET /api/admin/settings 304 34.407 ms - -
+15:08:37 [[32mhttp[39m]: GET /api/auth/me 304 4.523 ms - -
+15:08:37 [[32mhttp[39m]: GET /api/admin/content/home 304 18.173 ms - -
+15:08:37 [[32mhttp[39m]: GET /api/admin/content/pages 304 22.633 ms - -
+15:08:37 [[32mhttp[39m]: GET /api/admin/content/banners 304 21.913 ms - -
+15:08:37 [[32mhttp[39m]: GET /api/favorites/ids 304 18.417 ms - -
+15:08:37 [[32mhttp[39m]: GET /api/admin/alerts 200 31.624 ms - 1257
+15:08:37 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 17.884 ms - -
+15:08:37 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 17.193 ms - -
+15:08:37 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 13.902 ms - -
+15:08:37 [[32mhttp[39m]: GET /api/admin/coupons 304 13.335 ms - -
+15:08:37 [[32mhttp[39m]: GET /api/admin/settings 304 12.009 ms - -
+15:08:37 [[32mhttp[39m]: GET /api/auth/me 304 4.393 ms - -
+15:08:37 [[32mhttp[39m]: GET /api/admin/content/pages 304 18.621 ms - -
+15:08:37 [[32mhttp[39m]: GET /api/admin/content/banners 304 18.249 ms - -
+15:08:37 [[32mhttp[39m]: GET /api/favorites/ids 304 14.997 ms - -
+15:08:37 [[32mhttp[39m]: GET /api/admin/alerts 200 24.370 ms - 1257
+15:08:37 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 16.864 ms - -
+15:08:37 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 20.731 ms - -
+15:08:37 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 9.523 ms - -
+15:08:37 [[32mhttp[39m]: GET /api/admin/coupons 304 8.626 ms - -
+15:08:37 [[32mhttp[39m]: GET /api/admin/settings 304 8.294 ms - -
+15:08:37 [[32mhttp[39m]: GET /api/admin/content/home 304 9.753 ms - -
+15:08:37 [[32mhttp[39m]: GET /api/admin/content/pages 304 9.123 ms - -
+15:08:37 [[32mhttp[39m]: GET /api/admin/content/banners 304 8.555 ms - -
+15:08:38 [[32mhttp[39m]: GET /api/auth/me 304 6.474 ms - -
+15:08:38 [[32mhttp[39m]: GET /api/admin/content/home 304 22.838 ms - -
+15:08:38 [[32mhttp[39m]: GET /api/admin/content/pages 304 23.399 ms - -
+15:08:38 [[32mhttp[39m]: GET /api/admin/alerts 200 32.980 ms - 1257
+15:08:38 [[32mhttp[39m]: GET /api/admin/content/banners 304 30.229 ms - -
+15:08:38 [[32mhttp[39m]: GET /api/favorites/ids 304 47.533 ms - -
+15:08:38 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 51.269 ms - -
+15:08:38 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 60.945 ms - -
+15:08:38 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 53.173 ms - -
+15:08:38 [[32mhttp[39m]: GET /api/admin/coupons 304 29.279 ms - -
+15:08:38 [[32mhttp[39m]: GET /api/admin/settings 304 23.522 ms - -
+{
+  "mode": "despues",
+  "checks": [
+    "inicio: cinco anchos inspeccionados",
+    "pedidos: cinco anchos inspeccionados",
+    "pedido: cinco anchos inspeccionados",
+    "comunicaciones: cinco anchos inspeccionados",
+    "productos: cinco anchos inspeccionados",
+    "existencias: cinco anchos inspeccionados",
+    "movimientos: cinco anchos inspeccionados",
+    "producto-nuevo: cinco anchos inspeccionados",
+    "producto-editar: cinco anchos inspeccionados",
+    "taxonomias: cinco anchos inspeccionados",
+    "solicitudes: cinco anchos inspeccionados",
+    "solicitud: cinco anchos inspeccionados",
+    "pqr: cinco anchos inspeccionados",
+    "tienda-home: cinco anchos inspeccionados",
+    "tienda-imagenes: cinco anchos inspeccionados",
+    "tienda-banners: cinco anchos inspeccionados",
+    "tienda-pages: cinco anchos inspeccionados",
+    "tienda-resenas: cinco anchos inspeccionados",
+    "tienda-appearance: cinco anchos inspeccionados",
+    "marketing-popup: cinco anchos inspeccionados",
+    "marketing-newsletter: cinco anchos inspeccionados",
+    "marketing-carritos: cinco anchos inspeccionados",
+    "exportaciones: cinco anchos inspeccionados",
+    "cupones: cinco anchos inspeccionados",
+    "finanzas: cinco anchos inspeccionados",
+    "usuarios: cinco anchos inspeccionados",
+    "configuracion: cinco anchos inspeccionados",
+    "auditoria: cinco anchos inspeccionados",
+    "alertas: cinco anchos inspeccionados",
+    "vendedor: cinco anchos",
+    "vendedor-pedidos: cinco anchos",
+    "vendedor-pedido: cinco anchos",
+    "vendedor-solicitudes: cinco anchos",
+    "A01 33 pantallas × 5 anchos sin desbordamiento horizontal del documento",
+    "A23 axe-core 4.11.4: WCAG 2/2.1/2.2 A y AA, 58 revisiones",
+    "A02 campos con etiquetas asociadas en todas las pantallas inspeccionadas",
+    "A19 contraste básico calculado y árbol accesible de Chrome sin botones sin nombre en 58 revisiones",
+    "A03 menú móvil: teclado, ciclo, Escape, inert y retorno de foco",
+    "A04 confirmación: nombre, descripción, foco inicial seguro, ciclo, Escape y retorno",
+    "A25 acción principal diferenciada: color de marca, texto legible y tamaño táctil",
+    "A05 validación nativa de correo impide enviar un formulario inválido",
+    "A06 doble envío de usuario produce una petición; procesamiento, error anunciado y persistente",
+    "A07 reintento de usuario tras rechazo: una creación real y éxito confirmado",
+    "A08 cupón: envío único, borrador reiniciado y mensaje de éxito conservado",
+    "A09 PQR: error distinto de vacío, recuperación, etiquetas, envío único e historial confirmado",
+    "A10 ajuste: doble clic, petición única, clave conservada y stock real actualizado",
+    "A20 repetición confirmada por backend muestra un mensaje preciso sin duplicar la transición",
+    "A11 despacho y entrega por teclado/formulario mantienen recaudo pendiente",
+    "A12 recaudo separado: referencia y confirmación, sin cambio indebido de entrega",
+    "A13 historial financiero: filtros de fecha asociados y cálculo del servidor conservado",
+    "A14 F5-A01: fallo bloquea escritura, reintento recupera valores reales",
+    "A21 cinco formularios de taxonomías con controles asociados y reflow",
+    "A22 todas las subsecciones de textos e imágenes con etiquetas y sin desbordamientos",
+    "A24 newsletter y carritos con registros ficticios legibles y recordatorios desactivados",
+    "A15 newsletter conserva exportación, datos confirmados y semántica de tabla en Chrome",
+    "A26 CMS: error visible, edición bloqueada y recuperación sin escrituras",
+    "A16 movimiento reducido elimina transiciones y animaciones administrativas",
+    "A17 texto ampliado al 200% redistribuye formulario sin ocultar contenido",
+    "A18 avisos integrados sin alert() nativo en usuarios, cupones y PQR"
+  ],
+  "tasks": [],
+  "pageErrors": [],
+  "hydrationErrors": [],
+  "externalRequests": [],
+  "routes": [
+    "/admin",
+    "/admin/pedidos",
+    "/admin/pedidos/6b01f9f11668063d900f70a9",
+    "/admin/pedidos?tray=communications",
+    "/admin/productos",
+    "/admin/productos?view=stock&productId=6b01f9f11668063d900f709a&variantId=6b01f9f11668063d900f709b",
+    "/admin/productos?view=movements",
+    "/admin/productos/nuevo",
+    "/admin/productos/6b01f9f11668063d900f709a/editar",
+    "/admin/catalogo",
+    "/admin/solicitudes",
+    "/admin/solicitudes/6b01f9f11668063d900f70be",
+    "/admin/pqr",
+    "/admin/contenido?tab=home",
+    "/admin/contenido?tab=imagenes",
+    "/admin/contenido?tab=banners",
+    "/admin/contenido?tab=pages",
+    "/admin/contenido?tab=resenas",
+    "/admin/contenido?tab=appearance",
+    "/admin/marketing?tab=popup",
+    "/admin/marketing?tab=newsletter",
+    "/admin/marketing?tab=carritos",
+    "/admin/marketing?tab=exports",
+    "/admin/cupones",
+    "/admin/finanzas",
+    "/admin/usuarios",
+    "/admin/configuracion",
+    "/admin/auditoria",
+    "/admin/alertas",
+    "/vendedor",
+    "/vendedor/pedidos",
+    "/vendedor/pedidos/6b01f9f11668063d900f70a9",
+    "/admin/solicitudes",
+    "/admin",
+    "/admin/catalogo",
+    "/admin/usuarios",
+    "/admin/cupones",
+    "/admin/pqr",
+    "/admin/productos?view=stock",
+    "/admin/pedidos/6b01f9f11668063d900f70a9",
+    "/admin/finanzas",
+    "/admin/marketing?tab=popup",
+    "/admin/catalogo?tab=categories",
+    "/admin/catalogo?tab=colors",
+    "/admin/catalogo?tab=sizes",
+    "/admin/catalogo?tab=weave-types",
+    "/admin/catalogo?tab=styles",
+    "/admin/contenido?tab=home",
+    "/admin/contenido?tab=imagenes",
+    "/admin/marketing?tab=carritos",
+    "/admin/marketing?tab=newsletter",
+    "/admin/marketing?tab=newsletter",
+    "/admin/contenido?tab=home",
+    "/admin/marketing?tab=popup"
+  ],
+  "isolatedNext": true,
+  "realBackend": true,
+  "screens": [
+    {
+      "name": "inicio",
+      "url": "/admin",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "Resumen de pedidos",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "inicio",
+      "url": "/admin",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "Resumen de pedidos",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "inicio",
+      "url": "/admin",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "Resumen de pedidos",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "inicio",
+      "url": "/admin",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "Resumen de pedidos",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "inicio",
+      "url": "/admin",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "Resumen de pedidos",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "pedidos",
+      "url": "/admin/pedidos",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "Pedidos",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "pedidos",
+      "url": "/admin/pedidos",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "Pedidos",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "pedidos",
+      "url": "/admin/pedidos",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "Pedidos",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "pedidos",
+      "url": "/admin/pedidos",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "Pedidos",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "pedidos",
+      "url": "/admin/pedidos",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "Pedidos",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "pedido",
+      "url": "/admin/pedidos/6b01f9f11668063d900f70a9",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "DIZ-20261121-7B4A31994FDAC77C1FA8",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "pedido",
+      "url": "/admin/pedidos/6b01f9f11668063d900f70a9",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "DIZ-20261121-7B4A31994FDAC77C1FA8",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "pedido",
+      "url": "/admin/pedidos/6b01f9f11668063d900f70a9",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "DIZ-20261121-7B4A31994FDAC77C1FA8",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "pedido",
+      "url": "/admin/pedidos/6b01f9f11668063d900f70a9",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "DIZ-20261121-7B4A31994FDAC77C1FA8",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "pedido",
+      "url": "/admin/pedidos/6b01f9f11668063d900f70a9",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "DIZ-20261121-7B4A31994FDAC77C1FA8",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "comunicaciones",
+      "url": "/admin/pedidos?tray=communications",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "Pedidos",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "comunicaciones",
+      "url": "/admin/pedidos?tray=communications",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "Pedidos",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "comunicaciones",
+      "url": "/admin/pedidos?tray=communications",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "Pedidos",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "comunicaciones",
+      "url": "/admin/pedidos?tray=communications",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "Pedidos",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "comunicaciones",
+      "url": "/admin/pedidos?tray=communications",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "Pedidos",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "productos",
+      "url": "/admin/productos",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "Productos",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "productos",
+      "url": "/admin/productos",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "Productos",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "productos",
+      "url": "/admin/productos",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "Productos",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "productos",
+      "url": "/admin/productos",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "Productos",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "productos",
+      "url": "/admin/productos",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "Productos",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "existencias",
+      "url": "/admin/productos?view=stock&productId=6b01f9f11668063d900f709a&variantId=6b01f9f11668063d900f709b",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "Productos",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "existencias",
+      "url": "/admin/productos?view=stock&productId=6b01f9f11668063d900f709a&variantId=6b01f9f11668063d900f709b",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "Productos",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "existencias",
+      "url": "/admin/productos?view=stock&productId=6b01f9f11668063d900f709a&variantId=6b01f9f11668063d900f709b",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "Productos",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "existencias",
+      "url": "/admin/productos?view=stock&productId=6b01f9f11668063d900f709a&variantId=6b01f9f11668063d900f709b",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "Productos",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "existencias",
+      "url": "/admin/productos?view=stock&productId=6b01f9f11668063d900f709a&variantId=6b01f9f11668063d900f709b",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "Productos",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "movimientos",
+      "url": "/admin/productos?view=movements",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "Productos",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "movimientos",
+      "url": "/admin/productos?view=movements",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "Productos",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "movimientos",
+      "url": "/admin/productos?view=movements",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "Productos",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "movimientos",
+      "url": "/admin/productos?view=movements",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "Productos",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "movimientos",
+      "url": "/admin/productos?view=movements",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "Productos",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "producto-nuevo",
+      "url": "/admin/productos/nuevo",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "Nuevo producto",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "producto-nuevo",
+      "url": "/admin/productos/nuevo",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "Nuevo producto",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "producto-nuevo",
+      "url": "/admin/productos/nuevo",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "Nuevo producto",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "producto-nuevo",
+      "url": "/admin/productos/nuevo",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "Nuevo producto",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "producto-nuevo",
+      "url": "/admin/productos/nuevo",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "Nuevo producto",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "producto-editar",
+      "url": "/admin/productos/6b01f9f11668063d900f709a/editar",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "Editar producto",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "producto-editar",
+      "url": "/admin/productos/6b01f9f11668063d900f709a/editar",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "Editar producto",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "producto-editar",
+      "url": "/admin/productos/6b01f9f11668063d900f709a/editar",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "Editar producto",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "producto-editar",
+      "url": "/admin/productos/6b01f9f11668063d900f709a/editar",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "Editar producto",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "producto-editar",
+      "url": "/admin/productos/6b01f9f11668063d900f709a/editar",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "Editar producto",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "taxonomias",
+      "url": "/admin/catalogo",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "Configuración del catálogo",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "taxonomias",
+      "url": "/admin/catalogo",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "Configuración del catálogo",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "taxonomias",
+      "url": "/admin/catalogo",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "Configuración del catálogo",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "taxonomias",
+      "url": "/admin/catalogo",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "Configuración del catálogo",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "taxonomias",
+      "url": "/admin/catalogo",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "Configuración del catálogo",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "solicitudes",
+      "url": "/admin/solicitudes",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "Solicitudes especiales",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "solicitudes",
+      "url": "/admin/solicitudes",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "Solicitudes especiales",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "solicitudes",
+      "url": "/admin/solicitudes",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "Solicitudes especiales",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "solicitudes",
+      "url": "/admin/solicitudes",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "Solicitudes especiales",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "solicitudes",
+      "url": "/admin/solicitudes",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "Solicitudes especiales",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "solicitud",
+      "url": "/admin/solicitudes/6b01f9f11668063d900f70be",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "F6-001",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "solicitud",
+      "url": "/admin/solicitudes/6b01f9f11668063d900f70be",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "F6-001",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "solicitud",
+      "url": "/admin/solicitudes/6b01f9f11668063d900f70be",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "F6-001",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "solicitud",
+      "url": "/admin/solicitudes/6b01f9f11668063d900f70be",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "F6-001",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "solicitud",
+      "url": "/admin/solicitudes/6b01f9f11668063d900f70be",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "F6-001",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "pqr",
+      "url": "/admin/pqr",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "PQR y solicitudes de datos",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "pqr",
+      "url": "/admin/pqr",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "PQR y solicitudes de datos",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "pqr",
+      "url": "/admin/pqr",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "PQR y solicitudes de datos",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "pqr",
+      "url": "/admin/pqr",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "PQR y solicitudes de datos",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "pqr",
+      "url": "/admin/pqr",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "PQR y solicitudes de datos",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-home",
+      "url": "/admin/contenido?tab=home",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-home",
+      "url": "/admin/contenido?tab=home",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-home",
+      "url": "/admin/contenido?tab=home",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-home",
+      "url": "/admin/contenido?tab=home",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-home",
+      "url": "/admin/contenido?tab=home",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-imagenes",
+      "url": "/admin/contenido?tab=imagenes",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-imagenes",
+      "url": "/admin/contenido?tab=imagenes",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-imagenes",
+      "url": "/admin/contenido?tab=imagenes",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-imagenes",
+      "url": "/admin/contenido?tab=imagenes",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-imagenes",
+      "url": "/admin/contenido?tab=imagenes",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-banners",
+      "url": "/admin/contenido?tab=banners",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-banners",
+      "url": "/admin/contenido?tab=banners",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-banners",
+      "url": "/admin/contenido?tab=banners",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-banners",
+      "url": "/admin/contenido?tab=banners",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-banners",
+      "url": "/admin/contenido?tab=banners",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-pages",
+      "url": "/admin/contenido?tab=pages",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": [
+        {
+          "tag": "TABLE",
+          "class": "admin-table"
+        },
+        {
+          "tag": "THEAD",
+          "class": ""
+        },
+        {
+          "tag": "TR",
+          "class": ""
+        },
+        {
+          "tag": "TH",
+          "class": ""
+        },
+        {
+          "tag": "TBODY",
+          "class": ""
+        }
+      ]
+    },
+    {
+      "name": "tienda-pages",
+      "url": "/admin/contenido?tab=pages",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-pages",
+      "url": "/admin/contenido?tab=pages",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-pages",
+      "url": "/admin/contenido?tab=pages",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-pages",
+      "url": "/admin/contenido?tab=pages",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-resenas",
+      "url": "/admin/contenido?tab=resenas",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-resenas",
+      "url": "/admin/contenido?tab=resenas",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-resenas",
+      "url": "/admin/contenido?tab=resenas",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-resenas",
+      "url": "/admin/contenido?tab=resenas",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-resenas",
+      "url": "/admin/contenido?tab=resenas",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-appearance",
+      "url": "/admin/contenido?tab=appearance",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-appearance",
+      "url": "/admin/contenido?tab=appearance",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-appearance",
+      "url": "/admin/contenido?tab=appearance",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-appearance",
+      "url": "/admin/contenido?tab=appearance",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "tienda-appearance",
+      "url": "/admin/contenido?tab=appearance",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "Tienda online",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "marketing-popup",
+      "url": "/admin/marketing?tab=popup",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "Marketing",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "marketing-popup",
+      "url": "/admin/marketing?tab=popup",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "Marketing",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "marketing-popup",
+      "url": "/admin/marketing?tab=popup",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "Marketing",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "marketing-popup",
+      "url": "/admin/marketing?tab=popup",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "Marketing",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "marketing-popup",
+      "url": "/admin/marketing?tab=popup",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "Marketing",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "marketing-newsletter",
+      "url": "/admin/marketing?tab=newsletter",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "Marketing",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "marketing-newsletter",
+      "url": "/admin/marketing?tab=newsletter",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "Marketing",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "marketing-newsletter",
+      "url": "/admin/marketing?tab=newsletter",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "Marketing",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "marketing-newsletter",
+      "url": "/admin/marketing?tab=newsletter",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "Marketing",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "marketing-newsletter",
+      "url": "/admin/marketing?tab=newsletter",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "Marketing",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "marketing-carritos",
+      "url": "/admin/marketing?tab=carritos",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "Marketing",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "marketing-carritos",
+      "url": "/admin/marketing?tab=carritos",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "Marketing",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "marketing-carritos",
+      "url": "/admin/marketing?tab=carritos",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "Marketing",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "marketing-carritos",
+      "url": "/admin/marketing?tab=carritos",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "Marketing",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "marketing-carritos",
+      "url": "/admin/marketing?tab=carritos",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "Marketing",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "exportaciones",
+      "url": "/admin/marketing?tab=exports",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "Exportaciones históricas",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "exportaciones",
+      "url": "/admin/marketing?tab=exports",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "Exportaciones históricas",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "exportaciones",
+      "url": "/admin/marketing?tab=exports",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "Exportaciones históricas",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "exportaciones",
+      "url": "/admin/marketing?tab=exports",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "Exportaciones históricas",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "exportaciones",
+      "url": "/admin/marketing?tab=exports",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "Exportaciones históricas",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "cupones",
+      "url": "/admin/cupones",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "Cupones de descuento",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "cupones",
+      "url": "/admin/cupones",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "Cupones de descuento",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "cupones",
+      "url": "/admin/cupones",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "Cupones de descuento",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "cupones",
+      "url": "/admin/cupones",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "Cupones de descuento",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "cupones",
+      "url": "/admin/cupones",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "Cupones de descuento",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "finanzas",
+      "url": "/admin/finanzas",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "Control financiero",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": [
+        {
+          "tag": "TABLE",
+          "class": "admin-table"
+        },
+        {
+          "tag": "THEAD",
+          "class": ""
+        },
+        {
+          "tag": "TR",
+          "class": ""
+        },
+        {
+          "tag": "TH",
+          "class": ""
+        },
+        {
+          "tag": "TBODY",
+          "class": ""
+        },
+        {
+          "tag": "TR",
+          "class": ""
+        },
+        {
+          "tag": "TD",
+          "class": ""
+        },
+        {
+          "tag": "TABLE",
+          "class": "admin-table"
+        }
+      ]
+    },
+    {
+      "name": "finanzas",
+      "url": "/admin/finanzas",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "Control financiero",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": [
+        {
+          "tag": "TABLE",
+          "class": "admin-table"
+        },
+        {
+          "tag": "THEAD",
+          "class": ""
+        },
+        {
+          "tag": "TR",
+          "class": ""
+        },
+        {
+          "tag": "TH",
+          "class": ""
+        },
+        {
+          "tag": "TH",
+          "class": ""
+        },
+        {
+          "tag": "TBODY",
+          "class": ""
+        },
+        {
+          "tag": "TR",
+          "class": ""
+        },
+        {
+          "tag": "TD",
+          "class": ""
+        }
+      ]
+    },
+    {
+      "name": "finanzas",
+      "url": "/admin/finanzas",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "Control financiero",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "finanzas",
+      "url": "/admin/finanzas",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "Control financiero",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "finanzas",
+      "url": "/admin/finanzas",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "Control financiero",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "usuarios",
+      "url": "/admin/usuarios",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "Usuarios del equipo",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": [
+        {
+          "tag": "TABLE",
+          "class": "admin-table"
+        },
+        {
+          "tag": "THEAD",
+          "class": ""
+        },
+        {
+          "tag": "TR",
+          "class": ""
+        },
+        {
+          "tag": "TH",
+          "class": ""
+        },
+        {
+          "tag": "TBODY",
+          "class": ""
+        },
+        {
+          "tag": "TR",
+          "class": ""
+        },
+        {
+          "tag": "TD",
+          "class": ""
+        },
+        {
+          "tag": "TR",
+          "class": ""
+        }
+      ]
+    },
+    {
+      "name": "usuarios",
+      "url": "/admin/usuarios",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "Usuarios del equipo",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "usuarios",
+      "url": "/admin/usuarios",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "Usuarios del equipo",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "usuarios",
+      "url": "/admin/usuarios",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "Usuarios del equipo",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "usuarios",
+      "url": "/admin/usuarios",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "Usuarios del equipo",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "configuracion",
+      "url": "/admin/configuracion",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "Configuración de tienda",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "configuracion",
+      "url": "/admin/configuracion",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "Configuración de tienda",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "configuracion",
+      "url": "/admin/configuracion",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "Configuración de tienda",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "configuracion",
+      "url": "/admin/configuracion",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "Configuración de tienda",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "configuracion",
+      "url": "/admin/configuracion",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "Configuración de tienda",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "auditoria",
+      "url": "/admin/auditoria",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "Historial de auditoría",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "auditoria",
+      "url": "/admin/auditoria",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "Historial de auditoría",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "auditoria",
+      "url": "/admin/auditoria",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "Historial de auditoría",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "auditoria",
+      "url": "/admin/auditoria",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "Historial de auditoría",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "auditoria",
+      "url": "/admin/auditoria",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "Historial de auditoría",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "alertas",
+      "url": "/admin/alertas",
+      "width": 1440,
+      "document": 1440,
+      "h1": [
+        {
+          "text": "Alertas del sistema",
+          "font": "28.89px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "alertas",
+      "url": "/admin/alertas",
+      "width": 1024,
+      "document": 1024,
+      "h1": [
+        {
+          "text": "Alertas del sistema",
+          "font": "26.394px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "alertas",
+      "url": "/admin/alertas",
+      "width": 820,
+      "document": 820,
+      "h1": [
+        {
+          "text": "Alertas del sistema",
+          "font": "25.17px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "alertas",
+      "url": "/admin/alertas",
+      "width": 390,
+      "document": 390,
+      "h1": [
+        {
+          "text": "Alertas del sistema",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "alertas",
+      "url": "/admin/alertas",
+      "width": 360,
+      "document": 360,
+      "h1": [
+        {
+          "text": "Alertas del sistema",
+          "font": "24px"
+        }
+      ],
+      "unlabelled": [],
+      "overflow": []
+    },
+    {
+      "name": "vendedor",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "name": "vendedor",
+      "width": 1024,
+      "document": 1024
+    },
+    {
+      "name": "vendedor",
+      "width": 820,
+      "document": 820
+    },
+    {
+      "name": "vendedor",
+      "width": 390,
+      "document": 390
+    },
+    {
+      "name": "vendedor",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "name": "vendedor-pedidos",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "name": "vendedor-pedidos",
+      "width": 1024,
+      "document": 1024
+    },
+    {
+      "name": "vendedor-pedidos",
+      "width": 820,
+      "document": 820
+    },
+    {
+      "name": "vendedor-pedidos",
+      "width": 390,
+      "document": 390
+    },
+    {
+      "name": "vendedor-pedidos",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "name": "vendedor-pedido",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "name": "vendedor-pedido",
+      "width": 1024,
+      "document": 1024
+    },
+    {
+      "name": "vendedor-pedido",
+      "width": 820,
+      "document": 820
+    },
+    {
+      "name": "vendedor-pedido",
+      "width": 390,
+      "document": 390
+    },
+    {
+      "name": "vendedor-pedido",
+      "width": 360,
+      "document": 360
+    },
+    {
+      "name": "vendedor-solicitudes",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "name": "vendedor-solicitudes",
+      "width": 1024,
+      "document": 1024
+    },
+    {
+      "name": "vendedor-solicitudes",
+      "width": 820,
+      "document": 820
+    },
+    {
+      "name": "vendedor-solicitudes",
+      "width": 390,
+      "document": 390
+    },
+    {
+      "name": "vendedor-solicitudes",
+      "width": 360,
+      "document": 360
+    }
+  ],
+  "accessibility": [
+    {
+      "name": "inicio",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "inicio",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "pedidos",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "pedidos",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "pedido",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "pedido",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "comunicaciones",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "comunicaciones",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "productos",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "productos",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "existencias",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "existencias",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "movimientos",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "movimientos",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "producto-nuevo",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "producto-nuevo",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "producto-editar",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "producto-editar",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "taxonomias",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "taxonomias",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "solicitudes",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "solicitudes",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "solicitud",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "solicitud",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "pqr",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "pqr",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "tienda-home",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "tienda-home",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "tienda-imagenes",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "tienda-imagenes",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "tienda-banners",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "tienda-banners",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "tienda-pages",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "tienda-pages",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "tienda-resenas",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "tienda-resenas",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "tienda-appearance",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "tienda-appearance",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "marketing-popup",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "marketing-popup",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "marketing-newsletter",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "marketing-newsletter",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "marketing-carritos",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "marketing-carritos",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "exportaciones",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "exportaciones",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "cupones",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "cupones",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "finanzas",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "finanzas",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "usuarios",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "usuarios",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "configuracion",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "configuracion",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "auditoria",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "auditoria",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "alertas",
+      "width": 1440,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    },
+    {
+      "name": "alertas",
+      "width": 360,
+      "contrast": {
+        "text": [],
+        "controls": []
+      },
+      "unnamedButtons": 0
+    }
+  ],
+  "axe": [
+    {
+      "name": "inicio",
+      "width": 1440,
+      "violations": [],
+      "passes": 14,
+      "incomplete": []
+    },
+    {
+      "name": "inicio",
+      "width": 360,
+      "violations": [],
+      "passes": 14,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "pedidos",
+      "width": 1440,
+      "violations": [],
+      "passes": 20,
+      "incomplete": []
+    },
+    {
+      "name": "pedidos",
+      "width": 360,
+      "violations": [],
+      "passes": 18,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "pedido",
+      "width": 1440,
+      "violations": [],
+      "passes": 21,
+      "incomplete": []
+    },
+    {
+      "name": "pedido",
+      "width": 360,
+      "violations": [],
+      "passes": 21,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "comunicaciones",
+      "width": 1440,
+      "violations": [],
+      "passes": 20,
+      "incomplete": []
+    },
+    {
+      "name": "comunicaciones",
+      "width": 360,
+      "violations": [],
+      "passes": 18,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "productos",
+      "width": 1440,
+      "violations": [],
+      "passes": 20,
+      "incomplete": []
+    },
+    {
+      "name": "productos",
+      "width": 360,
+      "violations": [],
+      "passes": 18,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "existencias",
+      "width": 1440,
+      "violations": [],
+      "passes": 21,
+      "incomplete": []
+    },
+    {
+      "name": "existencias",
+      "width": 360,
+      "violations": [],
+      "passes": 19,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "movimientos",
+      "width": 1440,
+      "violations": [],
+      "passes": 21,
+      "incomplete": []
+    },
+    {
+      "name": "movimientos",
+      "width": 360,
+      "violations": [],
+      "passes": 19,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "producto-nuevo",
+      "width": 1440,
+      "violations": [],
+      "passes": 19,
+      "incomplete": []
+    },
+    {
+      "name": "producto-nuevo",
+      "width": 360,
+      "violations": [],
+      "passes": 17,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "producto-editar",
+      "width": 1440,
+      "violations": [],
+      "passes": 21,
+      "incomplete": []
+    },
+    {
+      "name": "producto-editar",
+      "width": 360,
+      "violations": [],
+      "passes": 21,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "taxonomias",
+      "width": 1440,
+      "violations": [],
+      "passes": 19,
+      "incomplete": []
+    },
+    {
+      "name": "taxonomias",
+      "width": 360,
+      "violations": [],
+      "passes": 17,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "solicitudes",
+      "width": 1440,
+      "violations": [],
+      "passes": 20,
+      "incomplete": []
+    },
+    {
+      "name": "solicitudes",
+      "width": 360,
+      "violations": [],
+      "passes": 18,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "solicitud",
+      "width": 1440,
+      "violations": [],
+      "passes": 19,
+      "incomplete": []
+    },
+    {
+      "name": "solicitud",
+      "width": 360,
+      "violations": [],
+      "passes": 17,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "pqr",
+      "width": 1440,
+      "violations": [],
+      "passes": 20,
+      "incomplete": []
+    },
+    {
+      "name": "pqr",
+      "width": 360,
+      "violations": [],
+      "passes": 18,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "tienda-home",
+      "width": 1440,
+      "violations": [],
+      "passes": 18,
+      "incomplete": []
+    },
+    {
+      "name": "tienda-home",
+      "width": 360,
+      "violations": [],
+      "passes": 16,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "tienda-imagenes",
+      "width": 1440,
+      "violations": [],
+      "passes": 17,
+      "incomplete": []
+    },
+    {
+      "name": "tienda-imagenes",
+      "width": 360,
+      "violations": [],
+      "passes": 15,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "tienda-banners",
+      "width": 1440,
+      "violations": [],
+      "passes": 17,
+      "incomplete": []
+    },
+    {
+      "name": "tienda-banners",
+      "width": 360,
+      "violations": [],
+      "passes": 15,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "tienda-pages",
+      "width": 1440,
+      "violations": [],
+      "passes": 19,
+      "incomplete": [
+        {
+          "id": "th-has-data-cells",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "tienda-pages",
+      "width": 360,
+      "violations": [],
+      "passes": 17,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        },
+        {
+          "id": "th-has-data-cells",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "tienda-resenas",
+      "width": 1440,
+      "violations": [],
+      "passes": 15,
+      "incomplete": []
+    },
+    {
+      "name": "tienda-resenas",
+      "width": 360,
+      "violations": [],
+      "passes": 13,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "tienda-appearance",
+      "width": 1440,
+      "violations": [],
+      "passes": 20,
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "tienda-appearance",
+      "width": 360,
+      "violations": [],
+      "passes": 18,
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "nodes": 1
+        },
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "marketing-popup",
+      "width": 1440,
+      "violations": [],
+      "passes": 17,
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "marketing-popup",
+      "width": 360,
+      "violations": [],
+      "passes": 15,
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "nodes": 1
+        },
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "marketing-newsletter",
+      "width": 1440,
+      "violations": [],
+      "passes": 16,
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "nodes": 1
+        },
+        {
+          "id": "th-has-data-cells",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "marketing-newsletter",
+      "width": 360,
+      "violations": [],
+      "passes": 14,
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "nodes": 1
+        },
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        },
+        {
+          "id": "th-has-data-cells",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "marketing-carritos",
+      "width": 1440,
+      "violations": [],
+      "passes": 20,
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "nodes": 2
+        },
+        {
+          "id": "th-has-data-cells",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "marketing-carritos",
+      "width": 360,
+      "violations": [],
+      "passes": 18,
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "nodes": 2
+        },
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        },
+        {
+          "id": "th-has-data-cells",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "exportaciones",
+      "width": 1440,
+      "violations": [],
+      "passes": 15,
+      "incomplete": []
+    },
+    {
+      "name": "exportaciones",
+      "width": 360,
+      "violations": [],
+      "passes": 13,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "cupones",
+      "width": 1440,
+      "violations": [],
+      "passes": 18,
+      "incomplete": []
+    },
+    {
+      "name": "cupones",
+      "width": 360,
+      "violations": [],
+      "passes": 16,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "finanzas",
+      "width": 1440,
+      "violations": [],
+      "passes": 18,
+      "incomplete": [
+        {
+          "id": "th-has-data-cells",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "finanzas",
+      "width": 360,
+      "violations": [],
+      "passes": 18,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        },
+        {
+          "id": "th-has-data-cells",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "usuarios",
+      "width": 1440,
+      "violations": [],
+      "passes": 21,
+      "incomplete": []
+    },
+    {
+      "name": "usuarios",
+      "width": 360,
+      "violations": [],
+      "passes": 18,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "configuracion",
+      "width": 1440,
+      "violations": [],
+      "passes": 21,
+      "incomplete": []
+    },
+    {
+      "name": "configuracion",
+      "width": 360,
+      "violations": [],
+      "passes": 19,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "auditoria",
+      "width": 1440,
+      "violations": [],
+      "passes": 20,
+      "incomplete": []
+    },
+    {
+      "name": "auditoria",
+      "width": 360,
+      "violations": [],
+      "passes": 18,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "alertas",
+      "width": 1440,
+      "violations": [],
+      "passes": 18,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 3
+        }
+      ]
+    },
+    {
+      "name": "alertas",
+      "width": 360,
+      "violations": [],
+      "passes": 18,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 4
+        }
+      ]
+    }
+  ],
+  "additionalScreens": [
+    {
+      "name": "finanzas-costo-error-360",
+      "width": 360,
+      "document": 360,
+      "unlabelled": []
+    },
+    {
+      "name": "catalogo-categories-360",
+      "width": 360,
+      "document": 360,
+      "unlabelled": []
+    },
+    {
+      "name": "catalogo-colors-360",
+      "width": 360,
+      "document": 360,
+      "unlabelled": []
+    },
+    {
+      "name": "catalogo-sizes-360",
+      "width": 360,
+      "document": 360,
+      "unlabelled": []
+    },
+    {
+      "name": "catalogo-weave-types-360",
+      "width": 360,
+      "document": 360,
+      "unlabelled": []
+    },
+    {
+      "name": "catalogo-styles-360",
+      "width": 360,
+      "document": 360,
+      "unlabelled": []
+    },
+    {
+      "name": "tienda-home-Hero-360",
+      "width": 360,
+      "document": 360,
+      "unlabelled": []
+    },
+    {
+      "name": "tienda-home-Anuncio-360",
+      "width": 360,
+      "document": 360,
+      "unlabelled": []
+    },
+    {
+      "name": "tienda-home-Beneficios-360",
+      "width": 360,
+      "document": 360,
+      "unlabelled": []
+    },
+    {
+      "name": "tienda-home-Novedades-360",
+      "width": 360,
+      "document": 360,
+      "unlabelled": []
+    },
+    {
+      "name": "tienda-home-Colecciones-360",
+      "width": 360,
+      "document": 360,
+      "unlabelled": []
+    },
+    {
+      "name": "tienda-home-Historia-360",
+      "width": 360,
+      "document": 360,
+      "unlabelled": []
+    },
+    {
+      "name": "tienda-home-Personalizacion-360",
+      "width": 360,
+      "document": 360,
+      "unlabelled": []
+    },
+    {
+      "name": "tienda-home-Por-mayor-360",
+      "width": 360,
+      "document": 360,
+      "unlabelled": []
+    },
+    {
+      "name": "tienda-home-Voces-360",
+      "width": 360,
+      "document": 360,
+      "unlabelled": []
+    },
+    {
+      "name": "tienda-home-Seleccion-360",
+      "width": 360,
+      "document": 360,
+      "unlabelled": []
+    },
+    {
+      "name": "tienda-home-Inspiracion-360",
+      "width": 360,
+      "document": 360,
+      "unlabelled": []
+    },
+    {
+      "name": "tienda-home-Newsletter-360",
+      "width": 360,
+      "document": 360,
+      "unlabelled": []
+    },
+    {
+      "name": "tienda-imagenes-Hero-360",
+      "width": 360,
+      "document": 360,
+      "unlabelled": []
+    },
+    {
+      "name": "tienda-imagenes-Historia-360",
+      "width": 360,
+      "document": 360,
+      "unlabelled": []
+    },
+    {
+      "name": "tienda-imagenes-Personalizacion-360",
+      "width": 360,
+      "document": 360,
+      "unlabelled": []
+    },
+    {
+      "name": "tienda-imagenes-Por-mayor-360",
+      "width": 360,
+      "document": 360,
+      "unlabelled": []
+    },
+    {
+      "name": "tienda-imagenes-Colecciones-360",
+      "width": 360,
+      "document": 360,
+      "unlabelled": []
+    },
+    {
+      "name": "tienda-imagenes-Inspiracion-360",
+      "width": 360,
+      "document": 360,
+      "unlabelled": []
+    },
+    {
+      "name": "tienda-imagenes-Pausa-editorial-1-360",
+      "width": 360,
+      "document": 360,
+      "unlabelled": []
+    },
+    {
+      "name": "tienda-imagenes-Pausa-editorial-2-360",
+      "width": 360,
+      "document": 360,
+      "unlabelled": []
+    },
+    {
+      "name": "carritos-con-registros-360",
+      "width": 360,
+      "document": 360,
+      "unlabelled": []
+    },
+    {
+      "name": "newsletter-con-registros-360",
+      "width": 360,
+      "document": 360,
+      "unlabelled": []
+    }
+  ],
+  "textZoom": {
+    "before": 15,
+    "after": 30,
+    "viewport": 720
+  },
+  "newWrites": [
+    {
+      "method": "POST",
+      "url": "/api/admin/users"
+    },
+    {
+      "method": "POST",
+      "url": "/api/admin/users"
+    },
+    {
+      "method": "POST",
+      "url": "/api/admin/coupons"
+    },
+    {
+      "method": "PATCH",
+      "url": "/api/admin/pqr/6b01fa351668063d900f70ce/status"
+    },
+    {
+      "method": "POST",
+      "url": "/api/admin/catalog/products/6b01f9f11668063d900f709a/stock"
+    },
+    {
+      "method": "PATCH",
+      "url": "/api/admin/orders/6b01f9f11668063d900f70a9/status"
+    },
+    {
+      "method": "PATCH",
+      "url": "/api/admin/orders/6b01f9f11668063d900f70a9/shipping"
+    },
+    {
+      "method": "PATCH",
+      "url": "/api/admin/orders/6b01f9f11668063d900f70a9/status"
+    },
+    {
+      "method": "PATCH",
+      "url": "/api/admin/orders/6b01f9f11668063d900f70a9/payment"
+    }
+  ],
+  "interactionsPassed": true,
+  "passed": true
+}

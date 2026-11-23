@@ -1,0 +1,84 @@
+{
+  "syntax": [
+    {
+      "file": "backend/src/utils/financePeriod.js",
+      "passed": true
+    },
+    {
+      "file": "backend/src/services/financeService.js",
+      "passed": true
+    },
+    {
+      "file": "backend/src/controllers/financeAdminController.js",
+      "passed": true
+    },
+    {
+      "file": "backend/test/phase7.test.js",
+      "passed": true
+    },
+    {
+      "file": "frontend/test/phase7-next-browser.cjs",
+      "passed": true
+    },
+    {
+      "file": "frontend/test/helpers/phase7BrowserFlow.cjs",
+      "passed": true
+    },
+    {
+      "file": "frontend/test/helpers/phase7LastUnitFlow.cjs",
+      "passed": true
+    },
+    {
+      "file": "docs\\auditoria-admin\\fase7-evidencias\\crear-harness.cjs",
+      "passed": true
+    },
+    {
+      "file": "docs\\auditoria-admin\\fase7-evidencias\\preparar.cjs",
+      "passed": true
+    },
+    {
+      "file": "docs\\auditoria-admin\\fase7-evidencias\\preservar-salidas.cjs",
+      "passed": true
+    },
+    {
+      "file": "docs\\auditoria-admin\\fase7-evidencias\\regresion-navegador.cjs",
+      "passed": true
+    },
+    {
+      "file": "docs\\auditoria-admin\\fase7-evidencias\\regresion-node.cjs",
+      "passed": true
+    },
+    {
+      "file": "docs\\auditoria-admin\\fase7-evidencias\\resumir.cjs",
+      "passed": true
+    },
+    {
+      "file": "docs\\auditoria-admin\\fase7-evidencias\\verificar-estatico.cjs",
+      "passed": true
+    }
+  ],
+  "lintNode": {
+    "errors": 1,
+    "warnings": 0,
+    "previousErrors": 1,
+    "newErrors": 0
+  },
+  "previousDiagnostics": {
+    "errors": 7,
+    "warnings": 3,
+    "new": 0
+  },
+  "diffCheck": 0,
+  "preservation": {
+    "protectedFiles": 5821,
+    "changed": [
+      "backend/logs/combined-2026-11-21.log",
+      "backend/src/controllers/financeAdminController.js",
+      "backend/src/services/financeService.js",
+      "backend/src/utils/financePeriod.js"
+    ],
+    "runtimeLogs": [
+      "backend/logs/combined-2026-11-21.log"
+    ]
+  }
+}

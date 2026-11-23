@@ -153,35 +153,13 @@ exports.exportPdf = catchAsync(async (req, res) => {
 
 /* ─── Historial financiero ─────────────────────────────────── */
 
-const getIsoWeek = (date) => {
-  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-  d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
-  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-  return {
-    week: Math.ceil(((d - yearStart) / 86400000 + 1) / 7),
-    year: d.getUTCFullYear(),
-  };
-};
-
-const getPeriodKey = (date, groupBy) => {
-  const d = new Date(date);
-  if (groupBy === "day") {
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-  }
-  if (groupBy === "week") {
-    const { week, year } = getIsoWeek(d);
-    return `${year}-W${String(week).padStart(2, "0")}`;
-  }
-  if (groupBy === "year") {
-    return String(d.getFullYear());
-  }
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
-};
+const { historyBounds, financePeriodKey: getPeriodKey } = require("../utils/financePeriod");
 
 const getPeriodLabel = (key, groupBy) => {
   if (groupBy === "day") {
     const [y, m, day] = key.split("-").map(Number);
-    return new Date(y, m - 1, day).toLocaleDateString("es-CO", {
+    return new Date(Date.UTC(y, m - 1, day)).toLocaleDateString("es-CO", {
+      timeZone: "UTC",
       weekday: "short",
       day: "numeric",
       month: "short",
@@ -193,7 +171,8 @@ const getPeriodLabel = (key, groupBy) => {
   }
   if (groupBy === "month") {
     const [y, m] = key.split("-").map(Number);
-    return new Date(y, m - 1, 1).toLocaleDateString("es-CO", {
+    return new Date(Date.UTC(y, m - 1, 1)).toLocaleDateString("es-CO", {
+      timeZone: "UTC",
       month: "long",
       year: "numeric",
     });
@@ -206,31 +185,7 @@ exports.getFinanceHistory = catchAsync(async (req, res) => {
     ? req.query.groupBy
     : "month";
 
-  const now = new Date();
-  let start, end;
-
-  if (req.query.from && req.query.to) {
-    start = new Date(req.query.from);
-    start.setHours(0, 0, 0, 0);
-    end = new Date(req.query.to);
-    end.setHours(23, 59, 59, 999);
-  } else {
-    end = new Date(now);
-    end.setHours(23, 59, 59, 999);
-
-    if (groupBy === "day") {
-      start = new Date(now);
-      start.setDate(start.getDate() - 29);
-    } else if (groupBy === "week") {
-      start = new Date(now);
-      start.setDate(start.getDate() - 83);
-    } else if (groupBy === "year") {
-      start = new Date(now.getFullYear() - 4, 0, 1);
-    } else {
-      start = new Date(now.getFullYear(), now.getMonth() - 11, 1);
-    }
-    start.setHours(0, 0, 0, 0);
-  }
+  const { start, end } = historyBounds(groupBy, req.query.from, req.query.to);
 
   const [products, orders] = await Promise.all([
     Product.find().select("+internalCost _id").lean(),

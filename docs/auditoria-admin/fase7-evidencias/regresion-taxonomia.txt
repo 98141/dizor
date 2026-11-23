@@ -1,0 +1,116 @@
+(node:15916) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:15916) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:15916) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:15916) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:15916) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:15916) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+14:43:15 [[32mhttp[39m]: POST /api/auth/login 200 646.695 ms - 168
+14:43:16 [[32mhttp[39m]: POST /api/auth/login 200 617.876 ms - 169
+14:43:16 [[32mhttp[39m]: POST /api/auth/login 200 510.195 ms - 174
+14:43:17 [[32mhttp[39m]: POST /api/auth/login 200 549.089 ms - 173
+14:44:31 [[32mhttp[39m]: POST /api/admin/catalog/categories 201 143.311 ms - 264
+14:44:31 [[32mhttp[39m]: POST /api/admin/catalog/categories 201 26.006 ms - 328
+14:44:31 [[32mhttp[39m]: POST /api/admin/catalog/colors 201 52.663 ms - 236
+14:44:31 [[32mhttp[39m]: POST /api/admin/catalog/colors 201 26.461 ms - 304
+14:44:31 [[32mhttp[39m]: POST /api/admin/catalog/sizes 201 24.968 ms - 240
+14:44:31 [[32mhttp[39m]: POST /api/admin/catalog/sizes 201 43.197 ms - 282
+14:44:31 [[32mhttp[39m]: POST /api/admin/catalog/weave-types 201 18.072 ms - 266
+14:44:31 [[32mhttp[39m]: POST /api/admin/catalog/weave-types 201 31.495 ms - 328
+14:44:31 [[32mhttp[39m]: POST /api/admin/catalog/styles 201 40.358 ms - 256
+14:44:31 [[32mhttp[39m]: POST /api/admin/catalog/styles 201 39.983 ms - 324
+14:44:32 [[32mhttp[39m]: GET /api/auth/me 200 38.989 ms - 212
+14:44:33 [[32mhttp[39m]: GET /api/favorites/ids 200 54.517 ms - 47
+14:44:33 [[32mhttp[39m]: GET /api/admin/catalog/categories 200 83.451 ms - 773
+14:44:33 [[32mhttp[39m]: GET /api/admin/alerts 200 108.843 ms - 438
+14:44:38 [[32mhttp[39m]: GET /api/auth/me 304 7.851 ms - -
+14:44:38 [[32mhttp[39m]: GET /api/admin/catalog/colors 200 20.846 ms - 709
+14:44:38 [[32mhttp[39m]: GET /api/favorites/ids 304 20.439 ms - -
+14:44:38 [[32mhttp[39m]: GET /api/admin/alerts 200 27.608 ms - 438
+14:44:43 [[32mhttp[39m]: GET /api/auth/me 304 6.480 ms - -
+14:44:43 [[32mhttp[39m]: GET /api/admin/catalog/sizes 200 20.382 ms - 683
+14:44:43 [[32mhttp[39m]: GET /api/favorites/ids 304 17.282 ms - -
+14:44:43 [[32mhttp[39m]: GET /api/admin/alerts 200 32.877 ms - 438
+14:44:49 [[32mhttp[39m]: GET /api/auth/me 304 12.230 ms - -
+14:44:49 [[32mhttp[39m]: GET /api/admin/catalog/weave-types 200 41.435 ms - 582
+14:44:49 [[32mhttp[39m]: GET /api/favorites/ids 304 38.240 ms - -
+14:44:49 [[32mhttp[39m]: GET /api/admin/alerts 200 58.337 ms - 438
+14:44:54 [[32mhttp[39m]: GET /api/content/appearance 200 16.308 ms - 126
+14:44:54 [[32mhttp[39m]: GET /api/auth/me 304 8.462 ms - -
+14:44:54 [[32mhttp[39m]: GET /api/admin/catalog/styles 200 29.235 ms - 568
+14:44:54 [[32mhttp[39m]: GET /api/favorites/ids 304 27.073 ms - -
+14:44:54 [[32mhttp[39m]: GET /api/admin/alerts 200 39.271 ms - 438
+14:44:54 [[32mhttp[39m]: GET /api/content/appearance 200 5.294 ms - 126
+14:44:55 [[32mhttp[39m]: GET /api/products/filters 200 100.549 ms - 3352
+14:44:55 [[32mhttp[39m]: GET /api/content/home 200 118.743 ms - 3830
+14:44:55 [[32mhttp[39m]: GET /api/content/pages 200 20.306 ms - 43
+14:44:55 [[32mhttp[39m]: GET /api/visits/count 200 2.912 ms - 30
+14:44:55 [[32mhttp[39m]: GET /api/products?isNew=true&limit=8 200 14.155 ms - 80
+14:44:55 [[32mhttp[39m]: GET /api/reviews?limit=4 200 7.763 ms - 45
+14:44:55 [[32mhttp[39m]: GET /api/products/daily-random?limit=5 200 123.220 ms - 473
+14:44:59 [[32mhttp[39m]: GET /api/auth/me 304 7.480 ms - -
+14:45:00 [[32mhttp[39m]: GET /api/admin/catalog/categories 304 121.576 ms - -
+14:45:00 [[32mhttp[39m]: GET /api/favorites/ids 304 33.889 ms - -
+14:45:00 [[32mhttp[39m]: GET /api/admin/alerts 200 171.583 ms - 438
+14:45:00 [[32mhttp[39m]: POST /api/admin/catalog/categories 201 15.433 ms - 262
+14:45:00 [[32mhttp[39m]: GET /api/admin/catalog/categories 200 15.622 ms - 1008
+14:45:01 [[32mhttp[39m]: PATCH /api/admin/catalog/categories/6b01f4bc390fff6b45079365 200 14.192 ms - 278
+14:45:01 [[32mhttp[39m]: GET /api/admin/catalog/categories 200 7.152 ms - 1024
+14:45:01 [[32mhttp[39m]: DELETE /api/admin/catalog/categories/6b01f4bc390fff6b45079365 200 15.924 ms - 56
+14:45:01 [[32mhttp[39m]: GET /api/admin/catalog/categories 200 7.781 ms - 773
+14:45:02 [[32mhttp[39m]: GET /api/admin/catalog/categories 200 6.077 ms - 773
+14:45:02 [[32mhttp[39m]: GET /api/auth/me 304 4.717 ms - -
+14:45:02 [[32mhttp[39m]: GET /api/admin/catalog/colors 304 15.289 ms - -
+14:45:02 [[32mhttp[39m]: GET /api/favorites/ids 304 15.463 ms - -
+14:45:02 [[32mhttp[39m]: GET /api/admin/alerts 200 21.754 ms - 438
+14:45:02 [[32mhttp[39m]: POST /api/admin/catalog/colors 201 9.266 ms - 257
+14:45:02 [[32mhttp[39m]: GET /api/admin/catalog/colors 200 4.703 ms - 939
+14:45:03 [[32mhttp[39m]: PATCH /api/admin/catalog/colors/6b01f4be390fff6b45079366 200 10.545 ms - 273
+14:45:03 [[32mhttp[39m]: GET /api/admin/catalog/colors 200 6.551 ms - 955
+14:45:03 [[32mhttp[39m]: DELETE /api/admin/catalog/colors/6b01f4be390fff6b45079366 200 10.118 ms - 56
+14:45:03 [[32mhttp[39m]: GET /api/admin/catalog/colors 200 3.878 ms - 709
+14:45:03 [[32mhttp[39m]: GET /api/admin/catalog/colors 200 4.947 ms - 709
+14:45:03 [[32mhttp[39m]: GET /api/auth/me 304 6.216 ms - -
+14:45:03 [[32mhttp[39m]: GET /api/admin/catalog/sizes 304 27.952 ms - -
+14:45:03 [[32mhttp[39m]: GET /api/favorites/ids 304 27.357 ms - -
+14:45:03 [[32mhttp[39m]: GET /api/admin/alerts 200 35.256 ms - 438
+14:45:03 [[32mhttp[39m]: POST /api/admin/catalog/sizes 201 10.865 ms - 246
+14:45:03 [[32mhttp[39m]: GET /api/admin/catalog/sizes 200 4.232 ms - 902
+14:45:04 [[32mhttp[39m]: PATCH /api/admin/catalog/sizes/6b01f4bf390fff6b45079367 200 11.901 ms - 262
+14:45:04 [[32mhttp[39m]: GET /api/admin/catalog/sizes 200 5.005 ms - 918
+14:45:04 [[32mhttp[39m]: DELETE /api/admin/catalog/sizes/6b01f4bf390fff6b45079367 200 27.496 ms - 56
+14:45:04 [[32mhttp[39m]: GET /api/admin/catalog/sizes 200 12.321 ms - 683
+14:45:04 [[32mhttp[39m]: GET /api/admin/catalog/sizes 200 12.397 ms - 683
+14:45:04 [[32mhttp[39m]: GET /api/auth/me 304 5.359 ms - -
+14:45:04 [[32mhttp[39m]: GET /api/admin/catalog/weave-types 304 13.188 ms - -
+14:45:04 [[32mhttp[39m]: GET /api/favorites/ids 304 14.798 ms - -
+14:45:04 [[32mhttp[39m]: GET /api/admin/alerts 200 22.738 ms - 438
+14:45:05 [[32mhttp[39m]: POST /api/admin/catalog/weave-types 201 12.808 ms - 264
+14:45:05 [[32mhttp[39m]: GET /api/admin/catalog/weave-types 200 6.016 ms - 819
+14:45:05 [[32mhttp[39m]: PATCH /api/admin/catalog/weave-types/6b01f4c0390fff6b45079368 200 17.508 ms - 280
+14:45:05 [[32mhttp[39m]: GET /api/admin/catalog/weave-types 200 6.343 ms - 835
+14:45:06 [[32mhttp[39m]: DELETE /api/admin/catalog/weave-types/6b01f4c0390fff6b45079368 200 11.695 ms - 56
+14:45:06 [[32mhttp[39m]: GET /api/admin/catalog/weave-types 200 4.905 ms - 582
+14:45:06 [[32mhttp[39m]: GET /api/admin/catalog/weave-types 200 4.623 ms - 582
+14:45:06 [[32mhttp[39m]: GET /api/auth/me 304 5.972 ms - -
+14:45:06 [[32mhttp[39m]: GET /api/admin/catalog/styles 304 16.348 ms - -
+14:45:06 [[32mhttp[39m]: GET /api/favorites/ids 304 15.781 ms - -
+14:45:06 [[32mhttp[39m]: GET /api/admin/alerts 200 24.591 ms - 438
+14:45:06 [[32mhttp[39m]: POST /api/admin/catalog/styles 201 17.609 ms - 254
+14:45:06 [[32mhttp[39m]: GET /api/admin/catalog/styles 200 9.211 ms - 795
+14:45:07 [[32mhttp[39m]: PATCH /api/admin/catalog/styles/6b01f4c2390fff6b45079369 200 18.392 ms - 270
+14:45:07 [[32mhttp[39m]: GET /api/admin/catalog/styles 200 6.891 ms - 811
+14:45:07 [[32mhttp[39m]: DELETE /api/admin/catalog/styles/6b01f4c2390fff6b45079369 200 10.269 ms - 56
+14:45:07 [[32mhttp[39m]: GET /api/admin/catalog/styles 200 3.945 ms - 568
+14:45:07 [[32mhttp[39m]: GET /api/admin/catalog/styles 200 4.927 ms - 568
+14:45:07 [[32mhttp[39m]: GET /api/auth/me 304 4.864 ms - -
+14:45:07 [[32mhttp[39m]: GET /api/admin/catalog/categories 304 14.932 ms - -
+14:45:07 [[32mhttp[39m]: GET /api/favorites/ids 304 15.072 ms - -
+14:45:07 [[32mhttp[39m]: GET /api/admin/alerts 200 19.699 ms - 438
+{
+  "mode": "despues",
+  "passed": true,
+  "checks": 33,
+  "pageErrors": [],
+  "externalRequests": []
+}

@@ -1,0 +1,65 @@
+[
+  {
+    "name": "comunicaciones",
+    "file": "frontend/test/communications-browser.cjs",
+    "checks": 8,
+    "exitCode": 0,
+    "ms": 7731
+  },
+  {
+    "name": "pedidos",
+    "file": "frontend/test/orders-workspace-browser.cjs",
+    "checks": 20,
+    "exitCode": 0,
+    "ms": 16750
+  },
+  {
+    "name": "catalogo",
+    "file": "frontend/test/catalog-workspace-browser.cjs",
+    "checks": 20,
+    "exitCode": 0,
+    "ms": 18659
+  },
+  {
+    "name": "navegacion",
+    "file": "frontend/test/navigation-next-browser.cjs",
+    "checks": 35,
+    "exitCode": 1,
+    "ms": 118355
+  },
+  {
+    "name": "independiente-f5",
+    "file": "docs/auditoria-admin/cierre-fase5/navegador-independiente.cjs",
+    "checks": 10,
+    "exitCode": 0,
+    "ms": 135816
+  },
+  {
+    "name": "marketing",
+    "file": "frontend/test/content-settings-next-browser.cjs",
+    "checks": 25,
+    "exitCode": 0,
+    "ms": 81049
+  },
+  {
+    "name": "revalidacion-f5",
+    "file": "docs/auditoria-admin/cierre-fase5/revalidacion-evidencias/navegador-revalidacion.cjs",
+    "checks": 18,
+    "exitCode": 0,
+    "ms": 65348
+  },
+  {
+    "name": "fase6",
+    "file": "frontend/test/admin-polish-next-browser.cjs",
+    "checks": 59,
+    "exitCode": 0,
+    "ms": 163363
+  },
+  {
+    "name": "taxonomia",
+    "file": "frontend/test/taxonomy-responsive-next-browser.cjs",
+    "checks": 33,
+    "exitCode": 0,
+    "ms": 99701
+  }
+]

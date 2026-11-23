@@ -1,0 +1,47 @@
+(node:37644) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:37644) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:37644) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:37644) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:37644) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:37644) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+14:27:25 [[32mhttp[39m]: POST /api/auth/login 200 519.208 ms - 168
+14:27:26 [[32mhttp[39m]: POST /api/auth/login 200 482.852 ms - 169
+14:27:26 [[32mhttp[39m]: POST /api/auth/login 200 497.298 ms - 174
+14:27:27 [[32mhttp[39m]: POST /api/auth/login 200 687.234 ms - 173
+14:28:30 [[33mwarn[39m]: Auth failure No has iniciado sesión {"method":"GET","url":"/api/auth/me","statusCode":401,"ip":"127.0.0.1"}
+14:28:30 [[32mhttp[39m]: GET /api/auth/me 401 13.085 ms - 53
+14:28:30 [[33mwarn[39m]: Auth failure Refresh token requerido {"method":"POST","url":"/api/auth/refresh-token","statusCode":401,"ip":"127.0.0.1"}
+14:28:30 [[32mhttp[39m]: POST /api/auth/refresh-token 401 3.210 ms - 53
+14:28:32 [[32mhttp[39m]: GET /api/content/appearance 200 219.416 ms - 126
+14:28:32 [[32mhttp[39m]: GET /api/content/appearance 400 321.983 ms - 65
+14:28:32 [[32mhttp[39m]: POST /api/auth/login 200 701.982 ms - 174
+14:28:32 [[32mhttp[39m]: GET /api/favorites/ids 200 12.444 ms - 47
+14:28:33 [[32mhttp[39m]: GET /api/checkout/orders 200 19.619 ms - 44
+14:28:33 [[32mhttp[39m]: GET /api/special-requests/mine 200 17.480 ms - 46
+14:28:33 [[32mhttp[39m]: GET /api/products/pieza-746c7e 200 133.810 ms - 1252
+14:28:33 [[32mhttp[39m]: GET /api/content/pages 200 19.164 ms - 43
+14:28:33 [[32mhttp[39m]: GET /api/products/filters 200 41.800 ms - 957
+14:28:33 [[32mhttp[39m]: GET /api/content/home 200 84.080 ms - 3830
+14:28:33 [[32mhttp[39m]: GET /api/visits/count 200 3.925 ms - 30
+14:28:34 [[32mhttp[39m]: GET /api/auth/me 200 25.401 ms - 213
+14:28:34 [[32mhttp[39m]: GET /api/reviews/product/6b01f0e1070ac444480b7247 200 6.139 ms - 45
+14:28:34 [[32mhttp[39m]: GET /api/legal/notices 200 0.977 ms - 1511
+14:28:34 [[32mhttp[39m]: GET /api/favorites/ids 304 21.113 ms - -
+14:28:34 [[32mhttp[39m]: GET /api/marketing/config 200 240.624 ms - 503
+14:28:34 [[32mhttp[39m]: GET /api/marketing/config 304 24.243 ms - -
+14:28:35 [[32mhttp[39m]: POST /api/cart/validate 200 116.394 ms - 451
+14:28:35 [[32mhttp[39m]: GET /api/marketing/config 304 5.922 ms - -
+14:28:35 [[32mhttp[39m]: GET /api/products/pieza-746c7e 200 47.539 ms - 1252
+14:28:35 [[32mhttp[39m]: GET /api/checkout/config 200 4.285 ms - 830
+14:28:35 [[32mhttp[39m]: POST /api/checkout/calculate 200 21.689 ms - 537
+TimeoutError: Waiting failed: 20000ms exceeded
+    at new WaitTask (file:///C:/Users/Asus%20ExpertBook/AppData/Local/Temp/dizor-verify-puppeteer/node_modules/puppeteer-core/lib/puppeteer/common/WaitTask.js:46:34)
+    at IsolatedWorld.waitForFunction (file:///C:/Users/Asus%20ExpertBook/AppData/Local/Temp/dizor-verify-puppeteer/node_modules/puppeteer-core/lib/puppeteer/api/Realm.js:49:26)
+    at CdpFrame.waitForFunction (file:///C:/Users/Asus%20ExpertBook/AppData/Local/Temp/dizor-verify-puppeteer/node_modules/puppeteer-core/lib/puppeteer/api/Frame.js:585:43)
+    at CdpFrame.<anonymous> (file:///C:/Users/Asus%20ExpertBook/AppData/Local/Temp/dizor-verify-puppeteer/node_modules/puppeteer-core/lib/puppeteer/util/decorators.js:101:27)
+    at CdpPage.waitForFunction (file:///C:/Users/Asus%20ExpertBook/AppData/Local/Temp/dizor-verify-puppeteer/node_modules/puppeteer-core/lib/puppeteer/api/Page.js:1464:37)
+    at text (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\frontend\test\phase7-next-browser.cjs:32:31)
+    at checkout (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\frontend\test\helpers\phase7BrowserFlow.cjs:35:18)
+    at async module.exports (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\frontend\test\helpers\phase7BrowserFlow.cjs:55:56)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\frontend\test\phase7-next-browser.cjs:42:2

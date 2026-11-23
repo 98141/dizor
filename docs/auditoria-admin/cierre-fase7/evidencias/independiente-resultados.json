@@ -1,0 +1,118 @@
+{
+  "generatedAt": "2026-11-21T20:00:44.682Z",
+  "results": [
+    {
+      "id": "I7-01",
+      "zones": {
+        "UTC": "2026-11-20T05:00:00.000Z|2026-11-21T04:59:59.999Z|2026-11-19|2027-01-01T04:59:59.999Z",
+        "America/Bogota": "2026-11-20T05:00:00.000Z|2026-11-21T04:59:59.999Z|2026-11-19|2027-01-01T04:59:59.999Z",
+        "Pacific/Kiritimati": "2026-11-20T05:00:00.000Z|2026-11-21T04:59:59.999Z|2026-11-19|2027-01-01T04:59:59.999Z",
+        "Pacific/Honolulu": "2026-11-20T05:00:00.000Z|2026-11-21T04:59:59.999Z|2026-11-19|2027-01-01T04:59:59.999Z"
+      }
+    },
+    {
+      "id": "I7-02",
+      "history": {
+        "totalRevenue": 200000,
+        "totalProfit": -648484,
+        "grossMarginPct": -324.2,
+        "totalOrders": 2,
+        "periodsWithSales": 1
+      },
+      "report": {
+        "ordersCount": 2,
+        "totalCollected": 200000,
+        "productRevenue": 200000,
+        "unitsSold": 2,
+        "cogs": 848484,
+        "grossProfit": -648484,
+        "grossMarginPct": -324.2,
+        "averageOrderValue": 100000,
+        "shippingCollected": 0,
+        "taxCollected": 0,
+        "discountsGiven": 0,
+        "itemsMissingCost": 0,
+        "topByRevenue": [
+          {
+            "productId": "6b01f86be3510cc371543f49",
+            "name": "Pieza 631180",
+            "slug": "pieza-631180",
+            "units": 2,
+            "revenue": 200000,
+            "cost": 848484,
+            "profit": -648484,
+            "marginPct": -324.2
+          }
+        ],
+        "topByProfit": [
+          {
+            "productId": "6b01f86be3510cc371543f49",
+            "name": "Pieza 631180",
+            "slug": "pieza-631180",
+            "units": 2,
+            "revenue": 200000,
+            "cost": 848484,
+            "profit": -648484,
+            "marginPct": -324.2
+          }
+        ]
+      },
+      "pending": {
+        "ordersCount": 1,
+        "amount": 100000
+      },
+      "csvCount": "2",
+      "month": [
+        {
+          "periodKey": "2026-11",
+          "label": "noviembre de 2026",
+          "ordersCount": 4,
+          "onlineRevenue": 400000,
+          "totalRevenue": 400000,
+          "cogs": 1696968,
+          "grossProfit": -1296968,
+          "grossMarginPct": -324.2,
+          "unitsSold": 4
+        }
+      ],
+      "year": [
+        {
+          "periodKey": "2026",
+          "label": "2026",
+          "ordersCount": 4,
+          "onlineRevenue": 400000,
+          "totalRevenue": 400000,
+          "cogs": 1696968,
+          "grossProfit": -1296968,
+          "grossMarginPct": -324.2,
+          "unitsSold": 4
+        }
+      ],
+      "unchanged": true
+    },
+    {
+      "id": "I7-03",
+      "first": 201,
+      "second": 200,
+      "orders": 1,
+      "stock": 0,
+      "race": [
+        201,
+        409
+      ],
+      "rivalStock": 0,
+      "rivalOrders": 1,
+      "vendorFinance": 403,
+      "vendorStock": 403,
+      "adminFinance": 403,
+      "superFinance": 200,
+      "dashboard": 200
+    },
+    {
+      "id": "I7-04",
+      "status": "load-error",
+      "writes": 0,
+      "late": "loading"
+    }
+  ]
+}
