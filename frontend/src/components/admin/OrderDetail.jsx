@@ -4,8 +4,9 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import OrderCommunications from "./OrderCommunications";
 import OrderNextAction from "./OrderNextAction";
+import PaymentIncidentActions from "./PaymentIncidentActions";
 import { useSiteConfig } from "@/context/SiteConfigContext";
-import { getAdminOrder, updateOrderStatus, confirmPayment, reconcileWompi, updateOrderShipping } from "@/services/orderAdminService";
+import { getAdminOrder, updateOrderStatus, confirmPayment, reconcileWompi, updateOrderShipping, resolvePaymentIncident } from "@/services/orderAdminService";
 import { formatCOP } from "@/lib/formatCurrency";
 import { ORDER_STATUS_LABELS, PAYMENT_STATUS_LABELS, PAYMENT_METHOD_LABELS, CARRIER_LABELS } from "@/lib/orderLabels";
 import { formatOrderDate, returnToOrders } from "@/lib/orderWorkspace";
@@ -43,7 +44,8 @@ function OrderWorkspaceDetail({ orderId, backHref = "/admin/pedidos" }) {
     let actionResult;
     try {
       if (code === "collect") await confirmPayment(orderId, values);
-      else if (code === "reconcile") await reconcileWompi(orderId);
+      else if (code === "reconcile") await reconcileWompi(orderId, values);
+      else if (code === "resolveIncident") await resolvePaymentIncident(orderId, values.incidentId, values);
       else if (["dispatch", "correct"].includes(code)) await updateOrderShipping(orderId, values);
       else {
         const status = { prepare: "en_preparacion", deliver: "entregado", cancel: "cancelado", return: "devuelto" }[code];
@@ -76,6 +78,7 @@ function OrderWorkspaceDetail({ orderId, backHref = "/admin/pedidos" }) {
     {order && <>
       <header><p className={styles.eyebrow}>Pedido · {formatOrderDate(order.createdAt)}</p><h1>{order.orderNumber}</h1><div className={styles.summary}><span className={styles.badge}>{ORDER_STATUS_LABELS[order.orderStatus] || order.orderStatus}</span><span>Pago: {PAYMENT_STATUS_LABELS[order.paymentStatus] || order.paymentStatus}</span><span>{PAYMENT_METHOD_LABELS[order.paymentMethod] || order.paymentMethod}</span><strong>{formatCOP(order.total)}</strong>{order.operation?.requiresReview && <span className={`${styles.badge} ${styles.attention}`}>Requiere revisión</span>}</div></header>
       <OrderNextAction key={`${orderId}:${order.orderStatus}:${order.paymentStatus}`} order={order} execute={execute} busy={busy} locked={locked} />
+      <PaymentIncidentActions order={order} execute={execute} disabled={busy || locked} />
       <div className={styles.detail}>
         <div className={styles.stack}>
           <section className={styles.panel}><h2>Productos · {order.items?.length || 0}</h2><ul className={styles.list}>{(order.items || []).map((item, index) => <li key={item._id || index}><div className={styles.product}>{item.productImage && <img src={item.productImage} alt="" loading="lazy" decoding="async" />}<div><strong>{item.productName}</strong><p className={styles.muted}>{[item.sizeName, item.colorName, item.sku].filter(Boolean).join(" · ")}</p><p>{item.quantity} × {formatCOP(item.unitPrice)} · <strong>{formatCOP(item.lineTotal)}</strong></p></div></div></li>)}</ul>

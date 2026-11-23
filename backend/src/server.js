@@ -31,6 +31,8 @@ if (process.env.NODE_ENV === "production" && process.env.WOMPI_ENV !== "producti
 }
 
 let stopNotifications = () => {};
+try { require("./services/wompiService").validateConfiguration(); }
+catch (err) { logger.error(`[SECURITY] ${err.message}. Servidor detenido.`); process.exit(1); }
 connectDB().then(async () => {
   await require("./models/notification").init();
   if (process.env.TRANSACTIONAL_NOTIFICATIONS_ENABLED === "true") {

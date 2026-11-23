@@ -5,6 +5,19 @@ const { snapshotOrder } = require("./notificationTemplates");
 
 exports.validEmail = (value) => typeof value === "string" && value.length <= 254 && validator.isEmail(value) && !/[\r\n]/.test(value);
 exports.adminRecipient = () => (process.env.ADMIN_NOTIFY_EMAIL || "").trim().toLowerCase();
+exports.paymentEventReview = async (receipt, session) => {
+  if (!session?.inTransaction()) throw new Error("Notification events require a transaction");
+  const recipient = exports.adminRecipient();
+  const eventKey = crypto.createHash("sha256").update(JSON.stringify([String(receipt._id), "admin.payment_event", recipient])).digest("hex");
+  const valid = exports.validEmail(recipient);
+  await Notification.findOneAndUpdate({ eventKey }, { $setOnInsert: {
+    eventKey, event: "admin.payment_event", paymentEvent: receipt._id, audience: "admin", recipient,
+    snapshot: { transactionId: receipt.transactionId, status: receipt.status, environment: receipt.environment },
+    status: valid ? "pending" : "skipped", retryable: valid,
+    errorCode: valid ? "" : "recipient_missing", history: [{ at: new Date(), outcome: "created", attempt: 0 }],
+  } }, { session, upsert: true, returnDocument: "after" });
+  receipt.notificationQueuedAt ||= new Date();
+};
 exports.enqueue = async (order, event, identity, session, extra = {}) => {
   if (!session?.inTransaction()) throw new Error("Notification events require a transaction");
   const audience = event.startsWith("admin.") ? "admin" : "buyer";

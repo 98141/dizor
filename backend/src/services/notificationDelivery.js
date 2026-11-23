@@ -90,8 +90,13 @@ exports.processOne = async (id = null) => {
     $set: { ...fields, leaseUntil: null, leaseToken: "" },
     $push: { history: { at: new Date(), outcome: fields.status, attempt: n.attempts, code: fields.errorCode || "" } },
   });
-  const order = await Order.findById(n.order);
-  const blocked = order ? authorized(n, order) : "recipient_changed";
+  const order = n.order ? await Order.findById(n.order) : null;
+  let blocked;
+  if (n.event === "admin.payment_event") {
+    const receipt = await require("../models/paymentEvent").findById(n.paymentEvent);
+    blocked = !validEmail(n.recipient) || n.recipient !== adminRecipient() ? "recipient_changed"
+      : !receipt || receipt.processedAt ? "superseded" : "";
+  } else blocked = order ? authorized(n, order) : "recipient_changed";
   const configured = testTransport || (receiptTransport && n.event === "order.received") || (process.env.RESEND_API_KEY && process.env.EMAIL_FROM);
   const enabled = testTransport || (receiptTransport && n.event === "order.received") || process.env.TRANSACTIONAL_NOTIFICATIONS_ENABLED === "true";
   if (blocked || !configured || !enabled) {
@@ -149,6 +154,10 @@ exports.recoverIncidents = async (limit = 20) => {
   for (const event of interrupted) await require("./transactionService").inTransaction(async (session) => {
     const receipt = await PaymentEvent.findById(event._id).session(session);
     if (!receipt || receipt.processedAt || receipt.notificationQueuedAt) return;
+    if (!receipt.order) {
+      await require("./notificationEvents").paymentEventReview(receipt, session);
+      await receipt.save({ session, timestamps: false }); return;
+    }
     const order = await Order.findById(receipt.order).session(session);
     if (order?.requiresReview) await require("./notificationEvents").enqueue(order, "admin.incident", `payment-recovery:${receipt._id}`, session);
     receipt.notificationQueuedAt = new Date(); await receipt.save({ session, timestamps: false });

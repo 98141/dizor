@@ -1,4 +1,7 @@
 const crypto = require("crypto");
+const AppError = require("../utils/AppError");
+
+const queryError = (code, message, status = 503) => Object.assign(new AppError(message, status), { code });
 
 const getBaseUrl = () => {
   const env = process.env.WOMPI_ENV || "sandbox";
@@ -9,6 +12,14 @@ const getBaseUrl = () => {
 
 exports.isWompiConfigured = () =>
   Boolean(process.env.WOMPI_PRIVATE_KEY && process.env.WOMPI_EVENTS_SECRET);
+
+exports.validateConfiguration = (env = process.env) => {
+  const mode = env.WOMPI_ENV || "sandbox";
+  if (!["sandbox", "production"].includes(mode) || (env.NODE_ENV === "production" && mode !== "production")) throw new Error("Configuración de ambiente Wompi inválida");
+  if (!env.WOMPI_PRIVATE_KEY && !env.WOMPI_EVENTS_SECRET) return;
+  const prefix = mode === "production" ? "prod" : "test";
+  if (!env.WOMPI_PRIVATE_KEY?.startsWith(`prv_${prefix}_`) || !env.WOMPI_EVENTS_SECRET?.startsWith(`${prefix}_events_`)) throw new Error("Llaves Wompi incompatibles con el ambiente");
+};
 
 exports.createPaymentLink = async (order) => {
   const privateKey = process.env.WOMPI_PRIVATE_KEY;
@@ -126,13 +137,21 @@ exports.parseProviderExpiry = (value) => {
   return Number.isFinite(date.getTime()) ? date : null;
 };
 exports.getTransaction = async (id) => {
-  if (!process.env.WOMPI_PRIVATE_KEY) throw new Error("Wompi unavailable");
-  const res = await fetch(`${getBaseUrl()}/transactions/${encodeURIComponent(id)}`, {
-    headers: { Authorization: `Bearer ${process.env.WOMPI_PRIVATE_KEY}` }, signal: AbortSignal.timeout(10000),
-  });
-  if (!res.ok) throw new Error("Wompi verification unavailable");
-  const json = await res.json();
-  if (json?.data?.id !== id) throw new Error("Invalid provider response");
+  if (typeof id !== "string" || !/^[A-Za-z0-9_-]{1,150}$/.test(id)) throw queryError("WOMPI_TRANSACTION_ID_INVALID", "ID de transacción inválido", 409);
+  if (!process.env.WOMPI_PRIVATE_KEY) throw queryError("WOMPI_QUERY_UNAVAILABLE", "Consulta Wompi no disponible");
+  let res;
+  try {
+    res = await fetch(`${getBaseUrl()}/transactions/${encodeURIComponent(id)}`, {
+      headers: { Authorization: `Bearer ${process.env.WOMPI_PRIVATE_KEY}` }, signal: AbortSignal.timeout(10000),
+    });
+  } catch (err) {
+    throw queryError(["TimeoutError", "AbortError"].includes(err.name) ? "WOMPI_QUERY_TIMEOUT" : "WOMPI_QUERY_UNAVAILABLE", "Consulta Wompi temporalmente no disponible");
+  }
+  if (res.status === 404) throw queryError("WOMPI_TRANSACTION_NOT_FOUND", "ID no encontrado en este ambiente", 409);
+  if (!res.ok) throw queryError("WOMPI_QUERY_HTTP_ERROR", "Consulta Wompi no disponible");
+  let json;
+  try { json = await res.json(); } catch { throw queryError("WOMPI_INVALID_TRANSACTION_RESPONSE", "Respuesta Wompi inválida"); }
+  if (json?.data?.id !== id) throw queryError("WOMPI_INVALID_TRANSACTION_RESPONSE", "Identidad de respuesta Wompi inválida");
   return json.data;
 };
 

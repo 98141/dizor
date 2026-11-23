@@ -37,7 +37,9 @@ exports.allowedTransitions = (order, role) => (next[order.orderStatus] || []).fi
   } catch { return false; }
 });
 exports.canSelfCancel = (order) => ["pendiente", "pago_pendiente"].includes(order.orderStatus)
-  && ["wompi", "contra_entrega"].includes(order.paymentMethod)
+  // A Link can have another in-flight transaction even after a decline/expiry.
+  // Until the provider can prove closure, electronic cancellation needs staff review.
+  && order.paymentMethod === "contra_entrega"
   && order.paymentStatus !== "pagado" && order.paymentStatus !== "reembolsado";
 exports.assertCollection = (order, role, evidence) => {
   if (!isAdmin(role)) throw new AppError("Solo administradores pueden confirmar recaudos", 403);

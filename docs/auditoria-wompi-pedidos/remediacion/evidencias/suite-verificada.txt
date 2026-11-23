@@ -1,0 +1,1793 @@
+10:48:04 [[32mhttp[39m]: POST /api/auth/login 200 990.816 ms - 154
+10:48:04 [[32mhttp[39m]: POST /api/auth/login 200 682.651 ms - 155
+10:48:05 [[32mhttp[39m]: POST /api/auth/login 200 743.649 ms - 160
+10:48:05 [[32mhttp[39m]: POST /api/checkout/orders 201 360.728 ms - 371
+10:48:06 [[32mhttp[39m]: POST /api/checkout/orders 201 178.174 ms - 371
+✔ A1 índice idempotencyKey: dos pedidos sin clave (33423.6489ms)
+10:48:07 [[32mhttp[39m]: POST /api/checkout/orders 201 991.290 ms - 371
+10:48:07 [[32mhttp[39m]: POST /api/checkout/orders 201 1064.601 ms - 371
+10:48:07 [[32mhttp[39m]: POST /api/checkout/orders 201 1101.980 ms - 371
+10:48:07 [[32mhttp[39m]: POST /api/checkout/orders 201 1236.096 ms - 371
+10:48:07 [[32mhttp[39m]: POST /api/checkout/orders 201 1284.681 ms - 371
+10:48:07 [[32mhttp[39m]: POST /api/checkout/orders 201 1336.308 ms - 371
+✔ A2 número de pedido con peticiones concurrentes (1379.9886ms)
+10:48:07 [[32mhttp[39m]: POST /api/checkout/orders 201 162.206 ms - 371
+10:48:07 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460371d56a75f31abd41c/status 200 32.627 ms - 859
+10:48:07 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460371d56a75f31abd41c/shipping 200 38.321 ms - 837
+10:48:07 [[32mhttp[39m]: POST /api/checkout/orders 201 180.927 ms - 371
+10:48:07 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460371d56a75f31abd43c/status 200 20.910 ms - 859
+10:48:07 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460371d56a75f31abd43c/shipping 200 33.948 ms - 837
+10:48:08 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460371d56a75f31abd43c/status 200 19.479 ms - 894
+✔ B1 contraentrega despachada conserva pago pendiente por ambas rutas (555.457ms)
+10:48:08 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460381d56a75f31abd45f/status 409 14.573 ms - 84
+10:48:08 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460381d56a75f31abd45f/shipping 409 12.295 ms - 76
+10:48:08 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460381d56a75f31abd45f/status 409 15.035 ms - 64
+✔ B2 Wompi pendiente no puede prepararse ni enviarse (115.9453ms)
+10:48:08 [[33mwarn[39m]: Auth failure El vendedor solo puede actualizar estados operativos autorizados {"method":"PATCH","url":"/api/admin/orders/6b0460381d56a75f31abd46e/status","statusCode":403,"ip":"127.0.0.1"}
+10:48:08 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460381d56a75f31abd46e/status 403 12.028 ms - 94
+✔ B3 vendedor no puede asignar estado financiero (86.0106ms)
+10:48:08 [[33mwarn[39m]: Auth failure Solo administradores pueden registrar recaudos {"method":"PATCH","url":"/api/admin/orders/6b0460381d56a75f31abd479/payment","statusCode":403,"ip":"127.0.0.1"}
+10:48:08 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460381d56a75f31abd479/payment 403 21.770 ms - 76
+10:48:08 [[32mhttp[39m]: POST /api/checkout/orders 201 311.455 ms - 371
+10:48:08 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460381d56a75f31abd484/status 200 78.385 ms - 824
+10:48:08 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460381d56a75f31abd484/payment 409 15.965 ms - 44
+✔ B4 Wompi manual y recaudo sobre cancelado se rechazan (633.1984ms)
+10:48:09 [[32mhttp[39m]: POST /api/checkout/orders 201 209.300 ms - 371
+10:48:09 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460381d56a75f31abd4ab/status 409 15.190 ms - 64
+10:48:09 [[32mhttp[39m]: POST /api/checkout/orders 201 169.906 ms - 371
+10:48:09 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460391d56a75f31abd4c7/status 409 10.630 ms - 64
+10:48:09 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460391d56a75f31abd4c7/status 200 25.257 ms - 904
+10:48:09 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460391d56a75f31abd4c7/status 409 10.341 ms - 64
+✔ B5 saltos operativos, reactivaciones y estados inventados se rechazan (497.6024ms)
+10:48:09 [[32mhttp[39m]: POST /api/checkout/orders 201 167.208 ms - 371
+10:48:09 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460391d56a75f31abd4e5/status 200 51.802 ms - 824
+10:48:09 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460391d56a75f31abd4e5/shipping 409 18.192 ms - 76
+✔ B6 guía de pedido cancelado no se puede editar (271.9726ms)
+10:48:09 [[32mhttp[39m]: POST /api/webhooks/wompi 200 105.920 ms - 2
+10:48:09 [[32mhttp[39m]: POST /api/webhooks/wompi 200 116.669 ms - 2
+✔ C1 Wompi rechazado y luego aprobado (reintento en el mismo enlace) (329.5048ms)
+10:48:10 [[32mhttp[39m]: POST /api/webhooks/wompi 200 128.189 ms - 2
+✔ C2 Wompi aprobado sin stock disponible (225.2741ms)
+10:48:10 [[32mhttp[39m]: POST /api/webhooks/wompi 200 288.779 ms - 2
+10:48:10 [[32mhttp[39m]: POST /api/webhooks/wompi 200 294.289 ms - 2
+10:48:10 [[32mhttp[39m]: POST /api/webhooks/wompi 200 303.302 ms - 2
+✔ C3 dos eventos APPROVED simultáneos (410.4831ms)
+10:48:10 [[32mhttp[39m]: POST /api/checkout/orders 201 142.167 ms - 371
+10:48:10 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603a1d56a75f31abd55f/payment 409 15.851 ms - 68
+10:48:10 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603a1d56a75f31abd55f/status 200 39.499 ms - 860
+10:48:10 [[32mhttp[39m]: PATCH /api/checkout/orders/6b04603a1d56a75f31abd55f/cancel 409 13.757 ms - 83
+✔ C4 cliente no cancela pedidos en preparación (241.2127ms)
+10:48:11 [[32mhttp[39m]: POST /api/checkout/orders 201 202.499 ms - 371
+10:48:11 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603a1d56a75f31abd57f/status 200 36.158 ms - 860
+10:48:11 [[32mhttp[39m]: GET /api/checkout/orders/6b04603a1d56a75f31abd57f 200 21.616 ms - 937
+✔ C5 notas internas nunca se exponen al comprador (287.574ms)
+10:48:11 [[32mhttp[39m]: POST /api/checkout/orders 201 166.496 ms - 371
+10:48:11 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603b1d56a75f31abd59d/status 200 21.187 ms - 859
+10:48:11 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603b1d56a75f31abd59d/shipping 200 23.997 ms - 835
+10:48:11 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603b1d56a75f31abd59d/status 200 26.123 ms - 872
+10:48:11 [[32mhttp[39m]: POST /api/checkout/orders 201 171.173 ms - 371
+10:48:11 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603b1d56a75f31abd5c0/status 200 46.743 ms - 824
+10:48:11 [[32mhttp[39m]: POST /api/webhooks/wompi 200 218.901 ms - 2
+10:48:12 [[32mhttp[39m]: POST /api/webhooks/wompi 200 127.231 ms - 2
+✔ D1 flujos operativos usan transportes ficticios sin red externa (1009.4187ms)
+10:48:12 [[32mhttp[39m]: POST /api/checkout/orders 201 183.783 ms - 371
+✔ D2 sin proveedor no se registra acuse como enviado (196.833ms)
+10:48:12 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0460301d56a75f31abd323 200 13.399 ms - 1284
+10:48:12 [[32mhttp[39m]: POST /api/checkout/orders 201 118.698 ms - 371
+10:48:12 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b0460301d56a75f31abd323 200 54.540 ms - 1337
+✔ E1 edición obsoleta conserva stock descontado por una venta (214.25ms)
+10:48:12 [[32mhttp[39m]: POST /api/checkout/orders 400 3.749 ms - 56
+✔ E2 cantidad fraccionaria se rechaza (15.912ms)
+10:48:12 [[32mhttp[39m]: GET /api/admin/alerts 200 47.958 ms - 6601
+✔ E3 agotamiento de variante aparece en alertas (83.504ms)
+10:48:12 [[32mhttp[39m]: GET /api/admin/dashboard 200 63.243 ms - 12946
+10:48:12 [[32mhttp[39m]: POST /api/checkout/orders 201 149.538 ms - 371
+10:48:12 [[32mhttp[39m]: GET /api/admin/dashboard 200 71.371 ms - 12932
+10:48:12 [[32mhttp[39m]: GET /api/admin/alerts 200 38.090 ms - 6601
+✔ F1 contraentrega aparece por preparar y no como pago Wompi pendiente (345.9928ms)
+10:48:13 [[32mhttp[39m]: POST /api/checkout/orders 201 173.696 ms - 371
+10:48:13 [[32mhttp[39m]: GET /api/admin/orders/6b04603d1d56a75f31abd665 200 9.774 ms - 2614
+✔ G1 vendedor no recibe costos internos (200.1393ms)
+10:48:13 [[32mhttp[39m]: GET /api/admin/orders?q=[redactado] 200 16.822 ms - 192
+✔ G2 búsqueda con caracteres especiales (22.9763ms)
+10:48:13 [[32mhttp[39m]: POST /api/checkout/orders 201 194.276 ms - 371
+10:48:13 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603d1d56a75f31abd680/assign 400 10.607 ms - 69
+✔ G3 solo se asigna personal activo (235.2081ms)
+10:48:13 [[32mhttp[39m]: POST /api/checkout/orders 201 226.020 ms - 371
+10:48:13 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603d1d56a75f31abd69a/status 200 29.491 ms - 860
+10:48:13 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603d1d56a75f31abd69a/shipping 200 30.201 ms - 840
+10:48:13 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603d1d56a75f31abd69a/status 200 25.660 ms - 877
+10:48:13 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603d1d56a75f31abd69a/shipping 409 9.332 ms - 76
+✔ P01 entrega contraentrega conserva pago pendiente y evidencia de entrega (362.817ms)
+10:48:13 [[32mhttp[39m]: POST /api/checkout/orders 201 116.627 ms - 371
+10:48:13 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603d1d56a75f31abd6bf/status 200 18.318 ms - 860
+10:48:13 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603d1d56a75f31abd6bf/shipping 200 34.462 ms - 840
+10:48:14 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603d1d56a75f31abd6bf/status 200 23.855 ms - 877
+10:48:14 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603d1d56a75f31abd6bf/payment 200 48.183 ms - 858
+10:48:14 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603d1d56a75f31abd6bf/payment 200 69.633 ms - 858
+10:48:14 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603d1d56a75f31abd6bf/payment 200 64.619 ms - 858
+✔ P02 recaudo explícito por admin, repetido y concurrente se registra una vez (327.018ms)
+10:48:14 [[32mhttp[39m]: POST /api/checkout/orders 201 142.779 ms - 371
+10:48:14 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603e1d56a75f31abd6ee/status 200 20.753 ms - 860
+10:48:14 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603e1d56a75f31abd6ee/shipping 200 22.322 ms - 840
+10:48:14 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603e1d56a75f31abd6ee/status 200 24.585 ms - 877
+10:48:14 [[33mwarn[39m]: Auth failure Solo administradores pueden registrar recaudos {"method":"PATCH","url":"/api/admin/orders/6b04603e1d56a75f31abd6ee/payment","statusCode":403,"ip":"127.0.0.1"}
+10:48:14 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603e1d56a75f31abd6ee/payment 403 8.518 ms - 76
+10:48:14 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603e1d56a75f31abd6ee/payment 400 8.840 ms - 87
+10:48:14 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603e1d56a75f31abd6ee/payment 400 9.283 ms - 87
+10:48:14 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603e1d56a75f31abd6ee/payment 400 11.733 ms - 87
+✔ P03 vendedor no recauda; evidencia incompleta y fecha futura se rechazan (289.9278ms)
+10:48:14 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603e1d56a75f31abd717/payment 409 8.558 ms - 66
+10:48:14 [[32mhttp[39m]: POST /api/webhooks/wompi 200 84.700 ms - 2
+10:48:14 [[32mhttp[39m]: POST /api/webhooks/wompi 200 8.002 ms - 2
+10:48:14 [[32mhttp[39m]: POST /api/webhooks/wompi 200 7.994 ms - 2
+✔ P04 ni admin confirma Wompi manualmente; pago aprobado deja una venta (167.8256ms)
+10:48:14 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603e1d56a75f31abd732/status 200 24.880 ms - 841
+10:48:14 [[32mhttp[39m]: POST /api/webhooks/wompi 200 82.721 ms - 2
+10:48:14 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603e1d56a75f31abd732/status 409 9.483 ms - 64
+10:48:14 [[32mhttp[39m]: GET /api/admin/alerts 200 30.207 ms - 7252
+✔ P05 aprobación después de cancelar reconoce dinero, conserva cancelación y alerta (202.5191ms)
+10:48:15 [[32mhttp[39m]: POST /api/webhooks/wompi 200 156.900 ms - 2
+✖ P06 diferencias de monto y moneda conservan el hecho financiero y bloquean preparación (231.5722ms)
+10:48:15 [[31merror[39m]: Server error FALLO FICTICIO DE ALMACENAMIENTO
+Error: FALLO FICTICIO DE ALMACENAMIENTO
+    at History.create (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\test\phase1.test.js:576:40)
+    at exports.moveStock (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\inventoryService.js:26:26)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:164:13
+    at async ClientSession.withTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\sessions.js:568:30)
+    at async exports.inTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\transactionService.js:7:12)
+    at async exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:144:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":500,"userId":null,"ip":"127.0.0.1"}
+10:48:15 [[32mhttp[39m]: POST /api/webhooks/wompi 500 101.832 ms - 57
+10:48:15 [[32mhttp[39m]: POST /api/webhooks/wompi 200 78.547 ms - 2
+10:48:15 [[32mhttp[39m]: POST /api/webhooks/wompi 200 7.195 ms - 2
+✔ P07 fallo tras recibir pago conserva evidencia; reintento aplica stock una sola vez (252.4747ms)
+10:48:15 [[32mhttp[39m]: POST /api/checkout/orders 201 112.294 ms - 371
+10:48:15 [[32mhttp[39m]: PATCH /api/checkout/orders/6b04603f1d56a75f31abd7a4/cancel 200 54.922 ms - 135
+10:48:15 [[32mhttp[39m]: PATCH /api/checkout/orders/6b04603f1d56a75f31abd7a4/cancel 409 75.443 ms - 66
+10:48:15 [[32mhttp[39m]: PATCH /api/checkout/orders/6b04603f1d56a75f31abd7a4/cancel 409 79.135 ms - 66
+✔ P08 autocancelación contraentrega antes de preparación repone una sola vez (211.1388ms)
+10:48:15 [[32mhttp[39m]: POST /api/checkout/orders 201 176.354 ms - 371
+10:48:15 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603f1d56a75f31abd7d3/status 200 22.391 ms - 860
+10:48:15 [[32mhttp[39m]: PATCH /api/checkout/orders/6b04603f1d56a75f31abd7d3/cancel 409 7.213 ms - 83
+10:48:15 [[32mhttp[39m]: POST /api/webhooks/wompi 200 80.674 ms - 2
+10:48:15 [[32mhttp[39m]: PATCH /api/checkout/orders/6b04603f1d56a75f31abd7f1/cancel 409 6.858 ms - 83
+✔ P09 autocancelación en preparación y Wompi pagado se rechazan (358.5746ms)
+10:48:15 [[32mhttp[39m]: PATCH /api/checkout/orders/6b04603f1d56a75f31abd807/cancel 409 14.098 ms - 116
+✔ P10 Wompi sin transacción verificable conserva pedido e incidencia (85.5073ms)
+10:48:16 [[32mhttp[39m]: POST /api/checkout/orders 201 115.614 ms - 371
+10:48:16 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603f1d56a75f31abd815/status 200 17.434 ms - 860
+10:48:16 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603f1d56a75f31abd815/shipping 200 20.056 ms - 840
+10:48:16 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603f1d56a75f31abd815/status 200 20.442 ms - 877
+10:48:16 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603f1d56a75f31abd815/payment 200 17.623 ms - 858
+10:48:16 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603f1d56a75f31abd815/status 200 25.631 ms - 869
+10:48:16 [[32mhttp[39m]: PATCH /api/admin/orders/6b04603f1d56a75f31abd815/status 200 19.080 ms - 922
+✔ P11 contraentrega pagado cancelado administrativamente conserva dinero sin reembolso (304.908ms)
+10:48:16 [[32mhttp[39m]: POST /api/admin/catalog/products/6b0460301d56a75f31abd323/stock 200 130.405 ms - 106
+10:48:16 [[32mhttp[39m]: POST /api/admin/catalog/products/6b0460301d56a75f31abd323/stock 200 172.385 ms - 105
+10:48:16 [[32mhttp[39m]: POST /api/admin/catalog/products/6b0460301d56a75f31abd323/stock 200 200.076 ms - 105
+10:48:16 [[32mhttp[39m]: POST /api/admin/catalog/products/6b0460301d56a75f31abd323/stock 409 8.827 ms - 62
+10:48:16 [[32mhttp[39m]: POST /api/admin/catalog/products/6b0460301d56a75f31abd323/stock 400 4.108 ms - 90
+10:48:16 [[32mhttp[39m]: POST /api/admin/catalog/products/6b0460301d56a75f31abd323/stock 409 31.541 ms - 73
+10:48:16 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"POST","url":"/api/admin/catalog/products/6b0460301d56a75f31abd323/stock","statusCode":403,"ip":"127.0.0.1"}
+10:48:16 [[32mhttp[39m]: POST /api/admin/catalog/products/6b0460301d56a75f31abd323/stock 403 5.076 ms - 75
+✔ P12 ajustes de stock enteros y concurrentes tienen motivo y no se duplican (282.0413ms)
+10:48:16 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0460301d56a75f31abd323 200 11.618 ms - 1284
+10:48:16 [[32mhttp[39m]: POST /api/admin/catalog/products/6b0460301d56a75f31abd323/stock 200 159.403 ms - 106
+10:48:16 [[32mhttp[39m]: POST /api/checkout/orders 201 195.844 ms - 371
+10:48:16 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b0460301d56a75f31abd323 200 234.230 ms - 1337
+✔ P13 formulario obsoleto guardado en paralelo a venta y ajuste conserva stock (264.3478ms)
+10:48:16 [[32mhttp[39m]: POST /api/checkout/orders 409 84.595 ms - 120
+10:48:16 [[32mhttp[39m]: POST /api/checkout/orders 409 94.378 ms - 120
+10:48:16 [[32mhttp[39m]: POST /api/checkout/orders 201 153.074 ms - 371
+10:48:16 [[32mhttp[39m]: POST /api/checkout/orders 200 10.860 ms - 347
+10:48:16 [[32mhttp[39m]: POST /api/checkout/orders 409 4.058 ms - 69
+✔ P14 idempotencia checkout secuencial y concurrente, y conflicto de contenido (187.5792ms)
+10:48:16 [[32mhttp[39m]: POST /api/checkout/orders 400 1.147 ms - 61
+10:48:16 [[32mhttp[39m]: POST /api/checkout/orders 400 0.947 ms - 61
+10:48:16 [[32mhttp[39m]: POST /api/checkout/orders 400 0.910 ms - 61
+10:48:16 [[32mhttp[39m]: POST /api/checkout/orders 400 3.361 ms - 56
+10:48:16 [[32mhttp[39m]: POST /api/checkout/orders 400 3.365 ms - 56
+10:48:17 [[32mhttp[39m]: POST /api/checkout/orders 400 3.464 ms - 56
+10:48:17 [[32mhttp[39m]: POST /api/checkout/orders 400 3.723 ms - 56
+10:48:17 [[32mhttp[39m]: POST /api/checkout/orders 400 3.803 ms - 56
+✔ P15 claves malformadas y cantidades fraccionarias se rechazan sin datos internos (48.8905ms)
+10:48:17 [[32mhttp[39m]: POST /api/checkout/orders 201 103.993 ms - 371
+10:48:17 [[32mhttp[39m]: GET /api/admin/orders/6b0460411d56a75f31abd8b1 200 6.988 ms - 2620
+10:48:17 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460411d56a75f31abd8b1/status 200 19.586 ms - 840
+✔ P16 pedido histórico conserva número, estado, costos y evidencia sin inferir entrega (153.6879ms)
+✔ P17 números simultáneos únicos usan fecha Colombia; índices sin duplicado de orderNumber (239.0309ms)
+✔ P18 expiración viene del proveedor; nunca se calcula desde createdAt (40.8638ms)
+10:48:17 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.779 ms - 48
+10:48:17 [[32mhttp[39m]: POST /api/webhooks/wompi 200 0.523 ms - 2
+10:48:17 [[32mhttp[39m]: POST /api/webhooks/wompi 200 18.948 ms - 2
+✔ P19 checksum inválido, entorno incorrecto y evento sin referencia no alteran pedidos (64.9248ms)
+10:48:17 [[32mhttp[39m]: POST /api/webhooks/wompi 200 124.312 ms - 2
+10:48:17 [[32mhttp[39m]: POST /api/webhooks/wompi 200 69.670 ms - 2
+10:48:17 [[32mhttp[39m]: POST /api/webhooks/wompi 200 73.867 ms - 2
+✔ P20 evento rechazado posterior no degrada aprobado y pago adicional genera incidencia (317.8027ms)
+10:48:17 [[31merror[39m]: Server error No se pudo crear el pedido. Intenta nuevamente con la misma clave.
+Error: No se pudo crear el pedido. Intenta nuevamente con la misma clave.
+    at createCheckoutOrder (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\checkoutController.js:359:43)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\checkoutController.js:496:12 {"method":"POST","url":"/api/checkout/orders","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+10:48:17 [[32mhttp[39m]: POST /api/checkout/orders 503 23.534 ms - 97
+10:48:17 [[32mhttp[39m]: POST /api/checkout/orders 201 103.815 ms - 371
+✔ P21 fallo de checkout revierte pedido, stock y movimientos; no filtra error de BD (139.5006ms)
+10:48:18 [[32mhttp[39m]: PATCH /api/checkout/orders/6b0460411d56a75f31abd938/cancel 409 70.794 ms - 91
+✔ P22 consulta proveedor antes de cancelar descubre aprobación aún no local (129.6116ms)
+10:48:18 [[32mhttp[39m]: PATCH /api/checkout/orders/6b0460421d56a75f31abd952/cancel 409 65.438 ms - 124
+✖ P23 Wompi pendiente consultado permite cancelar y aprobación tardía queda visible (120.9415ms)
+10:48:18 [[31merror[39m]: Server error No se pudo verificar con Wompi. Reintenta o solicita revisión administrativa.
+Error: No se pudo verificar con Wompi. Reintenta o solicita revisión administrativa.
+    at C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\checkoutController.js:657:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {"method":"PATCH","url":"/api/checkout/orders/6b0460421d56a75f31abd962/cancel","statusCode":503,"userId":"6b0460321d56a75f31abd328","ip":"127.0.0.1"}
+10:48:18 [[32mhttp[39m]: PATCH /api/checkout/orders/6b0460421d56a75f31abd962/cancel 503 6.361 ms - 109
+✔ P24 fallo al consultar proveedor impide autocancelación sin perder pedido (62.3055ms)
+10:48:18 [[32mhttp[39m]: POST /api/webhooks/wompi 200 78.002 ms - 2
+10:48:18 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"POST","url":"/api/admin/orders/6b0460421d56a75f31abd96e/reconcile-wompi","statusCode":403,"ip":"127.0.0.1"}
+10:48:18 [[32mhttp[39m]: POST /api/admin/orders/6b0460421d56a75f31abd96e/reconcile-wompi 403 3.268 ms - 75
+10:48:18 [[32mhttp[39m]: POST /api/admin/orders/6b0460421d56a75f31abd96e/reconcile-wompi 200 82.900 ms - 100
+10:48:18 [[32mhttp[39m]: POST /api/admin/orders/6b0460421d56a75f31abd96e/reconcile-wompi 200 71.751 ms - 100
+✔ P25 conciliación consulta Wompi y recupera pago sin stock una vez repuesto (296.891ms)
+10:48:18 [[32mhttp[39m]: POST /api/checkout/orders 201 105.900 ms - 425
+10:48:18 [[32mhttp[39m]: POST /api/checkout/orders 200 11.197 ms - 382
+✔ P26 API enlace ficticio conserva expires_at y retry checkout reutiliza enlace (130.6116ms)
+10:48:18 [[31merror[39m]: Server error No se pudo iniciar el pago con Wompi. El pedido queda pendiente de revisión.
+Error: No se pudo iniciar el pago con Wompi. El pedido queda pendiente de revisión.
+    at createCheckoutOrder (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\checkoutController.js:395:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\checkoutController.js:496:12 {"method":"POST","url":"/api/checkout/orders","statusCode":502,"userId":null,"ip":"127.0.0.1"}
+10:48:18 [[32mhttp[39m]: POST /api/checkout/orders 502 52.696 ms - 108
+10:48:18 [[32mhttp[39m]: POST /api/checkout/orders 409 4.776 ms - 178
+✔ P27 fallo creando enlace conserva orden para conciliación y no expone error proveedor (78.3931ms)
+10:48:18 [[32mhttp[39m]: POST /api/checkout/orders 409 114.426 ms - 73
+10:48:18 [[32mhttp[39m]: POST /api/checkout/orders 201 181.766 ms - 371
+✔ P28 dos pedidos compiten por la última unidad y no hay sobreventa (215.7835ms)
+10:48:19 [[32mhttp[39m]: POST /api/checkout/orders 409 47.978 ms - 73
+✔ P29 líneas repetidas no permiten descuento parcial al agotarse stock (74.7981ms)
+10:48:19 [[32mhttp[39m]: POST /api/webhooks/wompi 200 78.560 ms - 2
+10:48:19 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460431d56a75f31abda04/status 200 43.653 ms - 832
+10:48:19 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460431d56a75f31abda04/status 200 52.930 ms - 885
+10:48:19 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460431d56a75f31abda04/status 200 71.102 ms - 885
+✔ P30 cancelación administrativa concurrente de pedido pagado repone stock una vez (203.9708ms)
+10:48:19 [[32mhttp[39m]: POST /api/webhooks/wompi 200 78.510 ms - 2
+✔ P31 un reembolso histórico no se borra por una aprobación tardía (133.9094ms)
+10:48:19 [[32mhttp[39m]: POST /api/webhooks/wompi 200 68.789 ms - 2
+10:48:19 [[32mhttp[39m]: POST /api/webhooks/wompi 200 77.516 ms - 2
+10:48:19 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460431d56a75f31abda62/status 200 31.779 ms - 832
+✔ P32 ventas conciliadas excluyen cobros con incidencia y cancelaciones sin borrar evidencia (372.6763ms)
+10:48:19 [[31merror[39m]: Server error Fallo ficticio al limpiar carrito
+Error: Fallo ficticio al limpiar carrito
+    at Cart.findOneAndUpdate (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\test\phase1.test.js:887:47)
+    at createCheckoutOrder (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\checkoutController.js:364:16)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\checkoutController.js:496:12 {"method":"POST","url":"/api/checkout/orders","statusCode":500,"userId":"6b0460321d56a75f31abd328","ip":"127.0.0.1"}
+10:48:19 [[32mhttp[39m]: POST /api/checkout/orders 500 45.112 ms - 57
+10:48:19 [[32mhttp[39m]: POST /api/checkout/orders 409 6.922 ms - 178
+✔ P33 fallo posterior a crear pedido conserva idempotencia y genera incidencia visible (64.7228ms)
+10:48:19 [[32mhttp[39m]: POST /api/checkout/orders 409 81.377 ms - 62
+10:48:20 [[32mhttp[39m]: POST /api/checkout/orders 201 178.977 ms - 370
+✔ P34 último uso de cupón concurrente no deja pedidos ni descuentos huérfanos (198.4458ms)
+10:48:20 [[32mhttp[39m]: POST /api/webhooks/wompi 200 124.450 ms - 2
+10:48:20 [[32mhttp[39m]: POST /api/webhooks/wompi 200 122.374 ms - 2
+10:48:20 [[32mhttp[39m]: POST /api/webhooks/wompi 200 126.853 ms - 2
+✔ P35 tres aprobaciones concurrentes consumen cupón Wompi una vez (186.0016ms)
+
+=== RESULTADOS ===
+[
+  {
+    "id": "unrelated-indexes",
+    "failures": [
+      "An existing index has the same name as the requested index. When index names are not specified, they are auto generated and can cause conflicts. Please refer to our documentation. Requested index: { v: 2, key: { requestNumber: 1 }, name: \"requestNumber_1\" }, existing index: { v: 2, unique: true, key: { requestNumber: 1 }, name: \"requestNumber_1\" }"
+    ]
+  },
+  {
+    "id": "A0",
+    "ok": true,
+    "detail": {
+      "initError": null,
+      "indexesCreated": [
+        {
+          "key": {
+            "_id": 1
+          },
+          "unique": false,
+          "sparse": false
+        },
+        {
+          "key": {
+            "orderNumber": 1
+          },
+          "unique": true,
+          "sparse": false
+        },
+        {
+          "key": {
+            "user": 1,
+            "createdAt": -1
+          },
+          "unique": false,
+          "sparse": false
+        },
+        {
+          "key": {
+            "buyer.email": 1
+          },
+          "unique": false,
+          "sparse": false
+        },
+        {
+          "key": {
+            "idempotencyKey": 1
+          },
+          "unique": true,
+          "sparse": false
+        }
+      ]
+    }
+  },
+  {
+    "id": "A1",
+    "ok": true,
+    "detail": {
+      "index": {
+        "v": 2,
+        "key": {
+          "idempotencyKey": 1
+        },
+        "name": "idempotencyKey_1",
+        "unique": true,
+        "partialFilterExpression": {
+          "idempotencyKey": {
+            "$type": "string"
+          }
+        }
+      },
+      "first": 201,
+      "second": 201,
+      "msg": "Pedido creado. Pagarás al recibir tu pedido."
+    }
+  },
+  {
+    "id": "A2",
+    "ok": true,
+    "detail": {
+      "statuses": [
+        201,
+        201,
+        201,
+        201,
+        201,
+        201
+      ],
+      "errors": []
+    }
+  },
+  {
+    "id": "B1",
+    "ok": true,
+    "detail": {
+      "viaGuia": {
+        "s1": 200,
+        "s2": 200,
+        "orderStatus": "enviado",
+        "paymentStatus": "pendiente"
+      },
+      "viaSelector": {
+        "status": 200,
+        "orderStatus": "enviado",
+        "paymentStatus": "pendiente",
+        "paymentConfirmedAt": null
+      }
+    }
+  },
+  {
+    "id": "B2",
+    "ok": true,
+    "detail": {
+      "status": 409,
+      "orderStatus": "pago_pendiente",
+      "paymentStatus": "pendiente",
+      "stockDeducted": false,
+      "stockBefore": 90,
+      "stockAfter": 90
+    }
+  },
+  {
+    "id": "B3",
+    "ok": true,
+    "detail": {
+      "status": 403,
+      "orderStatus": "pago_pendiente",
+      "paymentStatus": "pendiente"
+    }
+  },
+  {
+    "id": "B4",
+    "ok": true,
+    "detail": {
+      "wompiManualByVendor": {
+        "status": 403,
+        "paymentStatus": "pendiente",
+        "orderStatus": "pago_pendiente"
+      },
+      "cancelledThenConfirmed": {
+        "status": 409,
+        "orderStatus": "cancelado",
+        "paymentStatus": "pendiente",
+        "stockDeducted": false,
+        "stockBefore": 90,
+        "stockAfter": 90
+      }
+    }
+  },
+  {
+    "id": "B5",
+    "ok": true,
+    "detail": {
+      "pendienteAEntregado": {
+        "status": 409,
+        "orderStatus": "pendiente",
+        "paymentStatus": "pendiente",
+        "stockDeducted": true
+      },
+      "rechazadoYVuelta": {
+        "r2": 409,
+        "r3": 200,
+        "orderStatus": "pendiente",
+        "stockDeducted": true
+      },
+      "estadoInventado": {
+        "status": 409,
+        "msg": "Transición de pedido no permitida"
+      }
+    }
+  },
+  {
+    "id": "B6",
+    "ok": true,
+    "detail": {
+      "status": 409,
+      "tracking": ""
+    }
+  },
+  {
+    "id": "C1",
+    "ok": true,
+    "detail": {
+      "declined": 200,
+      "afterDecline": {
+        "orderStatus": "pago_pendiente",
+        "paymentStatus": "rechazado"
+      },
+      "approved": 200,
+      "final": {
+        "orderStatus": "pagado",
+        "paymentStatus": "pagado",
+        "stockDeducted": true
+      },
+      "stockBefore": 88,
+      "stockAfter": 87
+    }
+  },
+  {
+    "id": "C2",
+    "ok": true,
+    "detail": {
+      "code": 200,
+      "orderStatus": "pago_pendiente",
+      "paymentStatus": "pagado",
+      "wompiStatus": "APPROVED",
+      "lastHistory": "Wompi APPROVED verificado: tx-4b25593e-78b4-46b0-b5b1-f1d8f7407332; requiere conciliación",
+      "emailAttempts": []
+    }
+  },
+  {
+    "id": "C3",
+    "ok": true,
+    "detail": {
+      "codes": [
+        200,
+        200,
+        200
+      ],
+      "stockBefore": 87,
+      "stockAfter": 86,
+      "deducted": 1,
+      "paymentStatus": "pagado"
+    }
+  },
+  {
+    "id": "C4",
+    "ok": true,
+    "detail": {
+      "status": 409,
+      "orderStatus": "en_preparacion",
+      "paymentStatus": "pendiente",
+      "notifications": []
+    }
+  },
+  {
+    "id": "C5",
+    "ok": true,
+    "detail": {
+      "status": 200,
+      "leaked": false
+    }
+  },
+  {
+    "id": "D1",
+    "ok": true,
+    "detail": {
+      "creacion": [],
+      "en_preparacion": [],
+      "enviado_por_guia": [],
+      "entregado": [],
+      "cancelado": [],
+      "wompi_aprobado": [],
+      "wompi_rechazado": []
+    }
+  },
+  {
+    "id": "D2",
+    "ok": true,
+    "detail": {
+      "sentAt": null,
+      "attempts": 0,
+      "lastError": ""
+    }
+  },
+  {
+    "id": "E1",
+    "ok": true,
+    "detail": {
+      "status": 200,
+      "stockAlAbrirForm": 81,
+      "trasVenta": 80,
+      "trasGuardar": 80
+    }
+  },
+  {
+    "id": "E2",
+    "ok": true,
+    "detail": {
+      "status": 400,
+      "stockBefore": 80,
+      "stockAfter": 80
+    }
+  },
+  {
+    "id": "E3",
+    "ok": true,
+    "detail": {
+      "flagged": true
+    }
+  },
+  {
+    "id": "F1",
+    "ok": true,
+    "detail": {
+      "pendingPaymentDelta": 0,
+      "toPrepareDelta": 1,
+      "alertasPagosPendientes": 1,
+      "alertasPedidosNuevos": 25
+    }
+  },
+  {
+    "id": "G1",
+    "ok": true,
+    "detail": {
+      "status": 200
+    }
+  },
+  {
+    "id": "G2",
+    "ok": true,
+    "detail": {
+      "status": 200
+    }
+  },
+  {
+    "id": "G3",
+    "ok": true,
+    "detail": {
+      "status": 400
+    }
+  }
+]
+Intentos de red saliente bloqueados: []
+getPath: MongoMemoryServer: Possible version conflict
+  SystemBinary version: "8.3.2"
+  Requested version:    "7.0.24"
+
+  Using SystemBinary!
+(node:4020) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:4020) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:4020) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:4020) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:4020) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:4020) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+10:48:35 [[32mhttp[39m]: POST /api/auth/login 200 491.122 ms - 168
+10:48:36 [[32mhttp[39m]: POST /api/auth/login 200 446.332 ms - 169
+10:48:36 [[32mhttp[39m]: POST /api/auth/login 200 512.377 ms - 174
+10:48:37 [[32mhttp[39m]: POST /api/auth/login 200 436.790 ms - 173
+10:48:37 [[32mhttp[39m]: GET /api/admin/finance/report?from=2026-11-22T15%3A48%3A37.346Z&to=2026-11-24T15%3A48%3A37.346Z 200 75.627 ms - 1666
+10:48:37 [[32mhttp[39m]: GET /api/admin/finance/history?from=2026-11-22T15%3A48%3A37.346Z&to=2026-11-24T15%3A48%3A37.346Z 200 7.335 ms - 196
+10:48:37 [[32mhttp[39m]: GET /api/admin/finance/report?from=2026-11-22T15%3A48%3A37.346Z&to=2026-11-24T15%3A48%3A37.346Z 200 30.517 ms - 2210
+10:48:37 [[32mhttp[39m]: GET /api/admin/finance/history?from=2026-11-22T15%3A48%3A37.346Z&to=2026-11-24T15%3A48%3A37.346Z 200 7.633 ms - 380
+✔ independiente sin cambios: scenarioFinanceGap (14045.4542ms)
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:37 [[32mhttp[39m]: POST /api/checkout/orders 400 231.216 ms - 65
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:38 [[32mhttp[39m]: POST /api/checkout/orders 201 512.802 ms - 371
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:38 [[32mhttp[39m]: POST /api/checkout/orders 201 578.861 ms - 371
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:38 [[32mhttp[39m]: POST /api/checkout/orders 201 662.601 ms - 371
+10:48:38 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046055f89948850520c0d2/stock 200 619.326 ms - 104
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:38 [[32mhttp[39m]: POST /api/checkout/orders 201 684.923 ms - 371
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:38 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046055f89948850520c0d2/stock 200 687.034 ms - 104
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:38 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046055f89948850520c0d2/stock 200 713.931 ms - 104
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:38 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046055f89948850520c0d2/stock 200 744.685 ms - 104
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:38 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046055f89948850520c0d2/stock 200 798.684 ms - 104
+(node:4020) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:38 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046055f89948850520c0d2/stock 200 42.497 ms - 104
+10:48:38 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046055f89948850520c0d2/stock 200 63.120 ms - 103
+10:48:38 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046055f89948850520c0d2/stock 409 6.813 ms - 62
+✔ independiente sin cambios: scenarioStockRaces (1008.8967ms)
+✔ independiente sin cambios: scenarioUiGuards (3.5375ms)
+10:48:38 [[32mhttp[39m]: GET /api/admin/finance/report?from=2026-11-22T15%3A48%3A38.510Z&to=2026-11-24T15%3A48%3A38.510Z 200 29.554 ms - 2856
+10:48:38 [[32mhttp[39m]: GET /api/admin/finance/history?from=2026-11-22T15%3A48%3A38.510Z&to=2026-11-24T15%3A48%3A38.510Z 200 5.638 ms - 380
+10:48:38 [[32mhttp[39m]: GET /api/admin/dashboard 200 45.792 ms - 9192
+10:48:38 [[32mhttp[39m]: GET /api/admin/finance/report?from=2026-11-22T15%3A48%3A38.510Z&to=2026-11-24T15%3A48%3A38.510Z 200 29.134 ms - 4366
+10:48:38 [[32mhttp[39m]: GET /api/admin/finance/history?from=2026-11-22T15%3A48%3A38.510Z&to=2026-11-24T15%3A48%3A38.510Z 200 8.350 ms - 387
+10:48:38 [[32mhttp[39m]: GET /api/admin/dashboard 200 43.723 ms - 9751
+✔ finanzas: cancelados, devueltos, reembolsados e incidencias activas no son ingresos conciliados (194.6925ms)
+10:48:38 [[32mhttp[39m]: GET /api/admin/finance/export/csv?from=2026-11-22T15%3A48%3A38.510Z&to=2026-11-24T15%3A48%3A38.510Z 200 32.349 ms - 747
+10:48:38 [[32mhttp[39m]: GET /api/admin/finance/export/xlsx?from=2026-11-22T15%3A48%3A38.510Z&to=2026-11-24T15%3A48%3A38.510Z 200 130.060 ms - 8558
+10:48:39 [[32mhttp[39m]: GET /api/admin/finance/export/pdf?from=2026-11-22T15%3A48%3A38.510Z&to=2026-11-24T15%3A48%3A38.510Z 200 75.674 ms - 1891
+✔ finanzas: indicadores, métodos, tendencia y exportaciones contienen solo las mismas ventas (315.2892ms)
+(node:27200) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:27200) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:27200) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:27200) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:27200) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+getPath: MongoMemoryServer: Possible version conflict
+  SystemBinary version: "8.3.2"
+  Requested version:    "7.0.24"
+
+  Using SystemBinary!
+(node:27200) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+10:48:51 [[32mhttp[39m]: POST /api/auth/login 200 468.381 ms - 168
+10:48:51 [[32mhttp[39m]: POST /api/auth/login 200 454.657 ms - 169
+10:48:52 [[32mhttp[39m]: POST /api/auth/login 200 487.730 ms - 174
+10:48:52 [[32mhttp[39m]: POST /api/auth/login 200 422.773 ms - 173
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:52 [[32mhttp[39m]: POST /api/checkout/orders 201 182.418 ms - 371
+✔ N01 contraentrega crea acuse y aviso administrativo, sin confirmar pago (10569.9695ms)
+10:48:53 [[32mhttp[39m]: POST /api/checkout/orders 201 131.945 ms - 429
+✔ N02 Wompi creado solo acusa recepción, sin correo de pago ni listo para preparar (216.4696ms)
+10:48:53 [[32mhttp[39m]: POST /api/checkout/orders 201 100.739 ms - 429
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:53 [[32mhttp[39m]: POST /api/webhooks/wompi 200 87.426 ms - 2
+✔ N03 Wompi aprobado crea pago y pedido listo, con destinatarios correctos (333.7527ms)
+10:48:53 [[32mhttp[39m]: POST /api/checkout/orders 201 98.916 ms - 429
+10:48:53 [[32mhttp[39m]: POST /api/webhooks/wompi 200 83.183 ms - 2
+✔ N04 rechazo sin enlace verificable ofrece atención sin inventar URL (289.7935ms)
+10:48:53 [[32mhttp[39m]: POST /api/checkout/orders 201 89.982 ms - 429
+10:48:53 [[32mhttp[39m]: POST /api/webhooks/wompi 200 70.269 ms - 2
+✔ N05 rechazo solo ofrece enlace consultado activo, monto correcto y no vencido (260.5418ms)
+10:48:54 [[32mhttp[39m]: POST /api/checkout/orders 201 104.688 ms - 429
+10:48:54 [[32mhttp[39m]: POST /api/webhooks/wompi 200 76.518 ms - 2
+✔ N06 enlace vencido o monto distinto nunca se ofrece para reintento (286.1532ms)
+10:48:54 [[32mhttp[39m]: POST /api/checkout/orders 201 103.961 ms - 429
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:54 [[32mhttp[39m]: POST /api/webhooks/wompi 200 77.884 ms - 2
+10:48:54 [[32mhttp[39m]: POST /api/webhooks/wompi 200 7.470 ms - 2
+10:48:54 [[32mhttp[39m]: POST /api/webhooks/wompi 200 6.769 ms - 2
+✔ N07 webhook repetido secuencial no genera mensajes nuevos (269.3349ms)
+10:48:54 [[32mhttp[39m]: POST /api/checkout/orders 201 88.955 ms - 429
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:54 [[32mhttp[39m]: POST /api/webhooks/wompi 200 138.007 ms - 2
+10:48:54 [[32mhttp[39m]: POST /api/webhooks/wompi 200 142.395 ms - 2
+10:48:54 [[32mhttp[39m]: POST /api/webhooks/wompi 200 148.423 ms - 2
+✔ N08 tres aprobaciones concurrentes crean una sola confirmación de cada tipo (306.6784ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:54 [[32mhttp[39m]: POST /api/checkout/orders 201 129.468 ms - 371
+10:48:55 [[32mhttp[39m]: PATCH /api/admin/orders/6b04606642cc1eaa898a41f4/status 200 38.010 ms - 858
+✔ N09 preparar no envía un correo de pago ni otro aviso listo (265.0819ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:55 [[32mhttp[39m]: POST /api/checkout/orders 201 132.744 ms - 371
+10:48:55 [[32mhttp[39m]: PATCH /api/admin/orders/6b04606742cc1eaa898a421a/status 200 16.057 ms - 858
+10:48:55 [[32mhttp[39m]: PATCH /api/admin/orders/6b04606742cc1eaa898a421a/shipping 200 19.807 ms - 840
+✔ N10 despachar con guía genera comunicación única, sin marcar pago (295.1828ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:55 [[32mhttp[39m]: POST /api/checkout/orders 201 101.126 ms - 371
+10:48:55 [[32mhttp[39m]: PATCH /api/admin/orders/6b04606742cc1eaa898a4254/status 200 15.001 ms - 858
+10:48:55 [[32mhttp[39m]: PATCH /api/admin/orders/6b04606742cc1eaa898a4254/shipping 200 18.164 ms - 840
+10:48:55 [[32mhttp[39m]: PATCH /api/admin/orders/6b04606742cc1eaa898a4254/shipping 200 17.923 ms - 839
+✔ N11 corregir guía crea evento distinguible y suprime pendiente con guía antigua (306.6821ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:55 [[32mhttp[39m]: POST /api/checkout/orders 201 94.078 ms - 371
+10:48:55 [[32mhttp[39m]: PATCH /api/admin/orders/6b04606742cc1eaa898a429a/status 200 13.254 ms - 858
+10:48:55 [[32mhttp[39m]: PATCH /api/admin/orders/6b04606742cc1eaa898a429a/shipping 200 20.500 ms - 840
+10:48:55 [[32mhttp[39m]: PATCH /api/admin/orders/6b04606742cc1eaa898a429a/status 200 18.132 ms - 877
+✔ N12 entregar contraentrega comunica entrega y distingue recaudo pendiente (294.1791ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:56 [[32mhttp[39m]: POST /api/checkout/orders 201 93.275 ms - 371
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:56 [[32mhttp[39m]: PATCH /api/checkout/orders/6b04606842cc1eaa898a42de/cancel 200 27.486 ms - 135
+✔ N13 cancelación del cliente avisa a comprador y administrador una sola vez (181.2496ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:56 [[32mhttp[39m]: POST /api/checkout/orders 201 119.824 ms - 371
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:56 [[32mhttp[39m]: PATCH /api/admin/orders/6b04606842cc1eaa898a430e/status 200 24.093 ms - 823
+✔ N14 cancelación administrativa no se atribuye al cliente ni inventa reembolso (258.8717ms)
+10:48:56 [[32mhttp[39m]: POST /api/checkout/orders 201 82.704 ms - 429
+10:48:56 [[32mhttp[39m]: PATCH /api/admin/orders/6b04606842cc1eaa898a434a/status 200 20.302 ms - 863
+10:48:56 [[32mhttp[39m]: POST /api/webhooks/wompi 200 62.739 ms - 2
+✔ N15 aprobación tras cancelación alerta solo de la incidencia, sin compra normal (227.6763ms)
+10:48:56 [[32mhttp[39m]: POST /api/checkout/orders 201 83.790 ms - 429
+10:48:56 [[32mhttp[39m]: POST /api/webhooks/wompi 200 67.846 ms - 2
+✔ N16 pago sin inventario notifica revisión y no indica pedido listo (291.3778ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:57 [[32mhttp[39m]: POST /api/checkout/orders 201 91.068 ms - 371
+✔ N17 proveedor no configurado queda no enviado, nunca aceptado (136.0307ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:57 [[32mhttp[39m]: POST /api/checkout/orders 201 93.769 ms - 371
+10:48:57 [[32mhttp[39m]: GET /api/admin/orders/6b04606942cc1eaa898a43e1/communications 200 15.254 ms - 1441
+✔ N18 error temporal deja reintento acotado y no cambia pedido ni inventario (206.6315ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:57 [[32mhttp[39m]: POST /api/checkout/orders 201 91.826 ms - 371
+✔ N19 error permanente no se repite automáticamente (191.0811ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:57 [[32mhttp[39m]: POST /api/checkout/orders 201 113.447 ms - 371
+10:48:57 [[32mhttp[39m]: POST /api/admin/orders/6b04606942cc1eaa898a4445/communications/6b046069005eb4de7388d055/retry 202 11.034 ms - 86
+✔ N20 reintentar pendiente conserva fila, clave e historial (237.2368ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:57 [[32mhttp[39m]: POST /api/checkout/orders 201 88.233 ms - 371
+✔ N21 tres reintentos concurrentes reclaman una sola entrega (173.8738ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:57 [[32mhttp[39m]: POST /api/checkout/orders 201 90.001 ms - 371
+10:48:58 [[32mhttp[39m]: POST /api/admin/orders/6b04606942cc1eaa898a44b2/communications/6b046069005eb4de7388d058/resend 202 27.130 ms - 140
+✔ N22 reenvío manual autorizado conserva original, responsable y motivo (220.1886ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:58 [[32mhttp[39m]: POST /api/checkout/orders 201 80.543 ms - 371
+10:48:58 [[32mhttp[39m]: POST /api/admin/orders/6b04606a42cc1eaa898a44eb/communications/6b04606a005eb4de7388d05b/resend 202 40.059 ms - 140
+10:48:58 [[32mhttp[39m]: POST /api/admin/orders/6b04606a42cc1eaa898a44eb/communications/6b04606a005eb4de7388d05b/resend 202 42.664 ms - 140
+10:48:58 [[32mhttp[39m]: POST /api/admin/orders/6b04606a42cc1eaa898a44eb/communications/6b04606a005eb4de7388d05b/resend 202 64.549 ms - 140
+✔ N23 tres solicitudes de reenvío con la misma clave crean una sola copia (211.3607ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:58 [[32mhttp[39m]: POST /api/checkout/orders 201 112.219 ms - 371
+10:48:58 [[32mhttp[39m]: GET /api/admin/orders/6b04606a42cc1eaa898a4524/communications 200 11.343 ms - 514
+10:48:58 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"POST","url":"/api/admin/orders/6b04606a42cc1eaa898a4524/communications/6b04606a005eb4de7388d05e/retry","statusCode":403,"ip":"127.0.0.1"}
+10:48:58 [[32mhttp[39m]: POST /api/admin/orders/6b04606a42cc1eaa898a4524/communications/6b04606a005eb4de7388d05e/retry 403 4.164 ms - 75
+10:48:58 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"POST","url":"/api/admin/orders/6b04606a42cc1eaa898a4524/communications/6b04606a005eb4de7388d05e/resend","statusCode":403,"ip":"127.0.0.1"}
+10:48:58 [[32mhttp[39m]: POST /api/admin/orders/6b04606a42cc1eaa898a4524/communications/6b04606a005eb4de7388d05e/resend 403 3.226 ms - 75
+✔ N24 vendedor solo consulta comunicaciones operativas, sin acciones ni destinatario administrativo (203.6239ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:58 [[32mhttp[39m]: POST /api/checkout/orders 201 102.231 ms - 371
+10:48:58 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"GET","url":"/api/admin/orders/6b04606a42cc1eaa898a454e/communications","statusCode":403,"ip":"127.0.0.1"}
+10:48:58 [[32mhttp[39m]: GET /api/admin/orders/6b04606a42cc1eaa898a454e/communications 403 4.059 ms - 75
+10:48:58 [[33mwarn[39m]: Auth failure No has iniciado sesión {"method":"GET","url":"/api/admin/orders/6b04606a42cc1eaa898a454e/communications","statusCode":401,"ip":"127.0.0.1"}
+10:48:58 [[32mhttp[39m]: GET /api/admin/orders/6b04606a42cc1eaa898a454e/communications 401 0.822 ms - 53
+✔ N25 cliente y usuario anónimo no acceden al historial administrativo (177.9742ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:58 [[32mhttp[39m]: POST /api/checkout/orders 201 100.285 ms - 371
+✔ N26 plantillas escapan HTML y excluyen notas, costos, credenciales y tokens (178.1156ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:58 [[32mhttp[39m]: POST /api/checkout/orders 201 87.699 ms - 371
+✔ N27 destinatario inválido o inexistente no se entrega (175.8184ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:59 [[32mhttp[39m]: POST /api/checkout/orders 201 93.273 ms - 371
+✔ N28 transacción revertida elimina evento y no invoca proveedor (161.9103ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:59 [[32mhttp[39m]: POST /api/checkout/orders 201 110.484 ms - 371
+✔ N29 interrupción después de aceptación reutiliza la clave del proveedor (277.1574ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:59 [[32mhttp[39m]: POST /api/checkout/orders 201 94.693 ms - 371
+✔ N30 resultado ambiguo fuera de 23h no se vuelve a enviar ciegamente (169.1115ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:48:59 [[32mhttp[39m]: POST /api/checkout/orders 201 96.566 ms - 371
+10:48:59 [[32mhttp[39m]: GET /api/admin/alerts 200 29.896 ms - 5306
+✔ N31 alertas agrupan fallos sin generar correos por fallos (193.5814ms)
+10:48:59 [[32mhttp[39m]: GET /api/admin/alerts 200 28.425 ms - 5696
+✔ N32 variante agotada y producto sin variantes disponibles aparecen una vez (62.2864ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:00 [[32mhttp[39m]: POST /api/checkout/orders 201 127.127 ms - 371
+✔ N33 acuse existente no se duplica y sent no significa delivered (186.6447ms)
+10:49:00 [[32mhttp[39m]: POST /api/checkout/orders 201 89.006 ms - 429
+10:49:00 [[32mhttp[39m]: POST /api/webhooks/wompi 200 81.485 ms - 2
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:00 [[32mhttp[39m]: POST /api/webhooks/wompi 200 75.229 ms - 2
+✔ N34 nunca se entrega un rechazo desactualizado después de la aprobación (398.2737ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:00 [[32mhttp[39m]: POST /api/checkout/orders 201 97.795 ms - 371
+10:49:00 [[32mhttp[39m]: GET /api/admin/orders/6b04606c42cc1eaa898a46ed/communications 200 8.934 ms - 1223
+✔ N35 el historial oculta snapshots, cuerpos, emails completos y errores del proveedor (169.7825ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:00 [[32mhttp[39m]: POST /api/checkout/orders 201 91.595 ms - 371
+10:49:00 [[32mhttp[39m]: POST /api/admin/orders/6b04606c42cc1eaa898a4715/communications/6b04606c005eb4de7388d07b/resend 202 32.490 ms - 140
+10:49:00 [[32mhttp[39m]: POST /api/admin/orders/6b04606c42cc1eaa898a4715/communications/6b04606c005eb4de7388d07b/resend 409 36.381 ms - 103
+10:49:00 [[32mhttp[39m]: POST /api/admin/orders/6b04606c42cc1eaa898a4715/communications/6b04606c005eb4de7388d07b/resend 409 44.646 ms - 103
+10:49:00 [[32mhttp[39m]: GET /api/admin/orders/6b04606c42cc1eaa898a4715/communications 200 9.191 ms - 1784
+✔ N36 claves distintas concurrentes no acumulan reenvíos pendientes del mismo original (210.908ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:00 [[32mhttp[39m]: POST /api/checkout/orders 201 94.023 ms - 371
+✔ N37 errores temporales se acotan a cinco intentos y no se reinician para siempre (306.88ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:01 [[32mhttp[39m]: POST /api/checkout/orders 201 89.175 ms - 371
+10:49:01 [[32mhttp[39m]: POST /api/admin/orders/6b04606d42cc1eaa898a47be/communications/6b04606d005eb4de7388d081/retry 202 32.833 ms - 86
+10:49:01 [[32mhttp[39m]: POST /api/admin/orders/6b04606d42cc1eaa898a47be/communications/6b04606d005eb4de7388d081/retry 202 30.950 ms - 86
+10:49:01 [[32mhttp[39m]: POST /api/admin/orders/6b04606d42cc1eaa898a47be/communications/6b04606d005eb4de7388d081/retry 202 29.731 ms - 86
+✔ N38 reintento manual concurrente conserva una sola petición de recuperación (228.7265ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:01 [[32mhttp[39m]: POST /api/checkout/orders 201 86.204 ms - 371
+✔ N39 cambiar destinatario impide enviar la instantánea al correo anterior (190.68ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:01 [[32mhttp[39m]: POST /api/checkout/orders 201 95.196 ms - 371
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:01 [[32mhttp[39m]: POST /api/checkout/orders 201 80.249 ms - 371
+10:49:01 [[32mhttp[39m]: POST /api/admin/orders/6b04606d42cc1eaa898a484b/communications/6b04606d005eb4de7388d084/resend 404 5.434 ms - 57
+✔ N40 una comunicación no puede reenviarse mediante el identificador de otro pedido (288.2317ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:01 [[32mhttp[39m]: POST /api/checkout/orders 201 83.033 ms - 371
+10:49:02 [[32mhttp[39m]: POST /api/admin/orders/6b04606d42cc1eaa898a4872/communications/6b04606d005eb4de7388d088/resend 400 3.502 ms - 84
+10:49:02 [[32mhttp[39m]: POST /api/admin/orders/6b04606d42cc1eaa898a4872/communications/6b04606d005eb4de7388d088/resend 409 9.639 ms - 84
+✔ N41 reenvío exige confirmación, motivo y reconocimiento del resultado ambiguo (169.1606ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:02 [[32mhttp[39m]: POST /api/checkout/orders 201 86.612 ms - 371
+10:49:02 [[32mhttp[39m]: PATCH /api/admin/orders/6b04606e42cc1eaa898a489c/status 200 11.160 ms - 858
+10:49:02 [[32mhttp[39m]: PATCH /api/admin/orders/6b04606e42cc1eaa898a489c/shipping 200 14.732 ms - 840
+10:49:02 [[32mhttp[39m]: PATCH /api/admin/orders/6b04606e42cc1eaa898a489c/shipping 200 17.298 ms - 846
+10:49:02 [[32mhttp[39m]: PATCH /api/admin/orders/6b04606e42cc1eaa898a489c/shipping 200 11.380 ms - 846
+✔ N42 corrección repetida de la misma guía no crea una nueva comunicación (204.3923ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:02 [[32mhttp[39m]: POST /api/checkout/orders 201 92.056 ms - 371
+10:49:02 [[32mhttp[39m]: PATCH /api/admin/orders/6b04606e42cc1eaa898a48ca/status 200 14.250 ms - 858
+✔ N43 falla de persistencia outbox revierte transición sin enviar correos (177.0146ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:02 [[32mhttp[39m]: POST /api/checkout/orders 201 84.775 ms - 371
+✔ N44 aceptación correcta exige identificador del proveedor y nunca inventa entrega (171.3286ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:02 [[32mhttp[39m]: POST /api/checkout/orders 201 110.797 ms - 371
+10:49:02 [[32mhttp[39m]: GET /api/admin/orders/6b04606e42cc1eaa898a491f/communications 200 11.590 ms - 168
+✔ N45 registro histórico de acuse no se reenvía automáticamente (195.8065ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:02 [[32mhttp[39m]: POST /api/checkout/orders 201 79.866 ms - 371
+✔ N46 un rechazo permanente conserva su clasificación después de 24 horas (224.4719ms)
+10:49:03 [[32mhttp[39m]: POST /api/checkout/orders 201 128.011 ms - 429
+✔ N47 recuperación de incidente persistido antes de una interrupción crea alerta una sola vez (301.6985ms)
+10:49:03 [[32mhttp[39m]: POST /api/checkout/orders 201 90.742 ms - 429
+✔ N48 inbox financiero interrumpido genera aviso administrativo sin ejecutar el pago otra vez (263.0262ms)
+10:49:03 [[32mhttp[39m]: POST /api/checkout/orders 201 83.924 ms - 429
+✔ N49 recuperación de comunicaciones no altera la fecha operativa del pedido (199.0321ms)
+10:49:03 [[32mhttp[39m]: POST /api/checkout/orders 201 93.011 ms - 429
+✔ N50 incidentes históricos sin ID ni fecha no crean alertas nuevas en cada lectura (386.3405ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:04 [[32mhttp[39m]: POST /api/checkout/orders 201 76.253 ms - 371
+10:49:04 [[32mhttp[39m]: POST /api/admin/orders/6b04607042cc1eaa898a4a85/communications/6b046070005eb4de7388d0af/resend 202 25.204 ms - 140
+10:49:04 [[32mhttp[39m]: POST /api/admin/orders/6b04607042cc1eaa898a4a85/communications/6b046070005eb4de7388d0af/retry 409 5.175 ms - 103
+✔ N51 reenvío explícito detiene el reintento automático anterior y resuelve su alerta (233.4917ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:04 [[32mhttp[39m]: POST /api/checkout/orders 201 86.863 ms - 371
+10:49:04 [[32mhttp[39m]: POST /api/admin/orders/6b04607042cc1eaa898a4ac7/communications/6b046070005eb4de7388d0b1/resend 202 20.578 ms - 140
+10:49:04 [[32mhttp[39m]: POST /api/admin/orders/6b04607042cc1eaa898a4ac7/communications/6b046070005eb4de7388d0b1/resend 409 7.609 ms - 103
+10:49:04 [[32mhttp[39m]: POST /api/admin/orders/6b04607042cc1eaa898a4ac7/communications/6b046070005eb4de7388d0b1/resend 202 8.622 ms - 140
+✔ N52 una comunicación reemplazada no permite abrir otra rama de reenvío (220.0852ms)
+(node:27200) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:04 [[32mhttp[39m]: POST /api/checkout/orders 201 90.875 ms - 371
+✔ N53 configuración de Resend por sí sola no habilita correos reales en la fase local (131.9254ms)
+(node:13816) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:13816) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:13816) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:13816) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:13816) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+getPath: MongoMemoryServer: Possible version conflict
+  SystemBinary version: "8.3.2"
+  Requested version:    "7.0.24"
+
+  Using SystemBinary!
+(node:13816) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+10:49:15 [[32mhttp[39m]: POST /api/auth/login 200 536.091 ms - 168
+10:49:16 [[32mhttp[39m]: POST /api/auth/login 200 426.330 ms - 169
+10:49:16 [[32mhttp[39m]: POST /api/auth/login 200 424.381 ms - 174
+10:49:17 [[32mhttp[39m]: POST /api/auth/login 200 432.418 ms - 173
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:17 [[32mhttp[39m]: POST /api/checkout/orders 201 187.757 ms - 371
+10:49:17 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 13.795 ms - 985
+✔ U01 contraentrega nueva está en Por preparar con pago pendiente (10157.2094ms)
+10:49:17 [[32mhttp[39m]: POST /api/checkout/orders 201 129.353 ms - 429
+10:49:17 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 9.459 ms - 196
+10:49:17 [[32mhttp[39m]: GET /api/admin/orders/6b04607da3a3976f1f324b3b 200 9.644 ms - 2753
+✔ U02 Wompi pendiente no está en Por preparar y no se cancela por antigüedad (192.8369ms)
+10:49:17 [[32mhttp[39m]: POST /api/checkout/orders 201 96.375 ms - 429
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:17 [[32mhttp[39m]: POST /api/webhooks/wompi 200 103.056 ms - 2
+10:49:17 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 8.177 ms - 957
+✔ U03 Wompi aprobado entra en Por preparar (240.3628ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:17 [[32mhttp[39m]: POST /api/checkout/orders 201 118.086 ms - 371
+10:49:17 [[32mhttp[39m]: PATCH /api/admin/orders/6b04607da3a3976f1f324b74/status 200 19.421 ms - 858
+10:49:18 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 7.230 ms - 196
+10:49:18 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 6.771 ms - 994
+✔ U04 preparación está en Por despachar y no sigue en Por preparar (188.65ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:18 [[32mhttp[39m]: POST /api/checkout/orders 201 99.368 ms - 371
+10:49:18 [[32mhttp[39m]: PATCH /api/admin/orders/6b04607ea3a3976f1f324b93/status 200 15.880 ms - 858
+10:49:18 [[32mhttp[39m]: PATCH /api/admin/orders/6b04607ea3a3976f1f324b93/shipping 200 21.605 ms - 843
+10:49:18 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 5.586 ms - 982
+✔ U05 enviado está en En camino (175.7248ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:18 [[32mhttp[39m]: POST /api/checkout/orders 201 91.900 ms - 371
+10:49:18 [[32mhttp[39m]: PATCH /api/admin/orders/6b04607ea3a3976f1f324bb5/status 200 17.306 ms - 858
+10:49:18 [[32mhttp[39m]: PATCH /api/admin/orders/6b04607ea3a3976f1f324bb5/shipping 200 17.772 ms - 843
+10:49:18 [[32mhttp[39m]: PATCH /api/admin/orders/6b04607ea3a3976f1f324bb5/status 200 19.928 ms - 880
+10:49:18 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 11.982 ms - 1018
+10:49:18 [[32mhttp[39m]: GET /api/admin/orders/6b04607ea3a3976f1f324bb5 200 9.482 ms - 3122
+✔ U06 entregado contraentrega pendiente aparece en recaudo (209.5742ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:18 [[32mhttp[39m]: POST /api/checkout/orders 201 111.663 ms - 371
+10:49:18 [[32mhttp[39m]: PATCH /api/admin/orders/6b04607ea3a3976f1f324bdc/status 200 18.738 ms - 858
+10:49:18 [[32mhttp[39m]: PATCH /api/admin/orders/6b04607ea3a3976f1f324bdc/shipping 200 23.854 ms - 843
+10:49:18 [[32mhttp[39m]: PATCH /api/admin/orders/6b04607ea3a3976f1f324bdc/status 200 23.790 ms - 880
+10:49:18 [[32mhttp[39m]: PATCH /api/admin/orders/6b04607ea3a3976f1f324bdc/payment 200 19.886 ms - 862
+10:49:18 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 7.500 ms - 199
+10:49:18 [[32mhttp[39m]: GET /api/admin/orders/6b04607ea3a3976f1f324bdc 200 7.525 ms - 3534
+✔ U07 recaudo confirmado desaparece de pendientes sin cambiar entrega (266.95ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:18 [[32mhttp[39m]: POST /api/checkout/orders 201 176.543 ms - 371
+10:49:18 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 10.301 ms - 1014
+10:49:18 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 8.902 ms - 196
+10:49:18 [[32mhttp[39m]: PATCH /api/admin/orders/6b04607ea3a3976f1f324c05/status 409 10.540 ms - 83
+✔ U08 incidencia activa incluso con bandera antigua se clasifica y bloquea preparación (248.3935ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:19 [[32mhttp[39m]: POST /api/checkout/orders 201 122.490 ms - 371
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:19 [[32mhttp[39m]: PATCH /api/admin/orders/6b04607ea3a3976f1f324c24/status 200 26.761 ms - 823
+10:49:19 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 9.212 ms - 196
+10:49:19 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 7.559 ms - 197
+10:49:19 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 7.593 ms - 196
+10:49:19 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 7.272 ms - 199
+10:49:19 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 6.955 ms - 195
+10:49:19 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 7.204 ms - 954
+✔ U09 cancelado sin incidencia solo permanece en Todos (240.4112ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:19 [[32mhttp[39m]: POST /api/checkout/orders 201 107.491 ms - 371
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:19 [[32mhttp[39m]: POST /api/checkout/orders 201 108.352 ms - 371
+10:49:19 [[32mhttp[39m]: PATCH /api/admin/orders/6b04607fa3a3976f1f324c65/status 200 15.931 ms - 858
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:19 [[32mhttp[39m]: POST /api/checkout/orders 201 154.111 ms - 371
+10:49:19 [[32mhttp[39m]: GET /api/admin/dashboard 200 41.190 ms - 6353
+10:49:19 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado]&limit=50 200 9.811 ms - 985
+10:49:19 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado]&limit=50 200 9.092 ms - 994
+10:49:19 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado]&limit=50 200 8.873 ms - 196
+10:49:19 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado]&limit=50 200 7.768 ms - 199
+10:49:19 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado]&limit=50 200 8.316 ms - 1065
+10:49:19 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado]&limit=50 200 8.228 ms - 2650
+10:49:19 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado]&limit=50 200 8.599 ms - 2661
+✔ U10 contadores, listas y dashboard usan la misma clasificación sin duplicar pedidos (572.675ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:19 [[32mhttp[39m]: POST /api/checkout/orders 201 98.621 ms - 371
+10:49:19 [[32mhttp[39m]: PATCH /api/admin/orders/6b04607fa3a3976f1f324ca1/status 200 13.578 ms - 858
+10:49:19 [[32mhttp[39m]: PATCH /api/admin/orders/6b04607fa3a3976f1f324ca1/shipping 200 20.804 ms - 843
+10:49:19 [[32mhttp[39m]: POST /api/checkout/orders 201 89.478 ms - 429
+10:49:20 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado]&paymentMethod=[redactado]&paymentStatus=[redactado]&orderStatus=[redactado]&carrier=[redactado] 200 8.188 ms - 982
+✔ U11 filtros combinados conservan contadores sobre el mismo universo (276.6484ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:20 [[32mhttp[39m]: POST /api/checkout/orders 201 112.848 ms - 371
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:20 [[32mhttp[39m]: POST /api/checkout/orders 201 87.978 ms - 371
+10:49:20 [[32mhttp[39m]: GET /api/admin/orders?q=[redactado] 200 7.267 ms - 981
+✔ U12 búsqueda por número encuentra solo el pedido solicitado (250.9073ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:20 [[32mhttp[39m]: POST /api/checkout/orders 201 125.619 ms - 371
+10:49:20 [[32mhttp[39m]: GET /api/admin/orders?q=[redactado] 200 6.832 ms - 994
+10:49:20 [[32mhttp[39m]: GET /api/admin/orders?q=[redactado] 200 6.820 ms - 994
+10:49:20 [[32mhttp[39m]: GET /api/admin/orders?q=[redactado] 200 6.565 ms - 994
+✔ U13 búsqueda por cliente también admite correo y teléfono (182.3234ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:20 [[32mhttp[39m]: POST /api/checkout/orders 201 96.930 ms - 371
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:20 [[32mhttp[39m]: POST /api/checkout/orders 201 100.742 ms - 371
+10:49:20 [[32mhttp[39m]: GET /api/admin/orders?q=[redactado] 200 8.989 ms - 992
+10:49:20 [[32mhttp[39m]: GET /api/admin/orders?q=[redactado] 200 7.039 ms - 192
+✔ U14 caracteres especiales se buscan literalmente (258.5164ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:20 [[32mhttp[39m]: POST /api/checkout/orders 201 86.315 ms - 371
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:20 [[32mhttp[39m]: POST /api/checkout/orders 201 90.263 ms - 371
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:21 [[32mhttp[39m]: POST /api/checkout/orders 201 92.132 ms - 371
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:21 [[32mhttp[39m]: POST /api/checkout/orders 201 98.381 ms - 371
+10:49:21 [[32mhttp[39m]: GET /api/admin/orders?page=1&limit=2 200 10.120 ms - 1771
+10:49:21 [[32mhttp[39m]: GET /api/admin/orders?page=2&limit=2 200 9.640 ms - 1771
+10:49:21 [[32mhttp[39m]: GET /api/admin/orders?page=NaN 400 3.896 ms - 51
+10:49:21 [[32mhttp[39m]: GET /api/admin/orders?limit=-1 400 3.048 ms - 51
+✔ U15 paginación estable en servidor, límites seguros y sin repetición (465.7122ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:21 [[32mhttp[39m]: POST /api/checkout/orders 201 104.255 ms - 371
+10:49:21 [[32mhttp[39m]: GET /api/admin/orders/6b046081a3a3976f1f324dde 200 6.037 ms - 2637
+10:49:21 [[32mhttp[39m]: PATCH /api/admin/orders/6b046081a3a3976f1f324dde/status 200 18.729 ms - 858
+10:49:21 [[32mhttp[39m]: GET /api/admin/orders/6b046081a3a3976f1f324dde 200 8.420 ms - 2787
+10:49:21 [[32mhttp[39m]: PATCH /api/admin/orders/6b046081a3a3976f1f324dde/shipping 200 20.504 ms - 843
+10:49:21 [[32mhttp[39m]: GET /api/admin/orders/6b046081a3a3976f1f324dde 200 5.875 ms - 2917
+10:49:21 [[32mhttp[39m]: PATCH /api/admin/orders/6b046081a3a3976f1f324dde/status 200 18.317 ms - 880
+10:49:21 [[32mhttp[39m]: GET /api/admin/orders/6b046081a3a3976f1f324dde 200 6.966 ms - 3122
+✔ U16 siguiente acción viene del backend para cada paso contraentrega (235.8866ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:21 [[32mhttp[39m]: POST /api/checkout/orders 201 115.277 ms - 371
+10:49:21 [[32mhttp[39m]: GET /api/admin/orders/6b046081a3a3976f1f324e08 200 5.879 ms - 2608
+10:49:21 [[32mhttp[39m]: PATCH /api/admin/orders/6b046081a3a3976f1f324e08/status 200 14.933 ms - 859
+10:49:21 [[32mhttp[39m]: PATCH /api/admin/orders/6b046081a3a3976f1f324e08/shipping 200 17.349 ms - 844
+10:49:21 [[32mhttp[39m]: PATCH /api/admin/orders/6b046081a3a3976f1f324e08/status 200 15.283 ms - 881
+10:49:21 [[32mhttp[39m]: GET /api/admin/orders/6b046081a3a3976f1f324e08 200 5.019 ms - 3096
+10:49:21 [[33mwarn[39m]: Auth failure Solo administradores pueden registrar recaudos {"method":"PATCH","url":"/api/admin/orders/6b046081a3a3976f1f324e08/payment","statusCode":403,"ip":"127.0.0.1"}
+10:49:21 [[32mhttp[39m]: PATCH /api/admin/orders/6b046081a3a3976f1f324e08/payment 403 6.507 ms - 76
+10:49:21 [[33mwarn[39m]: Auth failure El vendedor solo puede actualizar estados operativos autorizados {"method":"PATCH","url":"/api/admin/orders/6b046081a3a3976f1f324e08/status","statusCode":403,"ip":"127.0.0.1"}
+10:49:21 [[32mhttp[39m]: PATCH /api/admin/orders/6b046081a3a3976f1f324e08/status 403 7.982 ms - 94
+✔ U17 vendedor tiene acciones operativas y nunca acciones financieras ni cierre (231.0107ms)
+10:49:21 [[32mhttp[39m]: POST /api/checkout/orders 201 85.622 ms - 429
+10:49:21 [[32mhttp[39m]: GET /api/admin/orders/6b046081a3a3976f1f324e32 200 7.717 ms - 2764
+10:49:21 [[32mhttp[39m]: GET /api/admin/orders/6b046081a3a3976f1f324e32 200 7.552 ms - 2737
+10:49:21 [[32mhttp[39m]: PATCH /api/admin/orders/6b046081a3a3976f1f324e32/payment 409 7.094 ms - 66
+✔ U18 administrador obtiene consulta Wompi verificable, nunca aprobación manual (145.6352ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:21 [[32mhttp[39m]: POST /api/checkout/orders 201 96.203 ms - 371
+10:49:21 [[32mhttp[39m]: PATCH /api/admin/orders/6b046081a3a3976f1f324e4b/status 200 16.728 ms - 858
+10:49:21 [[32mhttp[39m]: PATCH /api/admin/orders/6b046081a3a3976f1f324e4b/shipping 200 18.351 ms - 843
+10:49:21 [[32mhttp[39m]: GET /api/admin/orders/6b046081a3a3976f1f324e4b 200 7.065 ms - 2917
+✔ U19 guía y despacho son una operación atómica, sin segundo cambio de estado (172.8393ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:22 [[32mhttp[39m]: POST /api/checkout/orders 201 86.084 ms - 371
+10:49:22 [[32mhttp[39m]: PATCH /api/admin/orders/6b046081a3a3976f1f324e6e/status 200 14.534 ms - 858
+10:49:22 [[32mhttp[39m]: PATCH /api/admin/orders/6b046081a3a3976f1f324e6e/shipping 400 8.612 ms - 61
+✔ U20 despacho inválido no guarda parcialmente la transportadora (139.8731ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:22 [[32mhttp[39m]: POST /api/checkout/orders 201 97.964 ms - 371
+10:49:22 [[32mhttp[39m]: PATCH /api/admin/orders/6b046082a3a3976f1f324e8f/status 200 16.631 ms - 858
+10:49:22 [[32mhttp[39m]: GET /api/admin/orders/6b046082a3a3976f1f324e8f 200 10.542 ms - 2937
+10:49:22 [[32mhttp[39m]: PATCH /api/admin/orders/6b046082a3a3976f1f324e8f/shipping 409 10.021 ms - 76
+10:49:22 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 8.546 ms - 197
+✔ U21 incidencia bloquea despacho y presenta revisión, no formulario operativo (186.5262ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:22 [[32mhttp[39m]: POST /api/checkout/orders 201 89.040 ms - 371
+10:49:22 [[32mhttp[39m]: PATCH /api/admin/orders/6b046082a3a3976f1f324eb2/status 200 14.890 ms - 858
+10:49:22 [[32mhttp[39m]: PATCH /api/admin/orders/6b046082a3a3976f1f324eb2/shipping 200 31.054 ms - 843
+10:49:22 [[32mhttp[39m]: PATCH /api/admin/orders/6b046082a3a3976f1f324eb2/shipping 200 41.517 ms - 843
+10:49:22 [[32mhttp[39m]: PATCH /api/admin/orders/6b046082a3a3976f1f324eb2/shipping 200 42.050 ms - 843
+10:49:22 [[32mhttp[39m]: PATCH /api/admin/orders/6b046082a3a3976f1f324eb2/status 200 32.733 ms - 880
+10:49:22 [[32mhttp[39m]: PATCH /api/admin/orders/6b046082a3a3976f1f324eb2/status 200 48.423 ms - 933
+10:49:22 [[32mhttp[39m]: PATCH /api/admin/orders/6b046082a3a3976f1f324eb2/status 200 48.042 ms - 933
+10:49:22 [[32mhttp[39m]: GET /api/admin/orders/6b046082a3a3976f1f324eb2 200 5.754 ms - 3122
+✔ U22 tres despachos concurrentes y tres entregas publican una notificación por hecho (256.6027ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:22 [[32mhttp[39m]: POST /api/checkout/orders 201 113.118 ms - 371
+10:49:22 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 7.556 ms - 985
+10:49:22 [[32mhttp[39m]: GET /api/admin/orders/6b046082a3a3976f1f324ee5 200 5.396 ms - 2637
+10:49:22 [[32mhttp[39m]: GET /api/admin/dashboard 200 27.502 ms - 3738
+✔ U23 consultas, filtros y dashboard no alteran pagos, inventario ni notificaciones (190.9913ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:22 [[32mhttp[39m]: POST /api/checkout/orders 201 90.694 ms - 371
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:22 [[32mhttp[39m]: POST /api/checkout/orders 201 101.346 ms - 371
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:23 [[32mhttp[39m]: POST /api/checkout/orders 201 93.883 ms - 371
+10:49:23 [[32mhttp[39m]: GET /api/admin/dashboard 200 28.000 ms - 6231
+✔ U24 ventas conciliadas excluyen cancelados e incidencias aunque la bandera sea antigua (382.8145ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:23 [[32mhttp[39m]: POST /api/checkout/orders 201 105.181 ms - 371
+10:49:23 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado]&q=[redactado] 200 8.885 ms - 968
+10:49:23 [[32mhttp[39m]: GET /api/admin/orders/6b046083a3a3976f1f324f5a 200 7.804 ms - 2608
+✔ U25 pedidos históricos siguen consultables y sin inventar fechas de entrega (158.1538ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:23 [[32mhttp[39m]: POST /api/checkout/orders 201 98.826 ms - 371
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:23 [[32mhttp[39m]: POST /api/checkout/orders 201 98.705 ms - 371
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:23 [[32mhttp[39m]: POST /api/checkout/orders 201 100.714 ms - 371
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:23 [[32mhttp[39m]: POST /api/checkout/orders 201 94.533 ms - 371
+10:49:23 [[32mhttp[39m]: GET /api/admin/orders?from=2026-11-20&to=2026-11-20 200 7.448 ms - 1771
+10:49:23 [[32mhttp[39m]: GET /api/admin/orders?from=2026-02-30 400 2.486 ms - 45
+10:49:23 [[32mhttp[39m]: GET /api/admin/orders?from=2026-11-21&to=2026-11-20 400 2.447 ms - 66
+10:49:23 [[32mhttp[39m]: GET /api/admin/orders?from=2026-11-20T12:00:00 400 2.905 ms - 64
+✔ U26 intervalo de fechas usa el día colombiano completo y rechaza fechas imposibles (519.1589ms)
+✔ U27 límites de hoy y mes son independientes de la zona horaria del servidor (12.4859ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:23 [[32mhttp[39m]: POST /api/checkout/orders 201 92.593 ms - 371
+10:49:23 [[32mhttp[39m]: PATCH /api/admin/orders/6b046083a3a3976f1f324fec/status 200 13.797 ms - 858
+10:49:23 [[32mhttp[39m]: PATCH /api/admin/orders/6b046083a3a3976f1f324fec/shipping 200 18.326 ms - 843
+10:49:23 [[32mhttp[39m]: PATCH /api/admin/orders/6b046083a3a3976f1f324fec/status 200 16.144 ms - 880
+10:49:23 [[32mhttp[39m]: GET /api/admin/dashboard 200 26.552 ms - 3764
+10:49:24 [[32mhttp[39m]: GET /api/admin/dashboard 200 28.555 ms - 3764
+✔ U28 despacho hoy se mide por historial, no por una edición de metadatos (228.7866ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:24 [[32mhttp[39m]: POST /api/checkout/orders 201 90.483 ms - 371
+10:49:24 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 7.467 ms - 992
+10:49:24 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 5.394 ms - 992
+10:49:24 [[33mwarn[39m]: Auth failure Bandeja reservada a administradores {"method":"GET","url":"/api/admin/orders?tray=[redactado]","statusCode":403,"ip":"127.0.0.1"}
+10:49:24 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 403 3.251 ms - 65
+10:49:24 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 5.553 ms - 964
+✔ U29 comunicaciones fallidas cuentan pedidos distintos y conservan los permisos (147.6744ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:24 [[32mhttp[39m]: POST /api/checkout/orders 201 88.490 ms - 371
+10:49:24 [[32mhttp[39m]: GET /api/admin/orders/6b046084a3a3976f1f32502f/communications 200 11.579 ms - 495
+✔ U30 historial de comunicaciones conserva rutas y restricciones de Fase 2 (124.9438ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:24 [[32mhttp[39m]: POST /api/checkout/orders 201 119.425 ms - 371
+10:49:24 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 9.040 ms - 985
+10:49:24 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 7.853 ms - 195
+10:49:24 [[32mhttp[39m]: GET /api/admin/orders/6b046084a3a3976f1f32504d 200 7.833 ms - 2809
+✔ U31 incidencias resueltas dejan de bloquear la preparación (183.5662ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:24 [[32mhttp[39m]: POST /api/checkout/orders 201 94.262 ms - 371
+10:49:24 [[32mhttp[39m]: GET /api/admin/orders/export/pdf?tray=[redactado] 200 31.970 ms - 1496
+10:49:24 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 400 2.602 ms - 47
+10:49:24 [[32mhttp[39m]: GET /api/admin/orders?carrier=[redactado] 400 2.268 ms - 46
+✔ U32 exportación conserva la bandeja y rechaza filtros inválidos (161.0195ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:24 [[32mhttp[39m]: POST /api/checkout/orders 201 85.826 ms - 371
+10:49:24 [[32mhttp[39m]: PATCH /api/admin/orders/6b046084a3a3976f1f325089/status 200 13.562 ms - 858
+10:49:24 [[32mhttp[39m]: PATCH /api/admin/orders/6b046084a3a3976f1f325089/shipping 200 16.553 ms - 843
+10:49:24 [[32mhttp[39m]: PATCH /api/admin/orders/6b046084a3a3976f1f325089/shipping 200 15.695 ms - 844
+10:49:24 [[32mhttp[39m]: GET /api/admin/dashboard 200 50.590 ms - 3730
+10:49:24 [[32mhttp[39m]: GET /api/admin/orders/stats 200 8.997 ms - 172
+✔ U33 corregir hoy una guía despachada ayer no cuenta otro despacho (229.4253ms)
+(node:13816) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:24 [[32mhttp[39m]: POST /api/checkout/orders 201 86.922 ms - 371
+10:49:24 [[32mhttp[39m]: PATCH /api/admin/orders/6b046084a3a3976f1f3250ae/status 200 13.565 ms - 858
+10:49:25 [[32mhttp[39m]: PATCH /api/admin/orders/6b046084a3a3976f1f3250ae/shipping 200 17.390 ms - 843
+10:49:25 [[32mhttp[39m]: PATCH /api/admin/orders/6b046084a3a3976f1f3250ae/status 200 17.382 ms - 880
+10:49:25 [[32mhttp[39m]: PATCH /api/admin/orders/6b046084a3a3976f1f3250ae/payment 200 13.451 ms - 862
+10:49:25 [[32mhttp[39m]: GET /api/admin/dashboard 200 27.777 ms - 3739
+10:49:25 [[32mhttp[39m]: GET /api/admin/dashboard 200 24.515 ms - 3739
+✔ U34 recaudar hoy un pedido entregado antes no cuenta otra entrega (249.6815ms)
+getPath: MongoMemoryServer: Possible version conflict
+  SystemBinary version: "8.3.2"
+  Requested version:    "7.0.24"
+
+  Using SystemBinary!
+(node:37068) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:37068) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:37068) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:37068) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:37068) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:37068) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+10:49:36 [[32mhttp[39m]: POST /api/auth/login 200 503.096 ms - 168
+10:49:36 [[32mhttp[39m]: POST /api/auth/login 200 458.487 ms - 169
+10:49:37 [[32mhttp[39m]: POST /api/auth/login 200 486.745 ms - 174
+10:49:37 [[32mhttp[39m]: POST /api/auth/login 200 462.436 ms - 173
+10:49:38 [[32mhttp[39m]: GET /api/admin/catalog/products?page=6&limit=20 200 40.025 ms - 7623
+✔ V01 paginación permite consultar más de 100 productos sin descargarlos todos (10627.1316ms)
+10:49:38 [[32mhttp[39m]: GET /api/admin/catalog/products?q=[redactado] 200 14.672 ms - 1606
+10:49:38 [[32mhttp[39m]: GET /api/admin/catalog/products?q=[redactado] 200 7.303 ms - 94
+✔ V02 búsqueda por nombre y caracteres especiales es literal (64.3627ms)
+10:49:38 [[32mhttp[39m]: GET /api/admin/catalog/products?q=[redactado] 200 11.612 ms - 1605
+✔ V03 búsqueda por SKU encuentra la presentación (43.3575ms)
+10:49:38 [[32mhttp[39m]: GET /api/admin/catalog/products?category=6b046092d40e37a47b11abfa&weaveType=6b046092d40e37a47b11abfb&isActive=[redactado] 200 16.616 ms - 1836
+✔ V04 categorías, tejido y publicación se combinan en servidor (75.9701ms)
+10:49:38 [[32mhttp[39m]: GET /api/admin/catalog/products?stock=[redactado] 200 13.131 ms - 1593
+✔ V05 filtro de stock bajo observa cada variante y conserva total (39.8404ms)
+10:49:38 [[32mhttp[39m]: GET /api/admin/catalog/products?stock=[redactado] 200 15.286 ms - 1743
+✔ V06 agotado junto a otra variante disponible no se oculta por el total (62.1388ms)
+10:49:38 [[32mhttp[39m]: GET /api/admin/catalog/products/6b046092d40e37a47b11ac06 200 11.889 ms - 1272
+✔ V07 variantes inactivas conservan unidades sin ofrecerlas como disponibles (54.4856ms)
+10:49:38 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b046092d40e37a47b11ac09 200 51.855 ms - 1329
+10:49:38 [[32mhttp[39m]: GET /api/admin/catalog/products/6b046092d40e37a47b11ac09 200 10.530 ms - 1278
+✔ V08 producto no publicado distingue existencias de disponibilidad para venta (90.2404ms)
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:38 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046092d40e37a47b11ac10/stock 200 42.820 ms - 106
+✔ V09 ajuste positivo registra stock, responsable, motivo y fecha (72.0589ms)
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:38 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046092d40e37a47b11ac16/stock 200 38.921 ms - 104
+✔ V10 ajuste negativo es relativo y no modifica precio (72.1874ms)
+10:49:38 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046092d40e37a47b11ac1e/stock 400 5.088 ms - 90
+10:49:38 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046092d40e37a47b11ac1e/stock 400 5.105 ms - 90
+10:49:38 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046092d40e37a47b11ac1e/stock 400 3.450 ms - 90
+10:49:38 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046092d40e37a47b11ac1e/stock 409 27.508 ms - 73
+✔ V11 fracciones, cero, cantidades inseguras y stock negativo se rechazan (88.8559ms)
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:38 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046092d40e37a47b11ac21/stock 200 59.657 ms - 106
+10:49:39 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046092d40e37a47b11ac21/stock 200 78.462 ms - 105
+10:49:39 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046092d40e37a47b11ac21/stock 200 88.334 ms - 105
+✔ V12 misma clave concurrente produce un solo movimiento (135.8746ms)
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:39 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046093d40e37a47b11ac27/stock 200 116.033 ms - 106
+10:49:39 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046093d40e37a47b11ac27/stock 409 7.216 ms - 62
+10:49:39 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046093d40e37a47b11ac27/stock 409 6.655 ms - 62
+10:49:39 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046093d40e37a47b11ac27/stock 409 10.630 ms - 62
+✔ V13 una clave no puede cambiar cantidad, motivo, actor o variante (201.5875ms)
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:39 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046093d40e37a47b11ac2d/stock 200 56.606 ms - 106
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:39 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046093d40e37a47b11ac2d/stock 200 96.475 ms - 106
+✔ V14 dos administradores no se sobrescriben al ajustar simultáneamente (170.129ms)
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:39 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046093d40e37a47b11ac36/stock 200 93.093 ms - 106
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:39 [[32mhttp[39m]: POST /api/checkout/orders 201 204.446 ms - 371
+✔ V15 venta concurrente con ajuste conserva saldo e historial (250.4319ms)
+10:49:39 [[32mhttp[39m]: GET /api/admin/catalog/products/6b046093d40e37a47b11ac59 200 13.173 ms - 1277
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:39 [[32mhttp[39m]: POST /api/checkout/orders 201 117.972 ms - 371
+10:49:39 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b046093d40e37a47b11ac59 200 38.554 ms - 1366
+✔ V16 formulario abierto antes de una venta nunca repone stock absoluto (223.3167ms)
+10:49:39 [[32mhttp[39m]: GET /api/admin/catalog/products/6b046093d40e37a47b11ac79 200 8.918 ms - 1277
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:40 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b046093d40e37a47b11ac79 200 96.056 ms - 1348
+10:49:40 [[32mhttp[39m]: POST /api/checkout/orders 201 153.327 ms - 371
+✔ V17 edición y venta simultáneas conservan ID y existencias (211.0436ms)
+10:49:40 [[32mhttp[39m]: GET /api/admin/catalog/products/6b046094d40e37a47b11ac9e 200 9.565 ms - 1277
+10:49:40 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b046094d40e37a47b11ac9e 200 47.293 ms - 1450
+✔ V18 una presentación nueva admite stock inicial entero y genera evidencia atómica (100.5615ms)
+10:49:40 [[32mhttp[39m]: POST /api/admin/catalog/products 201 26.870 ms - 1064
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:40 [[32mhttp[39m]: POST /api/checkout/orders 201 93.912 ms - 370
+✔ V19 producto sin talla ni color usa su SKU real y funciona en checkout (164.7147ms)
+10:49:40 [[32mhttp[39m]: POST /api/admin/catalog/products 400 12.284 ms - 86
+10:49:40 [[32mhttp[39m]: POST /api/admin/catalog/products 400 7.222 ms - 83
+✔ V20 SKU duplicado se rechaza entre productos y dentro del producto (55.8607ms)
+10:49:40 [[32mhttp[39m]: POST /api/admin/catalog/products 201 33.079 ms - 1064
+10:49:40 [[32mhttp[39m]: POST /api/admin/catalog/products 400 38.433 ms - 90
+✔ V21 dos altas concurrentes no pueden apropiarse del mismo SKU (71.4322ms)
+10:49:40 [[32mhttp[39m]: GET /api/admin/catalog/products/6b046094d40e37a47b11acdb 200 8.932 ms - 1277
+10:49:40 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b046094d40e37a47b11acdb 400 11.874 ms - 76
+✔ V22 combinaciones activas repetidas se rechazan sin eliminar histórico (52.0168ms)
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:40 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046094d40e37a47b11ace2/stock 200 34.023 ms - 106
+10:49:40 [[32mhttp[39m]: GET /api/admin/inventory/history?productId=[redactado]&variantId=[redactado]&sku=[redactado]&movementKind=[redactado]&userId=[redactado] 200 15.185 ms - 863
+10:49:40 [[32mhttp[39m]: GET /api/admin/inventory/history?eventType=[redactado] 200 7.357 ms - 553
+✔ V23 historial filtra producto, variante, SKU, tipo y responsable (90.7251ms)
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:40 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046094d40e37a47b11ace9/stock 200 32.647 ms - 104
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:40 [[32mhttp[39m]: POST /api/checkout/orders 201 125.891 ms - 371
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:40 [[32mhttp[39m]: PATCH /api/admin/orders/6b046094d40e37a47b11acf4/status 200 32.433 ms - 823
+10:49:40 [[32mhttp[39m]: GET /api/admin/inventory/history?movementKind=[redactado] 200 9.231 ms - 850
+10:49:40 [[32mhttp[39m]: GET /api/admin/inventory/history?movementKind=[redactado] 200 9.704 ms - 894
+10:49:40 [[32mhttp[39m]: GET /api/admin/inventory/history?movementKind=[redactado] 200 10.170 ms - 820
+✔ V24 retiros y restauración por cancelación no se confunden (267.5589ms)
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:41 [[32mhttp[39m]: POST /api/checkout/orders 201 120.898 ms - 371
+10:49:41 [[32mhttp[39m]: DELETE /api/admin/catalog/products/6b046094d40e37a47b11ad10 200 29.474 ms - 1128
+10:49:41 [[32mhttp[39m]: PATCH /api/admin/orders/6b046094d40e37a47b11ad18/status 200 19.096 ms - 858
+✔ V25 DELETE desactiva sin borrar producto ni impedir un pedido ya surtido (231.7304ms)
+10:49:41 [[32mhttp[39m]: POST /api/checkout/orders 201 122.261 ms - 429
+10:49:41 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b046095d40e37a47b11ad35 409 21.222 ms - 151
+10:49:41 [[32mhttp[39m]: GET /api/admin/catalog/products/6b046095d40e37a47b11ad35 200 9.885 ms - 1277
+10:49:41 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b046095d40e37a47b11ad35 409 27.709 ms - 151
+✔ V26 Wompi pendiente protege el producto y la variante antes de aplicar inventario (237.8457ms)
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:41 [[32mhttp[39m]: POST /api/checkout/orders 201 138.602 ms - 371
+10:49:41 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b046095d40e37a47b11ad53 200 37.862 ms - 1328
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:41 [[32mhttp[39m]: PATCH /api/admin/orders/6b046095d40e37a47b11ad5b/status 200 25.595 ms - 823
+✔ V27 omitir variante conserva su ID y permite restauración histórica (251.6221ms)
+10:49:41 [[32mhttp[39m]: GET /api/admin/catalog/products/6b046095d40e37a47b11ad7d 200 8.744 ms - 1238
+10:49:41 [[32mhttp[39m]: GET /api/admin/catalog/products 200 9.637 ms - 1566
+10:49:41 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"PATCH","url":"/api/admin/catalog/products/6b046095d40e37a47b11ad7d","statusCode":403,"ip":"127.0.0.1"}
+10:49:41 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b046095d40e37a47b11ad7d 403 4.422 ms - 75
+10:49:41 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"POST","url":"/api/admin/catalog/products/6b046095d40e37a47b11ad7d/stock","statusCode":403,"ip":"127.0.0.1"}
+10:49:41 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046095d40e37a47b11ad7d/stock 403 3.230 ms - 75
+10:49:41 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"DELETE","url":"/api/admin/catalog/products/6b046095d40e37a47b11ad7d","statusCode":403,"ip":"127.0.0.1"}
+10:49:41 [[32mhttp[39m]: DELETE /api/admin/catalog/products/6b046095d40e37a47b11ad7d 403 3.768 ms - 75
+10:49:41 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"POST","url":"/api/admin/catalog/products","statusCode":403,"ip":"127.0.0.1"}
+10:49:41 [[32mhttp[39m]: POST /api/admin/catalog/products 403 3.396 ms - 75
+10:49:41 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"GET","url":"/api/admin/inventory/history","statusCode":403,"ip":"127.0.0.1"}
+10:49:41 [[32mhttp[39m]: GET /api/admin/inventory/history 403 2.851 ms - 75
+✔ V28 vendedor consulta sin costos y recibe 403 en todas las escrituras (84.8343ms)
+10:49:41 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"GET","url":"/api/admin/catalog/products","statusCode":403,"ip":"127.0.0.1"}
+10:49:41 [[32mhttp[39m]: GET /api/admin/catalog/products 403 3.172 ms - 75
+10:49:41 [[33mwarn[39m]: Auth failure No has iniciado sesión {"method":"GET","url":"/api/admin/catalog/products","statusCode":401,"ip":"127.0.0.1"}
+10:49:41 [[32mhttp[39m]: GET /api/admin/catalog/products 401 0.854 ms - 53
+10:49:41 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"GET","url":"/api/admin/catalog/products/6b046095d40e37a47b11ad80/stock-operations/e2f2ff09-7298-4e1c-8dab-09dcc9828e6a","statusCode":403,"ip":"127.0.0.1"}
+10:49:41 [[32mhttp[39m]: GET /api/admin/catalog/products/6b046095d40e37a47b11ad80/stock-operations/e2f2ff09-7298-4e1c-8dab-09dcc9828e6a 403 3.021 ms - 75
+✔ V29 cliente y anónimo no consultan catálogo administrativo ni recuperación (32.2934ms)
+10:49:41 [[32mhttp[39m]: GET /api/admin/catalog/products?stock=[redactado]&isActive=[redactado] 200 10.307 ms - 1743
+10:49:41 [[32mhttp[39m]: GET /api/admin/catalog/products/inventory?stock=[redactado] 200 10.991 ms - 3427
+10:49:41 [[32mhttp[39m]: GET /api/admin/alerts 200 33.284 ms - 879
+✔ V30 lista, resumen y alertas coinciden por variante sin entradas duplicadas (89.5137ms)
+10:49:41 [[32mhttp[39m]: GET /api/admin/catalog/products?stock=[redactado] 200 13.575 ms - 1593
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:41 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046095d40e37a47b11ad87/stock 200 40.589 ms - 104
+10:49:41 [[32mhttp[39m]: GET /api/admin/catalog/products?stock=[redactado] 200 14.308 ms - 1601
+✔ V31 umbral cinco, inactivas y stock suficiente comparten criterio (100.5211ms)
+10:49:41 [[32mhttp[39m]: GET /api/admin/catalog/products?stock=[redactado] 200 14.023 ms - 1609
+10:49:42 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046095d40e37a47b11ad8d/stock 409 28.529 ms - 104
+10:49:42 [[32mhttp[39m]: GET /api/admin/catalog/products?stock=[redactado] 200 9.148 ms - 94
+10:49:42 [[32mhttp[39m]: GET /api/admin/catalog/products/6b046095d40e37a47b11ad8d 200 8.266 ms - 1262
+10:49:42 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046095d40e37a47b11ad8d/stock 409 25.212 ms - 104
+✔ V32 stock histórico fraccionario requiere revisión y nunca se redondea (147.4759ms)
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:42 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046096d40e37a47b11ad90/stock 200 28.573 ms - 106
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:42 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046096d40e37a47b11ad90/stock 200 30.891 ms - 106
+10:49:42 [[32mhttp[39m]: GET /api/admin/catalog/products/6b046096d40e37a47b11ad90/stock-operations/a5274cbf-379f-496b-858d-4effffeea33b 200 7.274 ms - 225
+10:49:42 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046096d40e37a47b11ad90/stock 200 25.161 ms - 105
+✔ V33 consulta de operación recupera un resultado aceptado sin otro movimiento (128.5209ms)
+10:49:42 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046096d40e37a47b11ad99/stock 409 22.496 ms - 73
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:42 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046096d40e37a47b11ad99/stock 200 29.812 ms - 106
+10:49:42 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046096d40e37a47b11ad99/stock 409 17.157 ms - 73
+10:49:42 [[32mhttp[39m]: GET /api/admin/catalog/products/6b046096d40e37a47b11ad99/stock-operations/db5a0fc3-7b47-4dab-8c2e-1902b90e3c60 200 6.000 ms - 81
+✔ V34 rechazo persistido impide una aplicación tardía de la misma intención (113.2239ms)
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:42 [[31merror[39m]: Server error Fallo ficticio
+Error: Fallo ficticio
+    at History.create (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\test\phase4.test.js:197:73)
+    at C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\productAdminController.js:471:45
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async ClientSession.withTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\sessions.js:568:30)
+    at async exports.inTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\transactionService.js:7:12)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\productAdminController.js:445:18 {"method":"POST","url":"/api/admin/catalog/products/6b046096d40e37a47b11ad9f/stock","statusCode":500,"userId":"6b04608ed40e37a47b11aaab","ip":"127.0.0.1"}
+10:49:42 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046096d40e37a47b11ad9f/stock 500 25.977 ms - 57
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:42 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046096d40e37a47b11ad9f/stock 200 33.799 ms - 106
+✔ V35 fallo de historial revierte ajuste; reintento conserva clave y aplica una vez (93.7307ms)
+10:49:42 [[31merror[39m]: Server error Historial no disponible
+Error: Historial no disponible
+    at History.create (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\test\phase4.test.js:202:85)
+    at exports.logProductHistory (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\productHistoryService.js:26:24)
+    at exports.logProductUpdates (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\productHistoryService.js:239:19)
+    at C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\productAdminController.js:287:9
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async ClientSession.withTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\sessions.js:568:30)
+    at async exports.inTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\transactionService.js:7:12)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\productAdminController.js:207:23 {"method":"PATCH","url":"/api/admin/catalog/products/6b046096d40e37a47b11ada7","statusCode":500,"userId":"6b04608ed40e37a47b11aaab","ip":"127.0.0.1"}
+10:49:42 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b046096d40e37a47b11ada7 500 19.643 ms - 57
+✔ V36 edición de precio y stock inicial nuevo tienen historial transaccional (49.3645ms)
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:42 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046096d40e37a47b11adae/stock 200 31.049 ms - 106
+10:49:42 [[32mhttp[39m]: GET /api/admin/inventory/history?from=2026-11-20&to=2026-11-20 200 8.523 ms - 863
+10:49:42 [[32mhttp[39m]: GET /api/admin/inventory/history?from=2026-02-30 400 2.535 ms - 45
+10:49:42 [[32mhttp[39m]: GET /api/admin/inventory/history?productId=[redactado] 400 2.542 ms - 53
+10:49:42 [[32mhttp[39m]: GET /api/admin/catalog/products?limit=-3 400 2.564 ms - 51
+✔ V37 fechas de movimientos usan días colombianos e IDs inválidos se rechazan (79.9273ms)
+(node:37068) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:49:42 [[32mhttp[39m]: POST /api/admin/catalog/products/6b046096d40e37a47b11adb4/stock 200 32.564 ms - 106
+10:49:42 [[32mhttp[39m]: GET /api/admin/inventory/history/export-pdf?productId=[redactado] 200 39.137 ms - 2166
+✔ V38 exportación PDF y sus filtros siguen disponibles (102.035ms)
+10:49:42 [[32mhttp[39m]: POST /api/admin/catalog/products 400 2.931 ms - 62
+10:49:42 [[32mhttp[39m]: POST /api/admin/catalog/products 400 2.329 ms - 61
+10:49:42 [[32mhttp[39m]: POST /api/admin/catalog/products 400 5.350 ms - 61
+10:49:42 [[32mhttp[39m]: POST /api/admin/catalog/products 400 9.377 ms - 79
+✔ V39 imágenes, precios y SKU obligatorios muestran rechazo controlado (70.3265ms)
+10:49:42 [[32mhttp[39m]: GET /api/admin/catalog/products/6b046096d40e37a47b11adbd 200 6.050 ms - 1277
+10:49:42 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b046096d40e37a47b11adbd 400 16.819 ms - 83
+10:49:42 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b046096d40e37a47b11adbd 400 10.509 ms - 76
+✔ V40 no se pueden reciclar IDs ni SKU de una variante conservada (54.716ms)
+10:49:42 [[32mhttp[39m]: POST /api/checkout/orders 201 90.562 ms - 429
+10:49:42 [[32mhttp[39m]: GET /api/admin/catalog/products 200 9.123 ms - 1605
+10:49:42 [[32mhttp[39m]: GET /api/admin/catalog/products/6b046096d40e37a47b11adc5 200 6.429 ms - 1277
+10:49:42 [[32mhttp[39m]: GET /api/admin/inventory/history 200 6.751 ms - 133
+10:49:42 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b046096d40e37a47b11adc5 200 25.789 ms - 1364
+✔ V41 altas y consultas de catálogo no activan notificaciones ni alteran pedidos (179.5538ms)
+10:49:45 [[32mhttp[39m]: GET /api/admin/catalog/products?q=[redactado]&category=6b04608dd40e37a47b11aaa8&stock=[redactado]&page=3&limit=20 200 65.410 ms - 51237
+✔ V42 volumen ficticio: página acotada y plan de consulta reproducible (2713.8893ms)
+✔ C01 carga pendiente no permite guardar; carga válida conserva valores (5.9297ms)
+✔ C02 HTTP fallido no crea valores vacíos ni permite una escritura (1.3626ms)
+✔ C03 timeout cancela y bloquea la edición (15.418ms)
+✔ C04 solicitud abortada no significa configuración vacía (1.3147ms)
+✔ C05 respuesta inválida: null (1.0837ms)
+✔ C05 respuesta inválida: sin settings (0.5552ms)
+✔ C05 respuesta inválida: vacío sin contrato (0.4285ms)
+✔ C05 respuesta inválida: parcial (0.4599ms)
+✔ C05 respuesta inválida: tipo incorrecto (0.6779ms)
+✔ C05 respuesta inválida: HTTP 200 con error (0.5745ms)
+✔ C06 Reintentar recupera los valores reales (1.0694ms)
+✔ C07 un fallo de actualización conserva datos previos pero bloquea guardar (1.416ms)
+✔ C08 vacío legítimo: strings vacíos confirmados siguen siendo editables (2.2951ms)
+✔ C09 una respuesta anterior no reemplaza una carga más reciente (1.1659ms)
+✔ C10 desmontar cancela sin publicar una respuesta tardía (1.0601ms)
+✔ C11 doble clic y envíos simultáneos generan un solo PATCH (1.9498ms)
+✔ C12 un borrador inválido no llega al endpoint (0.6472ms)
+✔ C13 error 400 mantiene el borrador y no declara éxito (0.8601ms)
+✔ C14 respuesta perdida después de aplicar: verifica por GET sin repetir PATCH (1.781ms)
+✔ C15 respuesta ambigua no aplicada: bloqueo, conservación y cero reenvíos automáticos (1.4172ms)
+✔ C16 respuesta PATCH inválida y verificación fallida no son éxito (1.0741ms)
+✔ C17 Comprobar resultado recupera una operación ambigua sin nuevo PATCH (1.8165ms)
+✔ C18 recargar descarta borrador incierto solo con un GET válido (1.4184ms)
+✔ C19 una lectura vieja no reemplaza los cambios guardados (1.4446ms)
+✔ C20 apariencia fallida no crea un reemplazo vacío (0.5762ms)
+✔ C21 apariencia vacía explícita del backend es legítima; parcial se rechaza (2.3827ms)
+✔ C22 subscribers: error no es lista vacía, recuperación [] sí es válida (1.0332ms)
+✔ C22 carts: error no es lista vacía, recuperación [] sí es válida (0.8353ms)
+✔ C23 los cupones respetan su contrato existente sin status (0.2664ms)
+✔ C24 exportaciones históricas tienen un hijo visible coherente (5.5716ms)
+getPath: MongoMemoryServer: Possible version conflict
+  SystemBinary version: "8.3.2"
+  Requested version:    "7.0.24"
+
+  Using SystemBinary!
+(node:35756) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:35756) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:35756) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:35756) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:35756) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:35756) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+10:49:59 [[32mhttp[39m]: POST /api/auth/login 200 574.171 ms - 168
+10:49:59 [[32mhttp[39m]: POST /api/auth/login 200 475.287 ms - 169
+10:50:00 [[32mhttp[39m]: POST /api/auth/login 200 497.271 ms - 174
+10:50:00 [[32mhttp[39m]: POST /api/auth/login 200 626.422 ms - 173
+10:50:00 [[32mhttp[39m]: GET /api/admin/settings 200 19.319 ms - 489
+10:50:00 [[32mhttp[39m]: PATCH /api/admin/settings 200 15.364 ms - 489
+10:50:00 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"PATCH","url":"/api/admin/settings","statusCode":403,"ip":"127.0.0.1"}
+10:50:00 [[32mhttp[39m]: PATCH /api/admin/settings 403 5.712 ms - 75
+10:50:00 [[32mhttp[39m]: PATCH /api/admin/settings 200 13.625 ms - 504
+10:50:01 [[32mhttp[39m]: PATCH /api/admin/marketing/settings 200 35.078 ms - 669
+10:50:01 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"PATCH","url":"/api/admin/marketing/settings","statusCode":403,"ip":"127.0.0.1"}
+10:50:01 [[32mhttp[39m]: PATCH /api/admin/marketing/settings 403 12.463 ms - 75
+10:50:01 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 6.819 ms - 617
+10:50:01 [[32mhttp[39m]: PATCH /api/admin/settings 200 13.960 ms - 484
+10:50:01 [[33mwarn[39m]: Audit log save failed {"action":"settings_updated","module":"settings","error":"Operation interrupted because client was closed"}
+✔ C25 envío incluido: PATCH directo no cambia históricos; impuestos, apariencia y permisos se conservan (13018.8011ms)
+✔ N01 menú y privilegios visuales: superadmin (4.0396ms)
+✔ N01 menú y privilegios visuales: admin (0.5075ms)
+✔ N01 menú y privilegios visuales: vendedor (0.3762ms)
+✔ N01 menú y privilegios visuales: cliente (0.1794ms)
+✔ N01 menú y privilegios visuales: undefined (0.2721ms)
+✔ N02 selección contextual /admin (0.7402ms)
+✔ N02 selección contextual /admin/pedidos?tray=prepare&page=2 (0.3615ms)
+✔ N02 selección contextual /admin/pedidos/abc?returnTo=x (0.3898ms)
+✔ N02 selección contextual /admin/productos (0.4064ms)
+✔ N02 selección contextual /admin/productos?view=stock&variantId=abc (0.4685ms)
+✔ N02 selección contextual /admin/productos?view=movements (0.2113ms)
+✔ N02 selección contextual /admin/productos/abc/editar (0.2156ms)
+✔ N02 selección contextual /admin/inventario?productId=abc (0.1669ms)
+✔ N02 selección contextual /admin/catalogo?tab=weave-types (0.2526ms)
+✔ N02 selección contextual /admin/solicitudes/abc (0.144ms)
+✔ N02 selección contextual /admin/pqr (0.1389ms)
+✔ N02 selección contextual /admin/contenido?tab=resenas (0.2216ms)
+✔ N02 selección contextual /admin/marketing?tab=newsletter (0.2931ms)
+✔ N02 selección contextual /admin/contenido?tab=popup (0.1555ms)
+✔ N02 selección contextual /admin/cupones (0.1179ms)
+✔ N02 selección contextual /admin/finanzas (0.1574ms)
+✔ N02 selección contextual /admin/usuarios (0.1267ms)
+✔ N02 selección contextual /admin/auditoria (0.1708ms)
+✔ N02 selección contextual /admin/alertas (0.175ms)
+✔ N02 selección contextual /admin/contenido?tab=exports&scope=orders (0.1294ms)
+✔ N02 selección contextual /admin/resenas (0.1796ms)
+✔ N02 selección contextual /admin/home-imagenes (0.1937ms)
+✔ N03 vendedor mantiene Inicio y Pedidos desde la ruta histórica de Solicitudes (0.2415ms)
+✔ N04 pestañas históricas y parámetros conservados sin fuentes alternativas (0.3832ms)
+✔ N05 regreso de Solicitudes solo admite la lista interna y su consulta (0.2759ms)
+getPath: MongoMemoryServer: Possible version conflict
+  SystemBinary version: "8.3.2"
+  Requested version:    "7.0.24"
+
+  Using SystemBinary!
+(node:38900) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:38900) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:38900) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:38900) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:38900) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:38900) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+10:50:13 [[32mhttp[39m]: POST /api/auth/login 200 498.040 ms - 168
+10:50:13 [[32mhttp[39m]: POST /api/auth/login 200 417.712 ms - 169
+10:50:13 [[32mhttp[39m]: POST /api/auth/login 200 419.084 ms - 174
+10:50:14 [[32mhttp[39m]: POST /api/auth/login 200 453.506 ms - 173
+10:50:14 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"GET","url":"/api/admin/finance/overview","statusCode":403,"ip":"127.0.0.1"}
+10:50:14 [[32mhttp[39m]: GET /api/admin/finance/overview 403 8.296 ms - 75
+10:50:14 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"GET","url":"/api/admin/users","statusCode":403,"ip":"127.0.0.1"}
+10:50:14 [[32mhttp[39m]: GET /api/admin/users 403 4.986 ms - 75
+10:50:14 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"GET","url":"/api/admin/pqr","statusCode":403,"ip":"127.0.0.1"}
+10:50:14 [[32mhttp[39m]: GET /api/admin/pqr 403 4.001 ms - 75
+10:50:14 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"GET","url":"/api/admin/audit","statusCode":403,"ip":"127.0.0.1"}
+10:50:14 [[32mhttp[39m]: GET /api/admin/audit 403 3.130 ms - 75
+10:50:14 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"GET","url":"/api/admin/settings","statusCode":403,"ip":"127.0.0.1"}
+10:50:14 [[32mhttp[39m]: GET /api/admin/settings 403 4.394 ms - 75
+10:50:14 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"GET","url":"/api/admin/marketing/newsletter/export","statusCode":403,"ip":"127.0.0.1"}
+10:50:14 [[32mhttp[39m]: GET /api/admin/marketing/newsletter/export 403 5.970 ms - 75
+10:50:14 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"GET","url":"/api/admin/marketing/orders/export","statusCode":403,"ip":"127.0.0.1"}
+10:50:14 [[32mhttp[39m]: GET /api/admin/marketing/orders/export 403 3.881 ms - 75
+10:50:14 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"GET","url":"/api/admin/marketing/abandoned-carts/export","statusCode":403,"ip":"127.0.0.1"}
+10:50:14 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts/export 403 3.938 ms - 75
+10:50:14 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"GET","url":"/api/admin/users","statusCode":403,"ip":"127.0.0.1"}
+10:50:14 [[32mhttp[39m]: GET /api/admin/users 403 13.453 ms - 75
+10:50:14 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"GET","url":"/api/admin/finance/overview","statusCode":403,"ip":"127.0.0.1"}
+10:50:14 [[32mhttp[39m]: GET /api/admin/finance/overview 403 8.426 ms - 75
+10:50:14 [[32mhttp[39m]: GET /api/admin/finance/overview 200 107.213 ms - 1620
+10:50:14 [[32mhttp[39m]: GET /api/admin/users 200 9.471 ms - 451
+10:50:14 [[32mhttp[39m]: GET /api/admin/pqr 200 7.487 ms - 53
+10:50:14 [[32mhttp[39m]: GET /api/admin/audit 200 9.995 ms - 1389
+10:50:14 [[32mhttp[39m]: GET /api/admin/settings 200 17.223 ms - 489
+10:50:14 [[32mhttp[39m]: GET /api/admin/marketing/newsletter/export 200 8.928 ms - 82
+10:50:14 [[32mhttp[39m]: GET /api/admin/marketing/orders/export 200 5.704 ms - 91
+10:50:14 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts/export 200 5.790 ms - 56
+10:50:14 [[32mhttp[39m]: GET /api/admin/special-requests 200 5.978 ms - 80
+10:50:14 [[33mwarn[39m]: Auth failure No has iniciado sesión {"method":"GET","url":"/api/admin/pqr","statusCode":401,"ip":"127.0.0.1"}
+10:50:14 [[32mhttp[39m]: GET /api/admin/pqr 401 1.368 ms - 53
+10:50:14 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"PATCH","url":"/api/admin/catalog/products/6b0460b690754ed06ba2f4d6","statusCode":403,"ip":"127.0.0.1"}
+10:50:14 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b0460b690754ed06ba2f4d6 403 4.525 ms - 75
+10:50:14 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"POST","url":"/api/admin/catalog/products/6b0460b690754ed06ba2f4d6/stock","statusCode":403,"ip":"127.0.0.1"}
+10:50:14 [[32mhttp[39m]: POST /api/admin/catalog/products/6b0460b690754ed06ba2f4d6/stock 403 3.997 ms - 75
+✔ N06 backend conserva permisos de navegación, exportación y escritura (11992.4133ms)
+getPath: MongoMemoryServer: Possible version conflict
+  SystemBinary version: "8.3.2"
+  Requested version:    "7.0.24"
+
+  Using SystemBinary!
+(node:39908) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:39908) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:39908) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:39908) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:39908) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:39908) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+10:50:25 [[32mhttp[39m]: POST /api/auth/login 200 493.431 ms - 168
+10:50:26 [[32mhttp[39m]: POST /api/auth/login 200 471.814 ms - 169
+10:50:26 [[32mhttp[39m]: POST /api/auth/login 200 409.641 ms - 174
+10:50:26 [[32mhttp[39m]: POST /api/auth/login 200 416.087 ms - 173
+10:50:27 [[32mhttp[39m]: GET /api/admin/dashboard 200 80.431 ms - 1419
+✔ F6-01 contador histórico del dashboard coincide con clasificación por variante (10073.6411ms)
+(node:39908) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:27 [[32mhttp[39m]: POST /api/checkout/orders 201 181.907 ms - 371
+10:50:27 [[32mhttp[39m]: GET /api/admin/dashboard 200 32.392 ms - 2683
+✔ F6-02 consultar dashboard conserva pedidos, cobros, historial y notificaciones (249.077ms)
+(node:39908) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:27 [[32mhttp[39m]: POST /api/checkout/orders 201 100.478 ms - 371
+10:50:27 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460c33d4131737cd62402/status 200 17.485 ms - 858
+10:50:27 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460c33d4131737cd62402/status 200 14.697 ms - 911
+✔ F6-07 repetición idempotente informa que no hubo transición ni comunicación adicional (162.381ms)
+getPath: MongoMemoryServer: Possible version conflict
+  SystemBinary version: "8.3.2"
+  Requested version:    "7.0.24"
+
+  Using SystemBinary!
+(node:19812) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:19812) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:19812) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:19812) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:19812) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:19812) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+10:50:38 [[32mhttp[39m]: POST /api/auth/login 200 477.954 ms - 168
+10:50:38 [[32mhttp[39m]: POST /api/auth/login 200 438.194 ms - 169
+10:50:39 [[32mhttp[39m]: POST /api/auth/login 200 454.587 ms - 174
+10:50:39 [[32mhttp[39m]: POST /api/auth/login 200 408.465 ms - 173
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:40 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b0460cf6fea612149461d96 200 137.927 ms - 1367
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:40 [[32mhttp[39m]: POST /api/admin/catalog/products/6b0460cf6fea612149461d96/stock 200 230.025 ms - 106
+10:50:40 [[32mhttp[39m]: POST /api/checkout/orders 201 279.579 ms - 370
+✔ Q01 metadatos, venta y ajuste simultáneos conservan suma e historial (10280.862ms)
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:40 [[32mhttp[39m]: POST /api/checkout/orders 201 132.407 ms - 370
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:40 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460d06fea612149461dc5/status 200 51.932 ms - 823
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:40 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460d06fea612149461dc5/status 200 77.333 ms - 876
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:40 [[32mhttp[39m]: POST /api/admin/catalog/products/6b0460d06fea612149461dbd/stock 200 98.269 ms - 106
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:40 [[32mhttp[39m]: POST /api/admin/catalog/products/6b0460d06fea612149461dbd/stock 200 110.002 ms - 106
+✔ Q02 dos administradores, cancelación repetida y ajuste simultáneos restauran una vez (322.8824ms)
+10:50:40 [[32mhttp[39m]: POST /api/checkout/orders 201 108.495 ms - 428
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:40 [[32mhttp[39m]: POST /api/admin/catalog/products/6b0460d06fea612149461dec/stock 200 82.150 ms - 106
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:40 [[32mhttp[39m]: POST /api/webhooks/wompi 200 134.878 ms - 2
+10:50:40 [[32mhttp[39m]: POST /api/webhooks/wompi 200 139.274 ms - 2
+✔ Q03 webhook repetido y ajuste en paralelo no pierden unidades (309.8381ms)
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:40 [[32mhttp[39m]: POST /api/checkout/orders 409 63.112 ms - 73
+10:50:40 [[32mhttp[39m]: POST /api/checkout/orders 201 123.396 ms - 370
+10:50:41 [[32mhttp[39m]: POST /api/checkout/orders 400 13.511 ms - 80
+✔ Q04 dos checkouts concurrentes última unidad y reenvío sólo registran una venta (184.5333ms)
+10:50:41 [[32mhttp[39m]: POST /api/checkout/orders 201 147.009 ms - 428
+10:50:41 [[32mhttp[39m]: POST /api/checkout/orders 201 160.498 ms - 428
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:41 [[32mhttp[39m]: POST /api/webhooks/wompi 200 108.116 ms - 2
+10:50:41 [[32mhttp[39m]: POST /api/webhooks/wompi 200 129.820 ms - 2
+10:50:41 [[32mhttp[39m]: GET /api/admin/finance/history 200 8.529 ms - 395
+✔ Q05 dos aprobaciones para última unidad preservan cobro en disputa fuera de ingresos (351.8325ms)
+10:50:41 [[32mhttp[39m]: POST /api/checkout/orders 201 95.188 ms - 428
+10:50:41 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b0460d16fea612149461e7f 409 16.036 ms - 151
+10:50:41 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b0460d16fea612149461e7f 409 19.256 ms - 151
+10:50:41 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460d16fea612149461e87/status 200 22.325 ms - 863
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:41 [[32mhttp[39m]: POST /api/checkout/orders 201 102.801 ms - 370
+10:50:41 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b0460d16fea612149461e7f 200 34.433 ms - 1326
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:41 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460d16fea612149461ea6/status 200 26.667 ms - 823
+✔ Q06 Wompi pendiente protege producto y variante; histórico inactivo restaura stock (376.5373ms)
+10:50:41 [[32mhttp[39m]: POST /api/admin/catalog/products 201 28.486 ms - 1072
+10:50:41 [[32mhttp[39m]: POST /api/admin/catalog/products 400 33.889 ms - 115
+✔ Q07 dos altas concurrentes de mismo SKU no duplican sin nuevo índice global (78.8161ms)
+10:50:41 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0460d16fea612149461ed4 200 8.298 ms - 1260
+10:50:41 [[32mhttp[39m]: POST /api/checkout/orders 400 5.916 ms - 80
+10:50:41 [[32mhttp[39m]: POST /api/admin/catalog/products/6b0460d16fea612149461ed4/stock 409 23.284 ms - 104
+10:50:41 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0460d16fea612149461ed9 200 7.695 ms - 1276
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:41 [[32mhttp[39m]: POST /api/checkout/orders 409 24.681 ms - 79
+10:50:41 [[32mhttp[39m]: POST /api/admin/catalog/products/6b0460d16fea612149461ed9/stock 409 27.971 ms - 104
+✔ Q08 stock histórico ausente y fraccionario nunca se normaliza por lectura ni venta (160.1516ms)
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:42 [[32mhttp[39m]: POST /api/admin/catalog/products/6b0460d26fea612149461ee5/stock 200 37.547 ms - 106
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:42 [[32mhttp[39m]: POST /api/admin/catalog/products/6b0460d26fea612149461ee5/stock 200 36.583 ms - 106
+10:50:42 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0460d26fea612149461ee5/stock-operations/36886ac7-493e-43fa-b018-2742d8a0a524 200 7.097 ms - 229
+10:50:42 [[32mhttp[39m]: POST /api/admin/catalog/products/6b0460d26fea612149461ee5/stock 200 24.426 ms - 105
+✔ Q09 ajuste con respuesta descartada se recupera por misma clave sin repetir movimiento (146.3248ms)
+10:50:42 [[32mhttp[39m]: POST /api/admin/catalog/products/6b0460d26fea612149461eee/stock 409 25.650 ms - 73
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:42 [[32mhttp[39m]: POST /api/admin/catalog/products/6b0460d26fea612149461eee/stock 200 34.533 ms - 104
+10:50:42 [[32mhttp[39m]: POST /api/admin/catalog/products/6b0460d26fea612149461eee/stock 409 21.393 ms - 73
+✔ Q10 intención de ajuste rechazada no revive después de nueva reposición (122.2677ms)
+10:50:42 [[32mhttp[39m]: POST /api/checkout/orders 201 100.421 ms - 428
+10:50:42 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460d26fea612149461efc/status 200 43.542 ms - 863
+10:50:42 [[32mhttp[39m]: POST /api/webhooks/wompi 200 99.251 ms - 2
+10:50:42 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460d26fea612149461efc/status 409 9.295 ms - 64
+10:50:42 [[32mhttp[39m]: GET /api/admin/finance/history 200 7.879 ms - 196
+10:50:42 [[32mhttp[39m]: POST /api/webhooks/wompi 200 9.847 ms - 2
+✔ Q11 aprobación tardía tras cancelar preserva estado, dinero y alerta sin venta (333.9425ms)
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:42 [[32mhttp[39m]: POST /api/checkout/orders 201 110.218 ms - 370
+10:50:42 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 11.720 ms - 985
+10:50:42 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 8.240 ms - 197
+10:50:42 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 6.577 ms - 196
+10:50:42 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 7.704 ms - 199
+10:50:42 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 7.519 ms - 195
+10:50:42 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 8.387 ms - 981
+10:50:42 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 7.520 ms - 992
+10:50:42 [[32mhttp[39m]: GET /api/admin/orders?q=[redactado] 200 9.001 ms - 192
+10:50:42 [[33mwarn[39m]: Auth failure Solo administradores pueden registrar recaudos {"method":"PATCH","url":"/api/admin/orders/6b0460d26fea612149461f2e/payment","statusCode":403,"ip":"127.0.0.1"}
+10:50:42 [[32mhttp[39m]: PATCH /api/admin/orders/6b0460d26fea612149461f2e/payment 403 9.377 ms - 76
+10:50:42 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"POST","url":"/api/admin/catalog/products/6b0460d26fea612149461f26/stock","statusCode":403,"ip":"127.0.0.1"}
+10:50:42 [[32mhttp[39m]: POST /api/admin/catalog/products/6b0460d26fea612149461f26/stock 403 4.365 ms - 75
+10:50:42 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"GET","url":"/api/admin/finance/export/csv","statusCode":403,"ip":"127.0.0.1"}
+10:50:42 [[32mhttp[39m]: GET /api/admin/finance/export/csv 403 3.804 ms - 75
+✔ Q12 todas las bandejas reales, búsqueda literal y límites por rol (253.5481ms)
+✔ Q13 texto de todas las plantillas tiene saltos reales y escape de datos hostiles (42.1573ms)
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:43 [[32mhttp[39m]: POST /api/checkout/orders 201 124.569 ms - 370
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:43 [[32mhttp[39m]: POST /api/checkout/orders 201 123.545 ms - 370
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:43 [[32mhttp[39m]: POST /api/checkout/orders 201 145.560 ms - 370
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:43 [[32mhttp[39m]: POST /api/checkout/orders 201 126.046 ms - 370
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:43 [[32mhttp[39m]: POST /api/checkout/orders 201 124.941 ms - 370
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:43 [[32mhttp[39m]: POST /api/checkout/orders 201 125.124 ms - 370
+10:50:43 [[32mhttp[39m]: GET /api/admin/finance/history 200 8.410 ms - 395
+10:50:43 [[32mhttp[39m]: GET /api/admin/finance/report?period=all 200 32.679 ms - 2941
+10:50:43 [[32mhttp[39m]: GET /api/admin/finance/export/csv?period=all 200 29.377 ms - 497
+10:50:43 [[32mhttp[39m]: GET /api/admin/finance/export/xlsx?period=all 200 92.736 ms - 8445
+10:50:43 [[32mhttp[39m]: GET /api/admin/finance/export/pdf?period=all 200 57.917 ms - 1810
+✔ Q14 pedidos financieros de todos los estados mantienen filtros y no escriben históricos (1133.2775ms)
+✔ Q15 fechas financieras de Colombia no dependen de zona del servidor (26.9408ms)
+✔ Q17 frontera civil, semana ISO, cambio de año y rangos inválidos financieros (513.0564ms)
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:44 [[32mhttp[39m]: POST /api/checkout/orders 201 118.186 ms - 370
+✔ Q19 worker interrumpido después de aceptación recupera la misma clave sin tocar pedido ni inventario (189.9502ms)
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:44 [[32mhttp[39m]: POST /api/checkout/orders 201 107.181 ms - 370
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:45 [[32mhttp[39m]: POST /api/checkout/orders 201 107.167 ms - 370
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:45 [[32mhttp[39m]: POST /api/checkout/orders 201 107.271 ms - 370
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:45 [[32mhttp[39m]: POST /api/checkout/orders 201 111.061 ms - 370
+10:50:45 [[32mhttp[39m]: GET /api/admin/finance/history?groupBy=[redactado]&from=2026-11-20&to=2026-11-20 200 7.381 ms - 396
+10:50:45 [[32mhttp[39m]: GET /api/admin/finance/report?from=2026-11-20&to=2026-11-20 200 30.111 ms - 3309
+10:50:45 [[32mhttp[39m]: GET /api/admin/finance/export/csv?from=2026-11-20&to=2026-11-20 200 29.257 ms - 627
+10:50:45 [[32mhttp[39m]: GET /api/admin/finance/history?from=2026-02-30&to=2026-03-01 400 4.082 ms - 56
+10:50:45 [[32mhttp[39m]: GET /api/admin/finance/history?from=2026-11-21&to=2026-11-20 400 3.873 ms - 56
+✔ Q18 reporte, gráfica y CSV incluyen sólo el día colombiano solicitado sin modificar pedidos (603.7861ms)
+(node:19812) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:50:45 [[32mhttp[39m]: POST /api/checkout/orders 201 129.377 ms - 370
+10:50:46 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado]&limit=15 200 588.368 ms - 11771
+10:50:46 [[32mhttp[39m]: GET /api/admin/catalog/products?limit=20&stock=[redactado] 200 17.194 ms - 94
+10:50:47 [[32mhttp[39m]: GET /api/admin/dashboard 200 682.800 ms - 10700
+10:50:47 [[32mhttp[39m]: GET /api/admin/finance/history 200 12.955 ms - 196
+✔ Q16 explain y latencias con 1200 pedidos ficticios y 120 productos multivariante (2372.8856ms)
+ℹ tests 275
+ℹ suites 0
+ℹ pass 273
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 202201.8389
+
+✖ failing tests:
+
+test at test\phase1.test.js:559:1
+✖ P06 diferencias de monto y moneda conservan el hecho financiero y bloquean preparación (231.5722ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'pendiente'
+  - 'pagado'
+  
+      at TestContext.<anonymous> (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\test\phase1.test.js:564:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'pendiente',
+    expected: 'pagado',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test\phase1.test.js:754:1
+✖ P23 Wompi pendiente consultado permite cancelar y aprobación tardía queda visible (120.9415ms)
+  AssertionError [ERR_ASSERTION]: {"status":"fail","message":"Consultar un intento no descarta otros pagos en proceso. Solicita cancelación administrativa."}
+  
+  409 !== 200
+  
+      at TestContext.<anonymous> (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\test\phase1.test.js:761:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 409,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,237 @@
+diff --git a/backend/src/services/wompiPaymentService.js b/backend/src/services/wompiPaymentService.js
+index 4f28eb8..a915d40 100644
+--- a/backend/src/services/wompiPaymentService.js
++++ b/backend/src/services/wompiPaymentService.js
+@@ -7,6 +7,23 @@ const { moveStock } = require("./inventoryService");
+ const { addIncident, history } = require("./orderOperations");
+ const AppError = require("../utils/AppError");
+ 
++// A later HTTP observation is not necessarily a later transaction state.
++exports.canAdvanceTransactionStatus = (from, to) => from === to
++  || (from === "PENDING" && ["APPROVED", "DECLINED", "ERROR"].includes(to))
++  || (from === "APPROVED" && to === "VOIDED");
++
++exports.deferProviderDiscrepancy = (id, tx, reason = "Proveedor aún no refleja una progresión válida del estado firmado") => inTransaction(async session => {
++  const receipt = await PaymentEvent.findById(id).session(session);
++  if (!receipt) throw new AppError("Recibo no encontrado", 404);
++  if (receipt.processedAt) return false; // A concurrent successful application already completed.
++  receipt.providerObservation = { status: tx.status, paymentLinkId: tx.payment_link_id,
++    amountInCents: tx.amount_in_cents, currency: tx.currency, checkedAt: new Date() };
++  receipt.processingState = "failed"; receipt.lastError = reason;
++  await require("./notificationEvents").paymentEventReview(receipt, session);
++  await receipt.save({ session });
++  return true; // Commit failure evidence BEFORE the caller returns 503.
++});
++
+ // Payment Links generate reference themselves. No fallback to reference or sku.
+ exports.findAssociation = async (tx, session = null) => {
+   if (tx.status === "VOIDED") {
+@@ -79,7 +96,7 @@ exports.processTransaction = async (orderId, tx, evidence = {}) => {
+     if (err.code !== 11000) throw err;
+     event = await PaymentEvent.findOne({ key });
+   }
+-  if (event.processedAt && !evidence.reconcile) return;
++  if (event.processedAt && !evidence.reconcile) return event;
+   const initialAssociation = await exports.findAssociation(tx);
+   // A signed VOIDED of the unique applied ID is sufficient to BLOCK that charge,
+   // even if unsigned link/reference fields are missing or contradictory.
+@@ -111,10 +128,17 @@ exports.processTransaction = async (orderId, tx, evidence = {}) => {
+       return;
+     }
+     if (trusted.status !== tx.status && tx.status !== "VOIDED") {
+-      // Apply the current authenticated state; retain the signed observation too.
+-      await exports.processTransaction(orderId, trusted, { environment: evidence.environment, reconcile: true });
++      if (!exports.canAdvanceTransactionStatus(tx.status, trusted.status)) {
++        if (await exports.deferProviderDiscrepancy(event._id, trusted)) throw new AppError("Estado Wompi discrepante; reintentar verificación", 503);
++        return PaymentEvent.findById(event._id);
++      }
++      const completed = await exports.processTransaction(orderId, trusted, { environment: evidence.environment, reconcile: true });
++      if (!completed?.processedAt) {
++        await exports.deferProviderDiscrepancy(event._id, trusted, "Aplicación del estado consultado no completada");
++        throw new AppError("Aplicación Wompi pendiente; evidencia conservada", 503);
++      }
+       await PaymentEvent.updateOne({ _id: event._id }, { $set: { processingState: "processed", processedAt: new Date(), associationError: "superseded_by_provider_state" } });
+-      return;
++      return PaymentEvent.findById(event._id);
+     }
+   }
+   const association = await exports.findAssociation(tx);
+@@ -135,7 +159,7 @@ exports.processTransaction = async (orderId, tx, evidence = {}) => {
+   // audited separately. Re-querying the same observation must not reopen it.
+   if (event.processedAt && association.order.incidents.some(i => i.resolvedAt
+       && i.resolution?.evidence?.transactionId === tx.id
+-      && ["manual_refund_confirmed", "record_void_review"].includes(i.resolution.decision))) return;
++      && ["manual_refund_confirmed", "record_void_review"].includes(i.resolution.decision))) return event;
+   try {
+     // Validated money survives a later inventory failure, without pre-validating outside a transaction.
+     await inTransaction(async (session) => {
+@@ -143,7 +167,8 @@ exports.processTransaction = async (orderId, tx, evidence = {}) => {
+       if (receipt.processedAt && !evidence.reconcile) return;
+       const current = await exports.findAssociation(tx, session);
+       if (!current.order || String(current.order._id) !== String(orderId) || (receipt.order && String(receipt.order) !== String(orderId))) throw new AppError("Asociación contradictoria", 409);
+-      receipt.order = orderId; receipt.processingState = "associated"; receipt.associationError = "";
++      receipt.order = orderId; receipt.processingState = "associated";
++      if (receipt.associationError !== "provider_binding_mismatch") receipt.associationError = "";
+       if (evidence.reconcile) receipt.providerObservation = { status: tx.status, paymentLinkId: tx.payment_link_id,
+         amountInCents: tx.amount_in_cents, currency: tx.currency, checkedAt: new Date() };
+       await recognize(current.order, tx, session);
+@@ -151,9 +176,9 @@ exports.processTransaction = async (orderId, tx, evidence = {}) => {
+       await current.order.save({ session, validateModifiedOnly: true });
+       await receipt.save({ session });
+     });
+-    await inTransaction(async (session) => {
++    return await inTransaction(async (session) => {
+       const receipt = await PaymentEvent.findById(event._id).session(session);
+-      if (receipt.processedAt && !evidence.reconcile) return;
++      if (receipt.processedAt && !evidence.reconcile) return receipt;
+       const order = await Order.findById(orderId).session(session);
+       if (!order || order.paymentMethod !== "wompi") throw new Error("Invalid Wompi order");
+       let blocked = await recognize(order, tx, session);
+@@ -197,6 +222,7 @@ exports.processTransaction = async (orderId, tx, evidence = {}) => {
+       await order.save({ session, validateModifiedOnly: true });
+       receipt.processedAt = new Date(); receipt.processingState = "processed"; receipt.lastError = "";
+       await receipt.save({ session });
++      return receipt;
+     });
+   } catch (err) {
+     await PaymentEvent.updateOne({ _id: event._id }, { $set: { processingState: "failed", lastError: "Aplicación pendiente; reintentar conciliación" } });
+diff --git a/backend/src/services/wompiService.js b/backend/src/services/wompiService.js
+index f087e0c..411ab53 100644
+--- a/backend/src/services/wompiService.js
++++ b/backend/src/services/wompiService.js
+@@ -1,4 +1,7 @@
+ const crypto = require("crypto");
++const AppError = require("../utils/AppError");
++
++const queryError = (code, message, status = 503) => Object.assign(new AppError(message, status), { code });
+ 
+ const getBaseUrl = () => {
+   const env = process.env.WOMPI_ENV || "sandbox";
+@@ -134,13 +137,21 @@ exports.parseProviderExpiry = (value) => {
+   return Number.isFinite(date.getTime()) ? date : null;
+ };
+ exports.getTransaction = async (id) => {
+-  if (!process.env.WOMPI_PRIVATE_KEY) throw new Error("Wompi unavailable");
+-  const res = await fetch(`${getBaseUrl()}/transactions/${encodeURIComponent(id)}`, {
+-    headers: { Authorization: `Bearer ${process.env.WOMPI_PRIVATE_KEY}` }, signal: AbortSignal.timeout(10000),
+-  });
+-  if (!res.ok) throw new Error("Wompi verification unavailable");
+-  const json = await res.json();
+-  if (json?.data?.id !== id) throw new Error("Invalid provider response");
++  if (typeof id !== "string" || !/^[A-Za-z0-9_-]{1,150}$/.test(id)) throw queryError("WOMPI_TRANSACTION_ID_INVALID", "ID de transacción inválido", 409);
++  if (!process.env.WOMPI_PRIVATE_KEY) throw queryError("WOMPI_QUERY_UNAVAILABLE", "Consulta Wompi no disponible");
++  let res;
++  try {
++    res = await fetch(`${getBaseUrl()}/transactions/${encodeURIComponent(id)}`, {
++      headers: { Authorization: `Bearer ${process.env.WOMPI_PRIVATE_KEY}` }, signal: AbortSignal.timeout(10000),
++    });
++  } catch (err) {
++    throw queryError(["TimeoutError", "AbortError"].includes(err.name) ? "WOMPI_QUERY_TIMEOUT" : "WOMPI_QUERY_UNAVAILABLE", "Consulta Wompi temporalmente no disponible");
++  }
++  if (res.status === 404) throw queryError("WOMPI_TRANSACTION_NOT_FOUND", "ID no encontrado en este ambiente", 409);
++  if (!res.ok) throw queryError("WOMPI_QUERY_HTTP_ERROR", "Consulta Wompi no disponible");
++  let json;
++  try { json = await res.json(); } catch { throw queryError("WOMPI_INVALID_TRANSACTION_RESPONSE", "Respuesta Wompi inválida"); }
++  if (json?.data?.id !== id) throw queryError("WOMPI_INVALID_TRANSACTION_RESPONSE", "Identidad de respuesta Wompi inválida");
+   return json.data;
+ };
+ 
+diff --git a/backend/src/controllers/orderAdminController.js b/backend/src/controllers/orderAdminController.js
+index 2bc2522..5cfce28 100644
+--- a/backend/src/controllers/orderAdminController.js
++++ b/backend/src/controllers/orderAdminController.js
+@@ -196,18 +196,35 @@ exports.reconcileWompi = catchAsync(async (req, res) => {
+   if (!isAdmin(req.user.role)) throw new AppError("Solo administradores pueden conciliar", 403);
+   const order = await Order.findById(req.params.id);
+   if (!order) throw new AppError("Pedido no encontrado", 404);
+-  const transactionId = req.body.transactionId || order.wompi?.transactionId;
++  const transactionId = Object.hasOwn(req.body, "transactionId") ? req.body.transactionId : order.wompi?.transactionId;
+   if (order.paymentMethod !== "wompi" || typeof transactionId !== "string" || !/^[A-Za-z0-9_-]{1,150}$/.test(transactionId)) throw new AppError("Indica un ID de transacción del panel o comprobante de Wompi", 409);
+   const { getTransaction, getExpectedEventEnvironment } = require("../services/wompiService");
+   let tx;
+   try { tx = await getTransaction(transactionId); }
+-  catch {
+-    await mutateOrder(order._id, async current => { require("../services/orderOperations").addIncident(current, "reconciliation_query_failed", transactionId); });
++  catch (err) {
++    if (["WOMPI_TRANSACTION_ID_INVALID", "WOMPI_TRANSACTION_NOT_FOUND"].includes(err.code)) throw err;
++    await mutateOrder(order._id, async current => {
++      const count = current.incidents.length;
++      require("../services/orderOperations").addIncident(current, "reconciliation_query_failed", transactionId);
++      if (current.incidents.length !== count) history(current, `Consulta Wompi fallida: ${transactionId}. ${err.code || "Proveedor no disponible"}`, req.user);
++    });
+     throw new AppError("No se pudo consultar a Wompi. Conserva el pedido para revisión.", 503);
+   }
+-  await require("../services/wompiPaymentService").processTransaction(order._id, tx, { environment: getExpectedEventEnvironment(), reconcile: true });
+-  await mutateOrder(order._id, async current => {
+-    for (const i of current.incidents) if (i.code === "reconciliation_query_failed" && i.detail === transactionId) i.resolvedAt ||= new Date();
++  const completed = await require("../services/wompiPaymentService").processTransaction(order._id, tx, { environment: getExpectedEventEnvironment(), reconcile: true });
++  if (!completed?.processedAt) throw new AppError("Conciliación aún no completada", 503);
++  await mutateOrder(order._id, async (current, session) => {
++    const failures = current.incidents.filter(i => i.code === "reconciliation_query_failed" && !i.resolvedAt);
++    for (const i of failures) {
++      i.resolvedAt = new Date(); i.resolution = { actor: req.user.id, decision: "reconciled_with_provider",
++        reason: "Consulta autenticada del pedido completada", evidence: { transactionId: tx.id, recordedAt: new Date() } };
++    }
++    if (failures.length) {
++      history(current, `Incidencias de consulta superadas: ${failures.length}. Transacción consultada: ${tx.id}`, req.user);
++      await require("../models/AuditLog").create([{ userId: req.user.id, userEmail: req.user.email, role: req.user.role,
++        action: "wompi_query_failures_resolved", module: "orders", entityId: current._id, entityType: "order", success: true,
++        previousData: { incidents: failures.map(i => ({ id: i._id, detail: i.detail })) }, newData: { transactionId: tx.id, receipt: completed._id, status: tx.status },
++        summary: "Fallos de consulta superados mediante conciliación autenticada" }], { session });
++    }
+     if (tx.status === "APPROVED") current.requiresReview = current.incidents.some(i => !i.resolvedAt);
+   });
+   res.json({ status: "success", message: "Transacción consultada y conciliada según evidencia del proveedor" });
+@@ -229,9 +246,28 @@ exports.reprocessPaymentEvent = catchAsync(async (req, res) => {
+   if (event.environment !== service.getExpectedEventEnvironment()) throw new AppError("Evento de otro ambiente", 409);
+   let tx;
+   try { tx = await service.getTransaction(event.transactionId); } catch { throw new AppError("Consulta Wompi no disponible; evidencia conservada", 503); }
++  if (tx.id !== event.transactionId) throw new AppError("La consulta no corresponde al recibo original", 409);
++  const payments = require("../services/wompiPaymentService");
++  if (!payments.canAdvanceTransactionStatus(event.status, tx.status) || event.amountInCents !== tx.amount_in_cents) {
++    await payments.deferProviderDiscrepancy(event._id, tx);
++    throw new AppError("Estado o importe consultado discrepante; recibo conservado para recuperación", 503);
++  }
+   const association = await require("../services/wompiPaymentService").findAssociation(tx);
+   if (!association.order) throw new AppError("Wompi aún no aporta asociación inequívoca", 409);
+-  await require("../services/wompiPaymentService").processTransaction(association.order._id, tx, { environment: event.environment, reconcile: true });
++  const completed = await payments.processTransaction(association.order._id, tx, { environment: event.environment, reconcile: true });
++  if (!completed?.processedAt) throw new AppError("El reproceso no se ha completado", 503);
++  await require("../services/transactionService").inTransaction(async session => {
++    const PaymentEvent = require("../models/paymentEvent");
++    const original = await PaymentEvent.findById(event._id).session(session);
++    const verified = await PaymentEvent.findById(completed._id).session(session);
++    if (!original || !verified?.processedAt || verified.processingState !== "processed"
++        || original.transactionId !== tx.id || verified.transactionId !== tx.id || verified.environment !== original.environment
++        || String(verified.order) !== String(association.order._id)) throw new AppError("Procesamiento del recibo aún no verificable", 503);
++    original.processedAt ||= new Date(); original.processingState = "processed";
++    if (original.associationError !== "provider_binding_mismatch") original.associationError = "superseded_by_provider_state";
++    original.lastError = `Sustituido por recibo ${verified._id}: ${verified.status}`;
++    await original.save({ session });
++  });
+   res.json({ status: "success", message: "Estado actual consultado y reprocesado sin asociación manual" });
+ });
+ 
+diff --git a/backend/test/phase1-v2.test.js b/backend/test/phase1-v2.test.js
+new file mode 100644
+index 0000000..7d97a56
+--- /dev/null
++++ b/backend/test/phase1-v2.test.js
+@@ -0,0 +1,17 @@
++// Independent versions of P06/P23. Historical assertions remain untouched.
++const test=require('node:test'),assert=require('node:assert/strict');
++const f=require('../../docs/auditoria-wompi-pedidos/auditoria-claude/evidencias/fixture-claude.cjs');
++test.before(async()=>{await f.setup();});test.after(async()=>{await f.close();});
++test('P06-v2: monto o moneda discrepantes conservan evidencia sin declarar pago íntegro',async()=>{
++  for(const extra of [{amount_in_cents:12345},{currency:'USD'}]){
++    const {order,p}=await f.newWompi();const tx=f.linkTx(order,extra);f.provider.tx.set(tx.id,tx);assert.equal((await f.postEvent(tx)).status,200);
++    const o=await f.fresh(order._id);assert.notEqual(o.paymentStatus,'pagado');assert.ok(o.requiresReview);assert.equal(o.stockDeducted,false);assert.equal(await f.stockOf(p),5);
++    const event=await f.M.PaymentEvent.findOne({transactionId:tx.id});assert.equal(event.amountInCents,tx.amount_in_cents);assert.equal(event.currency,tx.currency);assert.equal((await f.canPrepare(order._id)).status,409);
++  }
++});
++test('P23-v2: política vigente no autocancela Wompi PENDING; aceptación comercial sigue pendiente',async()=>{
++  const p=await f.makeProduct(5),r=await f.createOrder(p,{},f.cookies.client),order=await f.fresh(r.json.order.id),tx=f.linkTx(order,{status:'PENDING'});
++  f.provider.tx.set(tx.id,tx);await f.postEvent(tx);assert.equal(require('../src/services/orderTransitions').canSelfCancel(await f.fresh(order._id)),false);
++  assert.equal((await f.api('PATCH',`/api/checkout/orders/${order._id}/cancel`,{cookie:f.cookies.client})).status,409);
++  const o=await f.fresh(order._id);assert.notEqual(o.orderStatus,'cancelado');assert.equal(o.paymentStatus,'pendiente');assert.equal(await f.stockOf(p),5);
++});

@@ -10,6 +10,7 @@ mod.require = (name) => name === "node:test" ? () => {} : Module.prototype.requi
 mod._compile(fs.readFileSync(original, "utf8") + `
 module.exports = {
   setup, api, makeProduct, orderBody, postEvent, txFor, stockOf,
+  setProviderTransaction(tx) { providerTx.set(tx.id, structuredClone(tx)); },
   get context() { return { Order, Product, User, ProductHistory, mongoose, base, adminCookie, vendorCookie, clientCookie, superCookie, clientId, blocked }; },
   async close() {
     if (server) await new Promise((resolve) => server.close(resolve));

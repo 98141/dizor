@@ -10,7 +10,6 @@ const {
 const {
   getStoreSettings,
   isShippingIncluded,
-  getActiveCarriers,
 } = require("../services/settingsService");
 const { getEnabledPaymentMethods, isPaymentMethodEnabled } = require("../services/paymentMethods");
 const { getPublicDeliveryTerms } = require("../config/deliveryTerms");
@@ -138,7 +137,6 @@ exports.getCheckoutConfig = catchAsync(async (req, res) => {
       shippingIncluded: isShippingIncluded(settings),
       shippingFixedCost: settings.shippingFixedCost,
       freeShippingMinAmount: isShippingIncluded(settings) ? 0 : settings.freeShippingMinAmount,
-      carriers: getActiveCarriers(),
       // Solo los métodos habilitados en el servidor (Wompi y contraentrega).
       paymentMethods: getEnabledPaymentMethods(),
       // null mientras el plazo no esté definido (no se promete nada ambiguo).
@@ -201,7 +199,6 @@ const createCheckoutOrder = async (req, res, next) => {
     buyer,
     shippingAddress,
     paymentMethod,
-    carrier,
     customerNotes,
     couponCode,
     idempotencyKey,
@@ -236,10 +233,8 @@ const createCheckoutOrder = async (req, res, next) => {
     );
   }
 
-  // Transportadora: vacía (la asigna la tienda) o una de las confirmadas.
-  if (carrier && !getActiveCarriers().includes(carrier)) {
-    return next(new AppError("Transportadora no disponible", 400));
-  }
+  // La transportadora la asigna DIZOR desde administración. Se ignora el
+  // campo de clientes antiguos, incluso en la huella de idempotencia.
 
   // Términos y condiciones de compra (H-17): aceptación obligatoria cuando
   // existe un texto publicado. Solo `true` cuenta.
@@ -269,7 +264,7 @@ const createCheckoutOrder = async (req, res, next) => {
     throw new AppError("Clave de idempotencia inválida", 400);
   }
   const fingerprint = crypto.createHash("sha256").update(JSON.stringify(stable({
-    actor: req.user?.id || null, items, buyer, shippingAddress, paymentMethod, carrier: carrier || "",
+    actor: req.user?.id || null, items, buyer, shippingAddress, paymentMethod, carrier: "",
     customerNotes: customerNotes || "", couponCode: couponCode || "",
   }))).digest("hex");
   const replay = async (existing) => {
@@ -278,6 +273,7 @@ const createCheckoutOrder = async (req, res, next) => {
     if (!owner || !existing.checkoutFingerprint || existing.checkoutFingerprint !== fingerprint) {
       throw new AppError("La clave ya se usó para otra solicitud", 409);
     }
+    if (existing.checkoutState === "failed" && existing.paymentMethod === "wompi") throw new AppError(`El pedido ${existing.orderNumber} requiere revisión del enlace con Wompi. Contacta a soporte con este número antes de iniciar otro pago.`, 409);
     if (existing.checkoutState !== "ready") throw new AppError("Pedido en proceso o pendiente de revisión. Conserva la misma clave e inténtalo después.", 409);
     return res.status(200).json({ status: "success", accessToken: await grantOrderAccess(existing._id),
       order: { id: existing._id, orderNumber: existing.orderNumber, total: existing.total,
@@ -342,7 +338,7 @@ const createCheckoutOrder = async (req, res, next) => {
       items: resolved,
       totals,
       paymentMethod,
-      carrier,
+      carrier: "",
       customerNotes,
       couponCode: appliedCoupon?.code || "",
       deductStock,
@@ -641,7 +637,9 @@ exports.cancelMyOrder = catchAsync(async (req, res, next) => {
     return next(new AppError("Pedido no encontrado", 404));
   }
 
-  if (!canSelfCancel(order)) throw new AppError("La cancelación requiere intervención administrativa", 409);
+  const canCheckElectronicAttempt = order.paymentMethod === "wompi"
+    && ["pendiente", "pago_pendiente"].includes(order.orderStatus) && !["pagado", "reembolsado"].includes(order.paymentStatus);
+  if (!canSelfCancel(order) && !canCheckElectronicAttempt) throw new AppError("La cancelación requiere intervención administrativa", 409);
   if (order.paymentMethod === "wompi") {
     // The link API does not enumerate all transactions. Unknown/unavailable payment state
     // must be reviewed, never treated as evidence of non-payment.
@@ -653,8 +651,9 @@ exports.cancelMyOrder = catchAsync(async (req, res, next) => {
     try { tx = await getTransaction(order.wompi.transactionId); }
     catch { throw new AppError("No se pudo verificar con Wompi. Reintenta o solicita revisión administrativa.", 503); }
     if (tx.id !== order.wompi.transactionId) throw new AppError("Verificación de pago inválida", 409);
-    await processTransaction(order._id, tx, { environment: process.env.WOMPI_ENV === "production" ? "prod" : "test" });
+    await processTransaction(order._id, tx, { environment: process.env.WOMPI_ENV === "production" ? "prod" : "test", reconcile: true });
     if (tx.status === "APPROVED") throw new AppError("El pago está aprobado; solicita intervención administrativa", 409);
+    throw new AppError("Consultar un intento no descarta otros pagos en proceso. Solicita cancelación administrativa.", 409);
   }
   await mutateOrder(order._id, async (current, session) => {
     if (String(current.user) !== String(req.user.id) || !canSelfCancel(current)) throw new AppError("El pedido ya no puede autocancelarse", 409);

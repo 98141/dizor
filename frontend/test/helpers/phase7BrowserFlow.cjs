@@ -34,17 +34,20 @@ module.exports=async({page,fixture,ctx,origin,out,result,text,goto,click,check,s
  };
  const product=async stock=>{const p=await fixture.makeProduct(stock,80000);await ctx.Product.updateOne({_id:p.product._id},{$set:{mainImage:'/favicon-dizor.png',images:[{url:'/favicon-dizor.png'}]}});return p;};
  const checkout=async(p,method,{lose=false}={})=>{
-  await goto('/producto/'+p.product.slug,p.product.name);await click('Agregar al carrito','button');await text('Producto agregado al carrito');await click('Ver carrito','a');await text('Ir a checkout');await click('Ir a checkout','a,button');await text('Datos del cliente');
-  await fill('input[name="phone"]','3000000099');await click('Continuar');await text('Dirección de envío');await fill('input[name="address"]','Calle Ficticia 10');await fill('input[name="city"]','Pasto');await click('Continuar');await text('Método de entrega');await click('Continuar');await text('Método de pago');await page.locator(new Function('return [...document.querySelectorAll(".checkout-payment-option")].find(e=>e.textContent.toLowerCase().includes('+JSON.stringify(method==='wompi'?'wompi':'contra')+'))')).click();await click('Continuar');await text('Confirmar pedido');
+  await goto('/producto/'+p.product.slug,p.product.name);await click('Agregar al carrito','button');await text('Producto agregado al carrito');await click('Ver carrito','a');await text('Ir a checkout');await click('Ir a checkout','a,button');await text('Datos de contacto');
+  await fill('input[name="phone"]','3000000099');await fill('input[name="address"]','Calle Ficticia 10');await fill('input[name="city"]','Pasto');
+  await page.click('input[name="payment"][value="'+method+'"]');
+  const action=method==='wompi'?'Ir a pagar con Wompi':'Confirmar pedido contraentrega';
+  assert.equal(await page.$('input[name="carrier"]'),null);
   for(const id of ['consent-order_processing','consent-terms']){await page.waitForSelector('#'+id);await page.focus('#'+id);await page.keyboard.press('Space');assert(await page.$eval('#'+id,e=>e.checked));}
-  await page.waitForFunction(()=>[...document.querySelectorAll('button')].some(e=>e.textContent.trim()==='Confirmar pedido'&&!e.disabled));
+  await page.waitForFunction(()=>document.querySelector('.checkout-layout button[type="submit"]')&&!document.querySelector('.checkout-layout button[type="submit"]').disabled);
   const before=requests.length;loseNext=lose;
   // Both calls happen in one JavaScript task, before React can render disabled.
-  await page.evaluate(()=>{const b=[...document.querySelectorAll('button')].find(e=>e.textContent.trim()==='Confirmar pedido');b.click();b.click();});
-  if(lose){await text('No se pudo crear el pedido');assert(lost);assert.equal(requests.length,before+1);await click('Confirmar pedido');}
+  await page.evaluate(()=>{const b=document.querySelector('.checkout-layout button[type="submit"]');b.click();b.click();});
+  if(lose){await text('No se pudo crear el pedido');assert(lost);assert.equal(requests.length,before+1);await click(action);}
   if(method==='wompi')await page.waitForFunction(()=>location.hostname==='checkout.wompi.co',{timeout:20000});else await page.waitForFunction(()=>location.pathname.includes('confirmacion'),{timeout:20000});
   const rows=await ctx.Order.find({'items.product':p.product._id});assert.equal(rows.length,1);const order=rows[0];
-  assert.equal(requests.length,before+(lose?2:1));if(lose)assert.equal(requests.at(-1).idempotencyKey,requests.at(-2).idempotencyKey);
+  assert.equal(requests.length,before+(lose?2:1));assert.equal(Object.hasOwn(requests.at(-1),'carrier'),false);assert.equal(order.carrier,'');if(lose)assert.equal(requests.at(-1).idempotencyKey,requests.at(-2).idempotencyKey);
   assert.equal(await fixture.stockOf(p.product,p.variantId),method==='wompi'?p.product.variants[0].stock:p.product.variants[0].stock-1);
   assert.equal(await Notification.countDocuments({order:order._id,event:'order.received'}),1);
   await acceptEvent(order,'order.received');
@@ -65,9 +68,9 @@ module.exports=async({page,fixture,ctx,origin,out,result,text,goto,click,check,s
  };
  await login('client');const codP=await product(4),cod=await checkout(codP,'contra_entrega',{lose:true});
  await login('admin');await operate(cod,true);await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:path.join(out,'e2e-cod-entregado-cobrado.png'),fullPage:true});
- await login('client');const wompiP=await product(4),wompi=await checkout(wompiP,'wompi');assert.equal(wompi.stockDeducted,false);const tx=fixture.txFor(wompi);const approved=await Promise.all([fixture.postEvent(tx),fixture.postEvent(tx),fixture.postEvent(tx)]);assert(approved.every(r=>r.status===200));assert.equal(await fixture.stockOf(wompiP.product,wompiP.variantId),3);assert.equal((await getOrder(wompi)).paymentStatus,'pagado');assert.equal(await Notification.countDocuments({order:wompi._id,event:'payment.approved'}),1);check('PAY webhook aprobado simultáneo: un descuento y una notificación');
+ await login('client');const wompiP=await product(4),wompi=await checkout(wompiP,'wompi');assert.equal(wompi.stockDeducted,false);const tx={...fixture.txFor(wompi),payment_link_id:wompi.wompi.paymentLinkId};fixture.setProviderTransaction(tx);const approved=await Promise.all([fixture.postEvent(tx),fixture.postEvent(tx),fixture.postEvent(tx)]);assert(approved.every(r=>r.status===200));assert.equal(await fixture.stockOf(wompiP.product,wompiP.variantId),3);assert.equal((await getOrder(wompi)).paymentStatus,'pagado');assert.equal(await Notification.countDocuments({order:wompi._id,event:'payment.approved'}),1);check('PAY webhook aprobado simultáneo: un descuento y una notificación');
  await login('admin');await operate(wompi,false);
- await login('client');const declinedP=await product(2),declined=await checkout(declinedP,'wompi');await fixture.postEvent(fixture.txFor(declined,{status:'DECLINED'}));assert.equal(await fixture.stockOf(declinedP.product,declinedP.variantId),2);let d=await getOrder(declined);assert.equal(d.paymentStatus,'rechazado');assert.notEqual(d.orderStatus,'cancelado');
+ await login('client');const declinedP=await product(2),declined=await checkout(declinedP,'wompi');const rejectedTx={...fixture.txFor(declined,{status:'DECLINED'}),payment_link_id:declined.wompi.paymentLinkId};fixture.setProviderTransaction(rejectedTx);await fixture.postEvent(rejectedTx);assert.equal(await fixture.stockOf(declinedP.product,declinedP.variantId),2);let d=await getOrder(declined);assert.equal(d.paymentStatus,'rechazado');assert.notEqual(d.orderStatus,'cancelado');
  await login('admin');await goto('/admin/pedidos/'+declined._id,'SIGUIENTE ACCIÓN');assert.equal(await page.$eval('body',e=>e.innerText.includes('Comenzar preparación')),false);assert.equal(await page.$('input[name="trackingNumber"]'),null);check('PAY rechazado: no cancela, no descuenta, no permite preparar/despachar');
  await require('./phase7LastUnitFlow.cjs')({page,fixture,ctx,origin,product,check,result,handleRequest});
  await login('vendor');await goto('/vendedor/pedidos?tray=all',cod.orderNumber);await page.click('a[href*="/pedidos/'+cod._id+'"]');await text('SIGUIENTE ACCIÓN');assert.equal(await page.$eval('body',e=>e.innerText.includes('Registrar recaudo')),false);await goto('/admin/solicitudes','Solicitudes');assert.equal(await page.$eval('.admin-shell',e=>e.innerText.includes('Finanzas')),false);check('ROLE vendedor: login real, pedidos y alias solicitudes sin finanzas');

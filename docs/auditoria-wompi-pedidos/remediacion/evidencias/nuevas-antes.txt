@@ -1,0 +1,295 @@
+getPath: MongoMemoryServer: Possible version conflict
+  SystemBinary version: "8.3.2"
+  Requested version:    "7.0.24"
+
+  Using SystemBinary!
+(node:36480) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:36480) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:36480) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:36480) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:36480) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:36480) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+10:22:56 [[32mhttp[39m]: POST /api/auth/login 200 725.580 ms - 160
+10:22:56 [[32mhttp[39m]: POST /api/auth/login 200 677.986 ms - 165
+10:22:57 [[32mhttp[39m]: POST /api/auth/login 200 836.264 ms - 164
+10:22:58 [[32mhttp[39m]: POST /api/auth/login 200 758.360 ms - 166
+10:22:58 [[32mhttp[39m]: POST /api/checkout/orders 201 307.959 ms - 425
+10:22:58 [[32mhttp[39m]: POST /api/webhooks/wompi 200 9.436 ms - 2
+10:22:58 [[32mhttp[39m]: POST /api/webhooks/wompi 200 14.523 ms - 2
+10:22:59 [[32mhttp[39m]: POST /api/webhooks/wompi 200 22.631 ms - 2
+10:22:59 [[32mhttp[39m]: POST /api/webhooks/wompi 200 21.393 ms - 2
+10:22:59 [[32mhttp[39m]: POST /api/webhooks/wompi 200 23.595 ms - 2
+10:22:59 [[32mhttp[39m]: POST /api/webhooks/wompi 200 20.549 ms - 2
+✖ R01: inbox durable sin pedido, sin datos sensibles, alerta única y permisos (18781.3189ms)
+10:22:59 [[32mhttp[39m]: POST /api/checkout/orders 201 146.189 ms - 425
+10:22:59 [[32mhttp[39m]: POST /api/webhooks/wompi 200 4.189 ms - 2
+✖ R02: evento conservado tras reinicio del servicio y reprocesado por proveedor (187.0086ms)
+10:22:59 [[32mhttp[39m]: POST /api/checkout/orders 201 143.789 ms - 425
+10:22:59 [[32mhttp[39m]: POST /api/webhooks/wompi 200 4.082 ms - 2
+✖ R03: inbox fallido nunca devuelve 200, y reintento conserva un efecto (179.7655ms)
+10:22:59 [[31merror[39m]: Server error Failing command via 'failCommand' failpoint
+MongoServerError: Failing command via 'failCommand' failpoint
+    at Connection.sendCommand (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\cmap\connection.js:320:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Connection.command (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\cmap\connection.js:347:26)
+    at async Server.command (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\sdam\server.js:208:29)
+    at async executeOperationWithRetries (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\operations\execute_operation.js:193:32)
+    at async executeOperation (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async Collection.findOneAndUpdate (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\collection.js:544:16)
+    at async model.Query._findOneAndUpdate (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongoose\lib\query.js:3621:13)
+    at async model.Query.exec (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongoose\lib\query.js:4797:63)
+    at async exports.orderRegistered (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\notificationEvents.js:23:36)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\checkoutController.js:464:5
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\orderOperations.js:18:18
+    at async ClientSession.withTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\sessions.js:568:30)
+    at async exports.inTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\transactionService.js:7:12)
+    at async createCheckoutOrder (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\checkoutController.js:462:3)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\checkoutController.js:495:12 {"method":"POST","url":"/api/checkout/orders","statusCode":500,"userId":null,"ip":"127.0.0.1"}
+10:22:59 [[32mhttp[39m]: POST /api/checkout/orders 500 122.391 ms - 57
+✖ R04: recuperación sin webhook valida ID, enlace, permisos y concurrencia (140.0916ms)
+10:22:59 [[32mhttp[39m]: POST /api/checkout/orders 201 142.783 ms - 425
+10:22:59 [[32mhttp[39m]: POST /api/checkout/orders 201 138.228 ms - 425
+(node:36480) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:36480) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:22:59 [[32mhttp[39m]: POST /api/webhooks/wompi 200 82.865 ms - 2
+✖ R05: contradicción de referencia y duplicidad de enlace no asignan dinero (439.8835ms)
+10:23:00 [[32mhttp[39m]: POST /api/checkout/orders 201 135.461 ms - 425
+(node:36480) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:23:00 [[32mhttp[39m]: POST /api/webhooks/wompi 200 60.617 ms - 2
+✖ R06: importe incorrecto conserva cobro y bloqueo sin afirmar pagado (234.7631ms)
+10:23:00 [[32mhttp[39m]: POST /api/checkout/orders 201 331.517 ms - 425
+(node:36480) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:36480) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:23:00 [[32mhttp[39m]: POST /api/webhooks/wompi 200 99.517 ms - 2
+(node:36480) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:23:00 [[32mhttp[39m]: POST /api/webhooks/wompi 200 52.431 ms - 2
+(node:36480) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:23:00 [[32mhttp[39m]: POST /api/webhooks/wompi 200 26.508 ms - 2
+(node:36480) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:23:00 [[32mhttp[39m]: POST /api/admin/orders/6b045a54a2133d8003f06b66/reconcile-wompi 200 56.553 ms - 100
+✖ R07: VOIDED bloquea preparación y APPROVED antiguo no rehabilita (670.4636ms)
+10:23:01 [[32mhttp[39m]: POST /api/checkout/orders 201 173.178 ms - 425
+(node:36480) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:36480) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:36480) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:23:01 [[32mhttp[39m]: POST /api/webhooks/wompi 200 70.798 ms - 2
+10:23:01 [[32mhttp[39m]: POST /api/webhooks/wompi 200 116.185 ms - 2
+✖ R08: VOIDED concurrente con APPROVED y después de despacho conserva inventario (332.3288ms)
+10:23:01 [[32mhttp[39m]: POST /api/checkout/orders 201 144.495 ms - 425
+(node:36480) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:36480) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:23:01 [[32mhttp[39m]: POST /api/webhooks/wompi 200 95.359 ms - 2
+(node:36480) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:23:01 [[32mhttp[39m]: POST /api/webhooks/wompi 200 72.312 ms - 2
+10:23:01 [[32mhttp[39m]: POST /api/admin/orders/6b045a55a2133d8003f06ba9/incidents/6b045a55a2133d8003f06bc1/resolve 404 8.037 ms - 135
+✖ R09: vendedor y texto libre no resuelven un pago duplicado (360.8536ms)
+10:23:01 [[32mhttp[39m]: POST /api/checkout/orders 201 137.735 ms - 425
+(node:36480) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:36480) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+10:23:01 [[32mhttp[39m]: POST /api/webhooks/wompi 200 65.094 ms - 2
+10:23:01 [[32mhttp[39m]: POST /api/admin/orders/6b045a55a2133d8003f06bce/incidents/6b045a55a2133d8003f06be4/resolve 404 7.121 ms - 135
+✖ R10: resolución de cupón auditada, motivo obligatorio, concurrencia idempotente (255.3155ms)
+10:23:02 [[32mhttp[39m]: POST /api/checkout/orders 201 263.436 ms - 425
+✖ R11: autocancelación Wompi no se ofrece ni cancela intento potencial; COD sí (295.9593ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 0
+ℹ fail 11
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 25806.0537
+
+✖ failing tests:
+
+test at docs\auditoria-wompi-pedidos\remediacion\regresiones.test.cjs:8:1
+✖ R01: inbox durable sin pedido, sin datos sensibles, alerta única y permisos (18781.3189ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\docs\auditoria-wompi-pedidos\remediacion\regresiones.test.cjs:13:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at docs\auditoria-wompi-pedidos\remediacion\regresiones.test.cjs:21:1
+✖ R02: evento conservado tras reinicio del servicio y reprocesado por proveedor (187.0086ms)
+  TypeError: Cannot read properties of null (reading '_id')
+      at TestContext.<anonymous> (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\docs\auditoria-wompi-pedidos\remediacion\regresiones.test.cjs:27:77)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7)
+
+test at docs\auditoria-wompi-pedidos\remediacion\regresiones.test.cjs:31:1
+✖ R03: inbox fallido nunca devuelve 200, y reintento conserva un efecto (179.7655ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  200 !== 500
+  
+      at TestContext.<anonymous> (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\docs\auditoria-wompi-pedidos\remediacion\regresiones.test.cjs:34:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 500,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at docs\auditoria-wompi-pedidos\remediacion\regresiones.test.cjs:38:1
+✖ R04: recuperación sin webhook valida ID, enlace, permisos y concurrencia (140.0916ms)
+  AssertionError [ERR_ASSERTION]: {"status":"error","message":"Error interno del servidor"}
+  
+  500 !== 201
+  
+      at Object.newWompi (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\docs\auditoria-wompi-pedidos\evidencias\auditoria-wompi.cjs:160:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\docs\auditoria-wompi-pedidos\remediacion\regresiones.test.cjs:39:19)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 500,
+    expected: 201,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at docs\auditoria-wompi-pedidos\remediacion\regresiones.test.cjs:45:1
+✖ R05: contradicción de referencia y duplicidad de enlace no asignan dinero (439.8835ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'pagado'
+  - 'pendiente'
+  
+      at TestContext.<anonymous> (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\docs\auditoria-wompi-pedidos\remediacion\regresiones.test.cjs:48:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'pagado',
+    expected: 'pendiente',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at docs\auditoria-wompi-pedidos\remediacion\regresiones.test.cjs:53:1
+✖ R06: importe incorrecto conserva cobro y bloqueo sin afirmar pagado (234.7631ms)
+  AssertionError [ERR_ASSERTION]: Expected "actual" to be strictly unequal to:
+  
+  'pagado'
+      at TestContext.<anonymous> (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\docs\auditoria-wompi-pedidos\remediacion\regresiones.test.cjs:55:44)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'pagado',
+    expected: 'pagado',
+    operator: 'notStrictEqual',
+    diff: 'simple'
+  }
+
+test at docs\auditoria-wompi-pedidos\remediacion\regresiones.test.cjs:59:1
+✖ R07: VOIDED bloquea preparación y APPROVED antiguo no rehabilita (670.4636ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'pagado'
+  - 'rechazado'
+  
+      at TestContext.<anonymous> (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\docs\auditoria-wompi-pedidos\remediacion\regresiones.test.cjs:62:44)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'pagado',
+    expected: 'rechazado',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at docs\auditoria-wompi-pedidos\remediacion\regresiones.test.cjs:65:1
+✖ R08: VOIDED concurrente con APPROVED y después de despacho conserva inventario (332.3288ms)
+  AssertionError [ERR_ASSERTION]: Expected "actual" to be strictly unequal to:
+  
+  'pagado'
+      at TestContext.<anonymous> (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\docs\auditoria-wompi-pedidos\remediacion\regresiones.test.cjs:68:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'pagado',
+    expected: 'pagado',
+    operator: 'notStrictEqual',
+    diff: 'simple'
+  }
+
+test at docs\auditoria-wompi-pedidos\remediacion\regresiones.test.cjs:73:1
+✖ R09: vendedor y texto libre no resuelven un pago duplicado (360.8536ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  404 !== 403
+  
+      at TestContext.<anonymous> (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\docs\auditoria-wompi-pedidos\remediacion\regresiones.test.cjs:76:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 404,
+    expected: 403,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at docs\auditoria-wompi-pedidos\remediacion\regresiones.test.cjs:80:1
+✖ R10: resolución de cupón auditada, motivo obligatorio, concurrencia idempotente (255.3155ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  404 !== 400
+  
+      at TestContext.<anonymous> (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\docs\auditoria-wompi-pedidos\remediacion\regresiones.test.cjs:84:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 404,
+    expected: 400,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at docs\auditoria-wompi-pedidos\remediacion\regresiones.test.cjs:90:1
+✖ R11: autocancelación Wompi no se ofrece ni cancela intento potencial; COD sí (295.9593ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\docs\auditoria-wompi-pedidos\remediacion\regresiones.test.cjs:92:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

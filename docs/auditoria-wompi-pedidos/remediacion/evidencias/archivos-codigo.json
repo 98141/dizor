@@ -1,0 +1,108 @@
+{
+  "head": "9289c7b1451d3b800ca8412d788a9a13c45cc514",
+  "branch": "main",
+  "modified": [
+    {
+      "file": "backend/src/app.js",
+      "sha256": "bd458678ec83fb44e49467870bce70c72fe8c782e302023cbd60e5cfbb237bdd"
+    },
+    {
+      "file": "backend/src/controllers/adminAlertController.js",
+      "sha256": "d59b2327299a96868414e71b1a99fe3e77fee539db22557ee18185c4be0ff28b"
+    },
+    {
+      "file": "backend/src/controllers/checkoutController.js",
+      "sha256": "6bc119e87187894c5cde3e8b1886fbbc8bcb33750e5d17294f47ef893c1fd9fe"
+    },
+    {
+      "file": "backend/src/controllers/orderAdminController.js",
+      "sha256": "e62581941da997dd3d5e716f3350d2264298406f196e6f6dc15171e572677156"
+    },
+    {
+      "file": "backend/src/controllers/wompiWebhookController.js",
+      "sha256": "cafd426099e2c2d2bd89412372bce4ed4c3d808e230b510515b35596ecfa63a1"
+    },
+    {
+      "file": "backend/src/models/notification.js",
+      "sha256": "dd34664eb61af2980fdffb4fce17b18a2ac1ff63236a888260f85da2c1460e7e"
+    },
+    {
+      "file": "backend/src/models/order.js",
+      "sha256": "37ca3d84626ba2272b3488347e5927c4a6106fd282759ca08a6f1fd80440edf0"
+    },
+    {
+      "file": "backend/src/models/paymentEvent.js",
+      "sha256": "25e097953c82e83110814acf38d4600e4382bca5ab896395fa2268b9c9e071e1"
+    },
+    {
+      "file": "backend/src/routes/adminOrderRoutes.js",
+      "sha256": "761a858d7bdbc9bf875041ae56c12ad73fd1b85c95cbf1d7d5f51742f4754b01"
+    },
+    {
+      "file": "backend/src/server.js",
+      "sha256": "1d2ae274f21fa049a7fba7f59a66f72ade02f2b65768aae8375cf08624def515"
+    },
+    {
+      "file": "backend/src/services/notificationDelivery.js",
+      "sha256": "fa0eabe10fbcea02a86e490dea490c84638a4810a9e7b123e7816f5867932659"
+    },
+    {
+      "file": "backend/src/services/notificationEvents.js",
+      "sha256": "09bb19d1d675bb4fb6b038b500afad1e3e9c9596296335c42cea7eb56f595563"
+    },
+    {
+      "file": "backend/src/services/notificationTemplates.js",
+      "sha256": "725c4636834a4ce2bf4009affea8e3c7f617aff63960b75e57e922fc87d63e6d"
+    },
+    {
+      "file": "backend/src/services/orderTransitions.js",
+      "sha256": "0dd231861d7d0ed3a390cc3bd9c80bc3c98fab8990398f092fba7ecd793d4ca9"
+    },
+    {
+      "file": "backend/src/services/orderWorkspace.js",
+      "sha256": "db019ee6dec91308bb3722dc60752931db7cbea84296fa4e9798da9a4baceabf"
+    },
+    {
+      "file": "backend/src/services/wompiPaymentService.js",
+      "sha256": "263fe33d035448ebe99e32f06bf8b5b1fb5a82c4ba84726cb6ade66accaca9a1"
+    },
+    {
+      "file": "backend/src/services/wompiService.js",
+      "sha256": "a4cbdb53a40d3e5424f78df8e7ca27e9d70b8b7df9fd724c9357a122d0b1f3a2"
+    },
+    {
+      "file": "frontend/src/app/(shop)/pedido/confirmacion/page.js",
+      "sha256": "cfd9229bd6f457acc4528b88488b12be60b5af43b4184bc2b869257f7353b864"
+    },
+    {
+      "file": "frontend/src/app/admin/alertas/page.js",
+      "sha256": "54cf7374e3451769f8905cfcc513aba151f57bb4143127ca634f1ca1a7f264f5"
+    },
+    {
+      "file": "frontend/src/components/admin/OrderDetail.jsx",
+      "sha256": "27718463fadc615b47cb59ee6c9e36eb0404ebff1f0c69481191bfa9b83d0280"
+    },
+    {
+      "file": "frontend/src/components/admin/OrderNextAction.jsx",
+      "sha256": "b6005f5f1b3728f8bcad55104f21790522b89d10ee68da0cf1d51ee750731150"
+    },
+    {
+      "file": "frontend/src/services/orderAdminService.js",
+      "sha256": "0d33288720177b43a05452c68e88916b999bedb65d53d66c0d527e3eba1b8e35"
+    }
+  ],
+  "added": [
+    {
+      "file": "backend/src/services/paymentIncidentResolution.js",
+      "sha256": "61a9bda3cbca5487a6b24b328ad4c04158b69658db668289c1bc5ac42573b7c2"
+    },
+    {
+      "file": "frontend/src/components/admin/PaymentEventAlerts.jsx",
+      "sha256": "0da5348537e45a0e369a265506a33a97ec35bda7fe5ba01a4aa23c4bbbb5c189"
+    },
+    {
+      "file": "frontend/src/components/admin/PaymentIncidentActions.jsx",
+      "sha256": "d5bf4cb4001ef67b60c931d0487056fdc30d6465ff609f61e1e6fa941ac710f1"
+    }
+  ]
+}

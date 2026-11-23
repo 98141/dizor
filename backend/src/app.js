@@ -84,7 +84,7 @@ const globalLimiter = rateLimit({
   max: 300,
   standardHeaders: true,
   legacyHeaders: false,
-  skip: (req) => req.path.startsWith("/admin"),
+  skip: (req) => req.path.startsWith("/admin") || (req.method === "POST" && req.path === "/webhooks/wompi"),
   message: {
     status: "fail",
     message: "Demasiadas solicitudes desde esta IP. Intenta más tarde.",

@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 const schema = new mongoose.Schema({
   eventKey: { type: String, required: true, unique: true },
   manualKey: { type: String, default: undefined },
-  order: { type: mongoose.Schema.Types.ObjectId, ref: "Order", required: true },
+  order: { type: mongoose.Schema.Types.ObjectId, ref: "Order", required: function () { return this.event !== "admin.payment_event"; }, default: null },
+  paymentEvent: { type: mongoose.Schema.Types.ObjectId, ref: "PaymentEvent", default: null },
   event: { type: String, required: true },
   audience: { type: String, enum: ["buyer", "admin"], required: true },
   recipient: { type: String, default: "", select: false },

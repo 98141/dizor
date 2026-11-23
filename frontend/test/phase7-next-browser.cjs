@@ -3,7 +3,7 @@
 // Own random loopback ports, sanitized child environment, no .env or external providers.
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),http=require('node:http'),assert=require('node:assert/strict');
 const {spawn}=require('node:child_process');
-const root=path.resolve(__dirname,'../..'),front=path.join(root,'frontend'),out=path.join(root,'docs/auditoria-admin/fase7-evidencias');
+const root=path.resolve(__dirname,'../..'),front=path.join(root,'frontend'),out=process.env.DIZOR_PHASE7_OUT || path.join(root,'docs/auditoria-admin/fase7-evidencias');
 const puppeteer=require(process.env.DIZOR_BROWSER_TOOLS || 'C:/Users/Asus ExpertBook/AppData/Local/Temp/dizor-verify-puppeteer/node_modules/puppeteer-core');
 fs.mkdirSync(out,{recursive:true});
 const tempRoot=fs.realpathSync(os.tmpdir()),stage=fs.mkdtempSync(path.join(tempRoot,'dizor-phase7-next-'));

@@ -1,0 +1,57 @@
+{
+  "head": "9289c7b1451d3b800ca8412d788a9a13c45cc514",
+  "branch": "main",
+  "checked": 3954,
+  "ownedChanges": [
+    {
+      "file": "backend/src/controllers/orderAdminController.js",
+      "before": "E62581941DA997DD3D5E716F3350D2264298406F196E6F6DC15171E572677156",
+      "after": "0D3CBA8658163780025CD4D67991B76A5A10C22B0C981B438D1D011BA23C170E"
+    },
+    {
+      "file": "backend/src/services/wompiPaymentService.js",
+      "before": "263FE33D035448EBE99E32F06BF8B5B1FB5A82C4BA84726CB6ADE66ACCACA9A1",
+      "after": "93DCF2D4694C8FEF3F0D1BDE3DF4033C9A8649A5E0C206BD8DB5AD3AFCF684EE"
+    },
+    {
+      "file": "backend/src/services/wompiService.js",
+      "before": "A4CBDB53A40D3E5424F78DF8E7CA27E9D70B8B7DF9FD724C9357A122D0B1F3A2",
+      "after": "76EF9471970AC2B900572F0633F104985B9ECE40459BE1339E30FF27A3A27826"
+    }
+  ],
+  "concurrentChanges": [
+    {
+      "file": "backend/src/controllers/checkoutController.js",
+      "before": "6BC119E87187894C5CDE3E8B1886FBBC8BCB33750E5D17294F47EF893C1FD9FE",
+      "after": "D5F7FA8E1948488D5C8BC4CD59749EB46E1928053C9B142356C5F10BEAA7C5A8"
+    },
+    {
+      "file": "frontend/src/app/(shop)/checkout/page.js",
+      "before": "948A15608139BA8801B99CDFA49C684DC3ACF69E8BE4EDF8C9849207BB818580",
+      "after": "62721D92CCA63A2889FF3A27814588E5AD9B929A45CBE544B3840FB004764EE9"
+    },
+    {
+      "file": "frontend/src/components/auth/AuthFormField.jsx",
+      "before": "84D6D855C9983BAB7FE42BBDC9BDA7398240C279769ED3DAD0036FE8CEBDF674",
+      "after": "C5B7AEE1DB9214CF55E125D32DE83ABC31F09390C2029CC2246EDC35BEDA114C"
+    },
+    {
+      "file": "frontend/src/styles/pages/checkout.css",
+      "before": "594E9F7E724552B432255B34E48739F3551AAD012982040554D3CEB3396CCE5E",
+      "after": "BDE4898A1F7CC3716FCEF47B27420F4583E118830E07E6181AE3E28B7CAB7047"
+    }
+  ],
+  "priorDocsChanged": [],
+  "originalTestsChanged": [],
+  "concurrentNewFiles": [
+    {
+      "file": "backend/test/checkout.test.js",
+      "sha256": "F7031E8685587780E4B463FBB579E587BE81BBA5FBF0C5EBA6EFC1A564EB4472"
+    },
+    {
+      "file": "frontend/src/lib/checkoutValidation.js",
+      "sha256": "AB7484C097F67260C99AF0FAF4F4A8FE715C07554944351AB4C7A24F0FFD5C66"
+    }
+  ],
+  "ownedHashesUnchanged": true
+}

@@ -39,6 +39,16 @@ exports.getAlerts = catchAsync(async (req, res) => {
     ]);
 
   const alerts = {
+    paymentEvents: {
+      count: await require("../models/paymentEvent").countDocuments({ processedAt: null }),
+      items: await require("../models/paymentEvent").find({ processedAt: null }).sort({ createdAt: 1 }).limit(10)
+        .select("transactionId status environment processingState associationError lastError createdAt").lean(),
+    },
+    oldPendingPayments: {
+      count: await Order.countDocuments({ paymentMethod: "wompi", paymentStatus: "pendiente", createdAt: { $lte: yesterday }, orderStatus: { $nin: ["cancelado", "devuelto", "rechazado"] } }),
+      items: await Order.find({ paymentMethod: "wompi", paymentStatus: "pendiente", createdAt: { $lte: yesterday }, orderStatus: { $nin: ["cancelado", "devuelto", "rechazado"] } })
+        .sort({ createdAt: 1 }).limit(10).select("orderNumber total createdAt").lean(),
+    },
     communications: await require("./notificationAdminController").communicationAlerts(),
     newOrders: {
       count: newOrders.length,

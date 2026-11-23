@@ -33,12 +33,14 @@ const INCIDENT_LABELS = {
   cancelled_wompi_watch: "Vigilar pagos posteriores a la cancelación", cancellation_verification_pending: "Verificar el pago antes de cancelar",
   payment_link_creation_failed: "Enlace de pago pendiente de revisión", checkout_completion_failed: "Registro del pedido incompleto",
   approval_on_refunded_order: "Pago recibido sobre un reembolso histórico", coupon_reconciliation: "Cupón pendiente de conciliación",
+  payment_voided: "Cobro anulado; detener preparación y despacho", additional_payment_voided: "Anulación de otra transacción para revisar",
+  reconciliation_query_failed: "Consulta al proveedor fallida; reintentar conciliación",
 };
 exports.operationalActions = (order, role) => {
   order = order.toObject ? order.toObject() : order;
   const admin = isAdmin(role);
   const transitions = allowedTransitions(order, role);
-  const canReconcile = admin && order.paymentMethod === "wompi" && !!order.wompi?.transactionId;
+  const canReconcile = admin && order.paymentMethod === "wompi";
   const canCollect = admin && order.orderStatus === "entregado" && order.paymentMethod === "contra_entrega" && order.paymentStatus === "pendiente";
   const review = exports.needsReview(order);
   const reasons = (order.incidents || []).filter((i) => !i.resolvedAt).map((i) => INCIDENT_LABELS[i.code] || "Incidencia administrativa pendiente");

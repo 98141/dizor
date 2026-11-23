@@ -1,0 +1,553 @@
+getPath: MongoMemoryServer: Possible version conflict
+  SystemBinary version: "8.3.2"
+  Requested version:    "7.0.24"
+
+  Using SystemBinary!
+(node:18672) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:18672) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:18672) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:18672) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:18672) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:18672) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+11:08:52 [[32mhttp[39m]: POST /api/auth/login 200 448.878 ms - 160
+11:08:52 [[32mhttp[39m]: POST /api/auth/login 200 419.990 ms - 165
+11:08:53 [[32mhttp[39m]: POST /api/auth/login 200 500.416 ms - 164
+11:08:53 [[32mhttp[39m]: POST /api/auth/login 200 357.946 ms - 166
+Entorno: { mongo: '8.3.2', node: 'v24.15.0' }
+11:08:53 [[32mhttp[39m]: POST /api/checkout/orders 201 309.351 ms - 425
+11:08:53 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:53 [[32mhttp[39m]: POST /api/webhooks/wompi 503 30.087 ms - 82
+11:08:53 [[32mhttp[39m]: PATCH /api/admin/orders/6b04651518a3b8951f9f1620/status 409 10.400 ms - 84
+FAIL     P01 — Pago aprobado (evento firmado, vinculado solo por payment_link_id)
+11:08:54 [[32mhttp[39m]: POST /api/checkout/orders 201 80.954 ms - 425
+11:08:54 [[32mhttp[39m]: POST /api/webhooks/wompi 200 19.489 ms - 2
+PASS     X01 — Evento APPROVED auténtico sin vínculo reconocible (sin payment_link_id ni sku)
+11:08:54 [[32mhttp[39m]: POST /api/checkout/orders 201 85.754 ms - 425
+11:08:54 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:54 [[32mhttp[39m]: POST /api/webhooks/wompi 503 27.883 ms - 82
+11:08:54 [[32mhttp[39m]: PATCH /api/admin/orders/6b04651618a3b8951f9f1650/status 409 8.066 ms - 84
+FAIL     P02 — Pago rechazado (DECLINED)
+11:08:54 [[32mhttp[39m]: POST /api/checkout/orders 201 94.499 ms - 425
+11:08:54 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:54 [[32mhttp[39m]: POST /api/webhooks/wompi 503 28.061 ms - 82
+11:08:54 [[32mhttp[39m]: PATCH /api/admin/orders/6b04651618a3b8951f9f1669/status 409 8.064 ms - 84
+FAIL     P03 — Pago pendiente (PENDING)
+11:08:54 [[32mhttp[39m]: POST /api/checkout/orders 201 153.978 ms - 425
+11:08:54 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:54 [[32mhttp[39m]: POST /api/webhooks/wompi 503 35.494 ms - 82
+FAIL     P04 — Pago anulado (VOIDED) sobre pedido pendiente
+11:08:54 [[32mhttp[39m]: POST /api/checkout/orders 201 81.780 ms - 425
+11:08:54 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:54 [[32mhttp[39m]: POST /api/webhooks/wompi 503 25.258 ms - 82
+11:08:54 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:54 [[32mhttp[39m]: POST /api/webhooks/wompi 503 24.122 ms - 82
+11:08:54 [[32mhttp[39m]: PATCH /api/admin/orders/6b04651618a3b8951f9f169a/status 409 5.750 ms - 84
+PASS     P04b — VOIDED posterior a APPROVED de la MISMA transacción
+11:08:54 [[32mhttp[39m]: POST /api/checkout/orders 201 78.581 ms - 425
+11:08:54 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:54 [[32mhttp[39m]: POST /api/webhooks/wompi 503 24.558 ms - 82
+FAIL     P05 — Error de pago (ERROR) del proveedor
+11:08:54 [[31merror[39m]: Server error No se pudo iniciar el pago con Wompi. El pedido queda pendiente de revisión.
+Error: No se pudo iniciar el pago con Wompi. El pedido queda pendiente de revisión.
+    at createCheckoutOrder (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\checkoutController.js:395:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\checkoutController.js:496:12 {"method":"POST","url":"/api/checkout/orders","statusCode":502,"userId":null,"ip":"127.0.0.1"}
+11:08:54 [[32mhttp[39m]: POST /api/checkout/orders 502 35.454 ms - 108
+11:08:54 [[32mhttp[39m]: POST /api/checkout/orders 409 4.259 ms - 178
+11:08:55 [[32mhttp[39m]: POST /api/checkout/orders 201 91.703 ms - 425
+PASS     P05b — Fallo/timeout del proveedor al crear el enlace de pago
+11:08:55 [[32mhttp[39m]: POST /api/checkout/orders 201 99.123 ms - 425
+11:08:55 [[32mhttp[39m]: POST /api/checkout/orders/lookup 200 3.737 ms - 600
+11:08:55 [[32mhttp[39m]: GET /api/admin/orders/6b04651718a3b8951f9f16ee 200 10.178 ms - 2752
+PASS     P06 — Cliente cierra el checkout de Wompi (ningún evento)
+11:08:55 [[32mhttp[39m]: POST /api/checkout/orders 201 100.542 ms - 425
+11:08:55 [[32mhttp[39m]: POST /api/checkout/orders/lookup 200 3.661 ms - 600
+PASS     P07 — Cliente regresa sin pagar (redirect con order= y sin transacción)
+11:08:55 [[32mhttp[39m]: POST /api/checkout/orders 201 77.477 ms - 425
+11:08:55 [[32mhttp[39m]: POST /api/checkout/orders/lookup 200 2.715 ms - 600
+11:08:55 [[33mwarn[39m]: Auth failure No has iniciado sesión {"method":"GET","url":"/api/checkout/orders/lookup?order=[redactado]&id=[redactado]&status=APPROVED","statusCode":401,"ip":"127.0.0.1"}
+11:08:55 [[32mhttp[39m]: GET /api/checkout/orders/lookup?order=[redactado]&id=[redactado]&status=APPROVED 401 0.934 ms - 53
+PASS     P08 — Redirección manipulada (parámetros de pago inyectados)
+11:08:55 [[32mhttp[39m]: POST /api/checkout/orders 201 72.354 ms - 425
+11:08:55 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.663 ms - 48
+11:08:55 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.807 ms - 48
+11:08:55 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.690 ms - 48
+11:08:55 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.796 ms - 48
+PASS     P09 — Webhook falsificado (sin checksum, checksum aleatorio, secreto incorrecto)
+11:08:55 [[32mhttp[39m]: POST /api/checkout/orders 201 85.770 ms - 425
+11:08:55 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.566 ms - 48
+11:08:55 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.779 ms - 48
+11:08:55 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.953 ms - 48
+11:08:55 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.925 ms - 48
+11:08:55 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.865 ms - 48
+11:08:55 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.595 ms - 48
+PASS     P10 — Firma inválida / manipulación del evento firmado
+11:08:55 [[32mhttp[39m]: POST /api/checkout/orders 201 89.462 ms - 425
+11:08:55 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:55 [[32mhttp[39m]: POST /api/webhooks/wompi 503 25.296 ms - 82
+11:08:55 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:55 [[32mhttp[39m]: POST /api/webhooks/wompi 503 23.965 ms - 82
+11:08:55 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:55 [[32mhttp[39m]: POST /api/webhooks/wompi 503 99.039 ms - 82
+11:08:55 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:55 [[32mhttp[39m]: POST /api/webhooks/wompi 503 118.816 ms - 82
+11:08:55 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:55 [[32mhttp[39m]: POST /api/webhooks/wompi 503 133.687 ms - 82
+11:08:55 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:55 [[32mhttp[39m]: POST /api/webhooks/wompi 503 144.126 ms - 82
+11:08:55 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:55 [[32mhttp[39m]: POST /api/webhooks/wompi 503 183.068 ms - 82
+11:08:55 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:55 [[32mhttp[39m]: POST /api/webhooks/wompi 503 207.732 ms - 82
+FAIL     P11 — Webhook duplicado (secuencial y 6 concurrentes)
+11:08:56 [[32mhttp[39m]: POST /api/checkout/orders 201 74.954 ms - 425
+11:08:56 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:56 [[32mhttp[39m]: POST /api/webhooks/wompi 503 21.023 ms - 82
+11:08:56 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:56 [[32mhttp[39m]: POST /api/webhooks/wompi 503 23.837 ms - 82
+11:08:56 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:56 [[32mhttp[39m]: POST /api/webhooks/wompi 503 23.479 ms - 82
+11:08:56 [[32mhttp[39m]: POST /api/checkout/orders 201 124.596 ms - 425
+11:08:56 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:56 [[32mhttp[39m]: POST /api/webhooks/wompi 503 29.288 ms - 82
+11:08:56 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:56 [[32mhttp[39m]: POST /api/webhooks/wompi 503 25.358 ms - 82
+FAIL     P12 — Webhooks fuera de orden
+11:08:56 [[32mhttp[39m]: POST /api/checkout/orders 201 78.019 ms - 425
+11:08:56 [[32mhttp[39m]: POST /api/admin/orders/6b04651818a3b8951f9f17d0/reconcile-wompi 409 6.558 ms - 91
+11:08:56 [[32mhttp[39m]: GET /api/admin/orders/6b04651818a3b8951f9f17d0 200 6.453 ms - 2752
+11:08:56 [[32mhttp[39m]: POST /api/checkout/orders/lookup 200 3.750 ms - 600
+FAIL     P13 — Webhook perdido: pago aprobado en Wompi pero el evento nunca llega
+11:08:56 [[32mhttp[39m]: POST /api/checkout/orders 201 89.875 ms - 425
+11:08:56 [[31merror[39m]: Server error Failing command via 'failCommand' failpoint
+MongoServerError: Failing command via 'failCommand' failpoint
+    at Connection.sendCommand (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\cmap\connection.js:320:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Connection.command (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\cmap\connection.js:347:26)
+    at async Server.command (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\sdam\server.js:208:29)
+    at async executeOperationWithRetries (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\operations\execute_operation.js:193:32)
+    at async executeOperation (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async Collection.findOneAndUpdate (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\collection.js:544:16)
+    at async model.Query._findOneAndUpdate (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongoose\lib\query.js:3621:13)
+    at async model.Query.exec (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongoose\lib\query.js:4797:63)
+    at async exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:72:13)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":500,"userId":null,"ip":"127.0.0.1"}
+11:08:56 [[32mhttp[39m]: POST /api/webhooks/wompi 500 3.218 ms - 57
+11:08:56 [[31merror[39m]: Server error Failing command via 'failCommand' failpoint
+MongoServerError: Failing command via 'failCommand' failpoint
+    at Connection.sendCommand (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\cmap\connection.js:320:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Connection.command (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\cmap\connection.js:347:26)
+    at async Server.command (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\sdam\server.js:208:29)
+    at async executeOperationWithRetries (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\operations\execute_operation.js:193:32)
+    at async executeOperation (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async Collection.findOneAndUpdate (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\collection.js:544:16)
+    at async model.Query._findOneAndUpdate (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongoose\lib\query.js:3621:13)
+    at async model.Query.exec (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongoose\lib\query.js:4797:63)
+    at async exports.paymentEventReview (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\notificationEvents.js:13:3)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:97:9
+    at async ClientSession.withTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\sessions.js:568:30)
+    at async exports.inTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\transactionService.js:7:12)
+    at async exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:94:7)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":500,"userId":null,"ip":"127.0.0.1"}
+11:08:56 [[32mhttp[39m]: POST /api/webhooks/wompi 500 15.921 ms - 57
+11:08:56 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:56 [[32mhttp[39m]: POST /api/webhooks/wompi 503 21.764 ms - 82
+FAIL     P14 — Error de MongoDB: (a) al guardar la evidencia, (b) durante el descuento de inventario
+11:08:56 [[32mhttp[39m]: POST /api/checkout/orders 201 78.325 ms - 425
+11:08:56 [[32mhttp[39m]: POST /api/checkout/orders 200 8.676 ms - 382
+PASS     P15 — Respuesta perdida / resultado desconocido al crear pedido (misma clave tras fallo)
+11:08:56 [[32mhttp[39m]: POST /api/checkout/orders 409 74.668 ms - 120
+11:08:56 [[32mhttp[39m]: POST /api/checkout/orders 409 93.596 ms - 120
+11:08:56 [[32mhttp[39m]: POST /api/checkout/orders 409 100.131 ms - 120
+11:08:56 [[32mhttp[39m]: POST /api/checkout/orders 409 98.169 ms - 120
+11:08:56 [[32mhttp[39m]: POST /api/checkout/orders 201 134.621 ms - 425
+PASS     P16 — Doble clic en pagar (5 solicitudes simultáneas, misma clave)
+11:08:56 [[32mhttp[39m]: POST /api/checkout/orders 201 90.963 ms - 425
+11:08:56 [[32mhttp[39m]: POST /api/checkout/orders 201 93.318 ms - 425
+PASS     P17 — Dos solicitudes concurrentes con claves distintas (dos pestañas)
+11:08:57 [[32mhttp[39m]: POST /api/checkout/orders 201 73.326 ms - 425
+11:08:57 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:57 [[32mhttp[39m]: POST /api/webhooks/wompi 503 22.249 ms - 82
+11:08:57 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:57 [[32mhttp[39m]: POST /api/webhooks/wompi 503 26.468 ms - 82
+FAIL     P18 — Reintento tras rechazo (DECLINED → APPROVED en el mismo enlace)
+11:08:57 [[32mhttp[39m]: POST /api/checkout/orders 201 97.311 ms - 425
+11:08:57 [[32mhttp[39m]: PATCH /api/admin/orders/6b04651918a3b8951f9f1895/status 200 30.344 ms - 863
+11:08:57 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:57 [[32mhttp[39m]: POST /api/webhooks/wompi 503 30.240 ms - 82
+FAIL     P19 — Aprobación tardía tras cancelación administrativa
+11:08:57 [[32mhttp[39m]: POST /api/checkout/orders 201 90.071 ms - 425
+11:08:57 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:57 [[32mhttp[39m]: POST /api/webhooks/wompi 503 28.999 ms - 82
+11:08:57 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:57 [[32mhttp[39m]: POST /api/webhooks/wompi 503 30.451 ms - 82
+11:08:57 [[32mhttp[39m]: PATCH /api/admin/orders/6b04651918a3b8951f9f18b5/status 409 8.628 ms - 84
+11:08:57 [[32mhttp[39m]: GET /api/admin/orders/6b04651918a3b8951f9f18b5 200 6.950 ms - 2752
+FAIL     P20 — Dos transacciones aprobadas para un pedido
+11:08:57 [[32mhttp[39m]: POST /api/checkout/orders 201 80.213 ms - 425
+PASS     P21 — Monto manipulado por el cliente en la solicitud
+11:08:57 [[32mhttp[39m]: POST /api/checkout/orders 201 84.271 ms - 425
+11:08:57 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:57 [[32mhttp[39m]: POST /api/webhooks/wompi 503 23.305 ms - 82
+11:08:57 [[32mhttp[39m]: POST /api/checkout/orders/lookup 200 3.048 ms - 600
+11:08:57 [[32mhttp[39m]: PATCH /api/admin/orders/6b04651918a3b8951f9f18e7/status 409 6.056 ms - 84
+PASS     P21b — Transacción APPROVED con monto inferior al del pedido
+11:08:57 [[32mhttp[39m]: POST /api/checkout/orders 400 9.198 ms - 75
+11:08:57 [[32mhttp[39m]: POST /api/checkout/orders 201 85.493 ms - 425
+11:08:57 [[32mhttp[39m]: POST /api/checkout/orders 400 9.750 ms - 75
+PASS     P22 — Cupón manipulado (inexistente, descuento enviado por el cliente)
+11:08:57 [[32mhttp[39m]: POST /api/checkout/orders 201 110.414 ms - 425
+11:08:58 [[32mhttp[39m]: POST /api/checkout/orders 201 104.911 ms - 425
+11:08:58 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:58 [[32mhttp[39m]: POST /api/webhooks/wompi 503 27.536 ms - 82
+11:08:58 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:58 [[32mhttp[39m]: POST /api/webhooks/wompi 503 31.427 ms - 82
+11:08:58 [[32mhttp[39m]: PATCH /api/admin/orders/6b04651918a3b8951f9f1931/status 409 5.977 ms - 84
+FAIL     P22b — Cupón de un solo uso usado en dos pedidos Wompi pagados
+11:08:58 [[32mhttp[39m]: POST /api/checkout/orders 201 77.872 ms - 425
+11:08:58 [[32mhttp[39m]: POST /api/checkout/orders 201 69.393 ms - 425
+11:08:58 [[32mhttp[39m]: POST /api/webhooks/wompi 200 23.421 ms - 2
+11:08:58 [[32mhttp[39m]: POST /api/checkout/orders 201 69.023 ms - 425
+11:08:58 [[32mhttp[39m]: POST /api/checkout/orders 201 72.547 ms - 425
+11:08:58 [[32mhttp[39m]: POST /api/webhooks/wompi 200 21.359 ms - 2
+PASS     P23 — Referencia/sku de un pedido y payment_link_id de otro en el mismo evento
+11:08:58 [[32mhttp[39m]: POST /api/checkout/orders 201 68.592 ms - 425
+11:08:58 [[32mhttp[39m]: POST /api/checkout/orders 201 70.009 ms - 425
+11:08:58 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:58 [[32mhttp[39m]: POST /api/webhooks/wompi 503 20.780 ms - 82
+11:08:58 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:58 [[32mhttp[39m]: POST /api/webhooks/wompi 503 23.758 ms - 82
+PASS     P24 — Transacción de otro pedido usada para confirmar un pedido diferente
+11:08:58 [[32mhttp[39m]: POST /api/checkout/orders 201 76.339 ms - 425
+11:08:58 [[32mhttp[39m]: POST /api/webhooks/wompi 200 0.558 ms - 2
+PASS     P25 — Evento de Sandbox con el backend en modo producción
+11:08:58 [[32mhttp[39m]: POST /api/checkout/orders 201 77.691 ms - 425
+11:08:58 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"PATCH","url":"/api/admin/orders/6b04651a18a3b8951f9f19ee/payment","statusCode":403,"ip":"127.0.0.1"}
+11:08:58 [[32mhttp[39m]: PATCH /api/admin/orders/6b04651a18a3b8951f9f19ee/payment 403 2.833 ms - 75
+11:08:58 [[33mwarn[39m]: Auth failure Solo administradores pueden registrar recaudos {"method":"PATCH","url":"/api/admin/orders/6b04651a18a3b8951f9f19ee/payment","statusCode":403,"ip":"127.0.0.1"}
+11:08:58 [[32mhttp[39m]: PATCH /api/admin/orders/6b04651a18a3b8951f9f19ee/payment 403 6.181 ms - 76
+11:08:58 [[32mhttp[39m]: PATCH /api/admin/orders/6b04651a18a3b8951f9f19ee/payment 409 5.020 ms - 66
+11:08:58 [[33mwarn[39m]: Auth failure No has iniciado sesión {"method":"PATCH","url":"/api/admin/orders/6b04651a18a3b8951f9f19ee/payment","statusCode":401,"ip":"127.0.0.1"}
+11:08:58 [[32mhttp[39m]: PATCH /api/admin/orders/6b04651a18a3b8951f9f19ee/payment 401 1.013 ms - 53
+11:08:59 [[32mhttp[39m]: POST /api/checkout/orders 201 74.702 ms - 425
+PASS     P26 — Intento de marcar pagado desde cliente / vendedor / admin (Wompi)
+11:08:59 [[32mhttp[39m]: POST /api/checkout/orders 201 83.361 ms - 425
+11:08:59 [[32mhttp[39m]: GET /api/checkout/orders/6b04651b18a3b8951f9f1a1a 404 4.080 ms - 50
+11:08:59 [[32mhttp[39m]: PATCH /api/checkout/orders/6b04651b18a3b8951f9f1a1a/cancel 404 3.535 ms - 50
+11:08:59 [[32mhttp[39m]: POST /api/checkout/orders/lookup 404 2.535 ms - 50
+11:08:59 [[32mhttp[39m]: POST /api/checkout/orders/lookup 404 2.419 ms - 50
+11:08:59 [[32mhttp[39m]: POST /api/checkout/orders/lookup 404 3.974 ms - 50
+11:08:59 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"GET","url":"/api/admin/orders/6b04651b18a3b8951f9f1a1a","statusCode":403,"ip":"127.0.0.1"}
+11:08:59 [[32mhttp[39m]: GET /api/admin/orders/6b04651b18a3b8951f9f1a1a 403 1.977 ms - 75
+PASS     P27 — Consulta/cancelación de pedido ajeno (BOLA/IDOR)
+11:08:59 [[32mhttp[39m]: POST /api/checkout/orders 201 88.675 ms - 425
+11:08:59 [[32mhttp[39m]: GET /api/checkout/orders/6b04651b18a3b8951f9f1a33 200 4.761 ms - 891
+11:08:59 [[32mhttp[39m]: PATCH /api/checkout/orders/6b04651b18a3b8951f9f1a33/cancel 409 10.756 ms - 116
+11:08:59 [[32mhttp[39m]: PATCH /api/admin/orders/6b04651b18a3b8951f9f1a33/status 200 19.958 ms - 939
+FAIL     P28 — Cancelación antes del pago
+11:08:59 [[32mhttp[39m]: POST /api/checkout/orders 201 91.885 ms - 425
+11:08:59 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:08:59 [[32mhttp[39m]: POST /api/webhooks/wompi 503 23.383 ms - 82
+11:08:59 [[32mhttp[39m]: PATCH /api/checkout/orders/6b04651b18a3b8951f9f1a56/cancel 409 13.744 ms - 116
+11:08:59 [[32mhttp[39m]: PATCH /api/admin/orders/6b04651b18a3b8951f9f1a56/status 200 24.191 ms - 939
+FAIL     P29 — Cancelación después del pago
+(node:18672) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:08:59 [[32mhttp[39m]: POST /api/checkout/orders 201 95.381 ms - 371
+11:08:59 [[32mhttp[39m]: PATCH /api/admin/orders/6b04651b18a3b8951f9f1a7b/status 200 13.952 ms - 858
+PASS     P31 — Pedido contraentrega
+(node:18672) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:08:59 [[32mhttp[39m]: POST /api/checkout/orders 201 82.425 ms - 371
+11:08:59 [[32mhttp[39m]: PATCH /api/admin/orders/6b04651b18a3b8951f9f1a99/payment 409 5.356 ms - 68
+11:08:59 [[32mhttp[39m]: PATCH /api/admin/orders/6b04651b18a3b8951f9f1a99/status 200 11.595 ms - 858
+11:08:59 [[32mhttp[39m]: PATCH /api/admin/orders/6b04651b18a3b8951f9f1a99/shipping 200 17.271 ms - 840
+11:08:59 [[32mhttp[39m]: PATCH /api/admin/orders/6b04651b18a3b8951f9f1a99/status 200 14.717 ms - 877
+11:08:59 [[33mwarn[39m]: Auth failure Solo administradores pueden registrar recaudos {"method":"PATCH","url":"/api/admin/orders/6b04651b18a3b8951f9f1a99/payment","statusCode":403,"ip":"127.0.0.1"}
+11:08:59 [[32mhttp[39m]: PATCH /api/admin/orders/6b04651b18a3b8951f9f1a99/payment 403 6.159 ms - 76
+11:08:59 [[32mhttp[39m]: PATCH /api/admin/orders/6b04651b18a3b8951f9f1a99/payment 400 5.215 ms - 87
+11:08:59 [[32mhttp[39m]: PATCH /api/admin/orders/6b04651b18a3b8951f9f1a99/payment 200 16.193 ms - 859
+PASS     P32 — Contraentrega: recaudo solo tras entrega y con evidencia, solo admin
+11:08:59 [[32mhttp[39m]: POST /api/checkout/orders 400 0.645 ms - 127
+11:08:59 [[32mhttp[39m]: POST /api/checkout/orders 400 0.543 ms - 127
+11:08:59 [[32mhttp[39m]: POST /api/checkout/orders 400 0.619 ms - 127
+11:08:59 [[32mhttp[39m]: POST /api/checkout/orders 400 0.717 ms - 127
+11:08:59 [[32mhttp[39m]: POST /api/checkout/orders 400 0.604 ms - 127
+11:08:59 [[32mhttp[39m]: POST /api/checkout/orders 400 0.514 ms - 127
+11:08:59 [[32mhttp[39m]: POST /api/checkout/orders 400 0.539 ms - 127
+11:08:59 [[32mhttp[39m]: POST /api/checkout/orders 400 0.534 ms - 127
+11:08:59 [[32mhttp[39m]: POST /api/checkout/orders 400 0.576 ms - 127
+11:08:59 [[32mhttp[39m]: POST /api/checkout/orders 400 0.533 ms - 127
+11:08:59 [[32mhttp[39m]: POST /api/payments/nequi/webhook 410 0.779 ms - 229
+11:08:59 [[32mhttp[39m]: GET /api/checkout/config 200 2.025 ms - 830
+11:08:59 [[32mhttp[39m]: GET /api/checkout/config 200 1.668 ms - 719
+11:08:59 [[32mhttp[39m]: POST /api/checkout/orders 400 0.535 ms - 127
+PASS     P33 — Métodos de pago deshabilitados o inventados
+(node:18672) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:18672) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:18672) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:08:59 [[32mhttp[39m]: POST /api/checkout/orders 409 43.819 ms - 73
+11:08:59 [[32mhttp[39m]: POST /api/checkout/orders 201 88.917 ms - 371
+11:09:00 [[32mhttp[39m]: POST /api/checkout/orders 201 79.025 ms - 425
+11:09:00 [[32mhttp[39m]: POST /api/checkout/orders 201 79.494 ms - 425
+11:09:00 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:09:00 [[32mhttp[39m]: POST /api/webhooks/wompi 503 25.343 ms - 82
+11:09:00 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:09:00 [[32mhttp[39m]: POST /api/webhooks/wompi 503 24.355 ms - 82
+FAIL     P34 — Última unidad: contraentrega concurrente y Wompi concurrente
+11:09:00 [[32mhttp[39m]: POST /api/checkout/orders 201 178.656 ms - 425
+11:09:00 [[32mhttp[39m]: POST /api/webhooks/wompi 200 79.922 ms - 2
+(node:18672) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:09:00 [[32mhttp[39m]: POST /api/admin/orders/6b04651c18a3b8951f9f1b18/reconcile-wompi 200 74.223 ms - 100
+PASS     P35 — Inventario agotado durante el checkout y recuperación por conciliación
+11:09:00 [[32mhttp[39m]: POST /api/checkout/orders 201 76.223 ms - 425
+(node:18672) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:09:00 [[32mhttp[39m]: POST /api/webhooks/wompi 200 63.447 ms - 2
+11:09:00 [[32mhttp[39m]: POST /api/admin/orders/6b04651c18a3b8951f9f1b49/reconcile-wompi 200 60.278 ms - 100
+11:09:00 [[32mhttp[39m]: POST /api/admin/orders/6b04651c18a3b8951f9f1b49/reconcile-wompi 200 62.134 ms - 100
+11:09:00 [[32mhttp[39m]: POST /api/webhooks/wompi 200 7.176 ms - 2
+PASS     P36 — Repetición de evento y conciliación con efectos de inventario
+11:09:00 [[32mhttp[39m]: POST /api/checkout/orders 201 70.852 ms - 425
+11:09:00 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:09:00 [[32mhttp[39m]: POST /api/webhooks/wompi 503 22.872 ms - 82
+11:09:00 [[32mhttp[39m]: POST /api/checkout/orders 201 85.724 ms - 425
+11:09:01 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:09:01 [[32mhttp[39m]: POST /api/webhooks/wompi 503 23.485 ms - 82
+11:09:01 [[32mhttp[39m]: POST /api/checkout/orders 201 122.909 ms - 425
+11:09:01 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:09:01 [[32mhttp[39m]: POST /api/webhooks/wompi 503 38.292 ms - 82
+11:09:01 [[32mhttp[39m]: GET /api/admin/alerts 200 57.842 ms - 12832
+11:09:01 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado]&limit=100 200 33.527 ms - 3555
+FAIL     P37 — Señales administrativas de pago (outbox, alertas, bandeja de revisión)
+11:09:01 [[32mhttp[39m]: POST /api/checkout/orders 201 81.240 ms - 425
+11:09:01 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:09:01 [[32mhttp[39m]: POST /api/webhooks/wompi 503 23.837 ms - 82
+11:09:01 [[32mhttp[39m]: POST /api/checkout/orders/lookup 200 3.008 ms - 600
+FAIL     P38 — Mensaje visible de rechazo (API + función de copia del frontend)
+11:09:01 [[32mhttp[39m]: POST /api/checkout/orders 201 85.058 ms - 425
+11:09:01 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:09:01 [[32mhttp[39m]: POST /api/webhooks/wompi 503 27.214 ms - 82
+11:09:01 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"POST","url":"/api/admin/orders/6b04651d18a3b8951f9f1bde/reconcile-wompi","statusCode":403,"ip":"127.0.0.1"}
+11:09:01 [[32mhttp[39m]: POST /api/admin/orders/6b04651d18a3b8951f9f1bde/reconcile-wompi 403 3.522 ms - 75
+11:09:01 [[32mhttp[39m]: POST /api/admin/orders/6b04651d18a3b8951f9f1bde/reconcile-wompi 409 5.210 ms - 91
+FAIL     P39 — Conciliación de pedido pendiente con transacción conocida
+11:09:01 [[32mhttp[39m]: POST /api/checkout/orders 201 82.263 ms - 425
+11:09:01 [[32mhttp[39m]: POST /api/webhooks/wompi 200 67.144 ms - 2
+11:09:01 [[32mhttp[39m]: PATCH /api/checkout/orders/6b04651d18a3b8951f9f1bf7/cancel 409 57.669 ms - 124
+11:09:01 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:09:01 [[32mhttp[39m]: POST /api/webhooks/wompi 503 21.228 ms - 82
+PASS     X02 — Cliente cancela tras DECLINED y luego paga en el mismo enlace (aún activo)
+(node:18672) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:09:01 [[32mhttp[39m]: POST /api/checkout/orders 201 88.900 ms - 371
+11:09:01 [[32mhttp[39m]: POST /api/webhooks/wompi 200 18.476 ms - 2
+PASS     X03 — Evento Wompi cuya referencia coincide con un pedido contraentrega
+11:09:02 [[32mhttp[39m]: POST /api/checkout/orders 201 80.232 ms - 425
+11:09:02 [[32mhttp[39m]: PATCH /api/admin/orders/6b04651d18a3b8951f9f1c3b/status 200 21.744 ms - 863
+11:09:02 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:09:02 [[32mhttp[39m]: POST /api/webhooks/wompi 503 30.165 ms - 82
+11:09:02 [[32mhttp[39m]: POST /api/checkout/orders 201 82.581 ms - 425
+11:09:02 [[32mhttp[39m]: PATCH /api/admin/orders/6b04651e18a3b8951f9f1c5a/status 200 22.470 ms - 863
+11:09:02 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:09:02 [[32mhttp[39m]: POST /api/webhooks/wompi 503 28.355 ms - 82
+11:09:02 [[32mhttp[39m]: POST /api/checkout/orders 201 74.078 ms - 425
+11:09:02 [[32mhttp[39m]: PATCH /api/admin/orders/6b04651e18a3b8951f9f1c79/status 200 16.200 ms - 863
+11:09:02 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:09:02 [[32mhttp[39m]: POST /api/webhooks/wompi 503 26.655 ms - 82
+11:09:02 [[32mhttp[39m]: POST /api/checkout/orders 201 65.274 ms - 425
+11:09:02 [[32mhttp[39m]: PATCH /api/admin/orders/6b04651e18a3b8951f9f1c98/status 200 19.561 ms - 863
+11:09:02 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:09:02 [[32mhttp[39m]: POST /api/webhooks/wompi 503 29.185 ms - 82
+FAIL     X04 — Webhook APPROVED y cancelación administrativa simultáneos
+11:09:02 [[32mhttp[39m]: POST /api/checkout/orders 201 66.975 ms - 425
+11:09:02 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:99:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:09:02 [[32mhttp[39m]: POST /api/webhooks/wompi 503 18.941 ms - 82
+11:09:02 [[32mhttp[39m]: POST /api/admin/orders/6b04651e18a3b8951f9f1cb7/reconcile-wompi 409 7.528 ms - 91
+(node:18672) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:09:02 [[32mhttp[39m]: POST /api/webhooks/wompi 200 79.986 ms - 2
+11:09:02 [[32mhttp[39m]: POST /api/webhooks/wompi 200 82.176 ms - 2
+PASS     X05 — Webhook y conciliación administrativa simultáneos
+PASS     X06 — Incidencias sin vía de resolución en la API administrativa
+11:09:02 [[32mhttp[39m]: POST /api/checkout/orders 201 70.925 ms - 425
+FAIL     X07 — Vigencia del enlace de pago creado
+NOT_APPLICABLE P40 — Reembolso o anulación en el proveedor
+Resumen: { FAIL: 21, PASS: 28, NOT_APPLICABLE: 1 } hosts externos bloqueados: []

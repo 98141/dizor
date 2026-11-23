@@ -90,7 +90,9 @@ const orderSchema = new mongoose.Schema(
       recordedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     },
     requiresReview: { type: Boolean, default: false },
-    incidents: [{ code: String, detail: String, createdAt: { type: Date, default: Date.now }, resolvedAt: { type: Date, default: null } }],
+    incidents: [{ code: String, detail: String, createdAt: { type: Date, default: Date.now }, resolvedAt: { type: Date, default: null },
+      resolution: { actor: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, decision: String, reason: String,
+        evidence: { transactionId: String, reference: String, url: String, amountInCents: Number, currency: String, recordedAt: Date } } }],
     paymentConfirmedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

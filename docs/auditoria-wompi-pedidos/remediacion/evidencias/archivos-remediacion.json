@@ -1,0 +1,378 @@
+[
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/01_PLAN_Y_DEPENDENCIAS.md",
+    "sha256": "85dec43ea500b39af55f64a0d5bda4c71c4d61c4bd51baa50251d06d7a3b8200"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/02_CAMBIOS_POR_HALLAZGO.md",
+    "sha256": "b4f3c555d7b0950e0f96fed9b6b1c373b158c0d588474718e88e34d170c2d6e2"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/03_DECISIONES_TECNICAS.md",
+    "sha256": "8ab419c1e2cef601143baead0f08cd74357b1a61f6c6da12c70e4a2ce80fc3d2"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/04_PRUEBAS_Y_REGRESIONES.md",
+    "sha256": "be309d115244570a95bbc594c5d188688fb78b15fb480a2349118fc58f9e3860"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/05_RIESGOS_RESIDUALES.md",
+    "sha256": "8c5f50ad749ee35776264911dad42a30157b190ff3b72100cca79ffd6e1bd95c"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/06_VERIFICACIONES_SANDBOX_PENDIENTES.md",
+    "sha256": "e14dca2e4a5bd135d9ac8c5f43502d097478a6d4476ffb69326e4198443216b1"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/07_HANDOFF_AUDITOR_CLAUDE.md",
+    "sha256": "50c20b82a45a9ab729330e03696d543beac123c18efd11959789b72a6f8632c1"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/auditoria-contrato.cjs",
+    "sha256": "928ba4fcf9f8ec10271b42587f58561178b89913e5ed1ce33af6a9489106dd19"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/contrato-fixtures.cjs",
+    "sha256": "af3220330ca6ba2337ae490f3309fba2ba69157850ff1f0e80f1a90ff8e531c0"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/estatico.cjs",
+    "sha256": "038353724b99a18d172b460afef34568d68c00e612622744fa6aba9a543dcc78"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/ampliadas-antes.txt",
+    "sha256": "36093c7c2f55a6449ef3ad588433e46a2a26be185361e59e60bf11c787cfa76e"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/ampliadas-despues.txt",
+    "sha256": "342232981b836ce15f47f749d0538867ae244cdfc9c18ec5fcf9ad70f312d207"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/archivos-codigo.json",
+    "sha256": "2a4d5e548ca235a9752afe9e73a50df3c72b2b379040571861de51e4cd277a58"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/auditoria-final/docs/auditoria-wompi-pedidos/evidencias/resultados-auditoria-wompi.json",
+    "sha256": "3bc2bcbf78fb5225f4eb2a12f10d508a3659757b7394dd4815f50943438afd06"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/auditoria-final.txt",
+    "sha256": "79dc142f027e2837aa5c4b86a7785b40c49e6c13ffb49a3c329800926077a697"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/baseline/docs/auditoria-admin/fase2-evidencias/cierre-independiente-resultados.json",
+    "sha256": "a3fb3e9a43fd122573524f0e1ecf88ee6e94d4b5bdb667e69cb78ac8e2a0fc1d"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/baseline/docs/auditoria-admin/fase4-evidencias/rendimiento.json",
+    "sha256": "15ffea987fc9f7d9c909b0bfde0371fa852fb286c1536e51a64c8a0a3f8cfa09"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/baseline/docs/auditoria-admin/fase7-evidencias/rendimiento-local.json",
+    "sha256": "7f0133841e50965fb2b4514153cbcb0e992dd0b820b19b5c039140fba3739ae0"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/baseline/docs/auditoria-wompi-pedidos/evidencias/resultados-auditoria-wompi.json",
+    "sha256": "76b4bc4371f401f5c27e8967486a5a2f8a2d40da707248ac15861456657ee19e"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/baseline-auditoria-local.txt",
+    "sha256": "1b51b62906ee64cd5918db74a1985d0689d120cbbfa68bb1011aeb35c4a5eb8e"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/baseline-auditoria.txt",
+    "sha256": "4b8ab90daa83bc33df156986231301a2cdf1383af10b89a84695f16ff61a3f7c"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/baseline-suite-local.txt",
+    "sha256": "09076b474b4f7f1ae18b2802f1cb424526b2ca2b1a0411c5d63cb30f95c6a09d"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/baseline-suite.txt",
+    "sha256": "8bb033df352dd0032aac14c1ab72af4f013e9563decaa0e19532bdc73f26dd48"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/bordes-antes.txt",
+    "sha256": "a25b3b4923036d633474d8a430d815e4923fd83cd821a4d31c898f9e484a83f9"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/codigo.diff",
+    "sha256": "5afc10904abd9bb66886a698249f2129a78fb4dd6d23fcd68736d787faba1ebd"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/controladores-cierre.txt",
+    "sha256": "63d9cde47e5d5c5f8c623533f8388bc1f84fe0b227a3e0e9a2627662852b0532"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/despues-original/docs/auditoria-wompi-pedidos/evidencias/resultados-auditoria-wompi.json",
+    "sha256": "e17e09ed2e5be88a3138ad9e46dd7b224f6696f024e834642ecd71139fc983d8"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/despues-original.txt",
+    "sha256": "d00de507a53284d638cc51ba11f125b825f42d265b598655e67b0498847eafab"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/estatico-cierre.json",
+    "sha256": "e7a9f6a80dc23a0232618cecbb589e6d82c3d0a0815c78969acc97d92164b2b6"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/estatico-cierre.txt",
+    "sha256": "8c8a04bdcf79791095c4cc249cb13cdee8cbb049188f33554c4de2854b8facd6"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/estatico-final.json",
+    "sha256": "7600993a6cdbbbb1c02fa2eec2b76943a381d1f4f652ae0ab3e57e7e11f69aba"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/estatico-final.txt",
+    "sha256": "d73e64ffbf42c7b40e5a50b32f649a83d4a3495ccba1c836b49a7ecadba213c9"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/estatico.json",
+    "sha256": "510c571e25282c2e9c9bbc89f75f4e2c45b6f49f776ec638f61f9c2aa31cab6c"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/estatico.txt",
+    "sha256": "945ec7c2e297a0774614a0f8d75937173add72b4bfd9e7224a2b16491dbe32d6"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/git-status.txt",
+    "sha256": "f804e2af769470ac3a069d6d5582c174d028d897941e0f82d159bcfd86f78545"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/historicos-sha256.json",
+    "sha256": "c2d8c60b2e1f76c5926a975ce6617a0c659187cb05cc7face00d1593cb11a254"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/limites.txt",
+    "sha256": "034acf93d9a663b50140e60c10223ad70e558e169e5572ef47ab6465954ac5b4"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/matriz-verificada/docs/auditoria-wompi-pedidos/evidencias/resultados-auditoria-wompi.json",
+    "sha256": "616236c9100dc9a55dffb5da5a486e3d0aa24cd49286afc76245004b6296f64c"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/matriz-verificada.txt",
+    "sha256": "f9a1ef9cd05dd6f05f260a61a990cb6b53a5e9054dfc86cd8f4e5a3c1d891de7"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/navegador/build-fase7.json",
+    "sha256": "e9ecf27ff890ccbc4d3372dd2c2b3c48012620e62995cbf61bf27bae1e306f7e"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/navegador/build-fase7.txt",
+    "sha256": "e0bdf50fe0e0b5b02b7afa31860c0a3425c8d0dbb49c53db45d4e675cc858e63"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/navegador/e2e-cod-entregado-cobrado.png",
+    "sha256": "5ae7fc5f03371cebbfcba06d5306fb65d12fc19bfbad537711f7cd6a697282bf"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/navegador/finanzas-1024.png",
+    "sha256": "3d8054125545113b7c6c5c27a02346861582bc0c9d3c9e963f053e204f0ae8ac"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/navegador/finanzas-1440.png",
+    "sha256": "4638bfc5f9c92e324c5e4ed884a3cf736dc2e681ff9a0ecb64f2043b792af48e"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/navegador/finanzas-360.png",
+    "sha256": "c453fddd1ff4343dd6569276e9a2a2002a009ac5707971f471ca4e21bf5c305a"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/navegador/finanzas-390.png",
+    "sha256": "5e2df4a1cd14d38174f261a263a8489ede887131b251d5406f99602855d2802f"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/navegador/finanzas-820.png",
+    "sha256": "626f97eb5443ae45119680e0c4a58280073ac1f456db17dfad21d9759377da84"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/navegador/integracion-compras.json",
+    "sha256": "d03b561fd7a8610db0d9a962167a5c5b816b777f0c9a50adbfd097a53d90a120"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/navegador/next-navegador.json",
+    "sha256": "927e2ea6782abfd399d18cabc87e8821e181cf6895e5c19424b6e1b0227abd8b"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/navegador/next-servidor.txt",
+    "sha256": "d0484710287c20e56809d002dc64cd3f0406df692738ad72e18780ef4ee1d5e7"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/navegador-remediacion/build-fase7.json",
+    "sha256": "e9ecf27ff890ccbc4d3372dd2c2b3c48012620e62995cbf61bf27bae1e306f7e"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/navegador-remediacion/build-fase7.txt",
+    "sha256": "73f6650477edd0523939742db8a2ab596e6d5413497f9f2cd30e6a1e867d065b"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/navegador-remediacion/e2e-cod-entregado-cobrado.png",
+    "sha256": "6db8828ef5f961169763cb295fdb03b32e3f09b3ae4dd3624199185fe6c5a758"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/navegador-remediacion/finanzas-1024.png",
+    "sha256": "ab7e2c00108b564f520b2fa58b7dc5e759b8a48000f60df9b1604ce8ab045275"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/navegador-remediacion/finanzas-1440.png",
+    "sha256": "f74f21493a4d19b25bff8a8b931412d78c7f84d4075942c04d9be6fa1a10194b"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/navegador-remediacion/finanzas-360.png",
+    "sha256": "41b6b0f9a22aa672660d9ae49f116c4f75ad6cd38b572fd01d0a08f7a5285034"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/navegador-remediacion/finanzas-390.png",
+    "sha256": "5fd956a01e827befdd99673cb0824309d5b26a287525a3b0142b25fb8671fb22"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/navegador-remediacion/finanzas-820.png",
+    "sha256": "375d2c1c3b4c565b79bedc1c1b816a2290371f5f5dbaaae79f75b76e9e148033"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/navegador-remediacion/integracion-compras.json",
+    "sha256": "2d2471ed6d0ebd0d6991febb3ba404d669d5214a9bc53c462d402ff5df057fc4"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/navegador-remediacion/next-navegador.json",
+    "sha256": "4b39c97aa05fb0f5827d50f4652536c919bbef3e5a5685964a583ed60f9f37c8"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/navegador-remediacion/next-servidor.txt",
+    "sha256": "33beaa9afd27d652f28c1e6a97b3b3904230e63b6bb48ad42c871877a48ea9a2"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/navegador-remediacion/remediacion-confirmacion-390.png",
+    "sha256": "b522c6decf48b49c4bd1a4a1c9b099184915d01e91d8ddd87a78e1982a303aff"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/navegador-remediacion/remediacion-ui.json",
+    "sha256": "c8d1247e4c18c0015d5156bd254b7ece7dc96fc58f5faf93349e0f1937db5f7d"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/navegador-remediacion.txt",
+    "sha256": "6af5df19093ee58d3b4486f6b37de64e400916102875948852350b6b4e293dc4"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/navegador.txt",
+    "sha256": "7e4ee77867a1ed89d3510c71f724c522787464365898b453360799ee306829f8"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/nuevas-antes.txt",
+    "sha256": "5c66093573296832c06775d276548fb9e1e84d61d2903b77e1bc6c78700c1c23"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/nuevas-final.txt",
+    "sha256": "b54d2a539f77f6ee45592b63ff37d52d00257eebfe415cccb92c366f4e32438b"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/nuevas-intermedio.txt",
+    "sha256": "7ac11226a2dd8485a21ebc3775de16ad7c2fcde9ac3bcb5fc3271d3004db0a2f"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/phase1-contrato.txt",
+    "sha256": "824cb794e92ea002d0c008755ab6f4366593929a0ca875024686dcc1c5f24551"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/regresiones-27.txt",
+    "sha256": "77bffd3b52bc54f17fa753fbacb635f01d2e46e7b7cd70602a486ce92ae4a6e7"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/regresiones-cierre.txt",
+    "sha256": "3d4e5c979062f2e27236c1da9c8a3050254b11f649dcec67ebdcb0ba517f064e"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/suite-cierre/docs/auditoria-admin/fase2-evidencias/cierre-independiente-resultados.json",
+    "sha256": "a3fb3e9a43fd122573524f0e1ecf88ee6e94d4b5bdb667e69cb78ac8e2a0fc1d"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/suite-cierre/docs/auditoria-admin/fase4-evidencias/rendimiento.json",
+    "sha256": "a1f54f389786ec7922d5a6172072b3852198b99c5913de5db214d4c14e769f2d"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/suite-cierre/docs/auditoria-admin/fase7-evidencias/rendimiento-local.json",
+    "sha256": "ddd323b74befddeb4b2692145d7af1336117f6f7373a4493e9b7e047d9dd6fe2"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/suite-cierre.txt",
+    "sha256": "0be72ead9d7b9a11e3c39cc58fc413499ecf515eb3621f96d2a9e941867ffabe"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/suite-contrato/docs/auditoria-admin/fase2-evidencias/cierre-independiente-resultados.json",
+    "sha256": "a3fb3e9a43fd122573524f0e1ecf88ee6e94d4b5bdb667e69cb78ac8e2a0fc1d"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/suite-contrato/docs/auditoria-admin/fase4-evidencias/rendimiento.json",
+    "sha256": "d6d30e95c4b12589c9f6ca9fc111a5d2f7da5f06da11525d4228af8b9c20bfcf"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/suite-contrato/docs/auditoria-admin/fase7-evidencias/rendimiento-local.json",
+    "sha256": "ce8636ccb6829f4cb2d48afa41eba5f0cb200509bef9c39899cfc36bb5568f11"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/suite-contrato.txt",
+    "sha256": "871dce80cee75e8bc35922de8eefc50b649576c220e308aacf17c1c07042cd38"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/suite-final/docs/auditoria-admin/fase2-evidencias/cierre-independiente-resultados.json",
+    "sha256": "a3fb3e9a43fd122573524f0e1ecf88ee6e94d4b5bdb667e69cb78ac8e2a0fc1d"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/suite-final/docs/auditoria-admin/fase4-evidencias/rendimiento.json",
+    "sha256": "884ae6a5f71509b1c710429b0fb918e0d6ec13c2d51352b785db7023a4cacc4a"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/suite-final/docs/auditoria-admin/fase7-evidencias/rendimiento-local.json",
+    "sha256": "c2bc50b8678ec8477bf8e0a9200dbe8b769b584d53fb31ba6e5c0744879cfaf7"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/suite-final.txt",
+    "sha256": "e04c9f8b4fa31001197c747b832b410cd1368b533bdc81ff103751fcdab8a8cc"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/suite-verificada/docs/auditoria-admin/fase2-evidencias/cierre-independiente-resultados.json",
+    "sha256": "a3fb3e9a43fd122573524f0e1ecf88ee6e94d4b5bdb667e69cb78ac8e2a0fc1d"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/suite-verificada/docs/auditoria-admin/fase4-evidencias/rendimiento.json",
+    "sha256": "4a6fdec6a05971b08e3f28a3d4feab75e7ad0b5d0b60a60535842478123e613a"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/suite-verificada/docs/auditoria-admin/fase7-evidencias/rendimiento-local.json",
+    "sha256": "e9ded94d6980bb32a828f4767e63a67377e8907e0f7b502911bd7ddfd985f0c9"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/evidencias/suite-verificada.txt",
+    "sha256": "101f9e7d22fa4de7764e20daf53d31311d5a75745c49e05892d4dba6bf3995cf"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/fixture.cjs",
+    "sha256": "84527b58ace65c60928e6ac6bebbf55e81bbee3e340f5b9adbc9ede83334e7ef"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/flujo-remediacion.cjs",
+    "sha256": "26d3822f184e8e2ce90f111f66bdb5b82c0482c65668862635285a008c96a96f"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/inventariar.cjs",
+    "sha256": "36d06452ad66bee993a5cdd25b1b1d4a34b1b97ca9e26b1b9f624dce3637829a"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/limites.test.cjs",
+    "sha256": "8efbab78a6b659adc95e86b65f93191fd935b7a8a9f6d4056e923ab6d596cda4"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/navegador.cjs",
+    "sha256": "d259e734f7c29e0510a4eef8bede23bf950e73f926e5bce99b4c0af6adbf12d5"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/preservar.cjs",
+    "sha256": "13112f2b0ab08752d277f705ae33466315148c740a0eb647175f59a56f08c2fb"
+  },
+  {
+    "file": "docs/auditoria-wompi-pedidos/remediacion/regresiones.test.cjs",
+    "sha256": "040352f11f75208c6dafffecbfd0ee5000e63cc6ab184f5b70c94d98a487dab8"
+  }
+]

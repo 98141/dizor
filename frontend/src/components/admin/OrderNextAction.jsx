@@ -45,7 +45,11 @@ export default function OrderNextAction({ order, execute, busy, locked }) {
       <label>URL de evidencia (opcional)<input name="paymentProofUrl" type="url" placeholder="https://…" disabled={disabled} /></label>
       <button type="submit" className="admin-btn admin-btn--primary" disabled={disabled}>Registrar recaudo</button>
     </form>}
-    {operation.canReconcile && <div className={styles.actions}><button type="button" className="admin-btn" disabled={disabled} onClick={() => setConfirmation({ code: "reconcile", values: {} })}>Consultar y conciliar con Wompi</button></div>}
+    {operation.canReconcile && <form className={styles.form} onSubmit={submit("reconcile")}>
+      <label>ID de transacción del panel o comprobante de Wompi<input name="transactionId" defaultValue={order.wompi?.transactionId || ""} required maxLength={150} pattern="[A-Za-z0-9_-]+" disabled={disabled} /></label>
+      <p>El ID sólo permite consultar. El servidor verifica el enlace, importe y moneda antes de confirmar un pago.</p>
+      <button type="submit" className="admin-btn" disabled={disabled}>Consultar y conciliar con Wompi</button>
+    </form>}
     {confirmation && <fieldset className={styles.confirm}>
       <legend>{CONFIRM[confirmation.code][0]}</legend><p>{CONFIRM[confirmation.code][1]}</p>
       {confirmation.values.trackingNumber && <p><strong>{CARRIER_LABELS[confirmation.values.carrier]} · {confirmation.values.trackingNumber}</strong></p>}

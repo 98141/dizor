@@ -9,6 +9,7 @@ const LABELS = {
   "shipping.corrected": "Actualizamos la guía de tu pedido", "order.delivered": "Entrega registrada",
   "order.cancelled": "Cancelación de tu pedido", "admin.cancelled": "Cancelación solicitada por el cliente",
   "admin.incident": "Pedido con incidencia para revisión",
+  "admin.payment_event": "Transacción Wompi sin asociación verificada",
 };
 exports.EVENT_LABELS = LABELS;
 exports.snapshotOrder = (order) => ({
@@ -23,6 +24,12 @@ exports.snapshotOrder = (order) => ({
 });
 
 exports.buildMessage = (event, snapshot, { retryUrl = null } = {}) => {
+  if (event === "admin.payment_event") {
+    const lines = [`Revisar transacción Wompi ${snapshot.transactionId}: ${snapshot.status} (${snapshot.environment}).`,
+      "Evidencia conservada en la bandeja de eventos de pago. No confirma un pedido ni un reembolso.",
+      ...(snapshot.items || []).map(i => i.name || "")];
+    return { subject: LABELS[event], text: lines.join("\n\n"), html: lines.map(line => `<p>${escape(line)}</p>`).join("") };
+  }
   if (event !== "payment.declined") retryUrl = null;
   if (retryUrl) {
     try {

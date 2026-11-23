@@ -101,8 +101,8 @@ function confirmationCopy(order) {
   }
 
   return {
-    tone: "ok",
-    title: "¡Gracias por tu compra!",
+    tone: order.paymentMethod === "wompi" && order.paymentStatus === "pendiente" ? "quiet" : "ok",
+    title: order.paymentMethod === "wompi" && order.paymentStatus === "pendiente" ? "Pedido registrado; pago pendiente" : "¡Gracias por tu compra!",
     lead,
   };
 }
@@ -541,17 +541,21 @@ function ConfirmacionContent() {
       return undefined;
     }
     let cancelled = false;
-    lookupOrderConfirmation(orderNumber, token)
+    let timer; let remaining = 8;
+    const refresh = () => lookupOrderConfirmation(orderNumber, token)
       .then((data) => {
         if (cancelled) return;
         setOrder(data.order);
         setStatus("ready");
+        if (data.order.paymentMethod === "wompi" && data.order.paymentStatus === "pendiente" && remaining-- > 0) timer = setTimeout(refresh, 15000);
       })
       .catch(() => {
         if (!cancelled) setStatus("limited");
       });
+    void refresh();
     return () => {
       cancelled = true;
+      clearTimeout(timer);
     };
   }, [orderNumber, isAuthenticated, loadingAuth]);
 

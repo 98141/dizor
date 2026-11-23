@@ -54,6 +54,8 @@ export default function AuthFormField({
           autoComplete={autoComplete}
           disabled={disabled}
           required={required}
+          aria-invalid={Boolean(error)}
+          aria-describedby={error ? `${name}-error` : undefined}
         />
         {isPassword && (
           <button
@@ -68,7 +70,7 @@ export default function AuthFormField({
         )}
       </div>
       {hint && !error && <span className="auth-field__hint">{hint}</span>}
-      {error && <span className="auth-field__error">{error}</span>}
+      {error && <span id={`${name}-error`} className="auth-field__error">{error}</span>}
     </div>
   );
 }

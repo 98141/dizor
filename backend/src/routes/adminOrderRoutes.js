@@ -14,6 +14,8 @@ router.use(authorizeRoles(...staffRoles));
 router.get("/stats", orderAdminController.getOrderStats);
 router.get("/export/pdf", orderAdminController.exportOrdersPdf);
 router.get("/", orderAdminController.getOrders);
+router.get("/payment-events", authorizeRoles("superadmin", "admin"), orderAdminController.listPaymentEvents);
+router.post("/payment-events/:eventId/reprocess", authorizeRoles("superadmin", "admin"), orderAdminController.reprocessPaymentEvent);
 router.get("/:id", orderAdminController.getOrder);
 router.get("/:id/communications", communications.list);
 router.post("/:id/communications/:notificationId/retry", authorizeRoles("superadmin", "admin"), communications.retry);
@@ -21,6 +23,7 @@ router.post("/:id/communications/:notificationId/resend", authorizeRoles("supera
 router.patch("/:id/status", orderAdminController.updateOrderStatus);
 router.patch("/:id/payment", orderAdminController.confirmPayment);
 router.post("/:id/reconcile-wompi", authorizeRoles("superadmin", "admin"), orderAdminController.reconcileWompi);
+router.post("/:id/incidents/:incidentId/resolve", authorizeRoles("superadmin", "admin"), orderAdminController.resolveIncident);
 router.patch("/:id/shipping", orderAdminController.updateShipping);
 router.patch("/:id/assign", orderAdminController.assignOrder);
 

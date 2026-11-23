@@ -1,0 +1,18 @@
+[
+  {
+    "file": "backend/src/services/wompiPaymentService.js",
+    "sha256": "93DCF2D4694C8FEF3F0D1BDE3DF4033C9A8649A5E0C206BD8DB5AD3AFCF684EE"
+  },
+  {
+    "file": "backend/src/services/wompiService.js",
+    "sha256": "76EF9471970AC2B900572F0633F104985B9ECE40459BE1339E30FF27A3A27826"
+  },
+  {
+    "file": "backend/src/controllers/orderAdminController.js",
+    "sha256": "0D3CBA8658163780025CD4D67991B76A5A10C22B0C981B438D1D011BA23C170E"
+  },
+  {
+    "file": "backend/test/phase1-v2.test.js",
+    "sha256": "CA5785EAABC7D18D4137E0385B3A25479576297616E68D2E946DDC3CF0491A05"
+  }
+]

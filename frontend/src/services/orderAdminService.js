@@ -3,7 +3,10 @@ export const getOrderCommunications = async (id, page = 1) => (await api.get(`/a
 export const retryOrderCommunication = async (id, notificationId) => (await api.post(`/admin/orders/${id}/communications/${notificationId}/retry`)).data;
 export const resendOrderCommunication = async (id, notificationId, data) => (await api.post(`/admin/orders/${id}/communications/${notificationId}/resend`, data)).data;
 
-export const reconcileWompi = async (id) => (await api.post(`/admin/orders/${id}/reconcile-wompi`)).data;
+export const reconcileWompi = async (id, data = {}) => (await api.post(`/admin/orders/${id}/reconcile-wompi`, data)).data;
+export const resolvePaymentIncident = async (id, incidentId, data) => (await api.post(`/admin/orders/${id}/incidents/${incidentId}/resolve`, data)).data;
+export const getPaymentEvents = async () => (await api.get('/admin/orders/payment-events')).data;
+export const reprocessPaymentEvent = async (id) => (await api.post(`/admin/orders/payment-events/${id}/reprocess`)).data;
 
 export const getOrderStats = async () => {
   const res = await api.get("/admin/orders/stats");

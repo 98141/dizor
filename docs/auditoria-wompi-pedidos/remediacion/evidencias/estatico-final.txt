@@ -1,0 +1,19 @@
+warning: in the working copy of 'backend/src/controllers/orderAdminController.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/services/orderWorkspace.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/app/admin/alertas/page.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/admin/OrderDetail.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/admin/OrderNextAction.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/controllers/orderAdminController.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/src/services/orderWorkspace.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/app/admin/alertas/page.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/admin/OrderDetail.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/admin/OrderNextAction.jsx', LF will be replaced by CRLF the next time Git touches it
+{
+  "syntax": 26,
+  "newDiagnostics": [],
+  "preservation": {
+    "checked": 3374,
+    "changed": []
+  },
+  "diffCheck": 0
+}

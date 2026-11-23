@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import AdminShell from "@/components/admin/AdminShell";
 import CommunicationAlerts from "@/components/admin/CommunicationAlerts";
+import PaymentEventAlerts from "@/components/admin/PaymentEventAlerts";
 import { getAlerts } from "@/services/adminAlertService";
 
 const REFRESH_INTERVAL = 60_000;
@@ -158,6 +159,7 @@ export default function AlertasPage() {
         {data && (
           <>
             {/* Tarjetas de resumen */}
+            <PaymentEventAlerts alerts={alerts.paymentEvents} oldPending={alerts.oldPendingPayments} />
             <div className="alert-summary-grid">
               <SummaryCard
                 count={alerts.newOrders?.count ?? 0}

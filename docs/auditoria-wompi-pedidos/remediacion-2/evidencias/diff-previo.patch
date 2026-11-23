@@ -1,0 +1,728 @@
+diff --git a/backend/src/app.js b/backend/src/app.js
+index 4582255..ddd244a 100644
+--- a/backend/src/app.js
++++ b/backend/src/app.js
+@@ -84,7 +84,7 @@ const globalLimiter = rateLimit({
+   max: 300,
+   standardHeaders: true,
+   legacyHeaders: false,
+-  skip: (req) => req.path.startsWith("/admin"),
++  skip: (req) => req.path.startsWith("/admin") || (req.method === "POST" && req.path === "/webhooks/wompi"),
+   message: {
+     status: "fail",
+     message: "Demasiadas solicitudes desde esta IP. Intenta más tarde.",
+@@ -203,4 +203,4 @@ app.use((req, res, next) => {
+ 
+ app.use(globalErrorHandler);
+ 
+-module.exports = app;
+\ No newline at end of file
++module.exports = app;
+diff --git a/backend/src/controllers/adminAlertController.js b/backend/src/controllers/adminAlertController.js
+index 342b719..f9e6170 100644
+--- a/backend/src/controllers/adminAlertController.js
++++ b/backend/src/controllers/adminAlertController.js
+@@ -39,6 +39,16 @@ exports.getAlerts = catchAsync(async (req, res) => {
+     ]);
+ 
+   const alerts = {
++    paymentEvents: {
++      count: await require("../models/paymentEvent").countDocuments({ processedAt: null }),
++      items: await require("../models/paymentEvent").find({ processedAt: null }).sort({ createdAt: 1 }).limit(10)
++        .select("transactionId status environment processingState associationError lastError createdAt").lean(),
++    },
++    oldPendingPayments: {
++      count: await Order.countDocuments({ paymentMethod: "wompi", paymentStatus: "pendiente", createdAt: { $lte: yesterday }, orderStatus: { $nin: ["cancelado", "devuelto", "rechazado"] } }),
++      items: await Order.find({ paymentMethod: "wompi", paymentStatus: "pendiente", createdAt: { $lte: yesterday }, orderStatus: { $nin: ["cancelado", "devuelto", "rechazado"] } })
++        .sort({ createdAt: 1 }).limit(10).select("orderNumber total createdAt").lean(),
++    },
+     communications: await require("./notificationAdminController").communicationAlerts(),
+     newOrders: {
+       count: newOrders.length,
+diff --git a/backend/src/controllers/checkoutController.js b/backend/src/controllers/checkoutController.js
+index b848021..0dfa4e4 100644
+--- a/backend/src/controllers/checkoutController.js
++++ b/backend/src/controllers/checkoutController.js
+@@ -278,6 +278,7 @@ const createCheckoutOrder = async (req, res, next) => {
+     if (!owner || !existing.checkoutFingerprint || existing.checkoutFingerprint !== fingerprint) {
+       throw new AppError("La clave ya se usó para otra solicitud", 409);
+     }
++    if (existing.checkoutState === "failed" && existing.paymentMethod === "wompi") throw new AppError(`El pedido ${existing.orderNumber} requiere revisión del enlace con Wompi. Contacta a soporte con este número antes de iniciar otro pago.`, 409);
+     if (existing.checkoutState !== "ready") throw new AppError("Pedido en proceso o pendiente de revisión. Conserva la misma clave e inténtalo después.", 409);
+     return res.status(200).json({ status: "success", accessToken: await grantOrderAccess(existing._id),
+       order: { id: existing._id, orderNumber: existing.orderNumber, total: existing.total,
+@@ -641,7 +642,9 @@ exports.cancelMyOrder = catchAsync(async (req, res, next) => {
+     return next(new AppError("Pedido no encontrado", 404));
+   }
+ 
+-  if (!canSelfCancel(order)) throw new AppError("La cancelación requiere intervención administrativa", 409);
++  const canCheckElectronicAttempt = order.paymentMethod === "wompi"
++    && ["pendiente", "pago_pendiente"].includes(order.orderStatus) && !["pagado", "reembolsado"].includes(order.paymentStatus);
++  if (!canSelfCancel(order) && !canCheckElectronicAttempt) throw new AppError("La cancelación requiere intervención administrativa", 409);
+   if (order.paymentMethod === "wompi") {
+     // The link API does not enumerate all transactions. Unknown/unavailable payment state
+     // must be reviewed, never treated as evidence of non-payment.
+@@ -653,8 +656,9 @@ exports.cancelMyOrder = catchAsync(async (req, res, next) => {
+     try { tx = await getTransaction(order.wompi.transactionId); }
+     catch { throw new AppError("No se pudo verificar con Wompi. Reintenta o solicita revisión administrativa.", 503); }
+     if (tx.id !== order.wompi.transactionId) throw new AppError("Verificación de pago inválida", 409);
+-    await processTransaction(order._id, tx, { environment: process.env.WOMPI_ENV === "production" ? "prod" : "test" });
++    await processTransaction(order._id, tx, { environment: process.env.WOMPI_ENV === "production" ? "prod" : "test", reconcile: true });
+     if (tx.status === "APPROVED") throw new AppError("El pago está aprobado; solicita intervención administrativa", 409);
++    throw new AppError("Consultar un intento no descarta otros pagos en proceso. Solicita cancelación administrativa.", 409);
+   }
+   await mutateOrder(order._id, async (current, session) => {
+     if (String(current.user) !== String(req.user.id) || !canSelfCancel(current)) throw new AppError("El pedido ya no puede autocancelarse", 409);
+diff --git a/backend/src/controllers/orderAdminController.js b/backend/src/controllers/orderAdminController.js
+index a6cff50..2bc2522 100644
+--- a/backend/src/controllers/orderAdminController.js
++++ b/backend/src/controllers/orderAdminController.js
+@@ -40,6 +40,7 @@ exports.getOrder = catchAsync(async (req, res, next) => {
+   const dto = order.toObject();
+   if (!isAdmin(req.user.role)) for (const item of dto.items) delete item.unitCost;
+   dto.operation = workspace.operationalActions(dto, req.user.role);
++  dto.incidents = dto.incidents.map(i => ({ ...i, allowedResolutions: require("../services/paymentIncidentResolution").decisions(i, req.user.role) }));
+   dto.allowedTransitions = allowedTransitions(dto, req.user.role);
+   dto.canConfirmCollection = isAdmin(req.user.role) && dto.paymentMethod === "contra_entrega"
+     && dto.orderStatus === "entregado" && dto.paymentStatus === "pendiente";
+@@ -195,12 +196,42 @@ exports.reconcileWompi = catchAsync(async (req, res) => {
+   if (!isAdmin(req.user.role)) throw new AppError("Solo administradores pueden conciliar", 403);
+   const order = await Order.findById(req.params.id);
+   if (!order) throw new AppError("Pedido no encontrado", 404);
+-  if (order.paymentMethod !== "wompi" || !order.wompi?.transactionId) throw new AppError("No hay transacción Wompi consultable", 409);
++  const transactionId = req.body.transactionId || order.wompi?.transactionId;
++  if (order.paymentMethod !== "wompi" || typeof transactionId !== "string" || !/^[A-Za-z0-9_-]{1,150}$/.test(transactionId)) throw new AppError("Indica un ID de transacción del panel o comprobante de Wompi", 409);
+   const { getTransaction, getExpectedEventEnvironment } = require("../services/wompiService");
+   let tx;
+-  try { tx = await getTransaction(order.wompi.transactionId); }
+-  catch { throw new AppError("No se pudo consultar a Wompi. Conserva el pedido para revisión.", 503); }
++  try { tx = await getTransaction(transactionId); }
++  catch {
++    await mutateOrder(order._id, async current => { require("../services/orderOperations").addIncident(current, "reconciliation_query_failed", transactionId); });
++    throw new AppError("No se pudo consultar a Wompi. Conserva el pedido para revisión.", 503);
++  }
+   await require("../services/wompiPaymentService").processTransaction(order._id, tx, { environment: getExpectedEventEnvironment(), reconcile: true });
++  await mutateOrder(order._id, async current => {
++    for (const i of current.incidents) if (i.code === "reconciliation_query_failed" && i.detail === transactionId) i.resolvedAt ||= new Date();
++    if (tx.status === "APPROVED") current.requiresReview = current.incidents.some(i => !i.resolvedAt);
++  });
+   res.json({ status: "success", message: "Transacción consultada y conciliada según evidencia del proveedor" });
+ });
+ 
++exports.resolveIncident = catchAsync(async (req, res) => {
++  const { order } = await require("../services/paymentIncidentResolution").resolve(req.params.id, req.params.incidentId, req.body, req.user);
++  res.json({ status: "success", message: "Resolución registrada con evidencia y auditoría", order: formatOrderList(order, req.user.role) });
++});
++exports.listPaymentEvents = catchAsync(async (_req, res) => {
++  const events = await require("../models/paymentEvent").find({ processedAt: null }).sort({ createdAt: 1 }).limit(100)
++    .select("transactionId status amountInCents currency environment reference paymentLinkId order processingState associationError lastError createdAt").lean();
++  res.json({ status: "success", events });
++});
++exports.reprocessPaymentEvent = catchAsync(async (req, res) => {
++  const event = await require("../models/paymentEvent").findById(req.params.eventId);
++  if (!event) throw new AppError("Evento no encontrado", 404);
++  const service = require("../services/wompiService");
++  if (event.environment !== service.getExpectedEventEnvironment()) throw new AppError("Evento de otro ambiente", 409);
++  let tx;
++  try { tx = await service.getTransaction(event.transactionId); } catch { throw new AppError("Consulta Wompi no disponible; evidencia conservada", 503); }
++  const association = await require("../services/wompiPaymentService").findAssociation(tx);
++  if (!association.order) throw new AppError("Wompi aún no aporta asociación inequívoca", 409);
++  await require("../services/wompiPaymentService").processTransaction(association.order._id, tx, { environment: event.environment, reconcile: true });
++  res.json({ status: "success", message: "Estado actual consultado y reprocesado sin asociación manual" });
++});
++
+diff --git a/backend/src/controllers/wompiWebhookController.js b/backend/src/controllers/wompiWebhookController.js
+index 4f16006..b4b082a 100644
+--- a/backend/src/controllers/wompiWebhookController.js
++++ b/backend/src/controllers/wompiWebhookController.js
+@@ -1,21 +1,16 @@
+ const catchAsync = require("../utils/catchAsync");
+-const Order = require("../models/order");
+ const { verifyEventChecksum, getExpectedEventEnvironment } = require("../services/wompiService");
+ const { processTransaction } = require("../services/wompiPaymentService");
+ 
+ exports.handleWompiEvent = catchAsync(async (req, res) => {
+-  const event = req.body;
++  // Verify the provider payload, before any global XSS sanitizer can alter text.
++  const event = req.rawBody ? JSON.parse(req.rawBody.toString("utf8")) : req.body;
+   const checksum = req.headers["x-event-checksum"] || event?.signature?.checksum;
+   if (!verifyEventChecksum(event, checksum)) return res.status(401).json({ status: "fail", message: "Checksum inválido" });
+   if (event.event !== "transaction.updated" || event.environment !== getExpectedEventEnvironment()) return res.status(200).send("OK");
+   const tx = event.data?.transaction;
+   if (!tx || typeof tx.id !== "string" || !["PENDING", "APPROVED", "DECLINED", "ERROR", "VOIDED"].includes(tx.status)) return res.status(400).send("Invalid transaction");
+-  const refs = [];
+-  for (const value of [tx.reference, tx.sku]) if (typeof value === "string" && value) refs.push({ orderNumber: value });
+-  if (typeof tx.payment_link_id === "string" && tx.payment_link_id) refs.push({ "wompi.paymentLinkId": tx.payment_link_id });
+-  if (!refs.length) return res.status(200).send("OK");
+-  const order = await Order.findOne({ paymentMethod: "wompi", $or: refs });
+-  if (!order) return res.status(200).send("OK");
+-  await processTransaction(order._id, tx, { environment: event.environment, checksum, timestamp: event.timestamp });
++  // Receipt is durable even when no unambiguous Payment Link association exists.
++  await processTransaction(null, tx, { environment: event.environment, checksum, timestamp: event.timestamp });
+   res.status(200).send("OK");
+ });
+diff --git a/backend/src/models/notification.js b/backend/src/models/notification.js
+index e8adace..e1c044a 100644
+--- a/backend/src/models/notification.js
++++ b/backend/src/models/notification.js
+@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
+ const schema = new mongoose.Schema({
+   eventKey: { type: String, required: true, unique: true },
+   manualKey: { type: String, default: undefined },
+-  order: { type: mongoose.Schema.Types.ObjectId, ref: "Order", required: true },
++  order: { type: mongoose.Schema.Types.ObjectId, ref: "Order", required: function () { return this.event !== "admin.payment_event"; }, default: null },
++  paymentEvent: { type: mongoose.Schema.Types.ObjectId, ref: "PaymentEvent", default: null },
+   event: { type: String, required: true },
+   audience: { type: String, enum: ["buyer", "admin"], required: true },
+   recipient: { type: String, default: "", select: false },
+diff --git a/backend/src/models/order.js b/backend/src/models/order.js
+index 6ee11e7..11512e4 100644
+--- a/backend/src/models/order.js
++++ b/backend/src/models/order.js
+@@ -90,7 +90,9 @@ const orderSchema = new mongoose.Schema(
+       recordedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+     },
+     requiresReview: { type: Boolean, default: false },
+-    incidents: [{ code: String, detail: String, createdAt: { type: Date, default: Date.now }, resolvedAt: { type: Date, default: null } }],
++    incidents: [{ code: String, detail: String, createdAt: { type: Date, default: Date.now }, resolvedAt: { type: Date, default: null },
++      resolution: { actor: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, decision: String, reason: String,
++        evidence: { transactionId: String, reference: String, url: String, amountInCents: Number, currency: String, recordedAt: Date } } }],
+     paymentConfirmedBy: {
+       type: mongoose.Schema.Types.ObjectId,
+       ref: "User",
+diff --git a/backend/src/models/paymentEvent.js b/backend/src/models/paymentEvent.js
+index b4ca1ca..96da0f5 100644
+--- a/backend/src/models/paymentEvent.js
++++ b/backend/src/models/paymentEvent.js
+@@ -3,10 +3,15 @@ const mongoose = require("mongoose");
+ // Durable inbox: preserve financial evidence even if fulfillment fails afterwards.
+ const schema = new mongoose.Schema({
+   key: { type: String, required: true, unique: true },
+-  order: { type: mongoose.Schema.Types.ObjectId, ref: "Order", required: true },
++  order: { type: mongoose.Schema.Types.ObjectId, ref: "Order", default: null },
+   transactionId: { type: String, required: true },
+   status: { type: String, required: true },
+   amountInCents: Number, currency: String, reference: String, environment: String,
++  paymentLinkId: { type: String, default: "" },
++  processingState: { type: String, enum: ["unassociated", "associated", "processed", "failed"], default: "unassociated" },
++  associationError: { type: String, default: "" },
++  source: { type: String, enum: ["webhook", "provider_query"], default: "webhook" },
++  providerObservation: { status: String, paymentLinkId: String, amountInCents: Number, currency: String, checkedAt: Date },
+   checksum: String, providerTimestamp: Number,
+   processedAt: { type: Date, default: null },
+   notificationQueuedAt: { type: Date, default: null },
+diff --git a/backend/src/routes/adminOrderRoutes.js b/backend/src/routes/adminOrderRoutes.js
+index 89e4dbc..9b8a0ed 100644
+--- a/backend/src/routes/adminOrderRoutes.js
++++ b/backend/src/routes/adminOrderRoutes.js
+@@ -14,6 +14,8 @@ router.use(authorizeRoles(...staffRoles));
+ router.get("/stats", orderAdminController.getOrderStats);
+ router.get("/export/pdf", orderAdminController.exportOrdersPdf);
+ router.get("/", orderAdminController.getOrders);
++router.get("/payment-events", authorizeRoles("superadmin", "admin"), orderAdminController.listPaymentEvents);
++router.post("/payment-events/:eventId/reprocess", authorizeRoles("superadmin", "admin"), orderAdminController.reprocessPaymentEvent);
+ router.get("/:id", orderAdminController.getOrder);
+ router.get("/:id/communications", communications.list);
+ router.post("/:id/communications/:notificationId/retry", authorizeRoles("superadmin", "admin"), communications.retry);
+@@ -21,6 +23,7 @@ router.post("/:id/communications/:notificationId/resend", authorizeRoles("supera
+ router.patch("/:id/status", orderAdminController.updateOrderStatus);
+ router.patch("/:id/payment", orderAdminController.confirmPayment);
+ router.post("/:id/reconcile-wompi", authorizeRoles("superadmin", "admin"), orderAdminController.reconcileWompi);
++router.post("/:id/incidents/:incidentId/resolve", authorizeRoles("superadmin", "admin"), orderAdminController.resolveIncident);
+ router.patch("/:id/shipping", orderAdminController.updateShipping);
+ router.patch("/:id/assign", orderAdminController.assignOrder);
+ 
+diff --git a/backend/src/server.js b/backend/src/server.js
+index 2e111f0..0806586 100644
+--- a/backend/src/server.js
++++ b/backend/src/server.js
+@@ -31,6 +31,8 @@ if (process.env.NODE_ENV === "production" && process.env.WOMPI_ENV !== "producti
+ }
+ 
+ let stopNotifications = () => {};
++try { require("./services/wompiService").validateConfiguration(); }
++catch (err) { logger.error(`[SECURITY] ${err.message}. Servidor detenido.`); process.exit(1); }
+ connectDB().then(async () => {
+   await require("./models/notification").init();
+   if (process.env.TRANSACTIONAL_NOTIFICATIONS_ENABLED === "true") {
+diff --git a/backend/src/services/notificationDelivery.js b/backend/src/services/notificationDelivery.js
+index a8075d2..07957e5 100644
+--- a/backend/src/services/notificationDelivery.js
++++ b/backend/src/services/notificationDelivery.js
+@@ -90,8 +90,13 @@ exports.processOne = async (id = null) => {
+     $set: { ...fields, leaseUntil: null, leaseToken: "" },
+     $push: { history: { at: new Date(), outcome: fields.status, attempt: n.attempts, code: fields.errorCode || "" } },
+   });
+-  const order = await Order.findById(n.order);
+-  const blocked = order ? authorized(n, order) : "recipient_changed";
++  const order = n.order ? await Order.findById(n.order) : null;
++  let blocked;
++  if (n.event === "admin.payment_event") {
++    const receipt = await require("../models/paymentEvent").findById(n.paymentEvent);
++    blocked = !validEmail(n.recipient) || n.recipient !== adminRecipient() ? "recipient_changed"
++      : !receipt || receipt.processedAt ? "superseded" : "";
++  } else blocked = order ? authorized(n, order) : "recipient_changed";
+   const configured = testTransport || (receiptTransport && n.event === "order.received") || (process.env.RESEND_API_KEY && process.env.EMAIL_FROM);
+   const enabled = testTransport || (receiptTransport && n.event === "order.received") || process.env.TRANSACTIONAL_NOTIFICATIONS_ENABLED === "true";
+   if (blocked || !configured || !enabled) {
+@@ -149,6 +154,10 @@ exports.recoverIncidents = async (limit = 20) => {
+   for (const event of interrupted) await require("./transactionService").inTransaction(async (session) => {
+     const receipt = await PaymentEvent.findById(event._id).session(session);
+     if (!receipt || receipt.processedAt || receipt.notificationQueuedAt) return;
++    if (!receipt.order) {
++      await require("./notificationEvents").paymentEventReview(receipt, session);
++      await receipt.save({ session, timestamps: false }); return;
++    }
+     const order = await Order.findById(receipt.order).session(session);
+     if (order?.requiresReview) await require("./notificationEvents").enqueue(order, "admin.incident", `payment-recovery:${receipt._id}`, session);
+     receipt.notificationQueuedAt = new Date(); await receipt.save({ session, timestamps: false });
+diff --git a/backend/src/services/notificationEvents.js b/backend/src/services/notificationEvents.js
+index 7ddc985..52f5120 100644
+--- a/backend/src/services/notificationEvents.js
++++ b/backend/src/services/notificationEvents.js
+@@ -5,6 +5,19 @@ const { snapshotOrder } = require("./notificationTemplates");
+ 
+ exports.validEmail = (value) => typeof value === "string" && value.length <= 254 && validator.isEmail(value) && !/[\r\n]/.test(value);
+ exports.adminRecipient = () => (process.env.ADMIN_NOTIFY_EMAIL || "").trim().toLowerCase();
++exports.paymentEventReview = async (receipt, session) => {
++  if (!session?.inTransaction()) throw new Error("Notification events require a transaction");
++  const recipient = exports.adminRecipient();
++  const eventKey = crypto.createHash("sha256").update(JSON.stringify([String(receipt._id), "admin.payment_event", recipient])).digest("hex");
++  const valid = exports.validEmail(recipient);
++  await Notification.findOneAndUpdate({ eventKey }, { $setOnInsert: {
++    eventKey, event: "admin.payment_event", paymentEvent: receipt._id, audience: "admin", recipient,
++    snapshot: { transactionId: receipt.transactionId, status: receipt.status, environment: receipt.environment },
++    status: valid ? "pending" : "skipped", retryable: valid,
++    errorCode: valid ? "" : "recipient_missing", history: [{ at: new Date(), outcome: "created", attempt: 0 }],
++  } }, { session, upsert: true, returnDocument: "after" });
++  receipt.notificationQueuedAt ||= new Date();
++};
+ exports.enqueue = async (order, event, identity, session, extra = {}) => {
+   if (!session?.inTransaction()) throw new Error("Notification events require a transaction");
+   const audience = event.startsWith("admin.") ? "admin" : "buyer";
+diff --git a/backend/src/services/notificationTemplates.js b/backend/src/services/notificationTemplates.js
+index bf1733e..62cd7b3 100644
+--- a/backend/src/services/notificationTemplates.js
++++ b/backend/src/services/notificationTemplates.js
+@@ -9,6 +9,7 @@ const LABELS = {
+   "shipping.corrected": "Actualizamos la guía de tu pedido", "order.delivered": "Entrega registrada",
+   "order.cancelled": "Cancelación de tu pedido", "admin.cancelled": "Cancelación solicitada por el cliente",
+   "admin.incident": "Pedido con incidencia para revisión",
++  "admin.payment_event": "Transacción Wompi sin asociación verificada",
+ };
+ exports.EVENT_LABELS = LABELS;
+ exports.snapshotOrder = (order) => ({
+@@ -23,6 +24,12 @@ exports.snapshotOrder = (order) => ({
+ });
+ 
+ exports.buildMessage = (event, snapshot, { retryUrl = null } = {}) => {
++  if (event === "admin.payment_event") {
++    const lines = [`Revisar transacción Wompi ${snapshot.transactionId}: ${snapshot.status} (${snapshot.environment}).`,
++      "Evidencia conservada en la bandeja de eventos de pago. No confirma un pedido ni un reembolso.",
++      ...(snapshot.items || []).map(i => i.name || "")];
++    return { subject: LABELS[event], text: lines.join("\n\n"), html: lines.map(line => `<p>${escape(line)}</p>`).join("") };
++  }
+   if (event !== "payment.declined") retryUrl = null;
+   if (retryUrl) {
+     try {
+diff --git a/backend/src/services/orderTransitions.js b/backend/src/services/orderTransitions.js
+index f8a2f9e..160acf0 100644
+--- a/backend/src/services/orderTransitions.js
++++ b/backend/src/services/orderTransitions.js
+@@ -37,7 +37,9 @@ exports.allowedTransitions = (order, role) => (next[order.orderStatus] || []).fi
+   } catch { return false; }
+ });
+ exports.canSelfCancel = (order) => ["pendiente", "pago_pendiente"].includes(order.orderStatus)
+-  && ["wompi", "contra_entrega"].includes(order.paymentMethod)
++  // A Link can have another in-flight transaction even after a decline/expiry.
++  // Until the provider can prove closure, electronic cancellation needs staff review.
++  && order.paymentMethod === "contra_entrega"
+   && order.paymentStatus !== "pagado" && order.paymentStatus !== "reembolsado";
+ exports.assertCollection = (order, role, evidence) => {
+   if (!isAdmin(role)) throw new AppError("Solo administradores pueden confirmar recaudos", 403);
+diff --git a/backend/src/services/orderWorkspace.js b/backend/src/services/orderWorkspace.js
+index 2b35ad2..d0c2fd9 100644
+--- a/backend/src/services/orderWorkspace.js
++++ b/backend/src/services/orderWorkspace.js
+@@ -33,12 +33,14 @@ const INCIDENT_LABELS = {
+   cancelled_wompi_watch: "Vigilar pagos posteriores a la cancelación", cancellation_verification_pending: "Verificar el pago antes de cancelar",
+   payment_link_creation_failed: "Enlace de pago pendiente de revisión", checkout_completion_failed: "Registro del pedido incompleto",
+   approval_on_refunded_order: "Pago recibido sobre un reembolso histórico", coupon_reconciliation: "Cupón pendiente de conciliación",
++  payment_voided: "Cobro anulado; detener preparación y despacho", additional_payment_voided: "Anulación de otra transacción para revisar",
++  reconciliation_query_failed: "Consulta al proveedor fallida; reintentar conciliación",
+ };
+ exports.operationalActions = (order, role) => {
+   order = order.toObject ? order.toObject() : order;
+   const admin = isAdmin(role);
+   const transitions = allowedTransitions(order, role);
+-  const canReconcile = admin && order.paymentMethod === "wompi" && !!order.wompi?.transactionId;
++  const canReconcile = admin && order.paymentMethod === "wompi";
+   const canCollect = admin && order.orderStatus === "entregado" && order.paymentMethod === "contra_entrega" && order.paymentStatus === "pendiente";
+   const review = exports.needsReview(order);
+   const reasons = (order.incidents || []).filter((i) => !i.resolvedAt).map((i) => INCIDENT_LABELS[i.code] || "Incidencia administrativa pendiente");
+diff --git a/backend/src/services/wompiPaymentService.js b/backend/src/services/wompiPaymentService.js
+index 5efa2c5..4f28eb8 100644
+--- a/backend/src/services/wompiPaymentService.js
++++ b/backend/src/services/wompiPaymentService.js
+@@ -5,48 +5,159 @@ const Coupon = require("../models/coupon");
+ const { inTransaction } = require("./transactionService");
+ const { moveStock } = require("./inventoryService");
+ const { addIncident, history } = require("./orderOperations");
++const AppError = require("../utils/AppError");
++
++// Payment Links generate reference themselves. No fallback to reference or sku.
++exports.findAssociation = async (tx, session = null) => {
++  if (tx.status === "VOIDED") {
++    const applied = await Order.find({ paymentMethod: "wompi", "wompi.transactionId": tx.id }).limit(2).session(session);
++    if (applied.length === 1) return { order: applied[0], appliedVoid: true };
++    if (applied.length > 1) return { error: "ambiguous_transaction_identity" };
++  }
++  if (typeof tx.payment_link_id !== "string" || !tx.payment_link_id) return { error: "missing_payment_link" };
++  const orders = await Order.find({ paymentMethod: "wompi", "wompi.paymentLinkId": tx.payment_link_id }).limit(2).session(session);
++  if (orders.length !== 1) return { error: orders.length ? "ambiguous_payment_link" : "unknown_payment_link" };
++  const order = orders[0];
++  if (typeof tx.reference === "string" && tx.reference && await Order.exists({ orderNumber: tx.reference, _id: { $ne: order._id } }).session(session)) return { error: "contradictory_reference" };
++  if (await PaymentEvent.exists({ environment: require("./wompiService").getExpectedEventEnvironment(), transactionId: tx.id,
++    order: { $ne: null, $nin: [order._id] } }).session(session)) return { error: "transaction_already_associated" };
++  return { order };
++};
++
++// Financial checks precede recognition; repeat under the order lock in both phases.
++const recognize = async (order, tx, session) => {
++  if (tx.payment_link_id !== order.wompi.paymentLinkId) throw new AppError("Vínculo Wompi inválido", 409);
++  let blocked = false;
++  const voided = await PaymentEvent.exists({ environment: require("./wompiService").getExpectedEventEnvironment(), transactionId: tx.id,
++    status: "VOIDED", $or: [{ order: order._id }, { paymentLinkId: order.wompi.paymentLinkId }] }).session(session);
++  if (tx.status === "APPROVED") {
++    if (voided) {
++      addIncident(order, "payment_voided", tx.id);
++      if (!order.wompi.transactionId || order.wompi.transactionId === tx.id) {
++        order.wompi.transactionId = tx.id; order.wompi.status = "VOIDED";
++        if (order.paymentStatus !== "reembolsado") order.paymentStatus = "rechazado";
++      }
++      return true;
++    }
++    if (order.paymentStatus === "reembolsado") { addIncident(order, "approval_on_refunded_order", tx.id); blocked = true; }
++    if (order.paymentStatus === "pagado" && order.wompi.transactionId !== tx.id) { addIncident(order, "additional_approved_payment", tx.id); blocked = true; }
++    if (tx.currency !== "COP" || !Number.isSafeInteger(tx.amount_in_cents) || tx.amount_in_cents !== Math.round(order.total * 100)) {
++      addIncident(order, "payment_amount_or_currency_mismatch", `${tx.id}: ${tx.amount_in_cents} ${tx.currency}`); blocked = true;
++    }
++    if (!blocked) {
++      order.paymentStatus = "pagado"; order.paymentConfirmedAt ||= new Date();
++      order.wompi.transactionId = tx.id; order.wompi.reference = tx.reference || ""; order.wompi.status = "APPROVED";
++    }
++    if (["cancelado", "devuelto", "rechazado"].includes(order.orderStatus)) { addIncident(order, "approved_after_cancellation", tx.id); blocked = true; }
++  } else if (tx.status === "VOIDED") {
++    if (order.wompi.transactionId === tx.id || !["pagado", "reembolsado"].includes(order.paymentStatus)) {
++      order.wompi.transactionId = tx.id; order.wompi.reference = tx.reference || ""; order.wompi.status = "VOIDED";
++      if (order.paymentStatus !== "reembolsado") order.paymentStatus = "rechazado";
++      addIncident(order, "payment_voided", tx.id);
++    } else addIncident(order, "additional_payment_voided", tx.id);
++    blocked = true;
++  } else if (!["pagado", "reembolsado"].includes(order.paymentStatus) && !voided && order.wompi.status !== "VOIDED") {
++    order.wompi.transactionId = tx.id; order.wompi.reference = tx.reference || ""; order.wompi.status = tx.status;
++    if (["DECLINED", "ERROR"].includes(tx.status)) order.paymentStatus = "rechazado";
++  }
++  return blocked;
++};
+ 
+ exports.processTransaction = async (orderId, tx, evidence = {}) => {
++  if (evidence.environment !== require("./wompiService").getExpectedEventEnvironment() || typeof tx?.id !== "string" || !tx.id
++      || !["PENDING", "APPROVED", "DECLINED", "ERROR", "VOIDED"].includes(tx.status)) throw new AppError("Evidencia Wompi inválida", 409);
+   const key = crypto.createHash("sha256").update(JSON.stringify([evidence.environment, tx.id, tx.status, tx.amount_in_cents, tx.currency])).digest("hex");
+   let event;
+   try {
+     event = await PaymentEvent.findOneAndUpdate({ key }, { $setOnInsert: {
+-      key, order: orderId, transactionId: tx.id, status: tx.status,
++      key, transactionId: tx.id, status: tx.status,
+       amountInCents: tx.amount_in_cents, currency: tx.currency, reference: tx.reference,
+       environment: evidence.environment, checksum: evidence.checksum, providerTimestamp: evidence.timestamp,
+-    } }, { upsert: true, new: true });
++      paymentLinkId: typeof tx.payment_link_id === "string" ? tx.payment_link_id : "", source: evidence.reconcile ? "provider_query" : "webhook",
++    } }, { upsert: true, returnDocument: "after", writeConcern: { w: "majority" } });
+   } catch (err) {
+     if (err.code !== 11000) throw err;
+     event = await PaymentEvent.findOne({ key });
+   }
+   if (event.processedAt && !evidence.reconcile) return;
+-  if (String(event.order) !== String(orderId)) throw new Error("Transaction associated with another order");
+-
+-  if (tx.status === "APPROVED") {
+-    // Money is a fact, independent of stock/fulfillment. Persist BEFORE fulfillment.
+-    await Order.updateOne({ _id: orderId, paymentStatus: { $nin: ["pagado", "reembolsado"] } }, {
+-      $set: { paymentStatus: "pagado", paymentConfirmedAt: new Date(),
+-        "wompi.transactionId": tx.id, "wompi.reference": tx.reference || "", "wompi.status": "APPROVED", requiresReview: true },
++  const initialAssociation = await exports.findAssociation(tx);
++  // A signed VOIDED of the unique applied ID is sufficient to BLOCK that charge,
++  // even if unsigned link/reference fields are missing or contradictory.
++  // Keep those original fields in the receipt; this never recognizes new money.
++  if (initialAssociation.appliedVoid) tx = { ...tx, payment_link_id: initialAssociation.order.wompi.paymentLinkId, reference: initialAssociation.order.wompi.reference };
++  // Wompi's checksum may omit link/currency. An authenticated server query
++  // anchors those fields before a candidate association can affect an order.
++  if (!evidence.reconcile && evidence.checksum && initialAssociation.order && !initialAssociation.appliedVoid) {
++    let trusted;
++    try { trusted = await require("./wompiService").getTransaction(tx.id); }
++    catch {
++      await inTransaction(async session => {
++        const receipt = await PaymentEvent.findById(event._id).session(session);
++        receipt.processingState = "failed"; receipt.lastError = "Consulta autenticada pendiente";
++        await require("./notificationEvents").paymentEventReview(receipt, session); await receipt.save({ session });
++      });
++      throw new AppError("Verificación Wompi pendiente; evidencia conservada", 503);
++    }
++    await PaymentEvent.updateOne({ _id: event._id }, { $set: { providerObservation: {
++      status: trusted.status, paymentLinkId: trusted.payment_link_id, amountInCents: trusted.amount_in_cents,
++      currency: trusted.currency, checkedAt: new Date(),
++    } } }, { writeConcern: { w: "majority" } });
++    if (trusted.payment_link_id !== tx.payment_link_id || trusted.currency !== tx.currency || trusted.amount_in_cents !== tx.amount_in_cents) {
++      await inTransaction(async session => {
++        const receipt = await PaymentEvent.findById(event._id).session(session);
++        receipt.processingState = "unassociated"; receipt.associationError = "provider_binding_mismatch";
++        await require("./notificationEvents").paymentEventReview(receipt, session); await receipt.save({ session });
++      });
++      return;
++    }
++    if (trusted.status !== tx.status && tx.status !== "VOIDED") {
++      // Apply the current authenticated state; retain the signed observation too.
++      await exports.processTransaction(orderId, trusted, { environment: evidence.environment, reconcile: true });
++      await PaymentEvent.updateOne({ _id: event._id }, { $set: { processingState: "processed", processedAt: new Date(), associationError: "superseded_by_provider_state" } });
++      return;
++    }
++  }
++  const association = await exports.findAssociation(tx);
++  if (!association.order || (orderId && String(association.order._id) !== String(orderId))
++      || (event.order && String(event.order) !== String(association.order?._id))) {
++    await inTransaction(async (session) => {
++      const receipt = await PaymentEvent.findById(event._id).session(session);
++      if (receipt.processedAt) return;
++      receipt.processingState = "unassociated"; receipt.associationError = association.error || "requested_order_mismatch";
++      await require("./notificationEvents").paymentEventReview(receipt, session);
++      await receipt.save({ session });
+     });
++    if (orderId) throw new AppError("La transacción no tiene vínculo inequívoco con este pedido", 409);
++    return;
+   }
+-
++  orderId = association.order._id;
++  // A reconciler may still see APPROVED for a charge whose manual refund was
++  // audited separately. Re-querying the same observation must not reopen it.
++  if (event.processedAt && association.order.incidents.some(i => i.resolvedAt
++      && i.resolution?.evidence?.transactionId === tx.id
++      && ["manual_refund_confirmed", "record_void_review"].includes(i.resolution.decision))) return;
+   try {
++    // Validated money survives a later inventory failure, without pre-validating outside a transaction.
++    await inTransaction(async (session) => {
++      const receipt = await PaymentEvent.findById(event._id).session(session);
++      if (receipt.processedAt && !evidence.reconcile) return;
++      const current = await exports.findAssociation(tx, session);
++      if (!current.order || String(current.order._id) !== String(orderId) || (receipt.order && String(receipt.order) !== String(orderId))) throw new AppError("Asociación contradictoria", 409);
++      receipt.order = orderId; receipt.processingState = "associated"; receipt.associationError = "";
++      if (evidence.reconcile) receipt.providerObservation = { status: tx.status, paymentLinkId: tx.payment_link_id,
++        amountInCents: tx.amount_in_cents, currency: tx.currency, checkedAt: new Date() };
++      await recognize(current.order, tx, session);
++      if (["APPROVED", "VOIDED"].includes(tx.status)) current.order.requiresReview = true;
++      await current.order.save({ session, validateModifiedOnly: true });
++      await receipt.save({ session });
++    });
+     await inTransaction(async (session) => {
+       const receipt = await PaymentEvent.findById(event._id).session(session);
+       if (receipt.processedAt && !evidence.reconcile) return;
+       const order = await Order.findById(orderId).session(session);
+       if (!order || order.paymentMethod !== "wompi") throw new Error("Invalid Wompi order");
+-      if (receipt.processedAt && !order.requiresReview) return;
++      let blocked = await recognize(order, tx, session);
+       if (tx.status === "APPROVED") {
+-        let blocked = false;
+-        if (order.paymentStatus === "reembolsado") { addIncident(order, "approval_on_refunded_order", tx.id); blocked = true; }
+-        if (order.wompi.transactionId !== tx.id) { addIncident(order, "additional_approved_payment", tx.id); blocked = true; }
+-        if (tx.currency !== "COP" || tx.amount_in_cents !== Math.round(order.total * 100)) {
+-          addIncident(order, "payment_amount_or_currency_mismatch", `${tx.id}: ${tx.amount_in_cents} ${tx.currency}`); blocked = true;
+-        }
+-        if (["cancelado", "devuelto", "rechazado"].includes(order.orderStatus)) {
+-          addIncident(order, "approved_after_cancellation", tx.id); blocked = true;
+-        }
+         if (!blocked && !order.stockDeducted) {
+           // Preflight ALL lines; a stock shortage leaves money recognized and no partial sale.
+           const Product = require("../models/product");
+@@ -71,26 +182,30 @@ exports.processTransaction = async (orderId, tx, evidence = {}) => {
+         }
+         order.requiresReview = blocked || order.incidents.some((i) => !i.resolvedAt);
+         history(order, `Wompi APPROVED verificado: ${tx.id}${blocked ? "; requiere conciliación" : ""}`);
+-        if (!blocked && order.couponCode && !order.couponConsumed) {
++        if (!blocked && order.couponCode && !order.couponConsumed && !order.incidents.some(i => i.code === "coupon_reconciliation" && i.resolvedAt && i.resolution?.decision === "accept_discount")) {
+           const consumed = await Coupon.findOneAndUpdate({ code: order.couponCode, isActive: true,
+             $or: [{ maxUses: null }, { $expr: { $lt: ["$usedCount", "$maxUses"] } }] }, { $inc: { usedCount: 1 } }, { session });
+           order.couponConsumed = !!consumed;
+           if (!consumed) addIncident(order, "coupon_reconciliation", order.couponCode);
+         }
+-      } else if (!["pagado", "reembolsado"].includes(order.paymentStatus)) {
+-        order.wompi.transactionId = tx.id;
+-        order.wompi.reference = tx.reference || "";
+-        order.wompi.status = tx.status;
+-        if (["DECLINED", "ERROR", "VOIDED"].includes(tx.status)) order.paymentStatus = "rechazado";
++      } else {
+         history(order, `Wompi ${tx.status}: ${tx.id}. No se cancela el pedido automáticamente.`);
+       }
++      if (["APPROVED", "VOIDED"].includes(tx.status)) order.requiresReview = blocked || order.incidents.some(i => !i.resolvedAt);
++      else if (order.incidents.some(i => !i.resolvedAt)) order.requiresReview = true;
+       await require("./notificationEvents").paymentResult(order, tx, session);
+       await order.save({ session, validateModifiedOnly: true });
+-      receipt.processedAt = new Date(); receipt.lastError = "";
++      receipt.processedAt = new Date(); receipt.processingState = "processed"; receipt.lastError = "";
+       await receipt.save({ session });
+     });
+   } catch (err) {
+-    await PaymentEvent.updateOne({ _id: event._id }, { $set: { lastError: "Aplicación pendiente; reintentar conciliación" } });
++    await PaymentEvent.updateOne({ _id: event._id }, { $set: { processingState: "failed", lastError: "Aplicación pendiente; reintentar conciliación" } });
++    try {
++      await inTransaction(async session => {
++        const receipt = await PaymentEvent.findById(event._id).session(session);
++        await require("./notificationEvents").paymentEventReview(receipt, session); await receipt.save({ session });
++      });
++    } catch { /* Original failure remains non-200; inbox is the durable recovery source. */ }
+     if (tx.status === "APPROVED") {
+       await Order.updateOne({ _id: orderId, incidents: { $not: { $elemMatch: { code: "payment_processing_failed", detail: tx.id, resolvedAt: null } } } }, { $set: { requiresReview: true }, $push: {
+         incidents: { code: "payment_processing_failed", detail: tx.id },
+diff --git a/backend/src/services/wompiService.js b/backend/src/services/wompiService.js
+index 0701843..f087e0c 100644
+--- a/backend/src/services/wompiService.js
++++ b/backend/src/services/wompiService.js
+@@ -10,6 +10,14 @@ const getBaseUrl = () => {
+ exports.isWompiConfigured = () =>
+   Boolean(process.env.WOMPI_PRIVATE_KEY && process.env.WOMPI_EVENTS_SECRET);
+ 
++exports.validateConfiguration = (env = process.env) => {
++  const mode = env.WOMPI_ENV || "sandbox";
++  if (!["sandbox", "production"].includes(mode) || (env.NODE_ENV === "production" && mode !== "production")) throw new Error("Configuración de ambiente Wompi inválida");
++  if (!env.WOMPI_PRIVATE_KEY && !env.WOMPI_EVENTS_SECRET) return;
++  const prefix = mode === "production" ? "prod" : "test";
++  if (!env.WOMPI_PRIVATE_KEY?.startsWith(`prv_${prefix}_`) || !env.WOMPI_EVENTS_SECRET?.startsWith(`${prefix}_events_`)) throw new Error("Llaves Wompi incompatibles con el ambiente");
++};
++
+ exports.createPaymentLink = async (order) => {
+   const privateKey = process.env.WOMPI_PRIVATE_KEY;
+   if (!privateKey) {
+diff --git a/frontend/src/app/(shop)/pedido/confirmacion/page.js b/frontend/src/app/(shop)/pedido/confirmacion/page.js
+index bcc94cb..1b48e09 100644
+--- a/frontend/src/app/(shop)/pedido/confirmacion/page.js
++++ b/frontend/src/app/(shop)/pedido/confirmacion/page.js
+@@ -101,8 +101,8 @@ function confirmationCopy(order) {
+   }
+ 
+   return {
+-    tone: "ok",
+-    title: "¡Gracias por tu compra!",
++    tone: order.paymentMethod === "wompi" && order.paymentStatus === "pendiente" ? "quiet" : "ok",
++    title: order.paymentMethod === "wompi" && order.paymentStatus === "pendiente" ? "Pedido registrado; pago pendiente" : "¡Gracias por tu compra!",
+     lead,
+   };
+ }
+@@ -541,17 +541,21 @@ function ConfirmacionContent() {
+       return undefined;
+     }
+     let cancelled = false;
+-    lookupOrderConfirmation(orderNumber, token)
++    let timer; let remaining = 8;
++    const refresh = () => lookupOrderConfirmation(orderNumber, token)
+       .then((data) => {
+         if (cancelled) return;
+         setOrder(data.order);
+         setStatus("ready");
++        if (data.order.paymentMethod === "wompi" && data.order.paymentStatus === "pendiente" && remaining-- > 0) timer = setTimeout(refresh, 15000);
+       })
+       .catch(() => {
+         if (!cancelled) setStatus("limited");
+       });
++    void refresh();
+     return () => {
+       cancelled = true;
++      clearTimeout(timer);
+     };
+   }, [orderNumber, isAuthenticated, loadingAuth]);
+ 
+diff --git a/frontend/src/app/admin/alertas/page.js b/frontend/src/app/admin/alertas/page.js
+index 0222230..64c29cb 100644
+--- a/frontend/src/app/admin/alertas/page.js
++++ b/frontend/src/app/admin/alertas/page.js
+@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
+ import Link from "next/link";
+ import AdminShell from "@/components/admin/AdminShell";
+ import CommunicationAlerts from "@/components/admin/CommunicationAlerts";
++import PaymentEventAlerts from "@/components/admin/PaymentEventAlerts";
+ import { getAlerts } from "@/services/adminAlertService";
+ 
+ const REFRESH_INTERVAL = 60_000;
+@@ -158,6 +159,7 @@ export default function AlertasPage() {
+         {data && (
+           <>
+             {/* Tarjetas de resumen */}
++            <PaymentEventAlerts alerts={alerts.paymentEvents} oldPending={alerts.oldPendingPayments} />
+             <div className="alert-summary-grid">
+               <SummaryCard
+                 count={alerts.newOrders?.count ?? 0}
+diff --git a/frontend/src/components/admin/OrderDetail.jsx b/frontend/src/components/admin/OrderDetail.jsx
+index 759dbd4..0d4dfeb 100644
+--- a/frontend/src/components/admin/OrderDetail.jsx
++++ b/frontend/src/components/admin/OrderDetail.jsx
+@@ -4,8 +4,9 @@ import Link from "next/link";
+ import { useSearchParams } from "next/navigation";
+ import OrderCommunications from "./OrderCommunications";
+ import OrderNextAction from "./OrderNextAction";
++import PaymentIncidentActions from "./PaymentIncidentActions";
+ import { useSiteConfig } from "@/context/SiteConfigContext";
+-import { getAdminOrder, updateOrderStatus, confirmPayment, reconcileWompi, updateOrderShipping } from "@/services/orderAdminService";
++import { getAdminOrder, updateOrderStatus, confirmPayment, reconcileWompi, updateOrderShipping, resolvePaymentIncident } from "@/services/orderAdminService";
+ import { formatCOP } from "@/lib/formatCurrency";
+ import { ORDER_STATUS_LABELS, PAYMENT_STATUS_LABELS, PAYMENT_METHOD_LABELS, CARRIER_LABELS } from "@/lib/orderLabels";
+ import { formatOrderDate, returnToOrders } from "@/lib/orderWorkspace";
+@@ -43,7 +44,8 @@ function OrderWorkspaceDetail({ orderId, backHref = "/admin/pedidos" }) {
+     let actionResult;
+     try {
+       if (code === "collect") await confirmPayment(orderId, values);
+-      else if (code === "reconcile") await reconcileWompi(orderId);
++      else if (code === "reconcile") await reconcileWompi(orderId, values);
++      else if (code === "resolveIncident") await resolvePaymentIncident(orderId, values.incidentId, values);
+       else if (["dispatch", "correct"].includes(code)) await updateOrderShipping(orderId, values);
+       else {
+         const status = { prepare: "en_preparacion", deliver: "entregado", cancel: "cancelado", return: "devuelto" }[code];
+@@ -76,6 +78,7 @@ function OrderWorkspaceDetail({ orderId, backHref = "/admin/pedidos" }) {
+     {order && <>
+       <header><p className={styles.eyebrow}>Pedido · {formatOrderDate(order.createdAt)}</p><h1>{order.orderNumber}</h1><div className={styles.summary}><span className={styles.badge}>{ORDER_STATUS_LABELS[order.orderStatus] || order.orderStatus}</span><span>Pago: {PAYMENT_STATUS_LABELS[order.paymentStatus] || order.paymentStatus}</span><span>{PAYMENT_METHOD_LABELS[order.paymentMethod] || order.paymentMethod}</span><strong>{formatCOP(order.total)}</strong>{order.operation?.requiresReview && <span className={`${styles.badge} ${styles.attention}`}>Requiere revisión</span>}</div></header>
+       <OrderNextAction key={`${orderId}:${order.orderStatus}:${order.paymentStatus}`} order={order} execute={execute} busy={busy} locked={locked} />
++      <PaymentIncidentActions order={order} execute={execute} disabled={busy || locked} />
+       <div className={styles.detail}>
+         <div className={styles.stack}>
+           <section className={styles.panel}><h2>Productos · {order.items?.length || 0}</h2><ul className={styles.list}>{(order.items || []).map((item, index) => <li key={item._id || index}><div className={styles.product}>{item.productImage && <img src={item.productImage} alt="" loading="lazy" decoding="async" />}<div><strong>{item.productName}</strong><p className={styles.muted}>{[item.sizeName, item.colorName, item.sku].filter(Boolean).join(" · ")}</p><p>{item.quantity} × {formatCOP(item.unitPrice)} · <strong>{formatCOP(item.lineTotal)}</strong></p></div></div></li>)}</ul>
+diff --git a/frontend/src/components/admin/OrderNextAction.jsx b/frontend/src/components/admin/OrderNextAction.jsx
+index 79169d9..2fc69b1 100644
+--- a/frontend/src/components/admin/OrderNextAction.jsx
++++ b/frontend/src/components/admin/OrderNextAction.jsx
+@@ -45,7 +45,11 @@ export default function OrderNextAction({ order, execute, busy, locked }) {
+       <label>URL de evidencia (opcional)<input name="paymentProofUrl" type="url" placeholder="https://…" disabled={disabled} /></label>
+       <button type="submit" className="admin-btn admin-btn--primary" disabled={disabled}>Registrar recaudo</button>
+     </form>}
+-    {operation.canReconcile && <div className={styles.actions}><button type="button" className="admin-btn" disabled={disabled} onClick={() => setConfirmation({ code: "reconcile", values: {} })}>Consultar y conciliar con Wompi</button></div>}
++    {operation.canReconcile && <form className={styles.form} onSubmit={submit("reconcile")}>
++      <label>ID de transacción del panel o comprobante de Wompi<input name="transactionId" defaultValue={order.wompi?.transactionId || ""} required maxLength={150} pattern="[A-Za-z0-9_-]+" disabled={disabled} /></label>
++      <p>El ID sólo permite consultar. El servidor verifica el enlace, importe y moneda antes de confirmar un pago.</p>
++      <button type="submit" className="admin-btn" disabled={disabled}>Consultar y conciliar con Wompi</button>
++    </form>}
+     {confirmation && <fieldset className={styles.confirm}>
+       <legend>{CONFIRM[confirmation.code][0]}</legend><p>{CONFIRM[confirmation.code][1]}</p>
+       {confirmation.values.trackingNumber && <p><strong>{CARRIER_LABELS[confirmation.values.carrier]} · {confirmation.values.trackingNumber}</strong></p>}
+diff --git a/frontend/src/services/orderAdminService.js b/frontend/src/services/orderAdminService.js
+index a50b7af..2e7e93f 100644
+--- a/frontend/src/services/orderAdminService.js
++++ b/frontend/src/services/orderAdminService.js
+@@ -3,7 +3,10 @@ export const getOrderCommunications = async (id, page = 1) => (await api.get(`/a
+ export const retryOrderCommunication = async (id, notificationId) => (await api.post(`/admin/orders/${id}/communications/${notificationId}/retry`)).data;
+ export const resendOrderCommunication = async (id, notificationId, data) => (await api.post(`/admin/orders/${id}/communications/${notificationId}/resend`, data)).data;
+ 
+-export const reconcileWompi = async (id) => (await api.post(`/admin/orders/${id}/reconcile-wompi`)).data;
++export const reconcileWompi = async (id, data = {}) => (await api.post(`/admin/orders/${id}/reconcile-wompi`, data)).data;
++export const resolvePaymentIncident = async (id, incidentId, data) => (await api.post(`/admin/orders/${id}/incidents/${incidentId}/resolve`, data)).data;
++export const getPaymentEvents = async () => (await api.get('/admin/orders/payment-events')).data;
++export const reprocessPaymentEvent = async (id) => (await api.post(`/admin/orders/payment-events/${id}/reprocess`)).data;
+ 
+ export const getOrderStats = async () => {
+   const res = await api.get("/admin/orders/stats");

@@ -1,0 +1,1145 @@
+getPath: MongoMemoryServer: Possible version conflict
+  SystemBinary version: "8.3.2"
+  Requested version:    "7.0.24"
+
+  Using SystemBinary!
+(node:31192) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:31192) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:31192) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:31192) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:31192) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:31192) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+11:56:45 [[32mhttp[39m]: POST /api/auth/login 200 684.366 ms - 160
+11:56:46 [[32mhttp[39m]: POST /api/auth/login 200 623.716 ms - 165
+11:56:47 [[32mhttp[39m]: POST /api/auth/login 200 527.340 ms - 164
+11:56:47 [[32mhttp[39m]: POST /api/auth/login 200 698.197 ms - 166
+11:56:48 [[32mhttp[39m]: POST /api/checkout/orders 201 222.456 ms - 425
+11:56:48 [[31merror[39m]: Server error Estado Wompi discrepante; reintentar verificación
+Error: Estado Wompi discrepante; reintentar verificación
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:132:79)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:56:48 [[32mhttp[39m]: POST /api/webhooks/wompi 503 112.130 ms - 81
+11:56:48 [[31merror[39m]: Server error Estado Wompi discrepante; reintentar verificación
+Error: Estado Wompi discrepante; reintentar verificación
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:132:79)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:56:48 [[32mhttp[39m]: POST /api/webhooks/wompi 503 138.974 ms - 81
+11:56:48 [[31merror[39m]: Server error Estado Wompi discrepante; reintentar verificación
+Error: Estado Wompi discrepante; reintentar verificación
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:132:79)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:56:48 [[32mhttp[39m]: POST /api/webhooks/wompi 503 136.238 ms - 81
+11:56:48 [[31merror[39m]: Server error Estado Wompi discrepante; reintentar verificación
+Error: Estado Wompi discrepante; reintentar verificación
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:132:79)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:56:48 [[32mhttp[39m]: POST /api/webhooks/wompi 503 153.006 ms - 81
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:56:48 [[32mhttp[39m]: POST /api/webhooks/wompi 200 116.568 ms - 2
+✔ N01-PENDING: APPROVED firmado frente a GET PENDING: failed durable, 503, alerta única y recuperación (17177.4355ms)
+11:56:48 [[32mhttp[39m]: POST /api/checkout/orders 201 105.852 ms - 425
+11:56:48 [[31merror[39m]: Server error Estado Wompi discrepante; reintentar verificación
+Error: Estado Wompi discrepante; reintentar verificación
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:132:79)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:56:48 [[32mhttp[39m]: POST /api/webhooks/wompi 503 104.141 ms - 81
+11:56:48 [[31merror[39m]: Server error Estado Wompi discrepante; reintentar verificación
+Error: Estado Wompi discrepante; reintentar verificación
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:132:79)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:56:48 [[32mhttp[39m]: POST /api/webhooks/wompi 503 127.001 ms - 81
+11:56:48 [[31merror[39m]: Server error Estado Wompi discrepante; reintentar verificación
+Error: Estado Wompi discrepante; reintentar verificación
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:132:79)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:56:48 [[32mhttp[39m]: POST /api/webhooks/wompi 503 148.583 ms - 81
+11:56:48 [[31merror[39m]: Server error Estado Wompi discrepante; reintentar verificación
+Error: Estado Wompi discrepante; reintentar verificación
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:132:79)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:56:48 [[32mhttp[39m]: POST /api/webhooks/wompi 503 181.086 ms - 81
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:56:48 [[32mhttp[39m]: POST /api/webhooks/wompi 200 101.701 ms - 2
+✔ N01-DECLINED: APPROVED firmado frente a GET DECLINED: failed durable, 503, alerta única y recuperación (445.1177ms)
+11:56:49 [[32mhttp[39m]: POST /api/checkout/orders 201 114.254 ms - 425
+11:56:49 [[31merror[39m]: Server error Failing command via 'failCommand' failpoint
+MongoServerError: Failing command via 'failCommand' failpoint
+    at Connection.sendCommand (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\cmap\connection.js:320:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Connection.command (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\cmap\connection.js:347:26)
+    at async Server.command (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\sdam\server.js:208:29)
+    at async executeOperationWithRetries (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\operations\execute_operation.js:193:32)
+    at async executeOperation (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async Collection.findOneAndUpdate (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\collection.js:544:16)
+    at async model.Query._findOneAndUpdate (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongoose\lib\query.js:3621:13)
+    at async model.Query.exec (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongoose\lib\query.js:4797:63)
+    at async exports.paymentEventReview (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\notificationEvents.js:13:3)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:22:3
+    at async ClientSession.withTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\sessions.js:568:30)
+    at async exports.inTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\transactionService.js:7:12)
+    at async exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:132:13)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":500,"userId":null,"ip":"127.0.0.1"}
+11:56:49 [[32mhttp[39m]: POST /api/webhooks/wompi 500 35.731 ms - 57
+11:56:49 [[31merror[39m]: Server error Estado Wompi discrepante; reintentar verificación
+Error: Estado Wompi discrepante; reintentar verificación
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:132:79)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:56:49 [[32mhttp[39m]: POST /api/webhooks/wompi 503 48.091 ms - 81
+✔ N02: fallo Mongo de alerta no confirma ni oculta discrepancia; reintento conserva failed (234.7042ms)
+11:56:49 [[32mhttp[39m]: POST /api/checkout/orders 201 117.668 ms - 425
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:56:49 [[32mhttp[39m]: POST /api/webhooks/wompi 200 145.054 ms - 2
+✔ N03-APPROVED: PENDING firmado progresa a APPROVED consultado y cierra la observación anterior (289.012ms)
+11:56:49 [[32mhttp[39m]: POST /api/checkout/orders 201 129.073 ms - 425
+11:56:49 [[32mhttp[39m]: POST /api/webhooks/wompi 200 124.279 ms - 2
+✔ N03-DECLINED: PENDING firmado progresa a DECLINED consultado y cierra la observación anterior (277.1358ms)
+11:56:49 [[32mhttp[39m]: POST /api/checkout/orders 201 115.932 ms - 425
+11:56:49 [[32mhttp[39m]: POST /api/webhooks/wompi 200 116.878 ms - 2
+✔ N03-ERROR: PENDING firmado progresa a ERROR consultado y cierra la observación anterior (262.8814ms)
+11:56:50 [[32mhttp[39m]: POST /api/checkout/orders 201 122.333 ms - 425
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:56:50 [[32mhttp[39m]: POST /api/webhooks/wompi 200 137.620 ms - 2
+11:56:50 [[32mhttp[39m]: POST /api/webhooks/wompi 200 106.036 ms - 2
+11:56:50 [[32mhttp[39m]: POST /api/webhooks/wompi 200 10.176 ms - 2
+11:56:50 [[32mhttp[39m]: POST /api/admin/orders/6b047051b445a0a31cf23053/reconcile-wompi 200 148.138 ms - 100
+11:56:50 [[32mhttp[39m]: PATCH /api/admin/orders/6b047051b445a0a31cf23053/status 409 14.824 ms - 84
+✔ N04: VOIDED conserva precedencia frente a APPROVED antiguo (583.5594ms)
+11:56:50 [[32mhttp[39m]: POST /api/checkout/orders 201 135.439 ms - 425
+11:56:50 [[32mhttp[39m]: POST /api/admin/orders/6b047052b445a0a31cf23091/reconcile-wompi 409 6.641 ms - 91
+11:56:50 [[32mhttp[39m]: POST /api/admin/orders/6b047052b445a0a31cf23091/reconcile-wompi 409 6.330 ms - 91
+11:56:50 [[32mhttp[39m]: POST /api/admin/orders/6b047052b445a0a31cf23091/reconcile-wompi 409 6.709 ms - 91
+11:56:50 [[32mhttp[39m]: POST /api/admin/orders/6b047052b445a0a31cf23091/reconcile-wompi 409 10.440 ms - 63
+✔ N05: formato inválido y 404 son 409 sin incidencia ni mutación del pedido (201.7699ms)
+11:56:50 [[32mhttp[39m]: POST /api/checkout/orders 201 109.729 ms - 425
+11:56:50 [[31merror[39m]: Server error No se pudo consultar a Wompi. Conserva el pedido para revisión.
+Error: No se pudo consultar a Wompi. Conserva el pedido para revisión.
+    at C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\orderAdminController.js:211:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {"method":"POST","url":"/api/admin/orders/6b047052b445a0a31cf230aa/reconcile-wompi","statusCode":503,"userId":"6b04704bb445a0a31cf22f6c","ip":"127.0.0.1"}
+11:56:50 [[32mhttp[39m]: POST /api/admin/orders/6b047052b445a0a31cf230aa/reconcile-wompi 503 27.090 ms - 95
+11:56:51 [[32mhttp[39m]: POST /api/checkout/orders 201 112.941 ms - 425
+11:56:51 [[31merror[39m]: Server error No se pudo consultar a Wompi. Conserva el pedido para revisión.
+Error: No se pudo consultar a Wompi. Conserva el pedido para revisión.
+    at C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\orderAdminController.js:211:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {"method":"POST","url":"/api/admin/orders/6b047052b445a0a31cf230c4/reconcile-wompi","statusCode":503,"userId":"6b04704bb445a0a31cf22f6c","ip":"127.0.0.1"}
+11:56:51 [[32mhttp[39m]: POST /api/admin/orders/6b047052b445a0a31cf230c4/reconcile-wompi 503 21.613 ms - 95
+11:56:51 [[32mhttp[39m]: POST /api/checkout/orders 201 108.581 ms - 425
+11:56:51 [[31merror[39m]: Server error No se pudo consultar a Wompi. Conserva el pedido para revisión.
+Error: No se pudo consultar a Wompi. Conserva el pedido para revisión.
+    at C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\orderAdminController.js:211:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {"method":"POST","url":"/api/admin/orders/6b047053b445a0a31cf230de/reconcile-wompi","statusCode":503,"userId":"6b04704bb445a0a31cf22f6c","ip":"127.0.0.1"}
+11:56:51 [[32mhttp[39m]: POST /api/admin/orders/6b047053b445a0a31cf230de/reconcile-wompi 503 25.465 ms - 95
+11:56:51 [[32mhttp[39m]: POST /api/checkout/orders 201 105.671 ms - 425
+11:56:51 [[31merror[39m]: Server error No se pudo consultar a Wompi. Conserva el pedido para revisión.
+Error: No se pudo consultar a Wompi. Conserva el pedido para revisión.
+    at C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\orderAdminController.js:211:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {"method":"POST","url":"/api/admin/orders/6b047053b445a0a31cf230f8/reconcile-wompi","statusCode":503,"userId":"6b04704bb445a0a31cf22f6c","ip":"127.0.0.1"}
+11:56:51 [[32mhttp[39m]: POST /api/admin/orders/6b047053b445a0a31cf230f8/reconcile-wompi 503 26.212 ms - 95
+11:56:51 [[32mhttp[39m]: POST /api/checkout/orders 201 104.746 ms - 425
+11:56:51 [[31merror[39m]: Server error No se pudo consultar a Wompi. Conserva el pedido para revisión.
+Error: No se pudo consultar a Wompi. Conserva el pedido para revisión.
+    at C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\orderAdminController.js:211:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {"method":"POST","url":"/api/admin/orders/6b047053b445a0a31cf23112/reconcile-wompi","statusCode":503,"userId":"6b04704bb445a0a31cf22f6c","ip":"127.0.0.1"}
+11:56:51 [[32mhttp[39m]: POST /api/admin/orders/6b047053b445a0a31cf23112/reconcile-wompi 503 30.711 ms - 95
+✔ N06: 5xx, 429 y otros 4xx no se convierten en 404; timeout mantiene trazabilidad (773.2675ms)
+11:56:51 [[32mhttp[39m]: POST /api/checkout/orders 201 100.944 ms - 425
+11:56:51 [[31merror[39m]: Server error No se pudo consultar a Wompi. Conserva el pedido para revisión.
+Error: No se pudo consultar a Wompi. Conserva el pedido para revisión.
+    at C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\orderAdminController.js:211:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {"method":"POST","url":"/api/admin/orders/6b047053b445a0a31cf2312c/reconcile-wompi","statusCode":503,"userId":"6b04704bb445a0a31cf22f6c","ip":"127.0.0.1"}
+11:56:51 [[32mhttp[39m]: POST /api/admin/orders/6b047053b445a0a31cf2312c/reconcile-wompi 503 23.777 ms - 95
+11:56:51 [[31merror[39m]: Server error No se pudo consultar a Wompi. Conserva el pedido para revisión.
+Error: No se pudo consultar a Wompi. Conserva el pedido para revisión.
+    at C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\orderAdminController.js:211:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {"method":"POST","url":"/api/admin/orders/6b047053b445a0a31cf2312c/reconcile-wompi","statusCode":503,"userId":"6b04704bb445a0a31cf22f6c","ip":"127.0.0.1"}
+11:56:51 [[32mhttp[39m]: POST /api/admin/orders/6b047053b445a0a31cf2312c/reconcile-wompi 503 30.003 ms - 95
+11:56:51 [[32mhttp[39m]: POST /api/checkout/orders 201 134.693 ms - 425
+11:56:51 [[31merror[39m]: Server error No se pudo consultar a Wompi. Conserva el pedido para revisión.
+Error: No se pudo consultar a Wompi. Conserva el pedido para revisión.
+    at C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\orderAdminController.js:211:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {"method":"POST","url":"/api/admin/orders/6b047053b445a0a31cf2314f/reconcile-wompi","statusCode":503,"userId":"6b04704bb445a0a31cf22f6c","ip":"127.0.0.1"}
+11:56:51 [[32mhttp[39m]: POST /api/admin/orders/6b047053b445a0a31cf2314f/reconcile-wompi 503 23.772 ms - 95
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:56:52 [[32mhttp[39m]: POST /api/admin/orders/6b047053b445a0a31cf2312c/reconcile-wompi 200 352.701 ms - 100
+11:56:52 [[32mhttp[39m]: POST /api/admin/orders/6b047053b445a0a31cf2312c/reconcile-wompi 200 438.030 ms - 100
+11:56:52 [[32mhttp[39m]: POST /api/admin/orders/6b047053b445a0a31cf2312c/reconcile-wompi 200 508.477 ms - 100
+11:56:52 [[32mhttp[39m]: POST /api/admin/orders/6b047053b445a0a31cf2312c/reconcile-wompi 200 573.689 ms - 100
+11:56:52 [[32mhttp[39m]: PATCH /api/admin/orders/6b047053b445a0a31cf2312c/status 200 25.189 ms - 830
+✔ N07: recuperación con ID diferente cierra sólo fallos de consulta del mismo pedido y audita una vez (989.4558ms)
+11:56:52 [[32mhttp[39m]: POST /api/checkout/orders 201 93.065 ms - 425
+11:56:52 [[32mhttp[39m]: POST /api/checkout/orders 201 93.764 ms - 425
+11:56:52 [[32mhttp[39m]: POST /api/admin/orders/6b047054b445a0a31cf23205/reconcile-wompi 409 40.829 ms - 91
+11:56:52 [[31merror[39m]: Server error No se pudo consultar a Wompi. Conserva el pedido para revisión.
+Error: No se pudo consultar a Wompi. Conserva el pedido para revisión.
+    at C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\orderAdminController.js:211:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {"method":"POST","url":"/api/admin/orders/6b047054b445a0a31cf23205/reconcile-wompi","statusCode":503,"userId":"6b04704bb445a0a31cf22f6c","ip":"127.0.0.1"}
+11:56:52 [[32mhttp[39m]: POST /api/admin/orders/6b047054b445a0a31cf23205/reconcile-wompi 503 48.970 ms - 95
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:56:52 [[32mhttp[39m]: POST /api/admin/orders/6b047054b445a0a31cf23205/reconcile-wompi 200 109.507 ms - 100
+11:56:52 [[32mhttp[39m]: PATCH /api/admin/orders/6b047054b445a0a31cf23205/status 409 7.392 ms - 83
+✔ N08: conciliación no resuelve incidencias financieras independientes ni acepta ID ajeno (440.7033ms)
+11:56:53 [[32mhttp[39m]: POST /api/checkout/orders 201 103.167 ms - 425
+11:56:53 [[31merror[39m]: Server error No se pudo consultar a Wompi. Conserva el pedido para revisión.
+Error: No se pudo consultar a Wompi. Conserva el pedido para revisión.
+    at C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\orderAdminController.js:211:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {"method":"POST","url":"/api/admin/orders/6b047054b445a0a31cf2325b/reconcile-wompi","statusCode":503,"userId":"6b04704bb445a0a31cf22f6c","ip":"127.0.0.1"}
+11:56:53 [[32mhttp[39m]: POST /api/admin/orders/6b047054b445a0a31cf2325b/reconcile-wompi 503 23.569 ms - 95
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:56:53 [[31merror[39m]: Server error Fallo de almacenamiento AuditLog ficticio
+Error: Fallo de almacenamiento AuditLog ficticio
+    at Audit.create (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\docs\auditoria-wompi-pedidos\remediacion-2\regresiones.test.cjs:78:112)
+    at C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\orderAdminController.js:223:43
+    at C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\orderOperations.js:18:24
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async ClientSession.withTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\sessions.js:568:30)
+    at async exports.inTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\transactionService.js:7:12)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\orderAdminController.js:215:3 {"method":"POST","url":"/api/admin/orders/6b047054b445a0a31cf2325b/reconcile-wompi","statusCode":500,"userId":"6b04704bb445a0a31cf22f6c","ip":"127.0.0.1"}
+11:56:53 [[32mhttp[39m]: POST /api/admin/orders/6b047054b445a0a31cf2325b/reconcile-wompi 500 96.674 ms - 57
+11:56:53 [[32mhttp[39m]: PATCH /api/admin/orders/6b047054b445a0a31cf2325b/status 409 9.630 ms - 83
+11:56:53 [[32mhttp[39m]: POST /api/admin/orders/6b047054b445a0a31cf2325b/reconcile-wompi 200 94.718 ms - 100
+11:56:53 [[32mhttp[39m]: PATCH /api/admin/orders/6b047054b445a0a31cf2325b/status 200 17.483 ms - 830
+✔ N09: fallo AuditLog revierte cierre de fallos de consulta; pago auténtico queda bloqueado y recuperable (375.4679ms)
+11:56:53 [[32mhttp[39m]: POST /api/checkout/orders 201 117.426 ms - 425
+11:56:53 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"POST","url":"/api/admin/orders/6b047055b445a0a31cf2329e/reconcile-wompi","statusCode":403,"ip":"127.0.0.1"}
+11:56:53 [[32mhttp[39m]: POST /api/admin/orders/6b047055b445a0a31cf2329e/reconcile-wompi 403 6.260 ms - 75
+11:56:53 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"POST","url":"/api/admin/orders/6b047055b445a0a31cf2329e/reconcile-wompi","statusCode":403,"ip":"127.0.0.1"}
+11:56:53 [[32mhttp[39m]: POST /api/admin/orders/6b047055b445a0a31cf2329e/reconcile-wompi 403 5.068 ms - 75
+✔ N10: vendedor y cliente no concilian ni cierran consultas (153.812ms)
+11:56:53 [[32mhttp[39m]: POST /api/checkout/orders 201 121.514 ms - 425
+11:56:53 [[32mhttp[39m]: POST /api/webhooks/wompi 200 25.771 ms - 2
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:56:54 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b047055f08b0d545e68f2ad/reprocess 200 1036.390 ms - 94
+11:56:54 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b047055f08b0d545e68f2ad/reprocess 200 1120.494 ms - 94
+11:56:54 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b047055f08b0d545e68f2ad/reprocess 200 1129.478 ms - 94
+11:56:54 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b047055f08b0d545e68f2ad/reprocess 200 1205.097 ms - 94
+11:56:54 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b047055f08b0d545e68f2ad/reprocess 200 1253.259 ms - 94
+11:56:54 [[32mhttp[39m]: GET /api/admin/orders/payment-events 200 8.645 ms - 823
+✔ N11: reprocesos concurrentes cierran original de otro estado y preservan sus campos inmutables (1454.9039ms)
+11:56:55 [[32mhttp[39m]: POST /api/checkout/orders 201 105.850 ms - 425
+11:56:55 [[32mhttp[39m]: POST /api/webhooks/wompi 200 36.443 ms - 2
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:56:55 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b047057f08b0d545e68f2c1/reprocess 200 116.422 ms - 94
+✔ N12: moneda alterada se conserva como evidencia, con provider_binding_mismatch tras cierre (282.9641ms)
+11:56:55 [[32mhttp[39m]: POST /api/checkout/orders 201 116.549 ms - 425
+11:56:55 [[32mhttp[39m]: POST /api/webhooks/wompi 200 27.917 ms - 2
+11:56:55 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b047057f08b0d545e68f2c7/reprocess 409 5.851 ms - 74
+11:56:55 [[31merror[39m]: Server error Consulta Wompi no disponible; evidencia conservada
+Error: Consulta Wompi no disponible; evidencia conservada
+    at C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\orderAdminController.js:248:81
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {"method":"POST","url":"/api/admin/orders/payment-events/6b047057f08b0d545e68f2c7/reprocess","statusCode":503,"userId":"6b04704bb445a0a31cf22f6c","ip":"127.0.0.1"}
+11:56:55 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b047057f08b0d545e68f2c7/reprocess 503 6.739 ms - 81
+11:56:55 [[31merror[39m]: Server error Estado o importe consultado discrepante; recibo conservado para recuperación
+Error: Estado o importe consultado discrepante; recibo conservado para recuperación
+    at C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\orderAdminController.js:253:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {"method":"POST","url":"/api/admin/orders/payment-events/6b047057f08b0d545e68f2c7/reprocess","statusCode":503,"userId":"6b04704bb445a0a31cf22f6c","ip":"127.0.0.1"}
+11:56:55 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b047057f08b0d545e68f2c7/reprocess 503 21.114 ms - 108
+✔ N13: reproceso sin asociación, con otro ID o estado rezagado no cierra el recibo (254.1317ms)
+11:56:55 [[32mhttp[39m]: POST /api/checkout/orders 201 108.093 ms - 425
+11:56:55 [[32mhttp[39m]: POST /api/webhooks/wompi 200 27.380 ms - 2
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:56:55 [[31merror[39m]: Server error Failing command via 'failCommand' failpoint
+MongoServerError: Failing command via 'failCommand' failpoint
+    at Connection.sendCommand (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\cmap\connection.js:320:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Connection.command (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\cmap\connection.js:347:26)
+    at async Server.command (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\sdam\server.js:208:29)
+    at async executeOperationWithRetries (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\operations\execute_operation.js:193:32)
+    at async executeOperation (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async Collection.findOneAndUpdate (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\collection.js:544:16)
+    at async model.Query._findOneAndUpdate (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongoose\lib\query.js:3621:13)
+    at async model.Query.exec (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongoose\lib\query.js:4797:63)
+    at async exports.moveStock (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\inventoryService.js:18:21)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:199:13
+    at async ClientSession.withTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\sessions.js:568:30)
+    at async exports.inTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\transactionService.js:7:12)
+    at async exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:179:12)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\orderAdminController.js:257:21 {"method":"POST","url":"/api/admin/orders/payment-events/6b047057f08b0d545e68f2ca/reprocess","statusCode":500,"userId":"6b04704bb445a0a31cf22f6c","ip":"127.0.0.1"}
+11:56:55 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b047057f08b0d545e68f2ca/reprocess 500 128.089 ms - 57
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:56:55 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b047057f08b0d545e68f2ca/reprocess 200 117.832 ms - 94
+✔ N14: fallo Mongo al aplicar no cierra original y reintento no duplica stock (419.1628ms)
+11:56:55 [[32mhttp[39m]: POST /api/checkout/orders 201 110.985 ms - 425
+11:56:56 [[32mhttp[39m]: POST /api/webhooks/wompi 200 28.567 ms - 2
+(node:31192) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:56:56 [[31merror[39m]: Server error Fallo Mongo simulado al cerrar recibo original
+Error: Fallo Mongo simulado al cerrar recibo original
+    at f.M.PaymentEvent.save (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\docs\auditoria-wompi-pedidos\remediacion-2\regresiones.test.cjs:114:163)
+    at C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\orderAdminController.js:269:20
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async ClientSession.withTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\sessions.js:568:30)
+    at async exports.inTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\transactionService.js:7:12)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\orderAdminController.js:259:3 {"method":"POST","url":"/api/admin/orders/payment-events/6b047057f08b0d545e68f2d0/reprocess","statusCode":500,"userId":"6b04704bb445a0a31cf22f6c","ip":"127.0.0.1"}
+11:56:56 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b047057f08b0d545e68f2d0/reprocess 500 107.838 ms - 57
+11:56:56 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b047057f08b0d545e68f2d0/reprocess 200 106.556 ms - 94
+✔ N15: fallo Mongo al cerrar original conserva pago aplicado y permite cierre idempotente posterior (386.8162ms)
+(node:34232) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:34232) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:34232) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:34232) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:34232) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 65.987 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 3.170 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 3.080 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 4.199 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 2.473 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 1.275 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 3.835 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 1.231 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 1.804 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 3.010 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 6.850 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.930 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 1.715 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 1.833 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.907 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.886 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 1.073 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 1.800 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.914 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.854 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.856 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 1.751 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.926 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.855 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 3.853 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 1.812 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 2.009 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.858 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 1.033 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 1.176 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.851 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.841 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 1.248 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 2.385 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 2.843 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.801 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.814 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 1.125 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 1.132 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 1.002 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 1.852 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.807 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 1.261 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.878 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 2.125 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.990 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.933 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 1.001 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 1.244 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.798 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.751 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 1.862 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.839 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.755 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.753 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.810 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 1.075 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.736 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.862 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.682 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.878 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.827 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.817 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.949 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 2.631 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.731 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.717 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.859 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.693 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.736 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.978 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.749 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.832 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.875 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.893 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.618 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.799 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.730 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.850 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.906 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.757 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.732 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 1.124 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.784 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.702 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 3.942 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.798 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.752 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.750 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.848 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.670 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.712 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.836 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 1.509 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.880 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.850 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.850 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 1.038 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.784 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.727 ms - 48
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 1.024 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.747 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.815 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 3.677 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.661 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.845 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 2.318 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.791 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 1.909 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 1.957 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.716 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.696 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.629 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 1.417 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.980 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.903 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.535 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.618 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.678 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.742 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.828 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.802 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.760 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 1.146 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.859 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 1.853 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 1.081 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 1.287 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.882 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.880 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.667 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.551 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.474 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 4.210 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.683 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.603 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.662 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.641 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.709 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.486 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.500 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.612 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.507 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 1.194 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.659 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.719 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.640 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.610 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.659 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.621 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.610 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.574 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.651 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.720 ms - 64
+11:56:38 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.853 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.707 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 4.911 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.760 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.682 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.713 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.647 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.730 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.820 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.686 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.714 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.671 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.730 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.884 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.738 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.713 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 2.546 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.657 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.662 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.567 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.690 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.755 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.688 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.698 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.711 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.715 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.542 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.598 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.615 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.640 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.656 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.655 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.793 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.668 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.650 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.690 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 1.248 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.714 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.733 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.647 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.714 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.670 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.646 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.663 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.655 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.631 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.753 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.781 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.680 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.555 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.941 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.749 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.711 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.576 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.590 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.632 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.593 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.567 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.594 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 9.510 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.638 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 1.196 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.679 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.704 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.748 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.665 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.649 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.670 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.724 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.832 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.787 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.681 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 1.550 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.659 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.784 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.772 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.991 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.654 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 1.780 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.687 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.916 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.715 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.665 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.937 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.614 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.983 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.602 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.836 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 1.248 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.777 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.805 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.810 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 1.265 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.767 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.617 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.649 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.852 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.664 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.697 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.827 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.994 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.975 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.770 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.653 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.640 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.657 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.878 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 1.531 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 3.151 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.875 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.672 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.724 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.765 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.805 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.719 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.642 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.540 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.694 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.633 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.648 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.482 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.547 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 1.274 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.583 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.611 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.632 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.629 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.691 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.667 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.593 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.558 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.573 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.887 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.627 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.571 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.617 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.785 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.581 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.633 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.631 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.587 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.621 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.806 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.665 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.665 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.446 ms - 64
+11:56:39 [[32mhttp[39m]: POST /api/webhooks/wompi 429 0.456 ms - 64
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 2.556 ms - 82
+✔ L01: webhook conserva 100/min y tras 301 POST no consume el global (1692.3653ms)
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.911 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.676 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.749 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 1.126 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.620 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.672 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.642 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.672 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.629 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.526 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.558 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.718 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.594 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.529 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.561 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.486 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.504 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 1.464 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.545 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.518 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.475 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.501 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.568 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.537 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.545 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.554 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.546 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.571 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.570 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.557 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.638 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.543 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.582 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.764 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.557 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.595 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 1.222 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.687 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.579 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.595 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.671 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.598 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.654 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.742 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 1.361 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.557 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.623 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.551 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.648 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.587 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.653 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.599 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 1.099 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.690 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.652 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.712 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.546 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.645 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.610 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 1.221 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.548 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.700 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.560 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.420 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.584 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.683 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.709 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.710 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.513 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.531 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 2.483 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.921 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.657 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.909 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.801 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.853 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.656 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.906 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.698 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.672 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.646 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.826 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.687 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.595 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.609 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.612 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.750 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 1.162 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.643 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.464 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.530 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.695 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.563 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.919 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.667 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.811 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.452 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.646 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 1.971 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.745 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 1.177 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.708 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.650 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.646 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.753 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.747 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.944 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.672 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.897 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.594 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.905 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.851 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.610 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.731 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.671 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.727 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.754 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 1.102 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.775 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 1.670 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.659 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.749 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 1.558 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.701 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.596 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.601 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.417 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 1.903 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.716 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.615 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.682 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.650 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.689 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.497 ms - 82
+11:56:39 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.656 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.450 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.722 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.630 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.702 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.629 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 1.620 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.617 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.653 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.556 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.651 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.696 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.760 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.914 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.763 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.513 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.676 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 1.067 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.614 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.633 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.626 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.574 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.615 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.731 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 1.880 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.600 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.692 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.652 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.720 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.629 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.657 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.629 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.560 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.434 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.596 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.489 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.607 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.959 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.709 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.668 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.612 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.644 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.671 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.684 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.694 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.500 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.640 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.656 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.650 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.673 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.739 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.719 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.722 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 1.335 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.668 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.609 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.675 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.943 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.666 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 1.120 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 1.339 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.576 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 1.701 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 2.076 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.661 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.509 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.687 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.526 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.607 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.495 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 1.903 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.613 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.795 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.761 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 2.931 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.779 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 1.314 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.676 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.725 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.665 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.748 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.880 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.581 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.698 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.645 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.600 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.841 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 3.523 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.575 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.712 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.616 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 1.362 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.807 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.644 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.532 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.704 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.751 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.752 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.918 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.743 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.613 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.781 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.996 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.751 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.670 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.743 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.685 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.658 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.835 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.693 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.988 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 1.501 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.694 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.578 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.588 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.626 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.618 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.634 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.579 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.641 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.650 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.776 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.733 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.605 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.837 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.768 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.562 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.591 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.660 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.639 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.710 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.830 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.664 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.686 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.641 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.759 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.744 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.699 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.709 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.717 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.827 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 1.047 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.922 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.665 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.674 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.687 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.635 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.680 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.650 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 1.063 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.682 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.710 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.650 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 3.565 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.667 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.682 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.782 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.666 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 1.400 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.682 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.678 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.573 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.634 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.421 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 404 0.595 ms - 82
+11:56:40 [[32mhttp[39m]: GET /api/remediation-probe-not-found 429 0.285 ms - 87
+✔ L02: resto de API conserva límite global e IP no se acepta de un header en test (914.1839ms)
+getPath: MongoMemoryServer: Possible version conflict
+  SystemBinary version: "8.3.2"
+  Requested version:    "7.0.24"
+
+  Using SystemBinary!
+(node:40760) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:40760) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:40760) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:40760) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:40760) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:40760) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+11:56:45 [[32mhttp[39m]: POST /api/auth/login 200 672.027 ms - 160
+11:56:46 [[32mhttp[39m]: POST /api/auth/login 200 595.413 ms - 165
+11:56:47 [[32mhttp[39m]: POST /api/auth/login 200 525.858 ms - 164
+11:56:47 [[32mhttp[39m]: POST /api/auth/login 200 663.054 ms - 166
+11:56:48 [[32mhttp[39m]: POST /api/checkout/orders 201 216.401 ms - 425
+11:56:48 [[32mhttp[39m]: POST /api/webhooks/wompi 200 26.847 ms - 2
+11:56:48 [[32mhttp[39m]: POST /api/webhooks/wompi 200 55.353 ms - 2
+11:56:48 [[32mhttp[39m]: POST /api/webhooks/wompi 200 91.749 ms - 2
+11:56:48 [[32mhttp[39m]: POST /api/webhooks/wompi 200 120.627 ms - 2
+11:56:48 [[32mhttp[39m]: POST /api/webhooks/wompi 200 156.370 ms - 2
+11:56:48 [[32mhttp[39m]: POST /api/webhooks/wompi 200 172.820 ms - 2
+11:56:48 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"GET","url":"/api/admin/orders/payment-events","statusCode":403,"ip":"127.0.0.1"}
+11:56:48 [[32mhttp[39m]: GET /api/admin/orders/payment-events 403 7.926 ms - 75
+11:56:48 [[32mhttp[39m]: GET /api/admin/orders/payment-events 200 8.096 ms - 391
+✔ R01: inbox durable sin pedido, sin datos sensibles, alerta única y permisos (17044.2018ms)
+11:56:48 [[32mhttp[39m]: POST /api/checkout/orders 201 125.865 ms - 425
+11:56:48 [[32mhttp[39m]: POST /api/webhooks/wompi 200 21.625 ms - 2
+(node:40760) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:56:48 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b047050b8508c02c846fd4a/reprocess 200 126.673 ms - 94
+✔ R02: evento conservado tras reinicio del servicio y reprocesado por proveedor (306.5398ms)
+11:56:48 [[32mhttp[39m]: POST /api/checkout/orders 201 115.778 ms - 425
+11:56:48 [[31merror[39m]: Server error Failing command via 'failCommand' failpoint
+MongoServerError: Failing command via 'failCommand' failpoint
+    at Connection.sendCommand (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\cmap\connection.js:320:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Connection.command (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\cmap\connection.js:347:26)
+    at async Server.command (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\sdam\server.js:208:29)
+    at async executeOperationWithRetries (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\operations\execute_operation.js:193:32)
+    at async executeOperation (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async Collection.findOneAndUpdate (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\collection.js:544:16)
+    at async model.Query._findOneAndUpdate (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongoose\lib\query.js:3621:13)
+    at async model.Query.exec (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongoose\lib\query.js:4797:63)
+    at async exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:89:13)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":500,"userId":null,"ip":"127.0.0.1"}
+11:56:48 [[32mhttp[39m]: POST /api/webhooks/wompi 500 4.920 ms - 57
+11:56:48 [[32mhttp[39m]: POST /api/webhooks/wompi 200 21.636 ms - 2
+✔ R03: inbox fallido nunca devuelve 200, y reintento conserva un efecto (184.9268ms)
+11:56:48 [[32mhttp[39m]: POST /api/checkout/orders 201 112.003 ms - 425
+11:56:48 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"POST","url":"/api/admin/orders/6b0470504e245f5d45009597/reconcile-wompi","statusCode":403,"ip":"127.0.0.1"}
+11:56:48 [[32mhttp[39m]: POST /api/admin/orders/6b0470504e245f5d45009597/reconcile-wompi 403 5.771 ms - 75
+(node:40760) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:40760) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:56:49 [[32mhttp[39m]: POST /api/webhooks/wompi 200 204.657 ms - 2
+11:56:49 [[32mhttp[39m]: POST /api/admin/orders/6b0470504e245f5d45009597/reconcile-wompi 200 217.904 ms - 100
+11:56:49 [[32mhttp[39m]: POST /api/webhooks/wompi 200 230.095 ms - 2
+11:56:49 [[32mhttp[39m]: POST /api/checkout/orders 201 123.913 ms - 425
+11:56:49 [[32mhttp[39m]: POST /api/admin/orders/6b0470514e245f5d450095c2/reconcile-wompi 409 40.637 ms - 91
+✔ R04: recuperación sin webhook valida ID, enlace, permisos y concurrencia (565.1718ms)
+11:56:49 [[32mhttp[39m]: POST /api/checkout/orders 201 121.276 ms - 425
+11:56:49 [[32mhttp[39m]: POST /api/checkout/orders 201 131.669 ms - 425
+11:56:49 [[32mhttp[39m]: POST /api/webhooks/wompi 200 43.428 ms - 2
+11:56:49 [[32mhttp[39m]: POST /api/webhooks/wompi 200 33.355 ms - 2
+✔ R05: contradicción de referencia y duplicidad de enlace no asignan dinero (384.3403ms)
+11:56:49 [[32mhttp[39m]: POST /api/checkout/orders 201 109.162 ms - 425
+11:56:50 [[32mhttp[39m]: POST /api/webhooks/wompi 200 104.329 ms - 2
+11:56:50 [[32mhttp[39m]: PATCH /api/admin/orders/6b0470514e245f5d4500960e/status 409 12.731 ms - 84
+✔ R06: importe incorrecto conserva cobro y bloqueo sin afirmar pagado (256.2657ms)
+11:56:50 [[32mhttp[39m]: POST /api/checkout/orders 201 147.858 ms - 425
+(node:40760) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:56:50 [[32mhttp[39m]: POST /api/webhooks/wompi 200 142.814 ms - 2
+11:56:50 [[32mhttp[39m]: POST /api/webhooks/wompi 200 98.955 ms - 2
+11:56:50 [[32mhttp[39m]: POST /api/webhooks/wompi 200 17.312 ms - 2
+11:56:50 [[32mhttp[39m]: POST /api/admin/orders/6b0470524e245f5d4500962f/reconcile-wompi 200 134.447 ms - 100
+11:56:50 [[32mhttp[39m]: PATCH /api/admin/orders/6b0470524e245f5d4500962f/status 409 11.015 ms - 84
+✔ R07: VOIDED bloquea preparación y APPROVED antiguo no rehabilita (592.6026ms)
+11:56:50 [[32mhttp[39m]: POST /api/checkout/orders 201 120.931 ms - 425
+11:56:50 [[32mhttp[39m]: POST /api/webhooks/wompi 200 114.163 ms - 2
+11:56:50 [[32mhttp[39m]: POST /api/webhooks/wompi 200 197.059 ms - 2
+11:56:51 [[32mhttp[39m]: POST /api/checkout/orders 201 125.949 ms - 425
+(node:40760) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:56:51 [[32mhttp[39m]: POST /api/webhooks/wompi 200 97.595 ms - 2
+11:56:51 [[32mhttp[39m]: POST /api/webhooks/wompi 200 58.550 ms - 2
+✔ R08: VOIDED concurrente con APPROVED y después de despacho conserva inventario (652.1597ms)
+11:56:51 [[32mhttp[39m]: POST /api/checkout/orders 201 125.074 ms - 425
+(node:40760) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:56:51 [[32mhttp[39m]: POST /api/webhooks/wompi 200 100.145 ms - 2
+11:56:51 [[32mhttp[39m]: POST /api/webhooks/wompi 200 110.048 ms - 2
+11:56:51 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"POST","url":"/api/admin/orders/6b0470534e245f5d450096c5/incidents/6b0470534e245f5d450096e0/resolve","statusCode":403,"ip":"127.0.0.1"}
+11:56:51 [[32mhttp[39m]: POST /api/admin/orders/6b0470534e245f5d450096c5/incidents/6b0470534e245f5d450096e0/resolve 403 3.663 ms - 75
+11:56:51 [[33mwarn[39m]: Auth failure Decisión no autorizada para esta incidencia {"method":"POST","url":"/api/admin/orders/6b0470534e245f5d450096c5/incidents/6b0470534e245f5d450096e0/resolve","statusCode":403,"ip":"127.0.0.1"}
+11:56:51 [[32mhttp[39m]: POST /api/admin/orders/6b0470534e245f5d450096c5/incidents/6b0470534e245f5d450096e0/resolve 403 10.971 ms - 74
+11:56:51 [[32mhttp[39m]: PATCH /api/admin/orders/6b0470534e245f5d450096c5/status 409 8.325 ms - 83
+✔ R09: vendedor y texto libre no resuelven un pago duplicado (391.7544ms)
+11:56:51 [[32mhttp[39m]: POST /api/checkout/orders 201 100.288 ms - 425
+(node:40760) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:56:51 [[32mhttp[39m]: POST /api/webhooks/wompi 200 92.694 ms - 2
+11:56:51 [[32mhttp[39m]: POST /api/admin/orders/6b0470534e245f5d450096f3/incidents/6b0470534e245f5d4500970b/resolve 400 7.528 ms - 72
+11:56:51 [[32mhttp[39m]: POST /api/admin/orders/6b0470534e245f5d450096f3/incidents/6b0470534e245f5d4500970b/resolve 200 37.947 ms - 838
+11:56:51 [[32mhttp[39m]: POST /api/admin/orders/6b0470534e245f5d450096f3/incidents/6b0470534e245f5d4500970b/resolve 409 45.596 ms - 59
+11:56:51 [[32mhttp[39m]: PATCH /api/admin/orders/6b0470534e245f5d450096f3/status 200 18.256 ms - 830
+✔ R10: resolución de cupón auditada, motivo obligatorio, concurrencia idempotente (310.9728ms)
+11:56:52 [[32mhttp[39m]: POST /api/checkout/orders 201 117.007 ms - 425
+✔ R11: autocancelación Wompi no se ofrece ni cancela intento potencial; COD sí (132.9589ms)
+11:56:52 [[32mhttp[39m]: POST /api/checkout/orders 201 113.338 ms - 425
+(node:40760) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:56:52 [[32mhttp[39m]: POST /api/webhooks/wompi 200 94.365 ms - 2
+11:56:52 [[31merror[39m]: Server error Failing command via 'failCommand' failpoint
+MongoServerError: Failing command via 'failCommand' failpoint
+    at Connection.sendCommand (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\cmap\connection.js:320:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Connection.command (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\cmap\connection.js:347:26)
+    at async Server.command (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\sdam\server.js:208:29)
+    at async executeOperationWithRetries (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\operations\execute_operation.js:193:32)
+    at async executeOperation (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async Collection.insertOne (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\collection.js:154:16)
+    at async model.$__save (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongoose\lib\model.js:428:16)
+    at async model.save (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongoose\lib\model.js:667:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongoose\lib\model.js:2816:9
+    at async Promise.all (index 0)
+    at async model.create (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongoose\lib\model.js:2801:11)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\paymentIncidentResolution.js:70:5
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\orderOperations.js:18:18
+    at async ClientSession.withTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\sessions.js:568:30)
+    at async exports.inTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\transactionService.js:7:12) {"method":"POST","url":"/api/admin/orders/6b0470544e245f5d45009734/incidents/6b0470544e245f5d4500974c/resolve","statusCode":500,"userId":"6b04704b4e245f5d45009521","ip":"127.0.0.1"}
+11:56:52 [[32mhttp[39m]: POST /api/admin/orders/6b0470544e245f5d45009734/incidents/6b0470544e245f5d4500974c/resolve 500 13.825 ms - 57
+✔ R12: fallo de AuditLog revierte resolución, historial y desbloqueo (257.9331ms)
+11:56:52 [[32mhttp[39m]: POST /api/checkout/orders 201 95.396 ms - 425
+(node:40760) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:56:52 [[32mhttp[39m]: POST /api/webhooks/wompi 200 88.431 ms - 2
+11:56:52 [[32mhttp[39m]: POST /api/webhooks/wompi 200 83.083 ms - 2
+11:56:52 [[32mhttp[39m]: POST /api/admin/orders/6b0470544e245f5d45009758/incidents/6b0470544e245f5d45009773/resolve 409 9.805 ms - 85
+11:56:52 [[32mhttp[39m]: POST /api/admin/orders/6b0470544e245f5d45009758/incidents/6b0470544e245f5d45009773/resolve 200 22.086 ms - 838
+11:56:52 [[32mhttp[39m]: PATCH /api/admin/orders/6b0470544e245f5d45009758/status 200 16.699 ms - 830
+11:56:52 [[32mhttp[39m]: POST /api/admin/orders/6b0470544e245f5d45009758/reconcile-wompi 200 40.375 ms - 100
+✔ R13: devolución manual adicional exige superadmin, evidencia exacta y libera sólo pago principal válido (407.072ms)
+11:56:52 [[32mhttp[39m]: POST /api/checkout/orders 201 105.159 ms - 425
+11:56:52 [[32mhttp[39m]: POST /api/webhooks/wompi 200 100.563 ms - 2
+11:56:53 [[32mhttp[39m]: PATCH /api/admin/orders/6b0470544e245f5d45009792/status 200 33.087 ms - 937
+11:56:53 [[32mhttp[39m]: POST /api/admin/orders/6b0470544e245f5d45009792/incidents/6b0470544e245f5d450097a2/resolve 200 26.961 ms - 879
+11:56:53 [[32mhttp[39m]: PATCH /api/admin/orders/6b0470544e245f5d45009792/status 409 10.141 ms - 64
+11:56:53 [[32mhttp[39m]: POST /api/admin/orders/6b0470544e245f5d45009792/reconcile-wompi 200 44.247 ms - 100
+✔ R14: devolución manual de monto discrepante no habilita preparación ni reabre pago (369.7931ms)
+11:56:53 [[32mhttp[39m]: POST /api/checkout/orders 201 114.061 ms - 425
+11:56:53 [[32mhttp[39m]: PATCH /api/admin/orders/6b0470554e245f5d450097d2/status 200 30.072 ms - 848
+11:56:53 [[32mhttp[39m]: POST /api/admin/orders/6b0470554e245f5d450097d2/incidents/6b0470554e245f5d450097e0/resolve 200 21.154 ms - 829
+11:56:53 [[32mhttp[39m]: POST /api/webhooks/wompi 200 85.163 ms - 2
+11:56:53 [[32mhttp[39m]: PATCH /api/admin/orders/6b0470554e245f5d450097d2/status 409 9.695 ms - 64
+✔ R15: vigilancia se archiva con actor y motivo sin certificar ausencia de pagos futuros (294.4487ms)
+✔ R16: configuración falla cerrada sin revelar llaves y plantillas escapan eventos (3.1487ms)
+11:56:53 [[32mhttp[39m]: POST /api/checkout/orders 201 116.425 ms - 425
+11:56:53 [[32mhttp[39m]: POST /api/webhooks/wompi 200 105.337 ms - 2
+11:56:53 [[32mhttp[39m]: PATCH /api/admin/orders/6b0470554e245f5d45009800/status 409 9.553 ms - 83
+(node:40760) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:56:53 [[32mhttp[39m]: POST /api/admin/orders/6b0470554e245f5d45009800/reconcile-wompi 200 128.078 ms - 100
+11:56:53 [[32mhttp[39m]: POST /api/admin/orders/6b0470554e245f5d45009800/reconcile-wompi 200 113.404 ms - 100
+✔ R17: sin stock reconoce cobro válido y recuperación no duplica inventario (531.2633ms)
+11:56:54 [[32mhttp[39m]: POST /api/checkout/orders 201 222.533 ms - 425
+11:56:54 [[32mhttp[39m]: POST /api/webhooks/wompi 200 24.567 ms - 2
+11:56:54 [[32mhttp[39m]: GET /api/admin/alerts 200 49.918 ms - 13379
+✔ R18: alertas detectan pendientes antiguos y entrega administrativa usa outbox existente (397.1532ms)
+11:56:54 [[32mhttp[39m]: POST /api/checkout/orders 201 138.620 ms - 425
+11:56:54 [[31merror[39m]: Server error Failing command via 'failCommand' failpoint
+MongoServerError: Failing command via 'failCommand' failpoint
+    at Connection.sendCommand (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\cmap\connection.js:320:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Connection.command (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\cmap\connection.js:347:26)
+    at async Server.command (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\sdam\server.js:208:29)
+    at async executeOperationWithRetries (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\operations\execute_operation.js:193:32)
+    at async executeOperation (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async Collection.findOneAndUpdate (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\collection.js:544:16)
+    at async model.Query._findOneAndUpdate (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongoose\lib\query.js:3621:13)
+    at async model.Query.exec (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongoose\lib\query.js:4797:63)
+    at async exports.paymentEventReview (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\notificationEvents.js:13:3)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:151:7
+    at async ClientSession.withTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\sessions.js:568:30)
+    at async exports.inTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\transactionService.js:7:12)
+    at async exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:147:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":500,"userId":null,"ip":"127.0.0.1"}
+11:56:54 [[32mhttp[39m]: POST /api/webhooks/wompi 500 19.251 ms - 57
+11:56:54 [[32mhttp[39m]: POST /api/webhooks/wompi 200 24.332 ms - 2
+✔ R19: fallo de outbox no confirma recepción; inbox sobrevive y reintento genera un aviso (217.078ms)
+11:56:54 [[32mhttp[39m]: POST /api/checkout/orders 201 123.222 ms - 425
+11:56:54 [[32mhttp[39m]: POST /api/checkout/orders 201 114.441 ms - 425
+11:56:54 [[32mhttp[39m]: POST /api/webhooks/wompi 200 39.285 ms - 2
+✔ R20: modificar campos de vínculo no firmados jamás aplica pago a otro pedido (317.2249ms)
+11:56:55 [[32mhttp[39m]: POST /api/checkout/orders 201 105.276 ms - 425
+11:56:55 [[31merror[39m]: Server error Verificación Wompi pendiente; evidencia conservada
+Error: Verificación Wompi pendiente; evidencia conservada
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:116:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+11:56:55 [[32mhttp[39m]: POST /api/webhooks/wompi 503 32.928 ms - 82
+(node:40760) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:56:55 [[32mhttp[39m]: POST /api/webhooks/wompi 200 101.190 ms - 2
+✔ R21: indisponibilidad de consulta conserva inbox y aviso, devuelve 503 y permite reintento (275.133ms)
+11:56:55 [[32mhttp[39m]: POST /api/checkout/orders 201 113.894 ms - 425
+11:56:55 [[32mhttp[39m]: POST /api/webhooks/wompi 200 128.317 ms - 2
+✔ R22: consulta actual VOIDED prevalece sobre evento APPROVED firmado antiguo (265.3433ms)
+11:56:55 [[32mhttp[39m]: POST /api/checkout/orders 201 117.967 ms - 425
+11:56:55 [[32mhttp[39m]: POST /api/webhooks/wompi 200 41.276 ms - 2
+✔ R23: moneda no firmada se contrasta con consulta privada y no confirma dinero (188.791ms)
+11:56:55 [[32mhttp[39m]: POST /api/checkout/orders 201 119.129 ms - 425
+(node:40760) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:56:55 [[32mhttp[39m]: POST /api/webhooks/wompi 200 121.416 ms - 2
+11:56:55 [[32mhttp[39m]: POST /api/webhooks/wompi 200 84.682 ms - 2
+11:56:56 [[32mhttp[39m]: POST /api/webhooks/wompi 200 89.344 ms - 2
+11:56:56 [[32mhttp[39m]: POST /api/admin/orders/6b0470574e245f5d45009905/incidents/6b0470584e245f5d4500992d/resolve 200 22.282 ms - 838
+11:56:56 [[32mhttp[39m]: PATCH /api/admin/orders/6b0470574e245f5d45009905/status 200 18.658 ms - 830
+✔ R24: anulación consultada de pago adicional libera sólo el pedido respaldado por pago principal (497.0255ms)
+11:56:56 [[32mhttp[39m]: POST /api/checkout/orders 201 155.267 ms - 425
+11:56:56 [[32mhttp[39m]: PATCH /api/checkout/orders/6b0470584e245f5d45009945/cancel 409 21.822 ms - 116
+✔ R25: rechazo de cancelación electrónica sin ID conserva intención administrativa (348.0537ms)
+11:56:56 [[32mhttp[39m]: POST /api/checkout/orders 201 121.974 ms - 425
+11:56:56 [[32mhttp[39m]: POST /api/webhooks/wompi 200 86.471 ms - 2
+11:56:56 [[32mhttp[39m]: POST /api/admin/orders/6b0470584e245f5d4500995c/reconcile-wompi 200 89.929 ms - 100
+✔ R26: PENDING no elimina una retención histórica de revisión sin incidencia (334.4493ms)
+11:56:56 [[32mhttp[39m]: POST /api/checkout/orders 201 109.211 ms - 425
+(node:40760) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:56:57 [[32mhttp[39m]: POST /api/webhooks/wompi 200 277.592 ms - 2
+11:56:57 [[32mhttp[39m]: POST /api/webhooks/wompi 200 83.402 ms - 2
+11:56:57 [[32mhttp[39m]: PATCH /api/admin/orders/6b0470584e245f5d4500997b/status 409 10.200 ms - 84
+✔ R27: VOIDED auténtico del ID aplicado bloquea aunque falte vínculo no firmado (505.7285ms)
+ℹ tests 47
+ℹ suites 0
+ℹ pass 47
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 29418.0943

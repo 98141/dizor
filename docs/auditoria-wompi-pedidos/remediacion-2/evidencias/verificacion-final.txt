@@ -1,0 +1,62 @@
+{
+  "syntax": [
+    "backend/src/services/wompiPaymentService.js",
+    "backend/src/services/wompiService.js",
+    "backend/src/controllers/orderAdminController.js",
+    "backend/test/phase1-v2.test.js",
+    "docs/auditoria-wompi-pedidos/remediacion-2/preservar.cjs",
+    "docs/auditoria-wompi-pedidos/remediacion-2/regresiones.test.cjs",
+    "docs/auditoria-wompi-pedidos/remediacion-2/verificar.cjs"
+  ],
+  "lint": [
+    {
+      "file": "backend/src/services/wompiPaymentService.js",
+      "new": []
+    },
+    {
+      "file": "backend/src/services/wompiService.js",
+      "new": []
+    },
+    {
+      "file": "backend/src/controllers/orderAdminController.js",
+      "new": []
+    },
+    {
+      "file": "backend/test/phase1-v2.test.js",
+      "new": []
+    },
+    {
+      "file": "docs/auditoria-wompi-pedidos/remediacion-2/preservar.cjs",
+      "new": []
+    },
+    {
+      "file": "docs/auditoria-wompi-pedidos/remediacion-2/regresiones.test.cjs",
+      "new": []
+    },
+    {
+      "file": "docs/auditoria-wompi-pedidos/remediacion-2/verificar.cjs",
+      "new": []
+    }
+  ],
+  "preservation": {
+    "checked": 3954,
+    "changed": [
+      "backend/src/controllers/checkoutController.js",
+      "backend/src/controllers/orderAdminController.js",
+      "backend/src/services/wompiPaymentService.js",
+      "backend/src/services/wompiService.js",
+      "frontend/src/app/(shop)/checkout/page.js",
+      "frontend/src/components/auth/AuthFormField.jsx",
+      "frontend/src/styles/pages/checkout.css"
+    ],
+    "unexpected": [
+      "backend/src/controllers/checkoutController.js",
+      "frontend/src/app/(shop)/checkout/page.js",
+      "frontend/src/components/auth/AuthFormField.jsx",
+      "frontend/src/styles/pages/checkout.css"
+    ]
+  },
+  "head": "9289c7b1451d3b800ca8412d788a9a13c45cc514",
+  "branch": "main",
+  "diffCheck": 0
+}

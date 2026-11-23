@@ -1,0 +1,26 @@
+{
+  "checks": [
+    "Secciones visibles; validación junto al campo y foco; cambiar pago conserva datos, notas y autorizaciones sin crear pedidos",
+    "Dos columnas en escritorio; una en móvil, sin desbordamiento; total junto al botón en seis anchos",
+    "Error del servidor conserva valores; doble envío crea un pedido contraentrega y navega a la confirmación real",
+    "Cliente autenticado: datos/direcciones editables; Wompi redirige; retorno pendiente y pago solo tras evento verificado simulado",
+    "Error de cotización bloquea la compra y permite recuperar el resumen"
+  ],
+  "pageErrors": [],
+  "externalRequests": [],
+  "purchases": [
+    {
+      "paymentMethod": "contra_entrega",
+      "carrierSent": false,
+      "status": 201,
+      "orderNumber": "DIZ-20261123-D009AAD0D68ADBA6341E"
+    },
+    {
+      "paymentMethod": "wompi",
+      "carrierSent": false,
+      "status": 201,
+      "orderNumber": "DIZ-20261123-9E393BDF5B0F32DC30E5"
+    }
+  ],
+  "passed": true
+}
