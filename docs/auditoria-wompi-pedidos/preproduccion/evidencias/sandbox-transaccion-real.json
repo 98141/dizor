@@ -1,0 +1,31 @@
+{
+  "at": "2026-11-23T21:42:34.739Z",
+  "environment": "sandbox",
+  "readOnly": true,
+  "transactionId": "sha256:f37a55f19f39bb3b",
+  "http": 200,
+  "transaction": {
+    "id": "sha256:f37a55f19f39bb3b",
+    "paymentLinkFieldPresent": true,
+    "paymentLinkId": "sha256:043501bf97d24da9",
+    "reference": "sha256:638b250258b70f94",
+    "amountInCents": 15000000,
+    "currency": "COP",
+    "status": "APPROVED",
+    "createdAt": "2026-11-23T21:40:50.288Z",
+    "finalizedAt": "2026-11-23T21:40:51.471Z"
+  },
+  "association": {
+    "expectedLink": "sha256:043501bf97d24da9",
+    "matchesExpectedLink": true,
+    "referenceContainsLink": true
+  },
+  "E01": "PARCIAL_GET_REAL_CON_VINCULO; falta webhook auténtico",
+  "linkAfterPayment": {
+    "http": 200,
+    "active": true,
+    "singleUse": true,
+    "expiresAt": null,
+    "merchantEnvironment": "sandbox"
+  }
+}

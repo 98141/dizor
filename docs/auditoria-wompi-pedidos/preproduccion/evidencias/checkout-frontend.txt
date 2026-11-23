@@ -1,0 +1,14 @@
+✔ F6-03 campo obligatorio tiene etiqueta visible y asociación de ayuda (14.7049ms)
+✔ F6-04 error del campo es anunciado y asociado, sin ocultar el borrador (1.4001ms)
+✔ F6-05 error y éxito usan regiones distintas y mensajes persistentes en contexto (1.7521ms)
+✔ F6-06 contraseña permite control de teclado con nombre y estado (1.1126ms)
+✔ busca sin tildes/caja, muestra departamento y prioriza exactos antes de prefijos y contenidos (4388.357ms)
+✔ precarga solo parejas inequívocas y Bogotá no se mueve a Cundinamarca (9.9806ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4639.1391

@@ -1,0 +1,53 @@
+getPath: MongoMemoryServer: Possible version conflict
+  SystemBinary version: "8.3.2"
+  Requested version:    "7.0.24"
+
+  Using SystemBinary!
+(node:18076) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:18076) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:18076) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:18076) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:18076) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:18076) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+13:01:26 [[32mhttp[39m]: POST /api/auth/login 200 819.941 ms - 160
+13:01:27 [[32mhttp[39m]: POST /api/auth/login 200 808.416 ms - 165
+13:01:28 [[32mhttp[39m]: POST /api/auth/login 200 639.030 ms - 164
+13:01:28 [[32mhttp[39m]: POST /api/auth/login 200 635.175 ms - 166
+13:01:31 [[32mhttp[39m]: GET /api/legal/notices 200 2.402 ms - 1511
+13:01:31 [[32mhttp[39m]: GET /api/checkout/config 200 33.412 ms - 111773
+13:01:31 [[32mhttp[39m]: POST /api/checkout/calculate 200 63.457 ms - 580
+13:01:35 [[32mhttp[39m]: POST /api/checkout/calculate 200 14.256 ms - 580
+13:01:36 [[32mhttp[39m]: POST /api/checkout/calculate 200 16.527 ms - 580
+OK Combobox único: selección por teclado/clic, búsqueda local sin tildes, sin envío con Enter, Escape, texto libre inválido y borrador conservado
+13:01:37 [[32mhttp[39m]: POST /api/checkout/calculate 200 15.795 ms - 580
+OK Secciones visibles; validación junto al campo y foco; cambiar pago conserva datos, notas y autorizaciones sin crear pedidos
+OK Dos columnas en escritorio; una en móvil, sin desbordamiento; total junto al botón en seis anchos
+13:01:37 [[32mhttp[39m]: POST /api/checkout/calculate 200 11.529 ms - 580
+13:01:38 [[32mhttp[39m]: POST /api/checkout/calculate 200 17.091 ms - 580
+(node:18076) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+13:01:38 [[32mhttp[39m]: POST /api/checkout/orders 201 214.492 ms - 371
+13:01:38 [[32mhttp[39m]: POST /api/checkout/orders/lookup 200 8.523 ms - 604
+13:01:38 [[32mhttp[39m]: GET /api/admin/orders/6b047f824f48b743f89901aa 200 14.406 ms - 2696
+OK Error del servidor conserva valores; doble envío crea un pedido contraentrega y navega a la confirmación real
+13:01:38 [[32mhttp[39m]: GET /api/legal/notices 200 1.529 ms - 1511
+13:01:38 [[32mhttp[39m]: GET /api/checkout/config 200 29.714 ms - 111773
+13:01:39 [[32mhttp[39m]: POST /api/checkout/calculate 200 64.131 ms - 580
+13:01:39 [[32mhttp[39m]: POST /api/checkout/calculate 200 15.198 ms - 580
+13:01:39 [[32mhttp[39m]: POST /api/checkout/calculate 200 91.706 ms - 580
+OK Direcciones: pareja válida precargada, Bogotá propia, antigua ambigua exige solo municipio y conserva calle/teléfono/postal/notas
+13:01:40 [[32mhttp[39m]: POST /api/checkout/calculate 200 30.287 ms - 580
+13:01:40 [[32mhttp[39m]: POST /api/checkout/calculate 200 13.953 ms - 580
+13:01:40 [[32mhttp[39m]: POST /api/checkout/calculate 200 15.304 ms - 580
+13:01:40 [[32mhttp[39m]: POST /api/checkout/orders 201 117.761 ms - 425
+13:01:41 [[32mhttp[39m]: POST /api/checkout/orders/lookup 200 5.161 ms - 608
+13:01:41 [[32mhttp[39m]: GET /api/legal/notices 200 0.364 ms - 1511
+(node:18076) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+13:01:41 [[32mhttp[39m]: POST /api/webhooks/wompi 200 88.605 ms - 2
+13:01:41 [[32mhttp[39m]: POST /api/checkout/orders/lookup 200 6.418 ms - 597
+13:01:41 [[32mhttp[39m]: GET /api/legal/notices 200 0.580 ms - 1511
+OK Cliente autenticado: datos/direcciones editables; Wompi redirige; retorno pendiente y pago solo tras evento verificado simulado
+13:01:41 [[32mhttp[39m]: GET /api/legal/notices 200 0.693 ms - 1511
+13:01:41 [[32mhttp[39m]: GET /api/checkout/config 200 12.035 ms - 111773
+13:01:42 [[32mhttp[39m]: POST /api/checkout/calculate 200 15.094 ms - 580
+OK Error de cotización bloquea la compra y permite recuperar el resumen

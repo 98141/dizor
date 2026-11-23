@@ -1,0 +1,17 @@
+{
+  "at": "2026-11-23T22:22:05.551Z",
+  "environment": "sandbox",
+  "purpose": "Diagnóstico controlado del payload de creación; sin pedido ni pago",
+  "variant": "localhost",
+  "payload": {
+    "nameLength": 40,
+    "descriptionLength": 51,
+    "skuLength": 33,
+    "amountInCents": 15000000,
+    "currency": "COP",
+    "redirectHost": "localhost"
+  },
+  "http": 201,
+  "created": true,
+  "linkId": "sha256:d748c24c4d176deb"
+}

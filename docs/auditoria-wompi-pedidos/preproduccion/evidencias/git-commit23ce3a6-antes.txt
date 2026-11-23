@@ -1,0 +1,252 @@
+commit 23ce3a6c8d9d36253f8c0e7b1499ce63ce8f95e6
+Author:     98141 <armandomora14115@gmail.com>
+AuthorDate: Mon Nov 23 12:07:48 2026 -0500
+Commit:     98141 <armandomora14115@gmail.com>
+CommitDate: Mon Nov 23 12:07:48 2026 -0500
+
+    Modificaciones del checkout y la pasarela de pagos, validando cuando un pago fallido o erroneo
+
+ backend/src/app.js                                 |     4 +-
+ backend/src/controllers/adminAlertController.js    |    10 +
+ backend/src/controllers/checkoutController.js      |    21 +-
+ backend/src/controllers/orderAdminController.js    |    75 +-
+ backend/src/controllers/wompiWebhookController.js  |    13 +-
+ backend/src/models/notification.js                 |     3 +-
+ backend/src/models/order.js                        |     4 +-
+ backend/src/models/paymentEvent.js                 |     7 +-
+ backend/src/routes/adminOrderRoutes.js             |     3 +
+ backend/src/server.js                              |     2 +
+ backend/src/services/notificationDelivery.js       |    13 +-
+ backend/src/services/notificationEvents.js         |    13 +
+ backend/src/services/notificationTemplates.js      |     7 +
+ backend/src/services/orderTransitions.js           |     4 +-
+ backend/src/services/orderWorkspace.js             |     4 +-
+ backend/src/services/paymentIncidentResolution.js  |    76 +
+ backend/src/services/paymentMethods.js             |     9 +-
+ backend/src/services/wompiPaymentService.js        |   199 +-
+ backend/src/services/wompiService.js               |    33 +-
+ backend/test/checkout.test.js                      |   149 +
+ backend/test/helpers/phase2Fixture.cjs             |     1 +
+ backend/test/phase1-v2.test.js                     |    17 +
+ .../01_INFORME_EJECUTIVO.md                        |    43 +
+ .../02_ARQUITECTURA_Y_FLUJOS.md                    |   107 +
+ docs/auditoria-wompi-pedidos/03_MAQUINA_ESTADOS.md |    88 +
+ docs/auditoria-wompi-pedidos/04_SEGURIDAD_WOMPI.md |    87 +
+ docs/auditoria-wompi-pedidos/05_MATRIZ_PRUEBAS.md  |   110 +
+ .../06_HALLAZGOS_PRIORIZADOS.md                    |   133 +
+ .../07_CHECKLIST_PRODUCCION.md                     |    75 +
+ docs/auditoria-wompi-pedidos/08_VEREDICTO_FINAL.md |    67 +
+ docs/auditoria-wompi-pedidos/README.md             |    16 +
+ .../auditoria-claude/01_INFORME_INDEPENDIENTE.md   |    90 +
+ .../auditoria-claude/02_REVISION_DIFF.md           |    76 +
+ .../auditoria-claude/03_HALLAZGOS_PERSISTENTES.md  |   222 +
+ .../auditoria-claude/04_NUEVAS_VULNERABILIDADES.md |   170 +
+ .../auditoria-claude/05_RESULTADOS_PRUEBAS.md      |   102 +
+ .../auditoria-claude/06_CHECKLIST_FINAL.md         |    79 +
+ .../auditoria-claude/07_VEREDICTO_PREPRODUCCION.md |   102 +
+ .../evidencias/adversarial.test.cjs                |   423 +
+ .../evidencias/ejec-adversarial.txt                |   401 +
+ .../evidencias/ejec-limites-codex.txt              |   618 +
+ .../evidencias/ejec-matriz-contrato.txt            |   347 +
+ .../ejec-matriz-original-sin-adaptador.txt         |   553 +
+ .../evidencias/ejec-regresiones-codex.txt          |   235 +
+ .../evidencias/ejec-suite-historica.txt            |  1791 +++
+ .../auditoria-claude/evidencias/fixture-claude.cjs |    15 +
+ .../evidencias/huella-sha256-antes.txt             |  3931 +++++
+ .../evidencias/huella-sha256-despues.txt           |  3931 +++++
+ .../evidencias/preservar-claude.cjs                |    21 +
+ .../evidencias/resultados-auditoria-wompi.json     |   973 ++
+ .../evidencias/resultados-auditoria-wompi.json     |   945 ++
+ .../cierre-independiente-resultados.json           |   111 +
+ .../fase4-evidencias/rendimiento.json              |   966 ++
+ .../fase7-evidencias/rendimiento-local.json        |  1186 ++
+ .../evidencias/auditoria-wompi.cjs                 |   881 ++
+ .../evidencias/ejecucion-auditoria-wompi.txt       |    58 +
+ .../evidencias/resultados-auditoria-wompi.json     |   968 ++
+ .../evidencias/suite-existente-resumen.txt         |   283 +
+ .../remediacion-2/01_CAMBIOS_NV01_NV02_NV03.md     |    45 +
+ .../remediacion-2/02_CAUSAS_Y_DECISIONES.md        |    27 +
+ .../remediacion-2/03_PRUEBAS_DE_REGRESION.md       |    47 +
+ .../remediacion-2/04_DIFF_Y_ARCHIVOS.md            |    54 +
+ .../remediacion-2/05_RIESGOS_Y_BLOQUEOS.md         |    35 +
+ .../remediacion-2/06_HANDOFF_CLAUDE.md             |    91 +
+ .../remediacion-2/antes/orderAdminController.js    |   237 +
+ .../remediacion-2/antes/wompiPaymentService.js     |   222 +
+ .../remediacion-2/antes/wompiService.js            |   153 +
+ .../remediacion-2/evidencias/archivos-codigo.json  |    18 +
+ .../evidencias/baseline-casos-claude.txt           |   128 +
+ .../remediacion-2/evidencias/baseline-sha256.json  | 15818 +++++++++++++++++++
+ .../remediacion-2/evidencias/claude-despues.txt    |   337 +
+ .../remediacion-2/evidencias/codex-27.txt          |   235 +
+ .../remediacion-2/evidencias/diff-previo.patch     |   728 +
+ .../remediacion-2/evidencias/git-status-antes.txt  |    26 +
+ .../evidencias/git-status-despues.txt              |    34 +
+ .../remediacion-2/evidencias/git-status-final.txt  |    41 +
+ .../remediacion-2/evidencias/historica-275.txt     |  1779 +++
+ .../cierre-independiente-resultados.json           |   111 +
+ .../fase4-evidencias/rendimiento.json              |   966 ++
+ .../fase7-evidencias/rendimiento-local.json        |  1186 ++
+ .../evidencias/historicas-archivos.json            |    11 +
+ .../evidencias/inventario-remediacion-2.json       |   186 +
+ .../remediacion-2/evidencias/limites-2.txt         |   618 +
+ .../remediacion-2/evidencias/matriz-contrato.txt   |   349 +
+ .../evidencias/resultados-auditoria-wompi.json     |   973 ++
+ .../remediacion-2/evidencias/nuevas-antes.txt      |   450 +
+ .../remediacion-2/evidencias/nuevas-despues.txt    |   308 +
+ .../evidencias/preservacion-cierre.json            |    88 +
+ .../evidencias/preservacion-final.json             |    57 +
+ .../remediacion-2/evidencias/remediacion-2.diff    |   237 +
+ .../evidencias/restauracion-evidencias-2.json      |    23 +
+ .../evidencias/restauracion-evidencias.json        |    26 +
+ .../cierre-independiente-resultados.json           |   111 +
+ .../fase4-evidencias/rendimiento.json              |   966 ++
+ .../fase7-evidencias/rendimiento-local.json        |  1186 ++
+ .../cierre-independiente-resultados.json           |   111 +
+ .../fase4-evidencias/rendimiento.json              |   966 ++
+ .../fase7-evidencias/rendimiento-local.json        |  1186 ++
+ .../evidencias/verificacion-final.json             |    62 +
+ .../evidencias/verificacion-final.txt              |    62 +
+ .../remediacion-2/evidencias/versiones-v2.txt      |    35 +
+ .../remediacion-2/preservar.cjs                    |    16 +
+ .../remediacion-2/pruebas-sustituidas.md           |    14 +
+ .../remediacion-2/regresiones.test.cjs             |   118 +
+ .../remediacion-2/verificar.cjs                    |    34 +
+ .../remediacion/01_PLAN_Y_DEPENDENCIAS.md          |    36 +
+ .../remediacion/02_CAMBIOS_POR_HALLAZGO.md         |    31 +
+ .../remediacion/03_DECISIONES_TECNICAS.md          |    48 +
+ .../remediacion/04_PRUEBAS_Y_REGRESIONES.md        |    71 +
+ .../remediacion/05_RIESGOS_RESIDUALES.md           |    31 +
+ .../06_VERIFICACIONES_SANDBOX_PENDIENTES.md        |    46 +
+ .../remediacion/07_HANDOFF_AUDITOR_CLAUDE.md       |   102 +
+ .../remediacion/auditoria-contrato.cjs             |     7 +
+ .../remediacion/contrato-fixtures.cjs              |    30 +
+ .../remediacion/estatico.cjs                       |    29 +
+ .../remediacion/evidencias/ampliadas-antes.txt     |   254 +
+ .../remediacion/evidencias/ampliadas-despues.txt   |   194 +
+ .../remediacion/evidencias/archivos-codigo.json    |   108 +
+ .../evidencias/archivos-remediacion.json           |   378 +
+ .../remediacion/evidencias/auditoria-final.txt     |   387 +
+ .../evidencias/resultados-auditoria-wompi.json     |   973 ++
+ .../evidencias/baseline-auditoria-local.txt        |   420 +
+ .../remediacion/evidencias/baseline-auditoria.txt  |   141 +
+ .../evidencias/baseline-suite-local.txt            |  1784 +++
+ .../remediacion/evidencias/baseline-suite.txt      |    77 +
+ .../cierre-independiente-resultados.json           |   111 +
+ .../fase4-evidencias/rendimiento.json              |   966 ++
+ .../fase7-evidencias/rendimiento-local.json        |  1186 ++
+ .../evidencias/resultados-auditoria-wompi.json     |   968 ++
+ .../remediacion/evidencias/bordes-antes.txt        |    72 +
+ .../remediacion/evidencias/codigo.diff             |   879 ++
+ .../evidencias/controladores-cierre.txt            |    92 +
+ .../remediacion/evidencias/despues-original.txt    |   348 +
+ .../evidencias/resultados-auditoria-wompi.json     |   970 ++
+ .../remediacion/evidencias/estatico-cierre.json    |   254 +
+ .../remediacion/evidencias/estatico-cierre.txt     |    19 +
+ .../remediacion/evidencias/estatico-final.json     |   247 +
+ .../remediacion/evidencias/estatico-final.txt      |    19 +
+ .../remediacion/evidencias/estatico.json           |   267 +
+ .../remediacion/evidencias/estatico.txt            |    40 +
+ .../remediacion/evidencias/git-status.txt          |    26 +
+ .../remediacion/evidencias/historicos-sha256.json  | 13498 ++++++++++++++++
+ .../remediacion/evidencias/limites.txt             |   618 +
+ .../remediacion/evidencias/matriz-verificada.txt   |   349 +
+ .../evidencias/resultados-auditoria-wompi.json     |   973 ++
+ .../evidencias/navegador-remediacion.txt           |   511 +
+ .../navegador-remediacion/build-fase7.json         |     9 +
+ .../navegador-remediacion/build-fase7.txt          |    76 +
+ .../e2e-cod-entregado-cobrado.png                  |   Bin 0 -> 139170 bytes
+ .../navegador-remediacion/finanzas-1024.png        |   Bin 0 -> 148275 bytes
+ .../navegador-remediacion/finanzas-1440.png        |   Bin 0 -> 162054 bytes
+ .../navegador-remediacion/finanzas-360.png         |   Bin 0 -> 173182 bytes
+ .../navegador-remediacion/finanzas-390.png         |   Bin 0 -> 171119 bytes
+ .../navegador-remediacion/finanzas-820.png         |   Bin 0 -> 137973 bytes
+ .../navegador-remediacion/integracion-compras.json |   201 +
+ .../navegador-remediacion/next-navegador.json      |   212 +
+ .../navegador-remediacion/next-servidor.txt        |     4 +
+ .../remediacion-confirmacion-390.png               |   Bin 0 -> 68939 bytes
+ .../navegador-remediacion/remediacion-ui.json      |   212 +
+ .../remediacion/evidencias/navegador.txt           |   442 +
+ .../evidencias/navegador/build-fase7.json          |     9 +
+ .../evidencias/navegador/build-fase7.txt           |    76 +
+ .../navegador/e2e-cod-entregado-cobrado.png        |   Bin 0 -> 139247 bytes
+ .../evidencias/navegador/finanzas-1024.png         |   Bin 0 -> 148309 bytes
+ .../evidencias/navegador/finanzas-1440.png         |   Bin 0 -> 162746 bytes
+ .../evidencias/navegador/finanzas-360.png          |   Bin 0 -> 174427 bytes
+ .../evidencias/navegador/finanzas-390.png          |   Bin 0 -> 172332 bytes
+ .../evidencias/navegador/finanzas-820.png          |   Bin 0 -> 138832 bytes
+ .../evidencias/navegador/integracion-compras.json  |   201 +
+ .../evidencias/navegador/next-navegador.json       |   201 +
+ .../evidencias/navegador/next-servidor.txt         |     4 +
+ .../remediacion/evidencias/nuevas-antes.txt        |   295 +
+ .../remediacion/evidencias/nuevas-final.txt        |   221 +
+ .../remediacion/evidencias/nuevas-intermedio.txt   |   113 +
+ .../remediacion/evidencias/phase1-contrato.txt     |   666 +
+ .../remediacion/evidencias/regresiones-27.txt      |   231 +
+ .../remediacion/evidencias/regresiones-cierre.txt  |   235 +
+ .../remediacion/evidencias/suite-cierre.txt        |  1789 +++
+ .../cierre-independiente-resultados.json           |   111 +
+ .../fase4-evidencias/rendimiento.json              |   966 ++
+ .../fase7-evidencias/rendimiento-local.json        |  1186 ++
+ .../remediacion/evidencias/suite-contrato.txt      |  2056 +++
+ .../cierre-independiente-resultados.json           |   111 +
+ .../fase4-evidencias/rendimiento.json              |   966 ++
+ .../fase7-evidencias/rendimiento-local.json        |  1186 ++
+ .../remediacion/evidencias/suite-final.txt         |  1814 +++
+ .../cierre-independiente-resultados.json           |   111 +
+ .../fase4-evidencias/rendimiento.json              |   966 ++
+ .../fase7-evidencias/rendimiento-local.json        |  1186 ++
+ .../remediacion/evidencias/suite-verificada.txt    |  1793 +++
+ .../cierre-independiente-resultados.json           |   111 +
+ .../fase4-evidencias/rendimiento.json              |   966 ++
+ .../fase7-evidencias/rendimiento-local.json        |  1186 ++
+ .../remediacion/fixture.cjs                        |    13 +
+ .../remediacion/flujo-remediacion.cjs              |    51 +
+ .../remediacion/inventariar.cjs                    |    16 +
+ .../remediacion/limites.test.cjs                   |    20 +
+ .../remediacion/navegador.cjs                      |     8 +
+ .../remediacion/preservar.cjs                      |    16 +
+ .../remediacion/regresiones.test.cjs               |   212 +
+ docs/checkout-backend-pruebas.txt                  |  1256 ++
+ docs/checkout-build.txt                            |    80 +
+ docs/checkout-evidencias/baseline-controller.js    |   669 +
+ docs/checkout-evidencias/baseline-loader.cjs       |     1 +
+ docs/checkout-evidencias/checkout-1440.png         |   Bin 0 -> 65974 bytes
+ docs/checkout-evidencias/checkout-360.png          |   Bin 0 -> 59895 bytes
+ docs/checkout-evidencias/checkout-390.png          |   Bin 0 -> 60473 bytes
+ .../checkout-evidencias/comparacion-regresion.json |    59 +
+ docs/checkout-evidencias/next/build-fase7.json     |     9 +
+ docs/checkout-evidencias/next/build-fase7.txt      |    76 +
+ .../next/e2e-cod-entregado-cobrado.png             |   Bin 0 -> 139576 bytes
+ docs/checkout-evidencias/next/finanzas-1024.png    |   Bin 0 -> 147498 bytes
+ docs/checkout-evidencias/next/finanzas-1440.png    |   Bin 0 -> 162312 bytes
+ docs/checkout-evidencias/next/finanzas-360.png     |   Bin 0 -> 173027 bytes
+ docs/checkout-evidencias/next/finanzas-390.png     |   Bin 0 -> 170934 bytes
+ docs/checkout-evidencias/next/finanzas-820.png     |   Bin 0 -> 137591 bytes
+ .../next/integracion-compras.json                  |   201 +
+ docs/checkout-evidencias/next/next-navegador.json  |   201 +
+ docs/checkout-evidencias/next/next-servidor.txt    |     4 +
+ docs/checkout-evidencias/resultado.json            |    26 +
+ docs/checkout-evidencias/sandbox-link.cjs          |    24 +
+ docs/checkout-evidencias/sandbox-link.json         |     8 +
+ docs/checkout-navegador.txt                        |    41 +
+ docs/checkout-next-navegador.txt                   |   443 +
+ docs/checkout-regresion-backend.txt                |  2325 +++
+ docs/checkout-regresion-baseline.txt               |  2247 +++
+ docs/checkout-una-pagina.md                        |    93 +
+ docs/checkout-wompi-regresiones.txt                |  1145 ++
+ frontend/src/app/(shop)/checkout/page.js           |   921 +-
+ .../src/app/(shop)/pedido/confirmacion/page.js     |    10 +-
+ frontend/src/app/admin/alertas/page.js             |     2 +
+ frontend/src/components/admin/OrderDetail.jsx      |     7 +-
+ frontend/src/components/admin/OrderNextAction.jsx  |     6 +-
+ .../src/components/admin/PaymentEventAlerts.jsx    |    23 +
+ .../components/admin/PaymentIncidentActions.jsx    |    34 +
+ frontend/src/components/auth/AuthFormField.jsx     |     4 +-
+ frontend/src/lib/checkoutValidation.js             |    15 +
+ frontend/src/services/orderAdminService.js         |     5 +-
+ frontend/src/styles/pages/checkout.css             |    49 +-
+ frontend/test/checkout-browser.cjs                 |   164 +
+ frontend/test/helpers/phase7BrowserFlow.cjs        |    19 +-
+ frontend/test/helpers/phase7LastUnitFlow.cjs       |     6 +-
+ frontend/test/phase7-next-browser.cjs              |     2 +-
+ 243 files changed, 108504 insertions(+), 861 deletions(-)

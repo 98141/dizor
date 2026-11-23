@@ -1,0 +1,28 @@
+{
+  "checks": [
+    "Combobox único: selección por teclado/clic, búsqueda local sin tildes, sin envío con Enter, Escape, texto libre inválido y borrador conservado",
+    "Secciones visibles; validación junto al campo y foco; cambiar pago conserva datos, notas y autorizaciones sin crear pedidos",
+    "Dos columnas en escritorio; una en móvil, sin desbordamiento; total junto al botón en seis anchos",
+    "Error del servidor conserva valores; doble envío crea un pedido contraentrega y navega a la confirmación real",
+    "Direcciones: pareja válida precargada, Bogotá propia, antigua ambigua exige solo municipio y conserva calle/teléfono/postal/notas",
+    "Cliente autenticado: datos/direcciones editables; Wompi redirige; retorno pendiente y pago solo tras evento verificado simulado",
+    "Error de cotización bloquea la compra y permite recuperar el resumen"
+  ],
+  "pageErrors": [],
+  "externalRequests": [],
+  "purchases": [
+    {
+      "paymentMethod": "contra_entrega",
+      "carrierSent": false,
+      "status": 201,
+      "orderNumber": "DIZ-20261123-58CE9D35E702E461ED65"
+    },
+    {
+      "paymentMethod": "wompi",
+      "carrierSent": false,
+      "status": 201,
+      "orderNumber": "DIZ-20261123-005EBCAC309D32910D21"
+    }
+  ],
+  "passed": true
+}

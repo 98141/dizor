@@ -1,0 +1,23 @@
+{
+  "classification": "VALIDADO EN SANDBOX, PARCIAL",
+  "observedDate": "2026-11-23",
+  "timezone": "America/Bogota",
+  "source": "Navegador controlado mediante computer-use; estado visible del checkout oficial",
+  "linkOrigin": "Enlace preexistente del piloto documentado en docs/checkout-evidencias/sandbox-link.json; no reintento del pedido fallido",
+  "sandboxBannerObserved": "MODO DE PRUEBAS",
+  "merchantDisplayObserved": "Tejiendo Raices",
+  "buyerData": "Solo datos sintéticos de prueba",
+  "card": "Tarjeta oficial Sandbox, terminación 4242; PAN y CVC no registrados",
+  "consent": "Usuario autorizó reglamento y tratamiento de datos ficticios solo para esta prueba Sandbox",
+  "providerResult": "¡Pago aprobado!",
+  "amount": 150000,
+  "currencyConfirmedByPrivateGet": "COP",
+  "transactionId": "sha256:f37a55f19f39bb3b",
+  "linkId": "sha256:043501bf97d24da9",
+  "redirectObserved": "http://localhost:3000/pedido/confirmacion?order=<pedido_prueba>&payment=wompi&id=<sha256:f37a55f19f39bb3b>&env=test",
+  "addedQueryParameters": ["id", "env"],
+  "screenshot": "sandbox-aprobado.png",
+  "authenticWebhookCaptured": false,
+  "dizorOrderEndToEndValidated": false,
+  "productionTransactions": 0
+}

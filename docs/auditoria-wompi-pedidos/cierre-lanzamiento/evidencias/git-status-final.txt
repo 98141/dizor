@@ -1,0 +1,55 @@
+ M backend/src/config/db.js
+ M backend/src/controllers/adminAlertController.js
+ M backend/src/controllers/checkoutController.js
+ M backend/src/controllers/orderAdminController.js
+ M backend/src/models/paymentEvent.js
+ M backend/src/routes/adminOrderRoutes.js
+ M backend/src/server.js
+ M backend/src/services/paymentMethods.js
+ M backend/src/services/wompiPaymentService.js
+ M backend/src/services/wompiService.js
+ M backend/test/checkout.test.js
+ M frontend/src/app/(shop)/checkout/page.js
+ M frontend/src/app/admin/alertas/page.js
+ M frontend/src/components/admin/PaymentEventAlerts.jsx
+ M frontend/src/lib/checkoutValidation.js
+ M frontend/src/services/orderAdminService.js
+ M frontend/src/styles/pages/checkout.css
+ M frontend/test/checkout-browser.cjs
+ M frontend/test/helpers/phase7BrowserFlow.cjs
+ M frontend/test/helpers/phase7LastUnitFlow.cjs
+?? .gitattributes
+?? backend/src/data/
+?? backend/src/scripts/inspectDatabaseReadiness.js
+?? backend/src/services/databaseReadiness.js
+?? backend/src/services/municipalityCatalog.js
+?? backend/src/services/paymentEventArchive.js
+?? backend/test/municipality-catalog.test.js
+?? docs/auditoria-wompi-pedidos/auditoria-cierre-residuales/
+?? docs/auditoria-wompi-pedidos/auditoria-claude-2/
+?? docs/auditoria-wompi-pedidos/cierre-final-produccion/
+?? docs/auditoria-wompi-pedidos/cierre-lanzamiento/
+?? docs/auditoria-wompi-pedidos/cierre-residuales/
+?? docs/auditoria-wompi-pedidos/preproduccion/
+?? docs/checkout-audit-fixes.md
+?? docs/checkout-audit-fixes/
+?? docs/checkout-municipios-backend.txt
+?? docs/checkout-municipios-build.txt
+?? docs/checkout-municipios-evidencias/
+?? docs/checkout-municipios-frontend.txt
+?? docs/checkout-municipios-navegador.txt
+?? docs/checkout-municipios-next.txt
+?? docs/checkout-municipios.md
+?? docs/checkout-redesign-after.txt
+?? docs/checkout-redesign-before.txt
+?? docs/checkout-redesign-build.txt
+?? docs/checkout-redesign-regresion.txt
+?? docs/checkout-redesign.md
+?? docs/checkout-redesign/
+?? frontend/src/components/checkout/
+?? frontend/src/lib/municipalities.js
+?? frontend/test/checkout-audit-browser.cjs
+?? frontend/test/checkout-visual-browser.cjs
+?? frontend/test/helpers/checkoutAuditFlow.cjs
+?? frontend/test/helpers/checkoutVisualFlow.cjs
+?? frontend/test/municipalities.test.cjs

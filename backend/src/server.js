@@ -1,5 +1,10 @@
 require("dotenv").config();
 
+const mongoose = require("mongoose");
+if (process.env.NODE_ENV === "production") {
+  mongoose.set("autoIndex", false);
+  mongoose.set("autoCreate", false);
+}
 const app = require("./app");
 const connectDB = require("./config/db");
 const logger = require("./lib/logger");
@@ -30,23 +35,23 @@ if (process.env.NODE_ENV === "production" && process.env.WOMPI_ENV !== "producti
   process.exit(1);
 }
 
-let stopNotifications = () => {};
+let stopNotifications = () => {}, server;
 try { require("./services/wompiService").validateConfiguration(); }
 catch (err) { logger.error(`[SECURITY] ${err.message}. Servidor detenido.`); process.exit(1); }
 connectDB().then(async () => {
   await require("./models/notification").init();
+  server = app.listen(PORT, () => {
+    logger.info("Servidor iniciado", { port: PORT, env: process.env.NODE_ENV || "development" });
+  });
+  server.on("close", () => stopNotifications());
   if (process.env.TRANSACTIONAL_NOTIFICATIONS_ENABLED === "true") {
     stopNotifications = require("./services/notificationDelivery").startWorker();
   }
-}).catch(() => logger.error("Notification outbox initialization pending"));
-
-const server = app.listen(PORT, () => {
-  logger.info("Servidor iniciado", {
-    port: PORT,
-    env: process.env.NODE_ENV || "development",
-  });
+}).catch(async err => {
+  logger.error("Arranque rechazado: base de datos o índices no preparados", { code: err.code || "DATABASE_CONNECTION_FAILED", issues: err.issues || [] });
+  await mongoose.disconnect().catch(() => {});
+  process.exit(1);
 });
-server.on("close", () => stopNotifications());
 
 process.on("unhandledRejection", (err) => {
   logger.error("Unhandled Rejection — cerrando servidor", {
@@ -54,6 +59,7 @@ process.on("unhandledRejection", (err) => {
     message: err.message,
     stack: err.stack,
   });
+  if (!server) return process.exit(1);
   server.close(() => {
     process.exit(1);
   });

@@ -1,0 +1,966 @@
+{
+  "products": 1201,
+  "variants": 3601,
+  "returned": 20,
+  "totalMatches": 400,
+  "elapsedMs": 145.77230000000418,
+  "plan": {
+    "explainVersion": "1",
+    "stages": [
+      {
+        "$cursor": {
+          "queryPlanner": {
+            "namespace": "test.products",
+            "parsedQuery": {
+              "$and": [
+                {
+                  "$or": [
+                    {
+                      "name": {
+                        "$regex": "Volumen",
+                        "$options": "i"
+                      }
+                    },
+                    {
+                      "slug": {
+                        "$regex": "Volumen",
+                        "$options": "i"
+                      }
+                    },
+                    {
+                      "variants.sku": {
+                        "$regex": "Volumen",
+                        "$options": "i"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "category": {
+                    "$eq": "6b04b3517e4068ff91e9e28c"
+                  }
+                }
+              ]
+            },
+            "indexFilterSet": false,
+            "queryHash": "2734C1CC",
+            "planCacheShapeHash": "2734C1CC",
+            "planCacheKey": "8E368A38",
+            "optimizationTimeMillis": 0,
+            "cursorType": "regular",
+            "maxIndexedOrSolutionsReached": false,
+            "maxIndexedAndSolutionsReached": false,
+            "maxScansToExplodeReached": false,
+            "prunedSimilarIndexes": false,
+            "winningPlan": {
+              "isCached": false,
+              "stage": "FETCH",
+              "filter": {
+                "$or": [
+                  {
+                    "name": {
+                      "$regex": "Volumen",
+                      "$options": "i"
+                    }
+                  },
+                  {
+                    "slug": {
+                      "$regex": "Volumen",
+                      "$options": "i"
+                    }
+                  },
+                  {
+                    "variants.sku": {
+                      "$regex": "Volumen",
+                      "$options": "i"
+                    }
+                  }
+                ]
+              },
+              "nss": "test.products",
+              "inputStage": {
+                "stage": "IXSCAN",
+                "nss": "test.products",
+                "keyPattern": {
+                  "category": 1,
+                  "weaveType": 1,
+                  "style": 1
+                },
+                "indexName": "category_1_weaveType_1_style_1",
+                "isMultiKey": false,
+                "multiKeyPaths": {
+                  "category": [],
+                  "weaveType": [],
+                  "style": []
+                },
+                "isUnique": false,
+                "isSparse": false,
+                "isPartial": false,
+                "indexVersion": 2,
+                "direction": "forward",
+                "indexBounds": {
+                  "category": [
+                    "[ObjectId('6b04b3517e4068ff91e9e28c'), ObjectId('6b04b3517e4068ff91e9e28c')]"
+                  ],
+                  "weaveType": [
+                    "[MinKey, MaxKey]"
+                  ],
+                  "style": [
+                    "[MinKey, MaxKey]"
+                  ]
+                }
+              }
+            },
+            "rejectedPlans": []
+          },
+          "executionStats": {
+            "executionSuccess": true,
+            "nReturned": 1200,
+            "executionTimeMillis": 58,
+            "totalKeysExamined": 1201,
+            "totalDocsExamined": 1201,
+            "executionStages": {
+              "isCached": false,
+              "stage": "FETCH",
+              "filter": {
+                "$or": [
+                  {
+                    "name": {
+                      "$regex": "Volumen",
+                      "$options": "i"
+                    }
+                  },
+                  {
+                    "slug": {
+                      "$regex": "Volumen",
+                      "$options": "i"
+                    }
+                  },
+                  {
+                    "variants.sku": {
+                      "$regex": "Volumen",
+                      "$options": "i"
+                    }
+                  }
+                ]
+              },
+              "nReturned": 1200,
+              "executionTimeMillisEstimate": 0,
+              "works": 1202,
+              "advanced": 1200,
+              "needTime": 1,
+              "needYield": 0,
+              "saveState": 9,
+              "restoreState": 8,
+              "isEOF": 1,
+              "nss": "test.products",
+              "docsExamined": 1201,
+              "alreadyHasObj": 0,
+              "inputStage": {
+                "stage": "IXSCAN",
+                "nReturned": 1201,
+                "executionTimeMillisEstimate": 0,
+                "works": 1202,
+                "advanced": 1201,
+                "needTime": 0,
+                "needYield": 0,
+                "saveState": 9,
+                "restoreState": 8,
+                "isEOF": 1,
+                "nss": "test.products",
+                "keyPattern": {
+                  "category": 1,
+                  "weaveType": 1,
+                  "style": 1
+                },
+                "indexName": "category_1_weaveType_1_style_1",
+                "isMultiKey": false,
+                "multiKeyPaths": {
+                  "category": [],
+                  "weaveType": [],
+                  "style": []
+                },
+                "isUnique": false,
+                "isSparse": false,
+                "isPartial": false,
+                "indexVersion": 2,
+                "direction": "forward",
+                "indexBounds": {
+                  "category": [
+                    "[ObjectId('6b04b3517e4068ff91e9e28c'), ObjectId('6b04b3517e4068ff91e9e28c')]"
+                  ],
+                  "weaveType": [
+                    "[MinKey, MaxKey]"
+                  ],
+                  "style": [
+                    "[MinKey, MaxKey]"
+                  ]
+                },
+                "keysExamined": 1201,
+                "seeks": 1,
+                "dupsTested": 0,
+                "dupsDropped": 0,
+                "peakTrackedMemBytes": 0
+              }
+            }
+          }
+        },
+        "nReturned": 1200,
+        "executionTimeMillisEstimate": 16
+      },
+      {
+        "$set": {
+          "_activeVariants": {
+            "$filter": {
+              "input": {
+                "$ifNull": [
+                  "$variants",
+                  {
+                    "$const": []
+                  }
+                ]
+              },
+              "as": "v",
+              "cond": {
+                "$ne": [
+                  "$$v.isActive",
+                  {
+                    "$const": false
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "nReturned": 1200,
+        "executionTimeMillisEstimate": 23
+      },
+      {
+        "$set": {
+          "_inventory": {
+            "totalStock": {
+              "$sum": [
+                "$_activeVariants.stock"
+              ]
+            },
+            "activeVariantCount": {
+              "$size": [
+                "$_activeVariants"
+              ]
+            },
+            "validStock": {
+              "$sum": [
+                {
+                  "$map": {
+                    "input": "$_activeVariants",
+                    "as": "v",
+                    "in": {
+                      "$cond": [
+                        {
+                          "$cond": [
+                            {
+                              "$isNumber": [
+                                "$$v.stock"
+                              ]
+                            },
+                            {
+                              "$and": [
+                                {
+                                  "$gte": [
+                                    "$$v.stock",
+                                    {
+                                      "$const": 0
+                                    }
+                                  ]
+                                },
+                                {
+                                  "$lte": [
+                                    "$$v.stock",
+                                    {
+                                      "$const": 9007199254740991
+                                    }
+                                  ]
+                                },
+                                {
+                                  "$eq": [
+                                    "$$v.stock",
+                                    {
+                                      "$trunc": [
+                                        "$$v.stock"
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "$const": false
+                            }
+                          ]
+                        },
+                        "$$v.stock",
+                        {
+                          "$const": 0
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            "outCount": {
+              "$size": [
+                {
+                  "$filter": {
+                    "input": "$_activeVariants",
+                    "as": "v",
+                    "cond": {
+                      "$eq": [
+                        "$$v.stock",
+                        {
+                          "$const": 0
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            "lowCount": {
+              "$size": [
+                {
+                  "$filter": {
+                    "input": "$_activeVariants",
+                    "as": "v",
+                    "cond": {
+                      "$and": [
+                        {
+                          "$cond": [
+                            {
+                              "$isNumber": [
+                                "$$v.stock"
+                              ]
+                            },
+                            {
+                              "$and": [
+                                {
+                                  "$gte": [
+                                    "$$v.stock",
+                                    {
+                                      "$const": 0
+                                    }
+                                  ]
+                                },
+                                {
+                                  "$lte": [
+                                    "$$v.stock",
+                                    {
+                                      "$const": 9007199254740991
+                                    }
+                                  ]
+                                },
+                                {
+                                  "$eq": [
+                                    "$$v.stock",
+                                    {
+                                      "$trunc": [
+                                        "$$v.stock"
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "$const": false
+                            }
+                          ]
+                        },
+                        {
+                          "$gt": [
+                            "$$v.stock",
+                            {
+                              "$const": 0
+                            }
+                          ]
+                        },
+                        {
+                          "$lte": [
+                            "$$v.stock",
+                            {
+                              "$const": 5
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            "reviewCount": {
+              "$size": [
+                {
+                  "$filter": {
+                    "input": "$_activeVariants",
+                    "as": "v",
+                    "cond": {
+                      "$not": [
+                        {
+                          "$cond": [
+                            {
+                              "$isNumber": [
+                                "$$v.stock"
+                              ]
+                            },
+                            {
+                              "$and": [
+                                {
+                                  "$gte": [
+                                    "$$v.stock",
+                                    {
+                                      "$const": 0
+                                    }
+                                  ]
+                                },
+                                {
+                                  "$lte": [
+                                    "$$v.stock",
+                                    {
+                                      "$const": 9007199254740991
+                                    }
+                                  ]
+                                },
+                                {
+                                  "$eq": [
+                                    "$$v.stock",
+                                    {
+                                      "$trunc": [
+                                        "$$v.stock"
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "$const": false
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "nReturned": 1200,
+        "executionTimeMillisEstimate": 33
+      },
+      {
+        "$set": {
+          "_inventory": {
+            "stockStatus": {
+              "$switch": {
+                "branches": [
+                  {
+                    "case": {
+                      "$gt": [
+                        "$_inventory.reviewCount",
+                        {
+                          "$const": 0
+                        }
+                      ]
+                    },
+                    "then": {
+                      "$const": "review"
+                    }
+                  },
+                  {
+                    "case": {
+                      "$or": [
+                        {
+                          "$eq": [
+                            "$_inventory.activeVariantCount",
+                            {
+                              "$const": 0
+                            }
+                          ]
+                        },
+                        {
+                          "$gt": [
+                            "$_inventory.outCount",
+                            {
+                              "$const": 0
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "then": {
+                      "$const": "out"
+                    }
+                  },
+                  {
+                    "case": {
+                      "$gt": [
+                        "$_inventory.lowCount",
+                        {
+                          "$const": 0
+                        }
+                      ]
+                    },
+                    "then": {
+                      "$const": "low"
+                    }
+                  }
+                ],
+                "default": {
+                  "$const": "healthy"
+                }
+              }
+            }
+          }
+        },
+        "nReturned": 1200,
+        "executionTimeMillisEstimate": 33
+      },
+      {
+        "$match": {
+          "_inventory.stockStatus": {
+            "$eq": "low"
+          }
+        },
+        "nReturned": 400,
+        "executionTimeMillisEstimate": 52
+      },
+      {
+        "$facet": {
+          "total": [
+            {
+              "$internalFacetTeeConsumer": {},
+              "nReturned": 400,
+              "executionTimeMillisEstimate": 52
+            },
+            {
+              "$group": {
+                "_id": {
+                  "$const": null
+                },
+                "count": {
+                  "$sum": {
+                    "$const": 1
+                  }
+                },
+                "$willBeMerged": false
+              },
+              "nReturned": 1,
+              "executionTimeMillisEstimate": 52,
+              "maxAccumulatorMemoryUsageBytes": {
+                "count": 224
+              },
+              "totalOutputDataSizeBytes": 237,
+              "usedDisk": false,
+              "spills": 0,
+              "spilledDataStorageSize": 0,
+              "spilledBytes": 0,
+              "spilledRecords": 0,
+              "peakTrackedMemBytes": 240
+            },
+            {
+              "$project": {
+                "count": true,
+                "_id": false
+              },
+              "nReturned": 1,
+              "executionTimeMillisEstimate": 52
+            }
+          ],
+          "rows": [
+            {
+              "$internalFacetTeeConsumer": {},
+              "nReturned": 400,
+              "executionTimeMillisEstimate": 0
+            },
+            {
+              "$sort": {
+                "sortKey": {
+                  "createdAt": -1,
+                  "_id": -1
+                },
+                "limit": 60
+              },
+              "totalDataSizeSortedBytesEstimate": 229320,
+              "usedDisk": false,
+              "spills": 0,
+              "spilledBytes": 0,
+              "spilledRecords": 0,
+              "spilledDataStorageSize": 0,
+              "nReturned": 60,
+              "executionTimeMillisEstimate": 0,
+              "peakTrackedMemBytes": 229320
+            },
+            {
+              "$skip": 40,
+              "nReturned": 20,
+              "executionTimeMillisEstimate": 0
+            },
+            {
+              "$project": {
+                "_activeVariants": false,
+                "_inventory": false,
+                "_id": true
+              },
+              "nReturned": 20,
+              "executionTimeMillisEstimate": 0
+            }
+          ]
+        },
+        "nReturned": 1,
+        "executionTimeMillisEstimate": 52
+      }
+    ],
+    "queryShapeHash": "A4254850209FE3EB5C5C042FB2E197892F1119B13C19CDA188FDF20284FF38FE",
+    "serverInfo": {
+      "host": "DESKTOP-TK2LSRQ",
+      "port": 59716,
+      "version": "8.3.2",
+      "gitVersion": "89f54eb32e217d2f7bfcad50e5919f3033bb9611"
+    },
+    "serverParameters": {
+      "internalQueryFacetBufferSizeBytes": 104857600,
+      "internalDocumentSourceGroupMaxMemoryBytes": 104857600,
+      "internalQueryMaxBlockingSortMemoryUsageBytes": 104857600,
+      "internalDocumentSourceSetWindowFieldsMaxMemoryBytes": 104857600,
+      "internalQueryFacetMaxOutputDocSizeBytes": 104857600,
+      "internalLookupStageIntermediateDocumentMaxSizeBytes": 104857600,
+      "internalQueryProhibitBlockingMergeOnMongoS": 0,
+      "internalQueryMaxAddToSetBytes": 104857600,
+      "internalQueryFrameworkControl": "trySbeRestricted",
+      "internalQueryPlannerIgnoreIndexWithCollationForRegex": 1
+    },
+    "command": {
+      "aggregate": "products",
+      "pipeline": [
+        {
+          "$match": {
+            "category": "6b04b3517e4068ff91e9e28c",
+            "$or": [
+              {
+                "name": {
+                  "$regex": "Volumen",
+                  "$options": "i"
+                }
+              },
+              {
+                "slug": {
+                  "$regex": "Volumen",
+                  "$options": "i"
+                }
+              },
+              {
+                "variants.sku": {
+                  "$regex": "Volumen",
+                  "$options": "i"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "$set": {
+            "_activeVariants": {
+              "$filter": {
+                "input": {
+                  "$ifNull": [
+                    "$variants",
+                    []
+                  ]
+                },
+                "as": "v",
+                "cond": {
+                  "$ne": [
+                    "$$v.isActive",
+                    false
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "$set": {
+            "_inventory": {
+              "totalStock": {
+                "$sum": "$_activeVariants.stock"
+              },
+              "activeVariantCount": {
+                "$size": "$_activeVariants"
+              },
+              "validStock": {
+                "$sum": {
+                  "$map": {
+                    "input": "$_activeVariants",
+                    "as": "v",
+                    "in": {
+                      "$cond": [
+                        {
+                          "$cond": [
+                            {
+                              "$isNumber": "$$v.stock"
+                            },
+                            {
+                              "$and": [
+                                {
+                                  "$gte": [
+                                    "$$v.stock",
+                                    0
+                                  ]
+                                },
+                                {
+                                  "$lte": [
+                                    "$$v.stock",
+                                    9007199254740991
+                                  ]
+                                },
+                                {
+                                  "$eq": [
+                                    "$$v.stock",
+                                    {
+                                      "$trunc": "$$v.stock"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            false
+                          ]
+                        },
+                        "$$v.stock",
+                        0
+                      ]
+                    }
+                  }
+                }
+              },
+              "outCount": {
+                "$size": {
+                  "$filter": {
+                    "input": "$_activeVariants",
+                    "as": "v",
+                    "cond": {
+                      "$eq": [
+                        "$$v.stock",
+                        0
+                      ]
+                    }
+                  }
+                }
+              },
+              "lowCount": {
+                "$size": {
+                  "$filter": {
+                    "input": "$_activeVariants",
+                    "as": "v",
+                    "cond": {
+                      "$and": [
+                        {
+                          "$cond": [
+                            {
+                              "$isNumber": "$$v.stock"
+                            },
+                            {
+                              "$and": [
+                                {
+                                  "$gte": [
+                                    "$$v.stock",
+                                    0
+                                  ]
+                                },
+                                {
+                                  "$lte": [
+                                    "$$v.stock",
+                                    9007199254740991
+                                  ]
+                                },
+                                {
+                                  "$eq": [
+                                    "$$v.stock",
+                                    {
+                                      "$trunc": "$$v.stock"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            false
+                          ]
+                        },
+                        {
+                          "$gt": [
+                            "$$v.stock",
+                            0
+                          ]
+                        },
+                        {
+                          "$lte": [
+                            "$$v.stock",
+                            5
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                }
+              },
+              "reviewCount": {
+                "$size": {
+                  "$filter": {
+                    "input": "$_activeVariants",
+                    "as": "v",
+                    "cond": {
+                      "$not": [
+                        {
+                          "$cond": [
+                            {
+                              "$isNumber": "$$v.stock"
+                            },
+                            {
+                              "$and": [
+                                {
+                                  "$gte": [
+                                    "$$v.stock",
+                                    0
+                                  ]
+                                },
+                                {
+                                  "$lte": [
+                                    "$$v.stock",
+                                    9007199254740991
+                                  ]
+                                },
+                                {
+                                  "$eq": [
+                                    "$$v.stock",
+                                    {
+                                      "$trunc": "$$v.stock"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            false
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "$set": {
+            "_inventory.stockStatus": {
+              "$switch": {
+                "branches": [
+                  {
+                    "case": {
+                      "$gt": [
+                        "$_inventory.reviewCount",
+                        0
+                      ]
+                    },
+                    "then": "review"
+                  },
+                  {
+                    "case": {
+                      "$or": [
+                        {
+                          "$eq": [
+                            "$_inventory.activeVariantCount",
+                            0
+                          ]
+                        },
+                        {
+                          "$gt": [
+                            "$_inventory.outCount",
+                            0
+                          ]
+                        }
+                      ]
+                    },
+                    "then": "out"
+                  },
+                  {
+                    "case": {
+                      "$gt": [
+                        "$_inventory.lowCount",
+                        0
+                      ]
+                    },
+                    "then": "low"
+                  }
+                ],
+                "default": "healthy"
+              }
+            }
+          }
+        },
+        {
+          "$match": {
+            "_inventory.stockStatus": "low"
+          }
+        },
+        {
+          "$facet": {
+            "total": [
+              {
+                "$count": "count"
+              }
+            ],
+            "rows": [
+              {
+                "$sort": {
+                  "createdAt": -1,
+                  "_id": -1
+                }
+              },
+              {
+                "$skip": 40
+              },
+              {
+                "$limit": 20
+              },
+              {
+                "$unset": [
+                  "_activeVariants",
+                  "_inventory"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "cursor": {},
+      "$db": "test"
+    },
+    "ok": 1,
+    "$clusterTime": {
+      "clusterTime": {
+        "$timestamp": "7711485755582840841"
+      },
+      "signature": {
+        "hash": "AAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+        "keyId": 0
+      }
+    },
+    "operationTime": {
+      "$timestamp": "7711485755582840841"
+    }
+  },
+  "note": "Datos ficticios locales; sin índices nuevos. El explain reproduce el pipeline agregado, sin el populate posterior."
+}

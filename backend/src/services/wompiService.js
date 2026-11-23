@@ -13,6 +13,10 @@ const getBaseUrl = () => {
 exports.isWompiConfigured = () =>
   Boolean(process.env.WOMPI_PRIVATE_KEY && process.env.WOMPI_EVENTS_SECRET);
 
+// Only new checkout/link creation is gated. Existing webhooks and queries keep their credentials.
+exports.isWompiCheckoutEnabled = (env = process.env) => env.WOMPI_CHECKOUT_ENABLED === "true"
+  || (env.NODE_ENV !== "production" && env.WOMPI_CHECKOUT_ENABLED !== "false");
+
 exports.validateConfiguration = (env = process.env) => {
   const mode = env.WOMPI_ENV || "sandbox";
   if (!["sandbox", "production"].includes(mode) || (env.NODE_ENV === "production" && mode !== "production")) throw new Error("Configuración de ambiente Wompi inválida");
@@ -22,6 +26,7 @@ exports.validateConfiguration = (env = process.env) => {
 };
 
 exports.createPaymentLink = async (order) => {
+  if (!exports.isWompiCheckoutEnabled()) throw Object.assign(new AppError("Los pagos en línea no están habilitados", 503), { code: "WOMPI_CHECKOUT_DISABLED" });
   const privateKey = process.env.WOMPI_PRIVATE_KEY;
   if (!privateKey) {
     throw new Error("Wompi no configurado");
@@ -41,7 +46,8 @@ exports.createPaymentLink = async (order) => {
     redirect_url: `${clientUrl}/pedido/confirmacion?order=${encodeURIComponent(order.orderNumber)}&payment=wompi`,
   };
 
-  const res = await fetch(`${getBaseUrl()}/payment_links`, {
+  let res;
+  try { res = await fetch(`${getBaseUrl()}/payment_links`, {
     method: "POST",
     signal: AbortSignal.timeout(10000),
     headers: {
@@ -49,16 +55,25 @@ exports.createPaymentLink = async (order) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(body),
-  });
+  }); } catch (err) {
+    const code = ["TimeoutError", "AbortError"].includes(err.name) ? "WOMPI_LINK_TIMEOUT" : "WOMPI_LINK_UNAVAILABLE";
+    require("../lib/logger").error("Creación de enlace Wompi sin resultado confirmado", { code, outcome: "unknown" });
+    throw Object.assign(new Error("Creación de enlace Wompi sin resultado confirmado"), { code });
+  }
 
-  const json = await res.json();
+  let json;
+  try { json = await res.json(); } catch {
+    const code = "WOMPI_LINK_INVALID_RESPONSE";
+    require("../lib/logger").error("Respuesta no JSON creando enlace Wompi", { code, providerStatus: res.status, outcome: "unknown" });
+    throw Object.assign(new Error("Respuesta no verificable al crear enlace Wompi"), { code, providerStatus: res.status });
+  }
 
   if (!res.ok) {
-    const msg =
-      json?.error?.reason ||
-      json?.error?.message ||
-      "No se pudo crear el enlace de pago Wompi";
-    throw new Error(msg);
+    const code = "WOMPI_LINK_HTTP_ERROR";
+    const allowedFields = new Set(Object.keys(body));
+    const providerFields = Object.keys(json?.error?.messages || {}).filter(field => allowedFields.has(field));
+    require("../lib/logger").error("Proveedor rechazó creación de enlace Wompi", { code, providerStatus: res.status, providerFields });
+    throw Object.assign(new Error("No se pudo crear el enlace de pago Wompi"), { code, providerStatus: res.status });
   }
 
   const linkId = json?.data?.id;

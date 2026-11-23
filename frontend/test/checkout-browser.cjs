@@ -9,7 +9,7 @@ const fixture = require(path.join(root, "docs/auditoria-wompi-pedidos/auditoria-
 const puppeteer = require(process.env.DIZOR_BROWSER_TOOLS || "C:/Users/Asus ExpertBook/AppData/Local/Temp/dizor-verify-puppeteer/node_modules/puppeteer-core");
 const webpack = require(path.join(frontend, "node_modules/next/dist/compiled/webpack/webpack.js")).webpack;
 const stage = fs.mkdtempSync(path.join(os.tmpdir(), "dizor-checkout-"));
-const out = path.join(root, "docs/checkout-evidencias");
+const out = process.env.DIZOR_CHECKOUT_BROWSER_OUT || path.join(root, "docs/checkout-municipios-evidencias");
 fs.mkdirSync(out, { recursive: true });
 const result = { checks: [], pageErrors: [], externalRequests: [], purchases: [] };
 let browser, server;
@@ -41,6 +41,8 @@ const check = (label) => { result.checks.push(label); console.log("OK " + label)
       .filter((name) => fs.existsSync(path.join(frontend, "src/styles", name))).map((name) => fs.readFileSync(path.join(frontend, "src/styles", name), "utf8")).join("\n");
     const user = { id: String(fixture.users.client._id), name: "Cliente con dirección", email: fixture.users.client.email, phone: "3001234567", role: "cliente", shippingAddresses: [
       { id: "home", label: "Casa", address: "Casa predeterminada 123", city: "Pasto", department: "Nariño", postalCode: "520001", isDefault: true },
+      { id: "legacy", label: "Antigua ambigua", address: "Calle antigua 321", city: "La Unión", department: "", postalCode: "123456" },
+      { id: "bogota", label: "Bogotá", address: "Calle Bogotá 100", city: "Bogotá", department: "Bogotá D.C.", postalCode: "110111" },
       { id: "office", label: "Oficina", address: "Oficina 456", city: "Cali", department: "Valle del Cauca", postalCode: "760001" },
     ] };
     let failQuote = false, failOrder = false;
@@ -56,6 +58,7 @@ const check = (label) => { result.checks.push(label); console.log("OK " + label)
           if (apiPath === "/api/checkout/calculate" && failQuote) { failQuote = false; res.statusCode = 503; return res.end(JSON.stringify({ message: "Fallo de cotización de prueba" })); }
           if (apiPath === "/api/checkout/orders" && failOrder) { failOrder = false; res.statusCode = 503; return res.end(JSON.stringify({ message: "Fallo temporal de prueba" })); }
           const response = await fixture.api(req.method, apiPath, { body, cookie: req.headers["x-qa-role"] === "client" ? fixture.cookies.client : undefined });
+          if (response.status >= 400) console.log("QA HTTP", apiPath, response.status, response.json?.message, JSON.stringify(body));
           if (apiPath === "/api/checkout/orders" && req.method === "POST") result.purchases.push({ body, status: response.status, data: response.json });
           res.statusCode = response.status; return res.end(response.text);
         }
@@ -68,6 +71,8 @@ const check = (label) => { result.checks.push(label); console.log("OK " + label)
     browser = await puppeteer.launch({ headless: true, executablePath: process.env.DIZOR_CHROME || "C:/Program Files/Google/Chrome/Application/chrome.exe",
       userDataDir: path.join(stage, "profile"), args: ["--disable-background-networking", "--disable-component-update", "--disable-sync", "--no-first-run", "--host-resolver-rules=MAP * ~NOTFOUND, EXCLUDE 127.0.0.1"] });
     const page = await browser.newPage();
+    const apiCalls = [];
+    page.on("request", (req) => { if (req.url().includes("/mock/")) apiCalls.push(new URL(req.url()).pathname); });
     page.on("pageerror", (err) => result.pageErrors.push(err.stack || err.message));
     await page.setRequestInterception(true);
     page.on("request", (req) => {
@@ -79,7 +84,7 @@ const check = (label) => { result.checks.push(label); console.log("OK " + label)
     const fill = async (name, value) => { await page.click(`[name="${name}"]`); await page.keyboard.down("Control"); await page.keyboard.press("A"); await page.keyboard.up("Control"); await page.type(`[name="${name}"]`, value); };
     const snapshot = () => page.evaluate(() => Object.fromEntries([...document.querySelectorAll('input:not([type="radio"]),textarea,select')].map((e) => [e.id, e.type === "checkbox" ? e.checked : e.value])));
     const countOrders = () => fixture.M.Order.countDocuments();
-    await page.setViewport({ width: 1440, height: 1000 });
+    await page.setViewport({ width: 1440, height: 1000, hasTouch: true });
     await page.goto(origin + "/checkout"); await ready();
     assert.equal(await page.$('[name="carrier"]'), null);
     assert.equal(await page.$(".checkout-steps"), null);
@@ -88,19 +93,56 @@ const check = (label) => { result.checks.push(label); console.log("OK " + label)
     await page.click('button[type="submit"]');
     assert.equal(await page.evaluate(() => document.activeElement.id), "name");
     assert(await page.$("#name-error"));
-    for (const [name, value] of Object.entries({ name: "Cliente invitado", email: "correo inválido", phone: "123", address: "Calle Prueba 10", city: "Pasto" })) await fill(name, value);
+    for (const [name, value] of Object.entries({ name: "Cliente invitado", email: "correo inválido", phone: "123", address: "Calle Prueba 10" })) await fill(name, value);
     await page.click('button[type="submit"]'); assert.equal(await page.evaluate(() => document.activeElement.id), "email");
     await fill("email", "invitado@example.test"); await page.click('button[type="submit"]'); assert.equal(await page.evaluate(() => document.activeElement.id), "phone");
     await fill("phone", "+57 300 123 4567");
+    assert.equal(await page.$('#city'), null);
+    assert.equal(await page.$('#department'), null);
+    assert.equal(await page.$eval('#municipality', (e) => e.placeholder), 'Busca tu ciudad o municipio');
+    assert.equal(await page.$eval('#municipality', (e) => e.getAttribute('role')), 'combobox');
+    assert.equal(await page.$eval('#municipality', (e) => e.getAttribute('aria-autocomplete')), 'list');
+    assert.equal(await page.$eval('#municipality', (e) => document.getElementById(e.getAttribute('aria-controls')).getAttribute('role')), 'listbox');
+    assert.equal(await page.$eval('#municipality', (e) => e.value), '');
+    const callsBeforeSearch = apiCalls.length;
+    await fill('municipality', 'sandona');
+    await page.waitForSelector('#municipality-option-52683');
+    assert.equal(apiCalls.length, callsBeforeSearch);
+    await page.screenshot({ path: path.join(out, 'sugerencias-sandona-1440.png'), fullPage: true });
+    await page.keyboard.press('ArrowDown'); await page.keyboard.press('Enter');
+    assert.equal(await page.$eval('#municipality', (e) => e.value), 'Sandoná — Nariño');
+    assert.equal(await page.$eval('#municipality-option-52683', (e) => e.getAttribute('aria-selected')), 'true');
+    assert.equal(await countOrders(), 0, 'Enter selecciona y no compra');
     await page.type("#notes", "Conservar esta nota al cambiar de pago");
     await page.click("#consent-order_processing"); await page.click("#consent-terms");
+    const initialValues = await snapshot();
+    await fill('municipality', 'Ciudad que no existe zzz');
+    await page.keyboard.press('Enter');
+    assert.equal(await countOrders(), 0);
+    assert(await page.$eval('[role="status"]', (e) => e.textContent.includes('No se encontraron')));
+    await page.keyboard.press('Escape');
+    assert.equal(await page.$eval('#municipality', (e) => e.getAttribute('aria-expanded')), 'false');
+    await page.click('button[type="submit"]');
+    assert.equal(await page.evaluate(() => document.activeElement.id), 'municipality');
+    assert.equal(await page.$eval('#municipality-error', (e) => e.textContent), 'Selecciona una ciudad o municipio de la lista');
+    const afterInvalid = await snapshot();
+    for (const key of ['name', 'email', 'phone', 'address', 'postalCode', 'notes', 'consent-order_processing', 'consent-terms']) assert.deepEqual(afterInvalid[key], initialValues[key]);
+    await fill('municipality', 'san pedro');
+    await page.keyboard.press('ArrowDown');
+    const second = await page.$eval('#municipality', (e) => e.getAttribute('aria-activedescendant'));
+    await page.keyboard.press('ArrowUp');
+    assert.notEqual(await page.$eval('#municipality', (e) => e.getAttribute('aria-activedescendant')), second);
+    await page.keyboard.press('Escape');
+    await fill('municipality', 'SANDONA');
+    await page.click('#municipality-option-52683');
     const entered = await snapshot(), initialCount = await countOrders();
+    check('Combobox único: selección por teclado/clic, búsqueda local sin tildes, sin envío con Enter, Escape, texto libre inválido y borrador conservado');
     await page.click('[name="payment"][value="wompi"]');
     await page.click('[name="payment"][value="contra_entrega"]');
     assert.deepEqual(await snapshot(), entered); assert.equal(await countOrders(), initialCount);
     check("Secciones visibles; validación junto al campo y foco; cambiar pago conserva datos, notas y autorizaciones sin crear pedidos");
     for (const width of [1440, 1024, 820, 800, 390, 360]) {
-      await page.setViewport({ width, height: 1000 });
+      await page.setViewport({ width, height: 1000, hasTouch: true });
       const layout = await page.evaluate(() => ({ width: innerWidth, scroll: document.documentElement.scrollWidth,
         columns: getComputedStyle(document.querySelector(".checkout-layout")).gridTemplateColumns.split(" ").length,
         total: document.querySelector(".checkout-total").getBoundingClientRect().bottom,
@@ -111,6 +153,11 @@ const check = (label) => { result.checks.push(label); console.log("OK " + label)
       if ([1440, 390, 360].includes(width)) await page.screenshot({ path: path.join(out, `checkout-${width}.png`), fullPage: true });
     }
     check("Dos columnas en escritorio; una en móvil, sin desbordamiento; total junto al botón en seis anchos");
+    await fill('municipality', 'sandona');
+    await page.screenshot({ path: path.join(out, 'sugerencias-sandona-360.png'), fullPage: true });
+    await page.tap('#municipality-option-52683');
+    assert.equal(await page.$eval('#municipality', (e) => e.value), 'Sandoná — Nariño');
+    await page.screenshot({ path: path.join(out, 'seleccion-compra-local.png'), fullPage: true });
     failOrder = true;
     await page.click('button[type="submit"]'); await page.waitForFunction(() => document.body.innerText.includes("Fallo temporal de prueba"));
     assert.deepEqual(await snapshot(), entered); await ready();
@@ -121,12 +168,46 @@ const check = (label) => { result.checks.push(label); console.log("OK " + label)
     assert.equal(Object.hasOwn(result.purchases[0].body, "carrier"), false);
     const ce = await fixture.fresh(result.purchases[0].data.order.id);
     assert.equal(ce.carrier, ""); assert.equal(ce.paymentStatus, "pendiente"); assert.equal(ce.stockDeducted, true);
+    const rawOrder = await fixture.M.Order.collection.findOne({ _id: ce._id });
+    assert.equal(rawOrder.shippingAddress.city, 'Sandoná');
+    assert.equal(rawOrder.shippingAddress.department, 'Nariño');
+    const adminDetail = await fixture.api('GET', `/api/admin/orders/${ce._id}`, { cookie: fixture.cookies.admin });
+    assert.equal(adminDetail.status, 200);
+    assert.equal(adminDetail.json.order.shippingAddress.city, 'Sandoná');
+    fs.writeFileSync(path.join(out, 'compra-local.json'), JSON.stringify({
+      selectedOption: 'Sandoná — Nariño', municipalityId: '52683',
+      request: { method: 'POST', endpoint: '/api/checkout/orders', body: result.purchases[0].body,
+        carrierSent: Object.hasOwn(result.purchases[0].body, 'carrier') },
+      responseStatus: result.purchases[0].status,
+      mongo: { localEphemeralReplicaSet: true, database: fixture.mongoose.connection.name, collection: 'orders',
+        _id: String(rawOrder._id), orderNumber: rawOrder.orderNumber, shippingAddress: rawOrder.shippingAddress, carrier: rawOrder.carrier },
+      adminShippingAddress: adminDetail.json.order.shippingAddress,
+    }, null, 2));
     check("Error del servidor conserva valores; doble envío crea un pedido contraentrega y navega a la confirmación real");
     await page.goto(origin + "/checkout?as=client"); await ready();
     assert.equal(await page.$eval("#name", (e) => e.value), user.name);
     assert.equal(await page.$eval("#address", (e) => e.value), "Casa predeterminada 123");
+    assert.equal(await page.$eval('#municipality', (e) => e.value), 'Pasto — Nariño');
+    await page.type('#notes', 'Nota de dirección guardada');
+    await page.select('#savedAddress', 'bogota'); await ready();
+    assert.equal(await page.$eval('#municipality', (e) => e.value), 'Bogotá, D.C. — Bogotá, D.C.');
+    await page.select('#savedAddress', 'legacy'); await ready();
+    assert.equal(await page.$eval('#address', (e) => e.value), 'Calle antigua 321');
+    assert.equal(await page.$eval('#postalCode', (e) => e.value), '123456');
+    assert.equal(await page.$eval('#phone', (e) => e.value), user.phone);
+    assert.equal(await page.$eval('#notes', (e) => e.value), 'Nota de dirección guardada');
+    await page.click('button[type="submit"]');
+    assert.equal(await page.evaluate(() => document.activeElement.id), 'municipality');
+    assert.equal(await page.$eval('#municipality-error', (e) => e.textContent), 'Selecciona una ciudad o municipio de la lista');
+    check('Direcciones: pareja válida precargada, Bogotá propia, antigua ambigua exige solo municipio y conserva calle/teléfono/postal/notas');
     await page.select("#savedAddress", "office"); await ready();
     assert.equal(await page.$eval("#address", (e) => e.value), "Oficina 456");
+    // La dirección histórica dice Cali; el catálogo oficial la denomina
+    // Santiago de Cali. Se elige explícitamente, sin inferencias por substring.
+    await fill('municipality', 'cali');
+    await page.click('#municipality-option-76001');
+    assert.equal(await page.$eval('#municipality', (e) => e.value), 'Santiago de Cali — Valle del Cauca');
+    await ready();
     await fill("address", "Oficina corregida 789");
     await page.click('[name="payment"][value="wompi"]');
     await page.click("#consent-order_processing"); await page.click("#consent-terms");
@@ -158,6 +239,10 @@ const check = (label) => { result.checks.push(label); console.log("OK " + label)
     result.passed = true;
   } catch (err) { result.error = err.stack || err.message; process.exitCode = 1; console.error(err); }
   finally {
+    result.purchases = result.purchases.map((purchase) => purchase.body ? {
+      paymentMethod: purchase.body.paymentMethod, carrierSent: Object.hasOwn(purchase.body, 'carrier'),
+      status: purchase.status, orderNumber: purchase.data?.order?.orderNumber,
+    } : purchase);
     if (browser) await browser.close(); if (server) await new Promise((resolve) => server.close(resolve)); await fixture.close();
     fs.writeFileSync(path.join(out, "resultado.json"), JSON.stringify(result, null, 2));
   }

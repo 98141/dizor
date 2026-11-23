@@ -2,6 +2,7 @@ const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/catchAsync");
 const Order = require("../models/order");
 const Cart = require("../models/cart");
+const municipalityCatalog = require("../services/municipalityCatalog");
 const Coupon = require("../models/coupon");
 const {
   resolveCartItems,
@@ -141,40 +142,9 @@ exports.getCheckoutConfig = catchAsync(async (req, res) => {
       paymentMethods: getEnabledPaymentMethods(),
       // null mientras el plazo no esté definido (no se promete nada ambiguo).
       deliveryTerms: getPublicDeliveryTerms(),
-      departments: [
-        "Amazonas",
-        "Antioquia",
-        "Arauca",
-        "Atlántico",
-        "Bolívar",
-        "Boyacá",
-        "Caldas",
-        "Caquetá",
-        "Casanare",
-        "Cauca",
-        "Cesar",
-        "Chocó",
-        "Córdoba",
-        "Cundinamarca",
-        "Guainía",
-        "Guaviare",
-        "Huila",
-        "La Guajira",
-        "Magdalena",
-        "Meta",
-        "Nariño",
-        "Norte de Santander",
-        "Putumayo",
-        "Quindío",
-        "Risaralda",
-        "San Andrés",
-        "Santander",
-        "Sucre",
-        "Tolima",
-        "Valle del Cauca",
-        "Vaupés",
-        "Vichada",
-      ],
+      departments: municipalityCatalog.departments,
+      municipalities: municipalityCatalog.municipalities,
+      municipalityCatalog: municipalityCatalog.metadata,
     },
   });
 });
@@ -197,7 +167,7 @@ const createCheckoutOrder = async (req, res, next) => {
   const {
     items,
     buyer,
-    shippingAddress,
+    shippingAddress: submittedShippingAddress,
     paymentMethod,
     customerNotes,
     couponCode,
@@ -214,12 +184,16 @@ const createCheckoutOrder = async (req, res, next) => {
   requireAuthorization(req.body.privacyAuthorization, PURPOSES.ORDER_PROCESSING);
 
   if (
-    !shippingAddress?.address ||
-    !shippingAddress?.city ||
-    !shippingAddress?.department
+    !submittedShippingAddress?.address
   ) {
     return next(new AppError("Dirección de envío incompleta", 400));
   }
+
+  const municipality = municipalityCatalog.findMunicipality(submittedShippingAddress.city, submittedShippingAddress.department);
+  if (!municipality) {
+    return next(new AppError("Selecciona una ciudad o municipio de la lista", 400));
+  }
+  const shippingAddress = { ...submittedShippingAddress, city: municipality.city, department: municipality.department };
 
   // Solo métodos habilitados en el servidor (hoy: Wompi y contraentrega).
   // Rechaza nequi_api / nequi_manual aunque los envíe un cliente antiguo o

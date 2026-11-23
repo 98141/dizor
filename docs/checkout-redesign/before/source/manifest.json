@@ -1,0 +1,5 @@
+{
+  "src/styles/pages/checkout.css": "53e343b1cc5ad397f241a6c26285c0769caba029d24459df7170a8f5c7f8606a",
+  "src/app/(shop)/checkout/page.js": "be6b102fc2e8667d23f47c11b81d65220631e4040c662569be265bdc0e76f1e3",
+  "src/components/checkout/MunicipalityCombobox.jsx": "91a7ac0bedcb1b5570ad83e766c2f03e124048f4f097db8543336aed99ba5d7a"
+}

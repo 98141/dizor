@@ -1,0 +1,398 @@
+{
+  "mode": "before",
+  "checks": [
+    "1440px: capturas comparables y navegación real al desplazar campos/autorizaciones/total",
+    "375px: capturas comparables y navegación real al desplazar campos/autorizaciones/total"
+  ],
+  "tasks": [],
+  "pageErrors": [],
+  "hydrationErrors": [],
+  "externalRequests": [],
+  "routes": [
+    "/checkout",
+    "/checkout"
+  ],
+  "isolatedNext": true,
+  "realBackend": true,
+  "visualMeasurements": [
+    {
+      "width": 1440,
+      "position": "total",
+      "scroll": 344,
+      "height": 1000,
+      "documentWidth": 1440,
+      "headers": [
+        {
+          "left": 0,
+          "right": 1440,
+          "top": 0,
+          "bottom": 72,
+          "width": 1440,
+          "height": 72
+        }
+      ],
+      "wa": {
+        "visible": true,
+        "rect": {
+          "left": 1360,
+          "right": 1416,
+          "top": 920,
+          "bottom": 976,
+          "width": 56,
+          "height": 56
+        }
+      },
+      "waOverlaps": []
+    },
+    {
+      "width": 1440,
+      "position": "wa-check",
+      "scroll": 0,
+      "height": 1000,
+      "documentWidth": 1440,
+      "headers": [
+        {
+          "left": 0,
+          "right": 1440,
+          "top": 0,
+          "bottom": 114,
+          "width": 1440,
+          "height": 114
+        }
+      ],
+      "wa": {
+        "visible": true,
+        "rect": {
+          "left": 1360,
+          "right": 1416,
+          "top": 920,
+          "bottom": 976,
+          "width": 56,
+          "height": 56
+        }
+      },
+      "waOverlaps": []
+    },
+    {
+      "width": 1440,
+      "position": "#name",
+      "scroll": 167,
+      "height": 1000,
+      "documentWidth": 1440,
+      "headers": [
+        {
+          "left": 0,
+          "right": 1440,
+          "top": 0,
+          "bottom": 72,
+          "width": 1440,
+          "height": 72
+        }
+      ],
+      "wa": {
+        "visible": true,
+        "rect": {
+          "left": 1360,
+          "right": 1416,
+          "top": 920,
+          "bottom": 976,
+          "width": 56,
+          "height": 56
+        }
+      },
+      "waOverlaps": []
+    },
+    {
+      "width": 1440,
+      "position": "#municipality",
+      "scroll": 660,
+      "height": 1000,
+      "documentWidth": 1440,
+      "headers": [
+        {
+          "left": 0,
+          "right": 1440,
+          "top": 0,
+          "bottom": 72,
+          "width": 1440,
+          "height": 72
+        }
+      ],
+      "wa": {
+        "visible": true,
+        "rect": {
+          "left": 1360,
+          "right": 1416,
+          "top": 920,
+          "bottom": 976,
+          "width": 56,
+          "height": 56
+        }
+      },
+      "waOverlaps": []
+    },
+    {
+      "width": 1440,
+      "position": ".checkout-consents",
+      "scroll": 353,
+      "height": 1000,
+      "documentWidth": 1440,
+      "headers": [
+        {
+          "left": 0,
+          "right": 1440,
+          "top": 0,
+          "bottom": 72,
+          "width": 1440,
+          "height": 72
+        }
+      ],
+      "wa": {
+        "visible": true,
+        "rect": {
+          "left": 1360,
+          "right": 1416,
+          "top": 920,
+          "bottom": 976,
+          "width": 56,
+          "height": 56
+        }
+      },
+      "waOverlaps": []
+    },
+    {
+      "width": 1440,
+      "position": ".checkout-total",
+      "scroll": 464,
+      "height": 1000,
+      "documentWidth": 1440,
+      "headers": [
+        {
+          "left": 0,
+          "right": 1440,
+          "top": 0,
+          "bottom": 72,
+          "width": 1440,
+          "height": 72
+        }
+      ],
+      "wa": {
+        "visible": true,
+        "rect": {
+          "left": 1360,
+          "right": 1416,
+          "top": 920,
+          "bottom": 976,
+          "width": 56,
+          "height": 56
+        }
+      },
+      "waOverlaps": []
+    },
+    {
+      "width": 375,
+      "position": "total",
+      "scroll": 1612,
+      "height": 667,
+      "documentWidth": 375,
+      "headers": [
+        {
+          "left": 0,
+          "right": 375,
+          "top": 0,
+          "bottom": 60,
+          "width": 375,
+          "height": 60
+        }
+      ],
+      "wa": {
+        "visible": true,
+        "rect": {
+          "left": 309,
+          "right": 359,
+          "top": 597,
+          "bottom": 647,
+          "width": 50,
+          "height": 50
+        }
+      },
+      "waOverlaps": []
+    },
+    {
+      "width": 375,
+      "position": "wa-check",
+      "scroll": 1311,
+      "height": 667,
+      "documentWidth": 375,
+      "headers": [
+        {
+          "left": 0,
+          "right": 375,
+          "top": 0,
+          "bottom": 60,
+          "width": 375,
+          "height": 60
+        }
+      ],
+      "wa": {
+        "visible": true,
+        "rect": {
+          "left": 309,
+          "right": 359,
+          "top": 597,
+          "bottom": 647,
+          "width": 50,
+          "height": 50
+        }
+      },
+      "waOverlaps": [
+        {
+          "id": "checkout-btn checkout-btn--primary",
+          "left": 38.5,
+          "right": 336.5,
+          "top": 600,
+          "bottom": 641.5,
+          "width": 298,
+          "height": 41.5
+        }
+      ]
+    },
+    {
+      "width": 375,
+      "position": "#name",
+      "scroll": 118,
+      "height": 667,
+      "documentWidth": 375,
+      "headers": [
+        {
+          "left": 0,
+          "right": 375,
+          "top": 0,
+          "bottom": 60,
+          "width": 375,
+          "height": 60
+        }
+      ],
+      "wa": {
+        "visible": true,
+        "rect": {
+          "left": 309,
+          "right": 359,
+          "top": 597,
+          "bottom": 647,
+          "width": 50,
+          "height": 50
+        }
+      },
+      "waOverlaps": [
+        {
+          "id": "address",
+          "left": 38.5,
+          "right": 336.5,
+          "top": 572.109375,
+          "bottom": 614.609375,
+          "width": 298,
+          "height": 42.5
+        }
+      ]
+    },
+    {
+      "width": 375,
+      "position": "#municipality",
+      "scroll": 595,
+      "height": 667,
+      "documentWidth": 375,
+      "headers": [
+        {
+          "left": 0,
+          "right": 375,
+          "top": 0,
+          "bottom": 60,
+          "width": 375,
+          "height": 60
+        }
+      ],
+      "wa": {
+        "visible": true,
+        "rect": {
+          "left": 309,
+          "right": 359,
+          "top": 597,
+          "bottom": 647,
+          "width": 50,
+          "height": 50
+        }
+      },
+      "waOverlaps": [
+        {
+          "id": "checkout-payment-option",
+          "left": 38.5,
+          "right": 336.5,
+          "top": 590.328125,
+          "bottom": 687.671875,
+          "width": 298,
+          "height": 97.34375
+        }
+      ]
+    },
+    {
+      "width": 375,
+      "position": ".checkout-consents",
+      "scroll": 1544,
+      "height": 667,
+      "documentWidth": 375,
+      "headers": [
+        {
+          "left": 0,
+          "right": 375,
+          "top": 0,
+          "bottom": 60,
+          "width": 375,
+          "height": 60
+        }
+      ],
+      "wa": {
+        "visible": true,
+        "rect": {
+          "left": 309,
+          "right": 359,
+          "top": 597,
+          "bottom": 647,
+          "width": 50,
+          "height": 50
+        }
+      },
+      "waOverlaps": []
+    },
+    {
+      "width": 375,
+      "position": ".checkout-total",
+      "scroll": 1672,
+      "height": 667,
+      "documentWidth": 375,
+      "headers": [
+        {
+          "left": 0,
+          "right": 375,
+          "top": 0,
+          "bottom": 60,
+          "width": 375,
+          "height": 60
+        }
+      ],
+      "wa": {
+        "visible": true,
+        "rect": {
+          "left": 309,
+          "right": 359,
+          "top": 597,
+          "bottom": 647,
+          "width": 50,
+          "height": 50
+        }
+      },
+      "waOverlaps": []
+    }
+  ],
+  "passed": true
+}

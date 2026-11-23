@@ -1,0 +1,248 @@
+diff --git "a/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\docs\\auditoria-wompi-pedidos\\cierre-lanzamiento\\evidencias\\antes\\backend\\src\\config\\db.js" "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\config\\db.js"
+index b8f6a99..5b024ba 100644
+--- "a/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\docs\\auditoria-wompi-pedidos\\cierre-lanzamiento\\evidencias\\antes\\backend\\src\\config\\db.js"	
++++ "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\config\\db.js"	
+@@ -1,16 +1,17 @@
+ const mongoose = require("mongoose");
+ 
+ const connectDB = async () => {
+-  try {
+-    mongoose.set("strictQuery", true);
+-
+-    const conn = await mongoose.connect(process.env.MONGO_URI);
+-
+-    console.log(`MongoDB conectado: ${conn.connection.host}`);
+-  } catch (error) {
+-    console.error("Error conectando a MongoDB:", error.message);
+-    process.exit(1);
++  mongoose.set("strictQuery", true);
++  const production = process.env.NODE_ENV === "production";
++  if (production) {
++    mongoose.set("autoIndex", false); mongoose.set("autoCreate", false);
++    require("../services/databaseReadiness").loadModels();
+   }
++  const options = production ? { autoIndex: false, autoCreate: false } : {};
++  const conn = await mongoose.connect(process.env.MONGO_URI, options);
++  if (production) await require("../services/databaseReadiness").assertReady(conn.connection, conn.models);
++
++  return conn;
+ };
+ 
+-module.exports = connectDB;
+\ No newline at end of file
++module.exports = connectDB;
+diff --git "a/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\docs\\auditoria-wompi-pedidos\\cierre-lanzamiento\\evidencias\\antes\\backend\\src\\server.js" "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\server.js"
+index 0806586..22273d9 100644
+--- "a/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\docs\\auditoria-wompi-pedidos\\cierre-lanzamiento\\evidencias\\antes\\backend\\src\\server.js"	
++++ "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\server.js"	
+@@ -1,5 +1,10 @@
+ require("dotenv").config();
+ 
++const mongoose = require("mongoose");
++if (process.env.NODE_ENV === "production") {
++  mongoose.set("autoIndex", false);
++  mongoose.set("autoCreate", false);
++}
+ const app = require("./app");
+ const connectDB = require("./config/db");
+ const logger = require("./lib/logger");
+@@ -30,23 +35,23 @@ if (process.env.NODE_ENV === "production" && process.env.WOMPI_ENV !== "producti
+   process.exit(1);
+ }
+ 
+-let stopNotifications = () => {};
++let stopNotifications = () => {}, server;
+ try { require("./services/wompiService").validateConfiguration(); }
+ catch (err) { logger.error(`[SECURITY] ${err.message}. Servidor detenido.`); process.exit(1); }
+ connectDB().then(async () => {
+   await require("./models/notification").init();
++  server = app.listen(PORT, () => {
++    logger.info("Servidor iniciado", { port: PORT, env: process.env.NODE_ENV || "development" });
++  });
++  server.on("close", () => stopNotifications());
+   if (process.env.TRANSACTIONAL_NOTIFICATIONS_ENABLED === "true") {
+     stopNotifications = require("./services/notificationDelivery").startWorker();
+   }
+-}).catch(() => logger.error("Notification outbox initialization pending"));
+-
+-const server = app.listen(PORT, () => {
+-  logger.info("Servidor iniciado", {
+-    port: PORT,
+-    env: process.env.NODE_ENV || "development",
+-  });
++}).catch(async err => {
++  logger.error("Arranque rechazado: base de datos o índices no preparados", { code: err.code || "DATABASE_CONNECTION_FAILED", issues: err.issues || [] });
++  await mongoose.disconnect().catch(() => {});
++  process.exit(1);
+ });
+-server.on("close", () => stopNotifications());
+ 
+ process.on("unhandledRejection", (err) => {
+   logger.error("Unhandled Rejection — cerrando servidor", {
+@@ -54,6 +59,7 @@ process.on("unhandledRejection", (err) => {
+     message: err.message,
+     stack: err.stack,
+   });
++  if (!server) return process.exit(1);
+   server.close(() => {
+     process.exit(1);
+   });
+diff --git "a/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\docs\\auditoria-wompi-pedidos\\cierre-lanzamiento\\evidencias\\antes\\backend\\src\\services\\wompiService.js" "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\services\\wompiService.js"
+index 411ab53..7c95ae4 100644
+--- "a/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\docs\\auditoria-wompi-pedidos\\cierre-lanzamiento\\evidencias\\antes\\backend\\src\\services\\wompiService.js"	
++++ "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\services\\wompiService.js"	
+@@ -13,6 +13,10 @@ const getBaseUrl = () => {
+ exports.isWompiConfigured = () =>
+   Boolean(process.env.WOMPI_PRIVATE_KEY && process.env.WOMPI_EVENTS_SECRET);
+ 
++// Only new checkout/link creation is gated. Existing webhooks and queries keep their credentials.
++exports.isWompiCheckoutEnabled = (env = process.env) => env.WOMPI_CHECKOUT_ENABLED === "true"
++  || (env.NODE_ENV !== "production" && env.WOMPI_CHECKOUT_ENABLED !== "false");
++
+ exports.validateConfiguration = (env = process.env) => {
+   const mode = env.WOMPI_ENV || "sandbox";
+   if (!["sandbox", "production"].includes(mode) || (env.NODE_ENV === "production" && mode !== "production")) throw new Error("Configuración de ambiente Wompi inválida");
+@@ -22,6 +26,7 @@ exports.validateConfiguration = (env = process.env) => {
+ };
+ 
+ exports.createPaymentLink = async (order) => {
++  if (!exports.isWompiCheckoutEnabled()) throw Object.assign(new AppError("Los pagos en línea no están habilitados", 503), { code: "WOMPI_CHECKOUT_DISABLED" });
+   const privateKey = process.env.WOMPI_PRIVATE_KEY;
+   if (!privateKey) {
+     throw new Error("Wompi no configurado");
+@@ -41,7 +46,8 @@ exports.createPaymentLink = async (order) => {
+     redirect_url: `${clientUrl}/pedido/confirmacion?order=${encodeURIComponent(order.orderNumber)}&payment=wompi`,
+   };
+ 
+-  const res = await fetch(`${getBaseUrl()}/payment_links`, {
++  let res;
++  try { res = await fetch(`${getBaseUrl()}/payment_links`, {
+     method: "POST",
+     signal: AbortSignal.timeout(10000),
+     headers: {
+@@ -49,16 +55,25 @@ exports.createPaymentLink = async (order) => {
+       "Content-Type": "application/json",
+     },
+     body: JSON.stringify(body),
+-  });
++  }); } catch (err) {
++    const code = ["TimeoutError", "AbortError"].includes(err.name) ? "WOMPI_LINK_TIMEOUT" : "WOMPI_LINK_UNAVAILABLE";
++    require("../lib/logger").error("Creación de enlace Wompi sin resultado confirmado", { code, outcome: "unknown" });
++    throw Object.assign(new Error("Creación de enlace Wompi sin resultado confirmado"), { code });
++  }
+ 
+-  const json = await res.json();
++  let json;
++  try { json = await res.json(); } catch {
++    const code = "WOMPI_LINK_INVALID_RESPONSE";
++    require("../lib/logger").error("Respuesta no JSON creando enlace Wompi", { code, providerStatus: res.status, outcome: "unknown" });
++    throw Object.assign(new Error("Respuesta no verificable al crear enlace Wompi"), { code, providerStatus: res.status });
++  }
+ 
+   if (!res.ok) {
+-    const msg =
+-      json?.error?.reason ||
+-      json?.error?.message ||
+-      "No se pudo crear el enlace de pago Wompi";
+-    throw new Error(msg);
++    const code = "WOMPI_LINK_HTTP_ERROR";
++    const allowedFields = new Set(Object.keys(body));
++    const providerFields = Object.keys(json?.error?.messages || {}).filter(field => allowedFields.has(field));
++    require("../lib/logger").error("Proveedor rechazó creación de enlace Wompi", { code, providerStatus: res.status, providerFields });
++    throw Object.assign(new Error("No se pudo crear el enlace de pago Wompi"), { code, providerStatus: res.status });
+   }
+ 
+   const linkId = json?.data?.id;
+diff --git "a/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\docs\\auditoria-wompi-pedidos\\cierre-lanzamiento\\evidencias\\antes\\backend\\src\\services\\paymentMethods.js" "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\services\\paymentMethods.js"
+index 4322bfa..5995488 100644
+--- "a/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\docs\\auditoria-wompi-pedidos\\cierre-lanzamiento\\evidencias\\antes\\backend\\src\\services\\paymentMethods.js"	
++++ "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\services\\paymentMethods.js"	
+@@ -5,10 +5,10 @@
+ // El backend decide; el frontend solo muestra lo que devuelve
+ // getEnabledPaymentMethods(). Cualquier otro método se rechaza al crear el
+ // pedido, aunque lo envíe un cliente antiguo o manipulado.
+-const { isWompiConfigured } = require("./wompiService");
++const { isWompiConfigured, isWompiCheckoutEnabled } = require("./wompiService");
+ 
+ const getEnabledPaymentMethods = () => [
+-  ...(isWompiConfigured()
++  ...(isWompiConfigured() && isWompiCheckoutEnabled()
+     ? [{ id: "wompi", label: "Tarjeta, PSE y otros medios (Wompi)", description: "Pago en línea a través de Wompi" }]
+     : []),
+   { id: "contra_entrega", label: "Pago contra entrega", description: "Pagas al recibir tu pedido" },
+diff --git "a/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\services\\databaseReadiness.js" "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\services\\databaseReadiness.js"
+new file mode 100644
+index 0000000..1c4af45
+--- /dev/null
++++ "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\services\\databaseReadiness.js"	
+@@ -0,0 +1,48 @@
++const mongoose = require("mongoose");
++const fs = require("node:fs"), path = require("node:path");
++
++exports.loadModels = () => {
++  for (const file of fs.readdirSync(path.join(__dirname, "../models"))) {
++    if (file.endsWith(".js")) require(path.join(__dirname, "../models", file));
++  }
++};
++
++const canonical = value => JSON.stringify(value && typeof value === "object" && !Array.isArray(value)
++  ? Object.fromEntries(Object.keys(value).sort().map(k => [k, JSON.parse(canonical(value[k]))]))
++  : Array.isArray(value) ? value.map(v => JSON.parse(canonical(v))) : value ?? null);
++
++// Read-only: never creates, drops or repairs production collections/indexes.
++exports.inspect = async (connection = mongoose.connection, models = connection.models) => {
++  const issues = [], indexes = [];
++  const topology = await connection.db.admin().command({ hello: 1 });
++  if (!topology.setName && topology.msg !== "isdbgrid") issues.push({ code: "TRANSACTIONS_UNAVAILABLE" });
++  for (const model of Object.values(models)) {
++    const expected = model.schema.indexes().filter(([, options]) => options.unique === true);
++    if (!expected.length) continue;
++    let existing, collectionOptions;
++    try {
++      existing = await model.collection.listIndexes().toArray();
++      collectionOptions = await model.collection.options();
++    } catch (error) {
++      if (error.code !== 26) throw error;
++      issues.push({ code: "COLLECTION_MISSING", model: model.modelName }); continue;
++    }
++    for (const [key, options] of expected) {
++      const expectedCollation = options.collation || collectionOptions.collation || null;
++      const matching = existing.find(index => JSON.stringify(index.key) === JSON.stringify(key)
++        && index.unique === true && !!index.sparse === !!options.sparse
++        && canonical(index.partialFilterExpression) === canonical(options.partialFilterExpression)
++        && (expectedCollation ? Object.entries(expectedCollation).every(([k, v]) => canonical(index.collation?.[k]) === canonical(v)) : !index.collation || index.collation.locale === "simple")
++        && !index.buildUUID);
++      indexes.push({ model: model.modelName, key, valid: !!matching });
++      if (!matching) issues.push({ code: "UNIQUE_INDEX_MISSING_OR_INCOMPATIBLE", model: model.modelName, key });
++    }
++  }
++  return { ready: issues.length === 0, issues, indexes };
++};
++
++exports.assertReady = async (connection = mongoose.connection, models = connection.models) => {
++  const result = await exports.inspect(connection, models);
++  if (!result.ready) throw Object.assign(new Error("La base no cumple las garantías de arranque; revisar inventario de índices y topología"), { code: "DATABASE_NOT_READY", issues: result.issues });
++  return result;
++};
+diff --git "a/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\scripts\\inspectDatabaseReadiness.js" "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\scripts\\inspectDatabaseReadiness.js"
+new file mode 100644
+index 0000000..c607aa8
+--- /dev/null
++++ "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\scripts\\inspectDatabaseReadiness.js"	
+@@ -0,0 +1,16 @@
++// Uso por operador autorizado: MONGO_URI en entorno seguro. Solo lectura, sin dotenv ni migración.
++const mongoose = require("mongoose");
++if (!process.argv.includes("--read-only") || !process.env.MONGO_URI) {
++  console.error("Requiere --read-only y MONGO_URI autorizado en el entorno; no carga .env");
++  process.exit(1);
++}
++mongoose.set("autoIndex", false); mongoose.set("autoCreate", false);
++const readiness = require("../services/databaseReadiness"); readiness.loadModels();
++(async () => {
++  try {
++    await mongoose.connect(process.env.MONGO_URI, { autoIndex: false, autoCreate: false });
++    const result = await readiness.inspect(); console.log(JSON.stringify(result, null, 2));
++    if (!result.ready) process.exitCode = 1;
++  } catch (err) { console.error(JSON.stringify({ ready: false, code: err.code || "DATABASE_INSPECTION_FAILED" })); process.exitCode = 1; }
++  finally { await mongoose.disconnect(); }
++})();

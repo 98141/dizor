@@ -1,0 +1,9 @@
+{
+  "sourceUrl": "https://www.datos.gov.co/resource/gdxc-w37w.json?%24select=count%28%2A%29",
+  "retrievedAt": "2026-11-23",
+  "response": [
+    {
+      "count": "1122"
+    }
+  ]
+}

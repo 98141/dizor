@@ -1,0 +1,344 @@
+diff --git "a/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\docs\\auditoria-wompi-pedidos\\cierre-residuales\\evidencias\\originales\\backend\\src\\controllers\\orderAdminController.js" "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\controllers\\orderAdminController.js"
+index 5cfce28..8ab3759 100644
+--- "a/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\docs\\auditoria-wompi-pedidos\\cierre-residuales\\evidencias\\originales\\backend\\src\\controllers\\orderAdminController.js"	
++++ "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\controllers\\orderAdminController.js"	
+@@ -225,7 +225,7 @@ exports.reconcileWompi = catchAsync(async (req, res) => {
+         previousData: { incidents: failures.map(i => ({ id: i._id, detail: i.detail })) }, newData: { transactionId: tx.id, receipt: completed._id, status: tx.status },
+         summary: "Fallos de consulta superados mediante conciliación autenticada" }], { session });
+     }
+-    if (tx.status === "APPROVED") current.requiresReview = current.incidents.some(i => !i.resolvedAt);
++    if (failures.length || tx.status === "APPROVED") current.requiresReview = current.incidents.some(i => !i.resolvedAt);
+   });
+   res.json({ status: "success", message: "Transacción consultada y conciliada según evidencia del proveedor" });
+ });
+@@ -234,14 +234,30 @@ exports.resolveIncident = catchAsync(async (req, res) => {
+   const { order } = await require("../services/paymentIncidentResolution").resolve(req.params.id, req.params.incidentId, req.body, req.user);
+   res.json({ status: "success", message: "Resolución registrada con evidencia y auditoría", order: formatOrderList(order, req.user.role) });
+ });
+-exports.listPaymentEvents = catchAsync(async (_req, res) => {
+-  const events = await require("../models/paymentEvent").find({ processedAt: null }).sort({ createdAt: 1 }).limit(100)
+-    .select("transactionId status amountInCents currency environment reference paymentLinkId order processingState associationError lastError createdAt").lean();
+-  res.json({ status: "success", events });
++exports.listPaymentEvents = catchAsync(async (req, res) => {
++  const view = req.query.view || "pending";
++  if (!["pending", "financial-follow-up", "verified"].includes(view)) throw new AppError("Vista de eventos inválida", 400);
++  if (view === "verified" && (typeof req.query.transactionId !== "string" || !/^[A-Za-z0-9_-]{1,150}$/.test(req.query.transactionId))) throw new AppError("Indica una transacción para consultar evidencia", 400);
++  const filter = view === "verified" ? { $or: [{ source: "provider_query" }, { "providerObservation.checkedAt": { $exists: true } }], processedAt: { $ne: null }, processingState: "processed",
++    transactionId: req.query.transactionId, environment: require("../services/wompiService").getExpectedEventEnvironment() }
++    : require("../services/paymentEventArchive").filter(view);
++  const events = await require("../models/paymentEvent").find(filter).sort({ createdAt: 1 }).limit(100)
++    .select("transactionId status amountInCents currency environment reference paymentLinkId order processingState associationError lastError createdAt processedAt administrativeArchive").lean();
++  const count = await require("../models/paymentEvent").countDocuments(filter);
++  res.json({ status: "success", events, count });
++});
++exports.archivePaymentEvent = catchAsync(async (req, res) => {
++  await require("../services/paymentEventArchive").archive(req.params.eventId, req.body, req.user);
++  res.json({ status: "success", message: "Archivo administrativo registrado. El seguimiento financiero continúa abierto." });
++});
++exports.reopenPaymentEvent = catchAsync(async (req, res) => {
++  await require("../services/paymentEventArchive").reopen(req.params.eventId, req.body, req.user);
++  res.json({ status: "success", message: "Evento reabierto para revisión y conciliación" });
+ });
+ exports.reprocessPaymentEvent = catchAsync(async (req, res) => {
+   const event = await require("../models/paymentEvent").findById(req.params.eventId);
+   if (!event) throw new AppError("Evento no encontrado", 404);
++  if (event.administrativeArchive?.active) throw new AppError("Reabre el evento antes de reprocesarlo", 409);
+   const service = require("../services/wompiService");
+   if (event.environment !== service.getExpectedEventEnvironment()) throw new AppError("Evento de otro ambiente", 409);
+   let tx;
+@@ -264,8 +280,10 @@ exports.reprocessPaymentEvent = catchAsync(async (req, res) => {
+         || original.transactionId !== tx.id || verified.transactionId !== tx.id || verified.environment !== original.environment
+         || String(verified.order) !== String(association.order._id)) throw new AppError("Procesamiento del recibo aún no verificable", 503);
+     original.processedAt ||= new Date(); original.processingState = "processed";
+-    if (original.associationError !== "provider_binding_mismatch") original.associationError = "superseded_by_provider_state";
+-    original.lastError = `Sustituido por recibo ${verified._id}: ${verified.status}`;
++    if (String(original._id) !== String(verified._id)) {
++      if (original.associationError !== "provider_binding_mismatch") original.associationError = "superseded_by_provider_state";
++      original.lastError = `Sustituido por recibo ${verified._id}: ${verified.status}`;
++    } else original.lastError = "";
+     await original.save({ session });
+   });
+   res.json({ status: "success", message: "Estado actual consultado y reprocesado sin asociación manual" });
+diff --git "a/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\docs\\auditoria-wompi-pedidos\\cierre-residuales\\evidencias\\originales\\backend\\src\\services\\wompiPaymentService.js" "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\services\\wompiPaymentService.js"
+index a915d40..05a7803 100644
+--- "a/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\docs\\auditoria-wompi-pedidos\\cierre-residuales\\evidencias\\originales\\backend\\src\\services\\wompiPaymentService.js"	
++++ "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\services\\wompiPaymentService.js"	
+@@ -137,7 +137,12 @@ exports.processTransaction = async (orderId, tx, evidence = {}) => {
+         await exports.deferProviderDiscrepancy(event._id, trusted, "Aplicación del estado consultado no completada");
+         throw new AppError("Aplicación Wompi pendiente; evidencia conservada", 503);
+       }
+-      await PaymentEvent.updateOne({ _id: event._id }, { $set: { processingState: "processed", processedAt: new Date(), associationError: "superseded_by_provider_state" } });
++      await inTransaction(async session => {
++        const original = await PaymentEvent.findById(event._id).session(session);
++        original.processingState = "processed"; original.processedAt ||= new Date();
++        original.associationError = "superseded_by_provider_state";
++        await original.save({ session });
++      });
+       return PaymentEvent.findById(event._id);
+     }
+   }
+@@ -206,7 +211,7 @@ exports.processTransaction = async (orderId, tx, evidence = {}) => {
+               || incident.code === "cancellation_verification_pending") incident.resolvedAt ||= new Date();
+         }
+         order.requiresReview = blocked || order.incidents.some((i) => !i.resolvedAt);
+-        history(order, `Wompi APPROVED verificado: ${tx.id}${blocked ? "; requiere conciliación" : ""}`);
++        history(order, `${receipt.processedAt ? "Reconsulta Wompi APPROVED" : "Wompi APPROVED verificado"}: ${tx.id}${blocked ? "; requiere conciliación" : ""}`);
+         if (!blocked && order.couponCode && !order.couponConsumed && !order.incidents.some(i => i.code === "coupon_reconciliation" && i.resolvedAt && i.resolution?.decision === "accept_discount")) {
+           const consumed = await Coupon.findOneAndUpdate({ code: order.couponCode, isActive: true,
+             $or: [{ maxUses: null }, { $expr: { $lt: ["$usedCount", "$maxUses"] } }] }, { $inc: { usedCount: 1 } }, { session });
+@@ -214,13 +219,13 @@ exports.processTransaction = async (orderId, tx, evidence = {}) => {
+           if (!consumed) addIncident(order, "coupon_reconciliation", order.couponCode);
+         }
+       } else {
+-        history(order, `Wompi ${tx.status}: ${tx.id}. No se cancela el pedido automáticamente.`);
++        history(order, `${receipt.processedAt ? "Reconsulta Wompi" : "Wompi"} ${tx.status}: ${tx.id}. No se cancela el pedido automáticamente.`);
+       }
+       if (["APPROVED", "VOIDED"].includes(tx.status)) order.requiresReview = blocked || order.incidents.some(i => !i.resolvedAt);
+       else if (order.incidents.some(i => !i.resolvedAt)) order.requiresReview = true;
+       await require("./notificationEvents").paymentResult(order, tx, session);
+       await order.save({ session, validateModifiedOnly: true });
+-      receipt.processedAt = new Date(); receipt.processingState = "processed"; receipt.lastError = "";
++      receipt.processedAt ||= new Date(); receipt.processingState = "processed"; receipt.lastError = "";
+       await receipt.save({ session });
+       return receipt;
+     });
+diff --git "a/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\docs\\auditoria-wompi-pedidos\\cierre-residuales\\evidencias\\originales\\backend\\src\\models\\paymentEvent.js" "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\models\\paymentEvent.js"
+index 96da0f5..21480ac 100644
+--- "a/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\docs\\auditoria-wompi-pedidos\\cierre-residuales\\evidencias\\originales\\backend\\src\\models\\paymentEvent.js"	
++++ "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\models\\paymentEvent.js"	
+@@ -14,6 +14,16 @@ const schema = new mongoose.Schema({
+   providerObservation: { status: String, paymentLinkId: String, amountInCents: Number, currency: String, checkedAt: Date },
+   checksum: String, providerTimestamp: Number,
+   processedAt: { type: Date, default: null },
++  // Administrative disposition is not financial processing or a refund.
++  administrativeArchive: {
++    active: { type: Boolean, default: false },
++    actor: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
++    archivedAt: Date, reason: String,
++    evidenceReceipt: { type: mongoose.Schema.Types.ObjectId, ref: "PaymentEvent" },
++    financialFollowUp: { type: Boolean, default: false },
++    reopenedAt: Date, reopenedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
++    reopenReason: String,
++  },
+   notificationQueuedAt: { type: Date, default: null },
+   lastError: { type: String, default: "" },
+ }, { timestamps: true });
+diff --git "a/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\docs\\auditoria-wompi-pedidos\\cierre-residuales\\evidencias\\originales\\backend\\src\\controllers\\adminAlertController.js" "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\controllers\\adminAlertController.js"
+index f9e6170..fcf99b0 100644
+--- "a/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\docs\\auditoria-wompi-pedidos\\cierre-residuales\\evidencias\\originales\\backend\\src\\controllers\\adminAlertController.js"	
++++ "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\controllers\\adminAlertController.js"	
+@@ -40,10 +40,15 @@ exports.getAlerts = catchAsync(async (req, res) => {
+ 
+   const alerts = {
+     paymentEvents: {
+-      count: await require("../models/paymentEvent").countDocuments({ processedAt: null }),
+-      items: await require("../models/paymentEvent").find({ processedAt: null }).sort({ createdAt: 1 }).limit(10)
++      count: await require("../models/paymentEvent").countDocuments(require("../services/paymentEventArchive").filter("pending")),
++      items: await require("../models/paymentEvent").find(require("../services/paymentEventArchive").filter("pending")).sort({ createdAt: 1 }).limit(10)
+         .select("transactionId status environment processingState associationError lastError createdAt").lean(),
+     },
++    financialFollowUp: {
++      count: await require("../models/paymentEvent").countDocuments(require("../services/paymentEventArchive").filter("financial-follow-up")),
++      items: await require("../models/paymentEvent").find(require("../services/paymentEventArchive").filter("financial-follow-up")).sort({ createdAt: 1 }).limit(10)
++        .select("transactionId status environment order processingState associationError lastError administrativeArchive createdAt").lean(),
++    },
+     oldPendingPayments: {
+       count: await Order.countDocuments({ paymentMethod: "wompi", paymentStatus: "pendiente", createdAt: { $lte: yesterday }, orderStatus: { $nin: ["cancelado", "devuelto", "rechazado"] } }),
+       items: await Order.find({ paymentMethod: "wompi", paymentStatus: "pendiente", createdAt: { $lte: yesterday }, orderStatus: { $nin: ["cancelado", "devuelto", "rechazado"] } })
+diff --git "a/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\docs\\auditoria-wompi-pedidos\\cierre-residuales\\evidencias\\originales\\backend\\src\\routes\\adminOrderRoutes.js" "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\routes\\adminOrderRoutes.js"
+index 9b8a0ed..a072197 100644
+--- "a/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\docs\\auditoria-wompi-pedidos\\cierre-residuales\\evidencias\\originales\\backend\\src\\routes\\adminOrderRoutes.js"	
++++ "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\routes\\adminOrderRoutes.js"	
+@@ -16,6 +16,8 @@ router.get("/export/pdf", orderAdminController.exportOrdersPdf);
+ router.get("/", orderAdminController.getOrders);
+ router.get("/payment-events", authorizeRoles("superadmin", "admin"), orderAdminController.listPaymentEvents);
+ router.post("/payment-events/:eventId/reprocess", authorizeRoles("superadmin", "admin"), orderAdminController.reprocessPaymentEvent);
++router.post("/payment-events/:eventId/archive", authorizeRoles("superadmin", "admin"), orderAdminController.archivePaymentEvent);
++router.post("/payment-events/:eventId/reopen", authorizeRoles("superadmin", "admin"), orderAdminController.reopenPaymentEvent);
+ router.get("/:id", orderAdminController.getOrder);
+ router.get("/:id/communications", communications.list);
+ router.post("/:id/communications/:notificationId/retry", authorizeRoles("superadmin", "admin"), communications.retry);
+diff --git "a/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\docs\\auditoria-wompi-pedidos\\cierre-residuales\\evidencias\\originales\\frontend\\src\\components\\admin\\PaymentEventAlerts.jsx" "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\frontend\\src\\components\\admin\\PaymentEventAlerts.jsx"
+index 7b4bc9f..886e303 100644
+--- "a/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\docs\\auditoria-wompi-pedidos\\cierre-residuales\\evidencias\\originales\\frontend\\src\\components\\admin\\PaymentEventAlerts.jsx"	
++++ "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\frontend\\src\\components\\admin\\PaymentEventAlerts.jsx"	
+@@ -1,23 +1,67 @@
+ "use client";
+ import { useState } from "react";
+-import { getPaymentEvents, reprocessPaymentEvent } from "@/services/orderAdminService";
+-export default function PaymentEventAlerts({ alerts, oldPending }) {
++import { getPaymentEvents, reprocessPaymentEvent, archivePaymentEvent, reopenPaymentEvent } from "@/services/orderAdminService";
++export default function PaymentEventAlerts({ alerts, oldPending, financialFollowUp }) {
+   const [events, setEvents] = useState(null), [busy, setBusy] = useState(false), [message, setMessage] = useState("");
++  const [followUp, setFollowUp] = useState(null), [review, setReview] = useState(null), [proofs, setProofs] = useState([]);
++  const [counts, setCounts] = useState(null);
++  const refresh = async () => {
++    const [pending, financial] = await Promise.all([getPaymentEvents(), getPaymentEvents({ view: "financial-follow-up" })]);
++    setEvents(pending.events); setFollowUp(financial.events);
++    setCounts({ pending: pending.count, financial: financial.count });
++  };
+   const load = async () => {
+     setBusy(true); setMessage("");
+-    try { setEvents((await getPaymentEvents()).events); } catch { setMessage("No se pudieron consultar los eventos. Intenta actualizar."); } finally { setBusy(false); }
++    try { await refresh(); } catch { setMessage("No se pudieron consultar los eventos. Intenta actualizar."); } finally { setBusy(false); }
++  };
++  const investigate = async (event, action) => {
++    setBusy(true); setMessage("");
++    try {
++      const candidates = action === "archive" ? (await getPaymentEvents({ view: "verified", transactionId: event.transactionId })).events : [];
++      setProofs(candidates); setReview({ event, action, reason: "", evidenceReceiptId: "" });
++    } catch { setMessage("No se pudo consultar la evidencia. Intenta actualizar."); }
++    finally { setBusy(false); }
+   };
+   return <section className="order-detail-card"><h2>Conciliación Wompi</h2>
+-    <p>Eventos sin completar: {alerts?.count || 0}. Pedidos pendientes por más de 24 horas: {oldPending?.count || 0}. Estas señales no confirman un pago.</p>
++    <p>Eventos sin completar: {counts?.pending ?? alerts?.count ?? 0}. Pedidos pendientes por más de 24 horas: {oldPending?.count || 0}. Estas señales no confirman un pago.</p>
++    <p>Archivos con seguimiento financiero abierto: {counts?.financial ?? financialFollowUp?.count ?? 0}. Archivar no resuelve el pago ni autoriza despacho.</p>
+     <button type="button" className="admin-btn" disabled={busy} onClick={load}>Consultar eventos de pago pendientes</button>
+     {message && <p role="status">{message}</p>}
+     {(events || []).map(e => <div key={e._id}><p>{e.transactionId} · {e.status} · {e.environment} · {e.associationError || e.lastError || e.processingState}</p>
+       <button className="admin-btn" type="button" disabled={busy} onClick={async () => {
+         setBusy(true); setMessage("");
+-        try { await reprocessPaymentEvent(e._id); setEvents((await getPaymentEvents()).events); setMessage("Estado consultado con Wompi. Revisa el pedido y sus incidencias."); }
++        try { await reprocessPaymentEvent(e._id); await refresh(); setMessage("Estado consultado con Wompi. Revisa el pedido y sus incidencias."); }
+         catch (err) { setMessage(err.response?.data?.message || "Resultado sin confirmar. Actualiza antes de reintentar."); }
+         finally { setBusy(false); }
+       }}>Consultar y reprocesar con Wompi</button>
++      <button className="admin-btn" type="button" disabled={busy} onClick={() => investigate(e, "archive")}>Investigar archivo</button>
++    </div>)}
++    {(followUp || []).length > 0 && <h3>Seguimiento financiero de archivos</h3>}
++    {(followUp || []).map(e => <div key={e._id}>
++      <p>{e.transactionId} · {e.status} · {e.administrativeArchive.reason} · Evidencia: {e.administrativeArchive.evidenceReceipt}</p>
++      <button className="admin-btn" type="button" disabled={busy} onClick={() => investigate(e, "reopen")}>Reabrir para revisar nueva evidencia</button>
+     </div>)}
++    {review && <form onSubmit={async ev => {
++      ev.preventDefault(); setBusy(true); setMessage("");
++      try {
++        const operation = review.action === "archive" ? archivePaymentEvent : reopenPaymentEvent;
++        const result = await operation(review.event._id, { reason: review.reason, evidenceReceiptId: review.evidenceReceiptId });
++        await refresh(); setReview(null); setMessage(result.message);
++      } catch (err) { setMessage(err.response?.data?.message || "Resultado sin confirmar. Actualiza antes de reintentar."); }
++      finally { setBusy(false); }
++    }}>
++      <h3>{review.action === "archive" ? "Archivo administrativo" : "Reapertura"}: {review.event.transactionId}</h3>
++      <label>Motivo de la decisión <textarea required maxLength={1000} value={review.reason} onChange={ev => setReview({ ...review, reason: ev.target.value })} /></label>
++      {review.action === "archive" && <>
++        <label>Recibo autenticado procesado <select required value={review.evidenceReceiptId} onChange={ev => setReview({ ...review, evidenceReceiptId: ev.target.value })}>
++          <option value="">Selecciona la evidencia investigada</option>
++          {proofs.map(p => <option key={p._id} value={p._id}>{p._id} · {p.status} · {p.amountInCents / 100} {p.currency}</option>)}
++        </select></label>
++        {!proofs.length && <p>Falta evidencia autenticada procesada. Concilia el pedido antes de archivar.</p>}
++        <p>El evento y su evidencia se conservan. El seguimiento financiero permanece abierto.</p>
++      </>}
++      <button className="admin-btn" type="submit" disabled={busy || (review.action === "archive" && !proofs.length)}>Registrar decisión</button>
++      <button className="admin-btn" type="button" disabled={busy} onClick={() => setReview(null)}>Cancelar</button>
++    </form>}
+   </section>;
+ }
+diff --git "a/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\docs\\auditoria-wompi-pedidos\\cierre-residuales\\evidencias\\originales\\frontend\\src\\services\\orderAdminService.js" "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\frontend\\src\\services\\orderAdminService.js"
+index 2e7e93f..f64440b 100644
+--- "a/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\docs\\auditoria-wompi-pedidos\\cierre-residuales\\evidencias\\originales\\frontend\\src\\services\\orderAdminService.js"	
++++ "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\frontend\\src\\services\\orderAdminService.js"	
+@@ -5,8 +5,10 @@ export const resendOrderCommunication = async (id, notificationId, data) => (awa
+ 
+ export const reconcileWompi = async (id, data = {}) => (await api.post(`/admin/orders/${id}/reconcile-wompi`, data)).data;
+ export const resolvePaymentIncident = async (id, incidentId, data) => (await api.post(`/admin/orders/${id}/incidents/${incidentId}/resolve`, data)).data;
+-export const getPaymentEvents = async () => (await api.get('/admin/orders/payment-events')).data;
++export const getPaymentEvents = async (params = {}) => (await api.get('/admin/orders/payment-events', { params })).data;
+ export const reprocessPaymentEvent = async (id) => (await api.post(`/admin/orders/payment-events/${id}/reprocess`)).data;
++export const archivePaymentEvent = async (id, data) => (await api.post(`/admin/orders/payment-events/${id}/archive`, data)).data;
++export const reopenPaymentEvent = async (id, data) => (await api.post(`/admin/orders/payment-events/${id}/reopen`, data)).data;
+ 
+ export const getOrderStats = async () => {
+   const res = await api.get("/admin/orders/stats");
+diff --git "a/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\docs\\auditoria-wompi-pedidos\\cierre-residuales\\evidencias\\originales\\frontend\\src\\app\\admin\\alertas\\page.js" "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\frontend\\src\\app\\admin\\alertas\\page.js"
+index 64c29cb..bf89726 100644
+--- "a/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\docs\\auditoria-wompi-pedidos\\cierre-residuales\\evidencias\\originales\\frontend\\src\\app\\admin\\alertas\\page.js"	
++++ "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\frontend\\src\\app\\admin\\alertas\\page.js"	
+@@ -159,7 +159,7 @@ export default function AlertasPage() {
+         {data && (
+           <>
+             {/* Tarjetas de resumen */}
+-            <PaymentEventAlerts alerts={alerts.paymentEvents} oldPending={alerts.oldPendingPayments} />
++            <PaymentEventAlerts alerts={alerts.paymentEvents} oldPending={alerts.oldPendingPayments} financialFollowUp={alerts.financialFollowUp} />
+             <div className="alert-summary-grid">
+               <SummaryCard
+                 count={alerts.newOrders?.count ?? 0}
+diff --git "a/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\services\\paymentEventArchive.js" "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\services\\paymentEventArchive.js"
+new file mode 100644
+index 0000000..fffd987
+--- /dev/null
++++ "b/C:\\Users\\Asus ExpertBook\\Desktop\\Desarrollo_MBT\\Dizor\\dizor\\backend\\src\\services\\paymentEventArchive.js"	
+@@ -0,0 +1,72 @@
++const mongoose = require("mongoose");
++const PaymentEvent = require("../models/paymentEvent");
++const AuditLog = require("../models/AuditLog");
++const AppError = require("../utils/AppError");
++const { inTransaction } = require("./transactionService");
++
++exports.filter = view => view === "financial-follow-up"
++  ? { "administrativeArchive.active": true, "administrativeArchive.financialFollowUp": true }
++  : { processedAt: null, "administrativeArchive.active": { $ne: true } };
++
++function validate(id, body, actor) {
++  if (!["admin", "superadmin"].includes(actor.role)) throw new AppError("Solo administradores pueden gestionar archivos", 403);
++  if (!mongoose.isObjectIdOrHexString(id)) throw new AppError("ID de evento inválido", 400);
++  if (typeof body?.reason !== "string" || !body.reason.trim() || body.reason.trim().length > 1000) throw new AppError("Indica un motivo de hasta 1000 caracteres", 400);
++  return body.reason.trim();
++}
++async function audit(event, actor, action, previous, session) {
++  await AuditLog.create([{ userId: actor.id, userEmail: actor.email, role: actor.role, action, module: "orders",
++    entityId: event._id, entityType: "payment_event", previousData: previous, newData: event.administrativeArchive.toObject(),
++    summary: action === "payment_event_archived" ? "Archivo administrativo; seguimiento financiero abierto" : "Reapertura de evidencia de pago", success: true }], { session });
++}
++exports.archive = async (id, body, actor) => {
++  const reason = validate(id, body, actor);
++  if (!mongoose.isObjectIdOrHexString(body.evidenceReceiptId)) throw new AppError("Indica un recibo autenticado como evidencia", 400);
++  const evidenceReceiptId = new mongoose.Types.ObjectId(body.evidenceReceiptId).toString();
++  return inTransaction(async session => {
++    const event = await PaymentEvent.findById(id).session(session);
++    if (!event) throw new AppError("Evento no encontrado", 404);
++    if (event.environment !== require("./wompiService").getExpectedEventEnvironment()) throw new AppError("Evento de otro ambiente", 409);
++    if (event.administrativeArchive?.active) {
++      if (event.administrativeArchive.reason === reason && String(event.administrativeArchive.evidenceReceipt) === evidenceReceiptId) return;
++      throw new AppError("El evento ya tiene una decisión de archivo; reábrelo para cambiarla", 409);
++    }
++    const proof = await PaymentEvent.findById(evidenceReceiptId).session(session);
++    const observation = event.providerObservation;
++    const terminal = ["APPROVED", "DECLINED", "ERROR", "VOIDED"];
++    const contradictory = observation && terminal.includes(observation.status) && event.status !== "PENDING"
++      && ((["DECLINED", "ERROR"].includes(event.status) && ["APPROVED", "VOIDED"].includes(observation.status))
++        || event.amountInCents !== observation.amountInCents || event.currency !== observation.currency);
++    if (event.processedAt || !contradictory || !proof?.processedAt || proof.processingState !== "processed"
++        || !(proof.source === "provider_query" || (proof.providerObservation?.checkedAt
++          && proof.providerObservation.status === proof.status && proof.providerObservation.amountInCents === proof.amountInCents
++          && proof.providerObservation.currency === proof.currency && proof.providerObservation.paymentLinkId === proof.paymentLinkId))
++        || !proof.order || String(proof._id) === String(event._id)
++        || proof.transactionId !== event.transactionId || proof.environment !== event.environment
++        || (event.order && String(event.order) !== String(proof.order))
++        || proof.status !== observation.status || proof.amountInCents !== observation.amountInCents
++        || proof.currency !== observation.currency || proof.paymentLinkId !== observation.paymentLinkId) {
++      throw new AppError("Archivo requiere contradicción persistente y recibo autenticado procesado de la misma transacción; recupera o concilia primero", 409);
++    }
++    const previous = event.administrativeArchive?.toObject();
++    event.administrativeArchive = { active: true, actor: actor.id, archivedAt: new Date(), reason,
++      evidenceReceipt: proof._id, financialFollowUp: true };
++    await event.save({ session });
++    await audit(event, actor, "payment_event_archived", previous, session);
++  });
++};
++exports.reopen = async (id, body, actor) => {
++  const reason = validate(id, body, actor);
++  return inTransaction(async session => {
++    const event = await PaymentEvent.findById(id).session(session);
++    if (!event) throw new AppError("Evento no encontrado", 404);
++    if (!event.administrativeArchive?.active) return;
++    if (event.environment !== require("./wompiService").getExpectedEventEnvironment()) throw new AppError("Evento de otro ambiente", 409);
++    const previous = event.administrativeArchive.toObject();
++    event.administrativeArchive.active = false;
++    event.administrativeArchive.reopenedAt = new Date(); event.administrativeArchive.reopenedBy = actor.id;
++    event.administrativeArchive.reopenReason = reason;
++    await event.save({ session });
++    await audit(event, actor, "payment_event_reopened", previous, session);
++  });
++};

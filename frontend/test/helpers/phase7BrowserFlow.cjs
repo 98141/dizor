@@ -35,7 +35,7 @@ module.exports=async({page,fixture,ctx,origin,out,result,text,goto,click,check,s
  const product=async stock=>{const p=await fixture.makeProduct(stock,80000);await ctx.Product.updateOne({_id:p.product._id},{$set:{mainImage:'/favicon-dizor.png',images:[{url:'/favicon-dizor.png'}]}});return p;};
  const checkout=async(p,method,{lose=false}={})=>{
   await goto('/producto/'+p.product.slug,p.product.name);await click('Agregar al carrito','button');await text('Producto agregado al carrito');await click('Ver carrito','a');await text('Ir a checkout');await click('Ir a checkout','a,button');await text('Datos de contacto');
-  await fill('input[name="phone"]','3000000099');await fill('input[name="address"]','Calle Ficticia 10');await fill('input[name="city"]','Pasto');
+  await fill('input[name="phone"]','3000000099');await fill('input[name="address"]','Calle Ficticia 10');await fill('#municipality','pasto');await page.keyboard.press('ArrowDown');await page.keyboard.press('Enter');
   await page.click('input[name="payment"][value="'+method+'"]');
   const action=method==='wompi'?'Ir a pagar con Wompi':'Confirmar pedido contraentrega';
   assert.equal(await page.$('input[name="carrier"]'),null);

@@ -1,0 +1,126 @@
+{
+  "baseline-development": {
+    "confirmation": {
+      "finalUrl": "http://127.0.0.1:58114/pedido/confirmacion?order=DIZ-20261123-D0852A2B1FC653ACFF2C",
+      "reference": "DIZ-20261123-D0852A2B1FC653ACFF2C",
+      "documentStatus": 200,
+      "reloadStatus": 200,
+      "visibleReference": true,
+      "countBefore": 0,
+      "beforeReloadCount": 1,
+      "afterReloadCount": 1,
+      "createRequests": 1,
+      "access": {
+        "reference": "DIZ-20261123-D0852A2B1FC653ACFF2C",
+        "hasToken": true
+      },
+      "invalidTokenLookupStatus": 404,
+      "order": {
+        "id": "6b049d753b2e073f7ed01ce9",
+        "orderNumber": "DIZ-20261123-D0852A2B1FC653ACFF2C",
+        "paymentMethod": "contra_entrega",
+        "paymentStatus": "pendiente",
+        "orderStatus": "pendiente",
+        "carrier": ""
+      }
+    },
+    "hitPoints": 138,
+    "blockedPoints": 20,
+    "checkout404s": [],
+    "pageErrors": [],
+    "hydrationErrors": []
+  },
+  "baseline-production": {
+    "confirmation": {
+      "finalUrl": "http://127.0.0.1:58116/pedido/confirmacion?order=DIZ-20261123-EE7142B7BFDCDD34A38D",
+      "reference": "DIZ-20261123-EE7142B7BFDCDD34A38D",
+      "documentStatus": 200,
+      "reloadStatus": 200,
+      "visibleReference": true,
+      "countBefore": 0,
+      "beforeReloadCount": 1,
+      "afterReloadCount": 1,
+      "createRequests": 1,
+      "access": {
+        "reference": "DIZ-20261123-EE7142B7BFDCDD34A38D",
+        "hasToken": true
+      },
+      "invalidTokenLookupStatus": 404,
+      "order": {
+        "id": "6b049d68653afbbb5358a8ee",
+        "orderNumber": "DIZ-20261123-EE7142B7BFDCDD34A38D",
+        "paymentMethod": "contra_entrega",
+        "paymentStatus": "pendiente",
+        "orderStatus": "pendiente",
+        "carrier": ""
+      }
+    },
+    "hitPoints": 138,
+    "blockedPoints": 4,
+    "checkout404s": [],
+    "pageErrors": [],
+    "hydrationErrors": []
+  },
+  "fixed-development": {
+    "confirmation": {
+      "finalUrl": "http://127.0.0.1:59981/pedido/confirmacion?order=DIZ-20261123-8DCEFF7BA4C2014195DC",
+      "reference": "DIZ-20261123-8DCEFF7BA4C2014195DC",
+      "documentStatus": 200,
+      "reloadStatus": 200,
+      "visibleReference": true,
+      "countBefore": 0,
+      "beforeReloadCount": 1,
+      "afterReloadCount": 1,
+      "createRequests": 1,
+      "access": {
+        "reference": "DIZ-20261123-8DCEFF7BA4C2014195DC",
+        "hasToken": true
+      },
+      "invalidTokenLookupStatus": 404,
+      "order": {
+        "id": "6b049e61c0d7a7baf5deeceb",
+        "orderNumber": "DIZ-20261123-8DCEFF7BA4C2014195DC",
+        "paymentMethod": "contra_entrega",
+        "paymentStatus": "pendiente",
+        "orderStatus": "pendiente",
+        "carrier": ""
+      }
+    },
+    "hitPoints": 138,
+    "blockedPoints": 0,
+    "checkout404s": [],
+    "pageErrors": [],
+    "hydrationErrors": []
+  },
+  "fixed-production": {
+    "confirmation": {
+      "finalUrl": "http://127.0.0.1:62033/pedido/confirmacion?order=DIZ-20261123-E0D492EBC6DDB266D7F9",
+      "reference": "DIZ-20261123-E0D492EBC6DDB266D7F9",
+      "documentStatus": 200,
+      "reloadStatus": 200,
+      "visibleReference": true,
+      "countBefore": 0,
+      "beforeReloadCount": 1,
+      "afterReloadCount": 1,
+      "createRequests": 1,
+      "access": {
+        "reference": "DIZ-20261123-E0D492EBC6DDB266D7F9",
+        "hasToken": true
+      },
+      "invalidTokenLookupStatus": 404,
+      "order": {
+        "id": "6b049e54fd78fe048dc35655",
+        "orderNumber": "DIZ-20261123-E0D492EBC6DDB266D7F9",
+        "paymentMethod": "contra_entrega",
+        "paymentStatus": "pendiente",
+        "orderStatus": "pendiente",
+        "carrier": ""
+      }
+    },
+    "hitPoints": 138,
+    "blockedPoints": 0,
+    "checkout404s": [],
+    "pageErrors": [],
+    "hydrationErrors": []
+  }
+}

@@ -13,6 +13,46 @@ test("checkout público no ofrece transportadoras y mantiene los dos medios", as
   assert.equal(Object.hasOwn(response.json.config, "carriers"), false);
   assert.deepEqual(response.json.config.paymentMethods.map((m) => m.id), ["wompi", "contra_entrega"]);
   assert.equal(response.json.config.shippingIncluded, true);
+  assert.equal(response.json.config.municipalities.length, 1122);
+  assert.equal(response.json.config.municipalityCatalog.datasetId, "gdxc-w37w");
+});
+
+test("el resumen inicial se calcula sin preseleccionar departamento", async () => {
+  const product = await fixture.makeProduct(5);
+  const body = fixture.orderBody(product);
+  const response = await fixture.api("POST", "/api/checkout/calculate", { body: { items: body.items, department: "" } });
+  assert.equal(response.status, 200, response.text);
+  assert.equal(response.json.totals.shippingCost, 0);
+});
+
+test("crear compra exige pareja del catálogo y conserva el contrato sin campos logísticos nuevos", async () => {
+  const product = await fixture.makeProduct(10);
+  const before = await fixture.M.Order.countDocuments();
+  const links = fixture.provider.links.size;
+  for (const [city, department] of [["Sandoná", "Antioquia"], ["Bogotá", "Cundinamarca"], ["Ciudad inventada", "Nariño"], ["San Pedro", ""], ["", "Nariño"], [{ id: "52683" }, "Nariño"]]) {
+    const response = await fixture.createOrder(product, { shippingAddress: { address: "Calle de prueba", city, department } });
+    assert.equal(response.status, 400, response.text);
+    assert.equal(response.json.message, "Selecciona una ciudad o municipio de la lista");
+  }
+  assert.equal(await fixture.M.Order.countDocuments(), before);
+  assert.equal(fixture.provider.links.size, links);
+  assert.equal(await fixture.stockOf(product), 10);
+  for (const [city, department, savedCity, savedDepartment] of [
+    ["sandona", "NARINO", "Sandoná", "Nariño"],
+    ["Bogota", "Bogota D.C.", "Bogotá, D.C.", "Bogotá, D.C."],
+  ]) {
+    const response = await fixture.createOrder(product, { paymentMethod: "contra_entrega", carrier: "servientrega", customerNotes: "Conservar nota",
+      shippingAddress: { address: "Carrera de prueba", city, department, postalCode: "520001", country: "Colombia" } });
+    assert.equal(response.status, 201, response.text);
+    const order = await fixture.fresh(response.json.order.id);
+    assert.deepEqual(order.shippingAddress, { address: "Carrera de prueba", city: savedCity, department: savedDepartment, postalCode: "520001", country: "Colombia" });
+    assert.equal(order.carrier, "");
+    assert.equal(order.customerNotes, "Conservar nota");
+    const detail = await fixture.api("GET", `/api/admin/orders/${order._id}`, { cookie: fixture.cookies.admin });
+    assert.equal(detail.status, 200, detail.text);
+    assert.equal(detail.json.order.shippingAddress.city, savedCity);
+    assert.equal(detail.json.order.shippingAddress.department, savedDepartment);
+  }
 });
 
 test("las banderas históricas de Nequi no habilitan otros medios públicos", async () => {
@@ -75,7 +115,7 @@ test("transportadoras enviadas por clientes antiguos o manipulados se ignoran, t
   for (const carrier of ["interrapidisimo", "servientrega", "envia", "coordinadora", "inventada", { $ne: "" }]) {
     const product = await fixture.makeProduct(5);
     const body = fixture.orderBody(product, { paymentMethod: "contra_entrega", carrier,
-      shippingAddress: { address: "Dirección conservada", city: "Bogotá", department: "Cundinamarca", postalCode: "110111" } });
+      shippingAddress: { address: "Dirección conservada", city: "Bogotá, D.C.", department: "Bogotá, D.C.", postalCode: "110111" } });
     const response = await fixture.api("POST", "/api/checkout/orders", { body });
     assert.equal(response.status, 201, response.text);
     const order = await fixture.fresh(response.json.order.id);

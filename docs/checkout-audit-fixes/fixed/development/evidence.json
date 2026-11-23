@@ -1,0 +1,2735 @@
+{
+  "mode": "fixed",
+  "runtime": "development",
+  "checks": [
+    "320x568: centro y extremos interiores durante scroll en ambos sentidos",
+    "375x667: centro y extremos interiores durante scroll en ambos sentidos",
+    "390x844: centro y extremos interiores durante scroll en ambos sentidos",
+    "768x1024: centro y extremos interiores durante scroll en ambos sentidos",
+    "1440x900: centro y extremos interiores durante scroll en ambos sentidos",
+    "Contraentrega: carrito → confirmación visible, documento HTTP 200, reload 200 y un solo pedido; token de invitado conservado"
+  ],
+  "tasks": [],
+  "pageErrors": [],
+  "hydrationErrors": [],
+  "externalRequests": [],
+  "routes": [
+    "/carrito",
+    "/carrito",
+    "/carrito",
+    "/carrito",
+    "/carrito",
+    "/carrito"
+  ],
+  "isolatedNext": true,
+  "realBackend": true,
+  "http": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:59981/carrito",
+      "status": 200,
+      "resource": "document",
+      "rsc": false
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:59981/checkout?_rsc=9tYY41uzoifh-BHw",
+      "status": 200,
+      "resource": "fetch",
+      "rsc": true
+    },
+    {
+      "method": "OPTIONS",
+      "url": "http://127.0.0.1:59497/api/checkout/calculate",
+      "status": 204,
+      "resource": "other",
+      "rsc": false
+    },
+    {
+      "method": "OPTIONS",
+      "url": "http://127.0.0.1:59497/api/checkout/calculate",
+      "status": 204,
+      "resource": "other",
+      "rsc": false
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:59497/api/checkout/config",
+      "status": 200,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:59497/api/checkout/config",
+      "status": 304,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:59497/api/checkout/calculate",
+      "status": 200,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:59497/api/checkout/calculate",
+      "status": 200,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "OPTIONS",
+      "url": "http://127.0.0.1:59497/api/checkout/calculate",
+      "status": 204,
+      "resource": "other",
+      "rsc": false
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:59497/api/checkout/calculate",
+      "status": 200,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:59981/carrito",
+      "status": 200,
+      "resource": "document",
+      "rsc": false
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:59981/checkout?_rsc=9tYY41uzoifh-BHw",
+      "status": 200,
+      "resource": "fetch",
+      "rsc": true
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:59497/api/checkout/config",
+      "status": 304,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:59497/api/checkout/calculate",
+      "status": 200,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:59497/api/checkout/config",
+      "status": 304,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:59497/api/checkout/calculate",
+      "status": 200,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "OPTIONS",
+      "url": "http://127.0.0.1:59497/api/checkout/calculate",
+      "status": 204,
+      "resource": "other",
+      "rsc": false
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:59497/api/checkout/calculate",
+      "status": 200,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:59981/carrito",
+      "status": 200,
+      "resource": "document",
+      "rsc": false
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:59981/checkout?_rsc=9tYY41uzoifh-BHw",
+      "status": 200,
+      "resource": "fetch",
+      "rsc": true
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:59497/api/checkout/config",
+      "status": 304,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:59497/api/checkout/calculate",
+      "status": 200,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:59497/api/checkout/config",
+      "status": 304,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:59497/api/checkout/calculate",
+      "status": 200,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "OPTIONS",
+      "url": "http://127.0.0.1:59497/api/checkout/calculate",
+      "status": 204,
+      "resource": "other",
+      "rsc": false
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:59497/api/checkout/calculate",
+      "status": 200,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:59981/carrito",
+      "status": 200,
+      "resource": "document",
+      "rsc": false
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:59981/checkout?_rsc=9tYY41uzoifh-BHw",
+      "status": 200,
+      "resource": "fetch",
+      "rsc": true
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:59497/api/checkout/config",
+      "status": 304,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:59497/api/checkout/calculate",
+      "status": 200,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:59497/api/checkout/calculate",
+      "status": 200,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:59497/api/checkout/config",
+      "status": 304,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "OPTIONS",
+      "url": "http://127.0.0.1:59497/api/checkout/calculate",
+      "status": 204,
+      "resource": "other",
+      "rsc": false
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:59497/api/checkout/calculate",
+      "status": 200,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:59981/carrito",
+      "status": 200,
+      "resource": "document",
+      "rsc": false
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:59981/checkout?_rsc=9tYY41uzoifh-BHw",
+      "status": 200,
+      "resource": "fetch",
+      "rsc": true
+    },
+    {
+      "method": "OPTIONS",
+      "url": "http://127.0.0.1:59497/api/checkout/calculate",
+      "status": 204,
+      "resource": "other",
+      "rsc": false
+    },
+    {
+      "method": "OPTIONS",
+      "url": "http://127.0.0.1:59497/api/checkout/calculate",
+      "status": 204,
+      "resource": "other",
+      "rsc": false
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:59497/api/checkout/config",
+      "status": 304,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:59497/api/checkout/calculate",
+      "status": 200,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:59497/api/checkout/config",
+      "status": 304,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:59497/api/checkout/calculate",
+      "status": 200,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:59497/api/checkout/calculate",
+      "status": 200,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:59981/carrito",
+      "status": 200,
+      "resource": "document",
+      "rsc": false
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:59981/checkout?_rsc=9tYY41uzoifh-BHw",
+      "status": 200,
+      "resource": "fetch",
+      "rsc": true
+    },
+    {
+      "method": "OPTIONS",
+      "url": "http://127.0.0.1:59497/api/checkout/calculate",
+      "status": 204,
+      "resource": "other",
+      "rsc": false
+    },
+    {
+      "method": "OPTIONS",
+      "url": "http://127.0.0.1:59497/api/checkout/calculate",
+      "status": 204,
+      "resource": "other",
+      "rsc": false
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:59497/api/checkout/config",
+      "status": 304,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:59497/api/checkout/config",
+      "status": 304,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:59497/api/checkout/calculate",
+      "status": 200,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:59497/api/checkout/calculate",
+      "status": 200,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:59497/api/checkout/calculate",
+      "status": 200,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "OPTIONS",
+      "url": "http://127.0.0.1:59497/api/checkout/orders",
+      "status": 204,
+      "resource": "other",
+      "rsc": false
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:59497/api/checkout/orders",
+      "status": 201,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:59981/pedido/confirmacion?order=DIZ-20261123-8DCEFF7BA4C2014195DC&_rsc=cESzkVrlbNl39Jbq",
+      "status": 200,
+      "resource": "fetch",
+      "rsc": true
+    },
+    {
+      "method": "OPTIONS",
+      "url": "http://127.0.0.1:59497/api/checkout/orders/lookup",
+      "status": 204,
+      "resource": "other",
+      "rsc": false
+    },
+    {
+      "method": "OPTIONS",
+      "url": "http://127.0.0.1:59497/api/checkout/orders/lookup",
+      "status": 204,
+      "resource": "other",
+      "rsc": false
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:59497/api/checkout/orders/lookup",
+      "status": 200,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:59497/api/checkout/orders/lookup",
+      "status": 200,
+      "resource": "xhr",
+      "rsc": false
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:59981/pedido/confirmacion?order=DIZ-20261123-8DCEFF7BA4C2014195DC",
+      "status": 200,
+      "resource": "document",
+      "rsc": false
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:59497/api/checkout/orders/lookup",
+      "status": 200,
+      "resource": "xhr",
+      "rsc": false
+    }
+  ],
+  "hitTests": [
+    {
+      "phase": "footer-to-button-immediate",
+      "width": 320,
+      "height": 568,
+      "scrollY": 1291,
+      "delta": 0,
+      "points": [
+        {
+          "x": 39,
+          "y": 523.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 160,
+          "y": 523.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 281,
+          "y": 523.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 289,
+        "top": 488.1875,
+        "bottom": 558.1875
+      }
+    },
+    {
+      "phase": "settled",
+      "width": 320,
+      "height": 568,
+      "scrollY": 1291,
+      "delta": 0,
+      "points": [
+        {
+          "x": 39,
+          "y": 523.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 160,
+          "y": 523.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 281,
+          "y": 523.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 289,
+        "top": 488.1875,
+        "bottom": 558.1875
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 320,
+      "height": 568,
+      "scrollY": 1511,
+      "delta": -220,
+      "points": [
+        {
+          "x": 39,
+          "y": 303.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 160,
+          "y": 303.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 281,
+          "y": 303.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 289,
+        "top": 268.1875,
+        "bottom": 338.1875
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 320,
+      "height": 568,
+      "scrollY": 1431,
+      "delta": -140,
+      "points": [
+        {
+          "x": 39,
+          "y": 383.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 160,
+          "y": 383.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 281,
+          "y": 383.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 289,
+        "top": 348.1875,
+        "bottom": 418.1875
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 320,
+      "height": 568,
+      "scrollY": 1361,
+      "delta": -70,
+      "points": [
+        {
+          "x": 39,
+          "y": 453.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 160,
+          "y": 453.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 281,
+          "y": 453.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 289,
+        "top": 418.1875,
+        "bottom": 488.1875
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 320,
+      "height": 568,
+      "scrollY": 1291,
+      "delta": 0,
+      "points": [
+        {
+          "x": 39,
+          "y": 523.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 160,
+          "y": 523.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 281,
+          "y": 523.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 289,
+        "top": 488.1875,
+        "bottom": 558.1875
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 320,
+      "height": 568,
+      "scrollY": 1221,
+      "delta": 70,
+      "points": [
+        {
+          "x": 39,
+          "y": 593.1875,
+          "visible": false,
+          "ok": false,
+          "waIntercepts": false,
+          "hit": "undefined."
+        },
+        {
+          "x": 160,
+          "y": 593.1875,
+          "visible": false,
+          "ok": false,
+          "waIntercepts": false,
+          "hit": "undefined."
+        },
+        {
+          "x": 281,
+          "y": 593.1875,
+          "visible": false,
+          "ok": false,
+          "waIntercepts": false,
+          "hit": "undefined."
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 289,
+        "top": 558.1875,
+        "bottom": 628.1875
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 320,
+      "height": 568,
+      "scrollY": 1291,
+      "delta": 0,
+      "points": [
+        {
+          "x": 39,
+          "y": 523.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 160,
+          "y": 523.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 281,
+          "y": 523.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 289,
+        "top": 488.1875,
+        "bottom": 558.1875
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 320,
+      "height": 568,
+      "scrollY": 1361,
+      "delta": -70,
+      "points": [
+        {
+          "x": 39,
+          "y": 453.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 160,
+          "y": 453.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 281,
+          "y": 453.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 289,
+        "top": 418.1875,
+        "bottom": 488.1875
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 320,
+      "height": 568,
+      "scrollY": 1431,
+      "delta": -140,
+      "points": [
+        {
+          "x": 39,
+          "y": 383.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 160,
+          "y": 383.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 281,
+          "y": 383.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 289,
+        "top": 348.1875,
+        "bottom": 418.1875
+      }
+    },
+    {
+      "phase": "footer-to-button-immediate",
+      "width": 375,
+      "height": 667,
+      "scrollY": 1129,
+      "delta": 0,
+      "points": [
+        {
+          "x": 39,
+          "y": 622.34375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 187.5,
+          "y": 622.34375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 336,
+          "y": 622.34375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 344,
+        "top": 597.84375,
+        "bottom": 646.84375
+      }
+    },
+    {
+      "phase": "settled",
+      "width": 375,
+      "height": 667,
+      "scrollY": 1129,
+      "delta": 0,
+      "points": [
+        {
+          "x": 39,
+          "y": 622.34375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 187.5,
+          "y": 622.34375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 336,
+          "y": 622.34375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 344,
+        "top": 597.84375,
+        "bottom": 646.84375
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 375,
+      "height": 667,
+      "scrollY": 1349,
+      "delta": -220,
+      "points": [
+        {
+          "x": 39,
+          "y": 402.34375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 187.5,
+          "y": 402.34375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 336,
+          "y": 402.34375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 344,
+        "top": 377.84375,
+        "bottom": 426.84375
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 375,
+      "height": 667,
+      "scrollY": 1269,
+      "delta": -140,
+      "points": [
+        {
+          "x": 39,
+          "y": 482.34375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 187.5,
+          "y": 482.34375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 336,
+          "y": 482.34375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 344,
+        "top": 457.84375,
+        "bottom": 506.84375
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 375,
+      "height": 667,
+      "scrollY": 1199,
+      "delta": -70,
+      "points": [
+        {
+          "x": 39,
+          "y": 552.34375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 187.5,
+          "y": 552.34375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 336,
+          "y": 552.34375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 344,
+        "top": 527.84375,
+        "bottom": 576.84375
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 375,
+      "height": 667,
+      "scrollY": 1129,
+      "delta": 0,
+      "points": [
+        {
+          "x": 39,
+          "y": 622.34375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 187.5,
+          "y": 622.34375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 336,
+          "y": 622.34375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 344,
+        "top": 597.84375,
+        "bottom": 646.84375
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 375,
+      "height": 667,
+      "scrollY": 1059,
+      "delta": 70,
+      "points": [
+        {
+          "x": 39,
+          "y": 692.34375,
+          "visible": false,
+          "ok": false,
+          "waIntercepts": false,
+          "hit": "undefined."
+        },
+        {
+          "x": 187.5,
+          "y": 692.34375,
+          "visible": false,
+          "ok": false,
+          "waIntercepts": false,
+          "hit": "undefined."
+        },
+        {
+          "x": 336,
+          "y": 692.34375,
+          "visible": false,
+          "ok": false,
+          "waIntercepts": false,
+          "hit": "undefined."
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 344,
+        "top": 667.84375,
+        "bottom": 716.84375
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 375,
+      "height": 667,
+      "scrollY": 1129,
+      "delta": 0,
+      "points": [
+        {
+          "x": 39,
+          "y": 622.34375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 187.5,
+          "y": 622.34375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 336,
+          "y": 622.34375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 344,
+        "top": 597.84375,
+        "bottom": 646.84375
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 375,
+      "height": 667,
+      "scrollY": 1199,
+      "delta": -70,
+      "points": [
+        {
+          "x": 39,
+          "y": 552.34375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 187.5,
+          "y": 552.34375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 336,
+          "y": 552.34375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 344,
+        "top": 527.84375,
+        "bottom": 576.84375
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 375,
+      "height": 667,
+      "scrollY": 1269,
+      "delta": -140,
+      "points": [
+        {
+          "x": 39,
+          "y": 482.34375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 187.5,
+          "y": 482.34375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 336,
+          "y": 482.34375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 344,
+        "top": 457.84375,
+        "bottom": 506.84375
+      }
+    },
+    {
+      "phase": "footer-to-button-immediate",
+      "width": 390,
+      "height": 844,
+      "scrollY": 935,
+      "delta": 0,
+      "points": [
+        {
+          "x": 39,
+          "y": 798.953125,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 195,
+          "y": 798.953125,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 351,
+          "y": 798.953125,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 359,
+        "top": 774.453125,
+        "bottom": 823.453125
+      }
+    },
+    {
+      "phase": "settled",
+      "width": 390,
+      "height": 844,
+      "scrollY": 935,
+      "delta": 0,
+      "points": [
+        {
+          "x": 39,
+          "y": 798.953125,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 195,
+          "y": 798.953125,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 351,
+          "y": 798.953125,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 359,
+        "top": 774.453125,
+        "bottom": 823.453125
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 390,
+      "height": 844,
+      "scrollY": 1155,
+      "delta": -220,
+      "points": [
+        {
+          "x": 39,
+          "y": 578.953125,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 195,
+          "y": 578.953125,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 351,
+          "y": 578.953125,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 359,
+        "top": 554.453125,
+        "bottom": 603.453125
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 390,
+      "height": 844,
+      "scrollY": 1075,
+      "delta": -140,
+      "points": [
+        {
+          "x": 39,
+          "y": 658.953125,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 195,
+          "y": 658.953125,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 351,
+          "y": 658.953125,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 359,
+        "top": 634.453125,
+        "bottom": 683.453125
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 390,
+      "height": 844,
+      "scrollY": 1005,
+      "delta": -70,
+      "points": [
+        {
+          "x": 39,
+          "y": 728.953125,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 195,
+          "y": 728.953125,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 351,
+          "y": 728.953125,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 359,
+        "top": 704.453125,
+        "bottom": 753.453125
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 390,
+      "height": 844,
+      "scrollY": 935,
+      "delta": 0,
+      "points": [
+        {
+          "x": 39,
+          "y": 798.953125,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 195,
+          "y": 798.953125,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 351,
+          "y": 798.953125,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 359,
+        "top": 774.453125,
+        "bottom": 823.453125
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 390,
+      "height": 844,
+      "scrollY": 865,
+      "delta": 70,
+      "points": [
+        {
+          "x": 39,
+          "y": 868.953125,
+          "visible": false,
+          "ok": false,
+          "waIntercepts": false,
+          "hit": "undefined."
+        },
+        {
+          "x": 195,
+          "y": 868.953125,
+          "visible": false,
+          "ok": false,
+          "waIntercepts": false,
+          "hit": "undefined."
+        },
+        {
+          "x": 351,
+          "y": 868.953125,
+          "visible": false,
+          "ok": false,
+          "waIntercepts": false,
+          "hit": "undefined."
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 359,
+        "top": 844.453125,
+        "bottom": 893.453125
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 390,
+      "height": 844,
+      "scrollY": 935,
+      "delta": 0,
+      "points": [
+        {
+          "x": 39,
+          "y": 798.953125,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 195,
+          "y": 798.953125,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 351,
+          "y": 798.953125,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 359,
+        "top": 774.453125,
+        "bottom": 823.453125
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 390,
+      "height": 844,
+      "scrollY": 1005,
+      "delta": -70,
+      "points": [
+        {
+          "x": 39,
+          "y": 728.953125,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 195,
+          "y": 728.953125,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 351,
+          "y": 728.953125,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 359,
+        "top": 704.453125,
+        "bottom": 753.453125
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 390,
+      "height": 844,
+      "scrollY": 1075,
+      "delta": -140,
+      "points": [
+        {
+          "x": 39,
+          "y": 658.953125,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 195,
+          "y": 658.953125,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 351,
+          "y": 658.953125,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 359,
+        "top": 634.453125,
+        "bottom": 683.453125
+      }
+    },
+    {
+      "phase": "footer-to-button-immediate",
+      "width": 768,
+      "height": 1024,
+      "scrollY": 719,
+      "delta": 0,
+      "points": [
+        {
+          "x": 39,
+          "y": 972.234375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 384,
+          "y": 972.234375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 729,
+          "y": 972.234375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 737,
+        "top": 947.734375,
+        "bottom": 996.734375
+      }
+    },
+    {
+      "phase": "settled",
+      "width": 768,
+      "height": 1024,
+      "scrollY": 719,
+      "delta": 0,
+      "points": [
+        {
+          "x": 39,
+          "y": 972.234375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 384,
+          "y": 972.234375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 729,
+          "y": 972.234375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 737,
+        "top": 947.734375,
+        "bottom": 996.734375
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 768,
+      "height": 1024,
+      "scrollY": 939,
+      "delta": -220,
+      "points": [
+        {
+          "x": 39,
+          "y": 752.234375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 384,
+          "y": 752.234375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 729,
+          "y": 752.234375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 737,
+        "top": 727.734375,
+        "bottom": 776.734375
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 768,
+      "height": 1024,
+      "scrollY": 859,
+      "delta": -140,
+      "points": [
+        {
+          "x": 39,
+          "y": 832.234375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 384,
+          "y": 832.234375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 729,
+          "y": 832.234375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 737,
+        "top": 807.734375,
+        "bottom": 856.734375
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 768,
+      "height": 1024,
+      "scrollY": 789,
+      "delta": -70,
+      "points": [
+        {
+          "x": 39,
+          "y": 902.234375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 384,
+          "y": 902.234375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 729,
+          "y": 902.234375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 737,
+        "top": 877.734375,
+        "bottom": 926.734375
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 768,
+      "height": 1024,
+      "scrollY": 719,
+      "delta": 0,
+      "points": [
+        {
+          "x": 39,
+          "y": 972.234375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 384,
+          "y": 972.234375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 729,
+          "y": 972.234375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 737,
+        "top": 947.734375,
+        "bottom": 996.734375
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 768,
+      "height": 1024,
+      "scrollY": 649,
+      "delta": 70,
+      "points": [
+        {
+          "x": 39,
+          "y": 1042.234375,
+          "visible": false,
+          "ok": false,
+          "waIntercepts": false,
+          "hit": "undefined."
+        },
+        {
+          "x": 384,
+          "y": 1042.234375,
+          "visible": false,
+          "ok": false,
+          "waIntercepts": false,
+          "hit": "undefined."
+        },
+        {
+          "x": 729,
+          "y": 1042.234375,
+          "visible": false,
+          "ok": false,
+          "waIntercepts": false,
+          "hit": "undefined."
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 737,
+        "top": 1017.734375,
+        "bottom": 1066.734375
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 768,
+      "height": 1024,
+      "scrollY": 719,
+      "delta": 0,
+      "points": [
+        {
+          "x": 39,
+          "y": 972.234375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 384,
+          "y": 972.234375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 729,
+          "y": 972.234375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 737,
+        "top": 947.734375,
+        "bottom": 996.734375
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 768,
+      "height": 1024,
+      "scrollY": 789,
+      "delta": -70,
+      "points": [
+        {
+          "x": 39,
+          "y": 902.234375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 384,
+          "y": 902.234375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 729,
+          "y": 902.234375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 737,
+        "top": 877.734375,
+        "bottom": 926.734375
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 768,
+      "height": 1024,
+      "scrollY": 859,
+      "delta": -140,
+      "points": [
+        {
+          "x": 39,
+          "y": 832.234375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 384,
+          "y": 832.234375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 729,
+          "y": 832.234375,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 31,
+        "right": 737,
+        "top": 807.734375,
+        "bottom": 856.734375
+      }
+    },
+    {
+      "phase": "footer-to-button-immediate",
+      "width": 1440,
+      "height": 900,
+      "scrollY": 0,
+      "delta": 0,
+      "points": [
+        {
+          "x": 803.546875,
+          "y": 766.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 1012.265625,
+          "y": 766.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 1220.984375,
+          "y": 766.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 795.546875,
+        "right": 1228.984375,
+        "top": 741.6875,
+        "bottom": 790.6875
+      }
+    },
+    {
+      "phase": "settled",
+      "width": 1440,
+      "height": 900,
+      "scrollY": 0,
+      "delta": 0,
+      "points": [
+        {
+          "x": 803.546875,
+          "y": 766.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 1012.265625,
+          "y": 766.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 1220.984375,
+          "y": 766.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 795.546875,
+        "right": 1228.984375,
+        "top": 741.6875,
+        "bottom": 790.6875
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 1440,
+      "height": 900,
+      "scrollY": 138,
+      "delta": -220,
+      "points": [
+        {
+          "x": 803.546875,
+          "y": 628.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 1012.265625,
+          "y": 628.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 1220.984375,
+          "y": 628.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 795.546875,
+        "right": 1228.984375,
+        "top": 603.6875,
+        "bottom": 652.6875
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 1440,
+      "height": 900,
+      "scrollY": 58,
+      "delta": -140,
+      "points": [
+        {
+          "x": 803.546875,
+          "y": 708.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 1012.265625,
+          "y": 708.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 1220.984375,
+          "y": 708.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 795.546875,
+        "right": 1228.984375,
+        "top": 683.6875,
+        "bottom": 732.6875
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 1440,
+      "height": 900,
+      "scrollY": 0,
+      "delta": -70,
+      "points": [
+        {
+          "x": 803.546875,
+          "y": 766.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 1012.265625,
+          "y": 766.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 1220.984375,
+          "y": 766.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 795.546875,
+        "right": 1228.984375,
+        "top": 741.6875,
+        "bottom": 790.6875
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 1440,
+      "height": 900,
+      "scrollY": 0,
+      "delta": 0,
+      "points": [
+        {
+          "x": 803.546875,
+          "y": 766.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 1012.265625,
+          "y": 766.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 1220.984375,
+          "y": 766.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 795.546875,
+        "right": 1228.984375,
+        "top": 741.6875,
+        "bottom": 790.6875
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 1440,
+      "height": 900,
+      "scrollY": 0,
+      "delta": 70,
+      "points": [
+        {
+          "x": 803.546875,
+          "y": 766.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 1012.265625,
+          "y": 766.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 1220.984375,
+          "y": 766.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 795.546875,
+        "right": 1228.984375,
+        "top": 741.6875,
+        "bottom": 790.6875
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 1440,
+      "height": 900,
+      "scrollY": 0,
+      "delta": 0,
+      "points": [
+        {
+          "x": 803.546875,
+          "y": 766.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 1012.265625,
+          "y": 766.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 1220.984375,
+          "y": 766.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 795.546875,
+        "right": 1228.984375,
+        "top": 741.6875,
+        "bottom": 790.6875
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 1440,
+      "height": 900,
+      "scrollY": 0,
+      "delta": -70,
+      "points": [
+        {
+          "x": 803.546875,
+          "y": 766.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 1012.265625,
+          "y": 766.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 1220.984375,
+          "y": 766.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 795.546875,
+        "right": 1228.984375,
+        "top": 741.6875,
+        "bottom": 790.6875
+      }
+    },
+    {
+      "phase": "scroll",
+      "width": 1440,
+      "height": 900,
+      "scrollY": 58,
+      "delta": -140,
+      "points": [
+        {
+          "x": 803.546875,
+          "y": 708.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 1012.265625,
+          "y": 708.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        },
+        {
+          "x": 1220.984375,
+          "y": 708.1875,
+          "visible": true,
+          "ok": true,
+          "waIntercepts": false,
+          "hit": "BUTTON.checkout-btn checkout-btn--primary"
+        }
+      ],
+      "wa": {
+        "className": "whatsapp-float",
+        "display": "none",
+        "opacity": "1",
+        "pointerEvents": "auto"
+      },
+      "button": {
+        "left": 795.546875,
+        "right": 1228.984375,
+        "top": 683.6875,
+        "bottom": 732.6875
+      }
+    }
+  ],
+  "checkout404s": [],
+  "createRequests": 1,
+  "confirmation": {
+    "finalUrl": "http://127.0.0.1:59981/pedido/confirmacion?order=DIZ-20261123-8DCEFF7BA4C2014195DC",
+    "reference": "DIZ-20261123-8DCEFF7BA4C2014195DC",
+    "documentStatus": 200,
+    "reloadStatus": 200,
+    "visibleReference": true,
+    "countBefore": 0,
+    "beforeReloadCount": 1,
+    "afterReloadCount": 1,
+    "createRequests": 1,
+    "access": {
+      "reference": "DIZ-20261123-8DCEFF7BA4C2014195DC",
+      "hasToken": true
+    },
+    "invalidTokenLookupStatus": 404,
+    "order": {
+      "id": "6b049e61c0d7a7baf5deeceb",
+      "orderNumber": "DIZ-20261123-8DCEFF7BA4C2014195DC",
+      "paymentMethod": "contra_entrega",
+      "paymentStatus": "pendiente",
+      "orderStatus": "pendiente",
+      "carrier": ""
+    }
+  },
+  "firstFailingCheckoutRequest": null,
+  "passed": true
+}

@@ -40,9 +40,14 @@ exports.getAlerts = catchAsync(async (req, res) => {
 
   const alerts = {
     paymentEvents: {
-      count: await require("../models/paymentEvent").countDocuments({ processedAt: null }),
-      items: await require("../models/paymentEvent").find({ processedAt: null }).sort({ createdAt: 1 }).limit(10)
+      count: await require("../models/paymentEvent").countDocuments(require("../services/paymentEventArchive").filter("pending")),
+      items: await require("../models/paymentEvent").find(require("../services/paymentEventArchive").filter("pending")).sort({ createdAt: 1 }).limit(10)
         .select("transactionId status environment processingState associationError lastError createdAt").lean(),
+    },
+    financialFollowUp: {
+      count: await require("../models/paymentEvent").countDocuments(require("../services/paymentEventArchive").filter("financial-follow-up")),
+      items: await require("../models/paymentEvent").find(require("../services/paymentEventArchive").filter("financial-follow-up")).sort({ createdAt: 1 }).limit(10)
+        .select("transactionId status environment order processingState associationError lastError administrativeArchive createdAt").lean(),
     },
     oldPendingPayments: {
       count: await Order.countDocuments({ paymentMethod: "wompi", paymentStatus: "pendiente", createdAt: { $lte: yesterday }, orderStatus: { $nin: ["cancelado", "devuelto", "rechazado"] } }),

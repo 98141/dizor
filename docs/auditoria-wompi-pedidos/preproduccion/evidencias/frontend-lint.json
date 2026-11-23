@@ -1,0 +1,30 @@
+[
+  {
+    "file": "src/components/admin/PaymentEventAlerts.jsx",
+    "phase": "antes",
+    "errorCount": 0,
+    "warningCount": 0,
+    "messages": []
+  },
+  {
+    "file": "src/components/admin/PaymentEventAlerts.jsx",
+    "phase": "despues",
+    "errorCount": 0,
+    "warningCount": 0,
+    "messages": []
+  },
+  {
+    "file": "src/services/orderAdminService.js",
+    "phase": "antes",
+    "errorCount": 0,
+    "warningCount": 0,
+    "messages": []
+  },
+  {
+    "file": "src/services/orderAdminService.js",
+    "phase": "despues",
+    "errorCount": 0,
+    "warningCount": 0,
+    "messages": []
+  }
+]

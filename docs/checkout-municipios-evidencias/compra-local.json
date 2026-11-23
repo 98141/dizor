@@ -1,0 +1,58 @@
+{
+  "selectedOption": "Sandoná — Nariño",
+  "municipalityId": "52683",
+  "request": {
+    "method": "POST",
+    "endpoint": "/api/checkout/orders",
+    "body": {
+      "items": [
+        {
+          "productId": "6b047f784f48b743f8990195",
+          "variantId": "6b047f784f48b743f8990196",
+          "quantity": 2
+        }
+      ],
+      "buyer": {
+        "name": "Cliente invitado",
+        "email": "invitado@example.test",
+        "phone": "+57 300 123 4567"
+      },
+      "shippingAddress": {
+        "address": "Calle Prueba 10",
+        "city": "Sandoná",
+        "department": "Nariño",
+        "postalCode": ""
+      },
+      "paymentMethod": "contra_entrega",
+      "customerNotes": "Conservar esta nota al cambiar de pago",
+      "couponCode": null,
+      "idempotencyKey": "81e15e9e-5e76-414a-ad58-3971599c0b74",
+      "privacyAuthorization": true,
+      "termsAccepted": true
+    },
+    "carrierSent": false
+  },
+  "responseStatus": 201,
+  "mongo": {
+    "localEphemeralReplicaSet": true,
+    "database": "test",
+    "collection": "orders",
+    "_id": "6b047f824f48b743f89901aa",
+    "orderNumber": "DIZ-20261123-17A1DD55DEA4AF3EE680",
+    "shippingAddress": {
+      "address": "Calle Prueba 10",
+      "city": "Sandoná",
+      "department": "Nariño",
+      "postalCode": "",
+      "country": "Colombia"
+    },
+    "carrier": ""
+  },
+  "adminShippingAddress": {
+    "address": "Calle Prueba 10",
+    "city": "Sandoná",
+    "department": "Nariño",
+    "postalCode": "",
+    "country": "Colombia"
+  }
+}

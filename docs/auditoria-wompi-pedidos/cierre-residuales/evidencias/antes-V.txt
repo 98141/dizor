@@ -1,0 +1,35 @@
+getPath: MongoMemoryServer: Possible version conflict
+  SystemBinary version: "8.3.2"
+  Requested version:    "7.0.24"
+
+  Using SystemBinary!
+(node:41760) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:41760) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:41760) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:41760) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:41760) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:41760) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+15:47:53 [[32mhttp[39m]: POST /api/auth/login 200 413.755 ms - 160
+15:47:53 [[32mhttp[39m]: POST /api/auth/login 200 406.912 ms - 165
+15:47:54 [[32mhttp[39m]: POST /api/auth/login 200 354.681 ms - 164
+15:47:54 [[32mhttp[39m]: POST /api/auth/login 200 393.211 ms - 166
+15:47:54 [[32mhttp[39m]: POST /api/checkout/orders 201 160.382 ms - 425
+15:47:54 [[32mhttp[39m]: POST /api/webhooks/wompi 200 71.523 ms - 2
+15:47:54 [[32mhttp[39m]: PATCH /api/admin/orders/6b04a67ab0c1dab731c7c19e/status 409 10.098 ms - 84
+15:47:54 [[32mhttp[39m]: POST /api/checkout/orders 201 83.084 ms - 425
+15:47:54 [[32mhttp[39m]: POST /api/webhooks/wompi 200 61.163 ms - 2
+15:47:54 [[32mhttp[39m]: PATCH /api/admin/orders/6b04a67ab0c1dab731c7c1bf/status 409 7.595 ms - 84
+✔ P06-v2: monto o moneda discrepantes conservan evidencia sin declarar pago íntegro (9349.2784ms)
+15:47:55 [[32mhttp[39m]: POST /api/checkout/orders 201 105.171 ms - 425
+15:47:55 [[32mhttp[39m]: POST /api/webhooks/wompi 200 64.739 ms - 2
+15:47:55 [[32mhttp[39m]: PATCH /api/checkout/orders/6b04a67ab0c1dab731c7c1e0/cancel 409 57.886 ms - 124
+✔ P23-v2: política vigente no autocancela Wompi PENDING; aceptación comercial sigue pendiente (258.1238ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11928.4266

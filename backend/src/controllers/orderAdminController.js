@@ -225,7 +225,7 @@ exports.reconcileWompi = catchAsync(async (req, res) => {
         previousData: { incidents: failures.map(i => ({ id: i._id, detail: i.detail })) }, newData: { transactionId: tx.id, receipt: completed._id, status: tx.status },
         summary: "Fallos de consulta superados mediante conciliación autenticada" }], { session });
     }
-    if (tx.status === "APPROVED") current.requiresReview = current.incidents.some(i => !i.resolvedAt);
+    if (failures.length || tx.status === "APPROVED") current.requiresReview = current.incidents.some(i => !i.resolvedAt);
   });
   res.json({ status: "success", message: "Transacción consultada y conciliada según evidencia del proveedor" });
 });
@@ -234,14 +234,34 @@ exports.resolveIncident = catchAsync(async (req, res) => {
   const { order } = await require("../services/paymentIncidentResolution").resolve(req.params.id, req.params.incidentId, req.body, req.user);
   res.json({ status: "success", message: "Resolución registrada con evidencia y auditoría", order: formatOrderList(order, req.user.role) });
 });
-exports.listPaymentEvents = catchAsync(async (_req, res) => {
-  const events = await require("../models/paymentEvent").find({ processedAt: null }).sort({ createdAt: 1 }).limit(100)
-    .select("transactionId status amountInCents currency environment reference paymentLinkId order processingState associationError lastError createdAt").lean();
-  res.json({ status: "success", events });
+exports.listPaymentEvents = catchAsync(async (req, res) => {
+  const view = req.query.view || "pending";
+  if (!["pending", "financial-follow-up", "closed-follow-up", "verified"].includes(view)) throw new AppError("Vista de eventos inválida", 400);
+  if (view === "verified" && (typeof req.query.transactionId !== "string" || !/^[A-Za-z0-9_-]{1,150}$/.test(req.query.transactionId))) throw new AppError("Indica una transacción para consultar evidencia", 400);
+  const filter = view === "verified" ? { $or: [{ source: "provider_query" }, { "providerObservation.checkedAt": { $exists: true } }], processedAt: { $ne: null }, processingState: "processed",
+    transactionId: req.query.transactionId, environment: require("../services/wompiService").getExpectedEventEnvironment() }
+    : require("../services/paymentEventArchive").filter(view);
+  const events = await require("../models/paymentEvent").find(filter).sort({ createdAt: 1 }).limit(100)
+    .select("transactionId status amountInCents currency environment reference paymentLinkId order processingState associationError lastError createdAt processedAt administrativeArchive").lean();
+  const count = await require("../models/paymentEvent").countDocuments(filter);
+  res.json({ status: "success", events, count });
+});
+exports.archivePaymentEvent = catchAsync(async (req, res) => {
+  await require("../services/paymentEventArchive").archive(req.params.eventId, req.body, req.user);
+  res.json({ status: "success", message: "Archivo administrativo registrado. El seguimiento financiero continúa abierto." });
+});
+exports.reopenPaymentEvent = catchAsync(async (req, res) => {
+  await require("../services/paymentEventArchive").reopen(req.params.eventId, req.body, req.user);
+  res.json({ status: "success", message: "Evento reabierto para revisión y conciliación" });
+});
+exports.concludePaymentEventFollowUp = catchAsync(async (req, res) => {
+  await require("../services/paymentEventArchive").conclude(req.params.eventId, req.body, req.user);
+  res.json({ status: "success", message: "Seguimiento concluido con evidencia autenticada. El archivo y la auditoría se conservan." });
 });
 exports.reprocessPaymentEvent = catchAsync(async (req, res) => {
   const event = await require("../models/paymentEvent").findById(req.params.eventId);
   if (!event) throw new AppError("Evento no encontrado", 404);
+  if (event.administrativeArchive?.active) throw new AppError("Reabre el evento antes de reprocesarlo", 409);
   const service = require("../services/wompiService");
   if (event.environment !== service.getExpectedEventEnvironment()) throw new AppError("Evento de otro ambiente", 409);
   let tx;
@@ -264,8 +284,10 @@ exports.reprocessPaymentEvent = catchAsync(async (req, res) => {
         || original.transactionId !== tx.id || verified.transactionId !== tx.id || verified.environment !== original.environment
         || String(verified.order) !== String(association.order._id)) throw new AppError("Procesamiento del recibo aún no verificable", 503);
     original.processedAt ||= new Date(); original.processingState = "processed";
-    if (original.associationError !== "provider_binding_mismatch") original.associationError = "superseded_by_provider_state";
-    original.lastError = `Sustituido por recibo ${verified._id}: ${verified.status}`;
+    if (String(original._id) !== String(verified._id)) {
+      if (original.associationError !== "provider_binding_mismatch") original.associationError = "superseded_by_provider_state";
+      original.lastError = `Sustituido por recibo ${verified._id}: ${verified.status}`;
+    } else original.lastError = "";
     await original.save({ session });
   });
   res.json({ status: "success", message: "Estado actual consultado y reprocesado sin asociación manual" });

@@ -137,7 +137,12 @@ exports.processTransaction = async (orderId, tx, evidence = {}) => {
         await exports.deferProviderDiscrepancy(event._id, trusted, "Aplicación del estado consultado no completada");
         throw new AppError("Aplicación Wompi pendiente; evidencia conservada", 503);
       }
-      await PaymentEvent.updateOne({ _id: event._id }, { $set: { processingState: "processed", processedAt: new Date(), associationError: "superseded_by_provider_state" } });
+      await inTransaction(async session => {
+        const original = await PaymentEvent.findById(event._id).session(session);
+        original.processingState = "processed"; original.processedAt ||= new Date();
+        original.associationError = "superseded_by_provider_state";
+        await original.save({ session });
+      });
       return PaymentEvent.findById(event._id);
     }
   }
@@ -206,7 +211,7 @@ exports.processTransaction = async (orderId, tx, evidence = {}) => {
               || incident.code === "cancellation_verification_pending") incident.resolvedAt ||= new Date();
         }
         order.requiresReview = blocked || order.incidents.some((i) => !i.resolvedAt);
-        history(order, `Wompi APPROVED verificado: ${tx.id}${blocked ? "; requiere conciliación" : ""}`);
+        history(order, `${receipt.processedAt ? "Reconsulta Wompi APPROVED" : "Wompi APPROVED verificado"}: ${tx.id}${blocked ? "; requiere conciliación" : ""}`);
         if (!blocked && order.couponCode && !order.couponConsumed && !order.incidents.some(i => i.code === "coupon_reconciliation" && i.resolvedAt && i.resolution?.decision === "accept_discount")) {
           const consumed = await Coupon.findOneAndUpdate({ code: order.couponCode, isActive: true,
             $or: [{ maxUses: null }, { $expr: { $lt: ["$usedCount", "$maxUses"] } }] }, { $inc: { usedCount: 1 } }, { session });
@@ -214,13 +219,13 @@ exports.processTransaction = async (orderId, tx, evidence = {}) => {
           if (!consumed) addIncident(order, "coupon_reconciliation", order.couponCode);
         }
       } else {
-        history(order, `Wompi ${tx.status}: ${tx.id}. No se cancela el pedido automáticamente.`);
+        history(order, `${receipt.processedAt ? "Reconsulta Wompi" : "Wompi"} ${tx.status}: ${tx.id}. No se cancela el pedido automáticamente.`);
       }
       if (["APPROVED", "VOIDED"].includes(tx.status)) order.requiresReview = blocked || order.incidents.some(i => !i.resolvedAt);
       else if (order.incidents.some(i => !i.resolvedAt)) order.requiresReview = true;
       await require("./notificationEvents").paymentResult(order, tx, session);
       await order.save({ session, validateModifiedOnly: true });
-      receipt.processedAt = new Date(); receipt.processingState = "processed"; receipt.lastError = "";
+      receipt.processedAt ||= new Date(); receipt.processingState = "processed"; receipt.lastError = "";
       await receipt.save({ session });
       return receipt;
     });

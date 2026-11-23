@@ -8,6 +8,8 @@ import { useAuth } from "@/context/AuthContext";
 import { useFavorites } from "@/context/FavoritesContext";
 import AuthFormField from "@/components/auth/AuthFormField";
 import AuthErrorAlert from "@/components/auth/AuthErrorAlert";
+import MunicipalityCombobox from "@/components/checkout/MunicipalityCombobox";
+import { findMunicipality } from "@/lib/municipalities";
 import { getCheckoutConfig, calculateCheckout, createOrder } from "@/services/checkoutService";
 import { formatCOP } from "@/lib/formatCurrency";
 import { validateCheckout } from "@/lib/checkoutValidation";
@@ -17,6 +19,8 @@ import { hasPurchaseBeenTracked, markPurchaseTracked } from "@/lib/analytics/pur
 import ConsentCheckbox, { isNoticeReady } from "@/components/legal/ConsentCheckbox";
 import { useLegalNotices } from "@/lib/legalNotices";
 import { saveOrderAccess, confirmationPath } from "@/lib/orderAccess";
+import TrackedWhatsAppLink from "@/components/layout/TrackedWhatsAppLink";
+import { getWhatsAppUrl } from "@/lib/whatsapp";
 
 const STAFF_ROLES = ["superadmin", "admin", "vendedor"];
 const ROLE_LABELS = { superadmin: "Super Admin", admin: "Administrador", vendedor: "Vendedor" };
@@ -53,8 +57,9 @@ function CheckoutForm() {
     const address = saved.find((a) => a.isDefault) || saved[0];
     return address
       ? { address: address.address, city: address.city, department: address.department, postalCode: address.postalCode || "" }
-      : { address: "", city: "", department: "Nariño", postalCode: "" };
+      : { address: "", city: "", department: "", postalCode: "" };
   });
+  const [addressRevision, setAddressRevision] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState("contra_entrega");
   const [customerNotes, setCustomerNotes] = useState("");
   const [privacyAuthorization, setPrivacyAuthorization] = useState(false);
@@ -66,6 +71,7 @@ function CheckoutForm() {
   const totals = quoteLoading ? null : quote.data?.totals;
   const quoteItems = quoteLoading ? [] : quote.data?.items || [];
   const quoteError = quoteLoading ? "" : quote.error;
+  const selectedMunicipality = findMunicipality(config?.municipalities || [], shipping.city, shipping.department);
   const finalTotal = totals ? totals.total - (appliedCoupon?.discountAmount || 0) : 0;
 
   useEffect(() => {
@@ -121,7 +127,7 @@ function CheckoutForm() {
     event.preventDefault();
     if (submittingRef.current) return;
     const errors = validateCheckout({ buyer, shipping, paymentMethod, methods: config.paymentMethods,
-      privacyAuthorization, termsAccepted });
+      municipalities: config.municipalities, privacyAuthorization, termsAccepted });
     setFieldErrors(errors);
     if (Object.keys(errors).length) {
       document.getElementById(Object.keys(errors)[0])?.focus();
@@ -145,7 +151,7 @@ function CheckoutForm() {
       const data = await createOrder({
         items:           toApiItems(),
         buyer,
-        shippingAddress: shipping,
+        shippingAddress: { ...shipping, city: selectedMunicipality.city, department: selectedMunicipality.department },
         paymentMethod,
         customerNotes,
         couponCode:      appliedCoupon?.code || null,
@@ -211,6 +217,7 @@ function CheckoutForm() {
   );
 
   return (
+    <div className="checkout-surface">
     <div className="checkout-page checkout-page--single">
       <h1 className="checkout-page__title">Finaliza tu compra</h1>
       {!isAuthenticated && <p className="checkout-intro">Compra como invitado. <Link href="/login">Inicia sesión</Link> para guardar tu historial.</p>}
@@ -236,7 +243,8 @@ function CheckoutForm() {
                     const address = user.shippingAddresses.find((a) => String(a.id || a._id) === e.target.value);
                     if (!address) return;
                     setShipping({ address: address.address, city: address.city, department: address.department, postalCode: address.postalCode || "" });
-                    setFieldErrors((current) => ({ ...current, address: "", city: "", department: "" }));
+                    setAddressRevision((current) => current + 1);
+                    setFieldErrors((current) => ({ ...current, address: "", municipality: "" }));
                   }}>
                     <option value="">Escribir otra dirección</option>
                     {user.shippingAddresses.map((a) => <option key={a.id || a._id} value={a.id || a._id}>{a.label} — {a.address}, {a.city}</option>)}
@@ -244,17 +252,11 @@ function CheckoutForm() {
                 </div>
               )}
               <AuthFormField label="Dirección" name="address" value={shipping.address} onChange={handleShippingChange} error={fieldErrors.address} autoComplete="street-address" required />
-              <div className="checkout-form__row checkout-form__row--2">
-                <AuthFormField label="Ciudad" name="city" value={shipping.city} onChange={handleShippingChange} error={fieldErrors.city} autoComplete="address-level2" required />
-                <div className="auth-field">
-                  <label className="auth-field__label" htmlFor="department">Departamento</label>
-                  <select id="department" name="department" className="auth-field__input" value={shipping.department} onChange={handleShippingChange} autoComplete="address-level1" required aria-invalid={Boolean(fieldErrors.department)} aria-describedby={fieldErrors.department ? "department-error" : undefined}>
-                    <option value="">Selecciona un departamento</option>
-                    {config.departments.map((d) => <option key={d} value={d}>{d}</option>)}
-                  </select>
-                  {fieldErrors.department && <span id="department-error" className="auth-field__error">{fieldErrors.department}</span>}
-                </div>
-              </div>
+              <MunicipalityCombobox key={addressRevision} options={config.municipalities} selected={selectedMunicipality}
+                initialText={shipping.city} error={fieldErrors.municipality} onChange={(entry) => {
+                  setShipping((current) => ({ ...current, city: entry?.city || "", department: entry?.department || "" }));
+                  clearFieldError("municipality");
+                }} />
               <AuthFormField label="Código postal (opcional)" name="postalCode" value={shipping.postalCode} onChange={handleShippingChange} autoComplete="postal-code" />
               <div className="auth-field">
                 <label className="auth-field__label" htmlFor="notes">Notas del pedido (opcional)</label>
@@ -309,10 +311,16 @@ function CheckoutForm() {
             <button type="submit" className="checkout-btn checkout-btn--primary" disabled={loading || Boolean(success) || quoteLoading || !totals || !privacyNoticeReady || !termsNoticeReady}>
               {loading || success ? "Procesando..." : paymentMethod === "wompi" ? "Ir a pagar con Wompi" : "Confirmar pedido contraentrega"}
             </button>
-            <Link href="/carrito">Volver al carrito</Link>
+            <div className="checkout-secondary-actions">
+              <Link href="/carrito">Volver al carrito</Link>
+              <TrackedWhatsAppLink href={getWhatsAppUrl()} linkLocation="checkout_help" purpose="checkout_inquiry">
+                Ayuda por WhatsApp
+              </TrackedWhatsAppLink>
+            </div>
           </div>
         </aside>
       </form>
+    </div>
     </div>
   );
 }

@@ -1,0 +1,19 @@
+{
+  "startedAt": "2026-11-23T21:33:08.243Z",
+  "environment": "sandbox",
+  "authorization": "Usuario aprobó las llamadas y transacciones Sandbox en este chat",
+  "database": "Replica set efímero loopback; .env MONGO_URI no utilizado",
+  "webhook": {
+    "publicHttpsConfigured": false,
+    "authenticReceived": 0
+  },
+  "requests": [
+    {
+      "method": "POST",
+      "resource": "payment_links",
+      "at": "2026-11-23T21:33:19.411Z"
+    }
+  ],
+  "error": "Sesión Sandbox no completada. No se exponen errores del proveedor ni secretos.",
+  "finishedAt": "2026-11-23T21:33:20.348Z"
+}

@@ -1,0 +1,72 @@
+✔ B01: no escuchar HTTP mientras la conexión/validación de base está pendiente (6.4671ms)
+getPath: MongoMemoryServer: Possible version conflict
+  SystemBinary version: "8.3.2"
+  Requested version:    "7.0.24"
+
+  Using SystemBinary!
+(node:35280) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:35280) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:35280) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:35280) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:35280) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:35280) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+17:30:45 [[32mhttp[39m]: POST /api/auth/login 200 674.583 ms - 160
+17:30:46 [[32mhttp[39m]: POST /api/auth/login 200 529.526 ms - 165
+17:30:46 [[32mhttp[39m]: POST /api/auth/login 200 479.206 ms - 164
+17:30:47 [[32mhttp[39m]: POST /api/auth/login 200 580.349 ms - 166
+✔ I01 replica efímera e índices únicos completos: lista de solo lectura válida (10783.6473ms)
+✔ I02 índice de recibos ausente: rechazo explícito y nunca reparación automática (96.8222ms)
+✔ I03 índice con las mismas claves pero no único: se rechaza (95.5134ms)
+✔ I04 filtro parcial de idempotencia incompatible: se rechaza sin modificarlo (121.8769ms)
+✔ I05 sparse distinto al contrato: se rechaza (87.9252ms)
+✔ I06 duplicados impiden crear índice; la protección no se declara lista (264.4277ms)
+✔ I07 colección ausente: rechazo; no creación implícita desde inspección (5.128ms)
+getPath: MongoMemoryServer: Possible version conflict
+  SystemBinary version: "8.3.2"
+  Requested version:    "7.0.24"
+
+  Using SystemBinary!
+✔ I08 topología sin transacciones: rechazo (2017.3756ms)
+✔ I09 servidor real: índice ausente impide escuchar HTTP y devuelve exit=1 (3509.2248ms)
+✔ I10 servidor real: base sin preparar no se autoprovisiona (3516.5379ms)
+✔ I11 servidor real: topología e índices válidos permiten iniciar (3329.1155ms)
+getPath: MongoMemoryServer: Possible version conflict
+  SystemBinary version: "8.3.2"
+  Requested version:    "7.0.24"
+
+  Using SystemBinary!
+(node:38304) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:38304) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:38304) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:38304) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:38304) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:38304) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+17:30:45 [[32mhttp[39m]: POST /api/auth/login 200 741.774 ms - 160
+17:30:46 [[32mhttp[39m]: POST /api/auth/login 200 547.519 ms - 165
+17:30:47 [[32mhttp[39m]: POST /api/auth/login 200 498.977 ms - 164
+17:30:47 [[32mhttp[39m]: POST /api/auth/login 200 574.334 ms - 166
+✔ S01 producción requiere activación explícita; desarrollo conserva compatibilidad (10667.8869ms)
+17:30:47 [[32mhttp[39m]: GET /api/checkout/config 200 17.248 ms - 111662
+17:30:47 [[32mhttp[39m]: POST /api/checkout/orders 400 4.766 ms - 127
+(node:38304) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+17:30:47 [[32mhttp[39m]: POST /api/checkout/orders 201 189.280 ms - 371
+✔ S02 pausa oculta Wompi y rechaza nueva compra antes de crear pedido; COD sigue disponible (250.0061ms)
+17:30:48 [[32mhttp[39m]: POST /api/checkout/orders 201 119.090 ms - 425
+(node:38304) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+17:30:48 [[32mhttp[39m]: POST /api/webhooks/wompi 200 83.278 ms - 2
+17:30:48 [[32mhttp[39m]: POST /api/admin/orders/6b04be97f41936e35a19250b/reconcile-wompi 200 88.751 ms - 100
+17:30:48 [[31merror[39m]: Creación de enlace Wompi sin resultado confirmado {"code":"WOMPI_LINK_TIMEOUT","outcome":"unknown"}
+✔ S03 con creación pausada, webhook válido y conciliación conservan credenciales y procesan una vez (315.7855ms)
+✔ S04 creación directa pausada no alcanza al proveedor (1.2702ms)
+✔ S05 rechazo HTTP/HTML queda diagnosticado sin cuerpo, valores ni secretos (1.5852ms)
+✔ S06 timeout produce diagnóstico ambiguo y un solo intento, sin retry de creación (0.9113ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 26280.6643

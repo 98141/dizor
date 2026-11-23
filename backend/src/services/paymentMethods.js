@@ -5,10 +5,10 @@
 // El backend decide; el frontend solo muestra lo que devuelve
 // getEnabledPaymentMethods(). Cualquier otro método se rechaza al crear el
 // pedido, aunque lo envíe un cliente antiguo o manipulado.
-const { isWompiConfigured } = require("./wompiService");
+const { isWompiConfigured, isWompiCheckoutEnabled } = require("./wompiService");
 
 const getEnabledPaymentMethods = () => [
-  ...(isWompiConfigured()
+  ...(isWompiConfigured() && isWompiCheckoutEnabled()
     ? [{ id: "wompi", label: "Tarjeta, PSE y otros medios (Wompi)", description: "Pago en línea a través de Wompi" }]
     : []),
   { id: "contra_entrega", label: "Pago contra entrega", description: "Pagas al recibir tu pedido" },

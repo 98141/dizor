@@ -1,0 +1,193 @@
+getPath: MongoMemoryServer: Possible version conflict
+  SystemBinary version: "8.3.2"
+  Requested version:    "7.0.24"
+
+  Using SystemBinary!
+(node:7268) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:7268) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:7268) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:7268) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:7268) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:7268) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+15:59:30 [[32mhttp[39m]: POST /api/auth/login 200 447.491 ms - 160
+15:59:31 [[32mhttp[39m]: POST /api/auth/login 200 406.675 ms - 165
+15:59:31 [[32mhttp[39m]: POST /api/auth/login 200 409.594 ms - 164
+15:59:31 [[32mhttp[39m]: POST /api/auth/login 200 399.170 ms - 166
+15:59:32 [[32mhttp[39m]: POST /api/checkout/orders 201 230.553 ms - 425
+(node:7268) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+15:59:32 [[32mhttp[39m]: POST /api/webhooks/wompi 200 92.642 ms - 2
+15:59:32 [[31merror[39m]: Server error No se pudo consultar a Wompi. Conserva el pedido para revisión.
+Error: No se pudo consultar a Wompi. Conserva el pedido para revisión.
+    at C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\orderAdminController.js:211:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {"method":"POST","url":"/api/admin/orders/6b04a9346f4167fc6e7e6972/reconcile-wompi","statusCode":503,"userId":"6b04a9306f4167fc6e7e6961","ip":"127.0.0.1"}
+15:59:32 [[32mhttp[39m]: POST /api/admin/orders/6b04a9346f4167fc6e7e6972/reconcile-wompi 503 34.287 ms - 95
+15:59:32 [[32mhttp[39m]: POST /api/admin/orders/6b04a9346f4167fc6e7e6972/reconcile-wompi 200 93.880 ms - 100
+15:59:32 [[32mhttp[39m]: POST /api/admin/orders/6b04a9346f4167fc6e7e6972/reconcile-wompi 200 148.421 ms - 100
+15:59:32 [[32mhttp[39m]: POST /api/admin/orders/6b04a9346f4167fc6e7e6972/reconcile-wompi 200 242.950 ms - 100
+15:59:32 [[32mhttp[39m]: POST /api/admin/orders/6b04a9346f4167fc6e7e6972/reconcile-wompi 200 279.473 ms - 100
+15:59:32 [[32mhttp[39m]: PATCH /api/admin/orders/6b04a9346f4167fc6e7e6972/status 200 18.280 ms - 830
+✔ Z01 NR01: caída temporal + DECLINED anterior + consultas concurrentes conservan pago principal y permiten preparar (11331.1089ms)
+15:59:32 [[32mhttp[39m]: POST /api/checkout/orders 201 92.358 ms - 425
+(node:7268) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+15:59:32 [[32mhttp[39m]: POST /api/webhooks/wompi 200 75.461 ms - 2
+15:59:33 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93431c51bf619e1759f/reprocess 200 173.884 ms - 94
+15:59:33 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93431c51bf619e1759f/reprocess 200 234.960 ms - 94
+15:59:33 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93431c51bf619e1759f/reprocess 200 297.512 ms - 94
+✔ Z02 NR02: misma identidad, primera fecha y evidencia conservadas tras reprocesos repetidos y concurrentes (495.687ms)
+15:59:33 [[32mhttp[39m]: POST /api/checkout/orders 201 83.862 ms - 425
+15:59:33 [[32mhttp[39m]: POST /api/webhooks/wompi 200 34.780 ms - 2
+(node:7268) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+15:59:33 [[32mhttp[39m]: POST /api/admin/orders/6b04a9356f4167fc6e7e6a2a/reconcile-wompi 200 86.813 ms - 100
+15:59:33 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93531c51bf619e175a3/archive 200 16.260 ms - 112
+15:59:33 [[32mhttp[39m]: GET /api/admin/orders/payment-events?view=[redactado] 200 7.781 ms - 42
+15:59:33 [[32mhttp[39m]: GET /api/admin/orders/payment-events?view=[redactado] 200 6.878 ms - 680
+15:59:33 [[32mhttp[39m]: GET /api/admin/alerts 200 28.111 ms - 3103
+✔ Z03-amount NR03: archivo explícito, motivo, prueba autenticada, auditoría y seguimiento; no altera evidencia ni pedido (301.101ms)
+15:59:33 [[32mhttp[39m]: POST /api/checkout/orders 201 111.325 ms - 425
+15:59:33 [[31merror[39m]: Server error Estado Wompi discrepante; reintentar verificación
+Error: Estado Wompi discrepante; reintentar verificación
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:132:79)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+15:59:33 [[32mhttp[39m]: POST /api/webhooks/wompi 503 35.777 ms - 81
+(node:7268) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+15:59:33 [[32mhttp[39m]: POST /api/admin/orders/6b04a9356f4167fc6e7e6a50/reconcile-wompi 200 142.661 ms - 100
+15:59:33 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93531c51bf619e175a9/archive 200 33.239 ms - 112
+15:59:33 [[32mhttp[39m]: GET /api/admin/orders/payment-events?view=[redactado] 200 11.133 ms - 42
+15:59:33 [[32mhttp[39m]: GET /api/admin/orders/payment-events?view=[redactado] 200 9.344 ms - 1356
+15:59:34 [[32mhttp[39m]: GET /api/admin/alerts 200 30.558 ms - 4325
+✔ Z03-state NR03: archivo explícito, motivo, prueba autenticada, auditoría y seguimiento; no altera evidencia ni pedido (433.0505ms)
+15:59:34 [[32mhttp[39m]: POST /api/checkout/orders 201 102.565 ms - 425
+15:59:34 [[32mhttp[39m]: POST /api/webhooks/wompi 200 47.722 ms - 2
+(node:7268) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+15:59:34 [[32mhttp[39m]: POST /api/admin/orders/6b04a9366f4167fc6e7e6a76/reconcile-wompi 200 157.099 ms - 100
+15:59:34 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"POST","url":"/api/admin/orders/payment-events/6b04a93631c51bf619e175af/archive","statusCode":403,"ip":"127.0.0.1"}
+15:59:34 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93631c51bf619e175af/archive 403 7.573 ms - 75
+15:59:34 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"POST","url":"/api/admin/orders/payment-events/6b04a93631c51bf619e175af/archive","statusCode":403,"ip":"127.0.0.1"}
+15:59:34 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93631c51bf619e175af/archive 403 5.036 ms - 75
+15:59:34 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93631c51bf619e175af/archive 400 3.946 ms - 71
+15:59:34 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93631c51bf619e175af/archive 400 5.109 ms - 73
+15:59:34 [[32mhttp[39m]: POST /api/checkout/orders 201 156.579 ms - 425
+15:59:34 [[32mhttp[39m]: POST /api/webhooks/wompi 200 59.483 ms - 2
+(node:7268) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+15:59:34 [[32mhttp[39m]: POST /api/admin/orders/6b04a9366f4167fc6e7e6a9b/reconcile-wompi 200 191.137 ms - 100
+15:59:34 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93631c51bf619e175af/archive 409 29.850 ms - 158
+15:59:34 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93631c51bf619e175af/archive 409 15.475 ms - 158
+15:59:34 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93631c51bf619e175af/archive 400 4.639 ms - 73
+✔ Z04 NR03: sin permisos / motivo / prueba / prueba ajena / prueba no consultada se rechaza (888.0623ms)
+15:59:35 [[32mhttp[39m]: POST /api/checkout/orders 201 172.839 ms - 425
+15:59:35 [[32mhttp[39m]: POST /api/webhooks/wompi 200 48.896 ms - 2
+(node:7268) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+15:59:35 [[32mhttp[39m]: POST /api/admin/orders/6b04a9366f4167fc6e7e6ac0/reconcile-wompi 200 181.410 ms - 100
+15:59:35 [[32mhttp[39m]: POST /api/checkout/orders 201 198.312 ms - 425
+15:59:35 [[31merror[39m]: Server error Estado Wompi discrepante; reintentar verificación
+Error: Estado Wompi discrepante; reintentar verificación
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:132:79)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+15:59:35 [[32mhttp[39m]: POST /api/webhooks/wompi 503 132.472 ms - 81
+15:59:35 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93731c51bf619e175c1/archive 409 15.441 ms - 158
+15:59:35 [[32mhttp[39m]: GET /api/admin/orders/payment-events?view=[redactado] 200 20.194 ms - 1934
+15:59:35 [[32mhttp[39m]: POST /api/webhooks/wompi 200 30.627 ms - 2
+15:59:35 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93731c51bf619e175c3/archive 409 12.802 ms - 158
+15:59:35 [[32mhttp[39m]: GET /api/admin/orders/payment-events?view=[redactado] 200 12.169 ms - 2388
+✔ Z05 NR03: PENDING/lag recuperable y evento sin asociación confiable no se archivan (937.3012ms)
+15:59:35 [[32mhttp[39m]: POST /api/checkout/orders 201 115.704 ms - 425
+15:59:36 [[31merror[39m]: Server error Estado Wompi discrepante; reintentar verificación
+Error: Estado Wompi discrepante; reintentar verificación
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:132:79)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+15:59:36 [[32mhttp[39m]: POST /api/webhooks/wompi 503 44.634 ms - 81
+(node:7268) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+15:59:36 [[32mhttp[39m]: POST /api/admin/orders/6b04a9376f4167fc6e7e6aff/reconcile-wompi 200 110.874 ms - 100
+15:59:36 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93731c51bf619e175c6/archive 200 43.318 ms - 112
+15:59:36 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93731c51bf619e175c6/archive 200 53.798 ms - 112
+15:59:36 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93731c51bf619e175c6/archive 200 54.152 ms - 112
+15:59:36 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93731c51bf619e175c6/archive 409 10.996 ms - 99
+15:59:36 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93731c51bf619e175c6/reopen 400 6.257 ms - 71
+15:59:36 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"POST","url":"/api/admin/orders/payment-events/6b04a93731c51bf619e175c6/reopen","statusCode":403,"ip":"127.0.0.1"}
+15:59:36 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93731c51bf619e175c6/reopen 403 4.034 ms - 75
+15:59:36 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93731c51bf619e175c6/reopen 200 16.034 ms - 80
+15:59:36 [[32mhttp[39m]: GET /api/admin/orders/payment-events?view=[redactado] 200 10.332 ms - 3194
+15:59:36 [[32mhttp[39m]: GET /api/admin/orders/payment-events?view=[redactado] 200 11.929 ms - 1356
+✔ Z06 NR03: archivo concurrente/duplicado es una decisión; reapertura auditada permite gestionar nueva evidencia (457.3985ms)
+15:59:36 [[32mhttp[39m]: POST /api/checkout/orders 201 141.402 ms - 425
+15:59:36 [[32mhttp[39m]: POST /api/webhooks/wompi 200 73.962 ms - 2
+(node:7268) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+15:59:36 [[32mhttp[39m]: POST /api/admin/orders/6b04a9386f4167fc6e7e6b26/reconcile-wompi 200 129.552 ms - 100
+15:59:36 [[32mhttp[39m]: PATCH /api/admin/orders/6b04a9386f4167fc6e7e6b26/status 409 14.123 ms - 83
+15:59:36 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93831c51bf619e175cc/archive 200 22.569 ms - 112
+15:59:36 [[32mhttp[39m]: PATCH /api/admin/orders/6b04a9386f4167fc6e7e6b26/status 409 13.337 ms - 83
+✔ Z07 NR03: archivo conserva bloqueo de despacho e incidencia real (457.1941ms)
+15:59:36 [[32mhttp[39m]: POST /api/checkout/orders 201 185.080 ms - 425
+15:59:37 [[32mhttp[39m]: POST /api/webhooks/wompi 200 56.938 ms - 2
+(node:7268) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+15:59:37 [[32mhttp[39m]: POST /api/admin/orders/6b04a9386f4167fc6e7e6b51/reconcile-wompi 200 127.438 ms - 100
+15:59:37 [[31merror[39m]: Server error Failing command via 'failCommand' failpoint
+MongoServerError: Failing command via 'failCommand' failpoint
+    at Connection.sendCommand (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\cmap\connection.js:320:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Connection.command (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\cmap\connection.js:347:26)
+    at async Server.command (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\sdam\server.js:208:29)
+    at async executeOperationWithRetries (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\operations\execute_operation.js:193:32)
+    at async executeOperation (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async Collection.insertOne (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\collection.js:154:16)
+    at async model.$__save (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongoose\lib\model.js:428:16)
+    at async model.save (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongoose\lib\model.js:667:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongoose\lib\model.js:2816:9
+    at async Promise.all (index 0)
+    at async model.create (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongoose\lib\model.js:2801:11)
+    at async audit (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\paymentEventArchive.js:18:3)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\paymentEventArchive.js:54:5
+    at async ClientSession.withTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\sessions.js:568:30)
+    at async exports.inTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\transactionService.js:7:12) {"method":"POST","url":"/api/admin/orders/payment-events/6b04a93831c51bf619e175d2/archive","statusCode":500,"userId":"6b04a9306f4167fc6e7e6961","ip":"127.0.0.1"}
+15:59:37 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93831c51bf619e175d2/archive 500 20.509 ms - 57
+15:59:37 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93831c51bf619e175d2/archive 200 37.544 ms - 112
+✔ Z08 NR03: fallo real de Mongo revierte archivo y AuditLog; reintento registra una decisión (485.4451ms)
+15:59:37 [[32mhttp[39m]: POST /api/checkout/orders 201 118.584 ms - 425
+(node:7268) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+15:59:37 [[32mhttp[39m]: POST /api/webhooks/wompi 200 115.718 ms - 2
+15:59:37 [[31merror[39m]: Server error Estado Wompi discrepante; reintentar verificación
+Error: Estado Wompi discrepante; reintentar verificación
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:132:79)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+15:59:37 [[32mhttp[39m]: POST /api/webhooks/wompi 503 42.446 ms - 81
+15:59:37 [[32mhttp[39m]: GET /api/admin/orders/payment-events?view=[redactado]&transactionId=[redactado] 200 12.247 ms - 521
+15:59:37 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93931c51bf619e175db/archive 409 12.530 ms - 158
+15:59:37 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93931c51bf619e175db/archive 200 19.570 ms - 112
+✔ Z09 NR03: recibo originado en webhook pero contrastado por GET privado sirve de evidencia; sin contraste se rechaza (388.289ms)
+15:59:37 [[32mhttp[39m]: POST /api/checkout/orders 201 123.058 ms - 425
+15:59:37 [[31merror[39m]: Server error Estado Wompi discrepante; reintentar verificación
+Error: Estado Wompi discrepante; reintentar verificación
+    at exports.processTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\services\wompiPaymentService.js:132:79)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":503,"userId":null,"ip":"127.0.0.1"}
+15:59:37 [[32mhttp[39m]: POST /api/webhooks/wompi 503 46.903 ms - 81
+(node:7268) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+15:59:37 [[32mhttp[39m]: POST /api/admin/orders/6b04a9396f4167fc6e7e6b9c/reconcile-wompi 200 106.367 ms - 100
+15:59:38 [[32mhttp[39m]: POST /api/auth/login 200 360.832 ms - 173
+15:59:38 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93931c51bf619e175de/archive 200 15.125 ms - 112
+15:59:38 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93931c51bf619e175de/reprocess 409 4.657 ms - 68
+15:59:38 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93931c51bf619e175de/reopen 200 15.483 ms - 80
+15:59:38 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93931c51bf619e175de/reopen 200 26.762 ms - 80
+15:59:38 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93931c51bf619e175de/reprocess 200 79.721 ms - 94
+✔ Z10 NR03: original asociado, superadmin, reapertura idempotente y nueva evidencia permiten reproceso (1234.123ms)
+15:59:38 [[32mhttp[39m]: POST /api/checkout/orders 201 82.932 ms - 425
+15:59:38 [[32mhttp[39m]: POST /api/webhooks/wompi 200 27.684 ms - 2
+(node:7268) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+15:59:39 [[32mhttp[39m]: POST /api/admin/orders/6b04a93a6f4167fc6e7e6bca/reconcile-wompi 200 96.789 ms - 100
+15:59:39 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93a31c51bf619e175e4/archive 400 2.119 ms - 71
+15:59:39 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93a31c51bf619e175e4/reopen 400 1.871 ms - 71
+15:59:39 [[32mhttp[39m]: POST /api/admin/orders/payment-events/6b04a93a31c51bf619e175e4/archive 409 4.753 ms - 158
+✔ Z11 NR03: petición sin cuerpo y evidencia de otro ambiente no producen archivo ni cierre falso (245.1912ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 20884.9799

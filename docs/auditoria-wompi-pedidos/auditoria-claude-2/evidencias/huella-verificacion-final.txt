@@ -1,0 +1,90 @@
+Verificación final: 2026-11-23T15:29:28-05:00 · HEAD 23ce3a6c8d9d36253f8c0e7b1499ce63ce8f95e6
+== sha256sum -c huella-sha256-antes.txt (solo diferencias)
+frontend/src/app/(shop)/checkout/page.js: FAILED
+frontend/src/styles/pages/checkout.css: FAILED
+verificados: 4141
+
+== archivos nuevos en el alcance de la huella (excluida auditoria-claude-2)
+docs/checkout-audit-fixes.md
+docs/checkout-audit-fixes/baseline-development.txt
+docs/checkout-audit-fixes/baseline-production.txt
+docs/checkout-audit-fixes/baseline/development/confirmacion-reloaded.png
+docs/checkout-audit-fixes/baseline/development/evidence.json
+docs/checkout-audit-fixes/baseline/development/result.json
+docs/checkout-audit-fixes/baseline/development/server.txt
+docs/checkout-audit-fixes/baseline/development/whatsapp-375-immediate.png
+docs/checkout-audit-fixes/baseline/development/whatsapp-375.png
+docs/checkout-audit-fixes/baseline/development/whatsapp-768-immediate.png
+docs/checkout-audit-fixes/baseline/development/whatsapp-768.png
+docs/checkout-audit-fixes/baseline/production/build.txt
+docs/checkout-audit-fixes/baseline/production/confirmacion-reloaded.png
+docs/checkout-audit-fixes/baseline/production/evidence.json
+docs/checkout-audit-fixes/baseline/production/result.json
+docs/checkout-audit-fixes/baseline/production/server.txt
+docs/checkout-audit-fixes/baseline/production/whatsapp-375-immediate.png
+docs/checkout-audit-fixes/baseline/production/whatsapp-375.png
+docs/checkout-audit-fixes/baseline/production/whatsapp-768-immediate.png
+docs/checkout-audit-fixes/baseline/production/whatsapp-768.png
+docs/checkout-audit-fixes/fixed-development.txt
+docs/checkout-audit-fixes/fixed-production.txt
+docs/checkout-audit-fixes/fixed/development/confirmacion-reloaded.png
+docs/checkout-audit-fixes/fixed/development/evidence.json
+docs/checkout-audit-fixes/fixed/development/result.json
+docs/checkout-audit-fixes/fixed/development/server.txt
+docs/checkout-audit-fixes/fixed/development/whatsapp-375.png
+docs/checkout-audit-fixes/fixed/development/whatsapp-768.png
+docs/checkout-audit-fixes/fixed/production/build.txt
+docs/checkout-audit-fixes/fixed/production/confirmacion-reloaded.png
+docs/checkout-audit-fixes/fixed/production/evidence.json
+docs/checkout-audit-fixes/fixed/production/result.json
+docs/checkout-audit-fixes/fixed/production/server.txt
+docs/checkout-audit-fixes/fixed/production/whatsapp-375.png
+docs/checkout-audit-fixes/fixed/production/whatsapp-768.png
+docs/checkout-audit-fixes/protected-sha256-after.json
+docs/checkout-audit-fixes/protected-sha256-before.json
+docs/checkout-audit-fixes/summary.json
+frontend/test/checkout-audit-browser.cjs
+frontend/test/helpers/checkoutAuditFlow.cjs
+
+== backend: cambios respecto a la huella
+ninguno
+
+== docs historicos de auditorias/remediaciones Wompi
+ninguno alterado
+
+== git status (resumen)
+ M backend/src/controllers/checkoutController.js
+ M backend/test/checkout.test.js
+ M frontend/src/app/(shop)/checkout/page.js
+ M frontend/src/lib/checkoutValidation.js
+ M frontend/src/styles/pages/checkout.css
+ M frontend/test/checkout-browser.cjs
+ M frontend/test/helpers/phase7BrowserFlow.cjs
+ M frontend/test/helpers/phase7LastUnitFlow.cjs
+?? .gitattributes
+?? backend/src/data/
+?? backend/src/services/municipalityCatalog.js
+?? backend/test/municipality-catalog.test.js
+?? docs/auditoria-wompi-pedidos/auditoria-claude-2/
+?? docs/checkout-audit-fixes.md
+?? docs/checkout-audit-fixes/
+?? docs/checkout-municipios-backend.txt
+?? docs/checkout-municipios-build.txt
+?? docs/checkout-municipios-evidencias/
+?? docs/checkout-municipios-frontend.txt
+?? docs/checkout-municipios-navegador.txt
+?? docs/checkout-municipios-next.txt
+?? docs/checkout-municipios.md
+?? docs/checkout-redesign-after.txt
+?? docs/checkout-redesign-before.txt
+?? docs/checkout-redesign-build.txt
+?? docs/checkout-redesign-regresion.txt
+?? docs/checkout-redesign.md
+?? docs/checkout-redesign/
+?? frontend/src/components/checkout/
+?? frontend/src/lib/municipalities.js
+?? frontend/test/checkout-audit-browser.cjs
+?? frontend/test/checkout-visual-browser.cjs
+?? frontend/test/helpers/checkoutAuditFlow.cjs
+?? frontend/test/helpers/checkoutVisualFlow.cjs
+?? frontend/test/municipalities.test.cjs

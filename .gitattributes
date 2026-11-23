@@ -1,0 +1,3 @@
+# Preserve the downloaded official source bytes and their recorded SHA-256.
+backend/src/data/divipola-source.json -text
+backend/src/data/divipola-source-metadata.json -text

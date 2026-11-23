@@ -1,0 +1,352 @@
+getPath: MongoMemoryServer: Possible version conflict
+  SystemBinary version: "8.3.2"
+  Requested version:    "7.0.24"
+
+  Using SystemBinary!
+(node:25744) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:25744) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:25744) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:25744) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:25744) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:25744) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+16:18:36 [[32mhttp[39m]: POST /api/auth/login 200 517.123 ms - 160
+16:18:37 [[32mhttp[39m]: POST /api/auth/login 200 435.890 ms - 165
+16:18:37 [[32mhttp[39m]: POST /api/auth/login 200 489.453 ms - 164
+16:18:38 [[32mhttp[39m]: POST /api/auth/login 200 404.213 ms - 166
+Entorno: { mongo: '8.3.2', node: 'v24.15.0' }
+16:18:38 [[32mhttp[39m]: POST /api/checkout/orders 201 164.845 ms - 425
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+16:18:38 [[32mhttp[39m]: POST /api/webhooks/wompi 200 129.211 ms - 2
+16:18:38 [[32mhttp[39m]: PATCH /api/admin/orders/6b04adae8c3aeb313cc68b7b/status 200 17.912 ms - 830
+PASS     P01 — Pago aprobado (evento firmado, vinculado solo por payment_link_id)
+16:18:38 [[32mhttp[39m]: POST /api/checkout/orders 201 84.224 ms - 425
+16:18:38 [[32mhttp[39m]: POST /api/webhooks/wompi 200 20.898 ms - 2
+PASS     X01 — Evento APPROVED auténtico sin vínculo reconocible (sin payment_link_id ni sku)
+16:18:38 [[32mhttp[39m]: POST /api/checkout/orders 201 83.010 ms - 425
+16:18:38 [[32mhttp[39m]: POST /api/webhooks/wompi 200 58.455 ms - 2
+16:18:38 [[32mhttp[39m]: PATCH /api/admin/orders/6b04adae8c3aeb313cc68bb4/status 409 8.193 ms - 84
+PASS     P02 — Pago rechazado (DECLINED)
+16:18:39 [[32mhttp[39m]: POST /api/checkout/orders 201 82.899 ms - 425
+16:18:39 [[32mhttp[39m]: POST /api/webhooks/wompi 200 55.243 ms - 2
+16:18:39 [[32mhttp[39m]: PATCH /api/admin/orders/6b04adae8c3aeb313cc68bd0/status 409 8.368 ms - 84
+PASS     P03 — Pago pendiente (PENDING)
+16:18:39 [[32mhttp[39m]: POST /api/checkout/orders 201 88.902 ms - 425
+16:18:39 [[32mhttp[39m]: POST /api/webhooks/wompi 200 70.348 ms - 2
+PASS     P04 — Pago anulado (VOIDED) sobre pedido pendiente
+16:18:39 [[32mhttp[39m]: POST /api/checkout/orders 201 76.662 ms - 425
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+16:18:39 [[32mhttp[39m]: POST /api/webhooks/wompi 200 75.911 ms - 2
+16:18:39 [[32mhttp[39m]: POST /api/webhooks/wompi 200 56.430 ms - 2
+16:18:39 [[32mhttp[39m]: PATCH /api/admin/orders/6b04adaf8c3aeb313cc68c09/status 409 7.209 ms - 84
+PASS     P04b — VOIDED posterior a APPROVED de la MISMA transacción
+16:18:39 [[32mhttp[39m]: POST /api/checkout/orders 201 95.716 ms - 425
+16:18:39 [[32mhttp[39m]: POST /api/webhooks/wompi 200 64.946 ms - 2
+PASS     P05 — Error de pago (ERROR) del proveedor
+16:18:39 [[31merror[39m]: Server error No se pudo iniciar el pago con Wompi. El pedido queda pendiente de revisión.
+Error: No se pudo iniciar el pago con Wompi. El pedido queda pendiente de revisión.
+    at createCheckoutOrder (C:\Users\Asus ExpertBook\AppData\Local\Temp\claude\05d7f1a4ff6d7b65\6a043b24-c226-493a-a277-c0600faf5a03\scratchpad\arbol-cierre\backend\src\controllers\checkoutController.js:364:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async C:\Users\Asus ExpertBook\AppData\Local\Temp\claude\05d7f1a4ff6d7b65\6a043b24-c226-493a-a277-c0600faf5a03\scratchpad\arbol-cierre\backend\src\controllers\checkoutController.js:465:12 {"method":"POST","url":"/api/checkout/orders","statusCode":502,"userId":null,"ip":"127.0.0.1"}
+16:18:39 [[32mhttp[39m]: POST /api/checkout/orders 502 34.219 ms - 108
+16:18:39 [[32mhttp[39m]: POST /api/checkout/orders 409 3.639 ms - 178
+16:18:39 [[32mhttp[39m]: POST /api/checkout/orders 201 71.597 ms - 425
+PASS     P05b — Fallo/timeout del proveedor al crear el enlace de pago
+16:18:39 [[32mhttp[39m]: POST /api/checkout/orders 201 79.474 ms - 425
+16:18:39 [[32mhttp[39m]: POST /api/checkout/orders/lookup 200 3.158 ms - 600
+16:18:39 [[32mhttp[39m]: GET /api/admin/orders/6b04adaf8c3aeb313cc68c70 200 6.895 ms - 2737
+PASS     P06 — Cliente cierra el checkout de Wompi (ningún evento)
+16:18:40 [[32mhttp[39m]: POST /api/checkout/orders 201 79.313 ms - 425
+16:18:40 [[32mhttp[39m]: POST /api/checkout/orders/lookup 200 2.743 ms - 600
+PASS     P07 — Cliente regresa sin pagar (redirect con order= y sin transacción)
+16:18:40 [[32mhttp[39m]: POST /api/checkout/orders 201 73.058 ms - 425
+16:18:40 [[32mhttp[39m]: POST /api/checkout/orders/lookup 200 2.864 ms - 600
+16:18:40 [[33mwarn[39m]: Auth failure No has iniciado sesión {"method":"GET","url":"/api/checkout/orders/lookup?order=[redactado]&id=[redactado]&status=APPROVED","statusCode":401,"ip":"127.0.0.1"}
+16:18:40 [[32mhttp[39m]: GET /api/checkout/orders/lookup?order=[redactado]&id=[redactado]&status=APPROVED 401 1.321 ms - 53
+PASS     P08 — Redirección manipulada (parámetros de pago inyectados)
+16:18:40 [[32mhttp[39m]: POST /api/checkout/orders 201 83.542 ms - 425
+16:18:40 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.998 ms - 48
+16:18:40 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.763 ms - 48
+16:18:40 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.646 ms - 48
+16:18:40 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.568 ms - 48
+PASS     P09 — Webhook falsificado (sin checksum, checksum aleatorio, secreto incorrecto)
+16:18:40 [[32mhttp[39m]: POST /api/checkout/orders 201 92.375 ms - 425
+16:18:40 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.796 ms - 48
+16:18:40 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.698 ms - 48
+16:18:40 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.507 ms - 48
+16:18:40 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.642 ms - 48
+16:18:40 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.638 ms - 48
+16:18:40 [[32mhttp[39m]: POST /api/webhooks/wompi 401 0.566 ms - 48
+PASS     P10 — Firma inválida / manipulación del evento firmado
+16:18:40 [[32mhttp[39m]: POST /api/checkout/orders 201 80.134 ms - 425
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+16:18:40 [[32mhttp[39m]: POST /api/webhooks/wompi 200 67.183 ms - 2
+16:18:40 [[32mhttp[39m]: POST /api/webhooks/wompi 200 6.303 ms - 2
+16:18:40 [[32mhttp[39m]: POST /api/webhooks/wompi 200 13.597 ms - 2
+16:18:40 [[32mhttp[39m]: POST /api/webhooks/wompi 200 10.138 ms - 2
+16:18:40 [[32mhttp[39m]: POST /api/webhooks/wompi 200 10.189 ms - 2
+16:18:40 [[32mhttp[39m]: POST /api/webhooks/wompi 200 8.792 ms - 2
+16:18:40 [[32mhttp[39m]: POST /api/webhooks/wompi 200 11.322 ms - 2
+16:18:40 [[32mhttp[39m]: POST /api/webhooks/wompi 200 9.018 ms - 2
+PASS     P11 — Webhook duplicado (secuencial y 6 concurrentes)
+16:18:40 [[32mhttp[39m]: POST /api/checkout/orders 201 71.701 ms - 425
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+16:18:40 [[32mhttp[39m]: POST /api/webhooks/wompi 200 72.175 ms - 2
+16:18:40 [[32mhttp[39m]: POST /api/webhooks/wompi 200 55.727 ms - 2
+16:18:40 [[32mhttp[39m]: POST /api/webhooks/wompi 200 50.902 ms - 2
+16:18:40 [[32mhttp[39m]: POST /api/checkout/orders 201 70.709 ms - 425
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+16:18:40 [[32mhttp[39m]: POST /api/webhooks/wompi 200 61.623 ms - 2
+16:18:41 [[32mhttp[39m]: POST /api/webhooks/wompi 200 56.179 ms - 2
+PASS     P12 — Webhooks fuera de orden
+16:18:41 [[32mhttp[39m]: POST /api/checkout/orders 201 75.774 ms - 425
+16:18:41 [[32mhttp[39m]: POST /api/admin/orders/6b04adb18c3aeb313cc68d49/reconcile-wompi 409 7.524 ms - 91
+16:18:41 [[32mhttp[39m]: GET /api/admin/orders/6b04adb18c3aeb313cc68d49 200 6.588 ms - 2737
+16:18:41 [[32mhttp[39m]: POST /api/checkout/orders/lookup 200 5.743 ms - 600
+FAIL     P13 — Webhook perdido: pago aprobado en Wompi pero el evento nunca llega
+16:18:41 [[32mhttp[39m]: POST /api/checkout/orders 201 81.582 ms - 425
+16:18:41 [[31merror[39m]: Server error Failing command via 'failCommand' failpoint
+MongoServerError: Failing command via 'failCommand' failpoint
+    at Connection.sendCommand (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\cmap\connection.js:320:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Connection.command (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\cmap\connection.js:347:26)
+    at async Server.command (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\sdam\server.js:208:29)
+    at async executeOperationWithRetries (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\operations\execute_operation.js:193:32)
+    at async executeOperation (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async Collection.findOneAndUpdate (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\collection.js:544:16)
+    at async model.Query._findOneAndUpdate (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongoose\lib\query.js:3621:13)
+    at async model.Query.exec (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongoose\lib\query.js:4797:63)
+    at async exports.processTransaction (C:\Users\Asus ExpertBook\AppData\Local\Temp\claude\05d7f1a4ff6d7b65\6a043b24-c226-493a-a277-c0600faf5a03\scratchpad\arbol-cierre\backend\src\services\wompiPaymentService.js:89:13)
+    at async C:\Users\Asus ExpertBook\AppData\Local\Temp\claude\05d7f1a4ff6d7b65\6a043b24-c226-493a-a277-c0600faf5a03\scratchpad\arbol-cierre\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":500,"userId":null,"ip":"127.0.0.1"}
+16:18:41 [[32mhttp[39m]: POST /api/webhooks/wompi 500 3.975 ms - 57
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+16:18:41 [[31merror[39m]: Server error Failing command via 'failCommand' failpoint
+MongoServerError: Failing command via 'failCommand' failpoint
+    at Connection.sendCommand (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\cmap\connection.js:320:27)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Connection.command (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\cmap\connection.js:347:26)
+    at async Server.command (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\sdam\server.js:208:29)
+    at async executeOperationWithRetries (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\operations\execute_operation.js:193:32)
+    at async executeOperation (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\operations\execute_operation.js:83:16)
+    at async Collection.findOneAndUpdate (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\collection.js:544:16)
+    at async model.Query._findOneAndUpdate (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongoose\lib\query.js:3621:13)
+    at async model.Query.exec (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongoose\lib\query.js:4797:63)
+    at async exports.moveStock (C:\Users\Asus ExpertBook\AppData\Local\Temp\claude\05d7f1a4ff6d7b65\6a043b24-c226-493a-a277-c0600faf5a03\scratchpad\arbol-cierre\backend\src\services\inventoryService.js:18:21)
+    at async C:\Users\Asus ExpertBook\AppData\Local\Temp\claude\05d7f1a4ff6d7b65\6a043b24-c226-493a-a277-c0600faf5a03\scratchpad\arbol-cierre\backend\src\services\wompiPaymentService.js:204:13
+    at async ClientSession.withTransaction (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\backend\node_modules\mongodb\lib\sessions.js:568:30)
+    at async exports.inTransaction (C:\Users\Asus ExpertBook\AppData\Local\Temp\claude\05d7f1a4ff6d7b65\6a043b24-c226-493a-a277-c0600faf5a03\scratchpad\arbol-cierre\backend\src\services\transactionService.js:7:12)
+    at async exports.processTransaction (C:\Users\Asus ExpertBook\AppData\Local\Temp\claude\05d7f1a4ff6d7b65\6a043b24-c226-493a-a277-c0600faf5a03\scratchpad\arbol-cierre\backend\src\services\wompiPaymentService.js:184:12)
+    at async C:\Users\Asus ExpertBook\AppData\Local\Temp\claude\05d7f1a4ff6d7b65\6a043b24-c226-493a-a277-c0600faf5a03\scratchpad\arbol-cierre\backend\src\controllers\wompiWebhookController.js:14:3 {"method":"POST","url":"/api/webhooks/wompi","statusCode":500,"userId":null,"ip":"127.0.0.1"}
+16:18:41 [[32mhttp[39m]: POST /api/webhooks/wompi 500 77.482 ms - 57
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+16:18:41 [[32mhttp[39m]: POST /api/webhooks/wompi 200 71.836 ms - 2
+PASS     P14 — Error de MongoDB: (a) al guardar la evidencia, (b) durante el descuento de inventario
+16:18:41 [[32mhttp[39m]: POST /api/checkout/orders 201 76.098 ms - 425
+16:18:41 [[32mhttp[39m]: POST /api/checkout/orders 200 8.109 ms - 382
+PASS     P15 — Respuesta perdida / resultado desconocido al crear pedido (misma clave tras fallo)
+16:18:41 [[32mhttp[39m]: POST /api/checkout/orders 409 95.795 ms - 120
+16:18:41 [[32mhttp[39m]: POST /api/checkout/orders 409 103.848 ms - 120
+16:18:41 [[32mhttp[39m]: POST /api/checkout/orders 409 104.264 ms - 120
+16:18:41 [[32mhttp[39m]: POST /api/checkout/orders 409 105.561 ms - 120
+16:18:41 [[32mhttp[39m]: POST /api/checkout/orders 201 146.686 ms - 425
+PASS     P16 — Doble clic en pagar (5 solicitudes simultáneas, misma clave)
+16:18:41 [[32mhttp[39m]: POST /api/checkout/orders 201 102.137 ms - 425
+16:18:41 [[32mhttp[39m]: POST /api/checkout/orders 201 108.941 ms - 425
+PASS     P17 — Dos solicitudes concurrentes con claves distintas (dos pestañas)
+16:18:41 [[32mhttp[39m]: POST /api/checkout/orders 201 79.584 ms - 425
+16:18:41 [[32mhttp[39m]: POST /api/webhooks/wompi 200 56.324 ms - 2
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+16:18:42 [[32mhttp[39m]: POST /api/webhooks/wompi 200 68.644 ms - 2
+PASS     P18 — Reintento tras rechazo (DECLINED → APPROVED en el mismo enlace)
+16:18:42 [[32mhttp[39m]: POST /api/checkout/orders 201 76.177 ms - 425
+16:18:42 [[32mhttp[39m]: PATCH /api/admin/orders/6b04adb28c3aeb313cc68e2e/status 200 21.795 ms - 848
+16:18:42 [[32mhttp[39m]: POST /api/webhooks/wompi 200 62.700 ms - 2
+PASS     P19 — Aprobación tardía tras cancelación administrativa
+16:18:42 [[32mhttp[39m]: POST /api/checkout/orders 201 78.521 ms - 425
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+16:18:42 [[32mhttp[39m]: POST /api/webhooks/wompi 200 64.158 ms - 2
+16:18:42 [[32mhttp[39m]: POST /api/webhooks/wompi 200 60.016 ms - 2
+16:18:42 [[32mhttp[39m]: PATCH /api/admin/orders/6b04adb28c3aeb313cc68e58/status 409 6.789 ms - 83
+16:18:42 [[32mhttp[39m]: GET /api/admin/orders/6b04adb28c3aeb313cc68e58 200 8.429 ms - 3225
+FAIL     P20 — Dos transacciones aprobadas para un pedido
+16:18:42 [[32mhttp[39m]: POST /api/checkout/orders 201 73.473 ms - 425
+PASS     P21 — Monto manipulado por el cliente en la solicitud
+16:18:42 [[32mhttp[39m]: POST /api/checkout/orders 201 74.140 ms - 425
+16:18:42 [[32mhttp[39m]: POST /api/webhooks/wompi 200 58.658 ms - 2
+16:18:42 [[32mhttp[39m]: POST /api/checkout/orders/lookup 200 2.587 ms - 600
+16:18:42 [[32mhttp[39m]: PATCH /api/admin/orders/6b04adb28c3aeb313cc68e9b/status 409 6.113 ms - 84
+PASS     P21b — Transacción APPROVED con monto inferior al del pedido
+16:18:42 [[32mhttp[39m]: POST /api/checkout/orders 400 8.308 ms - 75
+16:18:42 [[32mhttp[39m]: POST /api/checkout/orders 201 74.219 ms - 425
+16:18:42 [[32mhttp[39m]: POST /api/checkout/orders 400 8.010 ms - 75
+PASS     P22 — Cupón manipulado (inexistente, descuento enviado por el cliente)
+16:18:42 [[32mhttp[39m]: POST /api/checkout/orders 201 79.572 ms - 425
+16:18:42 [[32mhttp[39m]: POST /api/checkout/orders 201 77.932 ms - 425
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+16:18:43 [[32mhttp[39m]: POST /api/webhooks/wompi 200 66.092 ms - 2
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+16:18:43 [[32mhttp[39m]: POST /api/webhooks/wompi 200 65.001 ms - 2
+16:18:43 [[32mhttp[39m]: PATCH /api/admin/orders/6b04adb28c3aeb313cc68eee/status 409 5.757 ms - 83
+FAIL     P22b — Cupón de un solo uso usado en dos pedidos Wompi pagados
+16:18:43 [[32mhttp[39m]: POST /api/checkout/orders 201 73.727 ms - 425
+16:18:43 [[32mhttp[39m]: POST /api/checkout/orders 201 75.717 ms - 425
+16:18:43 [[32mhttp[39m]: POST /api/webhooks/wompi 200 26.753 ms - 2
+16:18:43 [[32mhttp[39m]: POST /api/checkout/orders 201 74.186 ms - 425
+16:18:43 [[32mhttp[39m]: POST /api/checkout/orders 201 76.325 ms - 425
+16:18:43 [[32mhttp[39m]: POST /api/webhooks/wompi 200 22.909 ms - 2
+PASS     P23 — Referencia/sku de un pedido y payment_link_id de otro en el mismo evento
+16:18:43 [[32mhttp[39m]: POST /api/checkout/orders 201 74.048 ms - 425
+16:18:43 [[32mhttp[39m]: POST /api/checkout/orders 201 71.994 ms - 425
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+16:18:43 [[32mhttp[39m]: POST /api/webhooks/wompi 200 66.582 ms - 2
+16:18:43 [[32mhttp[39m]: POST /api/webhooks/wompi 200 6.268 ms - 2
+PASS     P24 — Transacción de otro pedido usada para confirmar un pedido diferente
+16:18:43 [[32mhttp[39m]: POST /api/checkout/orders 201 79.123 ms - 425
+16:18:43 [[32mhttp[39m]: POST /api/webhooks/wompi 200 0.976 ms - 2
+PASS     P25 — Evento de Sandbox con el backend en modo producción
+16:18:43 [[32mhttp[39m]: POST /api/checkout/orders 201 84.660 ms - 425
+16:18:43 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"PATCH","url":"/api/admin/orders/6b04adb38c3aeb313cc68fc2/payment","statusCode":403,"ip":"127.0.0.1"}
+16:18:43 [[32mhttp[39m]: PATCH /api/admin/orders/6b04adb38c3aeb313cc68fc2/payment 403 2.774 ms - 75
+16:18:44 [[33mwarn[39m]: Auth failure Solo administradores pueden registrar recaudos {"method":"PATCH","url":"/api/admin/orders/6b04adb38c3aeb313cc68fc2/payment","statusCode":403,"ip":"127.0.0.1"}
+16:18:44 [[32mhttp[39m]: PATCH /api/admin/orders/6b04adb38c3aeb313cc68fc2/payment 403 8.248 ms - 76
+16:18:44 [[32mhttp[39m]: PATCH /api/admin/orders/6b04adb38c3aeb313cc68fc2/payment 409 6.138 ms - 66
+16:18:44 [[33mwarn[39m]: Auth failure No has iniciado sesión {"method":"PATCH","url":"/api/admin/orders/6b04adb38c3aeb313cc68fc2/payment","statusCode":401,"ip":"127.0.0.1"}
+16:18:44 [[32mhttp[39m]: PATCH /api/admin/orders/6b04adb38c3aeb313cc68fc2/payment 401 1.327 ms - 53
+16:18:44 [[32mhttp[39m]: POST /api/checkout/orders 201 72.692 ms - 425
+PASS     P26 — Intento de marcar pagado desde cliente / vendedor / admin (Wompi)
+16:18:44 [[32mhttp[39m]: POST /api/checkout/orders 201 85.580 ms - 425
+16:18:44 [[32mhttp[39m]: GET /api/checkout/orders/6b04adb48c3aeb313cc68fee 404 5.173 ms - 50
+16:18:44 [[32mhttp[39m]: PATCH /api/checkout/orders/6b04adb48c3aeb313cc68fee/cancel 404 4.142 ms - 50
+16:18:44 [[32mhttp[39m]: POST /api/checkout/orders/lookup 404 2.738 ms - 50
+16:18:44 [[32mhttp[39m]: POST /api/checkout/orders/lookup 404 2.808 ms - 50
+16:18:44 [[32mhttp[39m]: POST /api/checkout/orders/lookup 404 4.529 ms - 50
+16:18:44 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"GET","url":"/api/admin/orders/6b04adb48c3aeb313cc68fee","statusCode":403,"ip":"127.0.0.1"}
+16:18:44 [[32mhttp[39m]: GET /api/admin/orders/6b04adb48c3aeb313cc68fee 403 2.247 ms - 75
+PASS     P27 — Consulta/cancelación de pedido ajeno (BOLA/IDOR)
+16:18:44 [[32mhttp[39m]: POST /api/checkout/orders 201 80.015 ms - 425
+16:18:44 [[32mhttp[39m]: GET /api/checkout/orders/6b04adb48c3aeb313cc69007 200 5.480 ms - 876
+16:18:44 [[32mhttp[39m]: PATCH /api/checkout/orders/6b04adb48c3aeb313cc69007/cancel 409 11.698 ms - 116
+16:18:44 [[32mhttp[39m]: PATCH /api/admin/orders/6b04adb48c3aeb313cc69007/status 200 18.662 ms - 924
+FAIL     P28 — Cancelación antes del pago
+16:18:44 [[32mhttp[39m]: POST /api/checkout/orders 201 86.697 ms - 425
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+16:18:44 [[32mhttp[39m]: POST /api/webhooks/wompi 200 67.124 ms - 2
+16:18:44 [[32mhttp[39m]: PATCH /api/checkout/orders/6b04adb48c3aeb313cc6902a/cancel 409 6.189 ms - 83
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+16:18:44 [[32mhttp[39m]: PATCH /api/admin/orders/6b04adb48c3aeb313cc6902a/status 200 23.436 ms - 840
+PASS     P29 — Cancelación después del pago
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+16:18:44 [[32mhttp[39m]: POST /api/checkout/orders 201 82.081 ms - 371
+16:18:44 [[32mhttp[39m]: PATCH /api/admin/orders/6b04adb48c3aeb313cc69056/status 200 12.856 ms - 843
+PASS     P31 — Pedido contraentrega
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+16:18:44 [[32mhttp[39m]: POST /api/checkout/orders 201 83.599 ms - 371
+16:18:44 [[32mhttp[39m]: PATCH /api/admin/orders/6b04adb48c3aeb313cc69074/payment 409 5.188 ms - 68
+16:18:44 [[32mhttp[39m]: PATCH /api/admin/orders/6b04adb48c3aeb313cc69074/status 200 11.189 ms - 843
+16:18:44 [[32mhttp[39m]: PATCH /api/admin/orders/6b04adb48c3aeb313cc69074/shipping 200 16.537 ms - 840
+16:18:44 [[32mhttp[39m]: PATCH /api/admin/orders/6b04adb48c3aeb313cc69074/status 200 15.344 ms - 877
+16:18:44 [[33mwarn[39m]: Auth failure Solo administradores pueden registrar recaudos {"method":"PATCH","url":"/api/admin/orders/6b04adb48c3aeb313cc69074/payment","statusCode":403,"ip":"127.0.0.1"}
+16:18:44 [[32mhttp[39m]: PATCH /api/admin/orders/6b04adb48c3aeb313cc69074/payment 403 6.065 ms - 76
+16:18:44 [[32mhttp[39m]: PATCH /api/admin/orders/6b04adb48c3aeb313cc69074/payment 400 6.347 ms - 87
+16:18:44 [[32mhttp[39m]: PATCH /api/admin/orders/6b04adb48c3aeb313cc69074/payment 200 11.328 ms - 859
+PASS     P32 — Contraentrega: recaudo solo tras entrega y con evidencia, solo admin
+16:18:44 [[32mhttp[39m]: POST /api/checkout/orders 400 0.566 ms - 127
+16:18:44 [[32mhttp[39m]: POST /api/checkout/orders 400 0.511 ms - 127
+16:18:44 [[32mhttp[39m]: POST /api/checkout/orders 400 0.750 ms - 127
+16:18:44 [[32mhttp[39m]: POST /api/checkout/orders 400 0.544 ms - 127
+16:18:44 [[32mhttp[39m]: POST /api/checkout/orders 400 0.523 ms - 127
+16:18:44 [[32mhttp[39m]: POST /api/checkout/orders 400 0.590 ms - 127
+16:18:44 [[32mhttp[39m]: POST /api/checkout/orders 400 0.640 ms - 127
+16:18:44 [[32mhttp[39m]: POST /api/checkout/orders 400 0.530 ms - 127
+16:18:44 [[32mhttp[39m]: POST /api/checkout/orders 400 0.913 ms - 127
+16:18:44 [[32mhttp[39m]: POST /api/checkout/orders 400 0.596 ms - 127
+16:18:44 [[32mhttp[39m]: POST /api/payments/nequi/webhook 410 0.738 ms - 229
+16:18:44 [[32mhttp[39m]: GET /api/checkout/config 200 3.135 ms - 111773
+16:18:44 [[32mhttp[39m]: GET /api/checkout/config 200 2.754 ms - 111662
+16:18:44 [[32mhttp[39m]: POST /api/checkout/orders 400 0.716 ms - 127
+PASS     P33 — Métodos de pago deshabilitados o inventados
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+16:18:44 [[32mhttp[39m]: POST /api/checkout/orders 409 47.239 ms - 73
+16:18:45 [[32mhttp[39m]: POST /api/checkout/orders 201 93.829 ms - 371
+16:18:45 [[32mhttp[39m]: POST /api/checkout/orders 201 71.023 ms - 425
+16:18:45 [[32mhttp[39m]: POST /api/checkout/orders 201 73.700 ms - 425
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+16:18:45 [[32mhttp[39m]: POST /api/webhooks/wompi 200 76.424 ms - 2
+16:18:45 [[32mhttp[39m]: POST /api/webhooks/wompi 200 90.078 ms - 2
+PASS     P34 — Última unidad: contraentrega concurrente y Wompi concurrente
+16:18:45 [[32mhttp[39m]: POST /api/checkout/orders 201 74.595 ms - 425
+16:18:45 [[32mhttp[39m]: POST /api/webhooks/wompi 200 56.447 ms - 2
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+16:18:45 [[32mhttp[39m]: POST /api/admin/orders/6b04adb58c3aeb313cc69102/reconcile-wompi 200 71.472 ms - 100
+PASS     P35 — Inventario agotado durante el checkout y recuperación por conciliación
+16:18:45 [[32mhttp[39m]: POST /api/checkout/orders 201 76.277 ms - 425
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+16:18:45 [[32mhttp[39m]: POST /api/webhooks/wompi 200 80.392 ms - 2
+16:18:45 [[32mhttp[39m]: POST /api/admin/orders/6b04adb58c3aeb313cc69133/reconcile-wompi 200 83.084 ms - 100
+16:18:45 [[32mhttp[39m]: POST /api/admin/orders/6b04adb58c3aeb313cc69133/reconcile-wompi 200 84.828 ms - 100
+16:18:45 [[32mhttp[39m]: POST /api/webhooks/wompi 200 7.536 ms - 2
+PASS     P36 — Repetición de evento y conciliación con efectos de inventario
+16:18:45 [[32mhttp[39m]: POST /api/checkout/orders 201 87.697 ms - 425
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+16:18:46 [[32mhttp[39m]: POST /api/webhooks/wompi 200 76.892 ms - 2
+16:18:46 [[32mhttp[39m]: POST /api/checkout/orders 201 82.353 ms - 425
+16:18:46 [[32mhttp[39m]: POST /api/webhooks/wompi 200 61.827 ms - 2
+16:18:46 [[32mhttp[39m]: POST /api/checkout/orders 201 81.940 ms - 425
+16:18:46 [[32mhttp[39m]: POST /api/webhooks/wompi 200 60.307 ms - 2
+16:18:46 [[32mhttp[39m]: GET /api/admin/alerts 200 40.865 ms - 14011
+16:18:46 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado]&limit=100 200 36.120 ms - 8941
+PASS     P37 — Señales administrativas de pago (outbox, alertas, bandeja de revisión)
+16:18:46 [[32mhttp[39m]: POST /api/checkout/orders 201 96.490 ms - 425
+16:18:46 [[32mhttp[39m]: POST /api/webhooks/wompi 200 74.851 ms - 2
+16:18:46 [[32mhttp[39m]: POST /api/checkout/orders/lookup 200 3.696 ms - 600
+PASS     P38 — Mensaje visible de rechazo (API + función de copia del frontend)
+16:18:46 [[32mhttp[39m]: POST /api/checkout/orders 201 87.524 ms - 425
+16:18:46 [[32mhttp[39m]: POST /api/webhooks/wompi 200 60.495 ms - 2
+16:18:46 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"POST","url":"/api/admin/orders/6b04adb68c3aeb313cc691dd/reconcile-wompi","statusCode":403,"ip":"127.0.0.1"}
+16:18:46 [[32mhttp[39m]: POST /api/admin/orders/6b04adb68c3aeb313cc691dd/reconcile-wompi 403 3.613 ms - 75
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+16:18:46 [[32mhttp[39m]: POST /api/admin/orders/6b04adb68c3aeb313cc691dd/reconcile-wompi 200 76.575 ms - 100
+PASS     P39 — Conciliación de pedido pendiente con transacción conocida
+16:18:46 [[32mhttp[39m]: POST /api/checkout/orders 201 85.879 ms - 425
+16:18:47 [[32mhttp[39m]: POST /api/webhooks/wompi 200 73.344 ms - 2
+16:18:47 [[32mhttp[39m]: PATCH /api/checkout/orders/6b04adb68c3aeb313cc69203/cancel 409 59.469 ms - 124
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+16:18:47 [[32mhttp[39m]: POST /api/webhooks/wompi 200 60.885 ms - 2
+PASS     X02 — Cliente cancela tras DECLINED y luego paga en el mismo enlace (aún activo)
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+16:18:47 [[32mhttp[39m]: POST /api/checkout/orders 201 78.134 ms - 371
+16:18:47 [[32mhttp[39m]: POST /api/webhooks/wompi 200 15.132 ms - 2
+PASS     X03 — Evento Wompi cuya referencia coincide con un pedido contraentrega
+16:18:47 [[32mhttp[39m]: POST /api/checkout/orders 201 74.341 ms - 425
+16:18:47 [[32mhttp[39m]: PATCH /api/admin/orders/6b04adb78c3aeb313cc6924f/status 200 19.743 ms - 848
+16:18:47 [[32mhttp[39m]: POST /api/webhooks/wompi 200 63.995 ms - 2
+16:18:47 [[32mhttp[39m]: POST /api/checkout/orders 201 72.978 ms - 425
+16:18:47 [[32mhttp[39m]: PATCH /api/admin/orders/6b04adb78c3aeb313cc69278/status 200 17.996 ms - 848
+16:18:47 [[32mhttp[39m]: POST /api/webhooks/wompi 200 62.517 ms - 2
+16:18:47 [[32mhttp[39m]: POST /api/checkout/orders 201 74.547 ms - 425
+16:18:47 [[32mhttp[39m]: PATCH /api/admin/orders/6b04adb78c3aeb313cc692a1/status 200 20.467 ms - 848
+16:18:47 [[32mhttp[39m]: POST /api/webhooks/wompi 200 62.380 ms - 2
+16:18:47 [[32mhttp[39m]: POST /api/checkout/orders 201 70.048 ms - 425
+16:18:47 [[32mhttp[39m]: PATCH /api/admin/orders/6b04adb78c3aeb313cc692ca/status 200 22.783 ms - 848
+16:18:47 [[32mhttp[39m]: POST /api/webhooks/wompi 200 63.195 ms - 2
+PASS     X04 — Webhook APPROVED y cancelación administrativa simultáneos
+16:18:47 [[32mhttp[39m]: POST /api/checkout/orders 201 68.305 ms - 425
+16:18:48 [[32mhttp[39m]: POST /api/webhooks/wompi 200 53.957 ms - 2
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(node:25744) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+16:18:48 [[32mhttp[39m]: POST /api/admin/orders/6b04adb78c3aeb313cc692f3/reconcile-wompi 200 159.350 ms - 100
+16:18:48 [[32mhttp[39m]: POST /api/webhooks/wompi 200 164.109 ms - 2
+16:18:48 [[32mhttp[39m]: POST /api/webhooks/wompi 200 183.255 ms - 2
+PASS     X05 — Webhook y conciliación administrativa simultáneos
+PASS     X06 — Incidencias sin vía de resolución en la API administrativa
+16:18:48 [[32mhttp[39m]: POST /api/checkout/orders 201 74.640 ms - 425
+FAIL     X07 — Vigencia del enlace de pago creado
+NOT_APPLICABLE P40 — Reembolso o anulación en el proveedor
+Resumen: { PASS: 44, FAIL: 5, NOT_APPLICABLE: 1 } hosts externos bloqueados: []
+[preservar-claude-2] escrituras desviadas: docs\auditoria-wompi-pedidos\evidencias\resultados-auditoria-wompi.json

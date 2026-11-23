@@ -1,0 +1,75 @@
+rama: main
+HEAD: 23ce3a6c8d9d36253f8c0e7b1499ce63ce8f95e6
+origin/main...main: 0	1
+fecha: 2026-11-23T17:04:52-05:00
+
+ M backend/src/controllers/adminAlertController.js
+ M backend/src/controllers/checkoutController.js
+ M backend/src/controllers/orderAdminController.js
+ M backend/src/models/paymentEvent.js
+ M backend/src/routes/adminOrderRoutes.js
+ M backend/src/services/wompiPaymentService.js
+ M backend/test/checkout.test.js
+ M frontend/src/app/(shop)/checkout/page.js
+ M frontend/src/app/admin/alertas/page.js
+ M frontend/src/components/admin/PaymentEventAlerts.jsx
+ M frontend/src/lib/checkoutValidation.js
+ M frontend/src/services/orderAdminService.js
+ M frontend/src/styles/pages/checkout.css
+ M frontend/test/checkout-browser.cjs
+ M frontend/test/helpers/phase7BrowserFlow.cjs
+ M frontend/test/helpers/phase7LastUnitFlow.cjs
+?? .gitattributes
+?? backend/src/data/
+?? backend/src/services/municipalityCatalog.js
+?? backend/src/services/paymentEventArchive.js
+?? backend/test/municipality-catalog.test.js
+?? docs/auditoria-wompi-pedidos/auditoria-cierre-residuales/
+?? docs/auditoria-wompi-pedidos/auditoria-claude-2/
+?? docs/auditoria-wompi-pedidos/cierre-final-produccion/
+?? docs/auditoria-wompi-pedidos/cierre-residuales/
+?? docs/auditoria-wompi-pedidos/preproduccion/
+?? docs/checkout-audit-fixes.md
+?? docs/checkout-audit-fixes/
+?? docs/checkout-municipios-backend.txt
+?? docs/checkout-municipios-build.txt
+?? docs/checkout-municipios-evidencias/
+?? docs/checkout-municipios-frontend.txt
+?? docs/checkout-municipios-navegador.txt
+?? docs/checkout-municipios-next.txt
+?? docs/checkout-municipios.md
+?? docs/checkout-redesign-after.txt
+?? docs/checkout-redesign-before.txt
+?? docs/checkout-redesign-build.txt
+?? docs/checkout-redesign-regresion.txt
+?? docs/checkout-redesign.md
+?? docs/checkout-redesign/
+?? frontend/src/components/checkout/
+?? frontend/src/lib/municipalities.js
+?? frontend/test/checkout-audit-browser.cjs
+?? frontend/test/checkout-visual-browser.cjs
+?? frontend/test/helpers/checkoutAuditFlow.cjs
+?? frontend/test/helpers/checkoutVisualFlow.cjs
+?? frontend/test/municipalities.test.cjs
+
+warning: in the working copy of 'backend/src/controllers/orderAdminController.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/test/checkout.test.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/app/admin/alertas/page.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/admin/PaymentEventAlerts.jsx', LF will be replaced by CRLF the next time Git touches it
+ backend/src/controllers/adminAlertController.js    |   9 +-
+ backend/src/controllers/checkoutController.js      |  50 ++------
+ backend/src/controllers/orderAdminController.js    |  36 ++++--
+ backend/src/models/paymentEvent.js                 |  12 ++
+ backend/src/routes/adminOrderRoutes.js             |   3 +
+ backend/src/services/wompiPaymentService.js        |  13 +-
+ backend/test/checkout.test.js                      |  42 ++++++-
+ frontend/src/app/(shop)/checkout/page.js           |  40 ++++---
+ frontend/src/app/admin/alertas/page.js             |   2 +-
+ .../src/components/admin/PaymentEventAlerts.jsx    |  63 +++++++++-
+ frontend/src/lib/checkoutValidation.js             |   7 +-
+ frontend/src/services/orderAdminService.js         |   5 +-
+ frontend/src/styles/pages/checkout.css             | 133 ++++++++++++++++++++-
+ frontend/test/checkout-browser.cjs                 |  93 +++++++++++++-
+ frontend/test/helpers/phase7BrowserFlow.cjs        |   2 +-
+ frontend/test/helpers/phase7LastUnitFlow.cjs       |   2 +-
+ 16 files changed, 427 insertions(+), 85 deletions(-)

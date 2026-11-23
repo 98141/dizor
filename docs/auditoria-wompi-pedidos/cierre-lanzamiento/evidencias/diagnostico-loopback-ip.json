@@ -1,0 +1,16 @@
+{
+  "at": "2026-11-23T22:21:32.805Z",
+  "environment": "sandbox",
+  "purpose": "Diagnóstico controlado del payload de creación; sin pedido ni pago",
+  "variant": "loopback-ip",
+  "payload": {
+    "nameLength": 40,
+    "descriptionLength": 51,
+    "skuLength": 33,
+    "amountInCents": 15000000,
+    "currency": "COP",
+    "redirectHost": "127.0.0.1"
+  },
+  "http": 403,
+  "created": false
+}

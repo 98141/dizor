@@ -1,0 +1,125 @@
+getPath: MongoMemoryServer: Possible version conflict
+  SystemBinary version: "8.3.2"
+  Requested version:    "7.0.24"
+
+  Using SystemBinary!
+(node:38104) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:38104) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:38104) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:38104) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:38104) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:38104) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+15:07:41 [[32mhttp[39m]: POST /api/auth/login 200 539.453 ms - 168
+15:07:42 [[32mhttp[39m]: POST /api/auth/login 200 615.282 ms - 169
+15:07:42 [[32mhttp[39m]: POST /api/auth/login 200 520.606 ms - 174
+15:07:43 [[32mhttp[39m]: POST /api/auth/login 200 656.436 ms - 173
+15:08:50 [[33mwarn[39m]: Auth failure No has iniciado sesión {"method":"GET","url":"/api/auth/me","statusCode":401,"ip":"127.0.0.1"}
+15:08:51 [[32mhttp[39m]: GET /api/auth/me 401 25.572 ms - 53
+15:08:51 [[32mhttp[39m]: GET /api/marketing/config 200 143.270 ms - 510
+15:08:51 [[33mwarn[39m]: Auth failure Refresh token requerido {"method":"POST","url":"/api/auth/refresh-token","statusCode":401,"ip":"127.0.0.1"}
+15:08:51 [[32mhttp[39m]: POST /api/auth/refresh-token 401 11.663 ms - 53
+15:08:51 [[32mhttp[39m]: GET /api/marketing/config 304 38.735 ms - -
+15:08:51 [[32mhttp[39m]: POST /api/cart/validate 200 72.236 ms - 473
+15:08:51 [[32mhttp[39m]: GET /api/marketing/config 304 4.319 ms - -
+15:08:51 [[32mhttp[39m]: POST /api/visits/forget 204 1.015 ms - -
+15:08:52 [[32mhttp[39m]: GET /api/content/appearance 200 68.514 ms - 126
+15:08:52 [[32mhttp[39m]: GET /api/content/appearance 200 49.667 ms - 126
+15:08:52 [[32mhttp[39m]: GET /api/products/pieza-264625 200 128.081 ms - 1281
+15:08:52 [[32mhttp[39m]: GET /api/legal/notices 200 8.045 ms - 1511
+15:08:52 [[32mhttp[39m]: GET /api/checkout/config 200 19.922 ms - 111662
+15:08:53 [[32mhttp[39m]: POST /api/checkout/calculate 200 64.277 ms - 559
+15:08:54 [[32mhttp[39m]: POST /api/checkout/calculate 200 29.826 ms - 559
+15:08:55 [[33mwarn[39m]: Auth failure No has iniciado sesión {"method":"GET","url":"/api/auth/me","statusCode":401,"ip":"127.0.0.1"}
+15:08:55 [[32mhttp[39m]: GET /api/auth/me 401 3.467 ms - 53
+15:08:55 [[32mhttp[39m]: GET /api/marketing/config 304 15.244 ms - -
+15:08:55 [[33mwarn[39m]: Auth failure Refresh token requerido {"method":"POST","url":"/api/auth/refresh-token","statusCode":401,"ip":"127.0.0.1"}
+15:08:55 [[32mhttp[39m]: POST /api/auth/refresh-token 401 1.212 ms - 53
+15:08:55 [[32mhttp[39m]: GET /api/marketing/config 304 7.082 ms - -
+15:08:55 [[32mhttp[39m]: POST /api/cart/validate 200 80.034 ms - 473
+15:08:56 [[32mhttp[39m]: GET /api/marketing/config 304 42.043 ms - -
+15:08:56 [[32mhttp[39m]: GET /api/products/pieza-264625 200 57.151 ms - 1281
+15:08:56 [[32mhttp[39m]: GET /api/legal/notices 304 1.006 ms - -
+15:08:56 [[32mhttp[39m]: GET /api/checkout/config 304 25.729 ms - -
+15:08:56 [[32mhttp[39m]: POST /api/checkout/calculate 200 70.912 ms - 559
+15:08:58 [[32mhttp[39m]: POST /api/checkout/calculate 200 33.247 ms - 559
+15:08:59 [[33mwarn[39m]: Auth failure No has iniciado sesión {"method":"GET","url":"/api/auth/me","statusCode":401,"ip":"127.0.0.1"}
+15:08:59 [[32mhttp[39m]: GET /api/auth/me 401 1.163 ms - 53
+15:08:59 [[32mhttp[39m]: GET /api/marketing/config 304 10.066 ms - -
+15:08:59 [[32mhttp[39m]: GET /api/marketing/config 304 3.660 ms - -
+15:08:59 [[33mwarn[39m]: Auth failure Refresh token requerido {"method":"POST","url":"/api/auth/refresh-token","statusCode":401,"ip":"127.0.0.1"}
+15:08:59 [[32mhttp[39m]: POST /api/auth/refresh-token 401 4.280 ms - 53
+15:08:59 [[32mhttp[39m]: POST /api/cart/validate 200 53.575 ms - 473
+15:08:59 [[32mhttp[39m]: GET /api/marketing/config 304 4.791 ms - -
+15:09:00 [[32mhttp[39m]: GET /api/products/pieza-264625 200 83.623 ms - 1281
+15:09:00 [[32mhttp[39m]: GET /api/legal/notices 304 6.092 ms - -
+15:09:00 [[32mhttp[39m]: GET /api/checkout/config 304 20.984 ms - -
+15:09:00 [[32mhttp[39m]: POST /api/checkout/calculate 200 49.359 ms - 559
+15:09:01 [[32mhttp[39m]: POST /api/checkout/calculate 200 15.277 ms - 559
+15:09:02 [[33mwarn[39m]: Auth failure No has iniciado sesión {"method":"GET","url":"/api/auth/me","statusCode":401,"ip":"127.0.0.1"}
+15:09:02 [[32mhttp[39m]: GET /api/auth/me 401 2.361 ms - 53
+15:09:02 [[32mhttp[39m]: GET /api/marketing/config 304 16.034 ms - -
+15:09:02 [[32mhttp[39m]: GET /api/marketing/config 304 16.415 ms - -
+15:09:02 [[32mhttp[39m]: POST /api/cart/validate 200 35.207 ms - 473
+15:09:02 [[33mwarn[39m]: Auth failure Refresh token requerido {"method":"POST","url":"/api/auth/refresh-token","statusCode":401,"ip":"127.0.0.1"}
+15:09:02 [[32mhttp[39m]: POST /api/auth/refresh-token 401 1.386 ms - 53
+15:09:02 [[32mhttp[39m]: GET /api/marketing/config 304 10.612 ms - -
+15:09:03 [[32mhttp[39m]: GET /api/legal/notices 304 1.470 ms - -
+15:09:03 [[32mhttp[39m]: GET /api/checkout/config 304 20.857 ms - -
+15:09:03 [[32mhttp[39m]: POST /api/checkout/calculate 200 32.923 ms - 559
+15:09:04 [[32mhttp[39m]: POST /api/checkout/calculate 200 13.382 ms - 559
+15:09:06 [[33mwarn[39m]: Auth failure No has iniciado sesión {"method":"GET","url":"/api/auth/me","statusCode":401,"ip":"127.0.0.1"}
+15:09:06 [[32mhttp[39m]: GET /api/auth/me 401 2.185 ms - 53
+15:09:06 [[32mhttp[39m]: GET /api/marketing/config 304 27.342 ms - -
+15:09:06 [[32mhttp[39m]: POST /api/cart/validate 200 62.396 ms - 473
+15:09:06 [[32mhttp[39m]: GET /api/marketing/config 304 56.938 ms - -
+15:09:06 [[33mwarn[39m]: Auth failure Refresh token requerido {"method":"POST","url":"/api/auth/refresh-token","statusCode":401,"ip":"127.0.0.1"}
+15:09:06 [[32mhttp[39m]: POST /api/auth/refresh-token 401 35.027 ms - 53
+15:09:06 [[32mhttp[39m]: GET /api/marketing/config 304 43.782 ms - -
+15:09:07 [[32mhttp[39m]: GET /api/legal/notices 304 0.796 ms - -
+15:09:07 [[32mhttp[39m]: GET /api/checkout/config 304 15.773 ms - -
+15:09:07 [[32mhttp[39m]: POST /api/checkout/calculate 200 18.837 ms - 559
+15:09:07 [[32mhttp[39m]: GET /api/content/pages 200 22.659 ms - 43
+15:09:07 [[32mhttp[39m]: GET /api/products/filters 200 59.931 ms - 959
+15:09:07 [[32mhttp[39m]: GET /api/visits/count 200 4.870 ms - 30
+15:09:09 [[32mhttp[39m]: POST /api/checkout/calculate 200 10.417 ms - 559
+15:09:10 [[32mhttp[39m]: GET /api/content/home 200 50.752 ms - 3830
+15:09:10 [[33mwarn[39m]: Auth failure No has iniciado sesión {"method":"GET","url":"/api/auth/me","statusCode":401,"ip":"127.0.0.1"}
+15:09:10 [[32mhttp[39m]: GET /api/auth/me 401 1.172 ms - 53
+15:09:10 [[32mhttp[39m]: GET /api/marketing/config 304 4.728 ms - -
+15:09:10 [[32mhttp[39m]: GET /api/marketing/config 304 13.096 ms - -
+15:09:10 [[32mhttp[39m]: POST /api/cart/validate 200 22.521 ms - 473
+15:09:10 [[33mwarn[39m]: Auth failure Refresh token requerido {"method":"POST","url":"/api/auth/refresh-token","statusCode":401,"ip":"127.0.0.1"}
+15:09:10 [[32mhttp[39m]: POST /api/auth/refresh-token 401 2.139 ms - 53
+15:09:10 [[32mhttp[39m]: GET /api/marketing/config 304 3.664 ms - -
+15:09:10 [[32mhttp[39m]: GET /api/products?isNew=true&limit=8 200 21.179 ms - 80
+15:09:10 [[32mhttp[39m]: GET /api/reviews?limit=4 200 14.947 ms - 45
+15:09:10 [[32mhttp[39m]: GET /api/products/pieza-264625 200 133.041 ms - 1281
+15:09:10 [[32mhttp[39m]: GET /api/legal/notices 304 0.607 ms - -
+15:09:10 [[32mhttp[39m]: GET /api/products/daily-random?limit=5 200 301.507 ms - 1349
+15:09:10 [[32mhttp[39m]: GET /api/checkout/config 304 20.516 ms - -
+15:09:10 [[32mhttp[39m]: POST /api/checkout/calculate 200 17.752 ms - 559
+15:09:12 [[32mhttp[39m]: POST /api/checkout/calculate 200 13.925 ms - 559
+(node:38104) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+15:09:13 [[32mhttp[39m]: POST /api/checkout/orders 201 223.023 ms - 371
+15:09:13 [[32mhttp[39m]: POST /api/checkout/orders/lookup 200 12.843 ms - 615
+15:09:13 [[33mwarn[39m]: Auth failure No has iniciado sesión {"method":"GET","url":"/api/auth/me","statusCode":401,"ip":"127.0.0.1"}
+15:09:13 [[32mhttp[39m]: GET /api/auth/me 401 1.353 ms - 53
+15:09:13 [[32mhttp[39m]: GET /api/marketing/config 304 13.918 ms - -
+15:09:13 [[33mwarn[39m]: Auth failure Refresh token requerido {"method":"POST","url":"/api/auth/refresh-token","statusCode":401,"ip":"127.0.0.1"}
+15:09:13 [[32mhttp[39m]: POST /api/auth/refresh-token 401 1.238 ms - 53
+15:09:14 [[32mhttp[39m]: POST /api/checkout/orders/lookup 200 8.072 ms - 615
+15:09:14 [[32mhttp[39m]: GET /api/legal/notices 304 0.681 ms - -
+15:09:14 [[32mhttp[39m]: POST /api/checkout/orders/lookup 404 7.060 ms - 50
+{
+  "passed": true,
+  "checks": [
+    "320x568: centro y extremos interiores durante scroll en ambos sentidos",
+    "375x667: centro y extremos interiores durante scroll en ambos sentidos",
+    "390x844: centro y extremos interiores durante scroll en ambos sentidos",
+    "768x1024: centro y extremos interiores durante scroll en ambos sentidos",
+    "1440x900: centro y extremos interiores durante scroll en ambos sentidos",
+    "Contraentrega: carrito → confirmación visible, documento HTTP 200, reload 200 y un solo pedido; token de invitado conservado"
+  ],
+  "mode": "baseline"
+}

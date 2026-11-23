@@ -159,7 +159,7 @@ export default function AlertasPage() {
         {data && (
           <>
             {/* Tarjetas de resumen */}
-            <PaymentEventAlerts alerts={alerts.paymentEvents} oldPending={alerts.oldPendingPayments} />
+            <PaymentEventAlerts alerts={alerts.paymentEvents} oldPending={alerts.oldPendingPayments} financialFollowUp={alerts.financialFollowUp} />
             <div className="alert-summary-grid">
               <SummaryCard
                 count={alerts.newOrders?.count ?? 0}

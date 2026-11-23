@@ -1,0 +1,132 @@
+[
+  {
+    "file": "antes-arranque.txt",
+    "tests": 1,
+    "pass": 0,
+    "fail": 1,
+    "cancelled": 0
+  },
+  {
+    "file": "arranque-indices-final.txt",
+    "tests": 12,
+    "pass": 12,
+    "fail": 0,
+    "cancelled": 0
+  },
+  {
+    "file": "arranque-indices.txt",
+    "tests": 9,
+    "pass": 9,
+    "fail": 0,
+    "cancelled": 0
+  },
+  {
+    "file": "despues-arranque.txt",
+    "tests": 1,
+    "pass": 1,
+    "fail": 0,
+    "cancelled": 0
+  },
+  {
+    "file": "final-C.txt",
+    "tests": 35,
+    "pass": 35,
+    "fail": 0,
+    "cancelled": 0
+  },
+  {
+    "file": "final-D.txt",
+    "tests": 28,
+    "pass": 26,
+    "fail": 2,
+    "cancelled": 0
+  },
+  {
+    "file": "final-DA.txt",
+    "tests": 28,
+    "pass": 28,
+    "fail": 0,
+    "cancelled": 0
+  },
+  {
+    "file": "final-F.txt",
+    "tests": 28,
+    "pass": 27,
+    "fail": 1,
+    "cancelled": 0
+  },
+  {
+    "file": "final-FA.txt",
+    "tests": 28,
+    "pass": 28,
+    "fail": 0,
+    "cancelled": 0
+  },
+  {
+    "file": "final-H.txt",
+    "tests": 275,
+    "pass": 273,
+    "fail": 2,
+    "cancelled": 0
+  },
+  {
+    "file": "final-L.txt",
+    "tests": 2,
+    "pass": 2,
+    "fail": 0,
+    "cancelled": 0
+  },
+  {
+    "file": "final-M.txt",
+    "matrix": "{ PASS: 44, FAIL: 5, NOT_APPLICABLE: 1 } hosts externos bloqueados: []"
+  },
+  {
+    "file": "final-N.txt",
+    "tests": 18,
+    "pass": 18,
+    "fail": 0,
+    "cancelled": 0
+  },
+  {
+    "file": "final-R.txt",
+    "tests": 27,
+    "pass": 27,
+    "fail": 0,
+    "cancelled": 0
+  },
+  {
+    "file": "final-RC.txt",
+    "tests": 11,
+    "pass": 11,
+    "fail": 0,
+    "cancelled": 0
+  },
+  {
+    "file": "final-V.txt",
+    "tests": 2,
+    "pass": 2,
+    "fail": 0,
+    "cancelled": 0
+  },
+  {
+    "file": "final-Z.txt",
+    "tests": 12,
+    "pass": 12,
+    "fail": 0,
+    "cancelled": 0
+  },
+  {
+    "file": "pruebas-nuevas.txt",
+    "tests": 18,
+    "pass": 18,
+    "fail": 0,
+    "cancelled": 0
+  },
+  {
+    "file": "regresiones-adicionales.txt",
+    "tests": 30,
+    "pass": 30,
+    "fail": 0,
+    "cancelled": 0
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "at": "2026-11-23T21:35:34.778Z",
+  "environment": "sandbox",
+  "readOnly": true,
+  "checks": [
+    {
+      "resource": "existing_test_link",
+      "http": 200,
+      "errorType": null,
+      "linkFound": true,
+      "publicKeyEnvironment": "sandbox",
+      "active": true,
+      "expiresAt": null
+    },
+    {
+      "resource": "private_query_nonexistent_id",
+      "http": 404,
+      "errorType": "NOT_FOUND_ERROR"
+    }
+  ]
+}

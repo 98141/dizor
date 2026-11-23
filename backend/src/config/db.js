@@ -1,16 +1,17 @@
 const mongoose = require("mongoose");
 
 const connectDB = async () => {
-  try {
-    mongoose.set("strictQuery", true);
-
-    const conn = await mongoose.connect(process.env.MONGO_URI);
-
-    console.log(`MongoDB conectado: ${conn.connection.host}`);
-  } catch (error) {
-    console.error("Error conectando a MongoDB:", error.message);
-    process.exit(1);
+  mongoose.set("strictQuery", true);
+  const production = process.env.NODE_ENV === "production";
+  if (production) {
+    mongoose.set("autoIndex", false); mongoose.set("autoCreate", false);
+    require("../services/databaseReadiness").loadModels();
   }
+  const options = production ? { autoIndex: false, autoCreate: false } : {};
+  const conn = await mongoose.connect(process.env.MONGO_URI, options);
+  if (production) await require("../services/databaseReadiness").assertReady(conn.connection, conn.models);
+
+  return conn;
 };
 
 module.exports = connectDB;

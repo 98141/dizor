@@ -1,0 +1,21 @@
+{
+  "source": "DANE — DIVIPOLA, Códigos municipios",
+  "datasetId": "gdxc-w37w",
+  "sourceUrl": "https://www.datos.gov.co/Mapas-Nacionales/DIVIPOLA-C-digos-municipios/gdxc-w37w",
+  "downloadUrl": "https://www.datos.gov.co/resource/gdxc-w37w.json?$limit=5000&$order=cod_mpio",
+  "metadataUrl": "https://www.datos.gov.co/api/views/gdxc-w37w.json",
+  "dataCutoff": "2024-12-30",
+  "dataUpdatedAt": "2025-01-24T20:44:32+00:00",
+  "metadataUpdatedAt": "2026-09-24T23:53:50+00:00",
+  "retrievedAt": "2026-11-23",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+  "sourceSha256": "1028ab04c10a08fa860dd89e621de1eb9246710a56102c915f0988ae9e10d63d",
+  "destinations": 1122,
+  "departmentsIncludingBogota": 33,
+  "types": {
+    "Municipio": 1103,
+    "Isla": 1,
+    "Área no municipalizada": 18
+  }
+}

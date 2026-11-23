@@ -14,6 +14,18 @@ const schema = new mongoose.Schema({
   providerObservation: { status: String, paymentLinkId: String, amountInCents: Number, currency: String, checkedAt: Date },
   checksum: String, providerTimestamp: Number,
   processedAt: { type: Date, default: null },
+  // Administrative disposition is not financial processing or a refund.
+  administrativeArchive: {
+    active: { type: Boolean, default: false },
+    actor: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    archivedAt: Date, reason: String,
+    evidenceReceipt: { type: mongoose.Schema.Types.ObjectId, ref: "PaymentEvent" },
+    financialFollowUp: { type: Boolean, default: false },
+    concludedAt: Date, concludedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    conclusionReason: String, conclusionCheckedAt: Date,
+    reopenedAt: Date, reopenedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    reopenReason: String,
+  },
   notificationQueuedAt: { type: Date, default: null },
   lastError: { type: String, default: "" },
 }, { timestamps: true });
