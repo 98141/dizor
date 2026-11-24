@@ -1,7 +1,0 @@
-{
-  "original": "C:\\Users\\Asus ExpertBook\\AppData\\Local\\Temp\\claude\\05d7f1a4ff6d7b65\\6a043b24-c226-493a-a277-c0600faf5a03\\scratchpad\\arbol-final\\docs\\auditoria-wompi-pedidos\\auditoria-cierre-residuales\\evidencias\\adversarial-cierre.test.cjs",
-  "sha256": "3692eccfb7135f36439c92c600c8d1e2d5b3027b0531ff4dcf9a0c7bf43c6cf2",
-  "assertionsChanged": 0,
-  "flowChanges": 1,
-  "action": "await archive(c.r, { reason: REASON, evidenceReceiptId: String(c.proof._id) });\n  const conclusion = await f.api('POST', '/api/admin/orders/payment-events/' + c.r._id + '/conclude-follow-up', {cookie: f.cookies.admin, body: {reason: 'Contradicción investigada, pago aplicado y pedido sin incidencias'}});\n  assert.equal(conclusion.status, 200, 'Conclusión explícita auditada'); const after = pay(await alerts());"
-}

@@ -1,7 +1,0 @@
-{
-  "exitCode": 0,
-  "isolatedCopy": true,
-  "envFilesCopied": false,
-  "inheritedCredentials": false,
-  "compiler": "Next.js --webpack"
-}

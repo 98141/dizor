@@ -1,8 +1,0 @@
-{
-  "backend/src/config/db.js": "862dd4bcba1c84574f42b85aa5dd6ba00f6e82a699e127a2e1118893b46fdeb2",
-  "backend/src/server.js": "182e792bf2416bd346cba69b2f54ace1924ba3d16b6fabebed3b547081bc5262",
-  "backend/src/services/wompiService.js": "e23bb80d7077a61e8f5f867da046c849a87938b8514ae6f8d7a1f9794fd26cd2",
-  "backend/src/services/paymentMethods.js": "d0a425ead03deb2a94263af80930ff471441df056c6f6beaca5a7fe87a1dbbe0",
-  "backend/src/services/databaseReadiness.js": "820139ecfc011208c3477a5058913c592c9163fee41281b62fa6789c37edd394",
-  "backend/src/scripts/inspectDatabaseReadiness.js": "ea22cd98e63fe4affa695b016267977dc09a8620d51404894d486e087cfb0aaa"
-}

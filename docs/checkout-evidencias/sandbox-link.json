@@ -1,8 +1,0 @@
-{
-  "sandbox": true,
-  "created": true,
-  "orderNumber": "DIZ-QA-6B8C2AD0556BA46DEA1B",
-  "paymentLinkUrl": "https://checkout.wompi.co/l/test_vYy0Qr",
-  "expiresAt": null,
-  "limit": "Solo creación de enlace sandbox; no se envió ningún pago ni se creó pedido en una base de datos."
-}

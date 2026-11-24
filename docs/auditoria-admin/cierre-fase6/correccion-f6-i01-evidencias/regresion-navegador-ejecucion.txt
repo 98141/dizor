@@ -1,8 +1,0 @@
-comunicaciones: PASS (8)
-pedidos: PASS (20)
-catalogo: PASS (20)
-navegacion: PASS (35)
-independiente-f5: PASS (10)
-marketing: PASS (25)
-revalidacion-f5: PASS (18)
-fase6: PASS (59)
