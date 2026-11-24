@@ -1,0 +1,13 @@
+{
+  "configuredAt": "2026-11-24T20:34:32.691Z",
+  "environment": "test",
+  "providerRegistration": "Sandbox UI saved and revisited",
+  "previousSandboxEventUrl": "https://webhook.site/dcf9929a-2130-41ee-93db-9279364c0bb7",
+  "webhookUrl": "https://sat-promo-aerial-ace.trycloudflare.com/api/webhooks/wompi",
+  "localEnvUpdated": true,
+  "productionSettingsChanged": false,
+  "genuineProviderDeliveryTested": false,
+  "tunnelTemporary": true,
+  "cloudflaredVersion": "2026.11.2",
+  "cloudflaredSha256": "555b46c85582461d189cac30d14ad05480d612613801be9f110b8ce08c5b2113"
+}

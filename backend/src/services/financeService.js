@@ -1,13 +1,14 @@
 const Order = require("../models/order");
 const Product = require("../models/product");
 const { reconciledSalesFilter } = require("./financeCriteria");
+const { emptyRollup, addLine, assess, productRow, round: roundMoney } = require("./financePresentation");
 const {
   parseFinancePeriod,
   buildDateFilter,
   financeMonthBounds,
 } = require("../utils/financePeriod");
 
-const round = (n) => Math.round(Number(n) || 0);
+const round = roundMoney;
 
 const resolveProductId = (productRef) => {
   if (!productRef) return null;
@@ -49,80 +50,47 @@ const getItemUnitCost = (item, costByProductId) => {
 };
 
 const computeOrderEconomics = (orders, costByProductId) => {
-  let productRevenue = 0;
-  let unitsSold = 0;
-  let cogs = 0;
-  let itemsMissingCost = 0;
+  const totals = emptyRollup();
   const productMap = new Map();
 
   for (const order of orders) {
     for (const item of order.items || []) {
-      const qty = item.quantity || 0;
-      const lineRevenue =
-        item.lineTotal != null
-          ? item.lineTotal
-          : (item.unitPrice || 0) * qty;
-      productRevenue += lineRevenue;
-      unitsSold += qty;
-
       const productId = resolveProductId(item.product);
-      const unitCost = getItemUnitCost(item, costByProductId);
-
-      if (unitCost == null) {
-        itemsMissingCost += qty;
-      } else {
-        cogs += unitCost * qty;
+      const fallback = productId ? costByProductId.get(productId) : null;
+      addLine(totals, item, fallback == null ? null : fallback);
+      if (!productId) continue;
+      if (!productMap.has(productId)) {
+        productMap.set(productId, {
+          ...emptyRollup(),
+          productId,
+          name: item.productName || "Producto",
+          slug: item.productSlug || "",
+        });
       }
-
-      if (productId) {
-        if (!productMap.has(productId)) {
-          productMap.set(productId, {
-            productId,
-            name: item.productName || "Producto",
-            slug: item.productSlug || "",
-            units: 0,
-            revenue: 0,
-            cost: 0,
-          });
-        }
-        const row = productMap.get(productId);
-        row.units += qty;
-        row.revenue += lineRevenue;
-        row.cost += (unitCost || 0) * qty;
-      }
+      addLine(productMap.get(productId), item, fallback == null ? null : fallback);
     }
   }
 
-  const grossProfit = productRevenue - cogs;
-  const grossMarginPct =
-    productRevenue > 0 ? round((grossProfit / productRevenue) * 1000) / 10 : 0;
-
-  const mapRow = (p) => ({
-    ...p,
-    profit: round(p.revenue - p.cost),
-    marginPct:
-      p.revenue > 0 ? round(((p.revenue - p.cost) / p.revenue) * 1000) / 10 : 0,
-  });
-
-  const topByRevenue = [...productMap.values()]
-    .map(mapRow)
-    .sort((a, b) => b.revenue - a.revenue)
-    .slice(0, 10);
-
-  const topByProfit = [...productMap.values()]
-    .map(mapRow)
-    .sort((a, b) => b.profit - a.profit)
-    .slice(0, 10);
-
+  const view = assess(totals);
+  const rows = [...productMap.values()].map(productRow);
   return {
-    productRevenue: round(productRevenue),
-    unitsSold,
-    cogs: round(cogs),
-    grossProfit: round(grossProfit),
-    grossMarginPct,
-    itemsMissingCost,
-    topByRevenue,
-    topByProfit,
+    productRevenue: view.revenue,
+    unitsSold: view.units,
+    cogs: view.cogs,
+    grossProfit: view.grossProfit,
+    grossMarginPct: view.grossMarginPct,
+    knownProfit: view.knownProfit,
+    knownMarginPct: view.knownMarginPct,
+    knownRevenue: view.knownRevenue,
+    missingRevenue: view.missingRevenue,
+    marginReliable: view.marginReliable,
+    costCoveragePct: view.costCoveragePct,
+    profitabilityStatus: view.status,
+    itemsMissingCost: view.missingUnits,
+    topByRevenue: rows.sort((a, b) => b.revenue - a.revenue).slice(0, 8),
+    topByProfit: rows.filter((row) => row.costComplete && row.profit != null)
+      .sort((a, b) => b.profit - a.profit).slice(0, 8),
+    missingCostProducts: rows.filter((row) => !row.costComplete).slice(0, 8),
   };
 };
 
@@ -130,8 +98,11 @@ const computeInventoryValuation = (products) => {
   let unitsInStock = 0;
   let investmentAtCost = 0;
   let potentialRetail = 0;
+  let potentialRetailKnown = 0;
   let productsMissingCost = 0;
   let variantsOutOfStock = 0;
+  let unpublishedUnits = 0;
+  let unpublishedProducts = 0;
   const catalogRows = [];
 
   for (const product of products) {
@@ -143,6 +114,7 @@ const computeInventoryValuation = (products) => {
     let productRetailValue = 0;
 
     if (unitCost == null) productsMissingCost += 1;
+    if (product.isActive === false) unpublishedProducts += 1;
 
     for (const variant of product.variants || []) {
       if (variant.isActive === false) continue;
@@ -153,9 +125,13 @@ const computeInventoryValuation = (products) => {
       const variantPrice =
         variant.price != null ? variant.price : retailUnit;
 
-      if (unitCost != null) productCostValue += unitCost * stock;
+      if (unitCost != null) {
+        productCostValue += unitCost * stock;
+        potentialRetailKnown += variantPrice * stock;
+      }
       productRetailValue += variantPrice * stock;
     }
+    if (product.isActive === false) unpublishedUnits += productUnits;
 
     unitsInStock += productUnits;
     investmentAtCost += productCostValue;
@@ -180,7 +156,8 @@ const computeInventoryValuation = (products) => {
           : null,
       investmentAtCost: round(productCostValue),
       potentialRetail: round(productRetailValue),
-      potentialProfit: round(productRetailValue - productCostValue),
+      potentialProfit: unitCost == null ? null : round(productRetailValue - productCostValue),
+      costKnown: unitCost != null,
       salesCount: product.salesCount || 0,
     });
   }
@@ -190,13 +167,18 @@ const computeInventoryValuation = (products) => {
     investmentAtCost: round(investmentAtCost),
     potentialRetail: round(potentialRetail),
     potentialProfit: round(potentialRetail - investmentAtCost),
+    potentialProfitKnown: round(potentialRetailKnown - investmentAtCost),
+    potentialRetailKnown: round(potentialRetailKnown),
     potentialMarginPct:
       potentialRetail > 0
         ? round(((potentialRetail - investmentAtCost) / potentialRetail) * 1000) /
           10
         : 0,
+    potentialMarginReliable: productsMissingCost === 0,
     productsMissingCost,
     variantsOutOfStock,
+    unpublishedUnits,
+    unpublishedProducts,
     lowMarginProducts: catalogRows
       .filter(
         (p) =>
@@ -214,6 +196,7 @@ const computeInventoryValuation = (products) => {
     catalogSummary: catalogRows
       .filter((p) => p.isActive)
       .sort((a, b) => b.investmentAtCost - a.investmentAtCost),
+    stockLeaders: [...catalogRows].sort((a, b) => b.unitsInStock - a.unitsInStock || String(a.id).localeCompare(String(b.id))).slice(0, 5),
   };
 };
 
@@ -237,15 +220,19 @@ const buildMonthlyTrend = async (products, months = 6) => {
     const totalRevenue = orders.reduce((s, o) => s + (o.total || 0), 0);
 
     trend.push({
+      key: start.toISOString().slice(0, 7),
       month: start.toLocaleDateString("es-CO", {
         timeZone: "America/Bogota",
         month: "short",
-        year: "numeric",
+        year: "2-digit",
       }),
       orders: orders.length,
       totalRevenue: round(totalRevenue),
       productRevenue: econ.productRevenue,
-      grossProfit: econ.grossProfit,
+      grossProfit: econ.marginReliable ? econ.grossProfit : econ.knownProfit,
+      marginReliable: econ.marginReliable,
+      itemsMissingCost: econ.itemsMissingCost,
+      profitabilityStatus: econ.profitabilityStatus,
     });
   }
 
@@ -370,8 +357,16 @@ exports.buildFinanceReport = async (query = {}) => {
       taxCollected: round(taxCollected),
       discountsGiven: round(discountsGiven),
       itemsMissingCost: sales.itemsMissingCost,
+      knownProfit: sales.knownProfit,
+      knownMarginPct: sales.knownMarginPct,
+      knownRevenue: sales.knownRevenue,
+      missingRevenue: sales.missingRevenue,
+      marginReliable: sales.marginReliable,
+      costCoveragePct: sales.costCoveragePct,
+      profitabilityStatus: sales.profitabilityStatus,
       topByRevenue: sales.topByRevenue,
       topByProfit: sales.topByProfit,
+      missingCostProducts: sales.missingCostProducts,
     },
     pending: {
       ordersCount: pendingOrders.length,
@@ -389,6 +384,7 @@ exports.buildFinanceReport = async (query = {}) => {
       "Las ventas conciliadas excluyen pedidos cancelados, devueltos o con incidencias; el dinero recibido se conserva como evidencia para conciliación.",
       "La ganancia bruta usa el costo registrado en cada pedido cuando existe; si no, el costo actual del producto.",
       "Asigna costo interno en todos los productos para métricas precisas.",
+      ...(sales.marginReliable ? [] : ["Rentabilidad pendiente de completar costos. La ganancia mostrada como verificable usa solo líneas con costo conocido; el margen histórico no es una rentabilidad confirmada."]),
       "Sin ventas en el período los totales aparecen en cero.",
     ],
   };

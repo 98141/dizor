@@ -64,8 +64,8 @@ export const getFinanceHistory = async (params = {}) => {
   return res.data;
 };
 
-export const getFinanceProducts = async () => {
-  const res = await api.get("/admin/finance/products");
+export const getFinanceProducts = async (params = {}) => {
+  const res = await api.get("/admin/finance/products", { params });
   return res.data;
 };
 

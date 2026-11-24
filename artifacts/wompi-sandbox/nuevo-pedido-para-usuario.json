@@ -1,0 +1,16 @@
+{
+  "createdFor": "user_administrative_verification",
+  "orderNumber": "DIZ-20261124-02AFC9E0D85E37ADCB90",
+  "buyerName": "Prueba Wompi Usuario",
+  "product": "Abanico de Iraca Liso",
+  "quantity": 1,
+  "totalCOP": 28000,
+  "providerEnvironment": "Sandbox",
+  "providerVisibleStatus": "APPROVED",
+  "providerTransactionId": "11998693-1795550516-91362",
+  "paymentLinkId": "test_xu6gG8",
+  "normalBuyerReturnCompleted": true,
+  "adminReconcileButtonClickedByAgent": false,
+  "preparationOrDispatchStarted": false,
+  "evidence": "nuevo-pedido-pago-aprobado.jpg"
+}

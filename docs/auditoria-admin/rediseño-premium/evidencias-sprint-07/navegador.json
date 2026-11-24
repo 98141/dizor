@@ -1,0 +1,19 @@
+{
+  "checks": [
+    "F01 panel: cobertura incompleta y stock elevado sin desborde",
+    "F02 costos paginados y edición sin tocar el stock",
+    "F03 historial compacto y margen no verificable"
+  ],
+  "externalRequests": [],
+  "pageErrors": [],
+  "screenshots": [
+    "panel-1440.png",
+    "panel-390.png",
+    "costos-1440.png",
+    "costo-edicion-1440.png",
+    "costos-390.png",
+    "historial-1440.png",
+    "historial-390.png"
+  ],
+  "passed": true
+}

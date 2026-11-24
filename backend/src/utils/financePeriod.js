@@ -36,7 +36,9 @@ exports.parseFinancePeriod = (period, from, to, now = new Date()) => {
   const end = civil(now), start = new Date(end);
   let label;
   switch (period) {
+    case "today": label = "Hoy"; break;
     case "week": start.setUTCDate(start.getUTCDate() - 6); label = "Últimos 7 días"; break;
+    case "days30": start.setUTCDate(start.getUTCDate() - 29); label = "Últimos 30 días"; break;
     case "quarter": start.setUTCMonth(Math.floor(start.getUTCMonth() / 3) * 3, 1); label = "Trimestre actual"; break;
     case "year": start.setUTCMonth(0, 1); label = "Año actual"; break;
     default: start.setUTCDate(1); label = "Mes actual";

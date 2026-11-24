@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import AdminFeedback from "@/components/admin/AdminFeedback";
 import Link from "next/link";
 import RoleRoute from "@/guards/RoleRoute";
@@ -22,34 +23,45 @@ function MarginBadge({ pct }) {
 }
 
 /* ─── Panel Costos y Precios ─────────────────────────── */
-function CostPricesPanel() {
+function CostPricesPanel({ initialFilter = "all" }) {
   const [rows, setRows] = useState([]);
   const [summary, setSummary] = useState(null);
+  const [meta, setMeta] = useState({ page: 1, pages: 1, total: 0, limit: 20 });
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState(null);
   const [editValue, setEditValue] = useState("");
   const [saving, setSaving] = useState(false);
-  const [filter, setFilter] = useState("all"); // all | missing | active
+  const [filter, setFilter] = useState(initialFilter);
+  const [query, setQuery] = useState("");
+  const [submittedQuery, setSubmittedQuery] = useState("");
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(20);
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
   const [loadError, setLoadError] = useState("");
+  const [reload, setReload] = useState(0);
+  const [seen, setSeen] = useState("");
   const lock = useRef(false);
   const costTrigger = useRef(null);
+  const queryKey = `${filter}|${submittedQuery}|${page}|${limit}|${reload}`;
+  if (seen !== queryKey) {
+    setSeen(queryKey);
+    setLoading(true);
+  }
 
-  const load = useCallback(async () => {
-    try {
-      const data = await getFinanceProducts();
+  useEffect(() => {
+    let cancel = false;
+    getFinanceProducts({ page, limit, filter, q: submittedQuery, sort: "name" }).then((data) => {
+      if (cancel) return;
       setRows(data.products || []);
       setSummary(data.summary || null);
+      setMeta({ page: data.page || 1, pages: data.pages || 1, total: data.total || 0, limit: data.limit || limit });
       setLoadError("");
-    } catch {
-      setLoadError("No se pudieron consultar los costos. No se presentan importes vacíos como datos confirmados.");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => { load(); }, [load]);
+    }).catch(() => {
+      if (!cancel) setLoadError("No se pudieron consultar los costos. No se presentan importes vacíos como datos confirmados.");
+    }).finally(() => { if (!cancel) setLoading(false); });
+    return () => { cancel = true; };
+  }, [queryKey, page, limit, filter, submittedQuery]);
 
   const handleSaveCost = async (id) => {
     if (lock.current) return;
@@ -65,7 +77,7 @@ function CostPricesPanel() {
       setIsError(false); setMessage("Costo guardado");
       setEditingId(null);
       setEditValue("");
-      await load();
+      setReload((n) => n + 1);
     } catch (err) {
       setIsError(true); setMessage(err.response?.data?.message || "No se pudo guardar");
     } finally {
@@ -81,14 +93,10 @@ function CostPricesPanel() {
   };
   const cancelCost = () => { if (lock.current) return; setEditingId(null); setEditValue(""); costTrigger.current?.focus(); };
 
-  const filteredRows = rows.filter((r) => {
-    if (filter === "missing") return r.internalCost == null;
-    if (filter === "active") return r.isActive;
-    return true;
-  });
+  const filteredRows = rows;
 
   if (loading) return <p className="auth-loading">Cargando productos…</p>;
-  if (loadError) return <><AdminFeedback message={loadError} /><button type="button" className="admin-btn" onClick={load}>Reintentar costos</button></>;
+  if (loadError) return <><AdminFeedback message={loadError} /><button type="button" className="admin-btn" onClick={() => setReload((n) => n + 1)}>Reintentar costos</button></>;
 
   return (
     <div>
@@ -101,8 +109,8 @@ function CostPricesPanel() {
             <p className="admin-stat-card__label">Valor inventario (costo)</p>
           </div>
           <div className="admin-stat-card">
-            <p className="admin-stat-card__value">{summary.avgMarginPct}%</p>
-            <p className="admin-stat-card__label">Margen promedio</p>
+            <p className="admin-stat-card__value">{summary.avgMarginPct == null ? "—" : `${summary.avgMarginPct}%`}</p>
+            <p className="admin-stat-card__label">Margen promedio solo con costo</p>
           </div>
           <div className="admin-stat-card">
             <p className="admin-stat-card__value">{summary.total}</p>
@@ -123,24 +131,24 @@ function CostPricesPanel() {
           { key: "all", label: "Todos" },
           { key: "active", label: "Activos" },
           { key: "missing", label: "Sin costo" },
+          { key: "withCost", label: "Con costo" },
+          { key: "lowMargin", label: "Margen bajo" },
         ].map(({ key, label }) => (
           <button
             key={key}
             type="button"
             className={`admin-btn admin-btn--sm${filter === key ? " admin-btn--primary" : ""}`}
-            onClick={() => setFilter(key)}
+            onClick={() => { setFilter(key); setPage(1); }}
           >
             {label}
           </button>
         ))}
-        <button
-          type="button"
-          className="admin-btn admin-btn--sm"
-          style={{ marginLeft: "auto" }}
-          onClick={load}
-        >
-          Actualizar
-        </button>
+        <form className="fn-search" onSubmit={(e) => { e.preventDefault(); setPage(1); setSubmittedQuery(query.trim()); }}>
+          <label htmlFor="finance-cost-search" className="sr-only">Buscar producto o SKU</label>
+          <input id="finance-cost-search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Producto o SKU" />
+          <button type="submit" className="admin-btn admin-btn--sm">Buscar</button>
+        </form>
+        <button type="button" className="admin-btn admin-btn--sm" onClick={() => setReload((n) => n + 1)}>Actualizar</button>
       </div>
 
       {/* ── Tabla ── */}
@@ -270,6 +278,17 @@ function CostPricesPanel() {
           </tbody>
         </table>
       </div>
+      <div className="fn-pager">
+        <p>{meta.total} resultados · página {meta.page} de {meta.pages}</p>
+        <label htmlFor="finance-cost-size">Por página</label>
+        <select id="finance-cost-size" value={limit} onChange={(e) => { setLimit(Number(e.target.value)); setPage(1); }}>
+          <option value={10}>10</option>
+          <option value={20}>20</option>
+          <option value={50}>50</option>
+        </select>
+        <button type="button" className="admin-btn admin-btn--sm" disabled={meta.page <= 1} onClick={() => setPage((n) => Math.max(1, n - 1))}>Anterior</button>
+        <button type="button" className="admin-btn admin-btn--sm" disabled={meta.page >= meta.pages} onClick={() => setPage((n) => n + 1)}>Siguiente</button>
+      </div>
 
       {/* ── Variantes expandidas ── */}
       <details style={{ marginTop: "var(--space-lg)" }}>
@@ -349,13 +368,15 @@ function HistoryChart({ rows }) {
                 style={{ height: `${Math.max(4, (row.totalRevenue / max) * 120)}px` }}
                 title={`Ingresos: ${formatCOP(row.totalRevenue)}`}
               />
-              <div
-                className="finance-history-chart__bar finance-history-chart__bar--profit"
-                style={{ height: `${Math.max(row.grossProfit > 0 ? 4 : 0, (Math.max(0, row.grossProfit) / max) * 120)}px` }}
-                title={`Ganancia: ${formatCOP(row.grossProfit)}`}
-              />
+              {row.marginReliable && (
+                <div
+                  className="finance-history-chart__bar finance-history-chart__bar--profit"
+                  style={{ height: `${Math.max(row.grossProfit > 0 ? 4 : 0, (Math.max(0, row.grossProfit) / max) * 120)}px` }}
+                  title={`Ganancia verificable: ${formatCOP(row.grossProfit)}`}
+                />
+              )}
             </div>
-            <span className="finance-history-chart__label">{row.label}</span>
+            <span className="finance-history-chart__label">{row.shortLabel || row.label}</span>
           </div>
         ))}
       </div>
@@ -366,7 +387,7 @@ function HistoryChart({ rows }) {
         </span>
         <span>
           <i className="finance-history-legend__dot finance-history-legend__dot--profit" />
-          Ganancia bruta
+          Ganancia solo si el periodo tiene costos completos
         </span>
       </div>
     </>
@@ -377,34 +398,32 @@ function FinanceHistoryPanel() {
   const [groupBy, setGroupBy] = useState("month");
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
+  const [page, setPage] = useState(1);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [retry, setRetry] = useState(0);
+  const [seen, setSeen] = useState("");
+  const queryKey = `${groupBy}|${from}|${to}|${page}|${retry}`;
+  if (seen !== queryKey) { setSeen(queryKey); setLoading(true); }
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    setError("");
-    try {
-      const params = { groupBy };
-      if (from) params.from = from;
-      if (to) params.to = to;
-      const res = await getFinanceHistory(params);
-      setData(res);
-    } catch {
-      setData(null);
-      setError("No se pudo cargar el historial.");
-    } finally {
-      setLoading(false);
-    }
-  }, [groupBy, from, to]);
-
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    let cancel = false;
+    const params = { groupBy, page, limit: 12 };
+    if (from && to) { params.from = from; params.to = to; }
+    getFinanceHistory(params).then((res) => {
+      if (!cancel) { setData(res); setError(""); }
+    }).catch(() => {
+      if (!cancel) { setData(null); setError("No se pudo cargar el historial."); }
+    }).finally(() => { if (!cancel) setLoading(false); });
+    return () => { cancel = true; };
+  }, [queryKey, groupBy, from, to, page]);
 
   if (loading) return <p className="auth-loading">Cargando historial…</p>;
   if (error) return (
     <div>
       <p style={{ color: "#b33" }}>{error}</p>
-      <button type="button" className="admin-btn" onClick={load}>Reintentar</button>
+      <button type="button" className="admin-btn" onClick={() => setRetry((n) => n + 1)}>Reintentar</button>
     </div>
   );
 
@@ -421,7 +440,7 @@ function FinanceHistoryPanel() {
               type="button"
               className={`finance-period-tabs__btn${groupBy === opt.value ? " finance-period-tabs__btn--active" : ""}`}
               aria-pressed={groupBy === opt.value}
-              onClick={() => setGroupBy(opt.value)}
+              onClick={() => { setGroupBy(opt.value); setPage(1); }}
             >
               {opt.label}
             </button>
@@ -460,7 +479,7 @@ function FinanceHistoryPanel() {
           type="button"
           className="admin-btn admin-btn--sm"
           style={{ marginLeft: "auto" }}
-          onClick={load}
+          onClick={() => setRetry((n) => n + 1)}
         >
           Actualizar
         </button>
@@ -474,12 +493,12 @@ function FinanceHistoryPanel() {
             <p className="admin-stat-card__label">Ingresos totales</p>
           </div>
           <div className="admin-stat-card admin-stat-card--highlight">
-            <p className="admin-stat-card__value">{formatCOP(summary.totalProfit)}</p>
-            <p className="admin-stat-card__label">Ganancia bruta estimada</p>
+            <p className="admin-stat-card__value">{summary.marginReliable ? formatCOP(summary.totalProfit) : "Pendiente"}</p>
+            <p className="admin-stat-card__label">{summary.marginReliable ? "Ganancia bruta estimada" : "Rentabilidad pendiente de completar costos"}</p>
           </div>
           <div className="admin-stat-card">
-            <p className="admin-stat-card__value">{summary.grossMarginPct}%</p>
-            <p className="admin-stat-card__label">Margen bruto</p>
+            <p className="admin-stat-card__value">{summary.marginReliable ? `${summary.grossMarginPct}%` : "No verificable"}</p>
+            <p className="admin-stat-card__label">Margen según cobertura</p>
           </div>
           <div className="admin-stat-card">
             <p className="admin-stat-card__value">{summary.totalOrders}</p>
@@ -520,12 +539,14 @@ function FinanceHistoryPanel() {
                     <td data-label="Pedidos">{row.ordersCount}</td>
                     <td data-label="Ingresos" style={{ fontWeight: 600 }}>{formatCOP(row.totalRevenue)}</td>
                     <td data-label="COGS">{formatCOP(row.cogs)}</td>
-                    <td data-label="Ganancia bruta" style={{ color: row.grossProfit >= 0 ? "#065f46" : "#b91c1c", fontWeight: 600 }}>
-                      {formatCOP(row.grossProfit)}
+                    <td data-label="Ganancia bruta">
+                      {row.marginReliable ? formatCOP(row.grossProfit) : <span>Pendiente <span className="admin-muted">({formatCOP(row.knownProfit)} con costo)</span></span>}
                     </td>
                     <td data-label="Margen">
-                      {row.totalRevenue > 0 ? (
+                      {row.totalRevenue > 0 && row.marginReliable ? (
                         <MarginBadge pct={row.grossMarginPct} />
+                      ) : row.totalRevenue > 0 ? (
+                        <span className="finance-badge finance-badge--missing">No verificable</span>
                       ) : (
                         <span className="admin-muted">—</span>
                       )}
@@ -535,6 +556,25 @@ function FinanceHistoryPanel() {
                 ))}
               </tbody>
             </table>
+          </div>
+
+          <div className="fn-periods">
+            {rows.map((row) => (
+              <details key={row.periodKey}>
+                <summary>
+                  <strong>{row.shortLabel || row.label}</strong>
+                  <span>{formatCOP(row.totalRevenue)}</span>
+                  <span>{row.ordersCount} pedidos</span>
+                  <span>{row.marginReliable ? formatCOP(row.grossProfit) : "Margen no verificable"}</span>
+                </summary>
+                <p>COGS conocidos {formatCOP(row.cogs)} · Unidades {row.unitsSold} · {row.label}</p>
+              </details>
+            ))}
+          </div>
+          <div className="fn-pager">
+            <p>Página {data.page || 1} de {data.pages || 1}</p>
+            <button type="button" className="admin-btn admin-btn--sm" disabled={(data.page || 1) <= 1} onClick={() => setPage((n) => Math.max(1, n - 1))}>Anterior</button>
+            <button type="button" className="admin-btn admin-btn--sm" disabled={(data.page || 1) >= (data.pages || 1)} onClick={() => setPage((n) => n + 1)}>Siguiente</button>
           </div>
 
           <p style={{ fontSize: "0.78rem", color: "var(--color-text-muted)", marginTop: "var(--space-md)" }}>
@@ -548,30 +588,29 @@ function FinanceHistoryPanel() {
 }
 
 /* ─── Página principal ───────────────────────────────── */
-export default function FinanzasPage() {
-  const [tab, setTab] = useState("resumen");
+function FinanzasContent() {
+  const params = useSearchParams();
+  const router = useRouter();
+  const requested = params.get("tab");
+  const tab = ["resumen", "costos", "historial"].includes(requested) ? requested : "resumen";
+  const costFilter = ["all", "active", "missing", "withCost", "lowMargin"].includes(params.get("costFilter")) ? params.get("costFilter") : "all";
+  const setTab = (id) => router.replace(id === "resumen" ? "/admin/finanzas" : `/admin/finanzas?tab=${id}`);
 
   return (
-    <RoleRoute allowedRoles={["superadmin"]}>
-      <AdminShell variant="admin">
-        <div className="admin-page">
+        <div className="admin-page fn-page">
           <div className="admin-page__header-row">
             <div>
-              <h1 className="admin-page__title">Control financiero</h1>
-              <p className="admin-page__subtitle">
-                Ganancias, inventario, costos y precios. Acceso exclusivo superadmin.
-              </p>
+              <h1 className="admin-page__title">Finanzas</h1>
+              <p className="admin-page__subtitle">Analiza ventas, costos y rentabilidad de tu tienda.</p>
             </div>
-            <Link href="/admin" className="admin-btn">
-              ← Dashboard
-            </Link>
+            <Link href="/admin" className="admin-btn admin-btn--tertiary">Inicio</Link>
           </div>
 
           {/* ── Tabs ── */}
           <div className="admin-view-tabs" style={{ marginBottom: "var(--space-lg)" }}>
             <button
               type="button"
-              className={`admin-btn${tab === "resumen" ? " admin-btn--primary" : ""}`}
+              className={`fn-tab${tab === "resumen" ? " is-active" : ""}`}
               aria-pressed={tab === "resumen"}
               onClick={() => setTab("resumen")}
             >
@@ -579,7 +618,7 @@ export default function FinanzasPage() {
             </button>
             <button
               type="button"
-              className={`admin-btn${tab === "costos" ? " admin-btn--primary" : ""}`}
+              className={`fn-tab${tab === "costos" ? " is-active" : ""}`}
               aria-pressed={tab === "costos"}
               onClick={() => setTab("costos")}
             >
@@ -587,7 +626,7 @@ export default function FinanzasPage() {
             </button>
             <button
               type="button"
-              className={`admin-btn${tab === "historial" ? " admin-btn--primary" : ""}`}
+              className={`fn-tab${tab === "historial" ? " is-active" : ""}`}
               aria-pressed={tab === "historial"}
               onClick={() => setTab("historial")}
             >
@@ -596,9 +635,19 @@ export default function FinanzasPage() {
           </div>
 
           {tab === "resumen" && <FinanceDashboard />}
-          {tab === "costos" && <CostPricesPanel />}
+          {tab === "costos" && <CostPricesPanel key={costFilter} initialFilter={costFilter} />}
           {tab === "historial" && <FinanceHistoryPanel />}
         </div>
+  );
+}
+
+export default function FinanzasPage() {
+  return (
+    <RoleRoute allowedRoles={["superadmin"]}>
+      <AdminShell variant="admin">
+        <Suspense fallback={<p className="auth-loading">Cargando finanzas...</p>}>
+          <FinanzasContent />
+        </Suspense>
       </AdminShell>
     </RoleRoute>
   );

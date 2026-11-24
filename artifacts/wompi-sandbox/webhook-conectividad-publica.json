@@ -1,0 +1,26 @@
+{
+  "testedAt": "2026-11-24T20:28:23.176Z",
+  "kind": "connectivity_and_rejection_only",
+  "webhookUrl": "https://sat-promo-aerial-ace.trycloudflare.com/api/webhooks/wompi",
+  "genuineWompiDeliveryTested": false,
+  "checks": [
+    {
+      "path": "/api/webhooks/wompi",
+      "method": "GET",
+      "expected": 405,
+      "status": 405
+    },
+    {
+      "path": "/api/admin/orders",
+      "method": "GET",
+      "expected": 404,
+      "status": 404
+    },
+    {
+      "path": "/api/webhooks/wompi",
+      "method": "POST",
+      "expected": 401,
+      "status": 401
+    }
+  ]
+}

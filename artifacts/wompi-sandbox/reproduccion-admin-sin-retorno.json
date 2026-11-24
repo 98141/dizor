@@ -1,0 +1,11 @@
+{
+  "testKind": "isolated_simulation_not_user_order_not_real_wompi",
+  "simulatedProviderStatus": "APPROVED",
+  "webhookDelivered": false,
+  "buyerReturned": false,
+  "adminButtonHttp": 409,
+  "privateProviderQueries": 0,
+  "localPaymentStatus": "pendiente",
+  "stockUnchanged": true,
+  "conclusion": "The button cannot discover an unknown transaction; it exits before any provider transaction query."
+}

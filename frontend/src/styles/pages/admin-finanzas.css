@@ -290,3 +290,62 @@
 .finance-history-legend__dot--profit {
   background: #16a34a;
 }
+
+/* Sprint 07. Solo dentro de Finanzas. */
+.admin-shell:has(.fn-page) { background: var(--admin-ivory, #f7f6f2); }
+html .admin-shell .admin-main > main .fn-page { overflow-wrap: break-word; }
+html .admin-shell .admin-main > main .fn-page .fn-tab {
+  display: inline-flex; align-items: center; min-height: 36px; padding: .35rem .8rem;
+  border: 1px solid #e8e4db; border-radius: 8px; background: #fff; color: #252725;
+  font: 600 .8rem/1.2 inherit; cursor: pointer;
+}
+html .admin-shell .admin-main > main .fn-page .fn-tab.is-active { border-color: #b87305; box-shadow: inset 0 -2px 0 #b87305; }
+html .admin-shell .admin-main > main .fn-page .fn-tab:focus-visible,
+.fn-page button:focus-visible, .fn-page a:focus-visible, .fn-page summary:focus-visible { outline: 3px solid #8a5503; outline-offset: 2px; }
+.fn-toolbar, .fn-pager, .fn-search, .fn-range { display: flex; flex-wrap: wrap; gap: .4rem .6rem; align-items: center; }
+.fn-kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; }
+.fn-kpi { background: #fff; border: 1px solid #e8e4db; border-radius: 10px; padding: .7rem .8rem; min-width: 0; }
+.fn-kpi p { margin: 0; font-size: clamp(1rem, 1.6vw, 1.35rem); font-weight: 650; font-variant-numeric: tabular-nums; color: #252725; }
+.fn-kpi span, .fn-quiet, .fn-note { color: #5c584f; font-size: .8rem; line-height: 1.4; }
+.fn-kpi a { display: inline-block; margin-top: .2rem; color: #8a5503; font-size: .78rem; }
+html .admin-shell .admin-main > main .fn-page .finance-period-tabs__btn--active { background: #fff; color: #252725; border-color: #b87305; box-shadow: inset 0 -2px 0 #b87305; }
+html .admin-shell .fn-page .admin-table td { white-space: normal; }
+html .admin-shell .fn-page #finance-history-from,
+html .admin-shell .fn-page #finance-history-to { width: 11rem; max-width: 100%; }
+.fn-note { margin: .2rem 0 .6rem; padding: .55rem .7rem; background: #fff; border: 1px solid #e8e4db; border-left: 3px solid #b87305; border-radius: 8px; }
+.fn-split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
+.fn-split > section, .fn-dashboard > section { background: #fff; border: 1px solid #e8e4db; border-radius: 10px; padding: .8rem .9rem; min-width: 0; }
+.fn-dashboard { gap: .8rem; }
+.fn-dashboard h2, .fn-page h2 { margin: 0 0 .55rem; font-size: 1rem; }
+.fn-chart svg { width: 100%; height: auto; }
+.fn-chart__sales { stroke: #252725; fill: #252725; stroke-width: 2; }
+.fn-chart__profit { stroke: #b87305; stroke-width: 2; }
+.fn-chart__tick { fill: #5c584f; font-size: 11px; }
+.fn-chart__legend { display: flex; gap: .8rem; font-size: .78rem; color: #5c584f; }
+.fn-chart-fallback { width: 100%; border-collapse: collapse; font-size: .78rem; }
+.fn-chart-fallback caption { text-align: left; font-weight: 650; margin-bottom: .3rem; }
+.fn-chart-fallback th, .fn-chart-fallback td { border-bottom: 1px solid #e8e4db; padding: .25rem .35rem; text-align: left; }
+.fn-mix__row { display: grid; grid-template-columns: 9rem 1fr auto; gap: .4rem; align-items: center; margin: .35rem 0; font-size: .8rem; }
+.fn-mix__track { height: 8px; background: #f7f6f2; border-radius: 99px; overflow: hidden; }
+.fn-mix__bar { display: block; height: 100%; }
+.fn-mix__bar--sales { background: #252725; }
+.fn-mix__bar--cost { background: #8a7350; }
+.fn-mix__bar--profit { background: #b87305; }
+html .admin-shell .fn-page .finance-history-chart__label { max-width: 4.5rem; overflow: visible; text-overflow: unset; white-space: normal; }
+.fn-periods { display: none; }
+.fn-search input, .fn-range input, .fn-pager select { min-height: 36px; border: 1px solid #e8e4db; border-radius: 8px; background: #fff; padding: .3rem .5rem; }
+@media (max-width: 900px) {
+  .fn-kpis, .fn-split { grid-template-columns: 1fr 1fr; }
+  .fn-mix__row { grid-template-columns: 1fr; }
+}
+@media (max-width: 759px) {
+  .fn-kpis, .fn-kpis--secondary, .fn-split { grid-template-columns: 1fr; }
+  html .admin-shell .fn-page .finance-history-chart { display: none; }
+  .fn-periods { display: grid; gap: .4rem; }
+  .fn-page .fn-periods + .admin-table-wrap, .fn-page .admin-table-wrap:has(+ .fn-periods) { display: none; }
+  .fn-periods details { background: #fff; border: 1px solid #e8e4db; border-radius: 8px; padding: .45rem .6rem; }
+  .fn-periods summary { display: flex; flex-wrap: wrap; gap: .25rem .6rem; cursor: pointer; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fn-page * { scroll-behavior: auto; transition: none; }
+}

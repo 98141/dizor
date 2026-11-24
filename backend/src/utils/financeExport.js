@@ -2,11 +2,19 @@ const ExcelJS = require("exceljs");
 const PDFDocument = require("pdfkit");
 
 const formatMoney = (n) =>
-  new Intl.NumberFormat("es-CO", {
-    style: "currency",
-    currency: "COP",
-    maximumFractionDigits: 0,
-  }).format(n || 0);
+  n == null
+    ? "Pendiente de costo"
+    : new Intl.NumberFormat("es-CO", {
+      style: "currency",
+      currency: "COP",
+      maximumFractionDigits: 0,
+    }).format(n || 0);
+
+const limitationNote = (report) => (
+  report.sales?.marginReliable && report.inventory?.potentialMarginReliable
+    ? ""
+    : "Rentabilidad pendiente de completar costos. Donde falta el costo, el margen histórico no es una rentabilidad confirmada."
+);
 
 const formatDate = (d) =>
   d
@@ -25,6 +33,7 @@ exports.buildFinanceCsv = (report) => {
 
   push(["Reporte financiero Dizor"]);
   push(["Período", report.period?.label || ""]);
+  push(["Limitación", limitationNote(report) || "Costos completos para las ventas del período y el inventario valorado."]);
   push([]);
 
   const { sales, inventory, pending } = report;
@@ -77,6 +86,7 @@ exports.buildFinanceXlsx = async (report) => {
   const summary = wb.addWorksheet("Resumen");
   summary.addRow(["Reporte financiero Dizor"]);
   summary.addRow(["Período", report.period?.label]);
+  summary.addRow(["Limitación", limitationNote(report) || "Sin costos faltantes en este reporte."]);
   summary.addRow([]);
   summary.addRow(["Métrica", "Valor"]);
   const { sales, inventory, pending } = report;
@@ -167,6 +177,8 @@ exports.buildFinancePdf = (report) =>
     doc.fontSize(18).text("Reporte financiero — Dizor", { align: "center" });
     doc.moveDown(0.5);
     doc.fontSize(11).text(report.period?.label || "", { align: "center" });
+    const note = limitationNote(report);
+    if (note) { doc.moveDown(0.4); doc.fontSize(9).text(note, { align: "center" }); }
     doc.moveDown(1.5);
 
     const { sales, inventory, pending } = report;
@@ -202,7 +214,7 @@ exports.buildFinancePdf = (report) =>
     doc.fontSize(9);
     (sales.topByRevenue || []).slice(0, 8).forEach((p, i) => {
       doc.text(
-        `${i + 1}. ${p.name} — ${formatMoney(p.revenue)} (ganancia ${formatMoney(p.profit)})`
+        `${i + 1}. ${p.name} — ${formatMoney(p.revenue)} (ganancia ${p.costComplete ? formatMoney(p.profit) : "pendiente de costo"})`
       );
     });
 

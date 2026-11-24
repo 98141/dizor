@@ -1,0 +1,44 @@
+{
+  "checkedAt": "2026-11-24T20:09:04.228Z",
+  "financialActionsPerformed": false,
+  "order": {
+    "http": 200,
+    "id": "6b05ee0d793a02d4ea62e35d",
+    "number": "DIZ-20261124-74DDA952202DEA71AF64",
+    "total": 600000,
+    "paymentStatus": "pendiente",
+    "orderStatus": "pago_pendiente",
+    "requiresReview": false,
+    "paymentLinkId": "test_MXslp4",
+    "hasTransactionId": false,
+    "providerStatusRecorded": null,
+    "history": [
+      {
+        "status": "pago_pendiente",
+        "note": "Pedido creado",
+        "changedAt": "2026-11-24T20:05:33.813Z"
+      }
+    ]
+  },
+  "recoveryConfiguration": {
+    "environment": "test",
+    "credentialsConfigured": true,
+    "recoveryEnabled": true,
+    "webhookUrl": null,
+    "webhookPath": "/api/webhooks/wompi",
+    "deliveryVerification": "requires_provider_test"
+  },
+  "lastStoredWebhookAt": null,
+  "matchingPendingReceipts": [],
+  "pendingReceiptPageTotal": 1,
+  "sandboxLink": {
+    "http": 200,
+    "id": "test_MXslp4",
+    "amountInCents": 60000000,
+    "currency": "COP",
+    "singleUse": true,
+    "active": true,
+    "hasTransactionId": false,
+    "hasTransactionList": false
+  }
+}
