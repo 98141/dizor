@@ -1,0 +1,32 @@
+{
+  "checks": [
+    "M01 cupones: vacío compacto, listado primero y un alta",
+    "M02 popup: el fallo bloquea el formulario y los campos cortos comparten fila",
+    "M03 newsletter: cantidad de la página, no un total inventado, y ancho contenido",
+    "M04 carritos compactos y recordatorios sin envío"
+  ],
+  "externalRequests": [],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "mutations": [
+    {
+      "method": "POST",
+      "path": "/coupons"
+    }
+  ],
+  "screenshots": [
+    "cupones-vacio-1440.png",
+    "cupones-datos-1440.png",
+    "cupones-390.png",
+    "popup-error-1440.png",
+    "popup-1440.png",
+    "popup-390.png",
+    "newsletter-uno-1440.png",
+    "newsletter-varios-1440.png",
+    "newsletter-390.png",
+    "carritos-uno-1440.png",
+    "carritos-varios-1440.png",
+    "popup-360.png"
+  ],
+  "passed": true
+}

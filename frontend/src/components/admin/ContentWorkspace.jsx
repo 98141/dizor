@@ -460,16 +460,16 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
 
   const ordersExport = tab === "exports" && scope === "orders";
   return (
-    <div className={`admin-page${tab === "exports" ? " op-export-page" : ""}${area === "store" ? " st-store" : ""}`}>
+    <div className={`admin-page${tab === "exports" ? " op-export-page" : ""}${area === "store" ? " st-store" : ""}${area === "marketing" ? " mk-page" : ""}`}>
       {!ordersExport && <>
       <h1 className="admin-page__title">{area === "store" ? "Tienda online" : area === "marketing" ? "Marketing" : ({ orders: "Exportaciones de pedidos", newsletter: "Exportaciones de newsletter", carts: "Exportaciones de carritos", all: "Exportaciones históricas" })[scope]}</h1>
       <p className="admin-page__subtitle">
-        {area === "store" ? "Presentación y contenido editorial de la tienda." : area === "marketing" ? "Cupones, popup y suscripciones. Las herramientas desactivadas conservan su estado." : "Descarga los registros autorizados. Cada exportación conserva su permiso y su límite."}
+        {area === "store" ? "Presentación y contenido editorial de la tienda." : area === "marketing" ? "Gestiona promociones y comunicaciones de tu tienda." : "Descarga los registros autorizados. Cada exportación conserva su permiso y su límite."}
       </p>
 
       <nav className="cms-tabs" aria-label={area === "store" ? "Secciones de Tienda online" : area === "tools" ? "Contextos de exportación" : "Secciones de Marketing"}>
-        {area === "marketing" && <Link href="/admin/cupones">Cupones</Link>}
-        {CONTENT_TABS.filter(t => t.area === area).map(t => <Link key={t.id} href={contentHref(t.id, searchParams.toString())} className={`${area === "store" ? "st-tab" : ""}${tab === t.id ? " active" : ""}`} aria-current={tab === t.id ? "page" : undefined}>{t.label}</Link>)}
+        {area === "marketing" && <Link href="/admin/cupones" className="mk-tab">Cupones</Link>}
+        {CONTENT_TABS.filter(t => t.area === area).map(t => <Link key={t.id} href={contentHref(t.id, searchParams.toString())} className={`${area === "store" ? "st-tab" : ""}${area === "marketing" ? "mk-tab" : ""}${tab === t.id ? " active" : ""}`} aria-current={tab === t.id ? "page" : undefined}>{t.label}</Link>)}
         {area === "tools" && <><Link href="/admin/pedidos">Pedidos</Link><Link href="/admin/marketing?tab=newsletter">Newsletter</Link><Link href="/admin/marketing?tab=carritos">Carritos</Link></>}
       </nav>
       </>}
@@ -657,19 +657,23 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
         </div>
       )}
 
-      {["popup", "carritos"].includes(tab) && <SettingsLoadState state={marketingState} label="configuración de marketing" />}
+      {tab === "popup" && <SettingsLoadState state={marketingState} label="configuración de marketing" />}
+      {tab === "carritos" && marketingState.status !== "ready" && <SettingsLoadState state={marketingState} label="configuración de marketing" />}
       {/* ── POPUP ── */}
       {tab === "popup" && marketing && (
-        <form className="admin-form product-form__section" onSubmit={saveMarketing}>
+        <form className="admin-form product-form__section mk-popup" onSubmit={saveMarketing}>
           <fieldset disabled={!marketingState.resource.canEdit()} style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}>
           <h2>Popup promocional</h2>
+          <p className="mk-hint">El popup, los textos del pie y la configuración histórica de carritos se guardan juntos.</p>
+          <section className="mk-panel">
+          <h3>Configuración principal</h3>
           <label className="admin-checkbox">
             <input type="checkbox" checked={Boolean(marketing.popup?.enabled)}
               onChange={(e) => setPopup("enabled", e.target.checked)} />
             Activar popup
           </label>
 
-          <fieldset className="admin-radio-group" style={{ margin: "1rem 0" }}>
+          <fieldset className="admin-radio-group mk-span" style={{ margin: "0.75rem 0" }}>
             <legend>Contenido del popup (solo uno se publica)</legend>
             <label className="admin-radio">
               <input type="radio" name="popupVariant" value="newsletter"
@@ -691,8 +695,13 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
             </label>
           </fieldset>
 
+          <div className="mk-grid">
           <AuthFormField label="Título" name="popupTitle" value={marketing.popup?.title || ""}
             onChange={(e) => setPopup("title", e.target.value)} />
+          <AuthFormField label="Retraso (segundos)" name="delay" type="number"
+            value={marketing.popup?.delaySeconds ?? 4}
+            onChange={(e) => setPopup("delaySeconds", Number(e.target.value))} />
+          </div>
           <AuthFormField label="Texto" name="popupText" value={marketing.popup?.text || ""}
             onChange={(e) => setPopup("text", e.target.value)} />
 
@@ -727,25 +736,28 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
             </>
           )}
 
-          <AuthFormField label="Retraso (segundos)" name="delay" type="number"
-            value={marketing.popup?.delaySeconds ?? 4}
-            onChange={(e) => setPopup("delaySeconds", Number(e.target.value))} />
+          </section>
+          <section className="mk-panel">
+          <h3>Imagen</h3>
           <CmsImageField
             label="Imagen del popup (opcional)"
             value={marketing.popup?.imageUrl || ""}
             onChange={(url) => setPopup("imageUrl", url)}
           />
-
-          <fieldset className="admin-form-section"><legend>Newsletter · pie de página</legend>
-          <p className="admin-muted">Estos textos pertenecen al formulario de suscripción del pie de página. Se guardan junto con la configuración del popup.</p>
+          </section>
+          <section className="mk-panel">
+          <h3>Pie de página</h3>
+          <p className="mk-hint">Estos textos pertenecen al formulario de suscripción del pie. Se guardan junto con el popup.</p>
+          <div className="mk-grid">
           <AuthFormField label="Título footer" name="nlTitle" value={marketing.newsletter?.footerTitle || ""}
             onChange={(e) => setNl("footerTitle", e.target.value)} />
           <AuthFormField label="Texto footer" name="nlText" value={marketing.newsletter?.footerText || ""}
             onChange={(e) => setNl("footerText", e.target.value)} />
-
-          </fieldset><fieldset className="admin-form-section"><legend>Carrito abandonado · configuración histórica</legend>
+          </div>
+          <details className="mk-historic">
+          <summary>Configuración histórica de carritos · desactivada</summary>
           {!marketing.abandonedCart?.featureEnabled && (
-            <p className="admin-muted">
+            <p className="mk-hint">
               Los recordatorios están desactivados. Se conserva la configuración histórica; no se muestran formularios ni se envían recordatorios.
             </p>
           )}
@@ -754,25 +766,35 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
               onChange={(e) => setAbandoned("enabled", e.target.checked)} />
             Enviar recordatorios
           </label>
+          <div className="mk-grid">
           <AuthFormField disabled={!marketing.abandonedCart?.featureEnabled} label="Horas antes del primer correo" name="delayHours" type="number"
             value={marketing.abandonedCart?.delayHours ?? 24}
             onChange={(e) => setAbandoned("delayHours", Number(e.target.value))} />
           <AuthFormField disabled={!marketing.abandonedCart?.featureEnabled} label="Máximo de recordatorios" name="maxReminders" type="number"
             value={marketing.abandonedCart?.maxReminders ?? 2}
             onChange={(e) => setAbandoned("maxReminders", Number(e.target.value))} />
-
-          </fieldset><AuthSubmitButton loading={marketingState.status === "saving"} disabled={!marketingState.resource.canSave()}>Guardar configuración</AuthSubmitButton>
+          </div>
+          </details>
+          </section>
+          <AuthSubmitButton loading={marketingState.status === "saving"} disabled={!marketingState.resource.canSave()}>Guardar configuración</AuthSubmitButton>
           </fieldset>
         </form>
       )}
 
       {/* ── NEWSLETTER ── */}
       {tab === "newsletter" && (
-        <div className="marketing-admin__card">
-          <DataExports scope="newsletter" embedded />
-          <SettingsLoadState state={subscribersState} label="suscriptores" editable={false} />
+        <div className="mk-sheet">
+          <div className="mk-toolbar">
+            <div>
+              <h2>Suscriptores</h2>
+              {subscribers !== null && <p className="mk-hint">{subscribers.length} suscriptores activos (últimos 50)</p>}
+            </div>
+            <div className="mk-toolbar__actions">
+              <SettingsLoadState state={subscribersState} label="suscriptores" editable={false} />
+              <DataExports scope="newsletter" embedded />
+            </div>
+          </div>
           {subscribers !== null && <>
-          <p>{subscribers.length} suscriptores activos (últimos 50)</p>
           <table className="marketing-admin__table">
             <thead>
               <tr><th>Correo</th><th>Nombre</th><th>Fuente</th><th>Fecha</th></tr>
@@ -794,14 +816,20 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
 
       {/* ── CARRITOS ── */}
       {tab === "carritos" && (
-        <div className="marketing-admin__card">
-          {marketing?.abandonedCart?.featureEnabled === false && <p role="status">Recordatorios desactivados. La consulta histórica y la exportación siguen disponibles; no se enviarán recordatorios.</p>}
-          <DataExports scope="carts" embedded />
-          <SettingsLoadState state={cartsState} label="carritos" editable={false} />
-          <button type="button" className="admin-btn admin-btn--primary"
+        <div className="mk-sheet">
+          <div className="mk-toolbar">
+            <div>
+              <h2>Carritos abandonados</h2>
+            </div>
+            <div className="mk-toolbar__actions">
+              <SettingsLoadState state={cartsState} label="carritos" editable={false} />
+              <DataExports scope="carts" embedded />
+            </div>
+            {marketing?.abandonedCart?.featureEnabled === false && <p className="mk-status" role="status">Recordatorios desactivados. La consulta histórica y la exportación siguen disponibles; no se enviarán recordatorios.</p>}
+          </div>
+          <button type="button" className="admin-btn admin-btn--primary admin-btn--sm mk-quiet"
             onClick={handleSendReminders}
-            disabled={saving || !marketingState.resource.canEdit() || !marketing?.abandonedCart?.featureEnabled}
-            style={{ marginBottom: "1rem" }}>
+            disabled={saving || !marketingState.resource.canEdit() || !marketing?.abandonedCart?.featureEnabled}>
             Enviar recordatorios pendientes
           </button>
           {carts !== null && <table className="marketing-admin__table">

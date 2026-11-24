@@ -76,6 +76,7 @@ function AdminCuponesContent() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formEl = e.currentTarget;
     if (lock.current) return;
     lock.current = true;
     setSaving(true);
@@ -102,6 +103,7 @@ function AdminCuponesContent() {
       }
       setIsError(false);
       resetForm(true);
+      formEl.reset();
       await load();
     } catch (err) {
       setMessage(err.response?.data?.message || "No se pudo guardar el cupón");
@@ -158,18 +160,22 @@ function AdminCuponesContent() {
   };
 
   return (
-    <div className="admin-page">
-      <h1 className="admin-page__title">Cupones de descuento</h1>
-      <p className="admin-page__subtitle">
-        Crea y gestiona códigos de descuento para tus clientes.
-      </p>
+    <div className="admin-page mk-page mk-coupons">
+      <div className="mk-toolbar">
+        <div>
+          <h1 className="admin-page__title">Cupones de descuento</h1>
+          <p className="admin-page__subtitle">Crea y gestiona códigos de descuento para tus clientes.</p>
+          {!loading && !loadError && <p className="mk-hint">{coupons.length} {coupons.length === 1 ? "cupón" : "cupones"}</p>}
+        </div>
+        <button type="button" className="admin-btn admin-btn--primary" onClick={() => document.getElementById("code")?.focus()}>{coupons.length ? "Nuevo cupón" : "Crear primer cupón"}</button>
+      </div>
 
       {loadError && <><AuthErrorAlert message={loadError} /><button type="button" className="admin-btn" onClick={() => { setLoading(true); load(); }}>Reintentar cupones</button></>}
-      <div className="admin-grid-2">
-        {/* ── Formulario ── */}
-        <section className="taxonomy-form-card">
+      <div className="mk-stack">
+        <section className="taxonomy-form-card mk-composer">
           <h2>{editingId ? "Editar cupón" : "Nuevo cupón"}</h2>
           <form className="admin-form" onSubmit={handleSubmit}>
+            <div className="admin-form__row">
             <div className="admin-form__group">
               <label htmlFor="code">Código *</label>
               <input
@@ -201,6 +207,7 @@ function AdminCuponesContent() {
                 placeholder="Promo verano 2025"
                 maxLength={120}
               />
+            </div>
             </div>
 
             <div className="admin-form__row">
@@ -309,14 +316,11 @@ function AdminCuponesContent() {
         </section>
 
         {/* ── Lista ── */}
-        <section className="taxonomy-list-card">
-          <h2>Cupones ({coupons.length})</h2>
+        <section className="taxonomy-list-card" aria-label="Listado de cupones">
           {loading ? (
             <p className="auth-loading">Cargando…</p>
           ) : coupons.length === 0 ? (
-            <p style={{ color: "var(--color-text-muted)", fontSize: "0.9rem" }}>
-              No hay cupones todavía.
-            </p>
+            <p className="mk-empty">No hay cupones creados.</p>
           ) : (
             <div className="admin-table-wrap">
               <table className="admin-table">
@@ -369,19 +373,7 @@ function AdminCuponesContent() {
                         {isExpired(c.expiresAt) && " ✕"}
                       </td>
                       <td data-label="Estado">
-                        <span
-                          style={{
-                            display: "inline-block",
-                            padding: "0.15rem 0.5rem",
-                            borderRadius: "9999px",
-                            fontSize: "0.75rem",
-                            fontWeight: 600,
-                            background: c.isActive ? "#d1fae5" : "#f3f4f6",
-                            color: c.isActive ? "#065f46" : "#6b7280",
-                          }}
-                        >
-                          {c.isActive ? "Activo" : "Inactivo"}
-                        </span>
+                        <span className={c.isActive ? "st-chip st-chip--on" : "st-chip"}>{c.isActive ? "Activo" : "Inactivo"}</span>
                       </td>
                       <td data-label="Acciones">
                         <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>

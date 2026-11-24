@@ -1,0 +1,62 @@
+{
+  "checkedAt": "2026-11-24T19:46:44.490Z",
+  "privateQueryHttp": 200,
+  "provider": {
+    "id": "11998693-1795549412-96741",
+    "status": "APPROVED",
+    "paymentLinkId": "test_XyUHuQ",
+    "amountInCents": 2800000,
+    "currency": "COP"
+  },
+  "order": {
+    "http": 200,
+    "number": "DIZ-20261124-8A16C1777B19E490E3C5",
+    "paymentStatus": "pagado",
+    "orderStatus": "pagado",
+    "total": 28000,
+    "transactionId": "11998693-1795549412-96741",
+    "requiresReview": false,
+    "nextAction": "prepare"
+  },
+  "verifiedReceipts": [
+    {
+      "id": "6b05e92e4c75c70ad41a71e2",
+      "status": "APPROVED",
+      "processingState": "processed",
+      "processedAt": "2026-11-24T19:44:48.904Z",
+      "order": "6b05e04229a23f8af537a157",
+      "paymentLinkId": "test_XyUHuQ",
+      "amountInCents": 2800000,
+      "currency": "COP",
+      "environment": "test"
+    }
+  ],
+  "browserVerification": {
+    "orderNumber": "DIZ-20261124-8A16C1777B19E490E3C5",
+    "scenario": "same_order_same_sandbox_payment",
+    "beforeBuyerReturn": {
+      "providerScreen": "Pago aprobado",
+      "adminResult": "Aún no hemos recibido la transacción de Wompi",
+      "status": "payment_not_yet_linked"
+    },
+    "buyerReturn": {
+      "urlContainedProviderId": true,
+      "confirmationPagePaymentStatus": "Aprobado",
+      "orderStatus": "Pagado"
+    },
+    "adminRecheckAfterReturn": {
+      "clickedButton": "Verificar pago con Wompi",
+      "visibleMessage": "Pago confirmado con Wompi.",
+      "orderStatus": "Pagado",
+      "nextAction": "Comenzar preparación",
+      "preparationNotStarted": true
+    },
+    "publicWebhookConfigured": false,
+    "signedWebhookDeliveryTested": false
+  },
+  "evidenceFiles": [
+    "wompi-aprobado-real.jpg",
+    "admin-pagado-sin-retorno.jpg",
+    "admin-pago-confirmado-real.jpg"
+  ]
+}
