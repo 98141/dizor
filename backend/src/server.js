@@ -35,7 +35,7 @@ if (process.env.NODE_ENV === "production" && process.env.WOMPI_ENV !== "producti
   process.exit(1);
 }
 
-let stopNotifications = () => {}, server;
+let stopNotifications = () => {}, stopWompiRecovery = () => {}, server;
 try { require("./services/wompiService").validateConfiguration(); }
 catch (err) { logger.error(`[SECURITY] ${err.message}. Servidor detenido.`); process.exit(1); }
 connectDB().then(async () => {
@@ -43,7 +43,10 @@ connectDB().then(async () => {
   server = app.listen(PORT, () => {
     logger.info("Servidor iniciado", { port: PORT, env: process.env.NODE_ENV || "development" });
   });
-  server.on("close", () => stopNotifications());
+  server.on("close", () => { stopNotifications(); stopWompiRecovery(); });
+  if (require("./services/wompiService").isWompiConfigured() && process.env.WOMPI_RECOVERY_ENABLED !== "false") {
+    stopWompiRecovery = require("./services/wompiRecoveryWorker").startWorker();
+  }
   if (process.env.TRANSACTIONAL_NOTIFICATIONS_ENABLED === "true") {
     stopNotifications = require("./services/notificationDelivery").startWorker();
   }

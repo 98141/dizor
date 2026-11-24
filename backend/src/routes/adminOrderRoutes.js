@@ -15,6 +15,7 @@ router.get("/stats", orderAdminController.getOrderStats);
 router.get("/export/pdf", orderAdminController.exportOrdersPdf);
 router.get("/", orderAdminController.getOrders);
 router.get("/payment-events", authorizeRoles("superadmin", "admin"), orderAdminController.listPaymentEvents);
+router.get("/payment-recovery", authorizeRoles("superadmin", "admin"), orderAdminController.getWompiRecoveryStatus);
 router.post("/payment-events/:eventId/reprocess", authorizeRoles("superadmin", "admin"), orderAdminController.reprocessPaymentEvent);
 router.post("/payment-events/:eventId/archive", authorizeRoles("superadmin", "admin"), orderAdminController.archivePaymentEvent);
 router.post("/payment-events/:eventId/reopen", authorizeRoles("superadmin", "admin"), orderAdminController.reopenPaymentEvent);

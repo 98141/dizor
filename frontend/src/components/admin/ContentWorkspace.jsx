@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { CONTENT_TABS, contentTab, contentHref } from "@/lib/adminNavigation.mjs";
-import DataExports from "./DataExports";
+import DataExports, { OrdersExportScreen } from "./DataExports";
 import SettingsLoadState from "./SettingsLoadState";
 import useConfirmedSettings from "@/hooks/useConfirmedSettings";
 import { readMarketing, marketingPayload, validMarketing, readAppearance, validAppearance, readRows } from "@/lib/confirmedSettings.mjs";
@@ -452,18 +452,22 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
   if (loading && ["home", "banners", "pages"].includes(tab)) return <p className="auth-loading" role="status">Cargando…</p>;
   if (cmsError && ["home", "banners", "pages"].includes(tab)) return <section><AuthErrorAlert message={cmsError} /><button type="button" className="admin-btn" onClick={() => { setLoading(true); load(); }}>Reintentar contenido CMS</button></section>;
 
+  const ordersExport = tab === "exports" && scope === "orders";
   return (
-    <div className="admin-page">
+    <div className={`admin-page${tab === "exports" ? " op-export-page" : ""}`}>
+      {!ordersExport && <>
       <h1 className="admin-page__title">{area === "store" ? "Tienda online" : area === "marketing" ? "Marketing" : ({ orders: "Exportaciones de pedidos", newsletter: "Exportaciones de newsletter", carts: "Exportaciones de carritos", all: "Exportaciones históricas" })[scope]}</h1>
       <p className="admin-page__subtitle">
-        {area === "store" ? "Presentación y contenido editorial de la tienda." : area === "marketing" ? "Cupones, popup y suscripciones. Las herramientas desactivadas conservan su estado." : "Herramientas existentes con sus permisos originales."}
+        {area === "store" ? "Presentación y contenido editorial de la tienda." : area === "marketing" ? "Cupones, popup y suscripciones. Las herramientas desactivadas conservan su estado." : "Descarga los registros autorizados. Cada exportación conserva su permiso y su límite."}
       </p>
 
-      <nav className="cms-tabs" aria-label={area === "store" ? "Secciones de Tienda online" : "Secciones de Marketing"}>
+      <nav className="cms-tabs" aria-label={area === "store" ? "Secciones de Tienda online" : area === "tools" ? "Contextos de exportación" : "Secciones de Marketing"}>
         {area === "marketing" && <Link href="/admin/cupones">Cupones</Link>}
         {CONTENT_TABS.filter(t => t.area === area).map(t => <Link key={t.id} href={contentHref(t.id, searchParams.toString())} className={tab === t.id ? "active" : ""} aria-current={tab === t.id ? "page" : undefined}>{t.label}</Link>)}
         {area === "tools" && <><Link href="/admin/pedidos">Pedidos</Link><Link href="/admin/marketing?tab=newsletter">Newsletter</Link><Link href="/admin/marketing?tab=carritos">Carritos</Link></>}
       </nav>
+      </>}
+      {ordersExport && <OrdersExportScreen />}
 
       <ConfirmModal
         isOpen={!!confirmModal}
@@ -814,7 +818,7 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
       )}
 
       {/* ── EXPORTAR ── */}
-      {tab === "exports" && <DataExports scope={scope} />}
+      {tab === "exports" && !ordersExport && <DataExports scope={scope} />}
 
       {/* ── APARIENCIA ── */}
       {tab === "appearance" && <SettingsLoadState state={appearanceState} label="apariencia" />}

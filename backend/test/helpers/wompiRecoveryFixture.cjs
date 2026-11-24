@@ -166,7 +166,7 @@ async function failpoint(mode, data) {
 }
 
 
-module.exports = { setup, api, newWompi, makeProduct, createOrder, orderBody, linkTx, postEvent, fresh, stockOf, canPrepare, provider, failpoint, mongoose,
+module.exports = { setup, api, login, newWompi, makeProduct, createOrder, orderBody, linkTx, postEvent, signEvent, fresh, stockOf, canPrepare, provider, failpoint, mongoose,
  get M() { return M; }, get cookies() { return cookies; }, get users() { return users; },
  async close() { if (server) await new Promise(r => server.close(r)); await mongoose.disconnect(); if (mongod) await mongod.stop(); }
 };

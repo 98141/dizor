@@ -270,37 +270,11 @@ exports.concludePaymentEventFollowUp = catchAsync(async (req, res) => {
   res.json({ status: "success", message: "Seguimiento concluido con evidencia autenticada. El archivo y la auditoría se conservan." });
 });
 exports.reprocessPaymentEvent = catchAsync(async (req, res) => {
-  const event = await require("../models/paymentEvent").findById(req.params.eventId);
-  if (!event) throw new AppError("Evento no encontrado", 404);
-  if (event.administrativeArchive?.active) throw new AppError("Reabre el evento antes de reprocesarlo", 409);
-  const service = require("../services/wompiService");
-  if (event.environment !== service.getExpectedEventEnvironment()) throw new AppError("Evento de otro ambiente", 409);
-  let tx;
-  try { tx = await service.getTransaction(event.transactionId); } catch { throw new AppError("Consulta Wompi no disponible; evidencia conservada", 503); }
-  if (tx.id !== event.transactionId) throw new AppError("La consulta no corresponde al recibo original", 409);
-  const payments = require("../services/wompiPaymentService");
-  if (!payments.canAdvanceTransactionStatus(event.status, tx.status) || event.amountInCents !== tx.amount_in_cents) {
-    await payments.deferProviderDiscrepancy(event._id, tx);
-    throw new AppError("Estado o importe consultado discrepante; recibo conservado para recuperación", 503);
-  }
-  const association = await require("../services/wompiPaymentService").findAssociation(tx);
-  if (!association.order) throw new AppError("Wompi aún no aporta asociación inequívoca", 409);
-  const completed = await payments.processTransaction(association.order._id, tx, { environment: event.environment, reconcile: true });
-  if (!completed?.processedAt) throw new AppError("El reproceso no se ha completado", 503);
-  await require("../services/transactionService").inTransaction(async session => {
-    const PaymentEvent = require("../models/paymentEvent");
-    const original = await PaymentEvent.findById(event._id).session(session);
-    const verified = await PaymentEvent.findById(completed._id).session(session);
-    if (!original || !verified?.processedAt || verified.processingState !== "processed"
-        || original.transactionId !== tx.id || verified.transactionId !== tx.id || verified.environment !== original.environment
-        || String(verified.order) !== String(association.order._id)) throw new AppError("Procesamiento del recibo aún no verificable", 503);
-    original.processedAt ||= new Date(); original.processingState = "processed";
-    if (String(original._id) !== String(verified._id)) {
-      if (original.associationError !== "provider_binding_mismatch") original.associationError = "superseded_by_provider_state";
-      original.lastError = `Sustituido por recibo ${verified._id}: ${verified.status}`;
-    } else original.lastError = "";
-    await original.save({ session });
-  });
+  await require("../services/wompiEventRecovery").reprocess(req.params.eventId);
   res.json({ status: "success", message: "Estado actual consultado y reprocesado sin asociación manual" });
+});
+
+exports.getWompiRecoveryStatus = catchAsync(async (_req, res) => {
+  res.json({ status: "success", ...await require("../services/wompiRecoveryStatus").inspect() });
 });
 

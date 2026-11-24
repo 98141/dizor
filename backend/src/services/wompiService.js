@@ -23,6 +23,10 @@ exports.validateConfiguration = (env = process.env) => {
   if (!env.WOMPI_PRIVATE_KEY && !env.WOMPI_EVENTS_SECRET) return;
   const prefix = mode === "production" ? "prod" : "test";
   if (!env.WOMPI_PRIVATE_KEY?.startsWith(`prv_${prefix}_`) || !env.WOMPI_EVENTS_SECRET?.startsWith(`${prefix}_events_`)) throw new Error("Llaves Wompi incompatibles con el ambiente");
+  if (env.NODE_ENV === "production" && exports.isWompiCheckoutEnabled(env)) {
+    if (!require("./wompiRecoveryStatus").publicWebhookUrl(env.WOMPI_WEBHOOK_URL)) throw new Error("Configura WOMPI_WEBHOOK_URL con una URL HTTPS pública del backend terminada en /api/webhooks/wompi");
+    if (env.WOMPI_RECOVERY_ENABLED === "false") throw new Error("La recuperación Wompi debe estar habilitada antes de aceptar nuevos pagos");
+  }
 };
 
 exports.createPaymentLink = async (order) => {

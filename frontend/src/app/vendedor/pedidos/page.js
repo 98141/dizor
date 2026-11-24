@@ -9,7 +9,6 @@ export default function VendedorPedidosPage() {
     <RoleRoute allowedRoles={["superadmin", "admin", "vendedor"]}>
       <AdminShell variant="vendedor">
         <div className="admin-page">
-          <h1 className="admin-page__title">Pedidos</h1>
           <OrdersList basePath="/vendedor/pedidos" />
         </div>
       </AdminShell>
