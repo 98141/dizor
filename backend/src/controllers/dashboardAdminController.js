@@ -170,3 +170,10 @@ exports.getDashboard = catchAsync(async (req, res) => {
     },
   });
 });
+
+// Sprint 01: read-only commercial analytics for the home page. The router keeps
+// the same admin/superadmin restriction as the operational dashboard (vendor: 403).
+exports.getAnalytics = catchAsync(async (req, res) => {
+  const analytics = await require("../services/dashboardAnalytics").buildDashboardAnalytics(req.query);
+  res.status(200).json({ status: "success", analytics });
+});

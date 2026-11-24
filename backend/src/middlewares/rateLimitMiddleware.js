@@ -45,6 +45,16 @@ const trackingLimiter = rateLimit({
   },
 });
 
+// Separate from tracking: a return verification must not consume the buyer's
+// confirmation polling budget. Includes private provider queries, so bounded.
+const paymentReturnLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 12,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { status: "fail", message: "Demasiadas verificaciones de pago. Intenta en unos minutos." },
+});
+
 // Webhook Wompi: limitar para evitar abuso/spam del endpoint
 const webhookLimiter = rateLimit({
   windowMs: 60 * 1000,
@@ -62,5 +72,6 @@ module.exports = {
   authLimiter,
   forgotPasswordLimiter,
   trackingLimiter,
+  paymentReturnLimiter,
   webhookLimiter,
 };

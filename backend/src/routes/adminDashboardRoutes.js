@@ -11,5 +11,6 @@ router.use(protect);
 router.use(authorizeRoles(...adminRoles));
 
 router.get("/", dashboardAdminController.getDashboard);
+router.get("/analytics", dashboardAdminController.getAnalytics);
 
 module.exports = router;

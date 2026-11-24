@@ -28,6 +28,11 @@ export const lookupOrderConfirmation = async (orderNumber, accessToken) => {
   return res.data;
 };
 
+export const verifyWompiReturn = async (orderNumber, accessToken, transactionId) => {
+  const res = await api.post("/checkout/orders/wompi-return", { orderNumber, accessToken, transactionId });
+  return res.data;
+};
+
 export const getMyOrders = async () => {
   const res = await api.get("/checkout/orders");
   return res.data;

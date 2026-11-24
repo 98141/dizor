@@ -3,7 +3,7 @@ const checkoutController = require("../controllers/checkoutController");
 const { protect } = require("../middlewares/authMiddleware");
 const { optionalAuth } = require("../middlewares/optionalAuthMiddleware");
 const { blockStaffCheckout } = require("../middlewares/roleMiddleware");
-const { trackingLimiter } = require("../middlewares/rateLimitMiddleware");
+const { trackingLimiter, paymentReturnLimiter } = require("../middlewares/rateLimitMiddleware");
 
 const router = express.Router();
 
@@ -24,6 +24,7 @@ router.post(
 );
 
 router.get("/orders", protect, checkoutController.getMyOrders);
+router.post("/orders/wompi-return", paymentReturnLimiter, optionalAuth, checkoutController.verifyWompiReturn);
 router.get("/orders/:id", protect, checkoutController.getMyOrder);
 router.patch("/orders/:id/cancel", protect, checkoutController.cancelMyOrder);
 

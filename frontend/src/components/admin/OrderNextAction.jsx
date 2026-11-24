@@ -10,7 +10,6 @@ const CONFIRM = {
   collect: ["Confirmar recaudo", "Confirma que tienes evidencia de la confirmación o giro de la transportadora. No basta con la entrega."],
   cancel: ["Confirmar cancelación", "El pedido se cerrará y se aplicará la devolución de inventario cuando corresponda. No se realiza un reembolso automático."],
   return: ["Confirmar devolución", "Se registrará la devolución y se repondrá el inventario cuando corresponda. El tratamiento del dinero es independiente."],
-  reconcile: ["Consultar evidencia de Wompi", "El servidor consultará al proveedor. Solo aplicará cambios respaldados por esa evidencia; no aprobará el pago manualmente."],
 };
 export default function OrderNextAction({ order, execute, busy, locked }) {
   const operation = order.operation;
@@ -45,11 +44,10 @@ export default function OrderNextAction({ order, execute, busy, locked }) {
       <label>URL de evidencia (opcional)<input name="paymentProofUrl" type="url" placeholder="https://…" disabled={disabled} /></label>
       <button type="submit" className="admin-btn admin-btn--primary" disabled={disabled}>Registrar recaudo</button>
     </form>}
-    {operation.canReconcile && <form className={styles.form} onSubmit={submit("reconcile")}>
-      <label>ID de transacción del panel o comprobante de Wompi<input name="transactionId" defaultValue={order.wompi?.transactionId || ""} required maxLength={150} pattern="[A-Za-z0-9_-]+" disabled={disabled} /></label>
-      <p>El ID sólo permite consultar. El servidor verifica el enlace, importe y moneda antes de confirmar un pago.</p>
-      <button type="submit" className="admin-btn" disabled={disabled}>Consultar y conciliar con Wompi</button>
-    </form>}
+    {operation.canReconcile && <div className={styles.form}>
+      <p>El pago se confirma automáticamente al recibir la respuesta de Wompi. Si hace falta actualizarlo, puedes verificarlo aquí sin copiar códigos.</p>
+      <button type="button" className="admin-btn" disabled={disabled} onClick={() => execute("reconcile", {})}>{busy ? "Verificando…" : "Verificar pago con Wompi"}</button>
+    </div>}
     {confirmation && <fieldset className={styles.confirm}>
       <legend>{CONFIRM[confirmation.code][0]}</legend><p>{CONFIRM[confirmation.code][1]}</p>
       {confirmation.values.trackingNumber && <p><strong>{CARRIER_LABELS[confirmation.values.carrier]} · {confirmation.values.trackingNumber}</strong></p>}

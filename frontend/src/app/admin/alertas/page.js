@@ -1,464 +1,146 @@
 "use client";
-
-import { useState, useEffect, useCallback } from "react";
+// Centro de alertas (Sprint 01). Same /admin/alerts contract and criteria; polling every
+// 60 s plus manual refresh. Lists are the API sample (≤ 10) and say so.
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { HiOutlineCreditCard, HiOutlineExclamationTriangle, HiOutlineArchiveBox, HiOutlineCube, HiOutlineShieldExclamation, HiOutlineEnvelope,
+  HiOutlineChatBubbleLeftRight, HiOutlineTicket, HiOutlineShoppingBag, HiOutlineArrowPath, HiOutlineCheckCircle } from "react-icons/hi2";
 import AdminShell from "@/components/admin/AdminShell";
-import CommunicationAlerts from "@/components/admin/CommunicationAlerts";
 import PaymentEventAlerts from "@/components/admin/PaymentEventAlerts";
+import { AlertGroup, AlertRow } from "@/components/admin/dashboard/AlertGroup";
+import { DashboardStateNotice, OrderReference, StatusChip } from "@/components/admin/dashboard/DashboardUI";
 import { getAlerts } from "@/services/adminAlertService";
+import { formatCOP } from "@/lib/formatCurrency";
+import { formatNumber } from "@/lib/dashboardPeriod";
+import { ORDER_STATUS_LABELS, PAYMENT_STATUS_LABELS, PAYMENT_METHOD_LABELS } from "@/lib/orderLabels";
 
 const REFRESH_INTERVAL = 60_000;
+const TZ = "America/Bogota";
+const fmtDate = (d) => new Date(d).toLocaleString("es-CO", { timeZone: TZ, day: "numeric", month: "short", hour: "numeric", minute: "2-digit" });
+const fmtTime = (d) => d.toLocaleTimeString("es-CO", { hour: "numeric", minute: "2-digit" });
+const hoursSince = (date, now) => Math.max(0, Math.floor((now - new Date(date).getTime()) / 3_600_000));
+const waitText = (h) => h < 1 ? "menos de 1 h" : h < 48 ? `${h} h` : `${Math.floor(h / 24)} días`;
+const stockHref = (productId, variantId) => `/admin/productos?view=stock&productId=${productId}${variantId ? `&variantId=${variantId}` : ""}`;
+const VARIANT = { out: "Agotada", low: "Bajo", review: "Revisar" };
 
-const fmt = (n) =>
-  new Intl.NumberFormat("es-CO", {
-    style: "currency",
-    currency: "COP",
-    maximumFractionDigits: 0,
-  }).format(n || 0);
-
-const fmtDate = (d) =>
-  new Date(d).toLocaleDateString("es-CO", {
-    day: "numeric",
-    month: "short",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-
-const fmtExpires = (d) =>
-  new Date(d).toLocaleDateString("es-CO", {
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-
-// ── Tarjeta de resumen ──────────────────────────────────────────────
-function SummaryCard({ count, label, color, href }) {
-  const card = (
-    <div
-      className="alert-summary-card"
-      style={{ borderTopColor: color }}
-    >
-      <p className="alert-summary-card__count" style={{ color }}>
-        {count}
-      </p>
-      <p className="alert-summary-card__label">{label}</p>
-    </div>
-  );
-  return href ? <Link href={href} style={{ textDecoration: "none" }}>{card}</Link> : card;
+function VariantPills({ product }) {
+  if (!product.affectedVariants?.length) return null;
+  return <span className="dz-pills">{product.affectedVariants.map((v) => <Link key={v.id} className={`dz-pill dz-pill--${v.stockStatus}`} href={stockHref(product.id, v.id)}
+    aria-label={`${v.sku}: ${v.stockStatus === "review" ? "existencias por revisar" : `${v.stock} unidades`} (${VARIANT[v.stockStatus] || v.stockStatus}). Ajustar variante`}>
+    <span className="dz-mono">{v.sku}</span><span>{v.stockStatus === "review" ? "revisar" : `${v.stock} ud${v.stock === 1 ? "" : "s"}`}</span>
+  </Link>)}</span>;
 }
+const inventoryRows = (group, action) => (group?.items || []).map((p) => <AlertRow key={p.id} title={p.name}
+  meta={p.unavailable ? "Sin variantes disponibles para la venta" : `${p.affectedVariants?.length || 0} ${p.affectedVariants?.length === 1 ? "variante afectada" : "variantes afectadas"}`}
+  action={{ href: stockHref(p.id, p.affectedVariants?.[0]?.id), label: action, ariaLabel: `${action}: ${p.name}` }}><VariantPills product={p} /></AlertRow>);
 
-// ── Sección colapsable ──────────────────────────────────────────────
-function AlertSection({ id, title, count, color, dot, children, actionHref, actionLabel }) {
-  const [open, setOpen] = useState(true);
-  if (count === 0) return null;
-  return (
-    <section className="alert-section">
-      <div className="alert-section__header">
-        <div className="alert-section__title-row">
-          <span className="alert-section__dot">{dot}</span>
-          <h2 className="alert-section__title">{title}</h2>
-          <span className="alert-section__badge" style={{ background: color }}>
-            {count}
-          </span>
-        </div>
-        <button type="button" className="alert-section__toggle" aria-label={`${open ? "Contraer" : "Expandir"} ${title}`} aria-expanded={open} aria-controls={`alert-group-${id}`} onClick={() => setOpen(v => !v)}>
-          {open ? "▲" : "▼"}
-        </button>
-      </div>
-      {open && (
-        <div id={`alert-group-${id}`} className="alert-section__body">
-          {children}
-          {actionHref && (
-            <div className="alert-section__footer">
-              <Link href={actionHref} className="alert-section__action">
-                {actionLabel || "Ver todos →"}
-              </Link>
-            </div>
-          )}
-        </div>
-      )}
-    </section>
-  );
-}
-
-// ── Página principal ────────────────────────────────────────────────
 export default function AlertasPage() {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [lastRefresh, setLastRefresh] = useState(null);
-  const [countdown, setCountdown] = useState(REFRESH_INTERVAL / 1000);
-
-  const load = useCallback(async () => {
-    try {
-      const res = await getAlerts();
-      setError(null);
-      setData(res);
-      setLastRefresh(new Date());
-      setCountdown(REFRESH_INTERVAL / 1000);
-    } catch {
-      setError("No se pudieron cargar las alertas. Verifica tu conexión.");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
+  const [version, setVersion] = useState(0);
+  const [state, setState] = useState({ version: -1, data: null, error: false, at: null });
   useEffect(() => {
-    load();
-    const id = setInterval(load, REFRESH_INTERVAL);
-    return () => clearInterval(id);
-  }, [load]);
+    let active = true;
+    getAlerts().then((res) => {
+      if (!res?.alerts) throw new Error("Respuesta incompleta");
+      if (active) setState({ version, data: res, error: false, at: new Date() });
+    }).catch(() => { if (active) setState((s) => ({ ...s, version, error: true })); });
+    return () => { active = false; };
+  }, [version]);
+  useEffect(() => { const id = setInterval(() => setVersion((v) => v + 1), REFRESH_INTERVAL); return () => clearInterval(id); }, []);
+  const refresh = () => setVersion((v) => v + 1);
+  const refreshing = state.version !== version, data = state.data, a = data?.alerts || {};
+  const now = state.at?.getTime() || 0;
+  const n = (k) => a[k]?.count || 0;
+  const payments = n("paymentEvents") + n("financialFollowUp") + n("oldPendingPayments");
+  const summary = [
+    ["payments", "Pagos", payments, "danger"], ["orders", "Pedidos con incidencias", n("pendingPayments"), "danger"], ["out", "Agotados", n("outOfStock"), "danger"],
+    ["low", "Stock bajo", n("lowStock"), "warning"], ["review-stock", "Existencias por revisar", n("inventoryReview"), "review"], ["communications", "Comunicaciones", n("communications"), "warning"],
+    ["requests", "Solicitudes", n("specialRequests"), "info"], ["coupons", "Cupones por vencer", n("expiringCoupons"), "info"], ["new", "Pedidos nuevos 24 h", n("newOrders"), "neutral"],
+  ];
+  const actionable = summary.filter(([k]) => k !== "new").reduce((s, [, , c]) => s + c, 0);
 
-  useEffect(() => {
-    const id = setInterval(() => setCountdown((c) => Math.max(0, c - 1)), 1000);
-    return () => clearInterval(id);
-  }, [lastRefresh]);
-
-  const alerts = data?.alerts ?? {};
-  const total = data?.totalCount ?? 0;
-
-  return (
-    <AdminShell>
-      <div className="alerts-page">
-        {/* Header */}
-        <div className="admin-page__header-row">
-          <div>
-            <h1 className="admin-page__title">Alertas del sistema</h1>
-            <p className="admin-page__subtitle">
-              Monitoreo en tiempo real · se actualiza automáticamente cada 60 segundos
-            </p>
-          </div>
-          <div className="alerts-page__toolbar">
-            {lastRefresh && (
-              <span className="alerts-page__refresh-info">
-                Actualizado {lastRefresh.toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit" })}
-                {" · "}próximo en {countdown}s
-              </span>
-            )}
-            <button
-              type="button"
-              className="btn btn--secondary"
-              onClick={load}
-              disabled={loading}
-            >
-              Actualizar ahora
-            </button>
-          </div>
+  return <AdminShell>
+    <div className="dz-page dz-alerts">
+      <header className="dz-hero dz-hero--alerts">
+        <div className="dz-hero__titles">
+          <p className="dz-eyebrow">Inicio · Alertas importantes</p>
+          <h1>Centro de alertas</h1>
+          <p className="dz-lead">Revisa los eventos que necesitan seguimiento.</p>
         </div>
+        <div className="dz-hero__actions">
+          <p className="dz-hero__meta dz-alerts__status" role="status">
+            {refreshing && data ? "Actualizando…" : state.at ? <>Última actualización <strong>{fmtTime(state.at)}</strong></> : "Consultando alertas…"}
+            <span> · revisión automática cada 60 s</span>
+          </p>
+          <button type="button" className="dz-btn dz-btn--primary" onClick={refresh}><HiOutlineArrowPath aria-hidden="true" />Actualizar</button>
+        </div>
+      </header>
 
-        {error && (
-          <div className="alert-error-banner">{error}</div>
-        )}
+      {!data && refreshing && <DashboardStateNotice>Cargando alertas…</DashboardStateNotice>}
+      {!data && !refreshing && state.error && <DashboardStateNotice tone="error" onRetry={refresh}>No se pudieron cargar las alertas. Ninguna categoría se muestra como vacía mientras no haya respuesta.</DashboardStateNotice>}
+      {data && state.error && !refreshing && <DashboardStateNotice tone="error" onRetry={refresh} retryLabel="Reintentar actualización">No se pudieron actualizar las alertas. Se muestran los datos de las {fmtTime(state.at)}.</DashboardStateNotice>}
 
-        {loading && !data && (
-          <p className="alerts-page__loading">Cargando alertas…</p>
-        )}
+      {data && <>
+        <nav className="dz-alert-summary" aria-label="Resumen de alertas por categoría">
+          <ul>{summary.map(([key, label, count, tone]) => <li key={key}>
+            {count || key === "payments" ? <a href={`#alerta-${key}`} className={`dz-summary-chip ${count ? `dz-summary-chip--${tone}` : "is-clear"}`}>
+              <strong>{formatNumber(count)}</strong><span>{label}</span>
+            </a> : <span className="dz-summary-chip is-clear"><strong>0</strong><span>{label}</span></span>}
+          </li>)}</ul>
+        </nav>
 
-        {data && (
-          <>
-            {/* Tarjetas de resumen */}
-            <PaymentEventAlerts alerts={alerts.paymentEvents} oldPending={alerts.oldPendingPayments} financialFollowUp={alerts.financialFollowUp} />
-            <div className="alert-summary-grid">
-              <SummaryCard
-                count={alerts.newOrders?.count ?? 0}
-                label="Pedidos nuevos (24h)"
-                color="#dc2626"
-                href="/admin/pedidos"
-              />
-              <SummaryCard
-                count={alerts.pendingPayments?.count ?? 0}
-                label="Pedidos por conciliar"
-                color="#d97706"
-                href="/admin/pedidos"
-              />
-              <SummaryCard
-                count={alerts.lowStock?.count ?? 0}
-                label="Stock bajo"
-                color="#d97706"
-                href="/admin/productos?view=stock&stock=low"
-              />
-              <SummaryCard
-                count={alerts.outOfStock?.count ?? 0}
-                label="Sin stock"
-                color="#dc2626"
-                href="/admin/productos?view=stock&stock=out"
-              />
-              <SummaryCard
-                count={alerts.specialRequests?.count ?? 0}
-                label="Solicitudes pendientes"
-                color="#d97706"
-                href="/admin/solicitudes"
-              />
-              <SummaryCard
-                count={alerts.expiringCoupons?.count ?? 0}
-                label="Cupones por vencer"
-                color="#7c3aed"
-                href="/admin/cupones"
-              />
-            </div>
+        {actionable === 0 && <div className="dz-all-clear" role="status"><HiOutlineCheckCircle aria-hidden="true" /><div><p className="dz-empty__title">Sin alertas activas</p><p>No hay pagos, pedidos, inventario, comunicaciones, solicitudes ni cupones que requieran seguimiento.</p></div></div>}
 
-            {total === 0 && (
-              <div className="alerts-page__all-clear">
-                <span className="alerts-page__all-clear-icon">✓</span>
-                <p>Todo en orden — sin alertas activas</p>
-              </div>
-            )}
+        <div className="dz-alert-groups">
+          <AlertGroup id="payments" title="Incidencias de pagos" icon={HiOutlineCreditCard} tone={payments ? "danger" : "calm"} total={payments}
+            description={`${formatNumber(n("paymentEvents"))} eventos Wompi sin completar · ${formatNumber(n("financialFollowUp"))} en seguimiento financiero · ${formatNumber(n("oldPendingPayments"))} pagos pendientes > 24 h. Ninguna de estas señales confirma un pago.`}
+            rows={(a.oldPendingPayments?.items || []).map((o) => <AlertRow key={o._id} title={<OrderReference value={o.orderNumber} />} meta={`Pago Wompi pendiente desde ${fmtDate(o.createdAt)}`}
+              chip={<StatusChip tone="warning">{waitText(hoursSince(o.createdAt, now))}</StatusChip>} value={formatCOP(o.total)}
+              action={{ href: `/admin/pedidos/${o._id}`, label: "Revisar", ariaLabel: `Revisar pedido ${o.orderNumber}` }} />)}
+            listTotal={n("oldPendingPayments")} listTitle="Pagos Wompi pendientes por más de 24 horas" initial={2}>
+            <PaymentEventAlerts alerts={a.paymentEvents} oldPending={a.oldPendingPayments} financialFollowUp={a.financialFollowUp} />
+          </AlertGroup>
 
-            {/* ── Pedidos nuevos ── */}
-            <AlertSection
-              id="newOrders"
-              title="Pedidos nuevos (últimas 24 h)"
-              count={alerts.newOrders?.count ?? 0}
-              color="#dc2626"
-              dot="🔴"
-              actionHref="/admin/pedidos"
-              actionLabel="Ver todos los pedidos →"
-            >
-              <div className="alert-table-wrap">
-                <table className="admin-table">
-                  <thead>
-                    <tr>
-                      <th>Pedido</th>
-                      <th>Cliente</th>
-                      <th>Total</th>
-                      <th>Estado pedido</th>
-                      <th>Estado pago</th>
-                      <th>Método</th>
-                      <th>Fecha</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {alerts.newOrders.items.map((o) => (
-                      <tr key={o._id}>
-                        <td data-label="Pedido">
-                          <Link href={`/admin/pedidos/${o._id}`} className="alert-link">
-                            #{o.orderNumber}
-                          </Link>
-                        </td>
-                        <td data-label="Cliente">{o.buyer?.name}<br /><small>{o.buyer?.email}</small></td>
-                        <td data-label="Total">{fmt(o.total)}</td>
-                        <td data-label="Estado pedido"><span className={`alert-status alert-status--${o.orderStatus}`}>{o.orderStatus}</span></td>
-                        <td data-label="Estado pago"><span className={`alert-status alert-status--pay-${o.paymentStatus}`}>{o.paymentStatus}</span></td>
-                        <td data-label="Método">{o.paymentMethod === "nequi_manual" ? "Nequi" : o.paymentMethod === "wompi" ? "Wompi" : "Contraentrega"}</td>
-                        <td data-label="Fecha">{fmtDate(o.createdAt)}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </AlertSection>
+          {n("pendingPayments") > 0 && <AlertGroup id="orders" title="Pedidos que requieren atención" icon={HiOutlineExclamationTriangle} tone="danger" total={n("pendingPayments")}
+            description="Incidencias de pago, inventario o registro. Resuélvelas antes de preparar o despachar." href="/admin/pedidos?tray=review" hrefLabel="Ver bandeja de revisión"
+            rows={a.pendingPayments.items.map((o) => { const active = (o.incidents || []).filter((i) => !i.resolvedAt).length;
+              return <AlertRow key={o._id} title={<OrderReference value={o.orderNumber} />} meta={`${o.buyer?.name || "Comprador sin nombre"} · ${active ? `${active} ${active === 1 ? "incidencia activa" : "incidencias activas"}` : "Marcado para revisión"}`}
+                chip={<StatusChip tone={hoursSince(o.createdAt, now) > 12 ? "danger" : "warning"}>Espera {waitText(hoursSince(o.createdAt, now))}</StatusChip>} value={formatCOP(o.total)}
+                action={{ href: `/admin/pedidos/${o._id}`, label: "Revisar", ariaLabel: `Revisar pedido ${o.orderNumber}` }} />; })} />}
 
-            {alerts.inventoryReview?.count > 0 && <div role="status"><p>{alerts.inventoryReview.count} productos con existencias que requieren revisión; no se modificaron automáticamente.</p><Link href="/admin/productos?view=stock&stock=review" className="admin-btn">Revisar existencias históricas</Link></div>}
-            <CommunicationAlerts alerts={alerts.communications} />
-            {/* ── Pedidos por conciliar ── */}
-            <AlertSection
-              id="pendingPayments"
-              title="Pedidos por conciliar"
-              count={alerts.pendingPayments?.count ?? 0}
-              color="#d97706"
-              dot="🟡"
-              actionHref="/admin/pedidos"
-              actionLabel="Gestionar pedidos →"
-            >
-              <p className="alert-hint">
-                Estos pedidos tienen incidencias de pago o inventario que requieren revisión administrativa.
-              </p>
-              <div className="alert-table-wrap">
-                <table className="admin-table">
-                  <thead>
-                    <tr>
-                      <th>Pedido</th>
-                      <th>Cliente</th>
-                      <th>Total</th>
-                      <th>Fecha</th>
-                      <th>Espera</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {alerts.pendingPayments.items.map((o) => {
-                      const horasEspera = Math.floor(
-                        ((lastRefresh?.getTime() || new Date(o.createdAt).getTime()) - new Date(o.createdAt).getTime()) / 3_600_000
-                      );
-                      return (
-                        <tr key={o._id}>
-                          <td data-label="Pedido">
-                            <Link href={`/admin/pedidos/${o._id}`} className="alert-link">
-                              #{o.orderNumber}
-                            </Link>
-                          </td>
-                          <td data-label="Cliente">{o.buyer?.name}<br /><small>{o.buyer?.phone}</small></td>
-                          <td data-label="Total">{fmt(o.total)}</td>
-                          <td data-label="Fecha">{fmtDate(o.createdAt)}</td>
-                          <td data-label="Espera">
-                            <span className={horasEspera > 12 ? "alert-warn-text" : ""}>
-                              {horasEspera}h
-                            </span>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </AlertSection>
+          {n("outOfStock") > 0 && <AlertGroup id="out" title="Inventario agotado" icon={HiOutlineArchiveBox} tone="danger" total={n("outOfStock")}
+            description="Productos publicados con alguna variante activa en cero. Cada etiqueta indica la variante (SKU) y sus unidades." href="/admin/productos?view=stock&stock=out" hrefLabel="Ver todos en Existencias"
+            rows={inventoryRows(a.outOfStock, "Reabastecer")} />}
 
-            {/* ── Stock bajo ── */}
-            <AlertSection
-              id="lowStock"
-              title={`Stock bajo (≤ ${alerts.lowStock?.threshold ?? 5} unidades)`}
-              count={alerts.lowStock?.count ?? 0}
-              color="#d97706"
-              dot="🟡"
-              actionHref="/admin/productos?view=stock&stock=low"
-              actionLabel="Ir a Inventario →"
-            >
-              <div className="alert-table-wrap">
-                <table className="admin-table">
-                  <thead>
-                    <tr>
-                      <th>Producto</th>
-                      <th>Stock total</th>
-                      <th>Acción</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {alerts.lowStock.items.map((p) => (
-                      <tr key={p.id}>
-                        <td data-label="Producto">{p.name}{p.affectedVariants?.length > 0 && <small style={{ display: "block" }}>{p.affectedVariants.map((v) => <Link key={v.id} href={`/admin/productos?view=stock&productId=${p.id}&variantId=${v.id}`} style={{ display: "inline-block", marginRight: ".75rem", textDecoration: "underline" }}>{v.sku}: {v.stock} uds</Link>)}</small>}</td>
-                        <td data-label="Stock total">
-                          <span className="alert-stock alert-stock--low">
-                            {p.totalStock} ud{p.totalStock !== 1 ? "s" : ""}
-                          </span>
-                        </td>
-                        <td data-label="Acción">
-                          <Link href={`/admin/productos?view=stock&productId=${p.id}${p.affectedVariants?.[0]?.id ? `&variantId=${p.affectedVariants[0].id}` : ""}`} className="alert-link">
-                            Ajustar →
-                          </Link>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </AlertSection>
+          {n("lowStock") > 0 && <AlertGroup id="low" title="Inventario bajo" icon={HiOutlineCube} tone="warning" total={n("lowStock")}
+            description={`Productos con variantes de ${a.lowStock.threshold ?? 5} unidades o menos.`} href="/admin/productos?view=stock&stock=low" hrefLabel="Ver todos en Existencias"
+            rows={inventoryRows(a.lowStock, "Ajustar")} />}
 
-            {/* ── Sin stock ── */}
-            <AlertSection
-              id="outOfStock"
-              title="Variantes agotadas o sin disponibilidad"
-              count={alerts.outOfStock?.count ?? 0}
-              color="#dc2626"
-              dot="🔴"
-              actionHref="/admin/productos?view=stock&stock=out"
-              actionLabel="Ir a Inventario →"
-            >
-              <div className="alert-table-wrap">
-                <table className="admin-table">
-                  <thead>
-                    <tr>
-                      <th>Producto</th>
-                      <th>Stock</th>
-                      <th>Acción</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {alerts.outOfStock.items.map((p) => (
-                      <tr key={p.id}>
-                        <td data-label="Producto">{p.name}{p.affectedVariants?.length > 0 && <small style={{ display: "block" }}>{p.affectedVariants.map((v) => <Link key={v.id} href={`/admin/productos?view=stock&productId=${p.id}&variantId=${v.id}`} style={{ display: "inline-block", marginRight: ".75rem", textDecoration: "underline" }}>{v.sku}: {v.stock} uds</Link>)}</small>}</td>
-                        <td data-label="Stock">
-                          <span className="alert-stock alert-stock--out">{p.unavailable ? "Sin variantes disponibles" : "Variante agotada"}</span>
-                        </td>
-                        <td data-label="Acción">
-                          <Link href={`/admin/productos?view=stock&productId=${p.id}${p.affectedVariants?.[0]?.id ? `&variantId=${p.affectedVariants[0].id}` : ""}`} className="alert-link">
-                            Reabastecer →
-                          </Link>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </AlertSection>
+          {n("inventoryReview") > 0 && <AlertGroup id="review-stock" title="Existencias por revisar" icon={HiOutlineShieldExclamation} tone="review" total={n("inventoryReview")}
+            description="Existencias históricas inválidas o ausentes. No se modificaron automáticamente." href="/admin/productos?view=stock&stock=review" hrefLabel="Revisar existencias históricas"
+            rows={inventoryRows(a.inventoryReview, "Revisar")} />}
 
-            {/* ── Solicitudes especiales ── */}
-            <AlertSection
-              id="specialRequests"
-              title="Solicitudes especiales sin atender"
-              count={alerts.specialRequests?.count ?? 0}
-              color="#d97706"
-              dot="🟡"
-              actionHref="/admin/solicitudes"
-              actionLabel="Ver solicitudes →"
-            >
-              <div className="alert-table-wrap">
-                <table className="admin-table">
-                  <thead>
-                    <tr>
-                      <th>N° solicitud</th>
-                      <th>Tipo</th>
-                      <th>Cliente</th>
-                      <th>Fecha</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {alerts.specialRequests.items.map((r) => (
-                      <tr key={r._id}>
-                        <td data-label="N° solicitud">
-                          <Link href="/admin/solicitudes" className="alert-link">
-                            #{r.requestNumber}
-                          </Link>
-                        </td>
-                        <td data-label="Tipo">
-                          {r.type === "customization" ? "Personalización" : "Pedido mayor"}
-                        </td>
-                        <td data-label="Cliente">{r.contact?.name}<br /><small>{r.contact?.email}</small></td>
-                        <td data-label="Fecha">{fmtDate(r.createdAt)}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </AlertSection>
+          {n("communications") > 0 && <AlertGroup id="communications" title="Comunicaciones fallidas" icon={HiOutlineEnvelope} tone="warning" total={n("communications")}
+            description="Los errores de correo no cambian pagos ni inventario. Revisa el historial del pedido o solicita un reintento." href="/admin/pedidos?tray=communications" hrefLabel="Ver bandeja de comunicaciones"
+            rows={a.communications.items.map((c) => <AlertRow key={c.id} title={c.orderNumber ? <OrderReference value={c.orderNumber} /> : "Pedido sin número"} meta={`${c.message}${c.count > 1 ? ` · ${c.count} intentos` : ""}`}
+              value={c.at ? fmtDate(c.at) : null} action={{ href: `/admin/pedidos/${c.orderId}`, label: "Ver pedido", ariaLabel: `Ver pedido ${c.orderNumber || ""}`.trim() }} />)} />}
 
-            {/* ── Cupones por vencer ── */}
-            <AlertSection
-              id="expiringCoupons"
-              title="Cupones próximos a vencer (3 días)"
-              count={alerts.expiringCoupons?.count ?? 0}
-              color="#7c3aed"
-              dot="🟣"
-              actionHref="/admin/cupones"
-              actionLabel="Gestionar cupones →"
-            >
-              <div className="alert-table-wrap">
-                <table className="admin-table">
-                  <thead>
-                    <tr>
-                      <th>Código</th>
-                      <th>Vence</th>
-                      <th>Usos</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {alerts.expiringCoupons.items.map((c) => (
-                      <tr key={c._id}>
-                        <td data-label="Código"><code className="alert-code">{c.code}</code></td>
-                        <td data-label="Vence">{fmtExpires(c.expiresAt)}</td>
-                        <td data-label="Usos">
-                          {c.usedCount}
-                          {c.maxUses ? ` / ${c.maxUses}` : " / ∞"}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </AlertSection>
-          </>
-        )}
-      </div>
-    </AdminShell>
-  );
+          {n("specialRequests") > 0 && <AlertGroup id="requests" title="Solicitudes sin atender" icon={HiOutlineChatBubbleLeftRight} tone="info" total={n("specialRequests")}
+            description="Personalizaciones y pedidos por mayor pendientes de respuesta." href="/admin/solicitudes" hrefLabel="Ver solicitudes"
+            rows={a.specialRequests.items.map((r) => <AlertRow key={r._id} title={`#${r.requestNumber}`} meta={`${r.type === "customization" ? "Personalización" : "Pedido por mayor"} · ${r.contact?.name || "Sin nombre"}`}
+              value={fmtDate(r.createdAt)} action={{ href: `/admin/solicitudes/${r._id}`, label: "Atender", ariaLabel: `Atender solicitud ${r.requestNumber}` }} />)} />}
+
+          {n("expiringCoupons") > 0 && <AlertGroup id="coupons" title="Cupones por vencer" icon={HiOutlineTicket} tone="info" total={n("expiringCoupons")}
+            description="Vencen en los próximos 3 días." href="/admin/cupones" hrefLabel="Gestionar cupones"
+            rows={a.expiringCoupons.items.map((c) => <AlertRow key={c._id} title={<span className="dz-mono">{c.code}</span>} meta={`Vence ${fmtDate(c.expiresAt)}`}
+              value={`${formatNumber(c.usedCount)} / ${c.maxUses ? formatNumber(c.maxUses) : "∞"} usos`} />)} />}
+
+          {n("newOrders") > 0 && <AlertGroup id="new" title="Pedidos nuevos · últimas 24 h" icon={HiOutlineShoppingBag} tone="neutral" total={n("newOrders")} defaultOpen={false}
+            description="Informativo: pedidos abiertos creados en las últimas 24 horas." href="/admin/pedidos" hrefLabel="Ver todos los pedidos"
+            rows={a.newOrders.items.map((o) => <AlertRow key={o._id} title={<OrderReference value={o.orderNumber} />} meta={`${o.buyer?.name || "Comprador sin nombre"} · ${PAYMENT_METHOD_LABELS[o.paymentMethod] || o.paymentMethod} · ${fmtDate(o.createdAt)}`}
+              chip={<StatusChip tone="neutral">{ORDER_STATUS_LABELS[o.orderStatus] || o.orderStatus} · pago {(PAYMENT_STATUS_LABELS[o.paymentStatus] || o.paymentStatus || "").toLowerCase()}</StatusChip>}
+              value={formatCOP(o.total)} action={{ href: `/admin/pedidos/${o._id}`, label: "Ver", ariaLabel: `Ver pedido ${o.orderNumber}` }} />)} />}
+        </div>
+      </>}
+    </div>
+  </AdminShell>;
 }

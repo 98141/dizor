@@ -534,12 +534,12 @@ exports.trackGuestOrderLegacy = (req, res) => {
  *  - quien presente el token de acceso vigente emitido al crear el pedido.
  * Cualquier otro caso responde 404 genérico (no revela si el pedido existe).
  */
-exports.lookupOrderConfirmation = catchAsync(async (req, res, next) => {
+const findAccessibleConfirmation = async req => {
   const orderNumber =
     typeof req.body?.orderNumber === "string" ? req.body.orderNumber.trim().toUpperCase() : "";
   const accessToken = typeof req.body?.accessToken === "string" ? req.body.accessToken : "";
 
-  const notFound = () => next(new AppError("Pedido no encontrado", 404));
+  const notFound = () => { throw new AppError("Pedido no encontrado", 404); };
   if (!orderNumber) return notFound();
 
   const order = await Order.findOne({ orderNumber }).select(
@@ -556,7 +556,20 @@ exports.lookupOrderConfirmation = catchAsync(async (req, res, next) => {
 
   if (!isOwner && !tokenValid) return notFound();
 
+  return order;
+};
+
+exports.lookupOrderConfirmation = catchAsync(async (req, res) => {
+  const order = await findAccessibleConfirmation(req);
+
   res.status(200).json({ status: "success", order: formatOrderConfirmation(order) });
+});
+
+exports.verifyWompiReturn = catchAsync(async (req, res) => {
+  const order = await findAccessibleConfirmation(req);
+  await require("../services/wompiTransactionRecovery").verifyReturn(order, req.body.transactionId);
+  const updated = await Order.findById(order._id);
+  res.json({ status: "success", order: formatOrderConfirmation(updated) });
 });
 
 exports.getMyOrders = catchAsync(async (req, res, next) => {

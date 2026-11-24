@@ -196,8 +196,20 @@ exports.reconcileWompi = catchAsync(async (req, res) => {
   if (!isAdmin(req.user.role)) throw new AppError("Solo administradores pueden conciliar", 403);
   const order = await Order.findById(req.params.id);
   if (!order) throw new AppError("Pedido no encontrado", 404);
-  const transactionId = Object.hasOwn(req.body, "transactionId") ? req.body.transactionId : order.wompi?.transactionId;
-  if (order.paymentMethod !== "wompi" || typeof transactionId !== "string" || !/^[A-Za-z0-9_-]{1,150}$/.test(transactionId)) throw new AppError("Indica un ID de transacción del panel o comprobante de Wompi", 409);
+  if (order.paymentMethod !== "wompi") throw new AppError("Este pedido no usa Wompi", 409);
+  const transactionIds = Object.hasOwn(req.body, "transactionId") ? [req.body.transactionId]
+    : await require("../services/wompiTransactionRecovery").knownTransactionIds(order);
+  for (const transactionId of transactionIds) await reconcileWompiTransaction(order, transactionId, req.user);
+  const updated = await Order.findById(order._id);
+  const message = updated.requiresReview || updated.incidents.some(i => !i.resolvedAt)
+    ? "Verificación completada. El pedido conserva incidencias que requieren revisión."
+    : updated.paymentStatus === "pagado" ? "Pago confirmado con Wompi."
+      : "Wompi todavía no confirma un pago aprobado para este pedido.";
+  res.json({ status: "success", message });
+});
+
+async function reconcileWompiTransaction(order, transactionId, actor) {
+  if (!require("../services/wompiTransactionRecovery").validId(transactionId)) throw new AppError("ID de transacción inválido", 409);
   const { getTransaction, getExpectedEventEnvironment } = require("../services/wompiService");
   let tx;
   try { tx = await getTransaction(transactionId); }
@@ -206,7 +218,7 @@ exports.reconcileWompi = catchAsync(async (req, res) => {
     await mutateOrder(order._id, async current => {
       const count = current.incidents.length;
       require("../services/orderOperations").addIncident(current, "reconciliation_query_failed", transactionId);
-      if (current.incidents.length !== count) history(current, `Consulta Wompi fallida: ${transactionId}. ${err.code || "Proveedor no disponible"}`, req.user);
+      if (current.incidents.length !== count) history(current, `Consulta Wompi fallida: ${transactionId}. ${err.code || "Proveedor no disponible"}`, actor);
     });
     throw new AppError("No se pudo consultar a Wompi. Conserva el pedido para revisión.", 503);
   }
@@ -215,20 +227,19 @@ exports.reconcileWompi = catchAsync(async (req, res) => {
   await mutateOrder(order._id, async (current, session) => {
     const failures = current.incidents.filter(i => i.code === "reconciliation_query_failed" && !i.resolvedAt);
     for (const i of failures) {
-      i.resolvedAt = new Date(); i.resolution = { actor: req.user.id, decision: "reconciled_with_provider",
+      i.resolvedAt = new Date(); i.resolution = { actor: actor.id, decision: "reconciled_with_provider",
         reason: "Consulta autenticada del pedido completada", evidence: { transactionId: tx.id, recordedAt: new Date() } };
     }
     if (failures.length) {
-      history(current, `Incidencias de consulta superadas: ${failures.length}. Transacción consultada: ${tx.id}`, req.user);
-      await require("../models/AuditLog").create([{ userId: req.user.id, userEmail: req.user.email, role: req.user.role,
+      history(current, `Incidencias de consulta superadas: ${failures.length}. Transacción consultada: ${tx.id}`, actor);
+      await require("../models/AuditLog").create([{ userId: actor.id, userEmail: actor.email, role: actor.role,
         action: "wompi_query_failures_resolved", module: "orders", entityId: current._id, entityType: "order", success: true,
         previousData: { incidents: failures.map(i => ({ id: i._id, detail: i.detail })) }, newData: { transactionId: tx.id, receipt: completed._id, status: tx.status },
         summary: "Fallos de consulta superados mediante conciliación autenticada" }], { session });
     }
     if (failures.length || tx.status === "APPROVED") current.requiresReview = current.incidents.some(i => !i.resolvedAt);
   });
-  res.json({ status: "success", message: "Transacción consultada y conciliada según evidencia del proveedor" });
-});
+}
 
 exports.resolveIncident = catchAsync(async (req, res) => {
   const { order } = await require("../services/paymentIncidentResolution").resolve(req.params.id, req.params.incidentId, req.body, req.user);

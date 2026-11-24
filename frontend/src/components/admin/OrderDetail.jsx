@@ -44,7 +44,7 @@ function OrderWorkspaceDetail({ orderId, backHref = "/admin/pedidos" }) {
     let actionResult;
     try {
       if (code === "collect") await confirmPayment(orderId, values);
-      else if (code === "reconcile") await reconcileWompi(orderId, values);
+      else if (code === "reconcile") actionResult = await reconcileWompi(orderId, values);
       else if (code === "resolveIncident") await resolvePaymentIncident(orderId, values.incidentId, values);
       else if (["dispatch", "correct"].includes(code)) await updateOrderShipping(orderId, values);
       else {
@@ -56,7 +56,7 @@ function OrderWorkspaceDetail({ orderId, backHref = "/admin/pedidos" }) {
       const result = await getAdminOrder(orderId);
       setState({ key, order: result.order });
       setCommunicationsVersion((v) => v + 1);
-      setMessage(actionResult?.message === "El pedido ya tenía este estado. No se registró una nueva transición." ? actionResult.message : code === "collect" ? "Recaudo verificado en el registro. El despacho y la entrega no se modificaron." : code === "reconcile" ? "Consulta completada. Revisa el estado y las incidencias resultantes." : "Operación registrada. La siguiente acción y las comunicaciones se actualizaron.");
+      setMessage(code === "reconcile" ? actionResult.message : actionResult?.message === "El pedido ya tenía este estado. No se registró una nueva transición." ? actionResult.message : code === "collect" ? "Recaudo verificado en el registro. El despacho y la entrega no se modificaron." : "Operación registrada. La siguiente acción y las comunicaciones se actualizaron.");
       return true;
     } catch (err) {
       const uncertain = recorded || !err.response || err.response.status >= 500;

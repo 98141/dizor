@@ -4,7 +4,8 @@ import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { lookupOrderConfirmation } from "@/services/checkoutService";
+import { lookupOrderConfirmation, verifyWompiReturn } from "@/services/checkoutService";
+import { createConfirmationLoader, wompiReturnId } from "@/lib/wompiConfirmation";
 import { formatCOP } from "@/lib/formatCurrency";
 import { getWhatsAppUrl } from "@/lib/whatsapp";
 import { trackWhatsAppClick } from "@/lib/analytics/events";
@@ -513,6 +514,8 @@ function ConfirmacionContent() {
   const sp = useSearchParams();
   const { isAuthenticated, loadingAuth } = useAuth();
   const orderNumber = (sp.get("order") || "").trim();
+  const [wompiReturn] = useState(() => ({ orderNumber, transactionId: wompiReturnId(sp) }));
+  const returnTransactionId = wompiReturn.orderNumber === orderNumber ? wompiReturn.transactionId : "";
 
   const [order, setOrder] = useState(null);
   const [status, setStatus] = useState("loading"); // loading | ready | limited
@@ -542,7 +545,9 @@ function ConfirmacionContent() {
     }
     let cancelled = false;
     let timer; let remaining = 8;
-    const refresh = () => lookupOrderConfirmation(orderNumber, token)
+    const load = createConfirmationLoader({ orderNumber, accessToken: token, transactionId: returnTransactionId,
+      verify: verifyWompiReturn, lookup: lookupOrderConfirmation });
+    const refresh = () => load()
       .then((data) => {
         if (cancelled) return;
         setOrder(data.order);
@@ -557,7 +562,7 @@ function ConfirmacionContent() {
       cancelled = true;
       clearTimeout(timer);
     };
-  }, [orderNumber, isAuthenticated, loadingAuth]);
+  }, [orderNumber, isAuthenticated, loadingAuth, returnTransactionId]);
 
   // Ofrecer registro opcional al invitado, una vez cargado su pedido.
   useEffect(() => {

@@ -36,6 +36,14 @@ exports.inventoryStages = () => [
     { case: { $gt: ["$_inventory.lowCount", 0] }, then: "low" },
   ], default: "healthy" } } } },
 ];
+// MongoDB equivalent of variantStatus() for one variant (same threshold and validity rule).
+// Read-only analytics use it to count variants without loading the catalogue in memory.
+exports.variantStatusExpression = (variant) => ({ $let: { vars: { v: variant }, in: { $switch: { branches: [
+  { case: { $eq: ["$$v.isActive", false] }, then: "inactive" },
+  { case: { $not: [validStock] }, then: "review" },
+  { case: { $eq: ["$$v.stock", 0] }, then: "out" },
+  { case: { $lte: ["$$v.stock", LOW_STOCK_THRESHOLD] }, then: "low" },
+], default: "healthy" } } } });
 exports.alertGroups = async () => {
   const Product = require("../models/product");
   const [result] = await Product.aggregate([{ $match: { isActive: true } }, ...exports.inventoryStages(),

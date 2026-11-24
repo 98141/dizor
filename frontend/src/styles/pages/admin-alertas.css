@@ -426,3 +426,87 @@
     grid-template-columns: repeat(6, 1fr);
   }
 }
+
+/* ══════════════════════════════════════════════════════════════════════
+   Sprint 01 · Centro de alertas ("dz-" namespace; shared blocks live in
+   admin-dashboard.css). The alert bell rules above are unchanged.
+   ══════════════════════════════════════════════════════════════════════ */
+.admin-shell .dz-alerts .dz-hero--alerts .dz-hero__actions { flex-direction: column; align-items: flex-end; gap: .4rem; }
+.admin-shell .dz-alerts .dz-alerts__status { text-align: right; }
+.admin-shell .dz-alerts > .dz-notice { margin-top: 1rem; }
+.admin-shell .dz-alerts .dz-alert-summary { margin-top: 1rem; }
+.admin-shell .dz-alerts .dz-alert-summary ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .4rem; }
+.admin-shell .dz-alerts .dz-summary-chip { display: inline-flex; align-items: baseline; gap: .4rem; min-height: 36px; padding: .4rem .75rem; border: 1px solid var(--dz-line); border-radius: 8px; background: var(--dz-card); color: var(--dz-ink); font-size: .76rem; text-decoration: none; }
+.admin-shell .dz-alerts a.dz-summary-chip:hover { border-color: var(--dz-gold); }
+.admin-shell .dz-alerts .dz-summary-chip strong { font-size: .95rem; font-weight: 700; }
+.admin-shell .dz-alerts .dz-summary-chip--danger { border-color: #ecd2cd; background: #fdf6f5; } .admin-shell .dz-alerts .dz-summary-chip--danger strong { color: var(--color-error); }
+.admin-shell .dz-alerts .dz-summary-chip--warning { border-color: #f0dcb4; background: #fffaf1; } .admin-shell .dz-alerts .dz-summary-chip--warning strong { color: #7a4a02; }
+.admin-shell .dz-alerts .dz-summary-chip--info, .admin-shell .dz-alerts .dz-summary-chip--review { border-color: #d3dde6; background: #f6f8fa; } .admin-shell .dz-alerts :is(.dz-summary-chip--info, .dz-summary-chip--review) strong { color: #34506b; }
+.admin-shell .dz-alerts .dz-summary-chip.is-clear { color: var(--dz-muted); background: transparent; border-style: dashed; }
+.admin-shell .dz-alerts .dz-all-clear { display: flex; gap: .8rem; align-items: center; margin-top: 1rem; padding: .9rem 1rem; border: 1px solid #cfe1d2; border-radius: var(--dz-radius); background: #f3f8f4; font-size: .8rem; color: #2f5d3a; }
+.admin-shell .dz-alerts .dz-all-clear svg { width: 1.6rem; height: 1.6rem; flex-shrink: 0; }
+.admin-shell .dz-alerts .dz-all-clear p { margin: 0; }
+.admin-shell .dz-alerts .dz-alert-groups { display: grid; gap: .75rem; margin-top: 1rem; }
+.admin-shell .dz-alerts .dz-alert-group { position: relative; background: var(--dz-card); border: 1px solid var(--dz-line); border-radius: var(--dz-radius); box-shadow: var(--dz-shadow); min-width: 0; scroll-margin-top: 5rem; }
+.admin-shell .dz-alerts .dz-alert-group--danger::before, .admin-shell .dz-alerts .dz-alert-group--warning::before { content: ""; position: absolute; left: -1px; top: 14px; height: 28px; width: 3px; border-radius: 0 3px 3px 0; background: var(--color-error); }
+.admin-shell .dz-alerts .dz-alert-group--warning::before { background: #d39a3a; }
+.admin-shell .dz-alerts .dz-alert-group__head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center; gap: .3rem .7rem; padding: .7rem .7rem .7rem 1rem; }
+.admin-shell .dz-alerts .dz-alert-group__icon { display: inline-grid; place-items: center; width: 2rem; height: 2rem; border-radius: 8px; background: #f4f1ea; color: var(--dz-ink); }
+.admin-shell .dz-alerts .dz-alert-group--danger .dz-alert-group__icon { background: #fbefed; color: var(--color-error); }
+.admin-shell .dz-alerts .dz-alert-group--warning .dz-alert-group__icon { background: #fdf5e6; color: #7a4a02; }
+.admin-shell .dz-alerts :is(.dz-alert-group--info, .dz-alert-group--review) .dz-alert-group__icon { background: #eef2f5; color: #34506b; }
+.admin-shell .dz-alerts .dz-alert-group__icon svg { width: 1.1rem; height: 1.1rem; }
+.admin-shell .dz-alerts .dz-alert-group__titles { min-width: 0; }
+.admin-shell .dz-alerts .dz-alert-group h2 { margin: 0; font: 600 .95rem/1.3 var(--font-ui); }
+.admin-shell .dz-alerts .dz-alert-group__titles p { margin: .1rem 0 0; font-size: .74rem; line-height: 1.45; color: var(--dz-muted); }
+.admin-shell .dz-alerts .dz-alert-group__toggle { display: inline-grid; place-items: center; width: 40px; min-width: 40px; height: 40px; min-height: 40px; padding: 0; border: 1px solid transparent; border-radius: 8px; background: transparent; color: var(--dz-ink); }
+.admin-shell .dz-alerts .dz-alert-group__toggle:hover { border-color: var(--dz-line-strong); }
+.admin-shell .dz-alerts .dz-alert-group__toggle svg { width: 1.1rem; height: 1.1rem; }
+.admin-shell .dz-alerts .dz-alert-group__toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+.admin-shell .dz-alerts .dz-alert-group__body { padding: 0 1rem .75rem; border-top: 1px solid var(--dz-line); }
+.admin-shell .dz-alerts .dz-alert-list { list-style: none; margin: 0; padding: 0; }
+.admin-shell .dz-alerts .dz-alert-group__body { container-type: inline-size; }
+@container (max-width: 22rem) { .admin-shell .dz-alerts .dz-alert-row { grid-template-columns: minmax(0, 1fr) !important; } .admin-shell .dz-alerts .dz-alert-row > .dz-btn { grid-column: 1 !important; grid-row: auto !important; justify-self: start; } .admin-shell .dz-alerts .dz-payments__stats div { display: block !important; } }
+.admin-shell .dz-alerts .dz-alert-group__list-title { margin: .75rem 0 .1rem; font: 600 .78rem/1.3 var(--font-ui); color: var(--dz-muted); }
+.admin-shell .dz-alerts .dz-alert-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: .35rem .9rem; padding: .6rem 0; border-bottom: 1px solid #f0ede6; }
+.admin-shell .dz-alerts .dz-alert-row__main { display: grid; gap: .15rem; min-width: 0; }
+.admin-shell .dz-alerts .dz-alert-row__title { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem; font-size: .84rem; font-weight: 600; line-height: 1.35; overflow-wrap: anywhere; }
+.admin-shell .dz-alerts .dz-alert-row__meta { font-size: .74rem; line-height: 1.45; color: var(--dz-muted); overflow-wrap: anywhere; }
+.admin-shell .dz-alerts .dz-alert-row__aside { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: .4rem .7rem; }
+.admin-shell .dz-alerts .dz-alert-row__value { font-size: .8rem; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.admin-shell .dz-alerts .dz-alert-group__foot { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1rem; padding-top: .65rem; font-size: .74rem; color: var(--dz-muted); }
+.admin-shell .dz-alerts .dz-alert-group__foot .dz-link { margin-left: auto; }
+.admin-shell .dz-alerts .dz-alert-group__more { min-height: 36px; padding: .3rem .8rem; border: 1px solid var(--dz-line-strong); border-radius: 8px; background: var(--dz-card); color: var(--dz-ink); font: 600 .76rem/1.2 var(--font-ui); }
+.admin-shell .dz-alerts .dz-pills { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .2rem; }
+.admin-shell .dz-alerts .dz-pill { display: inline-flex; align-items: center; gap: .35rem; min-height: 28px; padding: .15rem .55rem; border: 1px solid var(--dz-line); border-radius: 999px; background: #faf9f6; color: var(--dz-ink); font-size: .7rem; text-decoration: none; }
+.admin-shell .dz-alerts .dz-pill span:last-child { font-weight: 700; }
+.admin-shell .dz-alerts .dz-pill--out { border-color: #efcdc8; background: #fdf6f5; } .admin-shell .dz-alerts .dz-pill--out span:last-child { color: var(--color-error); }
+.admin-shell .dz-alerts .dz-pill--low { border-color: #f0dcb4; background: #fffaf1; } .admin-shell .dz-alerts .dz-pill--low span:last-child { color: #7a4a02; }
+.admin-shell .dz-alerts .dz-pill--review { border-color: #d3dde6; background: #f6f8fa; } .admin-shell .dz-alerts .dz-pill--review span:last-child { color: #34506b; }
+.admin-shell .dz-alerts a.dz-pill:hover { border-color: var(--dz-gold); }
+/* Wompi reconciliation (logic unchanged, presentation only) */
+.admin-shell .dz-alerts .dz-payments { padding: .75rem 0 .35rem; border-bottom: 1px solid #f0ede6; }
+.admin-shell .dz-alerts .dz-payments__title { margin: 0 0 .5rem; font: 600 .84rem/1.3 var(--font-ui); }
+.admin-shell .dz-alerts .dz-payments__stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .45rem; margin: 0 0 .5rem; }
+.admin-shell .dz-alerts .dz-payments__stats div { padding: .45rem .6rem; border-radius: 8px; background: #f7f5f0; }
+.admin-shell .dz-alerts .dz-payments__stats dt { font-size: .7rem; line-height: 1.35; color: var(--dz-muted); }
+.admin-shell .dz-alerts .dz-payments__stats dd { margin: 0; font-size: 1.05rem; font-weight: 700; }
+.admin-shell .dz-alerts .dz-payments__note, .admin-shell .dz-alerts .dz-payments__message { margin: 0 0 .55rem; font-size: .74rem; color: var(--dz-muted); }
+.admin-shell .dz-alerts .dz-payments__sub, .admin-shell .dz-alerts .dz-payment-review h4 { margin: .8rem 0 .35rem; font: 600 .78rem/1.3 var(--font-ui); }
+.admin-shell .dz-alerts .dz-payment-event { padding: .5rem 0; border-top: 1px solid #f0ede6; font-size: .76rem; }
+.admin-shell .dz-alerts .dz-payment-event p { margin: 0 0 .35rem; overflow-wrap: anywhere; }
+.admin-shell .dz-alerts .dz-payment-event__actions { display: flex; flex-wrap: wrap; gap: .4rem; }
+.admin-shell .dz-alerts .dz-payment-review { display: grid; gap: .5rem; margin-top: .6rem; padding: .7rem; border: 1px solid var(--dz-line); border-radius: 8px; background: #faf9f6; font-size: .78rem; }
+.admin-shell .dz-alerts .dz-payment-review label { display: grid; gap: .25rem; }
+@media (max-width: 699px) {
+  .admin-shell .dz-alerts .dz-hero--alerts { grid-template-columns: minmax(0, 1fr); }
+  .admin-shell .dz-alerts .dz-hero--alerts .dz-hero__actions { flex-direction: row; align-items: center; justify-content: space-between; }
+  .admin-shell .dz-alerts .dz-alerts__status { text-align: left; flex: 1 1 12rem; }
+  .admin-shell .dz-alerts .dz-alert-group__head { padding-left: .8rem; gap: .3rem .55rem; }
+  .admin-shell .dz-alerts .dz-alert-group__body { padding-inline: .8rem; }
+  .admin-shell .dz-alerts .dz-alert-row { grid-template-columns: minmax(0, 1fr) auto; }
+  .admin-shell .dz-alerts .dz-alert-row__aside { grid-column: 1; justify-content: flex-start; }
+  .admin-shell .dz-alerts .dz-alert-row > .dz-btn { grid-column: 2; grid-row: 1 / span 2; align-self: center; }
+  .admin-shell .dz-alerts .dz-payments__stats { grid-template-columns: minmax(0, 1fr); gap: .3rem; }
+  .admin-shell .dz-alerts .dz-payments__stats div { display: flex; justify-content: space-between; align-items: baseline; gap: .5rem; padding: .35rem .6rem; }
+}
