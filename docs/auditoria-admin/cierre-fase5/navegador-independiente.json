@@ -1,0 +1,91 @@
+{
+  "checks": [
+    {
+      "id": "B-I01",
+      "ok": true,
+      "labels": [
+        "Inicio",
+        "Pedidos",
+        "Productos",
+        "Atención al cliente",
+        "Tienda online",
+        "Marketing",
+        "Finanzas",
+        "Configuración"
+      ]
+    },
+    {
+      "id": "B-I02",
+      "ok": true,
+      "labels": [
+        "Inicio",
+        "Pedidos",
+        "Solicitudes"
+      ]
+    },
+    {
+      "id": "B-I03",
+      "ok": true,
+      "url": "http://127.0.0.1:51055/cuenta"
+    },
+    {
+      "id": "B-I04",
+      "ok": true,
+      "url": "http://127.0.0.1:51055/admin/contenido?tab=resenas&term=auditoria&page=2",
+      "before": "http://127.0.0.1:51055/admin/contenido?tab=resenas&term=auditoria&page=2"
+    },
+    {
+      "id": "B-I05",
+      "ok": true,
+      "active": "Newsletter",
+      "url": "http://127.0.0.1:51055/admin/marketing?tab=newsletter"
+    },
+    {
+      "id": "B-I06",
+      "ok": true,
+      "exportButtons": [
+        "Exportar pedidos (CSV)"
+      ],
+      "url": "http://127.0.0.1:51055/admin/contenido?tab=exports&scope=orders&tray=prepare"
+    },
+    {
+      "id": "B-I07",
+      "ok": true,
+      "url": "http://127.0.0.1:51055/admin/contenido?tab=no-existe&scope=finance"
+    },
+    {
+      "id": "B-I08",
+      "ok": true,
+      "inert": false,
+      "focus": true
+    },
+    {
+      "id": "B-I09",
+      "ok": true,
+      "inertDesktop": false
+    },
+    {
+      "id": "B-I10",
+      "ok": true,
+      "url": "http://127.0.0.1:51055/admin/contenido?tab=home"
+    }
+  ],
+  "findings": [
+    {
+      "id": "F5-M01",
+      "marketingState": {
+        "text": "Ir al contenido\n\nDizor\n\nAdmin Cierre\nAdministrador\n\nOPERACIÓN DIARIA\n\nInicio\nPedidos\nProductos\nAtención al cliente\n\nADMINISTRACIÓN\n\nTienda online\nMarketing\nCupones\nPopup\nNewsletter\nCarritos\nConfiguración\nVer tienda\nCerrar sesión\nDizor · Administración\nMarketing / Popup\nMarketing\n\nCupones, popup y suscripciones. Las herramientas desactivadas conservan su estado.\n\nCupones\nPopup\nNewsletter\nCarritos\nPopup promocional\nActivar popup\nContenido del popup (solo uno se publica)\nSuscripción por correo\nCupón de descuento\nInformación / anuncio\nTítulo\nTexto\nRetraso (segundos)\nImagen del popup (opcional)\nSubir desde equipoJPG, PNG, WebP · máx. 10 MB\no usa URL\nNewsletter (footer)\nTítulo footer\nTexto footer\nCarrito abandonado\n\nLos recordatorios están desactivados. Se conserva la configuración histórica; no se muestran formularios ni se envían recordatorios.\n\nEnviar recordatorios\nHoras antes del primer correo\nMáximo de recordatorios\nGuardar configuración",
+        "title": "",
+        "saveEnabled": true,
+        "errorVisible": false
+      },
+      "storedTitle": "",
+      "storedEnabled": false
+    }
+  ],
+  "pageErrors": [],
+  "hydrationErrors": [],
+  "externalRequests": [],
+  "preparedTitle": "Titulo real de auditoria",
+  "passed": true
+}

@@ -1,0 +1,89 @@
+{
+  "at": "2026-11-21T15:24:36.347Z",
+  "status": "F5-A01 y F5-B01/B02/B03 corregidos; pendiente verificación definitiva de Cursor",
+  "reproduction": {
+    "failedBefore": true,
+    "saveEnabledBefore": true,
+    "saveEnabledAfter": false
+  },
+  "node": {
+    "previous": {
+      "tests": 252,
+      "passed": 252,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 140189.4536
+    },
+    "added": {
+      "tests": 31,
+      "passed": 31,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 11009.9819
+    },
+    "total": 283
+  },
+  "browser": {
+    "originalComponents": 48,
+    "originalAuthenticated": 35,
+    "independent": 10,
+    "newAuthenticated": 25,
+    "total": 118,
+    "pageErrors": 0,
+    "hydrationErrors": 0,
+    "externalRequests": 0,
+    "independentStoredTitlePreserved": true
+  },
+  "static": {
+    "syntaxFiles": 8,
+    "syntaxFailures": 0,
+    "node": {
+      "errors": 0,
+      "warnings": 0
+    },
+    "nodeBaseline": {
+      "errors": 0,
+      "warnings": 0
+    },
+    "frontend": {
+      "errors": 1,
+      "warnings": 2
+    },
+    "frontendBaseline": {
+      "errors": 1,
+      "warnings": 2
+    },
+    "newMessages": []
+  },
+  "build": {
+    "exitCode": 0,
+    "signal": null,
+    "isolatedCopy": true,
+    "envFilesCopied": false,
+    "inheritedCredentials": false,
+    "network": "build fetch/TCP blocked; runtime loopback only",
+    "compiler": "Next.js --webpack"
+  },
+  "existingApplicationFilesChanged": [
+    "backend/src/controllers/settingsAdminController.js",
+    "frontend/src/components/admin/AdminShell.jsx",
+    "frontend/src/components/admin/ContentWorkspace.jsx",
+    "frontend/src/lib/adminNavigation.mjs",
+    "frontend/src/services/adminMarketingService.js",
+    "frontend/src/services/adminSettingsService.js"
+  ],
+  "restrictions": {
+    "production": false,
+    "realDatabase": false,
+    "envChanged": false,
+    "realCredentials": false,
+    "realEmails": false,
+    "realPayments": false,
+    "externalDeliveryEnabled": false,
+    "deployed": false,
+    "migratedProduction": false,
+    "committed": false,
+    "pushed": false,
+    "phase6": false
+  }
+}

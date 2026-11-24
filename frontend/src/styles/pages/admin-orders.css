@@ -220,12 +220,8 @@
 .admin-shell :is(.op-orders, .op-export) h1 { margin: 0; color: var(--admin-graphite, #252725); font-family: var(--font-display, Georgia, serif); font-size: clamp(1.35rem, 1.12rem + .7vw, 1.8rem); font-weight: 500; letter-spacing: -.02em; line-height: 1.15; }
 .op-lead { margin: .28rem 0 0; max-width: 62ch; color: #5f5b54; font-size: .86rem; line-height: 1.45; }
 .op-hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; }
+/* Sprint 04: colours, hover, primary and disabled states of .op-btn come from styles/layouts/admin-buttons.css. */
 .admin-shell :is(.op-orders, .op-export-page) :is(button, a).op-btn { display: inline-flex; align-items: center; justify-content: center; gap: .35rem; min-height: 36px; padding: .32rem .72rem; border: 1px solid #d6d0c3; border-radius: 8px; background: #fff; color: #252725; box-shadow: none; cursor: pointer; font: 600 .8rem/1.3 var(--font-ui, Verdana, sans-serif); text-align: center; text-decoration: none; }
-.admin-shell :is(.op-orders, .op-export-page) button.op-btn--primary { background: #252725; border-color: #252725; color: #fff; }
-.admin-shell :is(.op-orders, .op-export-page) button.op-btn:hover:not(:disabled),
-.admin-shell :is(.op-orders, .op-export-page) a.op-btn:hover { border-color: #b87305; }
-.admin-shell :is(.op-orders, .op-export-page) button.op-btn--primary:hover:not(:disabled) { background: #111; border-color: #111; }
-.admin-shell :is(.op-orders, .op-export-page) button.op-btn:disabled { background: #efede8; border-color: #cfc9be; color: #5c5c5c; cursor: not-allowed; }
 .admin-shell .op-orders .op-icon-btn { display: inline-grid; place-items: center; width: 28px; min-width: 28px; height: 28px; min-height: 28px; padding: 0; border: 1px solid transparent; border-radius: 6px; background: transparent; color: #5f5b54; cursor: pointer; }
 .admin-shell .op-orders .op-icon-btn:hover { border-color: #d6d0c3; color: #252725; }
 .op-orders svg, .op-export-page .op-export svg, .op-orders .op-btn svg { width: 1rem; height: 1rem; flex-shrink: 0; }
@@ -242,7 +238,7 @@
 .op-field.op-tray-select { display: none; }
 .op-field { display: grid; gap: .18rem; min-width: 0; color: #5f5b54; font-size: .72rem; font-weight: 700; }
 .admin-shell .op-orders .op-field :is(input, select),
-.admin-shell .op-tray-select select { width: 100%; min-height: 38px; padding: .4rem .65rem; border: 1px solid #d6d0c3; border-radius: 8px; background: #fff; color: #252725; font: 400 .875rem/1.4 var(--font-ui, Verdana, sans-serif); }
+.admin-shell .op-tray-select select { width: 100%; min-height: 38px; padding: .4rem .65rem; border: 1px solid var(--admin-line, #8a837a); /* Sprint 04: F6 control token, 3:1 (WCAG 1.4.11); #d6d0c3 failed F6 A19 */ border-radius: 8px; background: #fff; color: #252725; font: 400 .875rem/1.4 var(--font-ui, Verdana, sans-serif); }
 .op-filterbar { display: flex; flex-wrap: wrap; align-items: end; gap: .45rem; }
 .op-search { flex: 1 1 14rem; }
 .op-pay { flex: 1 1 10rem; max-width: 16rem; }

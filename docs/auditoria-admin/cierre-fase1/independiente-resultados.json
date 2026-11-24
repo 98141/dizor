@@ -1,0 +1,523 @@
+{
+  "date": "2026-11-20",
+  "mongoBinary": "C:\\Program Files\\MongoDB\\Server\\8.3\\bin\\mongod.exe",
+  "results": [
+    {
+      "id": "entorno",
+      "verdict": "pass",
+      "detail": {
+        "mongo": "8.3.2",
+        "autoIndex": true,
+        "uriHost": "127.0.0.1",
+        "externalNetwork": "bloqueada"
+      }
+    },
+    {
+      "id": "I01-ultima-unidad",
+      "verdict": "pass",
+      "detail": {
+        "statuses": [
+          201,
+          400,
+          409,
+          409,
+          409,
+          409,
+          409,
+          409,
+          409,
+          409
+        ],
+        "created": 1,
+        "stock": 0,
+        "leaked": false,
+        "messages": [
+          "Pedido creado. Pagarás al recibir tu pedido.",
+          "El valor de key ya está registrado",
+          "Stock insuficiente o variante no disponible"
+        ]
+      }
+    },
+    {
+      "id": "I02-dos-pagos-ultima-unidad",
+      "verdict": "pass",
+      "detail": {
+        "statuses": [
+          200,
+          200
+        ],
+        "stock": 0,
+        "deducted": 1,
+        "paid": 2,
+        "incident": 1,
+        "states": [
+          {
+            "status": "pago_pendiente",
+            "pay": "pagado",
+            "deducted": false,
+            "incidents": [
+              "approved_without_stock"
+            ]
+          },
+          {
+            "status": "pagado",
+            "pay": "pagado",
+            "deducted": true,
+            "incidents": []
+          }
+        ]
+      }
+    },
+    {
+      "id": "I03-webhooks-identicos",
+      "verdict": "pass",
+      "detail": {
+        "stock": 5,
+        "events": 1,
+        "pay": "pagado",
+        "burst": [
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200
+        ]
+      }
+    },
+    {
+      "id": "I03b-approved-vs-declined-concurrente",
+      "verdict": "pass",
+      "detail": {
+        "race": [
+          200,
+          200,
+          200,
+          200
+        ],
+        "pay": "pagado",
+        "status": "pagado",
+        "stock": 3
+      }
+    },
+    {
+      "id": "I04-reintento-tras-fallo-de-almacenamiento",
+      "verdict": "pass",
+      "detail": {
+        "first": 500,
+        "second": 200,
+        "midPay": "pagado",
+        "midStock": 5,
+        "endStock": 4,
+        "sales": 1,
+        "firstBody": "{\"status\":\"error\",\"message\":\"Error interno del servidor\"}",
+        "openTech": 0,
+        "thrown": 1
+      }
+    },
+    {
+      "id": "I05-reintento-misma-clave",
+      "verdict": "pass",
+      "detail": {
+        "first": 500,
+        "replay": 409,
+        "firstMsg": "Error interno del servidor",
+        "replayMsg": "Pedido en proceso o pendiente de revisión. Conserva la misma clave e inténtalo después.",
+        "orders": 2,
+        "stock": 3,
+        "states": [
+          "failed",
+          "ready"
+        ]
+      }
+    },
+    {
+      "id": "I05b-clave-nueva-tras-fallo-ambiguo",
+      "verdict": "observation",
+      "detail": {
+        "secondStatus": 201,
+        "ordersBefore": 2,
+        "ordersAfter": 2,
+        "stockBefore": 3,
+        "stockAfter": 3,
+        "note": "Una clave nueva crea otro pedido aunque el primero siga reteniendo stock."
+      }
+    },
+    {
+      "id": "I05c-cancelar-pedidos-ambiguos-repone",
+      "verdict": "pass",
+      "detail": {
+        "restored": 5
+      }
+    },
+    {
+      "id": "I05d-enlace-ambiguo",
+      "verdict": "pass",
+      "detail": {
+        "linkFail": 502,
+        "linkRetry": 409,
+        "msg": "No se pudo iniciar el pago con Wompi. El pedido queda pendiente de revisión.",
+        "state": "failed",
+        "stockDeducted": false,
+        "incidents": [
+          "payment_link_creation_failed"
+        ]
+      }
+    },
+    {
+      "id": "I06-cancelacion-y-aprobacion-simultaneas",
+      "verdict": "pass",
+      "detail": {
+        "cancel": 200,
+        "pay": 200,
+        "status": "cancelado",
+        "payment": "pagado",
+        "stockBefore": 4,
+        "stockAfter": 4,
+        "deducted": false,
+        "incidents": [
+          "received_payment_pending_resolution"
+        ]
+      }
+    },
+    {
+      "id": "I07-cancelaciones-simultaneas",
+      "verdict": "pass",
+      "detail": {
+        "statuses": [
+          200,
+          409
+        ],
+        "stock": 3,
+        "restores": 1,
+        "notes": 1,
+        "changedBy": "6b00b1ef15a77b04cb4b9349",
+        "note": "Cancelado por el cliente antes de preparación"
+      }
+    },
+    {
+      "id": "I07b-cupon-tras-cancelar",
+      "verdict": "observation",
+      "detail": {
+        "usedAfterBuy": 1,
+        "usedAfterCancel": 1,
+        "maxUses": 2,
+        "note": "La cancelación no libera el uso del cupón."
+      }
+    },
+    {
+      "id": "I08-ajuste-concurrente-con-compras",
+      "verdict": "pass",
+      "detail": {
+        "sales": 5,
+        "plus": 3,
+        "minus": 2,
+        "stock": 4,
+        "expected": 4,
+        "historySum": -4,
+        "statuses": [
+          201,
+          201,
+          201,
+          201,
+          201,
+          200,
+          200,
+          200,
+          200,
+          200
+        ]
+      }
+    },
+    {
+      "id": "I08b-clave-de-ajuste-reutilizada",
+      "verdict": "pass",
+      "detail": {
+        "pair": [
+          200,
+          200
+        ],
+        "delta": 3,
+        "movements": 1
+      }
+    },
+    {
+      "id": "I08c-misma-clave-distinto-delta",
+      "verdict": "pass",
+      "detail": {
+        "status": 409,
+        "message": "Clave usada para otro movimiento",
+        "stock": 7
+      }
+    },
+    {
+      "id": "I09-reutilizacion-de-clave",
+      "verdict": "pass",
+      "detail": {
+        "first": 201,
+        "again": 200,
+        "otherQty": 409,
+        "otherActor": 409,
+        "count": 1,
+        "stock": 3,
+        "messages": [
+          "La clave ya se usó para otra solicitud",
+          "La clave ya se usó para otra solicitud"
+        ]
+      }
+    },
+    {
+      "id": "I09b-clave-malformada",
+      "verdict": "pass",
+      "detail": {
+        "status": 400,
+        "message": "Clave de idempotencia inválida"
+      }
+    },
+    {
+      "id": "I09c-nulos-historicos-conviven",
+      "verdict": "pass",
+      "detail": {
+        "note": "Dos documentos con idempotencyKey null cupieron en el índice parcial nuevo."
+      }
+    },
+    {
+      "id": "I10-lineas-repetidas-con-stock-suficiente",
+      "verdict": "pass",
+      "detail": {
+        "status": 201,
+        "message": "Pedido creado. Pagarás al recibir tu pedido.",
+        "stock": 0,
+        "rows": [
+          {
+            "before": 2,
+            "change": -1,
+            "after": 1
+          },
+          {
+            "before": 1,
+            "change": -1,
+            "after": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "I10b-lineas-repetidas-sin-stock-no-dejan-parcial",
+      "verdict": "pass",
+      "detail": {
+        "status": 409,
+        "message": "Stock insuficiente o variante no disponible",
+        "stock": 2
+      }
+    },
+    {
+      "id": "I10c-stock-fraccionario-historico",
+      "verdict": "pass",
+      "detail": {
+        "checkout": 409,
+        "adjust": 409,
+        "stock": 10.5,
+        "checkoutMsg": "El stock histórico requiere conciliación previa",
+        "adjustMsg": "El stock histórico requiere conciliación previa"
+      }
+    },
+    {
+      "id": "I11-pedido-historico",
+      "verdict": "pass",
+      "detail": {
+        "view": 200,
+        "prepare": 409,
+        "message": "El pedido requiere conciliación de pago o inventario",
+        "deliveredAt": null,
+        "transitions": [
+          "cancelado"
+        ]
+      }
+    },
+    {
+      "id": "I12-permisos-vendedor",
+      "verdict": "pass",
+      "detail": {
+        "view": 200,
+        "prep": 200,
+        "ship": 200,
+        "done": 200,
+        "pay": "pendiente",
+        "status": "entregado",
+        "collect": 403,
+        "cancel": 403,
+        "back": 403,
+        "reconcile": 403,
+        "finance": 403,
+        "adjust": 403,
+        "catalogHasCost": false,
+        "requests": 200,
+        "requestUpdate": 200,
+        "nequi": 410,
+        "transitions": [
+          "en_preparacion"
+        ]
+      }
+    },
+    {
+      "id": "I13-monto-no-numerico-y-firma",
+      "verdict": "pass",
+      "detail": {
+        "badAmount": 200,
+        "pay": "pagado",
+        "deducted": false,
+        "incidents": [
+          "payment_amount_or_currency_mismatch"
+        ],
+        "prepare": 409,
+        "manual": 409,
+        "badSig": 401,
+        "stock": 3
+      }
+    },
+    {
+      "id": "I13b-recaudo-antes-de-entrega",
+      "verdict": "pass",
+      "detail": {
+        "status": 409,
+        "message": "El recaudo requiere entrega confirmada"
+      }
+    },
+    {
+      "id": "I14-recaudo-idempotente",
+      "verdict": "pass",
+      "detail": {
+        "deliveredPay": "pendiente",
+        "first": 200,
+        "second": 200,
+        "reference": "REC-ORIGINAL",
+        "notes": 1,
+        "secondMessage": "Recaudo registrado"
+      }
+    },
+    {
+      "id": "I15-conciliacion-ignora-el-cuerpo",
+      "verdict": "pass",
+      "detail": {
+        "status": 200,
+        "pay": "rechazado",
+        "orderStatus": "pago_pendiente",
+        "stock": 2,
+        "message": "Transacción consultada y conciliada según evidencia del proveedor"
+      }
+    },
+    {
+      "id": "I16-reporte-financiero-conciliado",
+      "verdict": "pass",
+      "detail": {
+        "reportDelta": 1,
+        "reportMoney": 80000,
+        "before": 200
+      }
+    },
+    {
+      "id": "I16b-historial-financiero-excluye-cancelados-y-disputas",
+      "verdict": "defect",
+      "detail": {
+        "historyDelta": 3,
+        "historyMoney": 160000,
+        "expectedOrders": 1,
+        "expectedMoney": 80000,
+        "note": "GET /api/admin/finance/history sigue contando paymentStatus=pagado sin excluir cancelados ni requiresReview."
+      }
+    },
+    {
+      "id": "I17-indices-vivos",
+      "verdict": "pass",
+      "detail": {
+        "orderNumberIndexes": [
+          {
+            "name": "orderNumber_1",
+            "unique": true
+          }
+        ],
+        "idempotency": {
+          "v": 2,
+          "key": {
+            "idempotencyKey": 1
+          },
+          "name": "idempotencyKey_1",
+          "unique": true,
+          "partialFilterExpression": {
+            "idempotencyKey": {
+              "$type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "I17b-indice-solicitudes",
+      "verdict": "observation",
+      "detail": {
+        "specialError": "An existing index has the same name as the requested index. When index names are not specified, they are auto generated and can cause conflicts. Please refer to our documentation. Requested index: { v: 2, key: { requestNumber: 1 }, name: \"requestNumber_1\" }, existing index: { v: 2, unique: true, key: { requestNumber: 1 }, name: \"requestNumber_1\" }"
+      }
+    },
+    {
+      "id": "I17c-migracion-de-indice-en-base-temporal",
+      "verdict": "pass",
+      "detail": {
+        "secondNull": 11000,
+        "duplicateString": 11000,
+        "conflict": {
+          "code": 86,
+          "message": "An existing index has the same name as the requested index. When index names are not specified, they are auto generated and can cause conflicts. Please refer to our documentation. Requested index: { v: 2, unique: true, key: { idempotencyKey: 1 }, name: \"idempotencyKey_1\", partialFilterExpression: { idempotencyKey: { $type: \"string\" } } }, existing index: { v: 2, unique: true, key: { idempotencyKey: 1 }, name: \"idempotencyKey_1\", sparse: true }"
+        },
+        "backupCount": 4,
+        "rollback": {
+          "code": 11000,
+          "message": "Index build failed: 0f3355bf-19b1-4ac8-add4-28a2421fd7c8: Collection dizor_index_lab.orders ( b84ad1d0-005a-4c23-866f-0d6480845f87 ) :: caused by :: E11000 duplicate key error collection: dizor_index_lab.orders index: idempotencyKey_1 dup key: { idempotencyKey: null }"
+        }
+      }
+    },
+    {
+      "id": "I18-standalone-sin-fallback",
+      "verdict": "pass",
+      "detail": {
+        "txError": "This MongoDB deployment does not support retryable writes. Please add retryWrites=false to your connection string.",
+        "count": 0,
+        "noFallback": true
+      }
+    },
+    {
+      "id": "I19-checkout-cliente-bloquea-doble-envio",
+      "verdict": "pass",
+      "detail": {
+        "checkoutLocks": true
+      }
+    },
+    {
+      "id": "I19b-stock-absoluto-solo-lectura",
+      "verdict": "pass",
+      "detail": {
+        "stockReadOnly": true
+      }
+    },
+    {
+      "id": "I19c-recaudo-y-ajuste-sin-bloqueo-de-reintento",
+      "verdict": "defect",
+      "detail": {
+        "confirmLocked": false,
+        "statusLocked": false,
+        "adjustLocked": false,
+        "stockReadOnly": true,
+        "note": "El recaudo, el cambio de estado y el ajuste de stock no quedan inhabilitados mientras la solicitud está en curso. Cada clic de ajuste puede generar una clave nueva."
+      }
+    },
+    {
+      "id": "red",
+      "verdict": "pass",
+      "detail": {
+        "blocked": []
+      }
+    }
+  ]
+}

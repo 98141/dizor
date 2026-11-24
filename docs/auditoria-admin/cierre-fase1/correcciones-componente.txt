@@ -1,0 +1,12 @@
+✔ doble clic antes de render: una petición, botón ocupado y stock confirmado (63.8142ms)
+✔ error de red y reintento inmediato conservan clave y contenido (25.6507ms)
+✔ rechazo explícito permite corregir sin ocultar el error; acción nueva usa clave nueva (30.0939ms)
+✔ dos variantes simultáneas se bloquean por separado y actualizan por ID (33.3168ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 458.2501

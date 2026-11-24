@@ -13,7 +13,7 @@ function CatalogoContent() {
   const tab = searchParams.get("tab") === "weaves" ? "weave-types" : searchParams.get("tab") || "categories";
 
   return (
-    <div className="admin-page">
+    <div className="admin-page op-tax">
       <Link href="/admin/productos">← Volver a Productos</Link>
       <h1 className="admin-page__title">Configuración del catálogo</h1>
       <p className="admin-page__subtitle">

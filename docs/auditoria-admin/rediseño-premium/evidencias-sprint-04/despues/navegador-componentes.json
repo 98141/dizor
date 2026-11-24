@@ -1,0 +1,750 @@
+{
+  "mode": "despues",
+  "checks": [
+    "B00 estilos acotados a .admin-shell; la tienda no los importa; el vendedor carga dz- y botones",
+    "B01–B08 primario, secundario, terciario, destructivo, deshabilitado, procesando (sin salto ni doble clic), foco, hover, contraste ≥4,5 y diálogo con retorno de foco",
+    "botones: 1440/1024/820/390/360 px sin desbordamiento ni texto tapado",
+    "solicitudes: 1440/1024/820/390/360 px sin desbordamiento ni texto tapado",
+    "S01–S03 cabecera, pestañas, tabla con tipos y los 7 estados reales, paginación del backend",
+    "S04 filtros por tipo y búsqueda, sin coincidencias distinto de vacío, limpiar filtros",
+    "S05 paginación existente con Anterior/Siguiente",
+    "S06–S08 vacío real, error con reintento distinto de vacío, carga",
+    "S09 teclado: filtros en orden lógico y «Ver solicitud» con nombre contextual abre el detalle",
+    "detalle: 1440/1024/820/390/360 px sin desbordamiento ni texto tapado",
+    "D01 detalle: referencia y estado, cliente, solicitud completa (variante, opciones, notas), visible/interno diferenciado",
+    "D02 jerarquía: Actualizar estado primario; pasa a destructivo discreto al elegir Cancelado/Rechazado; Guardar cotización secundario; Volver terciario",
+    "D03 procesando + doble clic: una sola petición, botón ocupado y deshabilitado; historial y cabecera actualizados",
+    "D04 cotización guardada: el backend la pasa a Cotizado y la vista lo refleja",
+    "D05 «Volver» conserva los filtros (returnTo)",
+    "D06 error de detalle con reintento y no encontrada",
+    "detalle-mayorista: 1440/1024/820/390/360 px sin desbordamiento ni texto tapado",
+    "vendedor-solicitudes: 1440/1024/820/390/360 px sin desbordamiento ni texto tapado",
+    "P01 vendedor: solicitudes y su gestión como antes (el backend decide), sin pestaña PQR y /admin/pqr redirigido",
+    "pqr: 1440/1024/820/390/360 px sin desbordamiento ni texto tapado",
+    "Q01 PQR: radicado, fecha, categoría, motivo y estado reales; datos personales identificados; sin contacto en el listado",
+    "Q02 filtros de categoría y estado; sin coincidencias con limpiar",
+    "Q03 vacío y error distintos; recuperación",
+    "Q04 detalle PQR: foco, historial con notas pública/interna diferenciadas, guardado único con doble clic",
+    "Q05 solicitud de datos personales con tratamiento diferenciado; cerrar detalle",
+    "Q06 detalle PQR en móvil sin desbordamiento",
+    "A01 texto al 200 % (1280 y 390) sin desbordamiento"
+  ],
+  "externalRequests": [],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "mutations": [
+    {
+      "method": "PATCH",
+      "path": "/special-requests/sr1/status",
+      "role": "admin",
+      "body": {
+        "status": "en_revision",
+        "note": "Revisión con el taller."
+      },
+      "at": 1795544510981
+    },
+    {
+      "method": "PATCH",
+      "path": "/special-requests/sr1/quote",
+      "role": "admin",
+      "body": {
+        "quotedAmount": 950000,
+        "adminNotes": ""
+      },
+      "at": 1795544511929
+    },
+    {
+      "method": "PATCH",
+      "path": "/pqr/pqr1/status",
+      "role": "admin",
+      "body": {
+        "status": "respondida",
+        "publicNote": "Enviamos un sombrero de reemplazo.",
+        "internalNote": ""
+      },
+      "at": 1795544534649
+    }
+  ],
+  "screenshots": [
+    "botones-dialogo-1440.png",
+    "botones-1440.png",
+    "botones-1024.png",
+    "botones-820.png",
+    "botones-390.png",
+    "botones-360.png",
+    "solicitudes-1440.png",
+    "solicitudes-1024.png",
+    "solicitudes-820.png",
+    "solicitudes-390.png",
+    "solicitudes-360.png",
+    "solicitudes-sin-coincidencias-1440.png",
+    "solicitudes-vacias-1440.png",
+    "solicitudes-vacias-390.png",
+    "solicitudes-error-1440.png",
+    "solicitudes-cargando-1440.png",
+    "detalle-1440.png",
+    "detalle-1024.png",
+    "detalle-820.png",
+    "detalle-390.png",
+    "detalle-360.png",
+    "detalle-cierre-destructivo-1440.png",
+    "detalle-mayorista-1440.png",
+    "detalle-mayorista-1024.png",
+    "detalle-mayorista-820.png",
+    "detalle-mayorista-390.png",
+    "detalle-mayorista-360.png",
+    "vendedor-solicitudes-1440.png",
+    "vendedor-solicitudes-1024.png",
+    "vendedor-solicitudes-820.png",
+    "vendedor-solicitudes-390.png",
+    "vendedor-solicitudes-360.png",
+    "pqr-1440.png",
+    "pqr-1024.png",
+    "pqr-820.png",
+    "pqr-390.png",
+    "pqr-360.png",
+    "pqr-sin-coincidencias-1440.png",
+    "pqr-vacia-1440.png",
+    "pqr-vacia-390.png",
+    "pqr-detalle-1440.png",
+    "pqr-detalle-datos-1440.png",
+    "solicitudes-texto200-1280.png",
+    "solicitudes-texto200-390.png",
+    "detalle-texto200-1280.png",
+    "detalle-texto200-390.png",
+    "pqr-texto200-1280.png",
+    "pqr-texto200-390.png"
+  ],
+  "measurements": [
+    {
+      "name": "botones",
+      "width": 1440,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 937,
+      "layout": null
+    },
+    {
+      "name": "botones",
+      "width": 1024,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 922,
+      "layout": null
+    },
+    {
+      "name": "botones",
+      "width": 820,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 917,
+      "layout": null
+    },
+    {
+      "name": "botones",
+      "width": 390,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 1027,
+      "layout": null
+    },
+    {
+      "name": "botones",
+      "width": 360,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 1027,
+      "layout": null
+    },
+    {
+      "name": "solicitudes",
+      "width": 1440,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 1625,
+      "layout": {
+        "section": 1136,
+        "rem": 15,
+        "thead": "table-header-group"
+      }
+    },
+    {
+      "name": "solicitudes",
+      "width": 1024,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 3169,
+      "layout": {
+        "section": 731,
+        "rem": 15,
+        "thead": "none"
+      }
+    },
+    {
+      "name": "solicitudes",
+      "width": 820,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 3112,
+      "layout": {
+        "section": 787,
+        "rem": 15,
+        "thead": "none"
+      }
+    },
+    {
+      "name": "solicitudes",
+      "width": 390,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 3383,
+      "layout": {
+        "section": 360,
+        "rem": 15,
+        "thead": "none"
+      }
+    },
+    {
+      "name": "solicitudes",
+      "width": 360,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 4093,
+      "layout": {
+        "section": 330,
+        "rem": 15,
+        "thead": "none"
+      }
+    },
+    {
+      "name": "detalle",
+      "width": 1440,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 1325,
+      "layout": null
+    },
+    {
+      "name": "detalle",
+      "width": 1024,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 1947,
+      "layout": null
+    },
+    {
+      "name": "detalle",
+      "width": 820,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 1942,
+      "layout": null
+    },
+    {
+      "name": "detalle",
+      "width": 390,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 2190,
+      "layout": null
+    },
+    {
+      "name": "detalle",
+      "width": 360,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 2318,
+      "layout": null
+    },
+    {
+      "name": "detalle-mayorista",
+      "width": 1440,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 1305,
+      "layout": null
+    },
+    {
+      "name": "detalle-mayorista",
+      "width": 1024,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 1777,
+      "layout": null
+    },
+    {
+      "name": "detalle-mayorista",
+      "width": 820,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 1772,
+      "layout": null
+    },
+    {
+      "name": "detalle-mayorista",
+      "width": 390,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 1976,
+      "layout": null
+    },
+    {
+      "name": "detalle-mayorista",
+      "width": 360,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 2065,
+      "layout": null
+    },
+    {
+      "name": "vendedor-solicitudes",
+      "width": 1440,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 1527,
+      "layout": {
+        "section": 1136,
+        "rem": 15,
+        "thead": "table-header-group"
+      }
+    },
+    {
+      "name": "vendedor-solicitudes",
+      "width": 1024,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 3091,
+      "layout": {
+        "section": 731,
+        "rem": 15,
+        "thead": "none"
+      }
+    },
+    {
+      "name": "vendedor-solicitudes",
+      "width": 820,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 3037,
+      "layout": {
+        "section": 787,
+        "rem": 15,
+        "thead": "none"
+      }
+    },
+    {
+      "name": "vendedor-solicitudes",
+      "width": 390,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 3229,
+      "layout": {
+        "section": 360,
+        "rem": 15,
+        "thead": "none"
+      }
+    },
+    {
+      "name": "vendedor-solicitudes",
+      "width": 360,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 3939,
+      "layout": {
+        "section": 330,
+        "rem": 15,
+        "thead": "none"
+      }
+    },
+    {
+      "name": "pqr",
+      "width": 1440,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 996,
+      "layout": {
+        "section": 1136,
+        "rem": 15,
+        "thead": "table-header-group"
+      }
+    },
+    {
+      "name": "pqr",
+      "width": 1024,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 1619,
+      "layout": {
+        "section": 731,
+        "rem": 15,
+        "thead": "none"
+      }
+    },
+    {
+      "name": "pqr",
+      "width": 820,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 1614,
+      "layout": {
+        "section": 787,
+        "rem": 15,
+        "thead": "none"
+      }
+    },
+    {
+      "name": "pqr",
+      "width": 390,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 1799,
+      "layout": {
+        "section": 360,
+        "rem": 15,
+        "thead": "none"
+      }
+    },
+    {
+      "name": "pqr",
+      "width": 360,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 2169,
+      "layout": {
+        "section": 330,
+        "rem": 15,
+        "thead": "none"
+      }
+    },
+    {
+      "name": "solicitudes-texto200",
+      "width": 1280,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 6617,
+      "layout": {
+        "section": 964,
+        "rem": 32,
+        "thead": "none"
+      }
+    },
+    {
+      "name": "solicitudes-texto200",
+      "width": 390,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 10297,
+      "layout": {
+        "section": 326,
+        "rem": 32,
+        "thead": "none"
+      }
+    },
+    {
+      "name": "detalle-texto200",
+      "width": 1280,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 4515,
+      "layout": null
+    },
+    {
+      "name": "detalle-texto200",
+      "width": 390,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 7764,
+      "layout": null
+    },
+    {
+      "name": "pqr-texto200",
+      "width": 1280,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 3407,
+      "layout": {
+        "section": 964,
+        "rem": 32,
+        "thead": "none"
+      }
+    },
+    {
+      "name": "pqr-texto200",
+      "width": 390,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 5673,
+      "layout": {
+        "section": 326,
+        "rem": 32,
+        "thead": "none"
+      }
+    }
+  ],
+  "buttonStyles": {
+    "g-primary": {
+      "bg": "rgb(37, 39, 37)",
+      "color": "rgb(255, 255, 255)",
+      "border": "rgb(37, 39, 37)",
+      "radius": "8px",
+      "h": 44,
+      "weight": "600",
+      "cursor": "pointer",
+      "outline": "none 3px",
+      "content": "normal",
+      "deco": "none"
+    },
+    "g-secondary": {
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(37, 39, 37)",
+      "border": "rgb(211, 205, 193)",
+      "radius": "8px",
+      "h": 44,
+      "weight": "600",
+      "cursor": "pointer",
+      "outline": "none 3px",
+      "content": "normal",
+      "deco": "none"
+    },
+    "g-tertiary": {
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(37, 39, 37)",
+      "border": "rgba(0, 0, 0, 0)",
+      "radius": "8px",
+      "h": 44,
+      "weight": "600",
+      "cursor": "pointer",
+      "outline": "none 3px",
+      "content": "normal",
+      "deco": "underline"
+    },
+    "g-danger": {
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(155, 44, 44)",
+      "border": "rgb(226, 186, 181)",
+      "radius": "8px",
+      "h": 44,
+      "weight": "600",
+      "cursor": "pointer",
+      "outline": "none 3px",
+      "content": "normal",
+      "deco": "none"
+    },
+    "g-sm": {
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(37, 39, 37)",
+      "border": "rgb(211, 205, 193)",
+      "radius": "8px",
+      "h": 36,
+      "weight": "600",
+      "cursor": "pointer",
+      "outline": "none 3px",
+      "content": "normal",
+      "deco": "none"
+    },
+    "g-sm-danger": {
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(155, 44, 44)",
+      "border": "rgb(226, 186, 181)",
+      "radius": "8px",
+      "h": 36,
+      "weight": "600",
+      "cursor": "pointer",
+      "outline": "none 3px",
+      "content": "normal",
+      "deco": "none"
+    },
+    "g-link": {
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(37, 39, 37)",
+      "border": "rgb(211, 205, 193)",
+      "radius": "8px",
+      "h": 36,
+      "weight": "600",
+      "cursor": "pointer",
+      "outline": "none 3px",
+      "content": "normal",
+      "deco": "none"
+    },
+    "g-classless": {
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(37, 39, 37)",
+      "border": "rgb(211, 205, 193)",
+      "radius": "8px",
+      "h": 44,
+      "weight": "600",
+      "cursor": "pointer",
+      "outline": "none 3px",
+      "content": "normal",
+      "deco": "none"
+    },
+    "g-disabled-primary": {
+      "bg": "rgb(239, 237, 232)",
+      "color": "rgb(103, 98, 90)",
+      "border": "rgb(221, 216, 206)",
+      "radius": "8px",
+      "h": 44,
+      "weight": "600",
+      "cursor": "not-allowed",
+      "outline": "none 3px",
+      "content": "normal",
+      "deco": "none"
+    },
+    "g-disabled": {
+      "bg": "rgb(239, 237, 232)",
+      "color": "rgb(103, 98, 90)",
+      "border": "rgb(221, 216, 206)",
+      "radius": "8px",
+      "h": 44,
+      "weight": "600",
+      "cursor": "not-allowed",
+      "outline": "none 3px",
+      "content": "normal",
+      "deco": "none"
+    },
+    "g-busy-secondary": {
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgba(0, 0, 0, 0)",
+      "border": "rgb(211, 205, 193)",
+      "radius": "8px",
+      "h": 44,
+      "weight": "600",
+      "cursor": "progress",
+      "outline": "none 3px",
+      "content": "normal",
+      "deco": "none"
+    },
+    "g-op": {
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(37, 39, 37)",
+      "border": "rgb(211, 205, 193)",
+      "radius": "8px",
+      "h": 36,
+      "weight": "600",
+      "cursor": "pointer",
+      "outline": "none 3px",
+      "content": "normal",
+      "deco": "none"
+    },
+    "g-op-primary": {
+      "bg": "rgb(37, 39, 37)",
+      "color": "rgb(255, 255, 255)",
+      "border": "rgb(37, 39, 37)",
+      "radius": "8px",
+      "h": 36,
+      "weight": "600",
+      "cursor": "pointer",
+      "outline": "none 3px",
+      "content": "normal",
+      "deco": "none"
+    },
+    "g-dz-primary": {
+      "bg": "rgb(37, 39, 37)",
+      "color": "rgb(255, 255, 255)",
+      "border": "rgb(37, 39, 37)",
+      "radius": "8px",
+      "h": 44,
+      "weight": "600",
+      "cursor": "pointer",
+      "outline": "none 3px",
+      "content": "normal",
+      "deco": "none"
+    },
+    "g-dz": {
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(37, 39, 37)",
+      "border": "rgb(211, 205, 193)",
+      "radius": "8px",
+      "h": 44,
+      "weight": "600",
+      "cursor": "pointer",
+      "outline": "none 3px",
+      "content": "normal",
+      "deco": "none"
+    },
+    "g-secondary:hover": {
+      "bg": "rgb(253, 252, 250)",
+      "color": "rgb(37, 39, 37)",
+      "border": "rgb(196, 190, 177)",
+      "radius": "8px",
+      "h": 44,
+      "weight": "600",
+      "cursor": "pointer",
+      "outline": "none 3px",
+      "content": "normal",
+      "deco": "none"
+    }
+  },
+  "sheets": [
+    "styles/base/variables.css",
+    "styles/base/globals.css",
+    "styles/layouts/admin-layout.css",
+    "styles/pages/admin-cms.css",
+    "styles/pages/admin-products.css",
+    "styles/pages/admin-orders.css",
+    "styles/pages/admin-marketing.css",
+    "styles/pages/admin-dashboard.css",
+    "styles/pages/admin-finanzas.css",
+    "styles/pages/admin-alertas.css",
+    "styles/components/auth-form.css",
+    "styles/components/auth-card.css",
+    "styles/pages/special-requests.css",
+    "styles/layouts/admin-premium.css",
+    "styles/pages/admin-atencion.css",
+    "styles/layouts/admin-polish.css",
+    "styles/layouts/admin-buttons.css"
+  ],
+  "buttonContrast": {
+    "g-primary": 15.05,
+    "g-secondary": 15.05,
+    "g-tertiary": 15.05,
+    "g-danger": 7.53,
+    "g-sm": 15.05,
+    "g-sm-danger": 7.53,
+    "g-link": 15.05,
+    "g-classless": 15.05,
+    "g-disabled-primary": 5.17,
+    "g-disabled": 5.17,
+    "g-op": 15.05,
+    "g-op-primary": 15.05,
+    "g-dz-primary": 15.05,
+    "g-dz": 15.05
+  },
+  "passed": true
+}

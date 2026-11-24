@@ -1,0 +1,9 @@
+[
+  {
+    "name": "fase6",
+    "file": "frontend/test/admin-polish-next-browser.cjs",
+    "checks": 59,
+    "exitCode": 1,
+    "ms": 260017
+  }
+]

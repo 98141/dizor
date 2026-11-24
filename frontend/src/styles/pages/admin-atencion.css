@@ -1,0 +1,154 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   Sprint 04 · Atención al cliente (Solicitudes especiales y PQR)
+   Scoped to `.admin-shell .cs-page` / `.cs-head` and to the Atención section tabs.
+   Shared surfaces, chips and notices come from layouts/admin-premium.css (dz-),
+   buttons from layouts/admin-buttons.css.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Header above the section tabs */
+.admin-shell .cs-head { padding: .25rem 0 0; }
+.admin-shell .cs-head h1 { margin: 0; font-family: var(--font-display); font-size: clamp(1.5rem, 1.28rem + .6vw, 1.9rem); font-weight: 500; line-height: 1.2; color: var(--admin-graphite); }
+.admin-shell .cs-head .dz-lead { margin: .3rem 0 .9rem; }
+
+/* Section tabs (AdminShell context nav), same language as the Pedidos trays */
+.admin-shell .admin-context-nav[aria-label="Secciones de Atención al cliente"] {
+  max-width: 1440px; margin: 0 auto 1rem; gap: .4rem; padding-bottom: .9rem; border-bottom: 1px solid var(--admin-border-soft);
+}
+.admin-shell .admin-context-nav[aria-label="Secciones de Atención al cliente"] a {
+  display: inline-flex; align-items: center; min-height: 40px; padding: .45rem .9rem; border: 1px solid var(--admin-border-soft); border-radius: 999px;
+  background: #fff; color: #4a4744; font-size: .82rem; font-weight: 600; text-decoration: none;
+}
+.admin-shell .admin-context-nav[aria-label="Secciones de Atención al cliente"] a:hover { border-color: #a8a092; color: var(--admin-graphite); }
+.admin-shell .admin-context-nav[aria-label="Secciones de Atención al cliente"] a[aria-current="page"] { background: #fff; color: var(--admin-graphite); border-color: var(--dizor-oro); box-shadow: inset 0 0 0 1px var(--dizor-oro); }
+.admin-shell:has(.cs-page) { background: var(--admin-canvas); }
+
+/* Section */
+.admin-shell .cs-page { color: var(--admin-graphite); }
+.admin-shell .cs-page .cs-section { container-type: inline-size; min-width: 0; }
+.admin-shell .cs-page .cs-section__head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: .3rem 1rem; margin-bottom: .75rem; }
+.admin-shell .cs-page .cs-section h2 { margin: 0; font: 600 1.05rem/1.35 var(--font-ui); color: var(--admin-graphite); }
+.admin-shell .cs-page .cs-section__desc { margin: .2rem 0 0; max-width: 72ch; color: #5f5b54; font-size: .8rem; line-height: 1.5; }
+.admin-shell .cs-page .cs-count { margin: 0; color: #5f5b54; font-size: .78rem; }
+
+/* Toolbar: search, filters and actions on one aligned row */
+.admin-shell .cs-page .cs-toolbar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: .55rem .65rem; margin: 0 0 .9rem; padding: .75rem; border: 1px solid var(--admin-border-soft); border-radius: 10px; background: #fff; }
+.admin-shell .cs-page .cs-field { display: grid; gap: .2rem; min-width: 0; flex: 1 1 13rem; max-width: 20rem; margin: 0; }
+.admin-shell .cs-page .cs-field--search { position: relative; flex: 3 1 16rem; max-width: none; align-self: end; }
+.admin-shell .cs-page .cs-field--search > svg { position: absolute; left: .7rem; bottom: .8rem; width: 1rem; height: 1rem; color: #6b665e; pointer-events: none; }
+.admin-shell .cs-page .cs-field--search input { padding-left: 2.2rem; }
+.admin-shell .cs-page .cs-field__label { color: #5f5b54; font-size: .72rem; font-weight: 700; }
+.admin-shell .cs-page .cs-field :is(input, select) { width: 100%; min-height: 44px; border-color: var(--admin-line); border-radius: 8px; font-size: .9rem; }
+.admin-shell .cs-page .cs-toolbar__actions { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; }
+@container (max-width: 40rem) { .admin-shell .cs-page .cs-field { flex-basis: 100%; max-width: none; } .admin-shell .cs-page .cs-toolbar__actions { flex: 1 1 100%; } .admin-shell .cs-page .cs-toolbar__actions .admin-btn--primary { flex: 1 1 auto; } }
+
+/* States */
+.admin-shell .cs-page .cs-skeleton { display: grid; gap: .5rem; }
+.admin-shell .cs-page .cs-skeleton span { display: block; height: 3.2rem; border-radius: 8px; background: #efece5; }
+.admin-shell .cs-page .cs-empty { display: grid; justify-items: center; gap: .4rem; padding: 1.2rem 1rem 1.5rem; border: 1px dashed #d6d0c3; border-radius: 10px; background: #fff; }
+.admin-shell .cs-page .cs-alert { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem 1rem; }
+
+/* Table (wide content) */
+.admin-shell .cs-page .cs-table-wrap { border: 1px solid var(--admin-border-soft); border-radius: 10px; background: #fff; overflow: hidden; }
+.admin-shell .cs-page .cs-table { margin: 0; font-size: .84rem; }
+.admin-shell .cs-page .cs-table thead th { padding: .6rem .85rem; background: #faf9f6; color: #5f5b54; font-size: .72rem; font-weight: 700; letter-spacing: .01em; border-bottom: 1px solid var(--admin-border-soft); }
+.admin-shell .cs-page .cs-table tbody td { padding: .7rem .85rem; vertical-align: middle; border-bottom: 1px solid #f0ede6; overflow-wrap: normal; word-break: normal; }
+.admin-shell .cs-page .cs-table tbody tr:last-child td { border-bottom: 0; }
+.admin-shell .cs-page .cs-table tbody tr:hover, .admin-shell .cs-page .cs-table tbody tr.is-selected { background: #faf8f3; }
+.admin-shell .cs-page .cs-table tbody tr.is-selected { box-shadow: inset 3px 0 var(--dizor-oro); }
+.admin-shell .cs-page .cs-ref { font-weight: 700; font-variant-numeric: tabular-nums; color: var(--admin-graphite); white-space: nowrap; }
+.admin-shell .cs-page a.cs-ref { text-decoration: underline; text-decoration-color: #c9c2b5; text-underline-offset: 3px; }
+.admin-shell .cs-page a.cs-ref:hover { text-decoration-color: var(--admin-graphite); }
+.admin-shell .cs-page .cs-strong { display: block; font-weight: 600; line-height: 1.35; }
+.admin-shell .cs-page .cs-sub { display: block; margin-top: .1rem; color: #5f5b54; font-size: .74rem; line-height: 1.4; }
+.admin-shell .cs-page .cs-email { max-width: 22rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.admin-shell .cs-page .cs-cell-status .cs-sub { margin-top: .25rem; }
+.admin-shell .cs-page .cs-cell-date { white-space: nowrap; color: #4a4744; }
+.admin-shell .cs-page .cs-cell-action { text-align: right; white-space: nowrap; width: 1%; }
+html .admin-shell .admin-main > main .cs-page .cs-cell-action .admin-btn { white-space: nowrap; }
+.admin-shell .cs-page .cs-cell-status .cs-sub { white-space: nowrap; }
+.admin-shell .cs-page .cs-table td[data-label]::before { content: none; }
+.admin-shell .cs-page .cs-chip-data svg { width: .85rem; height: .85rem; }
+
+/* Cards when the content is narrow (tablet, phone, 200 % text): container based, no repeated labels */
+@container (max-width: 64rem) {
+  .admin-shell .cs-page .cs-table-wrap { border: 0; background: transparent; overflow: visible; }
+  .admin-shell .cs-page .cs-table, .admin-shell .cs-page .cs-table tbody { display: block; width: 100%; }
+  .admin-shell .cs-page .cs-table thead { display: none; } /* each card is self-explanatory; no repeated labels */
+  .admin-shell .cs-page .cs-table tbody tr {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "ref status" "type type" "client client" "date action";
+    gap: .3rem .75rem; align-items: center; margin: 0 0 .55rem; padding: .75rem .85rem; border: 1px solid var(--admin-border-soft); border-radius: 10px; background: #fff;
+  }
+  .admin-shell .cs-page .cs-table tbody td { display: block; padding: 0; border: 0; min-width: 0; }
+  .admin-shell .cs-page .cs-cell-ref { grid-area: ref; }
+  .admin-shell .cs-page .cs-cell-status { grid-area: status; justify-self: end; text-align: right; }
+  .admin-shell .cs-page .cs-cell-type { grid-area: type; }
+  .admin-shell .cs-page .cs-cell-client { grid-area: client; }
+  .admin-shell .cs-page .cs-cell-date { grid-area: date; font-size: .76rem; color: #5f5b54; white-space: normal; }
+  .admin-shell .cs-page .cs-cell-action { grid-area: action; width: auto; }
+  .admin-shell .cs-page .cs-email { max-width: 100%; }
+  .admin-shell .cs-page .cs-table--pqr tbody tr { grid-template-areas: "ref status" "type type" "client client" "date action"; }
+  .admin-shell .cs-page .cs-table--pqr .cs-cell-type .dz-chip { justify-self: start; }
+}
+@container (max-width: 22rem) {
+  .admin-shell .cs-page .cs-table tbody tr { grid-template-columns: minmax(0, 1fr); grid-template-areas: "ref" "status" "type" "client" "date" "action"; }
+  .admin-shell .cs-page .cs-cell-status { justify-self: start; text-align: left; }
+  .admin-shell .cs-page .cs-ref { white-space: normal; overflow-wrap: anywhere; }
+}
+
+/* Pagination */
+.admin-shell .cs-page .cs-pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .6rem; margin-top: .9rem; color: #5f5b54; font-size: .8rem; }
+
+/* Request detail */
+.admin-shell .cs-page .cs-back { display: inline-flex; align-items: center; min-height: 40px; color: var(--admin-graphite); font-size: .84rem; font-weight: 600; text-decoration: underline; text-decoration-color: #c9c2b5; text-underline-offset: 4px; }
+.admin-shell .cs-page .cs-back:hover { text-decoration-color: var(--admin-graphite); }
+.admin-shell .cs-page .cs-detail-head { margin: .3rem 0 1rem; }
+.admin-shell .cs-page .cs-detail-head h1 { margin: 0 0 .45rem; font-family: var(--font-display); font-size: clamp(1.45rem, 1.25rem + .6vw, 1.85rem); font-weight: 500; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.admin-shell .cs-page .cs-detail-head__chips { display: flex; flex-wrap: wrap; gap: .35rem; }
+.admin-shell .cs-page .cs-detail { display: grid; grid-template-columns: minmax(0, 1fr); gap: .9rem; align-items: start; }
+@container (min-width: 60rem) { .admin-shell .cs-page .cs-detail { grid-template-columns: minmax(0, 1.6fr) minmax(19rem, 1fr); } }
+.admin-shell .cs-page .cs-detail__main, .admin-shell .cs-page .cs-detail__side { display: grid; gap: .9rem; min-width: 0; }
+.admin-shell .cs-page .cs-card { padding: 1rem 1.1rem 1.1rem; }
+.admin-shell .cs-page .cs-card h2 { margin: 0; font: 600 .98rem/1.35 var(--font-ui); }
+.admin-shell .cs-page .cs-rows { margin: 0; display: grid; gap: .1rem; }
+.admin-shell .cs-page .cs-row { display: grid; grid-template-columns: minmax(8rem, 11rem) minmax(0, 1fr); gap: .2rem .8rem; padding: .45rem 0; border-bottom: 1px solid #f0ede6; font-size: .84rem; }
+.admin-shell .cs-page .cs-row:last-child { border-bottom: 0; }
+.admin-shell .cs-page .cs-row dt { color: #5f5b54; font-size: .76rem; font-weight: 600; }
+.admin-shell .cs-page .cs-row dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.admin-shell .cs-page .cs-rows--stack .cs-row { grid-template-columns: minmax(0, 1fr); gap: .05rem; }
+@container (max-width: 34rem) { .admin-shell .cs-page .cs-row { grid-template-columns: minmax(0, 1fr); gap: .05rem; } }
+.admin-shell .cs-page .cs-break { overflow-wrap: anywhere; word-break: break-word; }
+.admin-shell .cs-page .cs-tags { display: flex; flex-wrap: wrap; gap: .3rem; margin: 0; padding: 0; list-style: none; }
+.admin-shell .cs-page .cs-tags li { padding: .1rem .55rem; border: 1px solid var(--admin-border-soft); border-radius: 999px; background: #faf9f6; font-size: .76rem; }
+.admin-shell .cs-page .cs-subtitle, .admin-shell .cs-page .dz-card .cs-subtitle { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; margin: 1rem 0 .4rem; font: 700 .8rem/1.35 var(--font-ui); color: var(--admin-graphite); }
+.admin-shell .cs-page .cs-longtext { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font-size: .86rem; line-height: 1.6; max-width: 75ch; }
+.admin-shell .cs-page .cs-muted { margin: .3rem 0 0; color: #5f5b54; font-size: .78rem; }
+.admin-shell .cs-page .cs-timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: .1rem; }
+.admin-shell .cs-page .cs-timeline li { position: relative; display: grid; grid-template-columns: 1rem minmax(0, 1fr); gap: .6rem; padding: .45rem 0; }
+.admin-shell .cs-page .cs-timeline li:not(:last-child)::after { content: ""; position: absolute; left: .44rem; top: 1.35rem; bottom: -.45rem; width: 1px; background: var(--admin-border-soft); }
+.admin-shell .cs-page .cs-timeline__dot { width: .62rem; height: .62rem; margin: .35rem 0 0 .2rem; border-radius: 50%; background: #fff; border: 2px solid var(--dizor-oro); }
+.admin-shell .cs-page .cs-timeline__title { margin: 0; font-size: .84rem; }
+.admin-shell .cs-page .cs-timeline__title time { margin-left: .35rem; color: #5f5b54; font-size: .76rem; }
+.admin-shell .cs-page .cs-timeline__note { margin: .2rem 0 0; font-size: .8rem; line-height: 1.5; color: #3d3b38; overflow-wrap: anywhere; }
+.admin-shell .cs-page .cs-visibility { display: inline-flex; padding: .05rem .45rem; border-radius: 999px; background: #f1efea; color: #4a4744; font-size: .68rem; font-weight: 600; }
+.admin-shell .cs-page .cs-visibility--public { background: #eef2f5; color: #34506b; }
+.admin-shell .cs-page .cs-manage__block + .cs-manage__block { margin-top: .4rem; padding-top: .4rem; border-top: 1px solid #f0ede6; }
+.admin-shell .cs-page .dz-card .cs-manage__block > .cs-subtitle { margin-top: .6rem; }
+.admin-shell .cs-page .cs-manage .admin-form__group { margin-bottom: .7rem; }
+.admin-shell .cs-page .cs-manage :is(.admin-btn) { width: 100%; }
+.admin-shell .cs-page .cs-warning { margin: 0 0 .6rem; padding: .5rem .65rem; border: 1px solid #efcdc8; border-radius: 8px; background: #fdf6f5; color: #7c2424; font-size: .78rem; }
+
+/* PQR detail */
+.admin-shell .cs-page .cs-pqr-detail { container-type: inline-size; margin-top: 1rem; scroll-margin-top: 5rem; }
+.admin-shell .cs-page .cs-pqr-detail--data { border-color: #d3dde6; }
+.admin-shell .cs-page .cs-pqr-detail__head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: .5rem 1rem; padding-bottom: .7rem; border-bottom: 1px solid var(--admin-border-soft); }
+.admin-shell .cs-page .cs-pqr-detail__head h2 { margin: 0 0 .4rem; font-family: var(--font-display); font-size: 1.35rem; font-weight: 500; font-variant-numeric: tabular-nums; }
+.admin-shell .cs-page .cs-pqr-detail__head h2:focus { outline: none; }
+.admin-shell .cs-page .cs-pqr-detail__head h2:focus-visible { outline: 3px solid var(--admin-focus); outline-offset: 3px; }
+.admin-shell .cs-page .cs-data-note { display: flex; gap: .5rem; align-items: flex-start; margin: .8rem 0 0; padding: .6rem .75rem; border: 1px solid #d3dde6; border-radius: 8px; background: #f6f8fa; color: #34506b; font-size: .8rem; line-height: 1.5; }
+.admin-shell .cs-page .cs-data-note svg { width: 1.1rem; height: 1.1rem; flex-shrink: 0; margin-top: .1rem; }
+.admin-shell .cs-page .cs-pqr-detail__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem 1.5rem; margin-top: .4rem; }
+@container (min-width: 50rem) { .admin-shell .cs-page .cs-pqr-detail__grid { grid-template-columns: minmax(0, 1.4fr) minmax(17rem, 1fr); } }
+.admin-shell .cs-page .cs-fieldset { display: grid; gap: .6rem; margin: 0; padding: .8rem .9rem .9rem; border: 1px solid var(--admin-border-soft); border-radius: 10px; background: #faf9f6; }
+.admin-shell .cs-page .cs-fieldset legend { padding: 0 .35rem; font-size: .78rem; font-weight: 700; }
+.admin-shell .cs-page .cs-fieldset label { display: grid; gap: .25rem; font-size: .78rem; font-weight: 600; color: #3d3b38; }
+.admin-shell .cs-page .cs-fieldset :is(select, textarea) { width: 100%; font-weight: 400; }

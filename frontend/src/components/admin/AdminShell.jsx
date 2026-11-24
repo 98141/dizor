@@ -38,7 +38,8 @@ function Navigation({ modules, selected, pathname, expanded, onToggle, onNavigat
 export default function AdminShell(props) {
   return <Suspense fallback={<p className="auth-loading" role="status">Cargando navegación…</p>}><Shell {...props} /></Suspense>;
 }
-function Shell({ children, variant = "admin" }) {
+// `pageHeader` (optional, Sprint 04): rendered before the section tabs so a page can introduce them.
+function Shell({ children, variant = "admin", pageHeader = null }) {
   const pathname = usePathname(), searchParams = useSearchParams(), route = `${pathname}?${searchParams}`;
   const { user, loadingAuth, logout } = useAuth(), { siteName } = useSiteConfig();
   const role = user?.role, vendor = role === "vendedor" || variant === "vendedor";
@@ -83,7 +84,7 @@ function Shell({ children, variant = "admin" }) {
     <aside className="admin-sidebar"><p className="admin-sidebar__brand">{siteName}</p><p className="admin-sidebar__identity">{user.name}<span>{vendor ? "Vendedor" : role === "superadmin" ? "Superadministrador" : "Administrador"}</span></p><Navigation {...navProps} label="Navegación principal" /></aside>
     <div className="admin-main" ref={background}>
       <header className="admin-topbar"><button ref={menuButton} type="button" className="admin-topbar__menu-btn" aria-label="Menú" aria-expanded={mobileOpen} aria-controls="admin-mobile-menu" onClick={() => setDrawer(route)}>☰</button><div className="admin-location"><span>{siteName} · {vendor ? "Vendedor" : "Administración"}</span><nav aria-label="Ubicación actual">{selected.module && selected.child && selected.module.label !== selected.child.label ? <><Link href={selected.module.href}>{selected.module.label}</Link><span aria-hidden="true"> / </span></> : null}<span aria-current="page">{current}</span></nav></div>{["superadmin", "admin"].includes(role) && <AlertBell />}</header>
-      <main id="admin-workspace" tabIndex={0}>{logoutError && <p role="alert">{logoutError}</p>}{["attention", "settings"].includes(selected.module?.id) && !!selected.module.children.length && <nav className="admin-context-nav" aria-label={`Secciones de ${selected.module.label}`}>{selected.module.children.map(c => <Link key={c.id} href={c.href} aria-current={selected.child?.id === c.id ? "page" : undefined}>{c.label}</Link>)}</nav>}{children}</main>
+      <main id="admin-workspace" tabIndex={0}>{logoutError && <p role="alert">{logoutError}</p>}{pageHeader}{["attention", "settings"].includes(selected.module?.id) && !!selected.module.children.length && <nav className="admin-context-nav" aria-label={`Secciones de ${selected.module.label}`}>{selected.module.children.map(c => <Link key={c.id} href={c.href} aria-current={selected.child?.id === c.id ? "page" : undefined}>{c.label}</Link>)}</nav>}{children}</main>
     </div>
     {mobileOpen && <div className="admin-mobile-nav--open"><div className="admin-mobile-nav__backdrop" onClick={() => setDrawer(null)} aria-hidden="true" /><section id="admin-mobile-menu" ref={panel} role="dialog" aria-modal="true" aria-label="Menú de navegación" className="admin-mobile-nav__links"><div className="admin-mobile-heading"><strong>{siteName}</strong><button type="button" className="admin-mobile-nav__close" aria-label="Cerrar menú" onClick={() => setDrawer(null)}>✕</button></div><p className="admin-sidebar__identity">{user.name}<span>{vendor ? "Vendedor" : "Administración"}</span></p><Navigation {...navProps} label="Navegación móvil" /></section></div>}
   </div>;

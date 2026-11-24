@@ -320,6 +320,7 @@ export default function TaxonomyManager({ initialTab = "categories", onTabChange
                         <button
                           type="button"
                           className="admin-btn admin-btn--sm"
+                          aria-label={`Editar ${item.name}`}
                           onClick={() => startEdit(item)}
                         >
                           Editar
@@ -327,6 +328,7 @@ export default function TaxonomyManager({ initialTab = "categories", onTabChange
                         <button
                           type="button"
                           className="admin-btn admin-btn--sm admin-btn--danger"
+                          aria-label={`Eliminar ${item.name}`}
                           onClick={() => handleDelete(item._id, item.name)}
                         >
                           Eliminar

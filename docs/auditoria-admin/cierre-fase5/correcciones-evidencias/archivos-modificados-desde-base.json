@@ -1,0 +1,8 @@
+[
+  "backend/src/controllers/settingsAdminController.js",
+  "frontend/src/components/admin/AdminShell.jsx",
+  "frontend/src/components/admin/ContentWorkspace.jsx",
+  "frontend/src/lib/adminNavigation.mjs",
+  "frontend/src/services/adminMarketingService.js",
+  "frontend/src/services/adminSettingsService.js"
+]

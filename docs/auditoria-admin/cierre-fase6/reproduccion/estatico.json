@@ -1,0 +1,191 @@
+{
+  "syntax": [
+    {
+      "file": "backend/src/controllers/dashboardAdminController.js",
+      "passed": true
+    },
+    {
+      "file": "backend/src/controllers/orderAdminController.js",
+      "passed": true
+    },
+    {
+      "file": "frontend/src/app/admin/alertas/page.js",
+      "passed": true
+    },
+    {
+      "file": "frontend/src/app/admin/configuracion/page.js",
+      "passed": true
+    },
+    {
+      "file": "frontend/src/app/admin/cupones/page.js",
+      "passed": true
+    },
+    {
+      "file": "frontend/src/app/admin/finanzas/page.js",
+      "passed": true
+    },
+    {
+      "file": "frontend/src/app/admin/layout.js",
+      "passed": true
+    },
+    {
+      "file": "frontend/src/app/admin/pqr/page.js",
+      "passed": true
+    },
+    {
+      "file": "frontend/src/app/admin/usuarios/page.js",
+      "passed": true
+    },
+    {
+      "file": "frontend/src/app/vendedor/layout.js",
+      "passed": true
+    },
+    {
+      "file": "frontend/src/components/admin/AlertBell.jsx",
+      "passed": true
+    },
+    {
+      "file": "frontend/src/components/admin/AuditLogList.jsx",
+      "passed": true
+    },
+    {
+      "file": "frontend/src/components/admin/ContentWorkspace.jsx",
+      "passed": true
+    },
+    {
+      "file": "frontend/src/components/admin/FinanceDashboard.jsx",
+      "passed": true
+    },
+    {
+      "file": "frontend/src/components/admin/HomeImagesTab.jsx",
+      "passed": true
+    },
+    {
+      "file": "frontend/src/components/admin/HomeTextsTab.jsx",
+      "passed": true
+    },
+    {
+      "file": "frontend/src/components/admin/OrderDetail.jsx",
+      "passed": true
+    },
+    {
+      "file": "frontend/src/components/admin/ProductHistoryList.jsx",
+      "passed": true
+    },
+    {
+      "file": "frontend/src/components/admin/ReviewsTab.jsx",
+      "passed": true
+    },
+    {
+      "file": "frontend/src/components/admin/SpecialRequestDetail.jsx",
+      "passed": true
+    },
+    {
+      "file": "frontend/src/components/admin/SpecialRequestsList.jsx",
+      "passed": true
+    },
+    {
+      "file": "frontend/src/components/admin/TaxonomyManager.jsx",
+      "passed": true
+    },
+    {
+      "file": "backend/test/phase6.test.js",
+      "passed": true
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase6/independiente.test.js",
+      "passed": true
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase6/navegador-independiente.cjs",
+      "passed": true
+    },
+    {
+      "file": "docs/auditoria-admin/cierre-fase6/preservar-salida.cjs",
+      "passed": true
+    },
+    {
+      "file": "docs/auditoria-admin/fase6-evidencias/crear-contactos.cjs",
+      "passed": true
+    },
+    {
+      "file": "docs/auditoria-admin/fase6-evidencias/manifestar.cjs",
+      "passed": true
+    },
+    {
+      "file": "docs/auditoria-admin/fase6-evidencias/preservar-evidencias.cjs",
+      "passed": true
+    },
+    {
+      "file": "docs/auditoria-admin/fase6-evidencias/regresion-navegador.cjs",
+      "passed": true
+    },
+    {
+      "file": "docs/auditoria-admin/fase6-evidencias/resumir-resultados.cjs",
+      "passed": true
+    },
+    {
+      "file": "docs/auditoria-admin/fase6-evidencias/verificar-estatico.cjs",
+      "passed": true
+    },
+    {
+      "file": "frontend/src/components/admin/AdminConfirmModal.jsx",
+      "passed": true
+    },
+    {
+      "file": "frontend/src/components/admin/AdminFeedback.jsx",
+      "passed": true
+    },
+    {
+      "file": "frontend/src/components/admin/AdminFormField.jsx",
+      "passed": true
+    },
+    {
+      "file": "frontend/test/admin-fields.test.cjs",
+      "passed": true
+    },
+    {
+      "file": "frontend/test/admin-polish-next-browser.cjs",
+      "passed": true
+    },
+    {
+      "file": "frontend/test/helpers/adminAccessibilityAudit.cjs",
+      "passed": true
+    },
+    {
+      "file": "frontend/test/helpers/adminPolishBrowserFlow.cjs",
+      "passed": true
+    },
+    {
+      "file": "frontend/test/helpers/adminPolishInteractions.cjs",
+      "passed": true
+    }
+  ],
+  "css": [
+    {
+      "file": "frontend/src/components/admin/CatalogWorkspace.module.css",
+      "passed": true
+    },
+    {
+      "file": "frontend/src/components/admin/OrderWorkspace.module.css",
+      "passed": true
+    },
+    {
+      "file": "frontend/src/styles/layouts/admin-polish.css",
+      "passed": true
+    }
+  ],
+  "frontend": {
+    "files": 23,
+    "errors": 7,
+    "warnings": 3,
+    "newDiagnostics": [],
+    "cms": []
+  },
+  "node": {
+    "files": 17,
+    "errors": 0,
+    "warnings": 0
+  },
+  "diffCheck": 0
+}

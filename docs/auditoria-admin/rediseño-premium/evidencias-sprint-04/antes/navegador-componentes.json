@@ -1,0 +1,220 @@
+{
+  "mode": "antes",
+  "checks": [
+    "solicitudes: 1440/1024/820/390/360 px",
+    "detalle: 1440/1024/820/390/360 px",
+    "pqr: 1440/1024/820/390/360 px",
+    "botones: 1440/1024/820/390/360 px"
+  ],
+  "externalRequests": [],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "mutations": [],
+  "screenshots": [
+    "solicitudes-1440.png",
+    "solicitudes-1024.png",
+    "solicitudes-820.png",
+    "solicitudes-390.png",
+    "solicitudes-360.png",
+    "solicitudes-vacias-1440.png",
+    "solicitudes-vacias-390.png",
+    "detalle-1440.png",
+    "detalle-1024.png",
+    "detalle-820.png",
+    "detalle-390.png",
+    "detalle-360.png",
+    "pqr-1440.png",
+    "pqr-1024.png",
+    "pqr-820.png",
+    "pqr-390.png",
+    "pqr-360.png",
+    "pqr-vacia-1440.png",
+    "pqr-detalle-1440.png",
+    "pqr-detalle-390.png",
+    "botones-1440.png",
+    "botones-1024.png",
+    "botones-820.png",
+    "botones-390.png",
+    "botones-360.png"
+  ],
+  "measurements": [
+    {
+      "name": "solicitudes",
+      "width": 1440,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 1531
+    },
+    {
+      "name": "solicitudes",
+      "width": 1024,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 1842
+    },
+    {
+      "name": "solicitudes",
+      "width": 820,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 1816
+    },
+    {
+      "name": "solicitudes",
+      "width": 390,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 3840
+    },
+    {
+      "name": "solicitudes",
+      "width": 360,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 3840
+    },
+    {
+      "name": "detalle",
+      "width": 1440,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 1394
+    },
+    {
+      "name": "detalle",
+      "width": 1024,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 1504
+    },
+    {
+      "name": "detalle",
+      "width": 820,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 1550
+    },
+    {
+      "name": "detalle",
+      "width": 390,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 1816
+    },
+    {
+      "name": "detalle",
+      "width": 360,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 1857
+    },
+    {
+      "name": "pqr",
+      "width": 1440,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 1031
+    },
+    {
+      "name": "pqr",
+      "width": 1024,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 1034
+    },
+    {
+      "name": "pqr",
+      "width": 820,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 1028
+    },
+    {
+      "name": "pqr",
+      "width": 390,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 2553
+    },
+    {
+      "name": "pqr",
+      "width": 360,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 2553
+    },
+    {
+      "name": "botones",
+      "width": 1440,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 933
+    },
+    {
+      "name": "botones",
+      "width": 1024,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 918
+    },
+    {
+      "name": "botones",
+      "width": 820,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 913
+    },
+    {
+      "name": "botones",
+      "width": 390,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 1031
+    },
+    {
+      "name": "botones",
+      "width": 360,
+      "docOverflow": false,
+      "offenders": [],
+      "covered": [],
+      "height": 1031
+    }
+  ],
+  "buttonStyles": {},
+  "sheets": [
+    "styles/base/variables.css",
+    "styles/base/globals.css",
+    "styles/layouts/admin-layout.css",
+    "styles/pages/admin-cms.css",
+    "styles/pages/admin-products.css",
+    "styles/pages/admin-orders.css",
+    "styles/pages/admin-marketing.css",
+    "styles/pages/admin-dashboard.css",
+    "styles/pages/admin-finanzas.css",
+    "styles/pages/admin-alertas.css",
+    "styles/components/auth-form.css",
+    "styles/components/auth-card.css",
+    "styles/pages/special-requests.css",
+    "styles/layouts/admin-polish.css"
+  ],
+  "passed": true
+}

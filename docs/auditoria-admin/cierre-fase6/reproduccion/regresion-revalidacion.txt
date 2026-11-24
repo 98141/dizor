@@ -1,0 +1,382 @@
+(node:13612) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:13612) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:13612) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:13612) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:13612) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:13612) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+12:35:27 [[32mhttp[39m]: POST /api/auth/login 200 443.877 ms - 168
+12:35:28 [[32mhttp[39m]: POST /api/auth/login 200 364.998 ms - 169
+12:35:28 [[32mhttp[39m]: POST /api/auth/login 200 358.343 ms - 174
+12:35:28 [[32mhttp[39m]: POST /api/auth/login 200 352.538 ms - 173
+12:35:28 [[32mhttp[39m]: PATCH /api/admin/marketing/settings 200 21.895 ms - 696
+12:36:05 [[32mhttp[39m]: GET /api/products/filters 200 47.591 ms - 796
+12:36:05 [[32mhttp[39m]: GET /api/content/pages 200 36.775 ms - 43
+12:36:05 [[32mhttp[39m]: GET /api/content/appearance 200 60.616 ms - 126
+12:36:05 [[32mhttp[39m]: GET /api/content/home 200 66.662 ms - 3830
+12:36:05 [[32mhttp[39m]: GET /api/content/appearance 200 12.769 ms - 126
+12:36:05 [[32mhttp[39m]: GET /api/content/pages 200 15.819 ms - 43
+12:36:05 [[32mhttp[39m]: GET /api/products/filters 200 24.161 ms - 796
+12:36:05 [[32mhttp[39m]: GET /api/visits/count 200 14.126 ms - 30
+12:36:05 [[32mhttp[39m]: GET /api/content/home 200 20.089 ms - 3830
+12:36:05 [[32mhttp[39m]: GET /api/visits/count 200 2.845 ms - 30
+12:36:06 [[32mhttp[39m]: GET /api/products?isNew=true&limit=8 200 14.406 ms - 80
+12:36:06 [[32mhttp[39m]: GET /api/reviews?limit=4 200 10.380 ms - 45
+12:36:06 [[32mhttp[39m]: GET /api/products/daily-random?limit=5 200 114.189 ms - 102
+12:36:06 [[32mhttp[39m]: GET /api/cms/pages 404 1.289 ms - 64
+12:36:06 [[32mhttp[39m]: GET /api/products?limit=500&isActive=[redactado] 200 6.200 ms - 80
+12:36:10 [[32mhttp[39m]: GET /api/auth/me 200 8.679 ms - 207
+12:36:10 [[32mhttp[39m]: GET /api/admin/content/home 200 18.551 ms - 3679
+12:36:10 [[32mhttp[39m]: GET /api/admin/alerts 200 27.102 ms - 438
+12:36:10 [[32mhttp[39m]: GET /api/admin/content/pages 200 12.183 ms - 43
+12:36:10 [[32mhttp[39m]: GET /api/admin/content/banners 200 11.424 ms - 45
+12:36:10 [[32mhttp[39m]: GET /api/favorites/ids 200 15.166 ms - 47
+12:36:10 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 16.931 ms - 644
+12:36:10 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 200 20.763 ms - 68
+12:36:10 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 200 19.284 ms - 62
+12:36:10 [[32mhttp[39m]: GET /api/admin/coupons 200 15.852 ms - 14
+12:36:10 [[32mhttp[39m]: GET /api/admin/settings 200 9.796 ms - 489
+12:36:13 [[32mhttp[39m]: GET /api/auth/me 304 10.145 ms - -
+12:36:13 [[32mhttp[39m]: GET /api/admin/content/home 304 30.632 ms - -
+12:36:13 [[32mhttp[39m]: GET /api/admin/content/pages 304 32.022 ms - -
+12:36:13 [[32mhttp[39m]: GET /api/admin/alerts 200 43.512 ms - 438
+12:36:13 [[32mhttp[39m]: GET /api/admin/content/banners 304 29.141 ms - -
+12:36:13 [[32mhttp[39m]: GET /api/favorites/ids 304 28.164 ms - -
+12:36:13 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 30.787 ms - -
+12:36:13 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 30.598 ms - -
+12:36:13 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 30.386 ms - -
+12:36:13 [[32mhttp[39m]: GET /api/admin/coupons 304 25.478 ms - -
+12:36:13 [[32mhttp[39m]: GET /api/admin/settings 304 24.700 ms - -
+12:36:13 [[32mhttp[39m]: GET /api/auth/me 304 9.734 ms - -
+12:36:13 [[32mhttp[39m]: GET /api/admin/content/home 304 33.879 ms - -
+12:36:13 [[32mhttp[39m]: GET /api/admin/alerts 200 43.433 ms - 438
+12:36:13 [[32mhttp[39m]: GET /api/admin/content/pages 304 31.953 ms - -
+12:36:13 [[32mhttp[39m]: GET /api/admin/content/banners 304 30.755 ms - -
+12:36:13 [[32mhttp[39m]: GET /api/favorites/ids 304 30.304 ms - -
+12:36:13 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 31.321 ms - -
+12:36:13 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 18.110 ms - -
+12:36:13 [[32mhttp[39m]: GET /api/admin/coupons 304 14.945 ms - -
+12:36:13 [[32mhttp[39m]: GET /api/admin/settings 304 15.097 ms - -
+12:36:13 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 10.565 ms - -
+12:36:14 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 4.910 ms - -
+12:36:14 [[32mhttp[39m]: PATCH /api/admin/marketing/settings 200 15.985 ms - 692
+12:36:15 [[32mhttp[39m]: GET /api/auth/me 304 6.879 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/admin/content/home 304 41.824 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/admin/content/pages 304 40.385 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 42.018 ms - 640
+12:36:15 [[32mhttp[39m]: GET /api/admin/content/banners 304 41.258 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/favorites/ids 304 49.427 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/admin/alerts 200 68.033 ms - 438
+12:36:15 [[32mhttp[39m]: GET /api/admin/coupons 304 16.489 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 26.440 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 31.497 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/admin/settings 304 30.671 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 7.289 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/auth/me 304 5.060 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/admin/content/home 304 18.330 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/admin/content/pages 304 24.387 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/admin/alerts 200 33.598 ms - 438
+12:36:15 [[32mhttp[39m]: GET /api/admin/content/banners 304 20.244 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/favorites/ids 304 16.563 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 17.282 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 17.669 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 15.220 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/admin/coupons 304 11.296 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/admin/settings 304 8.710 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/auth/me 304 6.307 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/admin/content/home 304 21.378 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/admin/content/pages 304 22.093 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/admin/content/banners 304 15.298 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/admin/alerts 200 28.785 ms - 438
+12:36:15 [[32mhttp[39m]: GET /api/favorites/ids 304 15.694 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 16.558 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 14.276 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 12.982 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/admin/coupons 304 11.997 ms - -
+12:36:15 [[32mhttp[39m]: GET /api/admin/settings 304 12.359 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/auth/me 304 11.800 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/admin/content/home 304 41.425 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/admin/content/pages 304 41.341 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/admin/content/banners 304 40.630 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 37.834 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/favorites/ids 304 42.062 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/admin/alerts 200 52.492 ms - 438
+12:36:16 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 26.818 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/admin/settings 304 19.507 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 41.954 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/admin/coupons 304 41.017 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/auth/me 304 6.416 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/admin/content/home 304 29.860 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/admin/content/pages 304 29.359 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/admin/alerts 200 35.848 ms - 438
+12:36:16 [[32mhttp[39m]: GET /api/admin/content/banners 304 23.937 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/favorites/ids 304 23.641 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 23.664 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 23.850 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 22.693 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/admin/coupons 304 19.281 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/admin/settings 304 18.950 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/auth/me 304 7.077 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/admin/content/home 304 29.242 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/admin/content/pages 304 22.702 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/admin/alerts 200 34.132 ms - 438
+12:36:16 [[32mhttp[39m]: GET /api/admin/content/banners 304 21.602 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/favorites/ids 304 19.855 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 19.332 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 13.020 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 12.393 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/admin/coupons 304 11.425 ms - -
+12:36:16 [[32mhttp[39m]: GET /api/admin/settings 304 11.723 ms - -
+12:36:17 [[32mhttp[39m]: GET /api/auth/me 304 5.172 ms - -
+12:36:17 [[32mhttp[39m]: GET /api/admin/content/home 304 30.306 ms - -
+12:36:17 [[32mhttp[39m]: GET /api/admin/content/pages 304 29.686 ms - -
+12:36:17 [[32mhttp[39m]: GET /api/admin/content/banners 304 29.981 ms - -
+12:36:17 [[32mhttp[39m]: GET /api/favorites/ids 304 25.463 ms - -
+12:36:17 [[32mhttp[39m]: GET /api/admin/alerts 200 38.535 ms - 438
+12:36:17 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 27.368 ms - -
+12:36:17 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 15.466 ms - -
+12:36:17 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 14.205 ms - -
+12:36:17 [[32mhttp[39m]: GET /api/admin/coupons 304 12.315 ms - -
+12:36:17 [[32mhttp[39m]: GET /api/admin/settings 304 12.415 ms - -
+12:36:17 [[32mhttp[39m]: GET /api/auth/me 304 5.684 ms - -
+12:36:17 [[32mhttp[39m]: GET /api/admin/content/home 304 21.464 ms - -
+12:36:17 [[32mhttp[39m]: GET /api/admin/content/pages 304 20.369 ms - -
+12:36:17 [[32mhttp[39m]: GET /api/admin/content/banners 304 15.229 ms - -
+12:36:17 [[32mhttp[39m]: GET /api/admin/alerts 200 26.447 ms - 438
+12:36:17 [[32mhttp[39m]: GET /api/favorites/ids 304 16.036 ms - -
+12:36:17 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 16.575 ms - -
+12:36:17 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 13.077 ms - -
+12:36:17 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 11.896 ms - -
+12:36:17 [[32mhttp[39m]: GET /api/admin/coupons 304 10.910 ms - -
+12:36:17 [[32mhttp[39m]: GET /api/admin/settings 304 10.676 ms - -
+12:36:17 [[32mhttp[39m]: GET /api/auth/me 304 6.049 ms - -
+12:36:17 [[32mhttp[39m]: GET /api/admin/content/home 304 24.665 ms - -
+12:36:17 [[32mhttp[39m]: GET /api/admin/content/pages 304 23.300 ms - -
+12:36:17 [[32mhttp[39m]: GET /api/admin/content/banners 304 22.062 ms - -
+12:36:17 [[32mhttp[39m]: GET /api/favorites/ids 304 16.876 ms - -
+12:36:18 [[32mhttp[39m]: GET /api/admin/alerts 200 31.094 ms - 438
+12:36:18 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 17.952 ms - -
+12:36:18 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 10.600 ms - -
+12:36:18 [[32mhttp[39m]: GET /api/admin/coupons 304 9.249 ms - -
+12:36:18 [[32mhttp[39m]: GET /api/admin/settings 304 9.482 ms - -
+{
+  "passed": true,
+  "checks": [
+    {
+      "id": "carga",
+      "ok": true,
+      "title": "Promoción artesanal de temporada",
+      "stored": {
+        "title": "Promoción artesanal de temporada",
+        "text": "Descubre nuestros productos elaborados en palma de iraca.",
+        "enabled": true
+      }
+    },
+    {
+      "id": "fallo-500",
+      "ok": true,
+      "enabled": false,
+      "patchCount": 0,
+      "alert": "Error al cargar configuración de marketing. No se pudo cargar información válida. Los datos que pudieran verse no están actualizados; guardar está bloqueado.",
+      "stored": {
+        "title": "Promoción artesanal de temporada",
+        "text": "Descubre nuestros productos elaborados en palma de iraca.",
+        "enabled": true
+      }
+    },
+    {
+      "id": "fallo-offline",
+      "ok": true,
+      "enabled": false,
+      "patchCount": 0,
+      "alert": "Error al cargar configuración de marketing. No se pudo cargar información válida. Los datos que pudieran verse no están actualizados; guardar está bloqueado.",
+      "stored": {
+        "title": "Promoción artesanal de temporada",
+        "text": "Descubre nuestros productos elaborados en palma de iraca.",
+        "enabled": true
+      }
+    },
+    {
+      "id": "fallo-abort",
+      "ok": true,
+      "enabled": false,
+      "patchCount": 0,
+      "alert": "Error al cargar configuración de marketing. No se pudo cargar información válida. Los datos que pudieran verse no están actualizados; guardar está bloqueado.",
+      "stored": {
+        "title": "Promoción artesanal de temporada",
+        "text": "Descubre nuestros productos elaborados en palma de iraca.",
+        "enabled": true
+      }
+    },
+    {
+      "id": "fallo-invalid",
+      "ok": true,
+      "enabled": false,
+      "patchCount": 0,
+      "alert": "Error al cargar configuración de marketing. No se pudo cargar información válida. Los datos que pudieran verse no están actualizados; guardar está bloqueado.",
+      "stored": {
+        "title": "Promoción artesanal de temporada",
+        "text": "Descubre nuestros productos elaborados en palma de iraca.",
+        "enabled": true
+      }
+    },
+    {
+      "id": "fallo-incomplete",
+      "ok": true,
+      "enabled": false,
+      "patchCount": 0,
+      "alert": "Error al cargar configuración de marketing. No se pudo cargar información válida. Los datos que pudieran verse no están actualizados; guardar está bloqueado.",
+      "stored": {
+        "title": "Promoción artesanal de temporada",
+        "text": "Descubre nuestros productos elaborados en palma de iraca.",
+        "enabled": true
+      }
+    },
+    {
+      "id": "recarga-tras-error",
+      "ok": true,
+      "title": "Promoción artesanal de temporada"
+    },
+    {
+      "id": "reintento",
+      "ok": true,
+      "stored": {
+        "title": "Promoción artesanal de temporada",
+        "text": "Descubre nuestros productos elaborados en palma de iraca.",
+        "enabled": true
+      }
+    },
+    {
+      "id": "pestaña-pendiente",
+      "ok": true,
+      "title": "Promoción artesanal de temporada",
+      "stored": {
+        "title": "Promoción artesanal de temporada",
+        "text": "Descubre nuestros productos elaborados en palma de iraca.",
+        "enabled": true
+      },
+      "saveEnabled": false
+    },
+    {
+      "id": "doble-clic",
+      "ok": true,
+      "patchCount": 1,
+      "stored": {
+        "title": "Edición válida de temporada",
+        "text": "Descubre nuestros productos elaborados en palma de iraca.",
+        "enabled": true
+      },
+      "success": true
+    },
+    {
+      "id": "persistencia",
+      "ok": true,
+      "stored": {
+        "title": "Edición válida de temporada",
+        "text": "Descubre nuestros productos elaborados en palma de iraca.",
+        "enabled": true
+      }
+    },
+    {
+      "id": "guardado-ambiguo",
+      "ok": true,
+      "body": "Ir al contenido\n\nDizor\n\nAdmin Cierre\nAdministrador\n\nOPERACIÓN DIARIA\n\nInicio\nPedidos\nProductos\nAtención al cliente\n\nADMINISTRACIÓN\n\nTienda online\nMarketing\nCupones\nPopup\nNewsletter\nCarritos\nExportaciones históricas\nConfiguración\nVer tienda\nCerrar sesión\nDizor · Administración\nMarketing / Popup\nMarketing\n\nCupones, popup y suscripciones. Las herramientas desactivadas conservan su estado.\n\nCupones\nPopup\nNewsletter\nCarritos\n\nEl resultado del guardado no está confirmado. No se ha declarado éxito. Com",
+      "stored": {
+        "title": "Edición válida de temporada",
+        "text": "Descubre nuestros productos elaborados en palma de iraca.",
+        "enabled": true
+      },
+      "patchCount": 1
+    },
+    {
+      "id": "otras-secciones",
+      "ok": true,
+      "title": "Edición válida de temporada"
+    },
+    {
+      "id": "aria-current",
+      "ok": true,
+      "current": [
+        {
+          "text": "Marketing",
+          "value": "location"
+        },
+        {
+          "text": "Popup",
+          "value": "page"
+        },
+        {
+          "text": "Popup",
+          "value": "page"
+        }
+      ]
+    },
+    {
+      "id": "export-/admin/contenido?tab=exports",
+      "ok": true,
+      "active": [
+        "Exportaciones históricas",
+        "Exportaciones históricas",
+        "Exportaciones"
+      ],
+      "buttons": [
+        "Exportar pedidos (CSV)",
+        "Exportar newsletter (CSV)",
+        "Exportar carritos (CSV)"
+      ],
+      "title": "Exportaciones",
+      "url": "/admin/contenido?tab=exports"
+    },
+    {
+      "id": "export-/admin/contenido?tab=exports&scope=orders",
+      "ok": true,
+      "active": [
+        "Exportar pedidos (CSV)",
+        "Exportar pedidos (CSV)",
+        "Exportaciones"
+      ],
+      "buttons": [
+        "Exportar pedidos (CSV)"
+      ],
+      "title": "Exportaciones de pedidos",
+      "url": "/admin/contenido?tab=exports&scope=orders"
+    },
+    {
+      "id": "export-/admin/contenido?tab=exports&scope=newsletter",
+      "ok": true,
+      "active": [
+        "Newsletter",
+        "Newsletter",
+        "Exportaciones"
+      ],
+      "buttons": [
+        "Exportar newsletter (CSV)"
+      ],
+      "title": "Exportaciones",
+      "url": "/admin/contenido?tab=exports&scope=newsletter"
+    },
+    {
+      "id": "export-/admin/contenido?tab=exports&scope=carts",
+      "ok": true,
+      "active": [
+        "Carritos",
+        "Carritos",
+        "Exportaciones"
+      ],
+      "buttons": [
+        "Exportar carritos (CSV)"
+      ],
+      "title": "Exportaciones",
+      "url": "/admin/contenido?tab=exports&scope=carts"
+    },
+    {
+      "id": "movil",
+      "ok": true,
+      "stored": {
+        "title": "Edición válida de temporada",
+        "text": "Descubre nuestros productos elaborados en palma de iraca.",
+        "enabled": true
+      }
+    }
+  ]
+}

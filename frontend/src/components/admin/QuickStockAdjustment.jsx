@@ -2,7 +2,6 @@
 import { useEffect, useRef, useState } from "react";
 import { adjustProductStock, getStockOperation } from "@/services/adminCatalogService";
 import { variantName } from "@/lib/catalogWorkspace";
-import styles from "./CatalogWorkspace.module.css";
 
 export default function QuickStockAdjustment({ product, variant, actorId, onRecorded, onClose }) {
   const storageKey = `dizor-stock:${actorId}:${product.id}:${variant.id}`;
@@ -61,19 +60,19 @@ export default function QuickStockAdjustment({ product, variant, actorId, onReco
     } catch { setError("No se pudo comprobar el ajuste. Conservamos la misma operación."); }
     finally { inFlightRef.current = false; setBusy(false); }
   };
-  return <section className={styles.adjustment} aria-label={`Ajustar ${variant.sku}`} aria-busy={busy}>
+  return <section className="op-adjust" aria-label={`Ajustar ${variant.sku}`} aria-busy={busy}>
     <h3>Ajustar existencias</h3><p>{product.name} · {variantName(variant)} · {variant.sku}</p><p>Stock actual mostrado: <strong>{variant.stock}</strong></p>
-    {error && <p role="alert" className={styles.error}>{error}</p>}{message && <p role="status">{message}</p>}
-    {pending ? <><p>Ajuste por comprobar: <strong>{pending.delta > 0 ? "+" : ""}{pending.delta}</strong> · {pending.reason}</p><div className={styles.actions}><button type="button" className="admin-btn admin-btn--primary" disabled={busy} onClick={verify}>Comprobar resultado</button><button type="button" className="admin-btn" disabled={busy} onClick={send}>Reintentar mismo ajuste</button></div><p className={styles.muted}>Una consulta sin resultado no demuestra que la petición anterior haya terminado. Se conserva la misma operación.</p></>
-      : <form className={styles.adjustForm} onSubmit={(e) => { e.preventDefault(); if (valid) setConfirmation(true); else setError("Revisa la cantidad, el stock previsto y el motivo."); }}>
+    {error && <p role="alert" className="op-alert">{error}</p>}{message && <p role="status">{message}</p>}
+    {pending ? <><p>Ajuste por comprobar: <strong>{pending.delta > 0 ? "+" : ""}{pending.delta}</strong> · {pending.reason}</p><div className="op-adjust-actions"><button type="button" className="op-btn op-btn--primary" disabled={busy} onClick={verify}>Comprobar resultado</button><button type="button" className="op-btn" disabled={busy} onClick={send}>Reintentar mismo ajuste</button></div><p className="op-muted">Una consulta sin resultado no demuestra que la petición anterior haya terminado. Se conserva la misma operación.</p></>
+      : <form className="op-adjust-form" onSubmit={(e) => { e.preventDefault(); if (valid) setConfirmation(true); else setError("Revisa la cantidad, el stock previsto y el motivo."); }}>
         <label>Operación<select value={mode} disabled={busy} onChange={(e) => { setMode(e.target.value); setConfirmation(false); }}><option value="add">Agregar unidades</option><option value="remove">Retirar unidades</option></select></label>
         <label>Cantidad<input name="adjustmentQuantity" type="number" min="1" step="1" required value={quantity} disabled={busy} onChange={(e) => { setQuantity(e.target.value); setConfirmation(false); }} /></label>
-        <label className={styles.wide}>Motivo<input name="adjustmentReason" required maxLength={500} value={reason} disabled={busy} onChange={(e) => { setReason(e.target.value); setConfirmation(false); }} /></label>
-        <p>Stock resultante previsto: <strong>{quantity && Number.isFinite(predicted) ? predicted : "—"}</strong></p><p className={styles.muted}>El resultado final se comprueba al registrar; otras ventas o ajustes pueden cambiarlo.</p>
-        {!confirmation && <button type="submit" className="admin-btn" disabled={busy || !valid}>Revisar ajuste</button>}
+        <label className="op-wide">Motivo<input name="adjustmentReason" required maxLength={500} value={reason} disabled={busy} onChange={(e) => { setReason(e.target.value); setConfirmation(false); }} /></label>
+        <p>Stock resultante previsto: <strong>{quantity && Number.isFinite(predicted) ? predicted : "—"}</strong></p><p className="op-muted">El resultado final se comprueba al registrar; otras ventas o ajustes pueden cambiarlo.</p>
+        {!confirmation && <button type="submit" className="op-btn" disabled={busy || !valid}>Revisar ajuste</button>}
       </form>}
-    {confirmation && !pending && <fieldset className={styles.confirm}><legend>Confirmar ajuste</legend><p>{mode === "add" ? "Agregar" : "Retirar"} {amount} unidades · previsto {predicted}. Motivo: {reason}</p><button ref={confirmRef} type="button" className="admin-btn admin-btn--primary" disabled={busy} onClick={send}>{busy ? "Registrando…" : "Confirmar ajuste"}</button></fieldset>}
+    {confirmation && !pending && <fieldset className="op-confirm"><legend>Confirmar ajuste</legend><p>{mode === "add" ? "Agregar" : "Retirar"} {amount} unidades · previsto {predicted}. Motivo: {reason}</p><button ref={confirmRef} type="button" className="op-btn op-btn--primary" disabled={busy} onClick={send}>{busy ? "Registrando…" : "Confirmar ajuste"}</button></fieldset>}
     {busy && <p role="status">Procesando ajuste…</p>}
-    <button type="button" className="admin-btn" disabled={busy} onClick={onClose}>{pending ? "Cerrar panel (se conserva la operación)" : "Cerrar ajuste"}</button>
+    <button type="button" className="op-btn" disabled={busy} onClick={onClose}>{pending ? "Cerrar panel (se conserva la operación)" : "Cerrar ajuste"}</button>
   </section>;
 }

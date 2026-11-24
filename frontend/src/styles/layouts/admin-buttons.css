@@ -1,0 +1,105 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   DIZOR · Sistema de botones del administrador (Sprint 04 · Premium Híbrido)
+   Single visual source for every action button of admin and seller screens.
+   Scope: only inside `.admin-shell .admin-main > main` (never the public store,
+   the sidebar or the top bar). Loaded last by app/admin/layout.js and
+   app/vendedor/layout.js. Only visual properties: no width, order or layout
+   decisions of the modules are overridden.
+
+   Classes mapped onto the system (existing markup keeps working):
+     secondary  .admin-btn  .op-btn  .dz-btn  button:not([class])  .admin-btn--secondary
+     primary    .admin-btn--primary  .op-btn--primary  .dz-btn--primary  .auth-submit
+     tertiary   .admin-btn--tertiary  .dz-btn--ghost
+     danger     .admin-btn--danger  .dz-btn--danger
+     size       .admin-btn--sm  .op-btn  .dz-btn--sm   (36 px; 44 px on touch screens)
+     states     :disabled  [aria-disabled="true"]  [aria-busy="true"]  :focus-visible
+   ══════════════════════════════════════════════════════════════════════════ */
+.admin-shell {
+  --btn-radius: 8px;
+  --btn-height: 44px;
+  --btn-height-sm: 36px;
+  --btn-font: 600 .84rem/1.25 var(--font-ui);
+  --btn-ink: var(--admin-graphite, #252725);
+  --btn-line: #d3cdc1;
+  --btn-line-hover: #a8a092;
+  --btn-surface: #ffffff;
+  --btn-surface-hover: #f8f6f1;
+  --btn-surface-active: #efebe3;
+  --btn-primary: var(--admin-graphite, #252725);
+  --btn-primary-hover: #111211;
+  --btn-danger: #9b2c2c;
+  --btn-danger-line: #e2bab5;
+  --btn-danger-surface: #fdf4f3;
+  --btn-disabled-ink: #67625a;
+  --btn-disabled-surface: #efede8;
+  --btn-disabled-line: #ddd8ce;
+}
+@media (pointer: coarse) { .admin-shell { --btn-height-sm: 44px; } }
+
+/* Base: secondary. (0,3,2) beats module and page rules such as `.workspace :is(a,button)[class~="admin-btn"]`. */
+html .admin-shell .admin-main > main :is(.admin-btn, .op-btn, .dz-btn, .auth-submit, :where(button:not([class]))) {
+  display: inline-flex; align-items: center; justify-content: center; gap: .45rem;
+  min-height: var(--btn-height); padding: .55rem 1rem;
+  border: 1px solid var(--btn-line); border-radius: var(--btn-radius);
+  background: var(--btn-surface); color: var(--btn-ink);
+  font: var(--btn-font); letter-spacing: .005em; text-align: center; text-decoration: none; white-space: normal;
+  box-shadow: 0 1px 0 rgba(37, 39, 37, .04); cursor: pointer; opacity: 1; transform: none;
+}
+html .admin-shell .admin-main > main :is(.admin-btn, .op-btn, .dz-btn, .auth-submit, :where(button:not([class]))) svg { width: 1.05em; height: 1.05em; flex-shrink: 0; }
+html .admin-shell .admin-main > main :is(.admin-btn, .op-btn, .dz-btn, :where(button:not([class]))):hover:not(:disabled):not([aria-disabled="true"]):not([aria-busy="true"]) { background: var(--btn-surface-hover); border-color: var(--btn-line-hover); color: var(--btn-ink); }
+html .admin-shell .admin-main > main :is(.admin-btn, .op-btn, .dz-btn, :where(button:not([class]))):active:not(:disabled):not([aria-busy="true"]) { background: var(--btn-surface-active); }
+html .admin-shell .admin-main > main .admin-btn--secondary { border-style: dashed; }
+
+/* Compact size for rows, lists and toolbars. */
+html .admin-shell .admin-main > main :is(.admin-btn--sm, .op-btn, .dz-btn--sm) { min-height: var(--btn-height-sm); padding: .35rem .75rem; font-size: .8rem; }
+
+/* Primary: one dominant action per context. */
+html .admin-shell .admin-main > main :is(.admin-btn--primary, .op-btn--primary, .dz-btn--primary, .auth-submit) {
+  background: var(--btn-primary); border-color: var(--btn-primary); color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 1px 2px rgba(17, 18, 17, .18);
+}
+html .admin-shell .admin-main > main :is(.admin-btn--primary, .op-btn--primary, .dz-btn--primary, .auth-submit):hover:not(:disabled):not([aria-disabled="true"]):not([aria-busy="true"]) { background: var(--btn-primary-hover); border-color: var(--btn-primary-hover); color: #fff; }
+html .admin-shell .admin-main > main :is(.admin-btn--primary, .op-btn--primary, .dz-btn--primary):active:not(:disabled):not([aria-busy="true"]) { background: #000; }
+
+/* Tertiary: low-weight actions (ver detalles, volver, abrir información). */
+html .admin-shell .admin-main > main :is(.admin-btn--tertiary, .dz-btn--ghost) {
+  border-color: transparent; background: transparent; box-shadow: none; color: var(--btn-ink);
+  text-decoration: underline; text-decoration-color: var(--btn-line-hover); text-underline-offset: 4px;
+}
+html .admin-shell .admin-main > main :is(.admin-btn--tertiary, .dz-btn--ghost):hover:not(:disabled):not([aria-busy="true"]) { background: var(--btn-surface-active); border-color: transparent; text-decoration-color: var(--btn-ink); }
+
+/* Destructive: discreet red, never a solid red block. Confirmations stay in the components. */
+html .admin-shell .admin-main > main :is(.admin-btn--danger, .dz-btn--danger) { background: var(--btn-surface); border-color: var(--btn-danger-line); color: var(--btn-danger); box-shadow: none; }
+html .admin-shell .admin-main > main :is(.admin-btn--danger, .dz-btn--danger):hover:not(:disabled):not([aria-disabled="true"]):not([aria-busy="true"]) { background: var(--btn-danger-surface); border-color: var(--btn-danger); color: var(--btn-danger); }
+
+/* Disabled: flat, neutral and clearly inactive, for every variant (a disabled primary is not dark). */
+html .admin-shell .admin-main > main :is(.admin-btn, .op-btn, .dz-btn, .auth-submit, :where(button:not([class]))):is(:disabled, [aria-disabled="true"]):not([aria-busy="true"]) {
+  background: var(--btn-disabled-surface); border-color: var(--btn-disabled-line); border-style: solid; color: var(--btn-disabled-ink);
+  box-shadow: none; cursor: not-allowed; text-decoration: none; opacity: 1;
+}
+
+/* Processing: label kept in the accessibility tree and in the layout (no width jump),
+   visually replaced by a spinner. Components keep their own locks against double submit. */
+html .admin-shell .admin-main > main :is(.admin-btn, .op-btn, .dz-btn, .auth-submit, :where(button:not([class])))[aria-busy="true"] {
+  position: relative; cursor: progress; color: transparent !important; text-decoration: none;
+}
+html .admin-shell .admin-main > main :is(.admin-btn, .op-btn, .dz-btn, .auth-submit, :where(button:not([class])))[aria-busy="true"] svg { visibility: hidden; }
+html .admin-shell .admin-main > main :is(.admin-btn, .op-btn, .dz-btn, .auth-submit, :where(button:not([class])))[aria-busy="true"]::after {
+  content: ""; position: absolute; inset: 50% auto auto 50%; width: 1rem; height: 1rem; margin: -.5rem 0 0 -.5rem;
+  border-radius: 50%; border: 2px solid currentColor; border-color: var(--btn-line) var(--btn-line) var(--btn-ink) var(--btn-ink);
+}
+html .admin-shell .admin-main > main :is(.admin-btn--primary, .op-btn--primary, .dz-btn--primary, .auth-submit)[aria-busy="true"]::after { border-color: rgba(255, 255, 255, .35) rgba(255, 255, 255, .35) #fff #fff; }
+html .admin-shell .admin-main > main :is(.admin-btn--danger, .dz-btn--danger)[aria-busy="true"]::after { border-color: var(--btn-danger-line) var(--btn-danger-line) var(--btn-danger) var(--btn-danger); }
+@media (prefers-reduced-motion: no-preference) {
+  html .admin-shell .admin-main > main :is(.admin-btn, .op-btn, .dz-btn, .auth-submit, :where(button:not([class])))[aria-busy="true"]::after { animation: admin-btn-spin .8s linear infinite; }
+  html .admin-shell .admin-main > main :is(.admin-btn, .op-btn, .dz-btn, .auth-submit, :where(button:not([class]))) { transition: background-color .15s, border-color .15s, color .15s, box-shadow .15s; }
+}
+@keyframes admin-btn-spin { to { transform: rotate(360deg); } }
+
+/* Focus: the F6 ring, visible on every variant (graphite and white surfaces). */
+html .admin-shell .admin-main > main :is(.admin-btn, .op-btn, .dz-btn, .auth-submit, :where(button:not([class]))):focus-visible { outline: 3px solid var(--admin-focus, #8a5503); outline-offset: 3px; }
+
+/* Forced colours: keep the boundary of every button. */
+@media (forced-colors: active) {
+  html .admin-shell .admin-main > main :is(.admin-btn, .op-btn, .dz-btn, .auth-submit, :where(button:not([class]))) { border: 1px solid ButtonText; }
+}

@@ -1,7 +1,9 @@
 import "@/styles/layouts/admin-layout.css";
 import "@/styles/pages/admin-orders.css";
 import "@/styles/components/auth-form.css";
+import "@/styles/layouts/admin-premium.css";
 import "@/styles/layouts/admin-polish.css";
+import "@/styles/layouts/admin-buttons.css";
 
 export const metadata = {
   robots: { index: false, follow: false },

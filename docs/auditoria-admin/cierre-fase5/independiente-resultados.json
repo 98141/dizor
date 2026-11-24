@@ -1,0 +1,100 @@
+{
+  "generatedAt": "2026-11-21T14:35:25.762Z",
+  "results": [
+    {
+      "id": "F5-I01",
+      "verdict": "observado",
+      "detail": {
+        "exportsSinAmbito": {
+          "module": "marketing",
+          "child": null
+        },
+        "exportsNewsletter": {
+          "module": "marketing",
+          "child": null
+        },
+        "unknownTabFallback": "popup"
+      }
+    },
+    {
+      "id": "F5-I02",
+      "verdict": "aprobado",
+      "detail": {
+        "matrix": {
+          "/api/admin/finance/export/csv": {
+            "vendor": 403,
+            "admin": 403,
+            "anonymous": 401
+          },
+          "/api/admin/finance/export/xlsx": {
+            "vendor": 403,
+            "admin": 403,
+            "anonymous": 401
+          },
+          "/api/admin/finance/export/pdf": {
+            "vendor": 403,
+            "admin": 403,
+            "anonymous": 401
+          },
+          "/api/admin/finance/products": {
+            "vendor": 403,
+            "admin": 403,
+            "anonymous": 401
+          },
+          "/api/admin/marketing/orders/export?tray=prepare": {
+            "vendor": 403,
+            "admin": 200,
+            "anonymous": 401
+          },
+          "/api/admin/marketing/newsletter/export": {
+            "vendor": 403,
+            "admin": 200,
+            "anonymous": 401
+          },
+          "/api/admin/marketing/abandoned-carts/export": {
+            "vendor": 403,
+            "admin": 200,
+            "anonymous": 401
+          }
+        },
+        "orderExportIgnoresTray": true,
+        "csvBytes": 88
+      }
+    },
+    {
+      "id": "F5-I03",
+      "verdict": "observado",
+      "detail": {
+        "effectiveIncluded": true,
+        "storedMode": "fixed",
+        "storedCost": 1,
+        "storedCarriers": [
+          "nequi"
+        ],
+        "checkoutCost": 0
+      }
+    },
+    {
+      "id": "F5-I04",
+      "verdict": "aprobado",
+      "detail": {
+        "status": 200,
+        "finance": 403,
+        "users": 403,
+        "stock": 403,
+        "direct": 200
+      }
+    },
+    {
+      "id": "F5-I05",
+      "verdict": "aprobado",
+      "detail": {
+        "order": 201,
+        "prepared": 200,
+        "adjust": 200,
+        "replay": true,
+        "notifications": 2
+      }
+    }
+  ]
+}
