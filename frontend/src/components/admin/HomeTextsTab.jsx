@@ -77,6 +77,25 @@ const SECTIONS = [
   },
 ];
 
+function draftPreview(section, home) {
+  const h = home || {};
+  const lines = {
+    hero: [h.hero?.brandClaim, h.hero?.title, h.hero?.subtitle],
+    anuncio: [(h.announcement?.items || []).map((item) => item.text).filter(Boolean).join(" · ")],
+    beneficios: [(h.features || []).map((item) => item.title).filter(Boolean).join(" · ")],
+    novedades: [h.newSection?.eyebrow, h.newSection?.title, h.newSection?.subtitle],
+    colecciones: [h.craftSection?.eyebrow, h.craftSection?.title, h.craftSection?.subtitle],
+    historia: [h.historia?.eyebrow, h.historia?.title, h.historia?.body],
+    personalizacion: [h.personalizacion?.eyebrow, h.personalizacion?.title, h.personalizacion?.body],
+    pormayor: [h.porMayor?.eyebrow, h.porMayor?.title, h.porMayor?.body],
+    voces: [h.reseñasSection?.eyebrow, h.reseñasSection?.title],
+    seleccion: [h.randomProductsSection?.eyebrow, h.randomProductsSection?.title, h.randomProductsSection?.subtitle],
+    inspiracion: [h.inspiracion?.eyebrow, h.inspiracion?.title, h.inspiracion?.subtitle],
+    newsletter: [h.newsletterSection?.eyebrow, h.newsletterSection?.title, h.newsletterSection?.subtitle],
+  };
+  return (lines[section] || []).map((line) => String(line || "").trim()).filter(Boolean);
+}
+
 export default function HomeTextsTab({
   home,
   setHome,
@@ -93,7 +112,7 @@ export default function HomeTextsTab({
   const meta = SECTIONS.find((s) => s.id === section);
 
   return (
-    <form className="admin-form product-form__section" onSubmit={onSave}>
+    <form className="admin-form product-form__section st-home" onSubmit={onSave}>
       <p className="admin-page__subtitle">
         Edita los textos de cada sección del home. Las imágenes se gestionan en
         la pestaña <strong>Imágenes</strong>.
@@ -104,7 +123,7 @@ export default function HomeTextsTab({
           <button
             key={s.id}
             type="button"
-            className={section === s.id ? "active" : ""}
+            className={`st-tab${section === s.id ? " active" : ""}`}
             onClick={() => setSection(s.id)}
           >
             {s.label}
@@ -112,9 +131,9 @@ export default function HomeTextsTab({
         ))}
       </nav>
 
-      <p style={{ color: "var(--color-text-muted)", fontSize: "0.9rem" }}>
-        {meta?.hint}
-      </p>
+      <div className="st-editor">
+        <div className="st-fields">
+      <p className="st-hint">{meta?.hint}</p>
 
       {section === "hero" && (
         <>
@@ -1021,6 +1040,16 @@ export default function HomeTextsTab({
           </div>
         </>
       )}
+
+        </div>
+        <aside className="st-preview" aria-label="Borrador de la sección">
+          <p className="st-preview__label">Borrador en edición</p>
+          <p className="st-hint">Textos de esta sección. No reproduce la tienda pública y no guarda solo.</p>
+          {draftPreview(section, home).map((line, index) => (
+            <p key={index} className={index === 0 ? "st-preview__title" : "st-hint"}>{line}</p>
+          ))}
+        </aside>
+      </div>
 
       <div className="cms-section-actions cms-section-actions--end">
         <AuthSubmitButton loading={saving}>Guardar inicio</AuthSubmitButton>

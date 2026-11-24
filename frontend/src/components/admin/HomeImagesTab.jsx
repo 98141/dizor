@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useMemo, useState } from "react";
+import Image from "next/image";
 import AuthFormField from "@/components/admin/AdminFormField";
 import AuthErrorAlert from "@/components/admin/AdminFeedback";
 import ConfirmModal from "@/components/admin/AdminConfirmModal";
@@ -118,6 +119,7 @@ export default function HomeImagesTab() {
   const [saving, setSaving] = useState(false);
   const savingLock = useRef(false);
   const [confirmModal, setConfirmModal] = useState(null);
+  const [zoom, setZoom] = useState(null);
   const { message, error, flashKey, showMsg, clearMsg } = useFlashMessage();
 
   const [file, setFile] = useState(null);
@@ -166,8 +168,22 @@ export default function HomeImagesTab() {
   }, [showMsg]);
 
   useEffect(() => {
-    load();
-  }, [load]);
+    let cancelled = false;
+    Promise.all([
+      getAdminHomeImages(),
+      getCatalogFilters().catch(() => null),
+    ]).then(([imagesData, filtersData]) => {
+      if (cancelled) return;
+      setImages(imagesData.images || []);
+      setSavedFocalById(Object.fromEntries((imagesData.images || []).map((img) => [img.id, { focalX: img.focalX ?? null, focalY: img.focalY ?? null }])));
+      setWeaveTypes(filtersData?.filters?.weaveTypes || []);
+    }).catch((err) => {
+      if (!cancelled) showMsg(err.response?.data?.message || "Error al cargar imágenes", true);
+    }).finally(() => {
+      if (!cancelled) setLoading(false);
+    });
+    return () => { cancelled = true; };
+  }, [showMsg]);
 
   const sectionImages = useMemo(
     () =>
@@ -362,7 +378,7 @@ export default function HomeImagesTab() {
   if (loading) return <p className="auth-loading">Cargando…</p>;
 
   return (
-    <div>
+    <div className="st-images">
       <p className="admin-page__subtitle" style={{ marginTop: 0 }}>
         Sube, reordena y elimina las imágenes de cada sección del inicio
         (Cloudinary). Los textos se editan en la pestaña Inicio.
@@ -385,7 +401,7 @@ export default function HomeImagesTab() {
           <button
             key={s.id}
             type="button"
-            className={section === s.id ? "active" : ""}
+            className={`st-tab${section === s.id ? " active" : ""}`}
             onClick={() => {
               setSection(s.id);
               clearMsg();
@@ -410,7 +426,7 @@ export default function HomeImagesTab() {
           : ""}
       </p>
 
-      <form className="admin-form product-form__section" onSubmit={handleUpload}>
+      <form className="admin-form product-form__section st-upload" onSubmit={handleUpload}>
         <h2>Subir imagen — {sectionMeta?.label}</h2>
         {inspiracionFull ? (
           <p className="admin-page__subtitle">
@@ -448,7 +464,7 @@ export default function HomeImagesTab() {
           ) : null}
         </div>
         {section === "inspiracion" && newPreviewUrl && !sectionFull ? (
-          <InspirationFocalEditor
+          <div className="st-span"><InspirationFocalEditor
             src={newPreviewUrl}
             focalX={newFocal.x}
             focalY={newFocal.y}
@@ -457,7 +473,7 @@ export default function HomeImagesTab() {
             previews={previewsForNew()}
             idPrefix="focal-new"
             disabled={saving}
-          />
+          /></div>
         ) : null}
         <AuthFormField
           label="Texto alternativo"
@@ -533,72 +549,46 @@ export default function HomeImagesTab() {
             Aún no hay imágenes en esta sección.
           </p>
         ) : (
-          <div className="admin-grid-2">
+          <div className="st-gallery">
             {sectionImages.map((img, idx) => (
-              <article key={img.id} className="taxonomy-form-card">
-                {section === "inspiracion" ? (
-                  <>
-                    <InspirationFocalEditor
-                      src={editorPreviewUrl(img.url)}
-                      focalX={img.focalX ?? null}
-                      focalY={img.focalY ?? null}
-                      onChange={(x, y) => setCardFocal(img.id, x, y)}
-                      onRatio={(ratio) =>
-                        setRatiosById((prev) =>
-                          prev[img.id] === ratio
-                            ? prev
-                            : { ...prev, [img.id]: ratio }
-                        )
-                      }
-                      previews={previewsForCard(img)}
-                      idPrefix={`focal-${img.id}`}
-                      disabled={saving}
-                    />
-                    {!sameFocal(img.focalX, savedFocalById[img.id]?.focalX) ||
-                    !sameFocal(img.focalY, savedFocalById[img.id]?.focalY) ? (
-                      <p className="focal-editor__note" role="status">
-                        Encuadre sin guardar: pulsa «Guardar datos».
-                      </p>
-                    ) : null}
-                  </>
-                ) : (
-                  <img
-                    src={img.url}
-                    alt={img.altText || img.titulo || "Home"}
-                    loading="lazy"
-                    decoding="async"
-                    style={{
-                      width: "100%",
-                      height: 160,
-                      objectFit: "cover",
-                      borderRadius: 4,
-                      border: "1px solid var(--color-border)",
-                    }}
-                  />
-                )}
-                <p
-                  style={{
-                    fontSize: "0.8rem",
-                    color: "var(--color-text-muted)",
-                  }}
-                >
-                  {section === "hero" ? (
+              <article key={img.id} className="st-card">
+                <button type="button" className="st-zoom" onClick={() => setZoom(img)} aria-label={`Ver imagen ${img.altText || img.titulo || idx + 1}`}>
+                  <Image src={img.url} alt="" width={320} height={112} unoptimized className="st-thumb" />
+                </button>
+                <p className="st-meta">
+                  {img.titulo || img.altText || "Sin título"}
+                  {img.publicId ? ` · ${img.publicId}` : ""}
+                </p>
+                <p className="st-meta">
+                  Orden {img.orden}
+                  {" "}
+                  <span className={img.activo ? "st-chip st-chip--on" : "st-chip st-chip--off"}>{img.activo ? "Activa" : "Inactiva"}</span>
+                  {section === "hero" && idx === 0 ? <span className="st-chip st-chip--on"> Principal (LCP)</span> : null}
+                  {img.weaveTypeId ? ` · tejido ${weaveTypes.find((w) => weaveOptionId(w) === img.weaveTypeId)?.name || img.weaveTypeId}` : ""}
+                </p>
+                <div className="st-image-actions">
+                  <button type="button" className="admin-btn admin-btn--sm" disabled={saving || idx === 0} onClick={() => move(img.id, -1)} aria-label={`Subir imagen ${idx + 1}`}>Subir</button>
+                  <button type="button" className="admin-btn admin-btn--sm" disabled={saving || idx === sectionImages.length - 1} onClick={() => move(img.id, 1)} aria-label={`Bajar imagen ${idx + 1}`}>Bajar</button>
+                </div>
+                <details className="st-more">
+                  <summary>Editar datos</summary>
+                  {section === "inspiracion" ? (
                     <>
-                      <strong style={{ color: "var(--color-text)" }}>
-                        {String(idx + 1).padStart(2, "0")}
-                      </strong>
-                      {idx === 0 ? " · Principal (LCP) · " : " · "}
+                      <InspirationFocalEditor
+                        src={editorPreviewUrl(img.url)}
+                        focalX={img.focalX ?? null}
+                        focalY={img.focalY ?? null}
+                        onChange={(x, y) => setCardFocal(img.id, x, y)}
+                        onRatio={(ratio) => setRatiosById((prev) => (prev[img.id] === ratio ? prev : { ...prev, [img.id]: ratio }))}
+                        previews={previewsForCard(img)}
+                        idPrefix={`focal-${img.id}`}
+                        disabled={saving}
+                      />
+                      {!sameFocal(img.focalX, savedFocalById[img.id]?.focalX) || !sameFocal(img.focalY, savedFocalById[img.id]?.focalY) ? (
+                        <p className="focal-editor__note" role="status">Encuadre sin guardar: pulsa «Guardar datos».</p>
+                      ) : null}
                     </>
                   ) : null}
-                  Orden {img.orden} · {img.activo ? "Activa" : "Inactiva"}
-                  {img.weaveTypeId
-                    ? ` · tejido ${
-                        weaveTypes.find(
-                          (w) => weaveOptionId(w) === img.weaveTypeId
-                        )?.name || img.weaveTypeId
-                      }`
-                    : ""}
-                </p>
                 <div className="auth-field">
                   <label className="auth-field__label">Alt
                   <input
@@ -690,10 +680,10 @@ export default function HomeImagesTab() {
                     </div>
                   </>
                 )}
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                <div className="st-image-actions">
                   <button
                     type="button"
-                    className="admin-btn admin-btn--sm"
+                    className="admin-btn admin-btn--sm admin-btn--primary"
                     disabled={saving}
                     onClick={() =>
                       saveMeta(img, {
@@ -718,22 +708,6 @@ export default function HomeImagesTab() {
                   <button
                     type="button"
                     className="admin-btn admin-btn--sm"
-                    disabled={saving || idx === 0}
-                    onClick={() => move(img.id, -1)}
-                  >
-                    Subir
-                  </button>
-                  <button
-                    type="button"
-                    className="admin-btn admin-btn--sm"
-                    disabled={saving || idx === sectionImages.length - 1}
-                    onClick={() => move(img.id, 1)}
-                  >
-                    Bajar
-                  </button>
-                  <button
-                    type="button"
-                    className="admin-btn admin-btn--sm"
                     disabled={saving}
                     onClick={() => toggleActive(img)}
                   >
@@ -748,11 +722,19 @@ export default function HomeImagesTab() {
                     Eliminar
                   </button>
                 </div>
+                </details>
               </article>
             ))}
           </div>
         )}
       </section>
+      {zoom ? (
+        <dialog open className="st-panel" aria-label="Imagen ampliada" style={{ position: "fixed", inset: "10vh 8vw auto", zIndex: 40, maxWidth: 720, margin: "0 auto" }}>
+          <Image src={zoom.url} alt={zoom.altText || zoom.titulo || "Imagen de la sección"} width={960} height={640} unoptimized style={{ width: "100%", height: "auto", maxHeight: "70vh", objectFit: "contain" }} />
+          <p className="st-meta">{zoom.altText || "Sin texto alternativo"}{zoom.publicId ? ` · ${zoom.publicId}` : ""}</p>
+          <button type="button" className="admin-btn admin-btn--tertiary" onClick={() => setZoom(null)}>Cerrar</button>
+        </dialog>
+      ) : null}
     </div>
   );
 }

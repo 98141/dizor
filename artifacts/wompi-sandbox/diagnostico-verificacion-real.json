@@ -1,0 +1,57 @@
+{
+  "checkedAt": "2026-11-24T19:40:03.917Z",
+  "providerLinkHttp": 200,
+  "providerLinkKeys": [
+    "id",
+    "name",
+    "amount_in_cents",
+    "currency",
+    "single_use",
+    "description",
+    "sku",
+    "expires_at",
+    "collect_shipping",
+    "collect_customer_legal_id",
+    "redirect_url",
+    "image_url",
+    "active",
+    "customer_data",
+    "created_at",
+    "updated_at",
+    "taxes",
+    "default_language",
+    "available_installments",
+    "merchant_public_key",
+    "signature",
+    "reference",
+    "expiration_time"
+  ],
+  "providerLink": {
+    "id": "test_XyUHuQ",
+    "active": true,
+    "singleUse": true,
+    "amountInCents": 2800000,
+    "currency": "COP",
+    "expiresAt": null,
+    "hasTransactionList": false,
+    "hasTransactionId": false
+  },
+  "adminLoginHttp": 200,
+  "localOrder": {
+    "http": 200,
+    "number": "DIZ-20261124-8A16C1777B19E490E3C5",
+    "total": 28000,
+    "paymentStatus": "pendiente",
+    "orderStatus": "pago_pendiente",
+    "transactionKnown": false,
+    "paymentLinkId": "test_XyUHuQ"
+  },
+  "localRecoveryConfiguration": {
+    "environment": "test",
+    "credentialsConfigured": true,
+    "recoveryEnabled": true,
+    "webhookUrl": null,
+    "webhookPath": "/api/webhooks/wompi",
+    "deliveryVerification": "requires_provider_test"
+  }
+}

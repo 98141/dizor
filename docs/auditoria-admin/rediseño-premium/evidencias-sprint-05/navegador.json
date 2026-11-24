@@ -1,0 +1,168 @@
+{
+  "checks": [
+    "T01 la tienda pública no importa estilos del administrador",
+    "T02 inicio: doce secciones, rejilla, borrador y guardado sin perder el título",
+    "T03 error de CMS bloquea el formulario y se recupera",
+    "T04 inicio móvil sin desborde de página",
+    "T05 imágenes: miniatura, LCP, identificador y reorden",
+    "T06 banners: lista primero en móvil y formulario al pedirlo",
+    "T07 páginas: el listado antecede al editor y el cuerpo sigue siendo texto",
+    "T08 reseñas paginadas en servidor, desempate y texto completo",
+    "T09 apariencia compacta; el guardado sigue en la máquina de carga confirmada",
+    "T10 1024 y 820 sin desborde de página"
+  ],
+  "externalRequests": [],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "mutations": [
+    {
+      "method": "PATCH",
+      "path": "/content/home",
+      "body": {
+        "hero": {
+          "brandClaim": "DIZOR",
+          "title": "Oficio colombiano, piezas que perduran",
+          "subtitle": "Palma de iraca tejida en Sandoná.",
+          "ctaLabel": "Ver catálogo",
+          "ctaHref": "/catalogo",
+          "secondaryCtaLabel": "Nuestra historia",
+          "secondaryCtaHref": "/pagina/sobre-dizor"
+        },
+        "features": [
+          {
+            "title": "Hecho a mano",
+            "text": "En Sandoná"
+          }
+        ],
+        "announcement": {
+          "isActive": true,
+          "items": [
+            {
+              "text": "Envíos a toda Colombia",
+              "linkHref": ""
+            }
+          ]
+        },
+        "newSection": {
+          "eyebrow": "LO NUEVO",
+          "title": "Novedades",
+          "subtitle": "Piezas recién marcadas.",
+          "linkLabel": "Ver novedades",
+          "linkHref": "/catalogo?isNew=true",
+          "isActive": true
+        },
+        "craftSection": {
+          "eyebrow": "COLECCIÓN",
+          "title": "Nuestros tejidos",
+          "subtitle": "Brisa, Común y Súper fino.",
+          "linkLabel": "Ver"
+        },
+        "historia": {
+          "eyebrow": "ORIGEN",
+          "title": "Del páramo a la fibra",
+          "body": "Cada puntada es memoria.",
+          "ctaLabel": "Sobre Dizor",
+          "ctaHref": "/pagina/sobre-dizor"
+        },
+        "personalizacion": {
+          "eyebrow": "A TU MEDIDA",
+          "title": "Personaliza",
+          "body": "Iniciales y horma.",
+          "bullets": [
+            "Iniciales"
+          ],
+          "ctaLabel": "Personalizar",
+          "ctaHref": "/personalizar",
+          "whatsappHint": "Escríbenos",
+          "imageOnLeft": true
+        },
+        "porMayor": {
+          "eyebrow": "POR VOLUMEN",
+          "title": "Por mayor",
+          "body": "Para tiendas.",
+          "bullets": [
+            "Mínimo 5"
+          ],
+          "ctaLabel": "Cotizar",
+          "ctaHref": "/pedido-mayor",
+          "imageOnLeft": false
+        },
+        "reseñasSection": {
+          "eyebrow": "VOCES",
+          "title": "Quienes ya eligieron Dizor",
+          "isActive": true
+        },
+        "randomProductsSection": {
+          "eyebrow": "CURADURÍA",
+          "title": "Descubre hoy",
+          "subtitle": "Cinco piezas.",
+          "linkLabel": "Ver más",
+          "linkHref": "/catalogo",
+          "itemLinkLabel": "Ver",
+          "isActive": true
+        },
+        "inspiracion": {
+          "eyebrow": "INSPIRACIÓN",
+          "title": "La pieza en la vida real",
+          "subtitle": "Fotografías del oficio.",
+          "ctaLabel": "Instagram",
+          "instagramUrl": "https://www.instagram.com/sombrereriadizor/"
+        },
+        "newsletterSection": {
+          "eyebrow": "NOVEDADES",
+          "title": "Entérate",
+          "subtitle": "Avisos puntuales."
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/home-images/reorder",
+      "body": {
+        "items": [
+          {
+            "id": "img2",
+            "orden": 0
+          },
+          {
+            "id": "img1",
+            "orden": 1
+          }
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/content/pages",
+      "body": {
+        "title": "Envíos",
+        "excerpt": "",
+        "imageUrl": "",
+        "imageAlt": "",
+        "body": "",
+        "isPublished": false,
+        "showInFooter": true,
+        "sortOrder": 0,
+        "seoTitle": "",
+        "seoDescription": ""
+      }
+    }
+  ],
+  "screenshots": [
+    "inicio-1440.png",
+    "inicio-historia-1440.png",
+    "inicio-390.png",
+    "inicio-360.png",
+    "imagenes-1440.png",
+    "imagenes-390.png",
+    "banners-1440.png",
+    "banners-nuevo-390.png",
+    "paginas-1440.png",
+    "resenas-1440.png",
+    "resenas-marca-1440.png",
+    "resenas-390.png",
+    "apariencia-1440.png",
+    "apariencia-390.png"
+  ],
+  "passed": true
+}

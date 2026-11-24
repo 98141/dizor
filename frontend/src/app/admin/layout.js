@@ -11,6 +11,7 @@ import "@/styles/components/auth-card.css";
 import "@/styles/pages/special-requests.css";
 import "@/styles/layouts/admin-premium.css";
 import "@/styles/pages/admin-atencion.css";
+import "@/styles/pages/admin-store.css";
 import "@/styles/layouts/admin-polish.css";
 import "@/styles/layouts/admin-buttons.css";
 

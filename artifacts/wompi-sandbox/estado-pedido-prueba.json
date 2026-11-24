@@ -1,0 +1,29 @@
+{
+  "observedAt": "2026-11-24T19:13:14.979Z",
+  "orderStatusHttp": 200,
+  "orderNumber": "DIZ-20261124-8A16C1777B19E490E3C5",
+  "paymentStatus": "pendiente",
+  "orderStatus": "pago_pendiente",
+  "total": 28000,
+  "requiresReview": false,
+  "nextAction": "Esperando confirmación del pago",
+  "hasTransactionId": false,
+  "paymentLinkId": "test_XyUHuQ",
+  "paymentLinkUrl": "https://checkout.wompi.co/l/test_XyUHuQ",
+  "recoveryConfiguration": {
+    "environment": "test",
+    "credentialsConfigured": true,
+    "recoveryEnabled": true,
+    "webhookUrl": null,
+    "webhookPath": "/api/webhooks/wompi",
+    "deliveryVerification": "requires_provider_test"
+  },
+  "recoveryTasks": {
+    "queued": 0,
+    "running": 0,
+    "waiting": 1,
+    "complete": 0,
+    "review": 0,
+    "rejected": 0
+  }
+}

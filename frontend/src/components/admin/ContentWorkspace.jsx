@@ -85,10 +85,11 @@ function ColorField({ label, value, onChange }) {
     <div className="appearance-color-field">
       <label className="auth-field__label" htmlFor={id}>{label}</label>
       <div className="appearance-color-row">
+        <span className="st-swatch" style={{ background: /^#[0-9A-Fa-f]{6}$/.test(value || "") ? value : "#f7f6f2" }} aria-hidden="true" />
         <input
           type="color"
           aria-label={`${label}: selector de color`}
-          value={value || "#1A1A1A"}
+          value={/^#[0-9A-Fa-f]{6}$/.test(value || "") ? value : "#1A1A1A"}
           onChange={(e) => onChange(e.target.value)}
           className="appearance-color-picker"
         />
@@ -211,6 +212,8 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
   const [editingPageId, setEditingPageId] = useState(null);
   const [bannerForm, setBannerForm] = useState(emptyBanner());
   const [editingBannerId, setEditingBannerId] = useState(null);
+  const [pageOpen, setPageOpen] = useState(false);
+  const [bannerOpen, setBannerOpen] = useState(false);
 
   // Marketing state
   const marketingState = useConfirmedSettings(marketingOptions);
@@ -331,9 +334,10 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
     }));
 
   const startEditPage = async (id) => {
-    if (!id) { setEditingPageId(null); setPageForm(emptyPage()); return; }
+    if (!id) { setEditingPageId(null); setPageForm(emptyPage()); setPageOpen(false); return; }
     const data = await getAdminPage(id);
     setEditingPageId(id);
+    setPageOpen(true);
     setPageForm({
       title: data.page.title,
       excerpt: data.page.excerpt || "",
@@ -359,6 +363,7 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
       else await createAdminPage(pageForm);
       showMsg("Página guardada");
       setEditingPageId(null);
+      setPageOpen(false);
       setPageForm(emptyPage());
       await load();
     } catch (err) {
@@ -381,9 +386,10 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
   };
 
   const startEditBanner = (banner) => {
-    if (!banner) { setEditingBannerId(null); setBannerForm(emptyBanner()); return; }
+    if (!banner) { setEditingBannerId(null); setBannerForm(emptyBanner()); setBannerOpen(false); return; }
     setEditingBannerId(banner.id);
     setBannerForm({ ...banner });
+    setBannerOpen(true);
   };
 
   const saveBanner = async (e) => {
@@ -454,7 +460,7 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
 
   const ordersExport = tab === "exports" && scope === "orders";
   return (
-    <div className={`admin-page${tab === "exports" ? " op-export-page" : ""}`}>
+    <div className={`admin-page${tab === "exports" ? " op-export-page" : ""}${area === "store" ? " st-store" : ""}`}>
       {!ordersExport && <>
       <h1 className="admin-page__title">{area === "store" ? "Tienda online" : area === "marketing" ? "Marketing" : ({ orders: "Exportaciones de pedidos", newsletter: "Exportaciones de newsletter", carts: "Exportaciones de carritos", all: "Exportaciones históricas" })[scope]}</h1>
       <p className="admin-page__subtitle">
@@ -463,7 +469,7 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
 
       <nav className="cms-tabs" aria-label={area === "store" ? "Secciones de Tienda online" : area === "tools" ? "Contextos de exportación" : "Secciones de Marketing"}>
         {area === "marketing" && <Link href="/admin/cupones">Cupones</Link>}
-        {CONTENT_TABS.filter(t => t.area === area).map(t => <Link key={t.id} href={contentHref(t.id, searchParams.toString())} className={tab === t.id ? "active" : ""} aria-current={tab === t.id ? "page" : undefined}>{t.label}</Link>)}
+        {CONTENT_TABS.filter(t => t.area === area).map(t => <Link key={t.id} href={contentHref(t.id, searchParams.toString())} className={`${area === "store" ? "st-tab" : ""}${tab === t.id ? " active" : ""}`} aria-current={tab === t.id ? "page" : undefined}>{t.label}</Link>)}
         {area === "tools" && <><Link href="/admin/pedidos">Pedidos</Link><Link href="/admin/marketing?tab=newsletter">Newsletter</Link><Link href="/admin/marketing?tab=carritos">Carritos</Link></>}
       </nav>
       </>}
@@ -505,10 +511,29 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
 
       {/* ── BANNERS ── */}
       {tab === "banners" && (
-        <div className="admin-grid-2">
-          <section className="taxonomy-form-card">
+        <div className="st-split st-banners">
+          <section className="taxonomy-list-card">
+            <div className="st-list-head">
+              <h2>Banners</h2>
+              <button type="button" className="admin-btn admin-btn--primary" onClick={() => { setEditingBannerId(null); setBannerForm(emptyBanner()); setBannerOpen(true); }}>Nuevo banner</button>
+            </div>
+            {banners.length === 0 ? <p className="st-empty">Todavía no hay banners.</p> : banners.map((b) => (
+              <article key={b.id} className="st-banner-row">
+                {b.imageUrl ? <Image src={b.imageUrl} alt="" width={72} height={48} unoptimized style={{ width: 72, height: 48, objectFit: "cover", borderRadius: 6 }} /> : <span className="st-thumb" style={{ width: 72, height: 48 }} />}
+                <div>
+                  <strong>{b.title}</strong>
+                  <p className="st-meta">{b.placement === "catalog_top" ? "Catálogo (arriba)" : "Inicio (medio)"} · {b.isActive ? "Activo" : "Inactivo"}</p>
+                </div>
+                <div className="st-row-actions">
+                  <button type="button" className="admin-btn admin-btn--sm" onClick={() => startEditBanner(b)} aria-label={`Editar banner ${b.title}`}>Editar</button>
+                  <button type="button" className="admin-btn admin-btn--sm admin-btn--danger" onClick={() => removeBanner(b.id)} aria-label={`Eliminar banner ${b.title}`}>Eliminar</button>
+                </div>
+              </article>
+            ))}
+          </section>
+          <section className={`taxonomy-form-card st-composer${bannerOpen || editingBannerId ? " is-open" : ""}`}>
             <h2>{editingBannerId ? "Editar banner" : "Nuevo banner"}</h2>
-            <form className="admin-form" onSubmit={saveBanner}>
+            <form className="admin-form st-upload" onSubmit={saveBanner}>
               <AuthFormField label="Título" name="bTitle" value={bannerForm.title} required
                 onChange={(e) => setBannerForm((p) => ({ ...p, title: e.target.value }))} />
               <AuthFormField label="Subtítulo" name="bSub" value={bannerForm.subtitle}
@@ -534,31 +559,38 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
                 Activo
               </label>
               <AuthSubmitButton loading={saving}>{editingBannerId ? "Actualizar" : "Crear"}</AuthSubmitButton>
-              {editingBannerId && (
-                <button type="button" className="admin-btn" onClick={() => startEditBanner(null)}>Cancelar</button>
-              )}
+              <button type="button" className="admin-btn admin-btn--tertiary" onClick={() => startEditBanner(null)}>Cancelar</button>
             </form>
-          </section>
-          <section className="taxonomy-list-card">
-            <h2>Banners</h2>
-            {banners.map((b) => (
-              <div key={b.id} className="cms-banner-card">
-                <strong>{b.title}</strong>
-                <p className="admin-muted">{b.placement}</p>
-                <div className="admin-table__actions">
-                  <button type="button" className="admin-btn admin-btn--sm" onClick={() => startEditBanner(b)}>Editar</button>
-                  <button type="button" className="admin-btn admin-btn--sm admin-btn--danger" onClick={() => removeBanner(b.id)}>Eliminar</button>
-                </div>
-              </div>
-            ))}
           </section>
         </div>
       )}
 
       {/* ── PÁGINAS ── */}
       {tab === "pages" && (
-        <div className="admin-grid-2">
-          <section className="taxonomy-form-card">
+        <div className="st-split">
+          <section className="taxonomy-list-card">
+            <div className="st-list-head">
+              <h2>Páginas</h2>
+              <button type="button" className="admin-btn admin-btn--primary" onClick={() => { setEditingPageId(null); setPageForm(emptyPage()); setPageOpen(true); }}>Nueva página</button>
+            </div>
+            {pages.length === 0 ? <p className="st-empty">Todavía no hay páginas informativas.</p> : (
+              <div className="st-page-list">
+                {pages.map((p) => (
+                  <article key={p.id} className="st-page-row">
+                    <div>
+                      <strong>{p.title}</strong>
+                      <p className="st-meta">/pagina/{p.slug} · {p.isPublished ? "Publicada" : "Borrador"}{p.showInFooter === false ? " · Fuera del footer" : " · En el footer"}</p>
+                    </div>
+                    <div className="st-row-actions">
+                      <button type="button" className="admin-btn admin-btn--sm" onClick={() => startEditPage(p.id)} aria-label={`Editar página ${p.title}`}>Editar</button>
+                      <button type="button" className="admin-btn admin-btn--sm admin-btn--danger" onClick={() => removePage(p.id)} aria-label={`Eliminar página ${p.title}`}>Eliminar</button>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )}
+          </section>
+          {(pageOpen || editingPageId) && <section className="taxonomy-form-card st-composer is-open">
             <h2>{editingPageId ? "Editar página" : "Nueva página"}</h2>
             <p className="image-upload-hint" style={{ marginBottom: "1rem" }}>
               Puedes crear varias páginas (nosotros, envíos, cambios…).
@@ -567,7 +599,7 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
               quieres, “Mostrar en footer”. La guía de tallas se edita en el
               código, no aquí.
             </p>
-            <form className="admin-form" onSubmit={savePage}>
+            <form className="admin-form st-upload" onSubmit={savePage}>
               <AuthFormField label="Título" name="pTitle" value={pageForm.title} required
                 onChange={(e) => setPageForm((p) => ({ ...p, title: e.target.value }))} />
               <AuthFormField label="Extracto (subtítulo visible)" name="pExcerpt" value={pageForm.excerpt}
@@ -615,39 +647,13 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
                 Mostrar en footer
               </label>
               <AuthSubmitButton loading={saving}>{editingPageId ? "Actualizar" : "Crear"}</AuthSubmitButton>
+              <button type="button" className="admin-btn admin-btn--tertiary" onClick={() => startEditPage(null)}>Cancelar</button>
               {editingPageId && (
-                <>
-                  <button type="button" className="admin-btn" onClick={() => startEditPage(null)}>Cancelar</button>
-                  <Link href={`/pagina/${pages.find((p) => p.id === editingPageId)?.slug || ""}`}
-                    target="_blank" className="admin-btn">Ver en tienda</Link>
-                </>
+                <Link href={`/pagina/${pages.find((p) => p.id === editingPageId)?.slug || ""}`}
+                  target="_blank" className="admin-btn admin-btn--tertiary">Ver en tienda</Link>
               )}
             </form>
-          </section>
-          <section className="taxonomy-list-card">
-            <h2>Páginas</h2>
-            <button type="button" className="admin-btn" style={{ marginBottom: "1rem" }}
-              onClick={() => startEditPage(null)}>+ Nueva página</button>
-            <div className="admin-table-wrap">
-              <table className="admin-table">
-                <thead>
-                  <tr><th>Título</th><th>Estado</th><th>Acciones</th></tr>
-                </thead>
-                <tbody>
-                  {pages.map((p) => (
-                    <tr key={p.id}>
-                      <td data-label="Título">{p.title}<br /><span className="admin-muted">/pagina/{p.slug}</span></td>
-                      <td data-label="Estado">{p.isPublished ? "Publicada" : "Borrador"}</td>
-                      <td data-label="Acciones" className="admin-table__actions">
-                        <button type="button" className="admin-btn admin-btn--sm" onClick={() => startEditPage(p.id)}>Editar</button>
-                        <button type="button" className="admin-btn admin-btn--sm admin-btn--danger" onClick={() => removePage(p.id)}>Eliminar</button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
+          </section>}
         </div>
       )}
 
@@ -825,6 +831,8 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
       {tab === "appearance" && appearance && (
         <form className="admin-form product-form__section" onSubmit={saveAppearance}>
           <fieldset disabled={!appearanceState.resource.canEdit()} style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}>
+          <div className="st-appearance">
+          <section className="st-panel">
           <h2>Identidad del sitio</h2>
           <AuthFormField
             label="Nombre del sitio"
@@ -833,29 +841,26 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
             placeholder="Dizor"
             onChange={(e) => setAppearanceField("siteName", e.target.value)}
           />
-          <p className="admin-muted" style={{ marginTop: "-0.5rem" }}>
+          <p className="st-hint">
             Aparece en el título del navegador y en los resultados de Google.
             También se usa como texto de respaldo del navbar si el logo no carga.
           </p>
-
-          <h2 style={{ marginTop: "1.5rem" }}>Logo del navbar</h2>
+          </section>
+          <section className="st-panel">
+          <h2>Logo del navbar</h2>
           <CmsImageField
             label="Logo horizontal"
             value={appearance.logoUrl}
             onChange={(url) => setAppearanceField("logoUrl", url)}
             placeholder="https://res.cloudinary.com/…/logo-dizor-horizontal.png"
           />
-          <p className="admin-muted" style={{ marginTop: "-0.5rem" }}>
-            PNG horizontal (fondo blanco o transparente), el navbar es claro.
-            Vacío = usa el archivo{" "}
-            <code>/images/logo-dizor-horizontal.png</code> del proyecto y, si
-            tampoco existe, muestra el nombre del sitio en texto.
+          <p className="st-hint">
+            PNG horizontal. Vacío = usa <code>/images/logo-dizor-horizontal.png</code> y, si tampoco existe, el nombre del sitio.
           </p>
-
-          <h2 style={{ marginTop: "1.5rem" }}>Colores</h2>
-          <p className="admin-muted">
-            Deja en blanco para usar el color por defecto del tema.
-          </p>
+          </section>
+          <section className="st-panel">
+          <h2>Colores</h2>
+          <p className="st-hint">Deja en blanco para usar el color por defecto del tema. El cambio no se publica hasta guardar.</p>
           <ColorField
             label="Color principal (botones, precio, links)"
             value={appearance.primaryColor}
@@ -871,19 +876,21 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
             value={appearance.bgColor}
             onChange={(v) => setAppearanceField("bgColor", v)}
           />
-
-          <h2 style={{ marginTop: "1.5rem" }}>Favicon</h2>
+          </section>
+          <section className="st-panel">
+          <h2>Favicon</h2>
           <CmsImageField
             label="Favicon"
             value={appearance.faviconUrl}
             onChange={(url) => setAppearanceField("faviconUrl", url)}
             placeholder="https://tudominio.com/favicon.ico"
           />
-          <p className="admin-muted" style={{ marginTop: "-0.5rem" }}>
-            Sube un PNG o ICO (16×16 a 64×64 px recomendado). Se aplica al abrir una nueva pestaña.
-          </p>
-
+          <p className="st-hint">PNG o ICO, de 16×16 a 64×64 px. Se aplica al abrir una pestaña nueva.</p>
+          </section>
+          <div className="st-panel--wide">
           <AuthSubmitButton loading={appearanceState.status === "saving"} disabled={!appearanceState.resource.canSave()}>Guardar apariencia</AuthSubmitButton>
+          </div>
+          </div>
           </fieldset>
         </form>
       )}

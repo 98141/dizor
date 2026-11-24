@@ -11,6 +11,7 @@ const { isValidObjectId } = require("../utils/objectIdUtils");
 const { logAuditEvent, safeLog } = require("../services/auditService");
 const { requireAuthorization, recordConsent } = require("../services/consentService");
 const { PURPOSES } = require("../config/legalTexts");
+const { adminReviewListQuery } = require("../services/reviewListQuery");
 
 const populateProduct = { path: "product", select: "name slug" };
 const populateUser = { path: "user", select: "name email" };
@@ -104,23 +105,44 @@ exports.createCustomerReview = catchAsync(async (req, res, next) => {
   });
 });
 
-/** GET /admin/reviews */
-exports.adminListReviews = catchAsync(async (req, res) => {
+/** GET /admin/reviews — sin `page` conserva el tope anterior; con `page` pagina en el servidor. */
+exports.adminListReviews = catchAsync(async (req, res, next) => {
+  const list = adminReviewListQuery(req.query);
+  if (list.error) return next(new AppError(list.error, list.status));
+
   const filter = {};
   if (req.query.aprobado === "true") filter.aprobado = true;
   if (req.query.aprobado === "false") filter.aprobado = false;
   if (req.query.isBrandReview === "true") filter.isBrandReview = true;
   if (req.query.isBrandReview === "false") filter.isBrandReview = false;
 
-  const reviews = await Review.find(filter)
+  const sort = { createdAt: -1, _id: -1 };
+  const query = Review.find(filter)
     .populate(populateProduct)
     .populate(populateUser)
-    .sort({ createdAt: -1 })
-    .limit(Math.min(200, parseInt(req.query.limit, 10) || 100));
+    .sort(sort);
+
+  if (!list.paginated) {
+    const reviews = await query.limit(list.limit);
+    return res.status(200).json({
+      status: "success",
+      results: reviews.length,
+      reviews: reviews.map(formatReviewAdmin),
+    });
+  }
+
+  const total = await Review.countDocuments(filter);
+  const pages = Math.max(1, Math.ceil(total / list.limit));
+  const page = Math.min(list.page, pages);
+  const reviews = await query.skip((page - 1) * list.limit).limit(list.limit);
 
   res.status(200).json({
     status: "success",
     results: reviews.length,
+    total,
+    page,
+    pages,
+    limit: list.limit,
     reviews: reviews.map(formatReviewAdmin),
   });
 });
