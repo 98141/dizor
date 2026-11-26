@@ -1,5 +1,6 @@
 const AuditLog = require("../models/AuditLog");
 const catchAsync = require("../utils/catchAsync");
+const { parseAuditPagination, auditDateFilter, bogotaDayStart } = require("../utils/auditQuery");
 
 const formatAuditLog = (log) => ({
   id: log._id,
@@ -19,9 +20,8 @@ const formatAuditLog = (log) => ({
 });
 
 exports.getAuditLogs = catchAsync(async (req, res) => {
-  const page = Math.max(1, parseInt(req.query.page, 10) || 1);
-  const limit = Math.min(100, parseInt(req.query.limit, 10) || 25);
-  const skip = (page - 1) * limit;
+  // Sprint 08: page size bounded to 1..100 (a negative limit used to reach Mongo).
+  const { page, limit, skip } = parseAuditPagination(req.query);
 
   const filter = {};
 
@@ -31,11 +31,10 @@ exports.getAuditLogs = catchAsync(async (req, res) => {
   if (req.query.success === "true") filter.success = true;
   if (req.query.success === "false") filter.success = false;
 
-  if (req.query.from || req.query.to) {
-    filter.createdAt = {};
-    if (req.query.from) filter.createdAt.$gte = new Date(req.query.from);
-    if (req.query.to) filter.createdAt.$lte = new Date(req.query.to);
-  }
+  // Sprint 08: date-only values are Colombian civil days and "to" includes that whole
+  // day (it used to stop at 00:00 UTC of the selected date, excluding it).
+  const createdAt = auditDateFilter(req.query.from, req.query.to);
+  if (createdAt) filter.createdAt = createdAt;
 
   const term = req.query.term?.trim();
   if (term) {
@@ -74,8 +73,8 @@ exports.getAuditLogs = catchAsync(async (req, res) => {
 });
 
 exports.getAuditStats = catchAsync(async (req, res) => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  // Sprint 08: "Hoy" is the America/Bogota civil day, not the host's local midnight.
+  const today = bogotaDayStart();
 
   const [total, todayCount, failedCount, byModule] = await Promise.all([
     AuditLog.countDocuments(),

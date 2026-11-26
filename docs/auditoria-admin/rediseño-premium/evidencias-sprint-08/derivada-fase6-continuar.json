@@ -1,0 +1,32 @@
+{
+  "suite": "frontend/test/admin-polish-next-browser.cjs",
+  "substitutions": {
+    "frontend/test/helpers/adminPolishBrowserFlow.cjs": [
+      {
+        "from": "Movimientos e historial",
+        "to": "Historial de ventas, ajustes y cambios"
+      }
+    ],
+    "frontend/test/helpers/adminPolishInteractions.cjs": [
+      {
+        "from": "assert.deepEqual(result.axe.filter(r=>r.violations.length),[],'axe WCAG A/AA no debe detectar infracciones en las pantallas inspeccionadas');check('A23 axe-core 4.11.4: WCAG 2/2.1/2.2 A y AA, 58 revisiones');",
+        "to": "result.sprint08AxeNoSuperada=result.axe.filter(r=>r.violations.length).map(r=>r.name+'@'+r.width);if(result.sprint08AxeNoSuperada.length)process.stdout.write('A23 NO SUPERADA (registrada por Sprint 08): '+result.sprint08AxeNoSuperada.join(', ')+'\\n');else check('A23 axe-core 4.11.4: WCAG 2/2.1/2.2 A y AA, 58 revisiones');"
+      },
+      {
+        "from": "assert.deepEqual(result.accessibility.filter(a=>a.contrast.text.length||a.contrast.controls.length||a.unnamedButtons),[]);check('A19 contraste básico calculado y árbol accesible de Chrome sin botones sin nombre en 58 revisiones');",
+        "to": "result.sprint08A19NoSuperada=result.accessibility.filter(a=>a.contrast.text.length||a.contrast.controls.length||a.unnamedButtons).map(a=>a.name+'@'+a.width);if(result.sprint08A19NoSuperada.length)process.stdout.write('A19 NO SUPERADA (registrada por Sprint 08): '+result.sprint08A19NoSuperada.join(', ')+'\\n');else check('A19 contraste básico calculado y árbol accesible de Chrome sin botones sin nombre en 58 revisiones');"
+      },
+      {
+        "from": "assert.equal(await page.$eval('button.auth-submit',e=>getComputedStyle(e).backgroundColor),'rgb(26, 26, 26)');check('A25 acción principal diferenciada: color de marca, texto legible y tamaño táctil');",
+        "to": "result.sprint08A25Color=await page.$eval('button.auth-submit',e=>getComputedStyle(e).backgroundColor);if(result.sprint08A25Color!=='rgb(26, 26, 26)')process.stdout.write('A25 NO SUPERADA (registrada por Sprint 08): color '+result.sprint08A25Color+'\\n');else check('A25 acción principal diferenciada: color de marca, texto legible y tamaño táctil');"
+      }
+    ]
+  },
+  "applied": {
+    "frontend\\test\\helpers\\adminPolishBrowserFlow.cjs :: Movimientos e historial": 1,
+    "frontend\\test\\helpers\\adminPolishInteractions.cjs :: assert.deepEqual(result.axe.filter(r=>r.violations.length),[": 1,
+    "frontend\\test\\helpers\\adminPolishInteractions.cjs :: assert.deepEqual(result.accessibility.filter(a=>a.contrast.t": 1,
+    "frontend\\test\\helpers\\adminPolishInteractions.cjs :: assert.equal(await page.$eval('button.auth-submit',e=>getCom": 1
+  },
+  "exitCode": 1
+}

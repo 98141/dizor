@@ -1,0 +1,80 @@
+(node:10832) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:10832) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:10832) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:10832) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:10832) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:10832) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+10:33:09 [[32mhttp[39m]: POST /api/auth/login 200 381.578 ms - 168
+10:33:10 [[32mhttp[39m]: POST /api/auth/login 200 351.211 ms - 169
+10:33:10 [[32mhttp[39m]: POST /api/auth/login 200 330.251 ms - 174
+10:33:10 [[32mhttp[39m]: POST /api/auth/login 200 366.414 ms - 173
+✔ S08-01 tamaño de página acotado: 1..100, por defecto 25; un límite negativo ya no llega a Mongo (7839.0594ms)
+✔ S08-02 «Hasta» incluye el día civil completo de Colombia (28.3575ms)
+✔ S08-03 fechas inválidas o invertidas responden 400 y un instante explícito conserva el comportamiento anterior (1.2685ms)
+✔ S08-04 «Hoy» empieza a medianoche de Bogotá, no del servidor (0.549ms)
+10:33:10 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"GET","url":"/api/admin/users","statusCode":403,"ip":"127.0.0.1"}
+10:33:10 [[32mhttp[39m]: GET /api/admin/users 403 6.434 ms - 75
+10:33:10 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"POST","url":"/api/admin/users","statusCode":403,"ip":"127.0.0.1"}
+10:33:10 [[32mhttp[39m]: POST /api/admin/users 403 3.575 ms - 75
+10:33:10 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"GET","url":"/api/admin/users","statusCode":403,"ip":"127.0.0.1"}
+10:33:10 [[32mhttp[39m]: GET /api/admin/users 403 2.847 ms - 75
+10:33:10 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"POST","url":"/api/admin/users","statusCode":403,"ip":"127.0.0.1"}
+10:33:10 [[32mhttp[39m]: POST /api/admin/users 403 3.075 ms - 75
+10:33:10 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"GET","url":"/api/admin/users","statusCode":403,"ip":"127.0.0.1"}
+10:33:10 [[32mhttp[39m]: GET /api/admin/users 403 3.345 ms - 75
+10:33:10 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"POST","url":"/api/admin/users","statusCode":403,"ip":"127.0.0.1"}
+10:33:10 [[32mhttp[39m]: POST /api/admin/users 403 3.142 ms - 75
+10:33:10 [[33mwarn[39m]: Auth failure No has iniciado sesión {"method":"GET","url":"/api/admin/users","statusCode":401,"ip":"127.0.0.1"}
+10:33:10 [[32mhttp[39m]: GET /api/admin/users 401 0.833 ms - 53
+10:33:10 [[32mhttp[39m]: GET /api/admin/users 200 5.879 ms - 451
+10:33:10 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"PATCH","url":"/api/admin/users/6b085134b4df8f68c764ef2a/status","statusCode":403,"ip":"127.0.0.1"}
+10:33:10 [[32mhttp[39m]: PATCH /api/admin/users/6b085134b4df8f68c764ef2a/status 403 2.906 ms - 75
+✔ S08-05 Usuarios: solo el superadministrador consulta, crea o cambia estado; el listado no expone credenciales (56.5111ms)
+10:33:10 [[32mhttp[39m]: POST /api/admin/users 400 3.606 ms - 101
+10:33:10 [[32mhttp[39m]: POST /api/admin/users 400 2.806 ms - 81
+10:33:10 [[32mhttp[39m]: POST /api/admin/users 400 2.629 ms - 46
+10:33:10 [[32mhttp[39m]: POST /api/admin/users 400 2.897 ms - 80
+10:33:11 [[32mhttp[39m]: POST /api/admin/users 201 354.852 ms - 257
+10:33:11 [[32mhttp[39m]: POST /api/admin/users 400 5.034 ms - 59
+✔ S08-06 Crear usuario conserva las validaciones del servidor y no admite superadministradores (388.5504ms)
+10:33:11 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"GET","url":"/api/admin/audit","statusCode":403,"ip":"127.0.0.1"}
+10:33:11 [[32mhttp[39m]: GET /api/admin/audit 403 4.308 ms - 75
+10:33:11 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"GET","url":"/api/admin/audit/stats","statusCode":403,"ip":"127.0.0.1"}
+10:33:11 [[32mhttp[39m]: GET /api/admin/audit/stats 403 2.867 ms - 75
+10:33:11 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"GET","url":"/api/admin/audit","statusCode":403,"ip":"127.0.0.1"}
+10:33:11 [[32mhttp[39m]: GET /api/admin/audit 403 2.574 ms - 75
+10:33:11 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"GET","url":"/api/admin/audit/stats","statusCode":403,"ip":"127.0.0.1"}
+10:33:11 [[32mhttp[39m]: GET /api/admin/audit/stats 403 2.156 ms - 75
+10:33:11 [[32mhttp[39m]: GET /api/admin/audit 200 7.998 ms - 1873
+10:33:11 [[32mhttp[39m]: PATCH /api/admin/audit/6b085135b4df8f68c764ef2d 404 2.374 ms - 91
+10:33:11 [[32mhttp[39m]: PUT /api/admin/audit/6b085135b4df8f68c764ef2d 404 2.197 ms - 91
+10:33:11 [[32mhttp[39m]: DELETE /api/admin/audit/6b085135b4df8f68c764ef2d 404 2.462 ms - 91
+10:33:11 [[32mhttp[39m]: POST /api/admin/audit 404 2.560 ms - 66
+✔ S08-07 Auditoría: vendedor y cliente rechazados; administradores consultan; no existe ruta de escritura (55.1739ms)
+10:33:11 [[32mhttp[39m]: GET /api/admin/audit?module=[redactado]&from=2026-11-20&to=2026-11-20 200 5.609 ms - 618
+10:33:11 [[32mhttp[39m]: GET /api/admin/audit?module=[redactado]&success=[redactado]&from=2026-11-20&to=2026-11-20&term=[redactado] 200 7.217 ms - 402
+10:33:11 [[32mhttp[39m]: GET /api/admin/audit?module=[redactado]&limit=15&page=2 200 4.996 ms - 3442
+10:33:11 [[32mhttp[39m]: GET /api/admin/audit?module=[redactado]&limit=-5 200 5.156 ms - 5610
+10:33:11 [[32mhttp[39m]: GET /api/admin/audit?module=[redactado]&limit=5000 200 5.162 ms - 7346
+10:33:11 [[32mhttp[39m]: GET /api/admin/audit?from=2026-02-30 400 2.322 ms - 59
+10:33:11 [[32mhttp[39m]: GET /api/admin/audit?from=2026-11-21&to=2026-11-20 400 2.324 ms - 80
+✔ S08-08 Paginación y filtros de auditoría en el servidor: límite acotado, día civil y fecha inválida (53.4309ms)
+10:33:11 [[32mhttp[39m]: GET /api/admin/audit/stats 200 7.517 ms - 165
+10:33:11 [[32mhttp[39m]: GET /api/admin/audit/stats 200 10.495 ms - 201
+✔ S08-09 «Hoy» y «Fallidos» salen de la base: un evento de ayer en Bogotá no cuenta como hoy (27.8386ms)
+10:33:11 [[32mhttp[39m]: GET /api/admin/settings 200 12.089 ms - 489
+10:33:11 [[32mhttp[39m]: PATCH /api/admin/settings 200 10.631 ms - 490
+10:33:11 [[32mhttp[39m]: PATCH /api/admin/settings 400 3.891 ms - 74
+10:33:11 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"PATCH","url":"/api/admin/settings","statusCode":403,"ip":"127.0.0.1"}
+10:33:11 [[32mhttp[39m]: PATCH /api/admin/settings 403 2.583 ms - 75
+10:33:11 [[32mhttp[39m]: GET /api/admin/settings 200 4.176 ms - 490
+✔ S08-10 Configuración: guardar impuestos no toca la política de envío; rango y permisos se conservan (43.8821ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10447.3393

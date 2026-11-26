@@ -1,0 +1,16 @@
+{
+  "sprint08": {
+    "tests": 412,
+    "pass": 381,
+    "fail": 31
+  },
+  "HEAD": {
+    "tests": 402,
+    "pass": 371,
+    "fail": 31
+  },
+  "failedIdentical": true,
+  "onlyWithSprint08": [],
+  "onlyOnHEAD": [],
+  "extraTestsInSprint08": "backend/test/sprint08-config-users-audit.test.js (10)"
+}

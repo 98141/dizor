@@ -1,0 +1,980 @@
+(node:23732) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:23732) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:23732) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:23732) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:23732) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:23732) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+10:48:39 [[32mhttp[39m]: POST /api/auth/login 200 368.243 ms - 168
+10:48:39 [[32mhttp[39m]: POST /api/auth/login 200 326.394 ms - 169
+10:48:40 [[32mhttp[39m]: POST /api/auth/login 200 324.428 ms - 174
+10:48:40 [[32mhttp[39m]: POST /api/auth/login 200 338.418 ms - 173
+10:49:16 [[32mhttp[39m]: PATCH /api/admin/settings 200 32.851 ms - 510
+10:49:16 [[32mhttp[39m]: PATCH /api/admin/marketing/settings 200 19.083 ms - 658
+10:49:17 [[32mhttp[39m]: GET /api/admin/settings 200 6.525 ms - 510
+10:49:17 [[32mhttp[39m]: GET /api/auth/me 200 6.648 ms - 207
+10:49:17 [[32mhttp[39m]: GET /api/admin/content/pages 200 34.565 ms - 43
+10:49:17 [[32mhttp[39m]: GET /api/admin/content/banners 200 35.520 ms - 45
+10:49:17 [[32mhttp[39m]: GET /api/favorites/ids 200 37.649 ms - 47
+10:49:17 [[32mhttp[39m]: GET /api/admin/content/home 200 55.844 ms - 3679
+10:49:17 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 200 39.289 ms - 68
+10:49:17 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 200 20.607 ms - 62
+10:49:17 [[32mhttp[39m]: GET /api/admin/coupons 200 19.679 ms - 14
+10:49:17 [[32mhttp[39m]: GET /api/admin/settings 200 20.640 ms - 510
+10:49:17 [[32mhttp[39m]: GET /api/admin/alerts 200 109.417 ms - 564
+10:49:18 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 10.022 ms - 606
+10:49:19 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 6.622 ms - 606
+10:49:19 [[32mhttp[39m]: GET /api/auth/me 304 5.878 ms - -
+10:49:19 [[32mhttp[39m]: GET /api/admin/content/home 304 22.839 ms - -
+10:49:19 [[32mhttp[39m]: GET /api/admin/content/pages 304 22.790 ms - -
+10:49:19 [[32mhttp[39m]: GET /api/admin/content/banners 304 22.713 ms - -
+10:49:19 [[32mhttp[39m]: GET /api/favorites/ids 304 23.203 ms - -
+10:49:19 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 23.577 ms - -
+10:49:19 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 13.117 ms - -
+10:49:19 [[32mhttp[39m]: GET /api/admin/coupons 304 12.973 ms - -
+10:49:19 [[32mhttp[39m]: GET /api/admin/settings 304 13.661 ms - -
+10:49:19 [[32mhttp[39m]: GET /api/admin/alerts 200 66.748 ms - 564
+10:49:19 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 5.811 ms - 606
+10:49:19 [[32mhttp[39m]: GET /api/auth/me 304 4.940 ms - -
+10:49:19 [[32mhttp[39m]: GET /api/admin/content/home 304 20.482 ms - -
+10:49:19 [[32mhttp[39m]: GET /api/admin/content/pages 304 22.195 ms - -
+10:49:19 [[32mhttp[39m]: GET /api/admin/content/banners 304 20.858 ms - -
+10:49:19 [[32mhttp[39m]: GET /api/favorites/ids 304 20.150 ms - -
+10:49:19 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 16.236 ms - -
+10:49:19 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 11.953 ms - -
+10:49:19 [[32mhttp[39m]: GET /api/admin/coupons 304 8.914 ms - -
+10:49:19 [[32mhttp[39m]: GET /api/admin/settings 304 5.979 ms - -
+10:49:19 [[32mhttp[39m]: GET /api/admin/alerts 200 59.849 ms - 564
+10:49:19 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 4.769 ms - 606
+10:49:19 [[32mhttp[39m]: GET /api/auth/me 304 5.470 ms - -
+10:49:19 [[32mhttp[39m]: GET /api/admin/content/home 304 26.372 ms - -
+10:49:19 [[32mhttp[39m]: GET /api/admin/content/pages 304 25.733 ms - -
+10:49:19 [[32mhttp[39m]: GET /api/admin/content/banners 304 24.887 ms - -
+10:49:19 [[32mhttp[39m]: GET /api/favorites/ids 304 23.904 ms - -
+10:49:19 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 22.749 ms - -
+10:49:19 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 14.840 ms - -
+10:49:19 [[32mhttp[39m]: GET /api/admin/coupons 304 14.276 ms - -
+10:49:19 [[32mhttp[39m]: GET /api/admin/settings 304 17.362 ms - -
+10:49:19 [[32mhttp[39m]: GET /api/admin/alerts 200 73.696 ms - 564
+10:49:19 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 6.813 ms - 606
+10:49:19 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 6.452 ms - -
+10:49:19 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 3.655 ms - -
+10:49:20 [[32mhttp[39m]: GET /api/auth/me 304 5.514 ms - -
+10:49:20 [[32mhttp[39m]: GET /api/admin/content/home 304 29.729 ms - -
+10:49:20 [[32mhttp[39m]: GET /api/admin/content/pages 304 28.930 ms - -
+10:49:20 [[32mhttp[39m]: GET /api/admin/content/banners 304 28.162 ms - -
+10:49:20 [[32mhttp[39m]: GET /api/favorites/ids 304 27.641 ms - -
+10:49:20 [[32mhttp[39m]: GET /api/admin/reviews?aprobado=[redactado]&page=1&limit=10 200 41.515 ms - 85
+10:49:20 [[32mhttp[39m]: PATCH /api/admin/marketing/settings 200 55.165 ms - 652
+10:49:20 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 24.004 ms - -
+10:49:20 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 24.007 ms - -
+10:49:20 [[32mhttp[39m]: GET /api/admin/coupons 304 23.567 ms - -
+10:49:20 [[32mhttp[39m]: GET /api/admin/settings 304 26.114 ms - -
+10:49:20 [[32mhttp[39m]: GET /api/admin/alerts 200 91.186 ms - 564
+10:49:20 [[32mhttp[39m]: GET /api/auth/me 304 6.188 ms - -
+10:49:20 [[32mhttp[39m]: GET /api/admin/content/home 304 22.690 ms - -
+10:49:20 [[32mhttp[39m]: GET /api/admin/content/pages 304 21.651 ms - -
+10:49:20 [[32mhttp[39m]: GET /api/admin/content/banners 304 21.080 ms - -
+10:49:20 [[32mhttp[39m]: GET /api/favorites/ids 304 19.605 ms - -
+10:49:20 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 19.980 ms - 600
+10:49:20 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 20.712 ms - -
+10:49:20 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 20.854 ms - -
+10:49:20 [[32mhttp[39m]: GET /api/admin/coupons 304 18.641 ms - -
+10:49:20 [[32mhttp[39m]: GET /api/admin/settings 304 19.751 ms - -
+10:49:20 [[32mhttp[39m]: GET /api/admin/alerts 200 75.237 ms - 564
+10:49:21 [[32mhttp[39m]: PATCH /api/admin/marketing/settings 200 16.585 ms - 446
+10:49:21 [[32mhttp[39m]: GET /api/auth/me 304 5.876 ms - -
+10:49:21 [[32mhttp[39m]: GET /api/admin/content/home 304 21.591 ms - -
+10:49:21 [[32mhttp[39m]: GET /api/admin/content/pages 304 20.042 ms - -
+10:49:21 [[32mhttp[39m]: GET /api/admin/content/banners 304 19.005 ms - -
+10:49:21 [[32mhttp[39m]: GET /api/favorites/ids 304 17.882 ms - -
+10:49:21 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 15.313 ms - 394
+10:49:21 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 15.187 ms - -
+10:49:21 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 14.517 ms - -
+10:49:21 [[32mhttp[39m]: GET /api/admin/coupons 304 14.388 ms - -
+10:49:21 [[32mhttp[39m]: GET /api/admin/settings 304 15.966 ms - -
+10:49:21 [[32mhttp[39m]: GET /api/admin/alerts 200 63.518 ms - 564
+10:49:21 [[32mhttp[39m]: PATCH /api/admin/marketing/settings 200 19.050 ms - 446
+10:49:21 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 4.455 ms - 394
+10:49:21 [[32mhttp[39m]: PATCH /api/admin/marketing/settings 200 12.746 ms - 503
+10:49:21 [[32mhttp[39m]: GET /api/auth/me 304 4.602 ms - -
+10:49:21 [[32mhttp[39m]: GET /api/admin/content/home 304 20.753 ms - -
+10:49:21 [[32mhttp[39m]: GET /api/admin/content/pages 304 15.000 ms - -
+10:49:21 [[32mhttp[39m]: GET /api/admin/content/banners 304 14.645 ms - -
+10:49:21 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 14.228 ms - 451
+10:49:21 [[32mhttp[39m]: GET /api/favorites/ids 304 14.827 ms - -
+10:49:21 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 12.776 ms - -
+10:49:21 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 12.655 ms - -
+10:49:21 [[32mhttp[39m]: GET /api/admin/coupons 304 12.527 ms - -
+10:49:21 [[32mhttp[39m]: GET /api/admin/settings 304 12.939 ms - -
+10:49:21 [[32mhttp[39m]: GET /api/admin/alerts 200 58.600 ms - 564
+10:49:21 [[32mhttp[39m]: PATCH /api/admin/marketing/settings 200 17.414 ms - 492
+10:49:21 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 7.046 ms - 440
+10:49:22 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 6.824 ms - 440
+10:49:22 [[32mhttp[39m]: PATCH /api/admin/marketing/settings 200 20.466 ms - 493
+10:49:22 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 7.996 ms - 441
+10:49:22 [[32mhttp[39m]: PATCH /api/admin/marketing/settings 200 26.299 ms - 505
+10:49:22 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 7.332 ms - 453
+10:49:22 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 4.905 ms - 453
+10:49:22 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 4.424 ms - -
+10:49:22 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 3.459 ms - 453
+10:49:22 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 8.031 ms - -
+10:49:22 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 8.154 ms - 453
+10:49:22 [[32mhttp[39m]: PATCH /api/admin/marketing/settings 200 27.739 ms - 501
+10:49:23 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 8.287 ms - 449
+10:49:23 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 4.839 ms - -
+10:49:23 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 4.192 ms - 449
+10:49:23 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 3.013 ms - -
+10:49:23 [[32mhttp[39m]: GET /api/auth/me 304 4.736 ms - -
+10:49:23 [[32mhttp[39m]: GET /api/admin/content/home 304 21.021 ms - -
+10:49:23 [[32mhttp[39m]: GET /api/admin/content/pages 304 19.573 ms - -
+10:49:23 [[32mhttp[39m]: GET /api/admin/content/banners 304 15.788 ms - -
+10:49:23 [[32mhttp[39m]: GET /api/favorites/ids 304 15.458 ms - -
+10:49:23 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 15.095 ms - -
+10:49:23 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 9.745 ms - -
+10:49:23 [[32mhttp[39m]: GET /api/admin/coupons 304 8.755 ms - -
+10:49:23 [[32mhttp[39m]: GET /api/admin/settings 304 10.947 ms - -
+10:49:23 [[32mhttp[39m]: GET /api/admin/alerts 200 54.193 ms - 564
+10:49:23 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 6.096 ms - -
+10:49:23 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 5.901 ms - 449
+10:49:23 [[32mhttp[39m]: GET /api/auth/me 304 4.749 ms - -
+10:49:24 [[32mhttp[39m]: GET /api/admin/content/home 304 21.596 ms - -
+10:49:24 [[32mhttp[39m]: GET /api/admin/content/pages 304 20.629 ms - -
+10:49:24 [[32mhttp[39m]: GET /api/admin/content/banners 304 19.807 ms - -
+10:49:24 [[32mhttp[39m]: GET /api/favorites/ids 304 16.047 ms - -
+10:49:24 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 15.855 ms - -
+10:49:24 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 17.565 ms - -
+10:49:24 [[32mhttp[39m]: GET /api/admin/coupons 304 16.506 ms - -
+10:49:24 [[32mhttp[39m]: GET /api/admin/settings 304 16.213 ms - -
+10:49:24 [[32mhttp[39m]: GET /api/admin/alerts 200 65.916 ms - 564
+10:49:24 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 5.957 ms - -
+10:49:24 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 6.000 ms - 449
+10:49:24 [[32mhttp[39m]: GET /api/auth/me 304 5.977 ms - -
+10:49:24 [[32mhttp[39m]: GET /api/admin/content/home 304 19.986 ms - -
+10:49:24 [[32mhttp[39m]: GET /api/admin/content/pages 304 19.119 ms - -
+10:49:24 [[32mhttp[39m]: GET /api/admin/content/banners 304 17.998 ms - -
+10:49:24 [[32mhttp[39m]: GET /api/favorites/ids 304 15.941 ms - -
+10:49:24 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 16.452 ms - -
+10:49:24 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 11.368 ms - -
+10:49:24 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 10.977 ms - -
+10:49:24 [[32mhttp[39m]: GET /api/admin/coupons 304 10.692 ms - -
+10:49:24 [[32mhttp[39m]: GET /api/admin/alerts 200 58.516 ms - 564
+10:49:24 [[32mhttp[39m]: GET /api/admin/settings 200 5.356 ms - 510
+10:49:24 [[32mhttp[39m]: GET /api/admin/settings 304 8.806 ms - -
+10:49:24 [[32mhttp[39m]: PATCH /api/admin/settings 200 21.014 ms - 506
+10:49:24 [[32mhttp[39m]: GET /api/admin/settings 200 9.615 ms - 506
+10:49:24 [[32mhttp[39m]: PATCH /api/admin/settings 200 15.139 ms - 489
+10:49:25 [[32mhttp[39m]: GET /api/admin/settings 200 3.498 ms - 489
+10:49:25 [[32mhttp[39m]: GET /api/auth/me 200 4.499 ms - 208
+10:49:25 [[32mhttp[39m]: GET /api/favorites/ids 304 3.756 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/checkout/orders 200 7.404 ms - 44
+10:49:25 [[32mhttp[39m]: GET /api/special-requests/mine 200 7.811 ms - 46
+10:49:25 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"PATCH","url":"/api/admin/marketing/settings","statusCode":403,"ip":"127.0.0.1"}
+10:49:25 [[32mhttp[39m]: PATCH /api/admin/marketing/settings 403 5.024 ms - 75
+10:49:25 [[32mhttp[39m]: GET /api/auth/me 200 5.226 ms - 207
+10:49:25 [[32mhttp[39m]: GET /api/admin/content/home 304 20.624 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/admin/content/pages 304 20.150 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/admin/content/banners 304 17.812 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/favorites/ids 304 17.185 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 17.454 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 13.362 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 12.316 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/admin/coupons 304 11.540 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/admin/settings 304 11.720 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/admin/alerts 200 59.330 ms - 564
+10:49:25 [[32mhttp[39m]: GET /api/auth/me 304 4.722 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/admin/content/home 304 17.090 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/admin/content/pages 304 16.150 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/admin/content/banners 304 15.249 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/favorites/ids 304 14.438 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 12.718 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 11.956 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 10.525 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/admin/coupons 304 9.263 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/admin/settings 304 9.361 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/admin/alerts 200 50.930 ms - 564
+10:49:25 [[32mhttp[39m]: GET /api/auth/me 304 3.598 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/admin/content/home 304 12.123 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/admin/content/pages 304 12.531 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/admin/content/banners 304 12.606 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/favorites/ids 304 12.964 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 13.406 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 12.364 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 10.905 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/admin/coupons 304 9.976 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/admin/settings 304 11.022 ms - -
+10:49:25 [[32mhttp[39m]: GET /api/admin/alerts 200 49.391 ms - 564
+10:49:26 [[32mhttp[39m]: GET /api/auth/me 304 4.010 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/admin/content/home 304 22.177 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/admin/content/pages 304 21.620 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/admin/content/banners 304 18.054 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/favorites/ids 304 17.536 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 18.015 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 11.500 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 9.442 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/admin/coupons 304 9.250 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/admin/settings 304 9.926 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/admin/alerts 200 52.423 ms - 564
+10:49:26 [[32mhttp[39m]: GET /api/auth/me 304 4.209 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/favorites/ids 304 35.123 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/admin/dashboard/analytics?period=30d 200 57.291 ms - 3400
+10:49:26 [[32mhttp[39m]: GET /api/admin/dashboard 200 65.560 ms - 2139
+10:49:26 [[32mhttp[39m]: GET /api/admin/alerts 200 77.431 ms - 564
+10:49:26 [[32mhttp[39m]: GET /api/auth/me 304 4.216 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/admin/content/home 304 16.033 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/admin/content/pages 304 14.794 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/admin/content/banners 304 13.988 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/favorites/ids 304 13.222 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 13.167 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 11.965 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 11.263 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/admin/coupons 304 10.619 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/admin/settings 304 11.838 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/admin/alerts 200 51.925 ms - 564
+10:49:26 [[32mhttp[39m]: GET /api/auth/me 304 3.454 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/admin/content/home 304 16.705 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/admin/content/pages 304 15.971 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/admin/content/banners 304 15.490 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/favorites/ids 304 13.324 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 14.430 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 12.669 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/admin/coupons 304 11.616 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/admin/settings 304 12.049 ms - -
+10:49:26 [[32mhttp[39m]: GET /api/admin/alerts 200 51.857 ms - 564
+10:49:27 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 7.239 ms - -
+10:49:27 [[32mhttp[39m]: GET /api/auth/me 304 4.338 ms - -
+10:49:27 [[32mhttp[39m]: GET /api/admin/content/home 304 16.249 ms - -
+10:49:27 [[32mhttp[39m]: GET /api/admin/content/pages 304 15.330 ms - -
+10:49:27 [[32mhttp[39m]: GET /api/admin/content/banners 304 14.890 ms - -
+10:49:27 [[32mhttp[39m]: GET /api/favorites/ids 304 15.203 ms - -
+10:49:27 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 12.886 ms - -
+10:49:27 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 11.690 ms - -
+10:49:27 [[32mhttp[39m]: GET /api/admin/coupons 304 10.650 ms - -
+10:49:27 [[32mhttp[39m]: GET /api/admin/settings 304 9.161 ms - -
+10:49:27 [[32mhttp[39m]: GET /api/admin/alerts 200 50.016 ms - 564
+10:49:27 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 7.765 ms - -
+10:49:27 [[32mhttp[39m]: GET /api/auth/me 304 4.088 ms - -
+10:49:27 [[32mhttp[39m]: GET /api/admin/content/home 304 17.900 ms - -
+10:49:27 [[32mhttp[39m]: GET /api/admin/content/pages 304 17.969 ms - -
+10:49:27 [[32mhttp[39m]: GET /api/admin/content/banners 304 17.257 ms - -
+10:49:27 [[32mhttp[39m]: GET /api/favorites/ids 304 17.450 ms - -
+10:49:27 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 16.047 ms - -
+10:49:27 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 12.019 ms - -
+10:49:27 [[32mhttp[39m]: GET /api/admin/coupons 304 8.827 ms - -
+10:49:27 [[32mhttp[39m]: GET /api/admin/settings 304 8.519 ms - -
+10:49:27 [[32mhttp[39m]: GET /api/admin/alerts 200 53.225 ms - 564
+10:49:28 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 6.935 ms - -
+10:49:28 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 3.182 ms - 449
+{
+  "checks": [
+    "R01 F5-A01 error HTTP bloquea escritura y conserva el popup real",
+    "R02 Reintentar recupera configuración no vacía y permite editar",
+    "R03 carga timeout no es una configuración vacía",
+    "R03 carga abort no es una configuración vacía",
+    "R03 carga invalid no es una configuración vacía",
+    "R04 fallo posterior conserva datos visibles como desactualizados y bloqueados",
+    "R05 cambio de pestaña durante carga conserva la configuración y no escribe",
+    "R06 respuesta tardía de una instancia anterior no reemplaza datos nuevos",
+    "R07 vacío legítimo confirmado se puede editar y guardar sin defaults nuevos",
+    "R08 doble submit antes de render produce un PATCH y confirma datos persistidos",
+    "R09 error de guardado conserva borrador y valores almacenados",
+    "R10 reintento deliberado después de rechazo explícito funciona",
+    "R11 respuesta perdida después de aplicar se verifica por GET sin duplicar PATCH",
+    "R12 resultado ambiguo no aplicado queda bloqueado, sin éxito ni reenvío automático",
+    "R13 comprobación posterior recupera el resultado sin enviar cambios",
+    "R14 respuesta PATCH incompleta no declara éxito y recargar no reenvía",
+    "R15 suscriptores muestra error y recuperación sin falsa lista vacía",
+    "R15 carritos muestra error y recuperación sin falsa lista vacía",
+    "R16 fallo o respuesta parcial de Apariencia no habilita un reemplazo vacío",
+    "R17 Apariencia se recupera y guarda un cambio autorizado del fixture",
+    "R18 Apariencia vacía confirmada conserva edición legítima",
+    "R19 guard y backend mantienen los permisos administrativos",
+    "R20 ámbitos históricos de exportaciones coherentes con título y selección, sin cambiar CSV",
+    "R21 aria-current semántico en destino actual y módulo antecesor",
+    "R22 error, reintento y formulario real en escritorio y móviles sin desbordamiento"
+  ],
+  "tasks": [],
+  "pageErrors": [],
+  "hydrationErrors": [],
+  "externalRequests": [],
+  "routes": [
+    "/admin/marketing?tab=popup",
+    "/admin/marketing?tab=popup",
+    "/admin/marketing?tab=popup",
+    "/admin/marketing?tab=popup",
+    "/admin/contenido?tab=resenas",
+    "/admin/marketing?tab=popup",
+    "/admin/marketing?tab=popup",
+    "/admin/marketing?tab=popup",
+    "/admin/marketing?tab=newsletter",
+    "/admin/marketing?tab=carritos",
+    "/admin/contenido?tab=appearance",
+    "/admin/marketing?tab=popup",
+    "/admin/contenido?tab=exports&scope=&tray=prepare",
+    "/admin/contenido?tab=exports&scope=newsletter&tray=prepare",
+    "/admin/contenido?tab=exports&scope=carts&tray=prepare",
+    "/admin/contenido?tab=exports&scope=orders&tray=prepare",
+    "/admin",
+    "/admin/marketing?tab=popup",
+    "/admin/marketing?tab=popup",
+    "/admin/marketing?tab=popup",
+    "/admin/marketing?tab=popup"
+  ],
+  "isolatedNext": true,
+  "realBackend": true,
+  "requests": [
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "subscribers",
+      "method": "GET"
+    },
+    {
+      "kind": "carts",
+      "method": "GET"
+    },
+    {
+      "kind": "appearance",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "subscribers",
+      "method": "GET"
+    },
+    {
+      "kind": "carts",
+      "method": "GET"
+    },
+    {
+      "kind": "appearance",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "subscribers",
+      "method": "GET"
+    },
+    {
+      "kind": "carts",
+      "method": "GET"
+    },
+    {
+      "kind": "appearance",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "subscribers",
+      "method": "GET"
+    },
+    {
+      "kind": "carts",
+      "method": "GET"
+    },
+    {
+      "kind": "appearance",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "subscribers",
+      "method": "GET"
+    },
+    {
+      "kind": "carts",
+      "method": "GET"
+    },
+    {
+      "kind": "appearance",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "subscribers",
+      "method": "GET"
+    },
+    {
+      "kind": "carts",
+      "method": "GET"
+    },
+    {
+      "kind": "appearance",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "subscribers",
+      "method": "GET"
+    },
+    {
+      "kind": "carts",
+      "method": "GET"
+    },
+    {
+      "kind": "appearance",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "OPTIONS"
+    },
+    {
+      "kind": "marketing",
+      "method": "PATCH",
+      "body": {
+        "popup": {
+          "enabled": false,
+          "title": "",
+          "text": "",
+          "ctaLabel": "",
+          "ctaHref": "",
+          "imageUrl": "",
+          "delaySeconds": 4,
+          "showNewsletterForm": true,
+          "variant": "newsletter",
+          "couponCode": ""
+        },
+        "newsletter": {
+          "footerTitle": "",
+          "footerText": "",
+          "successMessage": ""
+        },
+        "abandonedCart": {
+          "enabled": true,
+          "delayHours": 24,
+          "maxReminders": 2,
+          "emailSubject": ""
+        }
+      }
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "subscribers",
+      "method": "GET"
+    },
+    {
+      "kind": "carts",
+      "method": "GET"
+    },
+    {
+      "kind": "appearance",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "PATCH",
+      "body": {
+        "popup": {
+          "enabled": true,
+          "title": "Cambio controlado",
+          "text": "Contenido real que se conserva",
+          "ctaLabel": "",
+          "ctaHref": "",
+          "imageUrl": "",
+          "delaySeconds": 4,
+          "showNewsletterForm": true,
+          "variant": "newsletter",
+          "couponCode": ""
+        },
+        "newsletter": {
+          "footerTitle": "",
+          "footerText": "",
+          "successMessage": ""
+        },
+        "abandonedCart": {
+          "enabled": true,
+          "delayHours": 24,
+          "maxReminders": 2,
+          "emailSubject": ""
+        }
+      }
+    },
+    {
+      "kind": "marketing",
+      "method": "PATCH",
+      "body": {
+        "popup": {
+          "enabled": true,
+          "title": "Borrador rechazado",
+          "text": "Contenido real que se conserva",
+          "ctaLabel": "",
+          "ctaHref": "",
+          "imageUrl": "",
+          "delaySeconds": 4,
+          "showNewsletterForm": true,
+          "variant": "newsletter",
+          "couponCode": ""
+        },
+        "newsletter": {
+          "footerTitle": "",
+          "footerText": "",
+          "successMessage": ""
+        },
+        "abandonedCart": {
+          "enabled": true,
+          "delayHours": 24,
+          "maxReminders": 2,
+          "emailSubject": ""
+        }
+      }
+    },
+    {
+      "kind": "marketing",
+      "method": "PATCH",
+      "body": {
+        "popup": {
+          "enabled": true,
+          "title": "Borrador rechazado",
+          "text": "Contenido real que se conserva",
+          "ctaLabel": "",
+          "ctaHref": "",
+          "imageUrl": "",
+          "delaySeconds": 4,
+          "showNewsletterForm": true,
+          "variant": "newsletter",
+          "couponCode": ""
+        },
+        "newsletter": {
+          "footerTitle": "",
+          "footerText": "",
+          "successMessage": ""
+        },
+        "abandonedCart": {
+          "enabled": true,
+          "delayHours": 24,
+          "maxReminders": 2,
+          "emailSubject": ""
+        }
+      }
+    },
+    {
+      "kind": "marketing",
+      "method": "PATCH",
+      "body": {
+        "popup": {
+          "enabled": true,
+          "title": "Aplicado con respuesta perdida",
+          "text": "Contenido real que se conserva",
+          "ctaLabel": "",
+          "ctaHref": "",
+          "imageUrl": "",
+          "delaySeconds": 4,
+          "showNewsletterForm": true,
+          "variant": "newsletter",
+          "couponCode": ""
+        },
+        "newsletter": {
+          "footerTitle": "",
+          "footerText": "",
+          "successMessage": ""
+        },
+        "abandonedCart": {
+          "enabled": true,
+          "delayHours": 24,
+          "maxReminders": 2,
+          "emailSubject": ""
+        }
+      }
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "PATCH",
+      "body": {
+        "popup": {
+          "enabled": true,
+          "title": "Resultado aún desconocido",
+          "text": "Contenido real que se conserva",
+          "ctaLabel": "",
+          "ctaHref": "",
+          "imageUrl": "",
+          "delaySeconds": 4,
+          "showNewsletterForm": true,
+          "variant": "newsletter",
+          "couponCode": ""
+        },
+        "newsletter": {
+          "footerTitle": "",
+          "footerText": "",
+          "successMessage": ""
+        },
+        "abandonedCart": {
+          "enabled": true,
+          "delayHours": 24,
+          "maxReminders": 2,
+          "emailSubject": ""
+        }
+      }
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "PATCH",
+      "body": {
+        "popup": {
+          "enabled": true,
+          "title": "Respuesta inválida de guardado",
+          "text": "Contenido real que se conserva",
+          "ctaLabel": "",
+          "ctaHref": "",
+          "imageUrl": "",
+          "delaySeconds": 4,
+          "showNewsletterForm": true,
+          "variant": "newsletter",
+          "couponCode": ""
+        },
+        "newsletter": {
+          "footerTitle": "",
+          "footerText": "",
+          "successMessage": ""
+        },
+        "abandonedCart": {
+          "enabled": true,
+          "delayHours": 24,
+          "maxReminders": 2,
+          "emailSubject": ""
+        }
+      }
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "subscribers",
+      "method": "GET"
+    },
+    {
+      "kind": "carts",
+      "method": "GET"
+    },
+    {
+      "kind": "appearance",
+      "method": "GET"
+    },
+    {
+      "kind": "subscribers",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "subscribers",
+      "method": "GET"
+    },
+    {
+      "kind": "carts",
+      "method": "GET"
+    },
+    {
+      "kind": "appearance",
+      "method": "GET"
+    },
+    {
+      "kind": "carts",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "subscribers",
+      "method": "GET"
+    },
+    {
+      "kind": "carts",
+      "method": "GET"
+    },
+    {
+      "kind": "appearance",
+      "method": "GET"
+    },
+    {
+      "kind": "appearance",
+      "method": "GET"
+    },
+    {
+      "kind": "appearance",
+      "method": "GET"
+    },
+    {
+      "kind": "appearance",
+      "method": "OPTIONS"
+    },
+    {
+      "kind": "appearance",
+      "method": "PATCH",
+      "body": {
+        "appearance": {
+          "siteName": "Nombre confirmado",
+          "primaryColor": "",
+          "accentColor": "",
+          "bgColor": "",
+          "faviconUrl": "",
+          "logoUrl": ""
+        }
+      }
+    },
+    {
+      "kind": "appearance",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "subscribers",
+      "method": "GET"
+    },
+    {
+      "kind": "carts",
+      "method": "GET"
+    },
+    {
+      "kind": "appearance",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "subscribers",
+      "method": "GET"
+    },
+    {
+      "kind": "carts",
+      "method": "GET"
+    },
+    {
+      "kind": "appearance",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "subscribers",
+      "method": "GET"
+    },
+    {
+      "kind": "carts",
+      "method": "GET"
+    },
+    {
+      "kind": "appearance",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "subscribers",
+      "method": "GET"
+    },
+    {
+      "kind": "carts",
+      "method": "GET"
+    },
+    {
+      "kind": "appearance",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "subscribers",
+      "method": "GET"
+    },
+    {
+      "kind": "carts",
+      "method": "GET"
+    },
+    {
+      "kind": "appearance",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "subscribers",
+      "method": "GET"
+    },
+    {
+      "kind": "carts",
+      "method": "GET"
+    },
+    {
+      "kind": "appearance",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "subscribers",
+      "method": "GET"
+    },
+    {
+      "kind": "carts",
+      "method": "GET"
+    },
+    {
+      "kind": "appearance",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    },
+    {
+      "kind": "subscribers",
+      "method": "GET"
+    },
+    {
+      "kind": "carts",
+      "method": "GET"
+    },
+    {
+      "kind": "appearance",
+      "method": "GET"
+    },
+    {
+      "kind": "marketing",
+      "method": "GET"
+    }
+  ],
+  "interceptionErrors": [],
+  "regression": {
+    "saveEnabledAfterFailedLoad": false,
+    "storedBefore": {
+      "enabled": true,
+      "title": "Título confirmado de prueba",
+      "text": "Contenido real que se conserva",
+      "ctaLabel": "Suscribirme",
+      "ctaHref": "",
+      "imageUrl": "",
+      "delaySeconds": 4,
+      "showNewsletterForm": true,
+      "variant": "newsletter",
+      "couponCode": ""
+    }
+  },
+  "finalSettings": {
+    "key": "default",
+    "popup": {
+      "enabled": true,
+      "title": "Resultado aún desconocido",
+      "text": "Contenido real que se conserva",
+      "ctaLabel": "",
+      "ctaHref": "",
+      "imageUrl": "",
+      "delaySeconds": 4,
+      "showNewsletterForm": true,
+      "variant": "newsletter",
+      "couponCode": ""
+    },
+    "newsletter": {
+      "footerTitle": "",
+      "footerText": "",
+      "successMessage": ""
+    },
+    "abandonedCart": {
+      "enabled": true,
+      "delayHours": 24,
+      "maxReminders": 2,
+      "emailSubject": "",
+      "featureEnabled": false
+    }
+  },
+  "passed": true
+}

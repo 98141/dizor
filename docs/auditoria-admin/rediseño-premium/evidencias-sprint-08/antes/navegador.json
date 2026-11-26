@@ -1,0 +1,65 @@
+{
+  "mode": "antes",
+  "checks": [],
+  "externalRequests": [],
+  "pageErrors": [],
+  "screenshots": [
+    "configuracion-1440.png",
+    "configuracion-390.png",
+    "configuracion-error-1440.png",
+    "usuarios-1440.png",
+    "usuarios-390.png",
+    "usuarios-vacios-1440.png",
+    "usuarios-error-1440.png",
+    "auditoria-1440.png",
+    "auditoria-detalle-1440.png",
+    "auditoria-390.png",
+    "auditoria-error-1440.png"
+  ],
+  "measurements": [
+    {
+      "name": "configuracion",
+      "width": 1440,
+      "height": 911,
+      "overflow": false
+    },
+    {
+      "name": "configuracion",
+      "width": 390,
+      "height": 1013,
+      "overflow": false
+    },
+    {
+      "name": "usuarios",
+      "width": 1440,
+      "height": 959,
+      "overflow": false
+    },
+    {
+      "name": "usuarios",
+      "width": 390,
+      "height": 1920,
+      "overflow": false
+    },
+    {
+      "name": "auditoria",
+      "width": 1440,
+      "height": 3037,
+      "overflow": false
+    },
+    {
+      "name": "auditoria",
+      "width": 390,
+      "height": 9297,
+      "overflow": false
+    },
+    {
+      "name": "auditoria",
+      "width": 360,
+      "height": 9422,
+      "overflow": false
+    }
+  ],
+  "auditErrorShowsEmpty": true,
+  "passed": true
+}

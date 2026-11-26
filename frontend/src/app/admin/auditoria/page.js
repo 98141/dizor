@@ -1,27 +1,23 @@
 "use client";
 
-import Link from "next/link";
+import { HiOutlineLockClosed } from "react-icons/hi2";
 import RoleRoute from "@/guards/RoleRoute";
 import AdminShell from "@/components/admin/AdminShell";
 import AuditLogList from "@/components/admin/AuditLogList";
 
+// Sprint 08: read-only history. Same endpoints and roles (superadmin, admin).
 export default function AuditoriaPage() {
   return (
     <RoleRoute allowedRoles={["superadmin", "admin"]}>
       <AdminShell variant="admin">
-        <div className="admin-page">
-          <div className="admin-page__header-row">
+        <div className="admin-page cf-page cf-audit-page">
+          <header className="cf-head cf-head--action">
             <div>
-              <h1 className="admin-page__title">Historial de auditoría</h1>
-              <p className="admin-page__subtitle">
-                Registro de acciones en pedidos, catálogo, usuarios, configuración
-                y autenticación. Solo visible para administradores.
-              </p>
+              <h1>Historial de auditoría</h1>
+              <p className="cf-lead">Consulta los eventos y cambios registrados en la administración.</p>
             </div>
-            <Link href="/admin" className="admin-btn">
-              ← Dashboard
-            </Link>
-          </div>
+            <span className="cf-chip cf-chip--readonly" title="Los eventos no se pueden editar ni eliminar"><HiOutlineLockClosed aria-hidden="true" />Solo lectura</span>
+          </header>
           <AuditLogList />
         </div>
       </AdminShell>

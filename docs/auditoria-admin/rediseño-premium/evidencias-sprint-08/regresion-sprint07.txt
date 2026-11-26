@@ -1,0 +1,3 @@
+ok - F01 panel: cobertura incompleta y stock elevado sin desborde
+ok - F02 costos paginados y edición sin tocar el stock
+ok - F03 historial compacto y margen no verificable

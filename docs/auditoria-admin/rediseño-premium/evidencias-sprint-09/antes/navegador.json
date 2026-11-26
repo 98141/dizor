@@ -1,0 +1,71 @@
+{
+  "mode": "antes",
+  "checks": [],
+  "pageErrors": [],
+  "hydrationErrors": [],
+  "externalRequests": [],
+  "screenshots": [
+    "nuevo-1440.png",
+    "nuevo-390.png",
+    "editar-1440.png",
+    "galeria-1440.png",
+    "variantes-1440.png",
+    "publicacion-1440.png",
+    "ajuste-abierto-1440.png",
+    "editar-390.png",
+    "variantes-390.png",
+    "error-validacion-1440.png",
+    "guardando-1440.png"
+  ],
+  "measurements": [
+    {
+      "name": "nuevo-1440",
+      "width": 1440,
+      "height": 2658,
+      "overflow": false
+    },
+    {
+      "name": "nuevo-390",
+      "width": 390,
+      "height": 3378,
+      "overflow": false
+    },
+    {
+      "name": "nuevo-360",
+      "width": 360,
+      "height": 3433,
+      "overflow": false
+    },
+    {
+      "name": "editar-1440",
+      "width": 1440,
+      "height": 3754,
+      "overflow": false
+    },
+    {
+      "name": "editar-390",
+      "width": 390,
+      "height": 5986,
+      "overflow": false
+    },
+    {
+      "name": "editar-360",
+      "width": 360,
+      "height": 6106,
+      "overflow": false
+    },
+    {
+      "name": "muchas-variantes-1440",
+      "width": 1440,
+      "height": 5351,
+      "overflow": false
+    },
+    {
+      "name": "muchas-variantes-390",
+      "width": 390,
+      "height": 8465,
+      "overflow": false
+    }
+  ],
+  "passed": true
+}

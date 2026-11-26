@@ -1,0 +1,37 @@
+[
+  {
+    "name": "navegacion",
+    "file": "frontend/test/navigation-next-browser.cjs",
+    "exitCode": 1,
+    "okLines": 0,
+    "ms": 83554
+  },
+  {
+    "name": "fase6",
+    "file": "frontend/test/admin-polish-next-browser.cjs",
+    "exitCode": 1,
+    "okLines": 0,
+    "ms": 83656
+  },
+  {
+    "name": "marketing",
+    "file": "frontend/test/content-settings-next-browser.cjs",
+    "exitCode": 0,
+    "okLines": 0,
+    "ms": 61765
+  },
+  {
+    "name": "sprint07",
+    "file": "frontend/test/sprint07-finanzas-browser.cjs",
+    "exitCode": 0,
+    "okLines": 3,
+    "ms": 4235
+  },
+  {
+    "name": "sprint04",
+    "file": "frontend/test/sprint04-atencion-browser.cjs",
+    "exitCode": 0,
+    "okLines": 27,
+    "ms": 50369
+  }
+]

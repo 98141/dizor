@@ -1,0 +1,11 @@
+{
+  "suite": "frontend/test/admin-polish-next-browser.cjs",
+  "substitution": {
+    "from": "Movimientos e historial",
+    "to": "Historial de ventas, ajustes y cambios"
+  },
+  "applied": {
+    "frontend\\test\\helpers\\adminPolishBrowserFlow.cjs": 1
+  },
+  "exitCode": 1
+}
