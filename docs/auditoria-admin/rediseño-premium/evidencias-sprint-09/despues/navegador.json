@@ -1,0 +1,206 @@
+{
+  "mode": "despues",
+  "checks": [
+    "E01 nuevo producto: solo Información general abierta, resúmenes por sección y una sola acción de guardado",
+    "E02 cambiar de sección conserva nombre, imágenes, precio y SKU; los resúmenes reflejan el borrador",
+    "E03 error en sección contraída: se abre, se enfoca el campo y se anuncia junto al campo",
+    "E04 creación: doble clic = una petición; respuesta perdida comprobada por SKU, sin duplicar el producto",
+    "E09 respuesta ambigua: guardado bloqueado hasta comprobar el resultado real",
+    "E05 edición: resumen lateral con datos reales y SEO histórico intacto",
+    "E16 variantes contraídas: talla/color, SKU, unidades y estado",
+    "E17 una variante abierta a la vez; los cambios de la anterior se conservan y se señalan",
+    "E23 ajuste relativo: fallo ambiguo conserva la clave, reintento aplica una vez (3 → 7)",
+    "E21 stock existente de solo lectura y fuera del guardado",
+    "E24 venta concurrente durante la edición conservada (8 → 6)",
+    "E30 regreso a la lista filtrada tras guardar (q y página)",
+    "E15 diez imágenes, límite respetado y añadir deshabilitado",
+    "E12 imagen principal identificada y cambiada desde el menú contextual",
+    "E13 imagen eliminada sin alterar la principal ni el resto",
+    "E14 orden real de las imágenes conservado al guardar",
+    "E32 menú de imagen operable con teclado: Enter, flechas, Escape y retorno de foco",
+    "E20 combinación repetida: se abre la variante y se enfoca su talla",
+    "E22 variante nueva con existencias iniciales enteras (1,5 rechazado antes de enviar)",
+    "E18 agregar variante: formulario bajo demanda y guardado",
+    "E19 SKU nuevo único; los existentes no se regeneran",
+    "E10 validaciones de SKU duplicado y existencias, con foco en el campo",
+    "E25 variante desactivada conserva sus existencias",
+    "E26 precio y promoción guardados sin cambiar la lógica de cálculo",
+    "E27 costo interno visible y conservado para administración",
+    "E28 SEO: límites del modelo y valores guardados",
+    "E29 publicación: opciones compactas con su estado en el resumen",
+    "E31 vendedor sin acceso al editor ni a la API de escritura",
+    "E05b cambios sin guardar: confirmación al salir por enlace interno; descartar no guarda",
+    "E07 guardado con estado de proceso; respuesta perdida en edición comprobada contra el servidor",
+    "E33 responsive 1440–360 sin desbordes; edición móvil 1732px, variantes abiertas 1144px",
+    "E03b formulario inicialmente compacto en móvil: solo Información general abierta",
+    "E32b teclado en las secciones (Enter y Espacio), foco visible y vista previa con el formato real"
+  ],
+  "pageErrors": [],
+  "hydrationErrors": [],
+  "externalRequests": [],
+  "screenshots": [
+    "nuevo-1440.png",
+    "nuevo-390.png",
+    "nuevo-parcial-390.png",
+    "error-validacion-1440.png",
+    "resultado-desconocido-1440.png",
+    "editar-1440.png",
+    "variantes-contraidas-1440.png",
+    "variante-expandida-1440.png",
+    "ajuste-abierto-1440.png",
+    "galeria-1440.png",
+    "galeria-menu-1440.png",
+    "galeria-ampliada-1440.png",
+    "variante-nueva-error-1440.png",
+    "variante-nueva-1440.png",
+    "publicacion-1440.png",
+    "guardando-1440.png",
+    "guardando-390.png",
+    "editar-390.png",
+    "variantes-390.png",
+    "variante-expandida-390.png",
+    "galeria-390.png",
+    "muchas-variantes-390.png",
+    "editar-360.png",
+    "descripcion-vista-previa-1440.png"
+  ],
+  "measurements": [
+    {
+      "name": "nuevo-1440",
+      "width": 1440,
+      "height": 1278,
+      "overflow": false
+    },
+    {
+      "name": "nuevo-390",
+      "width": 390,
+      "height": 1483,
+      "overflow": false
+    },
+    {
+      "name": "nuevo-360",
+      "width": 360,
+      "height": 1538,
+      "overflow": false
+    },
+    {
+      "name": "editar-1440",
+      "width": 1440,
+      "height": 1481,
+      "overflow": false
+    },
+    {
+      "name": "nuevo-1440",
+      "width": 1440,
+      "height": 1278,
+      "overflow": false
+    },
+    {
+      "name": "editar-1440",
+      "width": 1440,
+      "height": 1481,
+      "overflow": false
+    },
+    {
+      "name": "muchas-1440",
+      "width": 1440,
+      "height": 1278,
+      "overflow": false
+    },
+    {
+      "name": "nuevo-1024",
+      "width": 1024,
+      "height": 1264,
+      "overflow": false
+    },
+    {
+      "name": "editar-1024",
+      "width": 1024,
+      "height": 1467,
+      "overflow": false
+    },
+    {
+      "name": "muchas-1024",
+      "width": 1024,
+      "height": 1264,
+      "overflow": false
+    },
+    {
+      "name": "nuevo-820",
+      "width": 820,
+      "height": 1258,
+      "overflow": false
+    },
+    {
+      "name": "editar-820",
+      "width": 820,
+      "height": 1461,
+      "overflow": false
+    },
+    {
+      "name": "muchas-820",
+      "width": 820,
+      "height": 1258,
+      "overflow": false
+    },
+    {
+      "name": "nuevo-390",
+      "width": 390,
+      "height": 1483,
+      "overflow": false
+    },
+    {
+      "name": "editar-390",
+      "width": 390,
+      "height": 1732,
+      "overflow": false
+    },
+    {
+      "name": "muchas-390",
+      "width": 390,
+      "height": 1483,
+      "overflow": false
+    },
+    {
+      "name": "nuevo-360",
+      "width": 360,
+      "height": 1538,
+      "overflow": false
+    },
+    {
+      "name": "editar-360",
+      "width": 360,
+      "height": 1825,
+      "overflow": false
+    },
+    {
+      "name": "muchas-360",
+      "width": 360,
+      "height": 1538,
+      "overflow": false
+    },
+    {
+      "name": "editar-390-inicial",
+      "width": 390,
+      "height": 1732,
+      "overflow": false
+    },
+    {
+      "name": "variantes-390",
+      "width": 390,
+      "height": 1144,
+      "overflow": false
+    },
+    {
+      "name": "muchas-variantes-390-abiertas",
+      "width": 390,
+      "height": 1799,
+      "overflow": false
+    }
+  ],
+  "descriptionHeights": {
+    "long": 300.5,
+    "empty": 97.5
+  },
+  "passed": true
+}

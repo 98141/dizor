@@ -68,7 +68,7 @@ module.exports = async function flow(t) {
   const toggle = async (s) => { await page.click(`#pe-toggle-${s}`); await page.waitForFunction((s) => document.getElementById(`pe-toggle-${s}`).getAttribute("aria-expanded") === "true", {}, s); };
   const visible = (sel) => page.evaluate((sel) => { const e = document.querySelector(sel); return !!e && e.getClientRects().length > 0; }, sel);
   const fill = async (sel, value) => { await page.$eval(sel, (e, v) => { const proto = e.tagName === "TEXTAREA" ? HTMLTextAreaElement.prototype : e.tagName === "SELECT" ? HTMLSelectElement.prototype : HTMLInputElement.prototype; Object.getOwnPropertyDescriptor(proto, "value").set.call(e, v); e.dispatchEvent(new Event(e.tagName === "SELECT" ? "change" : "input", { bubbles: true })); }, value); };
-  const clickText = async (label, scope = "body") => { const h = await page.waitForFunction((l, s) => [...document.querySelector(s).querySelectorAll("button,a,[role=menuitem]")].find((e) => e.getClientRects().length && e.textContent.trim() === l), { timeout: 15000 }, label, scope); await h.click(); await h.dispose(); };
+  const clickText = async (label, scope = "body") => { const h = await page.waitForFunction((l, s) => [...document.querySelector(s).querySelectorAll("button,a,[role=menuitem]")].find((e) => e.getClientRects().length && e.textContent.trim() === l), { timeout: 15000 }, label, scope); await h.evaluate((e) => e.scrollIntoView({ block: "center" })); await h.click(); await h.dispose(); };
   const submit = () => page.$eval("form.product-form", (f) => f.requestSubmit());
   const noOverflow = () => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1);
   const db = async (p) => ctx.Product.findById(id(p)).lean();
@@ -98,7 +98,7 @@ module.exports = async function flow(t) {
   assert.equal(await page.$eval("#name", (e) => e.value), "Sombrero borrador S09");
   assert.equal(await page.$eval('[aria-label="SKU variante 1"]', (e) => e.value), skuBefore, "el SKU no se regenera al cambiar de sección");
   assert.equal(await page.$eval("#salePrice", (e) => e.value), "180000");
-  assert.equal(await page.$$eval(".pe-gallery li", (n) => n.length), 1);
+  assert.equal(await page.$$eval(".pe-gallery > li", (n) => n.length), 1);
   assert.ok((await page.$eval("#pe-toggle-price .pe-section__summary", (e) => e.textContent)).includes("180.000"));
   check("E02", "cambiar de sección conserva nombre, imágenes, precio y SKU; los resúmenes reflejan el borrador");
   await vp(390, 844); await shot("nuevo-parcial-390"); await vp(1440);
@@ -202,24 +202,24 @@ module.exports = async function flow(t) {
 
   // ── E08 gallery: 10 images, main, menu by keyboard, delete keeps order ──
   await vp(1440); await goto(editUrl(three), "Sombrero vueltiao fino"); await toggle("images");
-  assert.equal(await page.$$eval(".pe-gallery li", (n) => n.length), 10); await text("10 de 10");
+  assert.equal(await page.$$eval(".pe-gallery > li", (n) => n.length), 10); await text("10 de 10");
   assert.equal(await page.$eval("#pe-image-url", (e) => e.disabled), true, "límite de 10");
-  const mainIndex = await page.$$eval(".pe-gallery li", (n) => n.findIndex((li) => li.innerText.includes("Principal")));
+  const mainIndex = await page.$$eval(".pe-gallery > li", (n) => n.findIndex((li) => li.innerText.includes("Principal")));
   assert.equal(mainIndex, 1);
-  assert.equal(await page.$$eval(".pe-gallery li button", (n) => n.filter((b) => b.getClientRects().length && /Eliminar|Hacer principal/.test(b.textContent)).length), 0, "sin botones repetidos visibles");
+  assert.equal(await page.$$eval(".pe-gallery > li button", (n) => n.filter((b) => b.getClientRects().length && /Eliminar|Hacer principal/.test(b.textContent)).length), 0, "sin botones repetidos visibles");
   await element("#pe-panel-images", "galeria-1440");
   const trigger = await page.$('button[aria-label="Acciones de la imagen 4"]');
   await trigger.focus(); await page.keyboard.press("Enter");
   await page.waitForFunction(() => document.activeElement?.getAttribute("role") === "menuitem");
   await page.keyboard.press("ArrowDown"); await page.keyboard.press("ArrowUp");
   assert.equal(await page.evaluate(() => document.activeElement.textContent.trim()), "Hacer principal");
-  await element(".pe-gallery li:nth-child(4)", "galeria-menu-1440");
+  await element("#pe-panel-images", "galeria-menu-1440");
   await page.keyboard.press("Escape"); assert.equal(await page.evaluate(() => document.activeElement.getAttribute("aria-label")), "Acciones de la imagen 4");
   await page.keyboard.press("Enter"); await page.waitForFunction(() => document.activeElement?.getAttribute("role") === "menuitem"); await page.keyboard.press("Enter");
-  assert.ok((await page.$eval(".pe-gallery li:nth-child(4)", (e) => e.innerText)).includes("Principal"));
-  await page.click('button[aria-label="Acciones de la imagen 6"]'); await clickText("Eliminar", ".pe-gallery li:nth-child(6)");
+  assert.ok((await page.$eval(".pe-gallery > li:nth-child(4)", (e) => e.innerText)).includes("Principal"));
+  await page.click('button[aria-label="Acciones de la imagen 6"]'); await clickText("Eliminar", ".pe-gallery > li:nth-child(6)");
   await text("9 de 10");
-  await page.click('button[aria-label="Acciones de la imagen 2"]'); await clickText("Ver ampliada", ".pe-gallery li:nth-child(2)");
+  await page.click('button[aria-label="Acciones de la imagen 2"]'); await clickText("Ver ampliada", ".pe-gallery > li:nth-child(2)");
   await page.waitForSelector("dialog.pe-preview[open]"); await shot("galeria-ampliada-1440", false);
   await page.keyboard.press("Escape"); await page.waitForFunction(() => !document.querySelector("dialog.pe-preview[open]"));
   await page.$eval("form.product-form", (f) => f.requestSubmit()); await page.waitForFunction((rt) => location.pathname + location.search === rt, {}, returnTo);
@@ -284,7 +284,7 @@ module.exports = async function flow(t) {
   await page.$eval("form.product-form", (f) => f.requestSubmit()); await page.waitForFunction((rt) => location.pathname + location.search === rt, {}, returnTo);
   const pub = await db(one);
   assert.equal(pub.discountPercent, 20); assert.equal(pub.onPromotion, true); assert.equal(pub.isNew, true); assert.equal(pub.allowsCustomization, true); assert.equal(pub.isActive, true);
-  assert.equal(pub.seoDescription, "Individual de palma tejido a mano para la mesa."); assert.equal(pub.internalCost, 90000);
+  assert.equal(pub.seoDescription, "Individual de palma tejido a mano para la mesa."); assert.equal((await ctx.Product.findById(id(one)).select("+internalCost").lean()).internalCost, 90000);
   check("E26", "precio y promoción guardados sin cambiar la lógica de cálculo");
   check("E27", "costo interno visible y conservado para administración");
   check("E28", "SEO: límites del modelo y valores guardados");

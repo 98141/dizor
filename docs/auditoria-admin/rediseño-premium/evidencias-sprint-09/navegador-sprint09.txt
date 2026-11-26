@@ -1,0 +1,232 @@
+(node:29160) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:29160) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:29160) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:29160) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:29160) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:29160) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+11:59:32 [[32mhttp[39m]: POST /api/auth/login 200 457.950 ms - 168
+11:59:33 [[32mhttp[39m]: POST /api/auth/login 200 548.878 ms - 169
+11:59:33 [[32mhttp[39m]: POST /api/auth/login 200 412.679 ms - 174
+11:59:34 [[32mhttp[39m]: POST /api/auth/login 200 383.836 ms - 173
+12:00:25 [[32mhttp[39m]: POST /api/admin/catalog/products 201 104.991 ms - 3597
+12:00:26 [[32mhttp[39m]: POST /api/admin/catalog/products 201 80.691 ms - 5126
+12:00:26 [[32mhttp[39m]: POST /api/admin/catalog/products 201 37.130 ms - 968
+12:00:26 [[32mhttp[39m]: GET /api/auth/me 200 7.464 ms - 207
+12:00:26 [[32mhttp[39m]: GET /api/admin/catalog/meta 200 46.591 ms - 2352
+12:00:26 [[32mhttp[39m]: GET /api/favorites/ids 200 48.416 ms - 47
+12:00:26 [[32mhttp[39m]: GET /api/admin/alerts 200 111.615 ms - 1690
+ok - E01 nuevo producto: solo Información general abierta, resúmenes por sección y una sola acción de guardado
+ok - E02 cambiar de sección conserva nombre, imágenes, precio y SKU; los resúmenes reflejan el borrador
+ok - E03 error en sección contraída: se abre, se enfoca el campo y se anuncia junto al campo
+12:00:28 [[32mhttp[39m]: POST /api/admin/catalog/products 201 31.071 ms - 1065
+12:00:29 [[32mhttp[39m]: GET /api/admin/catalog/products?q=[redactado]&limit=5 200 12.685 ms - 1331
+ok - E04 creación: doble clic = una petición; respuesta perdida comprobada por SKU, sin duplicar el producto
+ok - E09 respuesta ambigua: guardado bloqueado hasta comprobar el resultado real
+12:00:29 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 21.221 ms - -
+12:00:29 [[32mhttp[39m]: GET /api/admin/catalog/products 200 30.365 ms - 11778
+12:00:29 [[32mhttp[39m]: GET /api/admin/alerts 200 54.530 ms - 2059
+12:00:29 [[32mhttp[39m]: GET /api/content/appearance 200 13.433 ms - 126
+12:00:29 [[32mhttp[39m]: GET /api/auth/me 304 5.373 ms - -
+12:00:29 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 19.282 ms - -
+12:00:29 [[32mhttp[39m]: GET /api/favorites/ids 304 18.967 ms - -
+12:00:29 [[32mhttp[39m]: GET /api/admin/alerts 200 52.800 ms - 2059
+12:00:29 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0865a9a375696a76b35ada 200 20.536 ms - 3022
+ok - E05 edición: resumen lateral con datos reales y SEO histórico intacto
+ok - E16 variantes contraídas: talla/color, SKU, unidades y estado
+ok - E17 una variante abierta a la vez; los cambios de la anterior se conservan y se señalan
+(node:29160) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+12:00:31 [[32mhttp[39m]: POST /api/admin/catalog/products/6b0865a9a375696a76b35ada/stock 200 155.290 ms - 104
+ok - E23 ajuste relativo: fallo ambiguo conserva la clave, reintento aplica una vez (3 → 7)
+12:00:31 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b0865a9a375696a76b35ada 200 46.453 ms - 3599
+ok - E21 stock existente de solo lectura y fuera del guardado
+ok - E24 venta concurrente durante la edición conservada (8 → 6)
+ok - E30 regreso a la lista filtrada tras guardar (q y página)
+12:00:31 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 47.048 ms - -
+12:00:31 [[32mhttp[39m]: GET /api/admin/catalog/products?q=[redactado]&page=1 200 34.716 ms - 5154
+12:00:32 [[32mhttp[39m]: GET /api/admin/alerts 200 84.674 ms - 1980
+12:00:32 [[32mhttp[39m]: GET /api/auth/me 304 4.895 ms - -
+12:00:32 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 18.440 ms - -
+12:00:32 [[32mhttp[39m]: GET /api/favorites/ids 304 17.933 ms - -
+12:00:32 [[32mhttp[39m]: GET /api/admin/alerts 200 47.350 ms - 1980
+12:00:32 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0865a9a375696a76b35ada 200 15.890 ms - 3028
+12:00:33 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b0865a9a375696a76b35ada 200 44.557 ms - 3509
+ok - E15 diez imágenes, límite respetado y añadir deshabilitado
+ok - E12 imagen principal identificada y cambiada desde el menú contextual
+ok - E13 imagen eliminada sin alterar la principal ni el resto
+ok - E14 orden real de las imágenes conservado al guardar
+ok - E32 menú de imagen operable con teclado: Enter, flechas, Escape y retorno de foco
+12:00:33 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 37.896 ms - -
+12:00:33 [[32mhttp[39m]: GET /api/admin/catalog/products?q=[redactado]&page=1 200 54.377 ms - 5064
+12:00:33 [[32mhttp[39m]: GET /api/admin/alerts 200 101.621 ms - 1980
+12:00:33 [[32mhttp[39m]: GET /api/auth/me 304 5.961 ms - -
+12:00:33 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 17.691 ms - -
+12:00:33 [[32mhttp[39m]: GET /api/favorites/ids 304 16.659 ms - -
+12:00:33 [[32mhttp[39m]: GET /api/admin/alerts 200 49.317 ms - 1980
+12:00:33 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0865aaa375696a76b35b03 200 15.644 ms - 1182
+ok - E20 combinación repetida: se abre la variante y se enfoca su talla
+ok - E22 variante nueva con existencias iniciales enteras (1,5 rechazado antes de enviar)
+12:00:34 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b0865aaa375696a76b35b03 200 41.566 ms - 1346
+ok - E18 agregar variante: formulario bajo demanda y guardado
+ok - E19 SKU nuevo único; los existentes no se regeneran
+12:00:34 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 20.752 ms - -
+12:00:34 [[32mhttp[39m]: GET /api/admin/catalog/products?q=[redactado]&page=1 304 26.976 ms - -
+12:00:34 [[32mhttp[39m]: GET /api/admin/alerts 200 52.024 ms - 2349
+12:00:34 [[32mhttp[39m]: GET /api/auth/me 304 6.090 ms - -
+12:00:35 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 35.968 ms - -
+12:00:35 [[32mhttp[39m]: GET /api/favorites/ids 304 34.648 ms - -
+12:00:35 [[32mhttp[39m]: GET /api/admin/alerts 200 62.718 ms - 2349
+12:00:35 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0865aaa375696a76b35b03 200 9.313 ms - 1440
+12:00:35 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b0865aaa375696a76b35b03 200 57.358 ms - 1347
+ok - E10 validaciones de SKU duplicado y existencias, con foco en el campo
+ok - E25 variante desactivada conserva sus existencias
+12:00:35 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 28.335 ms - -
+12:00:35 [[32mhttp[39m]: GET /api/admin/catalog/products?q=[redactado]&page=1 304 26.993 ms - -
+12:00:35 [[32mhttp[39m]: GET /api/admin/alerts 200 55.878 ms - 1980
+12:00:35 [[32mhttp[39m]: GET /api/auth/me 304 5.358 ms - -
+12:00:35 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 17.287 ms - -
+12:00:35 [[32mhttp[39m]: GET /api/favorites/ids 304 15.896 ms - -
+12:00:35 [[32mhttp[39m]: GET /api/admin/alerts 200 45.206 ms - 1980
+12:00:35 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0865aaa375696a76b35b03 200 10.236 ms - 1450
+12:00:36 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b0865aaa375696a76b35b03 200 55.753 ms - 1430
+ok - E26 precio y promoción guardados sin cambiar la lógica de cálculo
+ok - E27 costo interno visible y conservado para administración
+ok - E28 SEO: límites del modelo y valores guardados
+ok - E29 publicación: opciones compactas con su estado en el resumen
+12:00:36 [[33mwarn[39m]: Auth failure No has iniciado sesión {"method":"GET","url":"/api/admin/catalog/products?q=[redactado]&page=1","statusCode":401,"ip":"127.0.0.1"}
+12:00:36 [[32mhttp[39m]: GET /api/admin/catalog/products?q=[redactado]&page=1 401 3.362 ms - 53
+12:00:36 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 24.803 ms - -
+12:00:36 [[32mhttp[39m]: GET /api/admin/alerts 200 62.583 ms - 1980
+12:00:36 [[32mhttp[39m]: POST /api/auth/refresh-token 200 16.644 ms - 168
+12:00:36 [[32mhttp[39m]: GET /api/admin/catalog/products?q=[redactado]&page=1 304 13.777 ms - -
+12:00:36 [[32mhttp[39m]: GET /api/auth/me 200 10.981 ms - 208
+12:00:36 [[32mhttp[39m]: GET /api/favorites/ids 304 6.034 ms - -
+12:00:36 [[32mhttp[39m]: GET /api/checkout/orders 200 12.884 ms - 44
+12:00:36 [[32mhttp[39m]: GET /api/special-requests/mine 200 13.391 ms - 46
+12:00:36 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"POST","url":"/api/admin/catalog/products","statusCode":403,"ip":"127.0.0.1"}
+12:00:36 [[32mhttp[39m]: POST /api/admin/catalog/products 403 8.001 ms - 75
+12:00:36 [[33mwarn[39m]: Auth failure No tienes permisos para realizar esta acción {"method":"PATCH","url":"/api/admin/catalog/products/6b0865aaa375696a76b35b03","statusCode":403,"ip":"127.0.0.1"}
+12:00:36 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b0865aaa375696a76b35b03 403 3.739 ms - 75
+ok - E31 vendedor sin acceso al editor ni a la API de escritura
+12:00:37 [[32mhttp[39m]: GET /api/auth/me 200 6.833 ms - 207
+12:00:37 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 17.530 ms - -
+12:00:37 [[32mhttp[39m]: GET /api/favorites/ids 304 13.378 ms - -
+12:00:37 [[32mhttp[39m]: GET /api/admin/alerts 200 42.747 ms - 1980
+12:00:37 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0865aaa375696a76b35b03 200 10.229 ms - 1533
+ok - E05b cambios sin guardar: confirmación al salir por enlace interno; descartar no guarda
+12:00:37 [[32mhttp[39m]: GET /api/admin/dashboard/analytics?period=30d 200 102.627 ms - 5064
+12:00:37 [[32mhttp[39m]: GET /api/admin/dashboard 200 111.629 ms - 2363
+12:00:37 [[32mhttp[39m]: GET /api/admin/alerts 200 123.375 ms - 1980
+12:00:37 [[32mhttp[39m]: GET /api/auth/me 304 4.589 ms - -
+12:00:37 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 15.186 ms - -
+12:00:37 [[32mhttp[39m]: GET /api/favorites/ids 304 14.729 ms - -
+12:00:37 [[32mhttp[39m]: GET /api/admin/alerts 200 41.011 ms - 1980
+12:00:37 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0865aaa375696a76b35b03 304 12.911 ms - -
+12:00:39 [[32mhttp[39m]: PATCH /api/admin/catalog/products/6b0865aaa375696a76b35b03 200 54.220 ms - 1446
+12:00:39 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0865aaa375696a76b35b03 200 7.474 ms - 1549
+ok - E07 guardado con estado de proceso; respuesta perdida en edición comprobada contra el servidor
+12:00:39 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 22.367 ms - -
+12:00:39 [[32mhttp[39m]: GET /api/admin/catalog/products?q=[redactado]&page=1 304 29.540 ms - -
+12:00:39 [[32mhttp[39m]: GET /api/admin/alerts 200 50.980 ms - 1980
+12:00:39 [[32mhttp[39m]: GET /api/auth/me 304 6.281 ms - -
+12:00:39 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 16.404 ms - -
+12:00:39 [[32mhttp[39m]: GET /api/favorites/ids 304 15.586 ms - -
+12:00:39 [[32mhttp[39m]: GET /api/admin/alerts 200 42.882 ms - 1980
+12:00:39 [[32mhttp[39m]: GET /api/auth/me 304 4.813 ms - -
+12:00:39 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 15.050 ms - -
+12:00:39 [[32mhttp[39m]: GET /api/favorites/ids 304 14.264 ms - -
+12:00:39 [[32mhttp[39m]: GET /api/admin/alerts 200 42.841 ms - 1980
+12:00:39 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0865a9a375696a76b35ada 200 13.379 ms - 2938
+12:00:40 [[32mhttp[39m]: GET /api/auth/me 304 5.355 ms - -
+12:00:40 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 17.267 ms - -
+12:00:40 [[32mhttp[39m]: GET /api/favorites/ids 304 12.440 ms - -
+12:00:40 [[32mhttp[39m]: GET /api/admin/alerts 200 47.693 ms - 1980
+12:00:40 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0865aaa375696a76b35aed 200 17.572 ms - 3046
+12:00:40 [[32mhttp[39m]: GET /api/auth/me 304 4.705 ms - -
+12:00:40 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 20.219 ms - -
+12:00:40 [[32mhttp[39m]: GET /api/favorites/ids 304 20.348 ms - -
+12:00:40 [[32mhttp[39m]: GET /api/admin/alerts 200 40.753 ms - 1980
+12:00:40 [[32mhttp[39m]: GET /api/auth/me 304 5.266 ms - -
+12:00:40 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 21.160 ms - -
+12:00:40 [[32mhttp[39m]: GET /api/favorites/ids 304 20.786 ms - -
+12:00:40 [[32mhttp[39m]: GET /api/admin/alerts 200 48.264 ms - 1980
+12:00:40 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0865a9a375696a76b35ada 304 14.630 ms - -
+12:00:40 [[32mhttp[39m]: GET /api/auth/me 304 4.391 ms - -
+12:00:40 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 13.802 ms - -
+12:00:40 [[32mhttp[39m]: GET /api/favorites/ids 304 13.514 ms - -
+12:00:40 [[32mhttp[39m]: GET /api/admin/alerts 200 38.019 ms - 1980
+12:00:40 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0865aaa375696a76b35aed 304 13.514 ms - -
+12:00:40 [[32mhttp[39m]: GET /api/auth/me 304 5.171 ms - -
+12:00:41 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 14.650 ms - -
+12:00:41 [[32mhttp[39m]: GET /api/favorites/ids 304 14.818 ms - -
+12:00:41 [[32mhttp[39m]: GET /api/admin/alerts 200 41.219 ms - 1980
+12:00:41 [[32mhttp[39m]: GET /api/auth/me 304 4.426 ms - -
+12:00:41 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 12.003 ms - -
+12:00:41 [[32mhttp[39m]: GET /api/favorites/ids 304 11.369 ms - -
+12:00:41 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0865a9a375696a76b35ada 304 8.373 ms - -
+12:00:41 [[32mhttp[39m]: GET /api/admin/alerts 200 31.255 ms - 1980
+12:00:41 [[32mhttp[39m]: GET /api/auth/me 304 5.822 ms - -
+12:00:41 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 12.456 ms - -
+12:00:41 [[32mhttp[39m]: GET /api/favorites/ids 304 12.552 ms - -
+12:00:41 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0865aaa375696a76b35aed 304 11.064 ms - -
+12:00:41 [[32mhttp[39m]: GET /api/admin/alerts 200 34.093 ms - 1980
+12:00:41 [[32mhttp[39m]: GET /api/auth/me 304 4.896 ms - -
+12:00:41 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 17.837 ms - -
+12:00:41 [[32mhttp[39m]: GET /api/favorites/ids 304 17.687 ms - -
+12:00:41 [[32mhttp[39m]: GET /api/admin/alerts 200 41.981 ms - 1980
+12:00:41 [[32mhttp[39m]: GET /api/auth/me 304 6.458 ms - -
+12:00:41 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 14.792 ms - -
+12:00:41 [[32mhttp[39m]: GET /api/favorites/ids 304 12.070 ms - -
+12:00:41 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0865a9a375696a76b35ada 304 10.631 ms - -
+12:00:41 [[32mhttp[39m]: GET /api/admin/alerts 200 37.632 ms - 1980
+12:00:41 [[32mhttp[39m]: GET /api/auth/me 304 5.318 ms - -
+12:00:41 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 18.652 ms - -
+12:00:41 [[32mhttp[39m]: GET /api/favorites/ids 304 18.083 ms - -
+12:00:42 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0865aaa375696a76b35aed 304 19.766 ms - -
+12:00:42 [[32mhttp[39m]: GET /api/admin/alerts 200 54.548 ms - 1980
+12:00:42 [[32mhttp[39m]: GET /api/auth/me 304 6.007 ms - -
+12:00:42 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 11.151 ms - -
+12:00:42 [[32mhttp[39m]: GET /api/favorites/ids 304 10.652 ms - -
+12:00:42 [[32mhttp[39m]: GET /api/admin/alerts 200 32.262 ms - 1980
+12:00:42 [[32mhttp[39m]: GET /api/auth/me 304 4.393 ms - -
+12:00:42 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 11.806 ms - -
+12:00:42 [[32mhttp[39m]: GET /api/favorites/ids 304 11.006 ms - -
+12:00:42 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0865a9a375696a76b35ada 304 7.651 ms - -
+12:00:42 [[32mhttp[39m]: GET /api/admin/alerts 200 30.736 ms - 1980
+12:00:42 [[32mhttp[39m]: GET /api/auth/me 304 5.120 ms - -
+12:00:42 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 13.725 ms - -
+12:00:42 [[32mhttp[39m]: GET /api/favorites/ids 304 10.955 ms - -
+12:00:42 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0865aaa375696a76b35aed 304 9.907 ms - -
+12:00:42 [[32mhttp[39m]: GET /api/admin/alerts 200 34.017 ms - 1980
+12:00:42 [[32mhttp[39m]: GET /api/auth/me 304 6.174 ms - -
+12:00:42 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 14.117 ms - -
+12:00:42 [[32mhttp[39m]: GET /api/favorites/ids 304 15.337 ms - -
+12:00:42 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0865a9a375696a76b35ada 304 11.929 ms - -
+12:00:42 [[32mhttp[39m]: GET /api/admin/alerts 200 38.496 ms - 1980
+12:00:44 [[32mhttp[39m]: GET /api/auth/me 304 5.516 ms - -
+12:00:44 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 11.274 ms - -
+12:00:44 [[32mhttp[39m]: GET /api/favorites/ids 304 11.139 ms - -
+12:00:44 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0865aaa375696a76b35aed 304 9.437 ms - -
+12:00:44 [[32mhttp[39m]: GET /api/admin/alerts 200 31.510 ms - 1980
+12:00:44 [[32mhttp[39m]: GET /api/auth/me 304 7.312 ms - -
+12:00:44 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 11.894 ms - -
+12:00:44 [[32mhttp[39m]: GET /api/favorites/ids 304 11.856 ms - -
+12:00:44 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0865a9a375696a76b35ada 304 10.513 ms - -
+12:00:44 [[32mhttp[39m]: GET /api/admin/alerts 200 33.331 ms - 1980
+12:00:44 [[32mhttp[39m]: GET /api/auth/me 304 5.056 ms - -
+12:00:44 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 10.159 ms - -
+12:00:44 [[32mhttp[39m]: GET /api/favorites/ids 304 11.254 ms - -
+12:00:44 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0865a9a375696a76b35ada 304 10.800 ms - -
+12:00:44 [[32mhttp[39m]: GET /api/admin/alerts 200 34.304 ms - 1980
+ok - E33 responsive 1440–360 sin desbordes; edición móvil 1732px, variantes abiertas 1144px
+ok - E03b formulario inicialmente compacto en móvil: solo Información general abierta
+12:00:45 [[32mhttp[39m]: GET /api/auth/me 304 4.916 ms - -
+12:00:45 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 13.067 ms - -
+12:00:45 [[32mhttp[39m]: GET /api/favorites/ids 304 12.971 ms - -
+12:00:45 [[32mhttp[39m]: GET /api/admin/alerts 200 38.841 ms - 1980
+12:00:45 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0865a9a375696a76b35ada 304 11.334 ms - -
+12:00:46 [[32mhttp[39m]: GET /api/auth/me 304 8.072 ms - -
+12:00:46 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 26.386 ms - -
+12:00:46 [[32mhttp[39m]: GET /api/favorites/ids 304 23.825 ms - -
+12:00:46 [[32mhttp[39m]: GET /api/admin/alerts 200 50.368 ms - 1980
+ok - E32b teclado en las secciones (Enter y Espacio), foco visible y vista previa con el formato real

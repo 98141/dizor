@@ -1,0 +1,15 @@
+{
+  "suite": "frontend/test/navigation-next-browser.cjs",
+  "substitutions": {
+    "frontend/test/navigation-next-browser.cjs": [
+      {
+        "from": "Movimientos e historial",
+        "to": "Historial de ventas, ajustes y cambios"
+      }
+    ]
+  },
+  "applied": {
+    "frontend\\test\\navigation-next-browser.cjs :: Movimientos e historial": 2
+  },
+  "exitCode": 0
+}

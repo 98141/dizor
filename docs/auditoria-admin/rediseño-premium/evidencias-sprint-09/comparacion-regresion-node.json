@@ -1,0 +1,17 @@
+{
+  "sprint09": {
+    "tests": 412,
+    "pass": 381,
+    "fail": 31
+  },
+  "HEAD_910349c": {
+    "tests": 402,
+    "pass": 371,
+    "fail": 31,
+    "source": "evidencias-sprint-08/regresion-node-HEAD.json"
+  },
+  "failedIdentical": true,
+  "onlyWithSprint09": [],
+  "onlyOnHEAD": [],
+  "note": "412 = 402 de HEAD + 10 pruebas backend del Sprint 08 (sin cambios en este sprint)"
+}

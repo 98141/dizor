@@ -876,7 +876,22 @@ export default function ProductForm({ productId, returnTo = "/admin/productos", 
                 onChange={(e) => setField("fullDescription", e.target.value)}
                 aria-invalid={invalid("fullDescription")}
                 aria-describedby={describedBy("fullDescription", "fullDescription-count")}
-                placeholder={`Ejemplo:
+                placeholder="Historia, materiales, medidas y cuidados. Usa «Formato» para ver títulos, viñetas e imágenes."
+              />
+              <span id="fullDescription-count" className="pe-count">{form.fullDescription.length}/8000</span>
+              {fieldError("fullDescription")}
+              {/* The one-line placeholder keeps an empty field short; the full example lives here. */}
+              <div id="pe-format-help" className="pe-format-help" hidden={!showFormatHelp}>
+                <p className="image-upload-hint">
+                  Formato: línea en blanco = nuevo bloque.{" "}
+                  <code># Título</code> o <code>#Título</code> se muestra en
+                  mayúsculas y negrita (sin el #).{" "}
+                  <code>- texto</code> = viñeta con sangría. Enter = salto de línea.{" "}
+                  <code>![texto alt](url)</code> = imagen (el texto entre{" "}
+                  <code>[]</code> no se ve en pantalla, solo ayuda a accesibilidad).
+                  Las fotos principales van en la galería del producto.
+                </p>
+                <pre>{`Ejemplo:
 
 Sombrero tejido a mano en palma de iraca.
 
@@ -888,19 +903,8 @@ Fibra natural de Sandoná, Nariño.
 - Acabado a mano
 - Ideal para clima cálido
 
-![Detalle del tejido](https://res.cloudinary.com/.../detalle.jpg)`}
-              />
-              <span id="fullDescription-count" className="pe-count">{form.fullDescription.length}/8000</span>
-              {fieldError("fullDescription")}
-              <p id="pe-format-help" className="image-upload-hint" hidden={!showFormatHelp}>
-                Formato: línea en blanco = nuevo bloque.{" "}
-                <code># Título</code> o <code>#Título</code> se muestra en
-                mayúsculas y negrita (sin el #).{" "}
-                <code>- texto</code> = viñeta con sangría. Enter = salto de línea.{" "}
-                <code>![texto alt](url)</code> = imagen (el texto entre{" "}
-                <code>[]</code> no se ve en pantalla, solo ayuda a accesibilidad).
-                Las fotos principales van en la galería del producto.
-              </p>
+![Detalle del tejido](https://res.cloudinary.com/.../detalle.jpg)`}</pre>
+              </div>
               {renderDescriptionPreview && <div id="pe-description-preview" className="pe-preview-body" hidden={!showDescriptionPreview} aria-label="Vista previa de la descripción" role="region">
                 {showDescriptionPreview && (renderDescriptionPreview(form.fullDescription, form.shortDescription) || <p className="image-upload-hint">Sin contenido que mostrar.</p>)}
               </div>}
@@ -979,9 +983,9 @@ Fibra natural de Sandoná, Nariño.
                         <svg aria-hidden="true" viewBox="0 0 20 20" width="18" height="18" fill="currentColor"><circle cx="4" cy="10" r="1.6" /><circle cx="10" cy="10" r="1.6" /><circle cx="16" cy="10" r="1.6" /></svg>
                       </button>
                       <ul id={`pe-image-menu-${index}`} role="menu" aria-label={`Imagen ${index + 1}`} className="pe-menu__list" hidden={!open} onKeyDown={(e) => menuKeys(e, index)}>
-                        {!isMain && <li role="none"><button type="button" role="menuitem" tabIndex={-1} onClick={() => menuAction(index, "main")}>Hacer principal</button></li>}
-                        <li role="none"><button type="button" role="menuitem" tabIndex={-1} onClick={() => menuAction(index, "preview")}>Ver ampliada</button></li>
-                        <li role="none"><button type="button" role="menuitem" tabIndex={-1} className="pe-menu__danger" onClick={() => menuAction(index, "remove")}>Eliminar</button></li>
+                        {!isMain && <li role="none"><button type="button" role="menuitem" tabIndex={-1} className="pe-menu__item" onClick={() => menuAction(index, "main")}>Hacer principal</button></li>}
+                        <li role="none"><button type="button" role="menuitem" tabIndex={-1} className="pe-menu__item" onClick={() => menuAction(index, "preview")}>Ver ampliada</button></li>
+                        <li role="none"><button type="button" role="menuitem" tabIndex={-1} className="pe-menu__item pe-menu__danger" onClick={() => menuAction(index, "remove")}>Eliminar</button></li>
                       </ul>
                     </div>
                   </li>
@@ -1203,7 +1207,7 @@ Fibra natural de Sandoná, Nariño.
       </div>
 
       <div className="pe-savebar">
-        <p className="pe-savebar__status" aria-live="polite">{statusText}</p>
+        <p className="pe-savebar__status" aria-live="polite" data-idle={!saving && !ambiguous && !hasChanges || undefined}>{statusText}</p>
         <div className="pe-savebar__actions">
           <Link href={returnTo} className="admin-btn admin-btn--tertiary">Cancelar</Link>
           {ambiguous && <button type="button" className="admin-btn" disabled={verifying} aria-busy={verifying} onClick={verifySave}>Comprobar guardado</button>}

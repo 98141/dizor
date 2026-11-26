@@ -1,0 +1,4 @@
+▲ Next.js 16.2.6
+- Local:         http://127.0.0.1:63007
+- Network:       http://127.0.0.1:63007
+✓ Ready in 390ms

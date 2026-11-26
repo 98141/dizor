@@ -1,0 +1,445 @@
+(node:25664) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:25664) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:25664) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:25664) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:25664) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:25664) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+11:50:29 [[32mhttp[39m]: POST /api/auth/login 200 460.003 ms - 168
+11:50:29 [[32mhttp[39m]: POST /api/auth/login 200 374.149 ms - 169
+11:50:30 [[32mhttp[39m]: POST /api/auth/login 200 503.328 ms - 174
+11:50:30 [[32mhttp[39m]: POST /api/auth/login 200 635.742 ms - 173
+(node:25664) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+11:50:31 [[32mhttp[39m]: POST /api/checkout/orders 201 181.026 ms - 371
+11:51:17 [[32mhttp[39m]: GET /api/auth/me 200 11.682 ms - 212
+11:51:17 [[32mhttp[39m]: GET /api/favorites/ids 200 25.439 ms - 47
+11:51:17 [[32mhttp[39m]: GET /api/admin/dashboard/analytics?period=30d 200 49.340 ms - 3741
+11:51:17 [[32mhttp[39m]: GET /api/admin/dashboard 200 79.205 ms - 2899
+11:51:17 [[32mhttp[39m]: GET /api/admin/alerts 200 106.218 ms - 3945
+11:51:17 [[32mhttp[39m]: GET /api/auth/me 200 8.246 ms - 207
+11:51:18 [[32mhttp[39m]: GET /api/favorites/ids 304 20.979 ms - -
+11:51:18 [[32mhttp[39m]: GET /api/admin/dashboard/analytics?period=30d 200 42.804 ms - 3741
+11:51:18 [[32mhttp[39m]: GET /api/admin/dashboard 304 56.455 ms - -
+11:51:18 [[32mhttp[39m]: GET /api/admin/alerts 200 84.340 ms - 3945
+11:51:18 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 14.418 ms - 970
+11:51:18 [[32mhttp[39m]: GET /api/admin/alerts 200 38.874 ms - 3945
+11:51:18 [[32mhttp[39m]: GET /api/auth/me 304 5.745 ms - -
+11:51:18 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado]&page=1 200 13.231 ms - 970
+11:51:18 [[32mhttp[39m]: GET /api/favorites/ids 304 12.506 ms - -
+11:51:18 [[32mhttp[39m]: GET /api/admin/alerts 200 41.113 ms - 3945
+11:51:18 [[32mhttp[39m]: GET /api/content/appearance 200 4.403 ms - 126
+11:51:18 [[32mhttp[39m]: GET /api/content/appearance 200 4.181 ms - 126
+11:51:18 [[32mhttp[39m]: GET /api/admin/orders/6b0863573b593ec6d2d7de29 200 21.646 ms - 2629
+11:51:18 [[32mhttp[39m]: GET /api/admin/alerts 200 50.073 ms - 3945
+11:51:18 [[32mhttp[39m]: GET /api/admin/orders/6b0863573b593ec6d2d7de29/communications?page=1 200 20.225 ms - 1096
+11:51:19 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado]&page=1 304 16.735 ms - -
+11:51:19 [[32mhttp[39m]: GET /api/admin/alerts 200 42.248 ms - 3945
+11:51:19 [[32mhttp[39m]: GET /api/admin/catalog/meta 200 34.025 ms - 842
+11:51:19 [[32mhttp[39m]: GET /api/admin/catalog/products 200 45.664 ms - 2095
+11:51:19 [[32mhttp[39m]: GET /api/admin/alerts 200 90.787 ms - 3945
+11:51:19 [[32mhttp[39m]: GET /api/admin/catalog/products?q=[redactado] 200 15.380 ms - 2095
+11:51:19 [[32mhttp[39m]: GET /api/auth/me 304 9.021 ms - -
+11:51:19 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 23.425 ms - -
+11:51:19 [[32mhttp[39m]: GET /api/favorites/ids 304 22.456 ms - -
+11:51:19 [[32mhttp[39m]: GET /api/admin/catalog/products?view=[redactado]&productId=[redactado]&variantId=[redactado] 200 31.963 ms - 2095
+11:51:20 [[32mhttp[39m]: GET /api/admin/alerts 200 54.002 ms - 3945
+11:51:20 [[32mhttp[39m]: GET /api/auth/me 304 6.194 ms - -
+11:51:20 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 19.179 ms - -
+11:51:20 [[32mhttp[39m]: GET /api/favorites/ids 304 17.944 ms - -
+11:51:20 [[32mhttp[39m]: GET /api/admin/catalog/products?q=[redactado]&page=1 200 26.641 ms - 2095
+11:51:20 [[32mhttp[39m]: GET /api/admin/alerts 200 53.657 ms - 3945
+11:51:20 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 24.031 ms - -
+11:51:20 [[32mhttp[39m]: GET /api/admin/alerts 200 54.482 ms - 3945
+11:51:20 [[32mhttp[39m]: GET /api/admin/catalog/products/6b0863563b593ec6d2d7de09 200 13.151 ms - 1502
+11:51:20 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 15.326 ms - -
+11:51:20 [[32mhttp[39m]: GET /api/admin/catalog/products?q=[redactado]&page=1 304 18.782 ms - -
+11:51:20 [[32mhttp[39m]: GET /api/admin/alerts 200 45.823 ms - 3945
+11:51:20 [[32mhttp[39m]: GET /api/auth/me 304 7.823 ms - -
+11:51:20 [[32mhttp[39m]: GET /api/favorites/ids 304 24.009 ms - -
+11:51:20 [[32mhttp[39m]: GET /api/admin/dashboard/analytics?period=30d 200 59.744 ms - 3741
+11:51:20 [[32mhttp[39m]: GET /api/admin/dashboard 304 73.733 ms - -
+11:51:20 [[32mhttp[39m]: GET /api/admin/alerts 200 93.571 ms - 3945
+11:51:21 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 19.242 ms - -
+11:51:21 [[32mhttp[39m]: GET /api/admin/catalog/products 304 26.346 ms - -
+11:51:21 [[32mhttp[39m]: GET /api/admin/alerts 200 55.832 ms - 3945
+11:51:21 [[32mhttp[39m]: GET /api/admin/inventory/history?view=[redactado] 200 26.768 ms - 778
+11:51:21 [[32mhttp[39m]: GET /api/admin/inventory/history/stats 200 30.452 ms - 152
+11:51:21 [[32mhttp[39m]: GET /api/auth/me 304 7.168 ms - -
+11:51:21 [[32mhttp[39m]: GET /api/admin/catalog/colors 200 23.325 ms - 223
+11:51:21 [[32mhttp[39m]: GET /api/favorites/ids 304 22.425 ms - -
+11:51:21 [[32mhttp[39m]: GET /api/admin/alerts 200 53.118 ms - 3945
+11:51:21 [[32mhttp[39m]: GET /api/admin/catalog/sizes 200 8.812 ms - 388
+11:51:21 [[32mhttp[39m]: GET /api/auth/me 304 7.132 ms - -
+11:51:21 [[32mhttp[39m]: GET /api/admin/catalog/sizes 304 13.310 ms - -
+11:51:21 [[32mhttp[39m]: GET /api/favorites/ids 304 16.050 ms - -
+11:51:21 [[32mhttp[39m]: GET /api/admin/alerts 200 45.337 ms - 3945
+11:51:21 [[32mhttp[39m]: GET /api/auth/me 304 5.803 ms - -
+11:51:22 [[32mhttp[39m]: GET /api/favorites/ids 304 23.086 ms - -
+11:51:22 [[32mhttp[39m]: GET /api/admin/dashboard/analytics?period=30d 200 48.645 ms - 3741
+11:51:22 [[32mhttp[39m]: GET /api/admin/dashboard 304 61.360 ms - -
+11:51:22 [[32mhttp[39m]: GET /api/admin/alerts 200 78.512 ms - 3945
+11:51:22 [[32mhttp[39m]: GET /api/admin/content/pages 200 27.748 ms - 43
+11:51:22 [[32mhttp[39m]: GET /api/admin/content/banners 200 24.388 ms - 45
+11:51:22 [[32mhttp[39m]: GET /api/admin/content/home 200 40.272 ms - 3679
+11:51:22 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 200 27.382 ms - 68
+11:51:22 [[32mhttp[39m]: GET /api/admin/marketing/settings 200 39.252 ms - 624
+11:51:22 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 200 17.468 ms - 62
+11:51:22 [[32mhttp[39m]: GET /api/admin/coupons 200 16.868 ms - 14
+11:51:22 [[32mhttp[39m]: GET /api/admin/settings 200 17.904 ms - 489
+11:51:22 [[32mhttp[39m]: GET /api/admin/alerts 200 78.164 ms - 3945
+11:51:22 [[32mhttp[39m]: GET /api/admin/reviews?aprobado=[redactado]&page=1&limit=10 200 14.962 ms - 85
+11:51:22 [[32mhttp[39m]: GET /api/auth/me 304 5.676 ms - -
+11:51:22 [[32mhttp[39m]: GET /api/admin/content/home 304 29.582 ms - -
+11:51:22 [[32mhttp[39m]: GET /api/admin/content/pages 304 30.926 ms - -
+11:51:22 [[32mhttp[39m]: GET /api/admin/content/banners 304 29.833 ms - -
+11:51:22 [[32mhttp[39m]: GET /api/favorites/ids 304 29.346 ms - -
+11:51:22 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 26.846 ms - -
+11:51:22 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 16.679 ms - -
+11:51:22 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 15.748 ms - -
+11:51:22 [[32mhttp[39m]: GET /api/admin/coupons 304 15.005 ms - -
+11:51:22 [[32mhttp[39m]: GET /api/admin/settings 304 15.918 ms - -
+11:51:22 [[32mhttp[39m]: GET /api/admin/alerts 200 80.701 ms - 3945
+11:51:23 [[32mhttp[39m]: GET /api/admin/marketing/newsletter/export 200 25.293 ms - 82
+11:51:23 [[32mhttp[39m]: GET /api/auth/me 304 8.864 ms - -
+11:51:23 [[32mhttp[39m]: GET /api/admin/content/home 304 24.205 ms - -
+11:51:23 [[32mhttp[39m]: GET /api/admin/content/pages 304 22.194 ms - -
+11:51:23 [[32mhttp[39m]: GET /api/admin/content/banners 304 22.262 ms - -
+11:51:23 [[32mhttp[39m]: GET /api/favorites/ids 304 22.060 ms - -
+11:51:23 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 23.753 ms - -
+11:51:23 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 18.806 ms - -
+11:51:23 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 18.364 ms - -
+11:51:23 [[32mhttp[39m]: GET /api/admin/coupons 304 18.753 ms - -
+11:51:23 [[32mhttp[39m]: GET /api/admin/settings 304 18.653 ms - -
+11:51:23 [[32mhttp[39m]: GET /api/admin/alerts 200 77.382 ms - 3945
+11:51:23 [[32mhttp[39m]: GET /api/auth/me 304 6.752 ms - -
+11:51:23 [[32mhttp[39m]: GET /api/admin/content/home 304 24.599 ms - -
+11:51:23 [[32mhttp[39m]: GET /api/admin/content/pages 304 23.098 ms - -
+11:51:23 [[32mhttp[39m]: GET /api/admin/content/banners 304 21.903 ms - -
+11:51:23 [[32mhttp[39m]: GET /api/favorites/ids 304 21.622 ms - -
+11:51:23 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 19.412 ms - -
+11:51:23 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 16.015 ms - -
+11:51:23 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 15.971 ms - -
+11:51:23 [[32mhttp[39m]: GET /api/admin/coupons 304 15.618 ms - -
+11:51:23 [[32mhttp[39m]: GET /api/admin/settings 304 17.503 ms - -
+11:51:23 [[32mhttp[39m]: GET /api/admin/alerts 200 73.456 ms - 3945
+11:51:24 [[32mhttp[39m]: GET /api/auth/me 304 10.240 ms - -
+11:51:24 [[32mhttp[39m]: GET /api/admin/content/home 304 31.408 ms - -
+11:51:24 [[32mhttp[39m]: GET /api/admin/content/pages 304 31.202 ms - -
+11:51:24 [[32mhttp[39m]: GET /api/admin/content/banners 304 31.434 ms - -
+11:51:24 [[32mhttp[39m]: GET /api/favorites/ids 304 31.310 ms - -
+11:51:24 [[32mhttp[39m]: GET /api/admin/reviews?aprobado=[redactado]&page=1&limit=10 304 42.721 ms - -
+11:51:24 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 26.621 ms - -
+11:51:24 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 24.778 ms - -
+11:51:24 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 24.853 ms - -
+11:51:24 [[32mhttp[39m]: GET /api/admin/coupons 304 24.713 ms - -
+11:51:24 [[32mhttp[39m]: GET /api/admin/settings 304 27.180 ms - -
+11:51:24 [[32mhttp[39m]: GET /api/admin/alerts 200 95.572 ms - 3945
+11:51:24 [[32mhttp[39m]: GET /api/auth/me 304 8.233 ms - -
+11:51:24 [[32mhttp[39m]: GET /api/admin/home-images 200 40.725 ms - 156
+11:51:24 [[32mhttp[39m]: GET /api/products/filters 200 41.510 ms - 1199
+11:51:24 [[32mhttp[39m]: GET /api/admin/content/home 304 42.679 ms - -
+11:51:24 [[32mhttp[39m]: GET /api/admin/content/pages 304 42.119 ms - -
+11:51:24 [[32mhttp[39m]: GET /api/admin/content/banners 304 41.994 ms - -
+11:51:24 [[32mhttp[39m]: GET /api/favorites/ids 304 29.331 ms - -
+11:51:24 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 27.482 ms - -
+11:51:24 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 25.994 ms - -
+11:51:24 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 25.672 ms - -
+11:51:25 [[32mhttp[39m]: GET /api/admin/coupons 304 29.449 ms - -
+11:51:25 [[32mhttp[39m]: GET /api/admin/settings 304 8.993 ms - -
+11:51:25 [[32mhttp[39m]: GET /api/admin/alerts 200 111.401 ms - 3945
+11:51:25 [[32mhttp[39m]: GET /api/auth/me 304 5.689 ms - -
+11:51:25 [[32mhttp[39m]: GET /api/admin/content/home 304 26.620 ms - -
+11:51:25 [[32mhttp[39m]: GET /api/admin/content/pages 304 26.137 ms - -
+11:51:25 [[32mhttp[39m]: GET /api/admin/content/banners 304 26.218 ms - -
+11:51:25 [[32mhttp[39m]: GET /api/favorites/ids 304 24.164 ms - -
+11:51:25 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 22.599 ms - -
+11:51:25 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 17.466 ms - -
+11:51:25 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 16.966 ms - -
+11:51:25 [[32mhttp[39m]: GET /api/admin/coupons 304 16.130 ms - -
+11:51:25 [[32mhttp[39m]: GET /api/admin/settings 304 19.748 ms - -
+11:51:25 [[32mhttp[39m]: GET /api/admin/alerts 200 76.655 ms - 3945
+11:51:25 [[32mhttp[39m]: GET /api/auth/me 304 5.156 ms - -
+11:51:25 [[32mhttp[39m]: GET /api/admin/inventory/history 200 29.405 ms - 778
+11:51:25 [[32mhttp[39m]: GET /api/admin/inventory/history/stats 304 35.344 ms - -
+11:51:25 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 33.529 ms - -
+11:51:25 [[32mhttp[39m]: GET /api/favorites/ids 304 29.406 ms - -
+11:51:25 [[32mhttp[39m]: GET /api/admin/alerts 200 74.408 ms - 3945
+11:51:25 [[32mhttp[39m]: GET /api/auth/me 304 7.916 ms - -
+11:51:25 [[32mhttp[39m]: GET /api/admin/coupons 304 22.124 ms - -
+11:51:25 [[32mhttp[39m]: GET /api/favorites/ids 304 14.880 ms - -
+11:51:25 [[32mhttp[39m]: GET /api/admin/alerts 200 60.251 ms - 3945
+11:51:25 [[32mhttp[39m]: GET /api/auth/me 304 9.152 ms - -
+11:51:25 [[32mhttp[39m]: GET /api/admin/audit?page=1&limit=15 200 30.208 ms - 1389
+11:51:25 [[32mhttp[39m]: GET /api/admin/audit/stats 200 29.159 ms - 102
+11:51:25 [[32mhttp[39m]: GET /api/favorites/ids 304 28.231 ms - -
+11:51:25 [[32mhttp[39m]: GET /api/admin/alerts 200 72.509 ms - 3945
+11:51:25 [[32mhttp[39m]: GET /api/auth/me 304 5.750 ms - -
+11:51:26 [[32mhttp[39m]: GET /api/admin/content/home 304 22.503 ms - -
+11:51:26 [[32mhttp[39m]: GET /api/admin/content/pages 304 21.749 ms - -
+11:51:26 [[32mhttp[39m]: GET /api/admin/reviews?aprobado=[redactado]&page=1&limit=10 304 35.881 ms - -
+11:51:26 [[32mhttp[39m]: GET /api/admin/content/banners 304 20.417 ms - -
+11:51:26 [[32mhttp[39m]: GET /api/favorites/ids 304 22.762 ms - -
+11:51:26 [[32mhttp[39m]: GET /api/admin/marketing/settings 304 20.891 ms - -
+11:51:26 [[32mhttp[39m]: GET /api/admin/marketing/newsletter?limit=50 304 19.553 ms - -
+11:51:26 [[32mhttp[39m]: GET /api/admin/marketing/abandoned-carts?limit=30 304 18.799 ms - -
+11:51:26 [[32mhttp[39m]: GET /api/admin/coupons 304 21.195 ms - -
+11:51:26 [[32mhttp[39m]: GET /api/admin/settings 304 23.946 ms - -
+11:51:26 [[32mhttp[39m]: GET /api/admin/alerts 200 89.683 ms - 3945
+11:51:26 [[32mhttp[39m]: GET /api/auth/me 304 8.955 ms - -
+11:51:26 [[32mhttp[39m]: GET /api/admin/settings 304 20.982 ms - -
+11:51:26 [[32mhttp[39m]: GET /api/favorites/ids 304 22.912 ms - -
+11:51:26 [[32mhttp[39m]: GET /api/admin/alerts 200 64.153 ms - 3945
+11:51:26 [[32mhttp[39m]: GET /api/admin/settings 200 21.357 ms - 489
+11:51:26 [[32mhttp[39m]: PATCH /api/admin/settings 200 16.614 ms - 489
+11:51:26 [[32mhttp[39m]: GET /api/admin/settings 200 6.220 ms - 489
+11:51:27 [[32mhttp[39m]: GET /api/auth/me 304 5.286 ms - -
+11:51:27 [[32mhttp[39m]: GET /api/admin/pqr?page=1 200 18.272 ms - 53
+11:51:27 [[32mhttp[39m]: GET /api/favorites/ids 304 17.407 ms - -
+11:51:27 [[32mhttp[39m]: GET /api/admin/alerts 200 45.420 ms - 3945
+11:51:27 [[32mhttp[39m]: GET /api/auth/me 304 7.903 ms - -
+11:51:27 [[32mhttp[39m]: GET /api/favorites/ids 304 15.527 ms - -
+11:51:27 [[32mhttp[39m]: GET /api/admin/special-requests?q=[redactado]&type=wholesale&status=&page=2&limit=15 200 18.208 ms - 690
+11:51:27 [[32mhttp[39m]: GET /api/admin/alerts 200 44.851 ms - 3945
+11:51:27 [[32mhttp[39m]: GET /api/admin/special-requests/6b0863563b593ec6d2d7de15 200 13.172 ms - 687
+11:51:27 [[32mhttp[39m]: GET /api/admin/alerts 200 40.789 ms - 3945
+11:51:27 [[32mhttp[39m]: GET /api/admin/special-requests?q=[redactado]&type=wholesale&status=&page=2&limit=15 304 13.532 ms - -
+11:51:27 [[32mhttp[39m]: GET /api/admin/alerts 200 48.606 ms - 3945
+11:51:27 [[32mhttp[39m]: GET /api/auth/me 304 7.048 ms - -
+11:51:27 [[32mhttp[39m]: GET /api/favorites/ids 304 16.204 ms - -
+11:51:27 [[32mhttp[39m]: GET /api/admin/dashboard/analytics?period=30d 200 34.632 ms - 3741
+11:51:27 [[32mhttp[39m]: GET /api/admin/dashboard 200 48.062 ms - 3139
+11:51:27 [[32mhttp[39m]: GET /api/admin/alerts 200 64.505 ms - 3945
+11:51:28 [[32mhttp[39m]: GET /api/admin/special-requests?q=[redactado]&type=&status=&page=1&limit=15 200 20.040 ms - 4656
+11:51:28 [[32mhttp[39m]: GET /api/admin/alerts 200 47.426 ms - 3945
+11:51:28 [[32mhttp[39m]: GET /api/admin/special-requests/6b0863563b593ec6d2d7de17 200 16.141 ms - 687
+11:51:28 [[32mhttp[39m]: GET /api/admin/alerts 200 45.734 ms - 3945
+11:51:28 [[32mhttp[39m]: PATCH /api/admin/special-requests/6b0863563b593ec6d2d7de17/status 200 27.404 ms - 846
+11:51:28 [[32mhttp[39m]: GET /api/auth/me 304 5.021 ms - -
+11:51:28 [[32mhttp[39m]: GET /api/favorites/ids 304 17.133 ms - -
+11:51:28 [[32mhttp[39m]: GET /api/admin/dashboard/analytics?period=30d 200 46.593 ms - 3741
+11:51:28 [[32mhttp[39m]: GET /api/admin/dashboard 200 60.441 ms - 3399
+11:51:28 [[32mhttp[39m]: GET /api/admin/alerts 200 73.798 ms - 3945
+11:51:29 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 17.003 ms - 977
+11:51:29 [[32mhttp[39m]: GET /api/admin/alerts 200 41.866 ms - 3945
+11:51:29 [[32mhttp[39m]: GET /api/admin/orders/6b0863573b593ec6d2d7de29 304 11.999 ms - -
+11:51:29 [[32mhttp[39m]: GET /api/admin/alerts 200 33.774 ms - 3945
+11:51:29 [[32mhttp[39m]: GET /api/admin/orders/6b0863573b593ec6d2d7de29/communications?page=1 304 16.349 ms - -
+11:51:29 [[32mhttp[39m]: GET /api/auth/me 304 5.137 ms - -
+11:51:29 [[32mhttp[39m]: GET /api/favorites/ids 304 15.250 ms - -
+11:51:29 [[32mhttp[39m]: GET /api/admin/dashboard/analytics?period=30d 200 35.352 ms - 3741
+11:51:29 [[32mhttp[39m]: GET /api/admin/dashboard 304 43.174 ms - -
+11:51:29 [[32mhttp[39m]: GET /api/admin/alerts 200 56.728 ms - 3945
+11:51:29 [[32mhttp[39m]: GET /api/admin/alerts 200 30.643 ms - 3945
+11:51:29 [[32mhttp[39m]: GET /api/admin/alerts 200 32.593 ms - 3945
+11:51:29 [[32mhttp[39m]: GET /api/auth/me 304 5.224 ms - -
+11:51:29 [[32mhttp[39m]: GET /api/favorites/ids 304 13.215 ms - -
+11:51:29 [[32mhttp[39m]: GET /api/admin/dashboard/analytics?period=30d 200 28.886 ms - 3741
+11:51:29 [[32mhttp[39m]: GET /api/admin/dashboard 304 37.410 ms - -
+11:51:29 [[32mhttp[39m]: GET /api/admin/alerts 200 55.101 ms - 3945
+11:51:30 [[32mhttp[39m]: GET /api/admin/alerts 200 45.071 ms - 3945
+11:51:30 [[32mhttp[39m]: GET /api/admin/alerts 200 37.209 ms - 3945
+11:51:30 [[32mhttp[39m]: GET /api/auth/me 200 4.606 ms - 212
+11:51:30 [[32mhttp[39m]: GET /api/favorites/ids 304 10.930 ms - -
+11:51:30 [[32mhttp[39m]: GET /api/admin/dashboard/analytics?period=30d 200 26.888 ms - 3741
+11:51:30 [[32mhttp[39m]: GET /api/admin/dashboard 304 38.468 ms - -
+11:51:30 [[32mhttp[39m]: GET /api/admin/alerts 200 51.186 ms - 3945
+11:51:30 [[32mhttp[39m]: GET /api/admin/alerts 200 46.557 ms - 3945
+11:51:30 [[32mhttp[39m]: GET /api/admin/finance/report?range=month 200 49.235 ms - 3538
+11:51:30 [[32mhttp[39m]: GET /api/auth/me 304 4.106 ms - -
+11:51:30 [[32mhttp[39m]: GET /api/admin/users 200 14.073 ms - 451
+11:51:30 [[32mhttp[39m]: GET /api/favorites/ids 304 13.768 ms - -
+11:51:31 [[32mhttp[39m]: GET /api/admin/alerts 200 38.783 ms - 3945
+11:51:31 [[32mhttp[39m]: GET /api/auth/me 200 4.826 ms - 208
+11:51:31 [[32mhttp[39m]: GET /api/favorites/ids 304 5.367 ms - -
+11:51:31 [[32mhttp[39m]: GET /api/admin/orders/stats 200 12.842 ms - 172
+11:51:31 [[32mhttp[39m]: GET /api/admin/orders 200 7.572 ms - 949
+11:51:31 [[32mhttp[39m]: GET /api/admin/orders/6b0863573b593ec6d2d7de29 200 6.943 ms - 2600
+11:51:31 [[32mhttp[39m]: GET /api/admin/orders/6b0863573b593ec6d2d7de29/communications?page=1 200 14.316 ms - 494
+11:51:31 [[32mhttp[39m]: PATCH /api/admin/orders/6b0863573b593ec6d2d7de29/status 200 33.627 ms - 844
+11:51:31 [[32mhttp[39m]: GET /api/admin/orders/6b0863573b593ec6d2d7de29 200 11.793 ms - 2750
+11:51:31 [[32mhttp[39m]: GET /api/admin/orders/6b0863573b593ec6d2d7de29/communications?page=1 304 18.050 ms - -
+11:51:31 [[32mhttp[39m]: GET /api/admin/special-requests?q=[redactado]&type=&status=&page=1&limit=15 200 9.312 ms - 4658
+11:51:31 [[32mhttp[39m]: GET /api/admin/special-requests/6b0863563b593ec6d2d7de17 200 6.597 ms - 846
+11:51:32 [[32mhttp[39m]: GET /api/admin/orders/stats 200 13.630 ms - 172
+11:51:32 [[32mhttp[39m]: GET /api/auth/me 200 5.785 ms - 207
+11:51:32 [[32mhttp[39m]: GET /api/favorites/ids 304 14.896 ms - -
+11:51:32 [[32mhttp[39m]: GET /api/admin/dashboard/analytics?period=30d 200 35.551 ms - 3741
+11:51:32 [[32mhttp[39m]: GET /api/admin/dashboard 200 43.480 ms - 3676
+11:51:32 [[32mhttp[39m]: GET /api/admin/alerts 200 55.513 ms - 3950
+11:51:32 [[32mhttp[39m]: GET /api/auth/me 304 5.832 ms - -
+11:51:32 [[32mhttp[39m]: GET /api/favorites/ids 304 16.021 ms - -
+11:51:32 [[32mhttp[39m]: GET /api/admin/dashboard/analytics?period=30d 200 32.000 ms - 3741
+11:51:32 [[32mhttp[39m]: GET /api/admin/dashboard 304 40.886 ms - -
+11:51:32 [[32mhttp[39m]: GET /api/admin/alerts 200 55.188 ms - 3950
+11:51:33 [[32mhttp[39m]: GET /api/auth/me 304 5.529 ms - -
+11:51:33 [[32mhttp[39m]: GET /api/favorites/ids 304 25.496 ms - -
+11:51:33 [[32mhttp[39m]: GET /api/admin/dashboard/analytics?period=30d 200 39.039 ms - 3741
+11:51:33 [[32mhttp[39m]: GET /api/admin/dashboard 304 51.224 ms - -
+11:51:33 [[32mhttp[39m]: GET /api/admin/alerts 200 64.653 ms - 3950
+11:51:34 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 27.245 ms - -
+11:51:34 [[32mhttp[39m]: GET /api/admin/catalog/products 304 33.045 ms - -
+11:51:34 [[32mhttp[39m]: GET /api/admin/alerts 200 60.601 ms - 3950
+11:51:34 [[32mhttp[39m]: GET /api/auth/me 304 5.662 ms - -
+11:51:34 [[32mhttp[39m]: GET /api/favorites/ids 304 14.186 ms - -
+11:51:34 [[32mhttp[39m]: GET /api/admin/dashboard/analytics?period=30d 200 28.836 ms - 3741
+11:51:34 [[32mhttp[39m]: GET /api/admin/dashboard 304 39.770 ms - -
+11:51:34 [[32mhttp[39m]: GET /api/admin/alerts 200 51.758 ms - 3950
+11:51:35 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 14.338 ms - -
+11:51:35 [[32mhttp[39m]: GET /api/admin/catalog/products 304 19.374 ms - -
+11:51:35 [[32mhttp[39m]: GET /api/admin/alerts 200 39.392 ms - 3950
+11:51:35 [[32mhttp[39m]: GET /api/auth/me 304 7.111 ms - -
+11:51:35 [[32mhttp[39m]: GET /api/favorites/ids 304 15.793 ms - -
+11:51:35 [[32mhttp[39m]: GET /api/admin/dashboard/analytics?period=30d 200 33.711 ms - 3741
+11:51:35 [[32mhttp[39m]: GET /api/admin/dashboard 304 43.586 ms - -
+11:51:35 [[32mhttp[39m]: GET /api/admin/alerts 200 57.046 ms - 3950
+11:51:36 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 17.951 ms - -
+11:51:36 [[32mhttp[39m]: GET /api/admin/catalog/products 304 24.863 ms - -
+11:51:36 [[32mhttp[39m]: GET /api/admin/alerts 200 48.200 ms - 3950
+11:51:36 [[32mhttp[39m]: GET /api/auth/me 304 4.551 ms - -
+11:51:36 [[32mhttp[39m]: GET /api/favorites/ids 304 3.254 ms - -
+11:51:36 [[32mhttp[39m]: GET /api/checkout/orders 200 10.127 ms - 44
+11:51:36 [[32mhttp[39m]: GET /api/special-requests/mine 200 8.732 ms - 46
+11:51:36 [[32mhttp[39m]: GET /api/auth/me 200 4.333 ms - 208
+11:51:36 [[32mhttp[39m]: GET /api/favorites/ids 304 4.256 ms - -
+11:51:36 [[32mhttp[39m]: GET /api/checkout/orders 304 22.371 ms - -
+11:51:36 [[32mhttp[39m]: GET /api/special-requests/mine 304 17.706 ms - -
+11:51:37 [[32mhttp[39m]: GET /api/content/pages 200 9.633 ms - 43
+11:51:37 [[32mhttp[39m]: GET /api/products/filters 200 20.948 ms - 1199
+11:51:37 [[32mhttp[39m]: GET /api/content/home 200 26.999 ms - 3830
+11:51:37 [[32mhttp[39m]: GET /api/visits/count 200 6.570 ms - 30
+{
+  "checks": [
+    "P35 autenticación en carga sin exponer enlaces antes de conocer el rol",
+    "P01 superadministrador: ocho módulos por tareas",
+    "P02 administrador sin Finanzas ni Usuarios",
+    "P03 Inicio a bandeja operativa sin opciones laterales por bandeja",
+    "P04 detalle de pedido conserva bandeja y página",
+    "P05 buscar producto, consultar agotado y abrir ajuste",
+    "P06 enlace por producto/variante conserva foco y selección Existencias",
+    "P07 regreso desde edición conserva filtros",
+    "P08 Movimientos integrado y exportación PDF conservada",
+    "P09 taxonomía por URL, cambio de pestaña y recarga",
+    "P10 reseñas editoriales separadas de Marketing",
+    "P11 Marketing y exportación de newsletter contextual",
+    "P12 carritos históricos visibles, envío de recordatorios deshabilitado",
+    "P13 exportación de pedidos en su contexto sin implementación duplicada",
+    "P14 rutas históricas reales sin 404",
+    "P15 redirecciones históricas conservan parámetros adicionales",
+    "P16 configuración efectiva, importes históricos de solo lectura y transportadoras legibles",
+    "P17 Atención conserva PQR y Solicitudes como procesos distintos",
+    "P18 Solicitudes conserva búsqueda, tipo y página al volver",
+    "P19 solicitud respondida con componente y endpoint existentes",
+    "P20 comunicaciones accesibles sin cambiar su arquitectura",
+    "P21 alertas desde Inicio y campana sin módulo principal duplicado",
+    "P22 Finanzas visible para superadministrador",
+    "P23 Usuarios accesible desde Configuración",
+    "P24 vendedor gestiona pedido y solicitudes sin perder navegación",
+    "P25 expandir y contraer grupos accesibles, sin abrir todos",
+    "P26 navegación de teclado en escritorio",
+    "P27 escritorio, tablet 820, móviles 390/360 sin desbordamiento",
+    "P28 drawer: Escape, trampa de foco, fondo inert y retorno al disparador",
+    "P29 cierre móvil al navegar y restauración del scroll",
+    "P34 campana con alertas y desplegable sin desbordamiento móvil",
+    "P30 URL exclusiva no muestra Finanzas al administrador",
+    "P31 URL de PQR denegada al vendedor por guard real",
+    "P32 Next autenticado real sin errores de hidratación ni llamadas externas",
+    "P33 enlaces internos del menú resuelven en Next real para todos los roles"
+  ],
+  "tasks": [
+    {
+      "id": 1,
+      "path": "Inicio → Listos para preparar",
+      "interactions": 1,
+      "result": "Bandeja filtrada"
+    },
+    {
+      "id": 2,
+      "path": "Productos → buscar Sombrero → variantes → ajuste de L",
+      "interactions": 5,
+      "result": "Panel contextual de variante agotada"
+    },
+    {
+      "id": 5,
+      "path": "Productos → Movimientos",
+      "interactions": 2,
+      "result": "Historial de solo lectura"
+    },
+    {
+      "id": 3,
+      "path": "Tienda online → Reseñas",
+      "interactions": 2,
+      "result": "Moderación existente"
+    },
+    {
+      "id": 4,
+      "path": "Atención al cliente → Solicitudes → detalle → En revisión",
+      "interactions": 5,
+      "result": "Respuesta operativa registrada en fixture real; no correo"
+    },
+    {
+      "id": 6,
+      "path": "Inicio → Comunicaciones por revisar → pedido",
+      "interactions": 2,
+      "result": "Fallo de comunicación del fixture consultado, sin reenvío"
+    },
+    {
+      "id": 7,
+      "path": "Inicio → Finanzas (superadministrador)",
+      "interactions": 1,
+      "result": "Panel financiero existente"
+    },
+    {
+      "id": 8,
+      "path": "Vendedor → Pedidos → Preparar → Solicitudes → detalle → Inicio",
+      "interactions": 6,
+      "result": "Preparación y shell vendedor conservados"
+    }
+  ],
+  "pageErrors": [],
+  "hydrationErrors": [],
+  "externalRequests": [],
+  "routes": [
+    "/admin",
+    "/admin",
+    "/admin/pedidos?tray=prepare&page=1",
+    "/admin/productos?view=stock&productId=6b0863563b593ec6d2d7de09&variantId=6b0863563b593ec6d2d7de0e",
+    "/admin/productos?q=Sombrero&page=1",
+    "/admin",
+    "/admin/catalogo?tab=colors",
+    "/admin",
+    "/admin/marketing?tab=newsletter",
+    "/admin/marketing?tab=carritos",
+    "/admin/contenido?tab=exports&scope=orders",
+    "/admin/resenas?term=conservar",
+    "/admin/home-imagenes?from=historial",
+    "/admin/contenido?tab=popup",
+    "/admin/inventario",
+    "/admin/cupones",
+    "/admin/auditoria",
+    "/admin/resenas?term=conservar",
+    "/admin/configuracion",
+    "/admin/pqr",
+    "/admin/solicitudes?q=NAV&type=wholesale&page=2",
+    "/admin",
+    "/admin",
+    "/admin",
+    "/admin",
+    "/admin",
+    "/admin/usuarios",
+    "/vendedor",
+    "/admin",
+    "/admin",
+    "/admin",
+    "/admin",
+    "/admin",
+    "/admin/finanzas",
+    "/admin/pqr"
+  ],
+  "isolatedNext": true,
+  "realBackend": true,
+  "settingsPayload": {
+    "taxEnabled": false,
+    "taxRate": 0
+  },
+  "passed": true
+}
