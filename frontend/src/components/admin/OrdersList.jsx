@@ -7,6 +7,7 @@ import { getAdminOrders, exportOrdersPdf } from "@/services/orderAdminService";
 import { formatCOP } from "@/lib/formatCurrency";
 import { ORDER_STATUS_LABELS, PAYMENT_STATUS_LABELS, PAYMENT_METHOD_LABELS, CARRIER_LABELS, SOURCE_LABELS, CHANNEL_ORIGIN_LABELS } from "@/lib/orderLabels";
 import { TRAYS } from "@/lib/orderWorkspace";
+import AdminSectionPicker from "./AdminSectionPicker";
 import { financePresentation, formatOrderListDate, isOperationalAction, orderStatusTone, shortenOrderNumber } from "@/lib/orderListPresentation.mjs";
 
 const ADVANCED = ["orderStatus", "paymentStatus", "from", "to", "carrier"];
@@ -133,12 +134,8 @@ function OrdersWorkspace({ basePath = "/admin/pedidos" }) {
           <span>{label}</span><span className="op-tray__count">{data?.counts?.[name] ?? "—"}</span>
         </Link>)}
       </nav>
-      <label className="op-field op-tray-select">
-        <span className="op-field__label">Bandeja</span>
-        <select aria-label="Bandeja de pedidos" value={trays[tray] ? tray : "all"} onChange={(event) => router.push(href({ tray: event.target.value, page: "" }))}>
-          {Object.entries(trays).map(([name, label]) => <option key={name} value={name}>{label} ({data?.counts?.[name] ?? "—"})</option>)}
-        </select>
-      </label>
+      <AdminSectionPicker className="op-field op-tray-select" label="Bandeja" navLabel="Bandeja de pedidos"
+        items={Object.entries(trays).map(([name, label]) => ({ key: name, label, count: data?.counts?.[name] ?? "—", href: href({ tray: name, page: "" }), current: (trays[tray] ? tray : "all") === name }))} />
     </div>
 
     <OrderFilterForm key={query} params={params} advancedCount={advancedCount} filtered={filtered} clearHref={clearHref} onApply={applyFilters} />

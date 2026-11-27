@@ -9,6 +9,7 @@ import { formatCOP } from "@/lib/formatCurrency";
 import { STOCK_LABELS, variantName } from "@/lib/catalogWorkspace";
 import ProductHistoryList from "./ProductHistoryList";
 import QuickStockAdjustment from "./QuickStockAdjustment";
+import AdminSectionPicker from "./AdminSectionPicker";
 
 const TONE = { healthy: "ok", low: "warn", out: "bad", inactive: "muted", review: "warn" };
 const count = (n, one, many) => `${n} ${n === 1 ? one : many}`;
@@ -124,12 +125,9 @@ function Workspace({ initialView = "products" }) {
       {trays.map(([name, label]) => <Link key={name} className="op-tray" aria-current={view === name ? "page" : undefined} href={href({ view: name, page: "" }, "/admin/productos")}>{label}</Link>)}
       <Link className="op-tray" href="/admin/catalogo">Configuración del catálogo</Link>
     </nav>
-    <label className="op-field op-section-select">Sección
-      <select aria-label="Sección del catálogo" value={view} onChange={(event) => { const value = event.target.value; if (value === "taxonomy") router.push("/admin/catalogo"); else router.push(href({ view: value, page: "" }, "/admin/productos")); }}>
-        {trays.map(([name, label]) => <option key={name} value={name}>{label}</option>)}
-        <option value="taxonomy">Configuración del catálogo</option>
-      </select>
-    </label>
+    <AdminSectionPicker className="op-field op-section-select" label="Sección" navLabel="Sección del catálogo"
+      items={[...trays.map(([name, label]) => ({ key: name, label, href: href({ view: name, page: "" }, "/admin/productos"), current: view === name })),
+        { key: "taxonomy", label: "Configuración del catálogo", href: "/admin/catalogo", current: false }]} />
     <p className="sr-only" role="status" aria-live="polite">{notice}</p>
     {message && <p className="op-notice op-notice--ok" role="status">{message}</p>}
     {view === "movements" ? admin ? <ProductHistoryList /> : <p role="alert">El historial de movimientos está reservado al administrador.</p> : <>

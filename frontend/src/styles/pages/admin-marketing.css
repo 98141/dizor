@@ -105,3 +105,41 @@ html .admin-shell .admin-main > main .mk-page .mk-tab:focus-visible { outline: 3
 @media (prefers-reduced-motion: reduce) {
   .mk-page .mk-tab { transition: none; }
 }
+
+/* ══ Marketing · móvil (2026-11-26) ═════════════════════════════════════════
+   Same language as Configuración and Finanzas: section tabs as one segmented row,
+   coupons as compact cards without repeated labels, form on demand, flat popup panels. */
+.mk-coupons .mk-tabs { margin-bottom: 1rem; }
+.mk-coupons .mk-form-actions { display: flex; flex-wrap: wrap; gap: .6rem; }
+.mk-coupons .mk-field-note { color: #5f5b54; font-size: .78rem; }
+.mk-coupons .cp-code__value { letter-spacing: .05em; }
+.mk-coupons .cp-line { display: block; }
+.mk-coupons .cp-unit { display: none; }
+.mk-coupons .cp-actions__row { display: flex; flex-wrap: wrap; gap: .4rem; }
+.mk-coupons .cp-expiry.is-expired { color: var(--color-error); font-weight: 600; }
+.mk-coupons tr.is-inactive :is(.cp-code, .cp-value, .cp-uses, .cp-expiry) { color: #6b665e; }
+.mk-coupons [hidden] { display: none !important; }
+@media (max-width: 759px) {
+  html .admin-shell .admin-main > main .mk-page .cms-tabs { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: .2rem; padding: .22rem; overflow: visible; border: 1px solid #e8e4db; border-radius: 10px; background: #efebe3; }
+  html .admin-shell .admin-main > main .mk-page .mk-tab { justify-content: center; min-height: 44px; padding: .3rem .25rem; border: 0; border-radius: 8px; background: transparent; box-shadow: none; color: #4a4744; font-size: .76rem; white-space: normal; text-align: center; }
+  html .admin-shell .admin-main > main .mk-page .mk-tab.active,
+  html .admin-shell .admin-main > main .mk-page .mk-tab[aria-current="page"] { background: #fff; color: #252725; box-shadow: 0 1px 2px rgba(37, 39, 37, .12), inset 0 -2px 0 #b87305; }
+  /* Popup: one sheet, panels separated by rules instead of nested cards */
+  html .admin-shell .mk-page .mk-popup { padding: .9rem .85rem; }
+  html .admin-shell .mk-page .mk-popup .mk-panel { margin: 0; padding: .85rem 0; border: 0; border-top: 1px solid #e8e4db; border-radius: 0; background: transparent; }
+  .mk-sheet { padding: .8rem .85rem; }
+  .mk-toolbar { margin-bottom: .7rem; }
+}
+@media (max-width: 700px) {
+  html .admin-shell .mk-coupons .mk-coupon-table tbody tr { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem .5rem; margin: 0 0 .5rem; padding: .7rem .8rem; border: 1px solid #e8e4db; border-radius: 10px; background: #fff; }
+  html .admin-shell .mk-coupons .mk-coupon-table td { padding: 0; border: 0; }
+  html .admin-shell .mk-coupons .mk-coupon-table td[data-label]::before { content: none; }
+  html .admin-shell .mk-coupons .mk-coupon-table .cp-code { flex: 1 1 calc(100% - 6.5rem); min-width: 0; order: 1; }
+  html .admin-shell .mk-coupons .mk-coupon-table .cp-status { flex: 0 0 auto; order: 2; margin-left: auto; }
+  html .admin-shell .mk-coupons .mk-coupon-table :is(.cp-value, .cp-uses, .cp-expiry) { flex: 0 0 auto; order: 3; color: #4a4744; font-size: .8rem; }
+  html .admin-shell .mk-coupons .mk-coupon-table .cp-value { font-weight: 700; color: #252725; }
+  html .admin-shell .mk-coupons .mk-coupon-table td[data-label]:is(.cp-uses, .cp-expiry)::before { content: "·"; margin-right: .5rem; color: #b3ab9d; }
+  html .admin-shell .mk-coupons .mk-coupon-table .cp-unit { display: inline; }
+  html .admin-shell .mk-coupons .mk-coupon-table .cp-actions { flex: 1 1 100%; order: 4; margin-top: .3rem; padding-top: .5rem; border-top: 1px solid #f0ede6; }
+  html .admin-shell .mk-coupons .taxonomy-list-card { padding: .7rem; }
+}

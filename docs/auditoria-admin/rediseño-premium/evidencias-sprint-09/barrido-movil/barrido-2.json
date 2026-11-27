@@ -1,0 +1,808 @@
+{
+  "mode": "despues",
+  "checks": [
+    "B01 34 rutas del panel (admin y vendedor) a 390 y 360 px sin desborde horizontal",
+    "B02 19 selectores visibles a 390 px, todos con el selector del panel (lista dentro de la página)",
+    "B04 menús de sección en una sola fila o con el selector compartido (Productos, Pedidos, Catálogo, Tienda online)",
+    "B03 selectores abiertos (ajuste de existencias, categoría, tipo de cupón, módulo de auditoría): lista dentro de la página y Escape la cierra"
+  ],
+  "pageErrors": [],
+  "hydrationErrors": [],
+  "externalRequests": [],
+  "screenshots": [
+    "b2-inicio.png",
+    "b2-alertas.png",
+    "b2-pedidos.png",
+    "b2-pedido.png",
+    "b2-productos.png",
+    "b2-existencias.png",
+    "b2-movimientos.png",
+    "b2-producto-nuevo.png",
+    "b2-producto-editar.png",
+    "b2-catalogo.png",
+    "b2-solicitudes.png",
+    "b2-solicitud.png",
+    "b2-pqr.png",
+    "b2-tienda-home.png",
+    "b2-tienda-imagenes.png",
+    "b2-tienda-banners.png",
+    "b2-tienda-pages.png",
+    "b2-tienda-resenas.png",
+    "b2-tienda-appearance.png",
+    "b2-marketing-popup.png",
+    "b2-marketing-newsletter.png",
+    "b2-marketing-carritos.png",
+    "b2-exportaciones.png",
+    "b2-cupones.png",
+    "b2-finanzas-panel.png",
+    "b2-finanzas-costos.png",
+    "b2-finanzas-historial.png",
+    "b2-configuracion.png",
+    "b2-usuarios.png",
+    "b2-auditoria.png",
+    "b2-vendedor-inicio.png",
+    "b2-vendedor-pedidos.png",
+    "b2-vendedor-pedido.png",
+    "b2-vendedor-solicitudes.png",
+    "b2-select-ajuste-existencias.png",
+    "b2-select-categoria-producto.png",
+    "b2-select-tipo-cupon.png",
+    "b2-select-modulo-auditoria.png"
+  ],
+  "measurements": [
+    {
+      "name": "inicio-390",
+      "overflow": false,
+      "selects": 1,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 3326
+    },
+    {
+      "name": "alertas-390",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 1701
+    },
+    {
+      "name": "pedidos-390",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [
+        "Bandeja"
+      ],
+      "height": 844
+    },
+    {
+      "name": "pedido-390",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 2593
+    },
+    {
+      "name": "productos-390",
+      "overflow": false,
+      "selects": 1,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [
+        "Sección"
+      ],
+      "height": 874
+    },
+    {
+      "name": "existencias-390",
+      "overflow": false,
+      "selects": 1,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [
+        "Sección"
+      ],
+      "height": 1176
+    },
+    {
+      "name": "movimientos-390",
+      "overflow": false,
+      "selects": 1,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [
+        "Sección"
+      ],
+      "height": 917
+    },
+    {
+      "name": "producto-nuevo-390",
+      "overflow": false,
+      "selects": 3,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 1483
+    },
+    {
+      "name": "producto-editar-390",
+      "overflow": false,
+      "selects": 3,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 1483
+    },
+    {
+      "name": "catalogo-390",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [
+        "Tipo de catálogo"
+      ],
+      "height": 1177
+    },
+    {
+      "name": "solicitudes-390",
+      "overflow": false,
+      "selects": 2,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 844
+    },
+    {
+      "name": "solicitud-390",
+      "overflow": false,
+      "selects": 1,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 1573
+    },
+    {
+      "name": "pqr-390",
+      "overflow": false,
+      "selects": 2,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 844
+    },
+    {
+      "name": "tienda-home-390",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [
+        "button.st-tab",
+        "button.st-tab",
+        "button.st-tab",
+        "button.st-tab",
+        "button.st-tab"
+      ],
+      "multiRow": [],
+      "pickers": [
+        "Sección"
+      ],
+      "height": 1632
+    },
+    {
+      "name": "tienda-imagenes-390",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [
+        "button.st-tab",
+        "button.st-tab",
+        "button.st-tab",
+        "button.st-tab",
+        "button.st-tab"
+      ],
+      "multiRow": [],
+      "pickers": [
+        "Sección"
+      ],
+      "height": 1017
+    },
+    {
+      "name": "tienda-banners-390",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [
+        "Sección"
+      ],
+      "height": 844
+    },
+    {
+      "name": "tienda-pages-390",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [
+        "Sección"
+      ],
+      "height": 844
+    },
+    {
+      "name": "tienda-resenas-390",
+      "overflow": false,
+      "selects": 1,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [
+        "Sección"
+      ],
+      "height": 844
+    },
+    {
+      "name": "tienda-appearance-390",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [
+        "Sección"
+      ],
+      "height": 1815
+    },
+    {
+      "name": "marketing-popup-390",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 1747
+    },
+    {
+      "name": "marketing-newsletter-390",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 844
+    },
+    {
+      "name": "marketing-carritos-390",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 844
+    },
+    {
+      "name": "exportaciones-390",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 1032
+    },
+    {
+      "name": "cupones-390",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 844
+    },
+    {
+      "name": "finanzas-panel-390",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 3243
+    },
+    {
+      "name": "finanzas-costos-390",
+      "overflow": false,
+      "selects": 1,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 1194
+    },
+    {
+      "name": "finanzas-historial-390",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 954
+    },
+    {
+      "name": "configuracion-390",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 1065
+    },
+    {
+      "name": "usuarios-390",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 844
+    },
+    {
+      "name": "auditoria-390",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 1247
+    },
+    {
+      "name": "vendedor-inicio-390",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 855
+    },
+    {
+      "name": "vendedor-pedidos-390",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [
+        "Bandeja"
+      ],
+      "height": 844
+    },
+    {
+      "name": "vendedor-pedido-390",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 2342
+    },
+    {
+      "name": "vendedor-solicitudes-390",
+      "overflow": false,
+      "selects": 2,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 844
+    },
+    {
+      "name": "inicio-360",
+      "overflow": false,
+      "selects": 1,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 3577
+    },
+    {
+      "name": "alertas-360",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 1962
+    },
+    {
+      "name": "pedidos-360",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [
+        "Bandeja"
+      ],
+      "height": 800
+    },
+    {
+      "name": "pedido-360",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 2669
+    },
+    {
+      "name": "productos-360",
+      "overflow": false,
+      "selects": 1,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [
+        "Sección"
+      ],
+      "height": 874
+    },
+    {
+      "name": "existencias-360",
+      "overflow": false,
+      "selects": 1,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [
+        "Sección"
+      ],
+      "height": 1176
+    },
+    {
+      "name": "movimientos-360",
+      "overflow": false,
+      "selects": 1,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [
+        "Sección"
+      ],
+      "height": 917
+    },
+    {
+      "name": "producto-nuevo-360",
+      "overflow": false,
+      "selects": 3,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 1538
+    },
+    {
+      "name": "producto-editar-360",
+      "overflow": false,
+      "selects": 3,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 1538
+    },
+    {
+      "name": "catalogo-360",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [
+        "Tipo de catálogo"
+      ],
+      "height": 1189
+    },
+    {
+      "name": "solicitudes-360",
+      "overflow": false,
+      "selects": 2,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 877
+    },
+    {
+      "name": "solicitud-360",
+      "overflow": false,
+      "selects": 1,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 1624
+    },
+    {
+      "name": "pqr-360",
+      "overflow": false,
+      "selects": 2,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 820
+    },
+    {
+      "name": "tienda-home-360",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [
+        "button.st-tab",
+        "button.st-tab",
+        "button.st-tab",
+        "button.st-tab",
+        "button.st-tab"
+      ],
+      "multiRow": [],
+      "pickers": [
+        "Sección"
+      ],
+      "height": 1650
+    },
+    {
+      "name": "tienda-imagenes-360",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [
+        "button.st-tab",
+        "button.st-tab",
+        "button.st-tab",
+        "button.st-tab",
+        "button.st-tab"
+      ],
+      "multiRow": [],
+      "pickers": [
+        "Sección"
+      ],
+      "height": 1017
+    },
+    {
+      "name": "tienda-banners-360",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [
+        "Sección"
+      ],
+      "height": 800
+    },
+    {
+      "name": "tienda-pages-360",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [
+        "Sección"
+      ],
+      "height": 800
+    },
+    {
+      "name": "tienda-resenas-360",
+      "overflow": false,
+      "selects": 1,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [
+        "Sección"
+      ],
+      "height": 800
+    },
+    {
+      "name": "tienda-appearance-360",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [
+        "Sección"
+      ],
+      "height": 1859
+    },
+    {
+      "name": "marketing-popup-360",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 1765
+    },
+    {
+      "name": "marketing-newsletter-360",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 800
+    },
+    {
+      "name": "marketing-carritos-360",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 800
+    },
+    {
+      "name": "exportaciones-360",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 1060
+    },
+    {
+      "name": "cupones-360",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 800
+    },
+    {
+      "name": "finanzas-panel-360",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 3249
+    },
+    {
+      "name": "finanzas-costos-360",
+      "overflow": false,
+      "selects": 1,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 1330
+    },
+    {
+      "name": "finanzas-historial-360",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 1146
+    },
+    {
+      "name": "configuracion-360",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 1138
+    },
+    {
+      "name": "usuarios-360",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 800
+    },
+    {
+      "name": "auditoria-360",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 1364
+    },
+    {
+      "name": "vendedor-inicio-360",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 890
+    },
+    {
+      "name": "vendedor-pedidos-360",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [
+        "Bandeja"
+      ],
+      "height": 800
+    },
+    {
+      "name": "vendedor-pedido-360",
+      "overflow": false,
+      "selects": 0,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 2418
+    },
+    {
+      "name": "vendedor-solicitudes-360",
+      "overflow": false,
+      "selects": 2,
+      "native": [],
+      "offenders": [],
+      "multiRow": [],
+      "pickers": [],
+      "height": 800
+    }
+  ],
+  "issues": [],
+  "passed": true
+}

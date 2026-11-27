@@ -166,7 +166,7 @@ export default function FinanceDashboard() {
   return (
     <div className="finance-dashboard fn-dashboard">
       <div className="fn-toolbar">
-        <p className="finance-period-label">{periodInfo?.label}</p>
+        <p className="finance-period-label"><span className="fn-caption">Periodo</span> {periodInfo?.label}</p>
         <div className="finance-period-tabs" role="group" aria-label="Periodo financiero">
           {PERIOD_OPTIONS.map((opt) => (
             <button key={opt.value} type="button" className={`finance-period-tabs__btn${range === opt.value ? " finance-period-tabs__btn--active" : ""}`} aria-pressed={range === opt.value} onClick={() => setRange(opt.value)}>{opt.label}</button>
@@ -180,7 +180,8 @@ export default function FinanceDashboard() {
             <input id="finance-to" type="date" value={to} onChange={(e) => setTo(e.target.value)} />
           </div>
         )}
-        <div className="finance-export-btns">
+        <div className="finance-export-btns" role="group" aria-label="Exportar informe">
+          <span className="fn-caption" aria-hidden="true">Exportar</span>
           <button type="button" className="admin-btn admin-btn--sm" disabled={!!exporting || !ready} onClick={() => handleExport("csv")}>{exporting === "csv" ? "Exportando…" : "CSV"}</button>
           <button type="button" className="admin-btn admin-btn--sm" disabled={!!exporting || !ready} onClick={() => handleExport("xlsx")}>{exporting === "xlsx" ? "Exportando…" : "Excel"}</button>
           <button type="button" className="admin-btn admin-btn--sm" disabled={!!exporting || !ready} onClick={() => handleExport("pdf")}>{exporting === "pdf" ? "Exportando…" : "PDF"}</button>

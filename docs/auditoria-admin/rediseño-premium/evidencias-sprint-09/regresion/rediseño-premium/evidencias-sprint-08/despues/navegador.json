@@ -1,0 +1,213 @@
+{
+  "mode": "despues",
+  "checks": [
+    "C01 configuración cargada en dos columnas, tasa de ancho acotado, transportadoras confirmadas",
+    "C04 envío incluido como condición vigente e histórico de solo lectura",
+    "C05 Inter Rapidísimo y Servientrega en una tarjeta compacta, sin edición",
+    "C03 impuestos editables, estado desactivado explicado y guardado {taxEnabled,taxRate}",
+    "C06 los campos de envío inactivos no viajan en el guardado",
+    "C08 doble envío produce un único PATCH",
+    "C07 guardado confirmado, validación previa, rechazo con borrador conservado y resultado desconocido verificable",
+    "C02 error de carga sin formulario ficticio y recuperación con Reintentar",
+    "U16 estado de carga anunciado sin afirmar un equipo vacío",
+    "U10 equipo en tabla compacta: nombre, correo, rol, estado y acciones, sin credenciales",
+    "U13 roles creables limitados a vendedor y administrador",
+    "U15 formulario contextual bajo demanda; Escape lo cierra y devuelve el foco",
+    "U12 validación nativa y regla de contraseña del servidor, con borrador conservado",
+    "U11 creación confirmada con una sola petición, lista actualizada y contraseña descartada",
+    "U08 doble clic en Crear usuario no duplica la creación",
+    "U18 desactivar exige confirmación y usa el endpoint existente una vez",
+    "U09 equipo vacío confirmado con estado propio y acceso a crear el primero",
+    "U17 error de consulta distinto de vacío, con recuperación",
+    "U19 resultado desconocido de creación comprobado contra el equipo real",
+    "U14 administrador sin acceso a Usuarios y vendedor sin acceso a Auditoría en la interfaz",
+    "A23 eventos de hoy (6) desde la fuente de estadísticas",
+    "A24 eventos fallidos (13) desde la fuente de estadísticas",
+    "A19 138 eventos: 15 por página desde el servidor, 10 páginas",
+    "A25 detalle expandible con fecha completa, usuario, rol, descripción, referencias e IP",
+    "A27 IP y datos solo en el detalle; claves sensibles ocultas",
+    "A26 historial de solo lectura: sin edición ni eliminación, solo consultas GET",
+    "A29 Ver detalle accesible con teclado y foco visible",
+    "A22 cambio de página por servidor, conservado en URL y tras recargar",
+    "A20 filtros combinados (búsqueda, módulo, resultado, desde, hasta) enviados al servidor y conservados en URL",
+    "A21 paginación y filtros restablecidos sin descargar el historial completo",
+    "A28 responsive 1440–360 sin desbordes, fichas compactas y filtros bajo demanda en móvil",
+    "A18 pocos eventos: sin paginación ni contenedores sobredimensionados",
+    "A17 error de consulta distinto de vacío, con indicadores no inventados y recuperación",
+    "N01 navegación secundaria: estado activo, permisos y una sola fila de 44 px en 360"
+  ],
+  "externalRequests": [],
+  "pageErrors": [],
+  "screenshots": [
+    "configuracion-1440.png",
+    "configuracion-error-guardado-1440.png",
+    "configuracion-390.png",
+    "configuracion-error-1440.png",
+    "usuarios-1440.png",
+    "usuario-nuevo-1440.png",
+    "usuario-nuevo-error-1440.png",
+    "usuario-desactivar-confirmacion-1440.png",
+    "usuarios-390.png",
+    "usuario-nuevo-390.png",
+    "usuarios-vacios-1440.png",
+    "usuarios-error-1440.png",
+    "auditoria-1440.png",
+    "auditoria-detalle-1440.png",
+    "auditoria-sin-coincidencias-1440.png",
+    "auditoria-390.png",
+    "auditoria-detalle-390.png",
+    "auditoria-filtros-390.png",
+    "auditoria-pocos-1440.png",
+    "auditoria-error-1440.png"
+  ],
+  "measurements": [
+    {
+      "name": "configuracion-geometria-1440",
+      "taxWidth": 150,
+      "mainLeft": 278.25,
+      "sideLeft": 901.578125,
+      "sideTop": 250.75,
+      "mainTop": 250.75,
+      "carriersHeight": 111.734375,
+      "envia": false
+    },
+    {
+      "name": "configuracion",
+      "width": 1440,
+      "height": 900,
+      "overflow": false
+    },
+    {
+      "name": "configuracion",
+      "width": 1440,
+      "height": 900,
+      "overflow": false
+    },
+    {
+      "name": "configuracion",
+      "width": 1024,
+      "height": 900,
+      "overflow": false
+    },
+    {
+      "name": "configuracion",
+      "width": 820,
+      "height": 900,
+      "overflow": false
+    },
+    {
+      "name": "configuracion",
+      "width": 390,
+      "height": 1188,
+      "overflow": false
+    },
+    {
+      "name": "configuracion",
+      "width": 360,
+      "height": 1277,
+      "overflow": false
+    },
+    {
+      "name": "configuracion-390-inicial",
+      "width": 390,
+      "height": 986,
+      "overflow": false
+    },
+    {
+      "name": "usuarios",
+      "width": 1440,
+      "height": 900,
+      "overflow": false
+    },
+    {
+      "name": "usuarios",
+      "width": 1440,
+      "height": 900,
+      "overflow": false
+    },
+    {
+      "name": "usuarios",
+      "width": 1024,
+      "height": 900,
+      "overflow": false
+    },
+    {
+      "name": "usuarios",
+      "width": 820,
+      "height": 900,
+      "overflow": false
+    },
+    {
+      "name": "usuarios",
+      "width": 390,
+      "height": 1027,
+      "overflow": false
+    },
+    {
+      "name": "usuarios",
+      "width": 360,
+      "height": 1038,
+      "overflow": false
+    },
+    {
+      "name": "usuarios-390-inicial",
+      "width": 390,
+      "height": 900,
+      "overflow": false
+    },
+    {
+      "name": "auditoria",
+      "width": 1440,
+      "height": 1521,
+      "overflow": false
+    },
+    {
+      "name": "auditoria",
+      "width": 1440,
+      "height": 1521,
+      "overflow": false
+    },
+    {
+      "name": "auditoria",
+      "width": 1024,
+      "height": 1911,
+      "overflow": false
+    },
+    {
+      "name": "auditoria",
+      "width": 820,
+      "height": 1823,
+      "overflow": false
+    },
+    {
+      "name": "auditoria",
+      "width": 390,
+      "height": 2279,
+      "overflow": false
+    },
+    {
+      "name": "auditoria",
+      "width": 360,
+      "height": 2546,
+      "overflow": false
+    },
+    {
+      "name": "auditoria-ficha-390",
+      "max": 110.671875,
+      "min": 98.453125
+    },
+    {
+      "name": "auditoria-390-inicial",
+      "width": 390,
+      "height": 2279,
+      "overflow": false
+    },
+    {
+      "name": "navegacion-secundaria-360",
+      "h": 52.59375,
+      "oneRow": true,
+      "minH": 44
+    }
+  ],
+  "passed": true
+}

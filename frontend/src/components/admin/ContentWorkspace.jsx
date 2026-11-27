@@ -15,6 +15,7 @@ import AuthFormField from "@/components/admin/AdminFormField";
 import AuthSubmitButton from "@/components/auth/AuthSubmitButton";
 import AuthErrorAlert from "@/components/admin/AdminFeedback";
 import ConfirmModal from "@/components/admin/AdminConfirmModal";
+import AdminSectionPicker from "@/components/admin/AdminSectionPicker";
 import {
   getAdminHomeContent,
   updateAdminHomeContent,
@@ -472,6 +473,9 @@ function ContenidoAdminContent({ defaultTab = "home" }) {
         {CONTENT_TABS.filter(t => t.area === area).map(t => <Link key={t.id} href={contentHref(t.id, searchParams.toString())} className={`${area === "store" ? "st-tab" : ""}${area === "marketing" ? "mk-tab" : ""}${tab === t.id ? " active" : ""}`} aria-current={tab === t.id ? "page" : undefined}>{t.label}</Link>)}
         {area === "tools" && <><Link href="/admin/pedidos">Pedidos</Link><Link href="/admin/marketing?tab=newsletter">Newsletter</Link><Link href="/admin/marketing?tab=carritos">Carritos</Link></>}
       </nav>
+      {/* Phones: six sections do not fit one row; same picker as Productos and Pedidos. */}
+      {area === "store" && <AdminSectionPicker className="st-section-picker" label="Sección" navLabel="Elegir sección de Tienda online"
+        items={CONTENT_TABS.filter((t) => t.area === "store").map((t) => ({ key: t.id, label: t.label, href: contentHref(t.id, searchParams.toString()), current: tab === t.id }))} />}
       </>}
       {ordersExport && <OrdersExportScreen />}
 

@@ -112,3 +112,26 @@ html .admin-shell .admin-main > main .st-store .st-tab:focus-visible { outline: 
 @media (prefers-reduced-motion: reduce) {
   .st-store .st-tab { transition: none; }
 }
+
+/* Phones (2026-11-26): the six sections use the shared section picker (AdminSectionPicker),
+   like Productos and Pedidos; the row of tabs stays for tablets and desktop. */
+.admin-shell .st-store .st-section-picker { display: none; margin: 0 0 1rem; }
+@media (max-width: 759px) {
+  html .admin-shell .admin-main > main .st-store > .cms-tabs:not(.cms-tabs--sub) { display: none; }
+  html .admin-shell .st-store .st-section-picker { display: grid; }
+}
+/* Reseñas: two states as one segmented row on phones (the second tab was cut off). */
+@media (max-width: 759px) {
+  html .admin-shell .admin-main > main .st-store .cms-tabs[aria-label="Estado de reseñas"] { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: .2rem; padding: .22rem; overflow: visible; border: 1px solid #e8e4db; border-radius: 10px; background: #efebe3; }
+  html .admin-shell .admin-main > main .st-store .cms-tabs[aria-label="Estado de reseñas"] .st-tab { min-height: 44px; border: 0; background: transparent; box-shadow: none; }
+  html .admin-shell .admin-main > main .st-store .cms-tabs[aria-label="Estado de reseñas"] .st-tab.active { background: #fff; box-shadow: 0 1px 2px rgba(37, 39, 37, .12), inset 0 -2px 0 #b87305; }
+}
+/* Reseñas · pager on phones: «Anterior · Página x de y · Siguiente» on one line, count and page size below. */
+@media (max-width: 759px) {
+  .st-store .st-pager { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; grid-template-areas: "prev page next" "total total size"; align-items: center; gap: .5rem; }
+  .st-store .st-pager > :nth-child(1) { grid-area: prev; }
+  .st-store .st-pager > :nth-child(2) { grid-area: page; justify-self: center; font-size: .82rem; }
+  .st-store .st-pager > :nth-child(3) { grid-area: total; color: #5f5b54; font-size: .8rem; }
+  .st-store .st-pager > :nth-child(4) { grid-area: next; }
+  .st-store .st-pager > :nth-child(5) { grid-area: size; display: flex; align-items: center; gap: .4rem; }
+}

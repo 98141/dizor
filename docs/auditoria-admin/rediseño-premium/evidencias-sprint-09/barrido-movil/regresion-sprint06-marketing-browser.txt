@@ -1,0 +1,4 @@
+ok - M01 cupones: vacío compacto, listado primero y un alta
+ok - M02 popup: el fallo bloquea el formulario y los campos cortos comparten fila
+ok - M03 newsletter: cantidad de la página, no un total inventado, y ancho contenido
+ok - M04 carritos compactos y recordatorios sin envío

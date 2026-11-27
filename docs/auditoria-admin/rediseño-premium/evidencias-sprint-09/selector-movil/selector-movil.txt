@@ -1,0 +1,85 @@
+(node:13024) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:13024) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:13024) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:13024) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:13024) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:13024) [MONGOOSE] Warning: mongoose: Duplicate schema index on {"requestNumber":1} for model "SpecialRequest". This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+12:25:04 [[32mhttp[39m]: POST /api/auth/login 200 394.800 ms - 168
+12:25:04 [[32mhttp[39m]: POST /api/auth/login 200 343.633 ms - 169
+12:25:05 [[32mhttp[39m]: POST /api/auth/login 200 335.633 ms - 174
+12:25:05 [[32mhttp[39m]: POST /api/auth/login 200 332.734 ms - 173
+12:25:43 [[32mhttp[39m]: GET /api/auth/me 200 10.951 ms - 207
+12:25:43 [[32mhttp[39m]: GET /api/admin/catalog/meta 200 32.334 ms - 669
+12:25:43 [[32mhttp[39m]: GET /api/favorites/ids 200 31.424 ms - 47
+12:25:43 [[32mhttp[39m]: GET /api/admin/catalog/products 200 40.527 ms - 1593
+12:25:43 [[32mhttp[39m]: GET /api/admin/alerts 200 71.739 ms - 916
+12:25:44 [[32mhttp[39m]: GET /api/admin/catalog/products?view=[redactado] 200 15.626 ms - 1593
+12:25:44 [[32mhttp[39m]: GET /api/auth/me 304 6.014 ms - -
+12:25:45 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 18.968 ms - -
+12:25:45 [[32mhttp[39m]: GET /api/admin/catalog/products?view=[redactado] 304 27.381 ms - -
+12:25:45 [[32mhttp[39m]: GET /api/favorites/ids 304 16.369 ms - -
+12:25:45 [[32mhttp[39m]: GET /api/admin/alerts 200 54.321 ms - 916
+12:25:45 [[32mhttp[39m]: GET /api/admin/inventory/history?view=[redactado] 200 12.811 ms - 133
+12:25:45 [[32mhttp[39m]: GET /api/admin/inventory/history/stats 200 36.261 ms - 122
+12:25:45 [[32mhttp[39m]: GET /api/auth/me 304 4.574 ms - -
+12:25:45 [[32mhttp[39m]: GET /api/favorites/ids 304 10.425 ms - -
+12:25:45 [[32mhttp[39m]: GET /api/admin/orders 200 13.388 ms - 192
+12:25:45 [[32mhttp[39m]: GET /api/admin/alerts 200 30.882 ms - 916
+12:25:46 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 6.342 ms - 196
+12:25:46 [[32mhttp[39m]: GET /api/auth/me 200 4.716 ms - 208
+12:25:46 [[32mhttp[39m]: GET /api/favorites/ids 304 4.880 ms - -
+12:25:46 [[32mhttp[39m]: GET /api/admin/orders 200 8.008 ms - 173
+12:25:47 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 7.719 ms - 177
+12:25:47 [[32mhttp[39m]: GET /api/auth/me 200 7.006 ms - 207
+12:25:47 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 18.711 ms - -
+12:25:47 [[32mhttp[39m]: GET /api/favorites/ids 304 16.822 ms - -
+12:25:47 [[32mhttp[39m]: GET /api/admin/catalog/products 304 25.779 ms - -
+12:25:47 [[32mhttp[39m]: GET /api/admin/alerts 200 47.201 ms - 916
+12:25:47 [[32mhttp[39m]: GET /api/admin/catalog/products?view=[redactado] 304 17.926 ms - -
+12:25:48 [[32mhttp[39m]: GET /api/auth/me 304 4.794 ms - -
+12:25:48 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 17.376 ms - -
+12:25:48 [[32mhttp[39m]: GET /api/favorites/ids 304 19.411 ms - -
+12:25:48 [[32mhttp[39m]: GET /api/admin/catalog/products?view=[redactado] 304 24.774 ms - -
+12:25:48 [[32mhttp[39m]: GET /api/admin/alerts 200 47.320 ms - 916
+12:25:48 [[32mhttp[39m]: GET /api/admin/inventory/history?view=[redactado] 304 11.978 ms - -
+12:25:48 [[32mhttp[39m]: GET /api/admin/inventory/history/stats 304 12.013 ms - -
+12:25:48 [[32mhttp[39m]: GET /api/auth/me 304 4.876 ms - -
+12:25:48 [[32mhttp[39m]: GET /api/favorites/ids 304 9.262 ms - -
+12:25:48 [[32mhttp[39m]: GET /api/admin/orders 200 11.494 ms - 192
+12:25:48 [[32mhttp[39m]: GET /api/admin/alerts 200 29.048 ms - 916
+12:25:48 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 8.412 ms - 196
+12:25:48 [[32mhttp[39m]: GET /api/auth/me 200 5.131 ms - 208
+12:25:48 [[32mhttp[39m]: GET /api/favorites/ids 304 3.699 ms - -
+12:25:48 [[32mhttp[39m]: GET /api/admin/orders 200 6.582 ms - 173
+12:25:49 [[32mhttp[39m]: GET /api/admin/orders?tray=[redactado] 200 5.398 ms - 177
+ok - M01 selector de sección/bandeja: visible solo en móvil, panel dentro de la pantalla a 390 y 360, sin desbordes
+ok - M02 selector operable con teclado (Enter, flechas, Escape con retorno de foco) y clic fuera
+ok - M03 cada opción es un enlace: cambia la URL y la sección actual (Productos, Existencias, Pedidos admin y vendedor)
+12:25:49 [[32mhttp[39m]: GET /api/auth/me 200 5.016 ms - 207
+12:25:49 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 14.684 ms - -
+12:25:49 [[32mhttp[39m]: GET /api/favorites/ids 304 12.269 ms - -
+12:25:49 [[32mhttp[39m]: GET /api/admin/catalog/products 304 19.768 ms - -
+12:25:49 [[32mhttp[39m]: GET /api/admin/alerts 200 38.083 ms - 916
+ok - M04 «Configuración del catálogo» abre /admin/catalogo desde el selector
+12:25:49 [[32mhttp[39m]: GET /api/admin/catalog/categories 200 12.665 ms - 235
+12:25:49 [[32mhttp[39m]: GET /api/admin/alerts 200 36.913 ms - 916
+12:25:49 [[32mhttp[39m]: GET /api/auth/me 304 4.467 ms - -
+12:25:49 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 14.213 ms - -
+12:25:49 [[32mhttp[39m]: GET /api/favorites/ids 304 12.164 ms - -
+12:25:49 [[32mhttp[39m]: GET /api/admin/catalog/products 304 21.533 ms - -
+12:25:49 [[32mhttp[39m]: GET /api/admin/alerts 200 37.928 ms - 916
+12:25:50 [[32mhttp[39m]: GET /api/auth/me 304 5.388 ms - -
+12:25:50 [[32mhttp[39m]: GET /api/admin/catalog/categories 304 11.088 ms - -
+12:25:50 [[32mhttp[39m]: GET /api/favorites/ids 304 12.355 ms - -
+12:25:50 [[32mhttp[39m]: GET /api/admin/alerts 200 34.763 ms - 916
+12:25:50 [[32mhttp[39m]: GET /api/auth/me 304 4.684 ms - -
+12:25:50 [[32mhttp[39m]: GET /api/favorites/ids 304 7.193 ms - -
+12:25:50 [[32mhttp[39m]: GET /api/admin/orders 200 9.370 ms - 192
+12:25:50 [[32mhttp[39m]: GET /api/admin/alerts 200 25.635 ms - 916
+12:25:50 [[32mhttp[39m]: GET /api/auth/me 304 5.636 ms - -
+12:25:50 [[32mhttp[39m]: GET /api/admin/catalog/meta 304 12.827 ms - -
+12:25:50 [[32mhttp[39m]: GET /api/favorites/ids 304 11.480 ms - -
+12:25:50 [[32mhttp[39m]: GET /api/admin/catalog/products 304 19.582 ms - -
+12:25:50 [[32mhttp[39m]: GET /api/admin/alerts 200 36.422 ms - 916
+ok - M05 barra superior grafito con texto blanco en Productos, Catálogo y Pedidos (390 px)

@@ -93,7 +93,7 @@
     "/admin",
     "/admin",
     "/admin/pedidos?tray=prepare&page=1",
-    "/admin/productos?view=stock&productId=6b0863563b593ec6d2d7de09&variantId=6b0863563b593ec6d2d7de0e",
+    "/admin/productos?view=stock&productId=6b09bb6690aa1056d861ba6c&variantId=6b09bb6690aa1056d861ba71",
     "/admin/productos?q=Sombrero&page=1",
     "/admin",
     "/admin/catalogo?tab=colors",

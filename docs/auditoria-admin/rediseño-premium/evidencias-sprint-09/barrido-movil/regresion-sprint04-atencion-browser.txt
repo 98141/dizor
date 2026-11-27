@@ -1,0 +1,29 @@
+ok - B00 estilos acotados a .admin-shell; la tienda no los importa; el vendedor carga dz- y botones
+ok - B01–B08 primario, secundario, terciario, destructivo, deshabilitado, procesando (sin salto ni doble clic), foco, hover, contraste ≥4,5 y diálogo con retorno de foco
+ok - botones: 1440/1024/820/390/360 px sin desbordamiento ni texto tapado
+ok - solicitudes: 1440/1024/820/390/360 px sin desbordamiento ni texto tapado
+ok - S01–S03 cabecera, pestañas, tabla con tipos y los 7 estados reales, paginación del backend
+ok - S04 filtros por tipo y búsqueda, sin coincidencias distinto de vacío, limpiar filtros
+ok - S05 paginación existente con Anterior/Siguiente
+ok - S06–S08 vacío real, error con reintento distinto de vacío, carga
+ok - S09 teclado: filtros en orden lógico y «Ver solicitud» con nombre contextual abre el detalle
+ok - detalle: 1440/1024/820/390/360 px sin desbordamiento ni texto tapado
+ok - D01 detalle: referencia y estado, cliente, solicitud completa (variante, opciones, notas), visible/interno diferenciado
+ok - D02 jerarquía: Actualizar estado primario; pasa a destructivo discreto al elegir Cancelado/Rechazado; Guardar cotización secundario; Volver terciario
+ok - D03 procesando + doble clic: una sola petición, botón ocupado y deshabilitado; historial y cabecera actualizados
+ok - D04 cotización guardada: el backend la pasa a Cotizado y la vista lo refleja
+ok - D05 «Volver» conserva los filtros (returnTo)
+ok - D06 error de detalle con reintento y no encontrada
+ok - detalle-mayorista: 1440/1024/820/390/360 px sin desbordamiento ni texto tapado
+ok - vendedor-solicitudes: 1440/1024/820/390/360 px sin desbordamiento ni texto tapado
+ok - P01 vendedor: solicitudes y su gestión como antes (el backend decide), sin pestaña PQR y /admin/pqr redirigido
+ok - pqr: 1440/1024/820/390/360 px sin desbordamiento ni texto tapado
+ok - Q01 PQR: radicado, fecha, categoría, motivo y estado reales; datos personales identificados; sin contacto en el listado
+ok - Q02 filtros de categoría y estado; sin coincidencias con limpiar
+ok - Q03 vacío y error distintos; recuperación
+ok - Q04 detalle PQR: foco, historial con notas pública/interna diferenciadas, guardado único con doble clic
+ok - Q05 solicitud de datos personales con tratamiento diferenciado; cerrar detalle
+ok - Q06 detalle PQR en móvil sin desbordamiento
+ok - A01 texto al 200 % (1280 y 390) sin desbordamiento
+
+27 comprobaciones · passed=true

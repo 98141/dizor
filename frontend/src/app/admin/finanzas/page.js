@@ -126,29 +126,34 @@ function CostPricesPanel({ initialFilter = "all" }) {
       )}
 
       {/* ── Filtros ── */}
-      <div style={{ display: "flex", gap: "var(--space-xs)", marginBottom: "var(--space-md)", flexWrap: "wrap" }}>
-        {[
-          { key: "all", label: "Todos" },
-          { key: "active", label: "Activos" },
-          { key: "missing", label: "Sin costo" },
-          { key: "withCost", label: "Con costo" },
-          { key: "lowMargin", label: "Margen bajo" },
-        ].map(({ key, label }) => (
-          <button
-            key={key}
-            type="button"
-            className={`admin-btn admin-btn--sm${filter === key ? " admin-btn--primary" : ""}`}
-            onClick={() => { setFilter(key); setPage(1); }}
-          >
-            {label}
-          </button>
-        ))}
-        <form className="fn-search" onSubmit={(e) => { e.preventDefault(); setPage(1); setSubmittedQuery(query.trim()); }}>
-          <label htmlFor="finance-cost-search" className="sr-only">Buscar producto o SKU</label>
-          <input id="finance-cost-search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Producto o SKU" />
-          <button type="submit" className="admin-btn admin-btn--sm">Buscar</button>
-        </form>
-        <button type="button" className="admin-btn admin-btn--sm" onClick={() => setReload((n) => n + 1)}>Actualizar</button>
+      <div className="fn-cost-controls">
+        <div className="fn-chips" role="group" aria-label="Filtrar productos">
+          {[
+            { key: "all", label: "Todos" },
+            { key: "active", label: "Activos" },
+            { key: "missing", label: "Sin costo" },
+            { key: "withCost", label: "Con costo" },
+            { key: "lowMargin", label: "Margen bajo" },
+          ].map(({ key, label }) => (
+            <button
+              key={key}
+              type="button"
+              className={`finance-period-tabs__btn${filter === key ? " finance-period-tabs__btn--active" : ""}`}
+              aria-pressed={filter === key}
+              onClick={() => { setFilter(key); setPage(1); }}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+        <div className="fn-cost-tools">
+          <form className="fn-search" onSubmit={(e) => { e.preventDefault(); setPage(1); setSubmittedQuery(query.trim()); }}>
+            <label htmlFor="finance-cost-search" className="sr-only">Buscar producto o SKU</label>
+            <input id="finance-cost-search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Producto o SKU" />
+            <button type="submit" className="admin-btn admin-btn--sm">Buscar</button>
+          </form>
+          <button type="button" className="admin-btn admin-btn--sm" onClick={() => setReload((n) => n + 1)}>Actualizar</button>
+        </div>
       </div>
 
       {/* ── Tabla ── */}
@@ -432,8 +437,8 @@ function FinanceHistoryPanel() {
   return (
     <div>
       {/* ── Controles ── */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-md)", alignItems: "flex-end", marginBottom: "var(--space-lg)" }}>
-        <div className="finance-period-tabs">
+      <div className="fn-history-controls">
+        <div className="finance-period-tabs" role="group" aria-label="Agrupar historial">
           {GROUP_OPTIONS.map((opt) => (
             <button
               key={opt.value}
@@ -446,25 +451,27 @@ function FinanceHistoryPanel() {
             </button>
           ))}
         </div>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-xs)", alignItems: "center", fontSize: "0.85rem" }}>
-          <label htmlFor="finance-history-from" style={{ color: "var(--color-text-muted)" }}>Desde</label>
-          <input
-            id="finance-history-from"
-            type="date"
-            className="auth-field__input"
-            style={{ padding: "0.3rem 0.5rem", fontSize: "0.82rem" }}
-            value={from}
-            onChange={(e) => setFrom(e.target.value)}
-          />
-          <label htmlFor="finance-history-to" style={{ color: "var(--color-text-muted)" }}>Hasta</label>
-          <input
-            id="finance-history-to"
-            type="date"
-            className="auth-field__input"
-            style={{ padding: "0.3rem 0.5rem", fontSize: "0.82rem" }}
-            value={to}
-            onChange={(e) => setTo(e.target.value)}
-          />
+        <div className="fn-dates">
+          <div className="fn-date">
+            <label htmlFor="finance-history-from">Desde</label>
+            <input
+              id="finance-history-from"
+              type="date"
+              className="auth-field__input"
+              value={from}
+              onChange={(e) => setFrom(e.target.value)}
+            />
+          </div>
+          <div className="fn-date">
+            <label htmlFor="finance-history-to">Hasta</label>
+            <input
+              id="finance-history-to"
+              type="date"
+              className="auth-field__input"
+              value={to}
+              onChange={(e) => setTo(e.target.value)}
+            />
+          </div>
           {(from || to) && (
             <button
               type="button"
@@ -477,8 +484,7 @@ function FinanceHistoryPanel() {
         </div>
         <button
           type="button"
-          className="admin-btn admin-btn--sm"
-          style={{ marginLeft: "auto" }}
+          className="admin-btn admin-btn--sm fn-refresh"
           onClick={() => setRetry((n) => n + 1)}
         >
           Actualizar
@@ -603,11 +609,11 @@ function FinanzasContent() {
               <h1 className="admin-page__title">Finanzas</h1>
               <p className="admin-page__subtitle">Analiza ventas, costos y rentabilidad de tu tienda.</p>
             </div>
-            <Link href="/admin" className="admin-btn admin-btn--tertiary">Inicio</Link>
+            <Link href="/admin" className="admin-btn admin-btn--tertiary fn-home">Inicio</Link>
           </div>
 
-          {/* ── Tabs ── */}
-          <div className="admin-view-tabs" style={{ marginBottom: "var(--space-lg)" }}>
+          {/* ── Tabs (segmented control on phones) ── */}
+          <div className="admin-view-tabs fn-tabs" role="group" aria-label="Secciones de Finanzas">
             <button
               type="button"
               className={`fn-tab${tab === "resumen" ? " is-active" : ""}`}

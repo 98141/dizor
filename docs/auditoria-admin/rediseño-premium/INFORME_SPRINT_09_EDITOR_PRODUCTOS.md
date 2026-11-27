@@ -259,3 +259,66 @@ Las suites originales de navegación F5 y pulido F6 siguen sin pasar completas e
 2. Decidir si los SKU de un producto nuevo deben dejar de regenerarse cuando el administrador los editó a mano (cambio de comportamiento; no se hizo).
 3. Valorar una reordenación de imágenes (arrastrar o «Mover antes/después») como funcionalidad nueva, con su prueba de orden; hoy no existe.
 4. Mantener las restricciones de `stock-adjustment.test.cjs` documentadas en la cabecera de `ProductForm.jsx` o migrar esa prueba a React real, para que futuros rediseños no queden atados a tres hooks.
+
+## Anexo · Correcciones solicitadas tras la entrega (26-11-2026)
+
+Petición del responsable, con capturas de Productos en móvil:
+
+1. **El selector de sección se desbordaba.** En móvil, Productos («Sección») y Pedidos («Bandeja», admin y vendedor) usaban un `<select>` nativo como navegación. Su lista la dibuja el navegador fuera del diseño: no se puede contener ni estilizar. Eran los dos únicos selectores nativos usados para navegar (`grep` de `select` con `router.push`).
+2. **Barra superior clara solo en Productos.** Una regla del Sprint 03 (`admin-products.css`) pintaba `.admin-topbar` color marfil en Productos y Configuración del catálogo. En móvil esa barra es grafito con texto blanco, que quedaba casi invisible. Se retiró la regla; en escritorio no cambia nada (la barra es transparente sobre el mismo fondo).
+3. **Aspecto del menú.** Se creó `components/admin/AdminSectionPicker.jsx`, compartido por los dos módulos. Es un botón de 48 px con la sección actual (y su contador en Pedidos) que despliega un panel del mismo ancho que el control, con opciones de 46 px, la actual marcada con filete oro y una marca de verificación, y contadores. Las opciones son enlaces reales: URL, historial, recarga y permisos se comportan igual que las pestañas de escritorio. Se cierra con Escape (devuelve el foco), clic fuera o al elegir; flechas, Inicio y Fin recorren las opciones. Estilos en `admin-orders.css` (bloque «Selector de sección/bandeja»), que cargan los paneles de administración y de vendedor. El resto de módulos (Atención, Tienda, Marketing, Finanzas, Configuración) no usan este patrón: tienen pestañas propias.
+
+Archivos: `AdminSectionPicker.jsx` (nuevo), `CatalogWorkspace.jsx`, `OrdersList.jsx`, `admin-orders.css`, `admin-products.css`.
+
+**Prueba anterior adaptada (no relajada):** `frontend/test/sprint02-orders-browser.cjs` leía `select[aria-label="Bandeja de pedidos"].value` y usaba `page.select()`, es decir, el control que se pidió sustituir. Ahora comprueba lo mismo sobre el nuevo control: la bandeja actual (`aria-current`) es «prepare» y elegir «En camino» cambia la URL a `tray=transit` y muestra la bandeja. El resto de aserciones (desborde, altura de tarjetas, pestañas ocultas) no cambió.
+
+Verificación (`evidencias-sprint-09/selector-movil/`):
+
+| Suite | Resultado |
+| --- | --- |
+| `section-picker-next-browser.cjs` (Next + Express + Mongo) — Productos, Existencias, Pedidos admin y vendedor a 390 y 360; panel dentro de la pantalla, sin desborde, teclado, clic fuera, navegación por enlace, Configuración del catálogo, barra grafito con texto blanco en Productos, Catálogo y Pedidos | 5/5 |
+| Pedidos Sprint 02 (adaptada como se indica) | pasa |
+| Catálogo F4 | pasa (20) |
+| Productos Sprint 03 | pasa |
+
+### Segunda ronda (26–27-11-2026): selectores en todo el panel, Finanzas, Marketing y barrido completo
+
+Petición: el desborde de la lista desplegable aparecía en cualquier selector (por ejemplo «Operación» al ajustar existencias); mejorar el menú de Finanzas en móvil; revisar Marketing en móvil; validar toda la administración sin omitir pantallas.
+
+**1. Selectores (`<select>`) de todo el panel.** Nueva hoja `styles/layouts/admin-controls.css`, cargada al final por los layouts de administrador y vendedor. Todo `select` de una sola opción dentro de `.admin-shell` usa el *select* personalizable del navegador (`appearance: base-select`, Chrome 135+; las pruebas usan Chrome 158). Es el mismo elemento: mismo teclado, lector de pantalla, valor, eventos `change` y `page.select()` de las pruebas. La lista se dibuja dentro de la página, anclada al control, del mismo ancho (`anchor-size`), con máximo `100vw − 1rem`, y se voltea si no cabe. Opciones de 44 px, la elegida con filete oro y marca. Navegadores sin soporte conservan el control nativo. La tienda pública no se toca.
+
+**2. Menús de sección en móvil, mismo criterio en todo el panel.** Hasta 4 secciones: control segmentado en una fila. Más de 4: selector compartido `AdminSectionPicker` (ahora acepta opciones de navegación o de acción).
+
+| Pantalla | Antes en 390 px | Después |
+| --- | --- | --- |
+| Finanzas (pestañas) | 2 filas | segmentado de 3 |
+| Finanzas (periodos, agrupación, filtros de costos) | 2–4 filas, filtro activo en grafito | fila deslizante de chips con el mismo estado oro; fechas en 2 columnas; «Exportar» con rótulo; indicadores en 2 columnas; «Inicio» oculto en móvil (está en el menú) |
+| Marketing (pestañas) | fila deslizante; Cupones no las tenía | segmentado de 4, también en Cupones |
+| Exportaciones | 2 filas, activa en grafito | segmentado de 4, activa en oro |
+| Atención al cliente | 2 filas | segmentado de 2 |
+| Tienda online | 6 pestañas deslizantes | selector compartido |
+| Reseñas (estado) | segunda pestaña recortada; paginación en 3 líneas | segmentado de 2; paginación ordenada |
+| Configuración del catálogo | 5 pestañas en 2 filas | selector compartido (mismo `changeTab`, reinicia el formulario como antes) |
+
+**3. Marketing.** Cupones: fichas compactas sin rótulos repetidos (código y estado; «15% de descuento · 0 usos · Sin vencimiento»; acciones), formulario bajo demanda (abierto si no hay cupones, al editar o con «Nuevo cupón»; siempre montado para F6 A08 y Sprint 06), «Cancelar» siempre disponible, Escape cierra el formulario salvo cuando cierra la lista de un selector. Popup: un solo panel con separadores, sin tarjetas anidadas.
+
+**Defecto propio detectado por el barrido y corregido:** con el *select* personalizable abierto el foco está en la opción; el Escape del formulario de cupón (y del panel «Nuevo usuario») cerraba el formulario entero. Ahora se ignora el Escape que nace dentro de un `select`.
+
+Archivos: `admin-controls.css` (nuevo), `app/admin/layout.js`, `app/vendedor/layout.js`, `AdminSectionPicker.jsx`, `TaxonomyManager.jsx`, `ContentWorkspace.jsx`, `app/admin/cupones/page.js`, `app/admin/usuarios/page.js`, `app/admin/finanzas/page.js`, `FinanceDashboard.jsx`, `admin-finanzas.css`, `admin-marketing.css`, `admin-store.css`, `admin-atencion.css`, `admin-orders.css`, `admin-products.css`.
+
+**Validación** (`evidencias-sprint-09/barrido-movil/`, Next de producción + Express + MongoDB temporal):
+
+| Comprobación | Resultado |
+| --- | --- |
+| B01 · 34 rutas (administración y vendedor) a 390 y 360 px sin desborde horizontal | pasa |
+| B02 · 19 selectores visibles, todos con el selector del panel | pasa |
+| B03 · selectores abiertos (ajuste de existencias, categoría, tipo de cupón, módulo de auditoría): lista dentro de la página; Escape la cierra | pasa |
+| B04 · menús de sección en una fila o con el selector compartido | pasa |
+| Selector de sección (M01–M05) | 5/5 |
+| Pedidos S02, Catálogo F4, Productos S03, Atención S04, Marketing S06, Finanzas S07, Configuración S08 | pasan |
+| `stock-adjustment` y `admin-fields` (unitarias) | pasan |
+| Navegación F5 derivada | pasa completa |
+| Pulido F6 derivada | A01–A09 pasan (incluidas A05–A08 de usuarios y cupones). Las infracciones axe de Productos, Existencias, Movimientos y Taxonomías a 360 px **desaparecieron** con el nuevo selector; queda A23 en Finanzas a 1440 y A19/A25 como antes. Se detiene en A10 (preexistente). |
+| Tienda S05 | se detiene tras T07 al abrir Reseñas (`networkidle0` agota 30 s). **Mismo fallo en HEAD `bdd22f9`** sin estos cambios: preexistente. Reseñas queda cubierta por el barrido. |
+
+Capturas `b1-*` (primer barrido, con los defectos encontrados) y `b2-*` (final) de cada ruta a 390 px, más `b2-select-*` con listas abiertas.

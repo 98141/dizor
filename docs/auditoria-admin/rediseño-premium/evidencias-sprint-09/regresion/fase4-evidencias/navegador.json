@@ -71,7 +71,7 @@
         "variantId": "000000000000000000001011",
         "delta": 5,
         "reason": "Reposición de prueba",
-        "operationKey": "e9274cc6-4e67-4d13-a81a-72996fdb2e65"
+        "operationKey": "a3635041-4224-49bb-a7cd-bcc0626ba430"
       }
     },
     {
@@ -80,7 +80,7 @@
         "variantId": "000000000000000000001011",
         "delta": -2,
         "reason": "Retiro físico de prueba",
-        "operationKey": "f6c8160c-4166-42a3-baae-74d91c70abfe"
+        "operationKey": "4b330c4a-1907-4ab1-b9a0-a019c9a2da41"
       }
     },
     {
@@ -89,7 +89,7 @@
         "variantId": "000000000000000000001011",
         "delta": 1,
         "reason": "Respuesta perdida de prueba",
-        "operationKey": "c00076eb-7904-4d14-afb2-460c993e8d4e"
+        "operationKey": "262bf3fe-f54d-41f1-9ced-04c040064e6a"
       }
     },
     {
@@ -98,7 +98,7 @@
         "variantId": "000000000000000000001011",
         "delta": 1,
         "reason": "Reintento seguro de prueba",
-        "operationKey": "6d3fec8f-b2d4-4884-a1b0-d1020829b490"
+        "operationKey": "8a436cb7-892a-4e13-81a6-cdb17d312da0"
       }
     },
     {
@@ -107,7 +107,7 @@
         "variantId": "000000000000000000001011",
         "delta": 1,
         "reason": "Reintento seguro de prueba",
-        "operationKey": "6d3fec8f-b2d4-4884-a1b0-d1020829b490"
+        "operationKey": "8a436cb7-892a-4e13-81a6-cdb17d312da0"
       }
     },
     {
@@ -116,7 +116,7 @@
         "variantId": "000000000000000000001011",
         "delta": 1,
         "reason": "Conflicto de prueba",
-        "operationKey": "f14aee1d-358a-418b-8e0a-89f1da5d8cb9"
+        "operationKey": "90fc2bf0-f630-49de-bfc0-2a7c52bb7cab"
       }
     },
     {

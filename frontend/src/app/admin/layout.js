@@ -15,6 +15,7 @@ import "@/styles/pages/admin-store.css";
 import "@/styles/pages/admin-config.css";
 import "@/styles/layouts/admin-polish.css";
 import "@/styles/layouts/admin-buttons.css";
+import "@/styles/layouts/admin-controls.css";
 
 export const metadata = {
   robots: { index: false, follow: false },

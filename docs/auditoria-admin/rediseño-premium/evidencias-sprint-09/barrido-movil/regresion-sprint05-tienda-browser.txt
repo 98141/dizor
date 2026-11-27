@@ -1,0 +1,16 @@
+ok - T01 la tienda pública no importa estilos del administrador
+ok - T02 inicio: doce secciones, rejilla, borrador y guardado sin perder el título
+ok - T03 error de CMS bloquea el formulario y se recupera
+ok - T04 inicio móvil sin desborde de página
+ok - T05 imágenes: miniatura, LCP, identificador y reorden
+ok - T06 banners: lista primero en móvil y formulario al pedirlo
+ok - T07 páginas: el listado antecede al editor y el cuerpo sigue siendo texto
+TimeoutError: Navigation timeout of 30000 ms exceeded
+    at new Deferred (file:///C:/Users/Asus%20ExpertBook/AppData/Local/Temp/dizor-verify-puppeteer/node_modules/puppeteer-core/lib/puppeteer/util/Deferred.js:57:34)
+    at Deferred.create (file:///C:/Users/Asus%20ExpertBook/AppData/Local/Temp/dizor-verify-puppeteer/node_modules/puppeteer-core/lib/puppeteer/util/Deferred.js:18:16)
+    at new LifecycleWatcher (file:///C:/Users/Asus%20ExpertBook/AppData/Local/Temp/dizor-verify-puppeteer/node_modules/puppeteer-core/lib/puppeteer/cdp/LifecycleWatcher.js:70:46)
+    at CdpFrame.goto (file:///C:/Users/Asus%20ExpertBook/AppData/Local/Temp/dizor-verify-puppeteer/node_modules/puppeteer-core/lib/puppeteer/cdp/Frame.js:152:29)
+    at CdpFrame.<anonymous> (file:///C:/Users/Asus%20ExpertBook/AppData/Local/Temp/dizor-verify-puppeteer/node_modules/puppeteer-core/lib/puppeteer/util/decorators.js:101:27)
+    at CdpPage.goto (file:///C:/Users/Asus%20ExpertBook/AppData/Local/Temp/dizor-verify-puppeteer/node_modules/puppeteer-core/lib/puppeteer/api/Page.js:582:43)
+    at goto (C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\frontend\test\sprint05-tienda-browser.cjs:131:51)
+    at C:\Users\Asus ExpertBook\Desktop\Desarrollo_MBT\Dizor\dizor\frontend\test\sprint05-tienda-browser.cjs:197:9

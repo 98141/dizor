@@ -1,0 +1,38 @@
+(node:23008) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:23008) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:23008) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:23008) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+(node:23008) [MONGOOSE] Warning: `collection` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+{
+  "passed": true,
+  "checks": [
+    "1-2 listado y bandeja activa con contador",
+    "4 búsqueda conservada en la URL",
+    "5-7 filtros, limpieza y URL",
+    "7-8 enlace de regreso y paginación",
+    "9-10 referencia larga abreviada y copiable",
+    "11 estados financieros sin marcar cobrada una entrega pendiente",
+    "12-13 acción real y estado informativo",
+    "14-16 PDF filtrado y CSV general distinguibles",
+    "3 cambio de bandeja en móvil",
+    "9 tarjetas compactas sin desborde",
+    "23 responsive 1440, 1024, 820, 390 y 360",
+    "19-21 vacío, carga, error y recuperación",
+    "22 campos etiquetados y foco de teclado",
+    "18 vendedor sin CSV ni bandeja de comunicaciones",
+    "15-17 CSV de pedidos, diferencia de alcance y exportaciones históricas"
+  ],
+  "shots": [
+    "pedidos-escritorio.png",
+    "pedidos-filtros.png",
+    "pedidos-movil-390.png",
+    "pedidos-movil-360.png",
+    "pedidos-filtros-movil.png",
+    "pedidos-1024.png",
+    "pedidos-tablet.png",
+    "exportacion-escritorio.png",
+    "exportacion-movil.png"
+  ],
+  "pageErrors": []
+}

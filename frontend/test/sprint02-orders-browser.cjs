@@ -205,14 +205,15 @@ const shot = async (page, name) => {
     await page.setViewport({ width: 390, height: 844 });
     await goto("/admin/pedidos?tray=prepare", "Por preparar");
     assert.equal(await page.$eval(".op-trays", (node) => getComputedStyle(node).display), "none");
-    assert.equal(await page.$eval('select[aria-label="Bandeja de pedidos"]', (node) => node.value), "prepare");
+    // Tray picker (AdminSectionPicker replaced the native select on request, 2026-11-26): same contract.
+    assert.equal(await page.$eval('.op-tray-select a[aria-current="page"]', (node) => new URL(node.href).searchParams.get("tray")), "prepare");
     const narrow = await metrics();
     assert.ok(narrow.pageOverflow <= 1, JSON.stringify(narrow));
     assert.ok(narrow.wrap <= 1, JSON.stringify(narrow));
     assert.ok(narrow.card > 0 && narrow.card < 230, JSON.stringify(narrow));
     assert.ok(narrow.caption < 60, JSON.stringify(narrow));
     await shot(page, "pedidos-movil-390.png");
-    await page.select('select[aria-label="Bandeja de pedidos"]', "transit");
+    await page.click(".op-tray-select .sp__button"); await page.click('.op-tray-select a[href*="tray=transit"]');
     await page.waitForFunction(() => location.search.includes("tray=transit"));
     await text("En camino");
     check("3 cambio de bandeja en móvil");

@@ -340,3 +340,41 @@
 @media (prefers-reduced-motion: no-preference) {
   .op-tray, .op-orders .op-btn, .op-table tbody tr { transition: background-color .15s, border-color .15s; }
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Selector de sección/bandeja en móvil (AdminSectionPicker) · Pedidos y Productos.
+   Replaces the native <select>: its option list is drawn by the browser and could
+   overflow the layout. The panel is as wide as its control and never widens the page.
+   Shown only where each module hides its desktop tabs (.op-tray-select / .op-section-select).
+   ══════════════════════════════════════════════════════════════════════════ */
+.admin-shell .sp { position: relative; display: grid; gap: .3rem; min-width: 0; }
+.admin-shell .sp [hidden] { display: none !important; }
+.admin-shell .sp .sp__label { color: #5f5b54; font-size: .72rem; font-weight: 700; letter-spacing: .01em; }
+.admin-shell .sp .sp__button { display: flex; align-items: center; gap: .6rem; width: 100%; min-height: 48px; padding: .55rem .85rem; border: 1px solid var(--admin-line, #8a837a); border-radius: 10px; background: #fff; color: #252725; font: 600 .92rem/1.3 var(--font-ui); text-align: left; cursor: pointer; box-shadow: 0 1px 2px rgba(37, 39, 37, .05); }
+.admin-shell .sp .sp__button:hover { border-color: #5f5b54; }
+.admin-shell .sp .sp__button[aria-expanded="true"] { border-color: var(--dizor-oro, #b87305); box-shadow: inset 0 0 0 1px var(--dizor-oro, #b87305); }
+.admin-shell .sp .sp__current { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.admin-shell .sp .sp__chevron { flex-shrink: 0; color: #5f5b54; }
+.admin-shell .sp .sp__button[aria-expanded="true"] .sp__chevron { transform: rotate(180deg); }
+.admin-shell .sp .sp__panel { position: absolute; top: calc(100% + .35rem); right: 0; left: 0; z-index: 40; max-height: min(60vh, 24rem); padding: .35rem; overflow-y: auto; border: 1px solid #e8e4db; border-radius: 12px; background: #fff; box-shadow: 0 14px 32px rgba(37, 39, 37, .18); }
+.admin-shell .sp .sp__list { display: grid; gap: .1rem; margin: 0; padding: 0; list-style: none; }
+.admin-shell .sp .sp__option { display: flex; align-items: center; gap: .6rem; min-height: 46px; padding: .5rem .7rem; border-radius: 8px; color: #252725; font: 500 .9rem/1.3 var(--font-ui); text-decoration: none; }
+.admin-shell .sp .sp__option:hover { background: #f6f3ed; }
+.admin-shell .sp .sp__option:focus-visible { background: #f6f3ed; outline: 2px solid var(--admin-focus, #8a5503); outline-offset: -2px; }
+.admin-shell .sp .sp__option[aria-current] { background: #fbf6ec; font-weight: 700; box-shadow: inset 3px 0 var(--dizor-oro, #b87305); }
+.admin-shell .sp .sp__option-label { flex: 1 1 auto; min-width: 0; }
+.admin-shell .sp .sp__count { flex-shrink: 0; min-width: 1.6rem; padding: .05rem .45rem; border-radius: 999px; background: #f2f0eb; color: #252725; font-size: .74rem; font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; }
+.admin-shell .sp [aria-current] .sp__count, .admin-shell .sp .sp__button .sp__count { background: #fbf2e4; color: #8a5503; }
+.admin-shell .sp .sp__check { flex-shrink: 0; color: #8a5503; }
+@media (prefers-reduced-motion: no-preference) { .admin-shell .sp .sp__chevron { transition: transform .15s; } }
+@media (forced-colors: active) { .admin-shell .sp .sp__option[aria-current] { outline: 2px solid CanvasText; } }
+.admin-shell .sp button.sp__option { width: 100%; border: 0; background: transparent; text-align: left; cursor: pointer; }
+.admin-shell .sp button.sp__option[aria-current] { background: #fbf6ec; }
+.admin-shell .sp button.sp__option:disabled { color: #8f877d; cursor: not-allowed; }
+/* Exportaciones históricas: the four contexts as tabs with the gold active state; one segmented row on phones. */
+html .admin-shell .admin-main > main .cms-tabs[aria-label="Contextos de exportación"] :is(a.active, a[aria-current="page"]) { background: #fff; color: #252725; border-color: #b87305; box-shadow: inset 0 -2px 0 #b87305; }
+@media (max-width: 759px) {
+  html .admin-shell .admin-main > main .cms-tabs[aria-label="Contextos de exportación"] { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: .2rem; padding: .22rem; border: 1px solid #e8e4db; border-radius: 10px; background: #efebe3; }
+  html .admin-shell .admin-main > main .cms-tabs[aria-label="Contextos de exportación"] a { justify-content: center; min-height: 44px; padding: .3rem .2rem; border: 0; border-radius: 8px; background: transparent; box-shadow: none; color: #4a4744; font-size: .74rem; text-align: center; white-space: normal; }
+  html .admin-shell .admin-main > main .cms-tabs[aria-label="Contextos de exportación"] :is(a.active, a[aria-current="page"]) { background: #fff; color: #252725; box-shadow: 0 1px 2px rgba(37, 39, 37, .12), inset 0 -2px 0 #b87305; }
+}

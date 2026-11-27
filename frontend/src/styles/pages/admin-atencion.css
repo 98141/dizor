@@ -152,3 +152,10 @@ html .admin-shell .admin-main > main .cs-page .cs-cell-action .admin-btn { white
 .admin-shell .cs-page .cs-fieldset legend { padding: 0 .35rem; font-size: .78rem; font-weight: 700; }
 .admin-shell .cs-page .cs-fieldset label { display: grid; gap: .25rem; font-size: .78rem; font-weight: 600; color: #3d3b38; }
 .admin-shell .cs-page .cs-fieldset :is(select, textarea) { width: 100%; font-weight: 400; }
+
+/* Phones (2026-11-26): the two sections as one segmented row, like Configuración, Finanzas and Marketing. */
+@media (max-width: 640px) {
+  .admin-shell .admin-context-nav[aria-label="Secciones de Atención al cliente"] { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: .2rem; padding: .22rem; border: 1px solid var(--admin-border-soft); border-radius: 10px; background: #efebe3; }
+  .admin-shell .admin-context-nav[aria-label="Secciones de Atención al cliente"] a { justify-content: center; min-height: 44px; padding: .3rem .4rem; border: 0; border-radius: 8px; background: transparent; box-shadow: none; font-size: .78rem; line-height: 1.2; text-align: center; }
+  .admin-shell .admin-context-nav[aria-label="Secciones de Atención al cliente"] a[aria-current="page"] { background: #fff; box-shadow: 0 1px 2px rgba(37, 39, 37, .12), inset 0 -2px 0 var(--dizor-oro); }
+}

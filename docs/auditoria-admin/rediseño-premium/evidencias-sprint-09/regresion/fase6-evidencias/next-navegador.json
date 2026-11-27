@@ -51,16 +51,16 @@
   "routes": [
     "/admin",
     "/admin/pedidos",
-    "/admin/pedidos/6b0864911e6fe7820383b6d6",
+    "/admin/pedidos/6b09bbd30ef92fef96ecd9c1",
     "/admin/pedidos?tray=communications",
     "/admin/productos",
-    "/admin/productos?view=stock&productId=6b0864911e6fe7820383b6c7&variantId=6b0864911e6fe7820383b6c8",
+    "/admin/productos?view=stock&productId=6b09bbd30ef92fef96ecd9b2&variantId=6b09bbd30ef92fef96ecd9b3",
     "/admin/productos?view=movements",
     "/admin/productos/nuevo",
-    "/admin/productos/6b0864911e6fe7820383b6c7/editar",
+    "/admin/productos/6b09bbd30ef92fef96ecd9b2/editar",
     "/admin/catalogo",
     "/admin/solicitudes",
-    "/admin/solicitudes/6b0864911e6fe7820383b6eb",
+    "/admin/solicitudes/6b09bbd30ef92fef96ecd9d6",
     "/admin/pqr",
     "/admin/contenido?tab=home",
     "/admin/contenido?tab=imagenes",
@@ -80,7 +80,7 @@
     "/admin/alertas",
     "/vendedor",
     "/vendedor/pedidos",
-    "/vendedor/pedidos/6b0864911e6fe7820383b6d6",
+    "/vendedor/pedidos/6b09bbd30ef92fef96ecd9c1",
     "/admin/solicitudes",
     "/admin",
     "/admin/catalogo",
@@ -291,12 +291,12 @@
     },
     {
       "name": "pedido",
-      "url": "/admin/pedidos/6b0864911e6fe7820383b6d6",
+      "url": "/admin/pedidos/6b09bbd30ef92fef96ecd9c1",
       "width": 1440,
       "document": 1440,
       "h1": [
         {
-          "text": "DIZ-20261126-C1977AC7416D81B15628",
+          "text": "DIZ-20261127-9E159CFD86E2F3731052",
           "font": "28.89px"
         }
       ],
@@ -305,12 +305,12 @@
     },
     {
       "name": "pedido",
-      "url": "/admin/pedidos/6b0864911e6fe7820383b6d6",
+      "url": "/admin/pedidos/6b09bbd30ef92fef96ecd9c1",
       "width": 1024,
       "document": 1024,
       "h1": [
         {
-          "text": "DIZ-20261126-C1977AC7416D81B15628",
+          "text": "DIZ-20261127-9E159CFD86E2F3731052",
           "font": "26.394px"
         }
       ],
@@ -319,12 +319,12 @@
     },
     {
       "name": "pedido",
-      "url": "/admin/pedidos/6b0864911e6fe7820383b6d6",
+      "url": "/admin/pedidos/6b09bbd30ef92fef96ecd9c1",
       "width": 820,
       "document": 820,
       "h1": [
         {
-          "text": "DIZ-20261126-C1977AC7416D81B15628",
+          "text": "DIZ-20261127-9E159CFD86E2F3731052",
           "font": "25.17px"
         }
       ],
@@ -333,12 +333,12 @@
     },
     {
       "name": "pedido",
-      "url": "/admin/pedidos/6b0864911e6fe7820383b6d6",
+      "url": "/admin/pedidos/6b09bbd30ef92fef96ecd9c1",
       "width": 390,
       "document": 390,
       "h1": [
         {
-          "text": "DIZ-20261126-C1977AC7416D81B15628",
+          "text": "DIZ-20261127-9E159CFD86E2F3731052",
           "font": "24px"
         }
       ],
@@ -347,12 +347,12 @@
     },
     {
       "name": "pedido",
-      "url": "/admin/pedidos/6b0864911e6fe7820383b6d6",
+      "url": "/admin/pedidos/6b09bbd30ef92fef96ecd9c1",
       "width": 360,
       "document": 360,
       "h1": [
         {
-          "text": "DIZ-20261126-C1977AC7416D81B15628",
+          "text": "DIZ-20261127-9E159CFD86E2F3731052",
           "font": "24px"
         }
       ],
@@ -559,7 +559,7 @@
     },
     {
       "name": "existencias",
-      "url": "/admin/productos?view=stock&productId=6b0864911e6fe7820383b6c7&variantId=6b0864911e6fe7820383b6c8",
+      "url": "/admin/productos?view=stock&productId=6b09bbd30ef92fef96ecd9b2&variantId=6b09bbd30ef92fef96ecd9b3",
       "width": 1440,
       "document": 1440,
       "h1": [
@@ -573,7 +573,7 @@
     },
     {
       "name": "existencias",
-      "url": "/admin/productos?view=stock&productId=6b0864911e6fe7820383b6c7&variantId=6b0864911e6fe7820383b6c8",
+      "url": "/admin/productos?view=stock&productId=6b09bbd30ef92fef96ecd9b2&variantId=6b09bbd30ef92fef96ecd9b3",
       "width": 1024,
       "document": 1024,
       "h1": [
@@ -587,7 +587,7 @@
     },
     {
       "name": "existencias",
-      "url": "/admin/productos?view=stock&productId=6b0864911e6fe7820383b6c7&variantId=6b0864911e6fe7820383b6c8",
+      "url": "/admin/productos?view=stock&productId=6b09bbd30ef92fef96ecd9b2&variantId=6b09bbd30ef92fef96ecd9b3",
       "width": 820,
       "document": 820,
       "h1": [
@@ -601,7 +601,7 @@
     },
     {
       "name": "existencias",
-      "url": "/admin/productos?view=stock&productId=6b0864911e6fe7820383b6c7&variantId=6b0864911e6fe7820383b6c8",
+      "url": "/admin/productos?view=stock&productId=6b09bbd30ef92fef96ecd9b2&variantId=6b09bbd30ef92fef96ecd9b3",
       "width": 390,
       "document": 390,
       "h1": [
@@ -615,7 +615,7 @@
     },
     {
       "name": "existencias",
-      "url": "/admin/productos?view=stock&productId=6b0864911e6fe7820383b6c7&variantId=6b0864911e6fe7820383b6c8",
+      "url": "/admin/productos?view=stock&productId=6b09bbd30ef92fef96ecd9b2&variantId=6b09bbd30ef92fef96ecd9b3",
       "width": 360,
       "document": 360,
       "h1": [
@@ -769,7 +769,7 @@
     },
     {
       "name": "producto-editar",
-      "url": "/admin/productos/6b0864911e6fe7820383b6c7/editar",
+      "url": "/admin/productos/6b09bbd30ef92fef96ecd9b2/editar",
       "width": 1440,
       "document": 1440,
       "h1": [
@@ -783,7 +783,7 @@
     },
     {
       "name": "producto-editar",
-      "url": "/admin/productos/6b0864911e6fe7820383b6c7/editar",
+      "url": "/admin/productos/6b09bbd30ef92fef96ecd9b2/editar",
       "width": 1024,
       "document": 1024,
       "h1": [
@@ -797,7 +797,7 @@
     },
     {
       "name": "producto-editar",
-      "url": "/admin/productos/6b0864911e6fe7820383b6c7/editar",
+      "url": "/admin/productos/6b09bbd30ef92fef96ecd9b2/editar",
       "width": 820,
       "document": 820,
       "h1": [
@@ -811,7 +811,7 @@
     },
     {
       "name": "producto-editar",
-      "url": "/admin/productos/6b0864911e6fe7820383b6c7/editar",
+      "url": "/admin/productos/6b09bbd30ef92fef96ecd9b2/editar",
       "width": 390,
       "document": 390,
       "h1": [
@@ -825,7 +825,7 @@
     },
     {
       "name": "producto-editar",
-      "url": "/admin/productos/6b0864911e6fe7820383b6c7/editar",
+      "url": "/admin/productos/6b09bbd30ef92fef96ecd9b2/editar",
       "width": 360,
       "document": 360,
       "h1": [
@@ -979,7 +979,7 @@
     },
     {
       "name": "solicitud",
-      "url": "/admin/solicitudes/6b0864911e6fe7820383b6eb",
+      "url": "/admin/solicitudes/6b09bbd30ef92fef96ecd9d6",
       "width": 1440,
       "document": 1440,
       "h1": [
@@ -993,7 +993,7 @@
     },
     {
       "name": "solicitud",
-      "url": "/admin/solicitudes/6b0864911e6fe7820383b6eb",
+      "url": "/admin/solicitudes/6b09bbd30ef92fef96ecd9d6",
       "width": 1024,
       "document": 1024,
       "h1": [
@@ -1007,7 +1007,7 @@
     },
     {
       "name": "solicitud",
-      "url": "/admin/solicitudes/6b0864911e6fe7820383b6eb",
+      "url": "/admin/solicitudes/6b09bbd30ef92fef96ecd9d6",
       "width": 820,
       "document": 820,
       "h1": [
@@ -1021,7 +1021,7 @@
     },
     {
       "name": "solicitud",
-      "url": "/admin/solicitudes/6b0864911e6fe7820383b6eb",
+      "url": "/admin/solicitudes/6b09bbd30ef92fef96ecd9d6",
       "width": 390,
       "document": 390,
       "h1": [
@@ -1035,7 +1035,7 @@
     },
     {
       "name": "solicitud",
-      "url": "/admin/solicitudes/6b0864911e6fe7820383b6eb",
+      "url": "/admin/solicitudes/6b09bbd30ef92fef96ecd9d6",
       "width": 360,
       "document": 360,
       "h1": [
@@ -1173,15 +1173,15 @@
       "unlabelled": [],
       "overflow": [
         {
-          "tag": "A",
+          "tag": "BUTTON",
           "class": "st-tab"
         },
         {
-          "tag": "A",
+          "tag": "BUTTON",
           "class": "st-tab"
         },
         {
-          "tag": "A",
+          "tag": "BUTTON",
           "class": "st-tab"
         },
         {
@@ -1220,15 +1220,15 @@
       "unlabelled": [],
       "overflow": [
         {
-          "tag": "A",
+          "tag": "BUTTON",
           "class": "st-tab"
         },
         {
-          "tag": "A",
+          "tag": "BUTTON",
           "class": "st-tab"
         },
         {
-          "tag": "A",
+          "tag": "BUTTON",
           "class": "st-tab"
         },
         {
@@ -1309,18 +1309,6 @@
       "unlabelled": [],
       "overflow": [
         {
-          "tag": "A",
-          "class": "st-tab"
-        },
-        {
-          "tag": "A",
-          "class": "st-tab"
-        },
-        {
-          "tag": "A",
-          "class": "st-tab"
-        },
-        {
           "tag": "BUTTON",
           "class": "st-tab"
         },
@@ -1355,18 +1343,6 @@
       ],
       "unlabelled": [],
       "overflow": [
-        {
-          "tag": "A",
-          "class": "st-tab"
-        },
-        {
-          "tag": "A",
-          "class": "st-tab"
-        },
-        {
-          "tag": "A",
-          "class": "st-tab"
-        },
         {
           "tag": "BUTTON",
           "class": "st-tab"
@@ -1443,20 +1419,7 @@
         }
       ],
       "unlabelled": [],
-      "overflow": [
-        {
-          "tag": "A",
-          "class": "st-tab"
-        },
-        {
-          "tag": "A",
-          "class": "st-tab"
-        },
-        {
-          "tag": "A",
-          "class": "st-tab"
-        }
-      ]
+      "overflow": []
     },
     {
       "name": "tienda-banners",
@@ -1470,20 +1433,7 @@
         }
       ],
       "unlabelled": [],
-      "overflow": [
-        {
-          "tag": "A",
-          "class": "st-tab"
-        },
-        {
-          "tag": "A",
-          "class": "st-tab"
-        },
-        {
-          "tag": "A",
-          "class": "st-tab"
-        }
-      ]
+      "overflow": []
     },
     {
       "name": "tienda-pages",
@@ -1539,20 +1489,7 @@
         }
       ],
       "unlabelled": [],
-      "overflow": [
-        {
-          "tag": "A",
-          "class": "st-tab active"
-        },
-        {
-          "tag": "A",
-          "class": "st-tab"
-        },
-        {
-          "tag": "A",
-          "class": "st-tab"
-        }
-      ]
+      "overflow": []
     },
     {
       "name": "tienda-pages",
@@ -1566,20 +1503,7 @@
         }
       ],
       "unlabelled": [],
-      "overflow": [
-        {
-          "tag": "A",
-          "class": "st-tab active"
-        },
-        {
-          "tag": "A",
-          "class": "st-tab"
-        },
-        {
-          "tag": "A",
-          "class": "st-tab"
-        }
-      ]
+      "overflow": []
     },
     {
       "name": "tienda-resenas",
@@ -1635,20 +1559,7 @@
         }
       ],
       "unlabelled": [],
-      "overflow": [
-        {
-          "tag": "A",
-          "class": "st-tab"
-        },
-        {
-          "tag": "A",
-          "class": "st-tab active"
-        },
-        {
-          "tag": "A",
-          "class": "st-tab"
-        }
-      ]
+      "overflow": []
     },
     {
       "name": "tienda-resenas",
@@ -1662,20 +1573,7 @@
         }
       ],
       "unlabelled": [],
-      "overflow": [
-        {
-          "tag": "A",
-          "class": "st-tab"
-        },
-        {
-          "tag": "A",
-          "class": "st-tab active"
-        },
-        {
-          "tag": "A",
-          "class": "st-tab"
-        }
-      ]
+      "overflow": []
     },
     {
       "name": "tienda-appearance",
@@ -1731,20 +1629,7 @@
         }
       ],
       "unlabelled": [],
-      "overflow": [
-        {
-          "tag": "A",
-          "class": "st-tab"
-        },
-        {
-          "tag": "A",
-          "class": "st-tab"
-        },
-        {
-          "tag": "A",
-          "class": "st-tab active"
-        }
-      ]
+      "overflow": []
     },
     {
       "name": "tienda-appearance",
@@ -1758,20 +1643,7 @@
         }
       ],
       "unlabelled": [],
-      "overflow": [
-        {
-          "tag": "A",
-          "class": "st-tab"
-        },
-        {
-          "tag": "A",
-          "class": "st-tab"
-        },
-        {
-          "tag": "A",
-          "class": "st-tab active"
-        }
-      ]
+      "overflow": []
     },
     {
       "name": "marketing-popup",
@@ -1841,12 +1713,7 @@
         }
       ],
       "unlabelled": [],
-      "overflow": [
-        {
-          "tag": "A",
-          "class": "mk-tab"
-        }
-      ]
+      "overflow": []
     },
     {
       "name": "marketing-newsletter",
@@ -1916,12 +1783,7 @@
         }
       ],
       "unlabelled": [],
-      "overflow": [
-        {
-          "tag": "A",
-          "class": "mk-tab"
-        }
-      ]
+      "overflow": []
     },
     {
       "name": "marketing-carritos",
@@ -1991,12 +1853,7 @@
         }
       ],
       "unlabelled": [],
-      "overflow": [
-        {
-          "tag": "A",
-          "class": "mk-tab active"
-        }
-      ]
+      "overflow": []
     },
     {
       "name": "exportaciones",
@@ -2291,7 +2148,28 @@
         }
       ],
       "unlabelled": [],
-      "overflow": []
+      "overflow": [
+        {
+          "tag": "BUTTON",
+          "class": "finance-period-tabs__btn"
+        },
+        {
+          "tag": "BUTTON",
+          "class": "finance-period-tabs__btn"
+        },
+        {
+          "tag": "BUTTON",
+          "class": "finance-period-tabs__btn"
+        },
+        {
+          "tag": "BUTTON",
+          "class": "finance-period-tabs__btn"
+        },
+        {
+          "tag": "BUTTON",
+          "class": "finance-period-tabs__btn"
+        }
+      ]
     },
     {
       "name": "finanzas",
@@ -2305,7 +2183,28 @@
         }
       ],
       "unlabelled": [],
-      "overflow": []
+      "overflow": [
+        {
+          "tag": "BUTTON",
+          "class": "finance-period-tabs__btn"
+        },
+        {
+          "tag": "BUTTON",
+          "class": "finance-period-tabs__btn"
+        },
+        {
+          "tag": "BUTTON",
+          "class": "finance-period-tabs__btn"
+        },
+        {
+          "tag": "BUTTON",
+          "class": "finance-period-tabs__btn"
+        },
+        {
+          "tag": "BUTTON",
+          "class": "finance-period-tabs__btn"
+        }
+      ]
     },
     {
       "name": "usuarios",
@@ -2785,53 +2684,8 @@
       "name": "productos",
       "width": 360,
       "contrast": {
-        "text": [
-          {
-            "text": "☰",
-            "class": "admin-topbar__menu-btn",
-            "color": "rgb(255, 255, 255)",
-            "background": [
-              247,
-              246,
-              242,
-              1
-            ],
-            "contrast": 1.08,
-            "required": 4.5
-          },
-          {
-            "text": "Dizor · Administración",
-            "class": "",
-            "color": "rgb(205, 198, 187)",
-            "background": [
-              247,
-              246,
-              242,
-              1
-            ],
-            "contrast": 1.57,
-            "required": 4.5
-          },
-          {
-            "text": "Productos",
-            "class": "",
-            "color": "rgb(255, 255, 255)",
-            "background": [
-              247,
-              246,
-              242,
-              1
-            ],
-            "contrast": 1.08,
-            "required": 4.5
-          }
-        ],
+        "text": [],
         "controls": [
-          {
-            "name": "",
-            "contrast": 1.27,
-            "border": "rgb(232, 228, 219)"
-          },
           {
             "name": "q",
             "contrast": 1.27,
@@ -2870,79 +2724,8 @@
       "name": "existencias",
       "width": 360,
       "contrast": {
-        "text": [
-          {
-            "text": "☰",
-            "class": "admin-topbar__menu-btn",
-            "color": "rgb(255, 255, 255)",
-            "background": [
-              247,
-              246,
-              242,
-              1
-            ],
-            "contrast": 1.08,
-            "required": 4.5
-          },
-          {
-            "text": "Dizor · Administración",
-            "class": "",
-            "color": "rgb(205, 198, 187)",
-            "background": [
-              247,
-              246,
-              242,
-              1
-            ],
-            "contrast": 1.57,
-            "required": 4.5
-          },
-          {
-            "text": "Productos",
-            "class": "",
-            "color": "rgb(255, 255, 255)",
-            "background": [
-              247,
-              246,
-              242,
-              1
-            ],
-            "contrast": 1.08,
-            "required": 4.5
-          },
-          {
-            "text": "/",
-            "class": "",
-            "color": "rgb(255, 255, 255)",
-            "background": [
-              247,
-              246,
-              242,
-              1
-            ],
-            "contrast": 1.08,
-            "required": 4.5
-          },
-          {
-            "text": "Existencias",
-            "class": "",
-            "color": "rgb(255, 255, 255)",
-            "background": [
-              247,
-              246,
-              242,
-              1
-            ],
-            "contrast": 1.08,
-            "required": 4.5
-          }
-        ],
+        "text": [],
         "controls": [
-          {
-            "name": "",
-            "contrast": 1.27,
-            "border": "rgb(232, 228, 219)"
-          },
           {
             "name": "q",
             "contrast": 1.27,
@@ -2981,79 +2764,8 @@
       "name": "movimientos",
       "width": 360,
       "contrast": {
-        "text": [
-          {
-            "text": "☰",
-            "class": "admin-topbar__menu-btn",
-            "color": "rgb(255, 255, 255)",
-            "background": [
-              247,
-              246,
-              242,
-              1
-            ],
-            "contrast": 1.08,
-            "required": 4.5
-          },
-          {
-            "text": "Dizor · Administración",
-            "class": "",
-            "color": "rgb(205, 198, 187)",
-            "background": [
-              247,
-              246,
-              242,
-              1
-            ],
-            "contrast": 1.57,
-            "required": 4.5
-          },
-          {
-            "text": "Productos",
-            "class": "",
-            "color": "rgb(255, 255, 255)",
-            "background": [
-              247,
-              246,
-              242,
-              1
-            ],
-            "contrast": 1.08,
-            "required": 4.5
-          },
-          {
-            "text": "/",
-            "class": "",
-            "color": "rgb(255, 255, 255)",
-            "background": [
-              247,
-              246,
-              242,
-              1
-            ],
-            "contrast": 1.08,
-            "required": 4.5
-          },
-          {
-            "text": "Movimientos",
-            "class": "",
-            "color": "rgb(255, 255, 255)",
-            "background": [
-              247,
-              246,
-              242,
-              1
-            ],
-            "contrast": 1.08,
-            "required": 4.5
-          }
-        ],
+        "text": [],
         "controls": [
-          {
-            "name": "",
-            "contrast": 1.27,
-            "border": "rgb(232, 228, 219)"
-          },
           {
             "name": "term",
             "contrast": 1.27,
@@ -3117,73 +2829,7 @@
       "name": "taxonomias",
       "width": 360,
       "contrast": {
-        "text": [
-          {
-            "text": "☰",
-            "class": "admin-topbar__menu-btn",
-            "color": "rgb(255, 255, 255)",
-            "background": [
-              247,
-              246,
-              242,
-              1
-            ],
-            "contrast": 1.08,
-            "required": 4.5
-          },
-          {
-            "text": "Dizor · Administración",
-            "class": "",
-            "color": "rgb(205, 198, 187)",
-            "background": [
-              247,
-              246,
-              242,
-              1
-            ],
-            "contrast": 1.57,
-            "required": 4.5
-          },
-          {
-            "text": "Productos",
-            "class": "",
-            "color": "rgb(255, 255, 255)",
-            "background": [
-              247,
-              246,
-              242,
-              1
-            ],
-            "contrast": 1.08,
-            "required": 4.5
-          },
-          {
-            "text": "/",
-            "class": "",
-            "color": "rgb(255, 255, 255)",
-            "background": [
-              247,
-              246,
-              242,
-              1
-            ],
-            "contrast": 1.08,
-            "required": 4.5
-          },
-          {
-            "text": "Configuración del catálogo",
-            "class": "",
-            "color": "rgb(255, 255, 255)",
-            "background": [
-              247,
-              246,
-              242,
-              1
-            ],
-            "contrast": 1.08,
-            "required": 4.5
-          }
-        ],
+        "text": [],
         "controls": []
       },
       "unnamedButtons": 0
@@ -3575,7 +3221,7 @@
       "name": "pedidos",
       "width": 360,
       "violations": [],
-      "passes": 20,
+      "passes": 19,
       "incomplete": [
         {
           "id": "color-contrast",
@@ -3613,7 +3259,7 @@
       "name": "comunicaciones",
       "width": 360,
       "violations": [],
-      "passes": 20,
+      "passes": 19,
       "incomplete": [
         {
           "id": "color-contrast",
@@ -3631,27 +3277,7 @@
     {
       "name": "productos",
       "width": 360,
-      "violations": [
-        {
-          "id": "color-contrast",
-          "impact": "serious",
-          "help": "Elements must meet minimum color contrast ratio thresholds",
-          "nodes": [
-            {
-              "target": [
-                ".admin-location > span"
-              ],
-              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.56 (foreground color: #cdc6bb, background color: #f7f6f2, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
-            },
-            {
-              "target": [
-                "span[aria-current=\"page\"]"
-              ],
-              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.08 (foreground color: #ffffff, background color: #f7f6f2, font size: 9.6pt (12.75px), font weight: normal). Expected contrast ratio of 4.5:1"
-            }
-          ]
-        }
-      ],
+      "violations": [],
       "passes": 20,
       "incomplete": [
         {
@@ -3670,33 +3296,7 @@
     {
       "name": "existencias",
       "width": 360,
-      "violations": [
-        {
-          "id": "color-contrast",
-          "impact": "serious",
-          "help": "Elements must meet minimum color contrast ratio thresholds",
-          "nodes": [
-            {
-              "target": [
-                ".admin-location > span"
-              ],
-              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.56 (foreground color: #cdc6bb, background color: #f7f6f2, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
-            },
-            {
-              "target": [
-                "nav[aria-label=\"Ubicación actual\"] > a[href$=\"productos\"]"
-              ],
-              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.08 (foreground color: #ffffff, background color: #f7f6f2, font size: 9.6pt (12.75px), font weight: normal). Expected contrast ratio of 4.5:1"
-            },
-            {
-              "target": [
-                "span[aria-current=\"page\"]"
-              ],
-              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.08 (foreground color: #ffffff, background color: #f7f6f2, font size: 9.6pt (12.75px), font weight: normal). Expected contrast ratio of 4.5:1"
-            }
-          ]
-        }
-      ],
+      "violations": [],
       "passes": 21,
       "incomplete": [
         {
@@ -3715,33 +3315,7 @@
     {
       "name": "movimientos",
       "width": 360,
-      "violations": [
-        {
-          "id": "color-contrast",
-          "impact": "serious",
-          "help": "Elements must meet minimum color contrast ratio thresholds",
-          "nodes": [
-            {
-              "target": [
-                ".admin-location > span"
-              ],
-              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.56 (foreground color: #cdc6bb, background color: #f7f6f2, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
-            },
-            {
-              "target": [
-                "nav[aria-label=\"Ubicación actual\"] > a[href$=\"productos\"]"
-              ],
-              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.08 (foreground color: #ffffff, background color: #f7f6f2, font size: 9.6pt (12.75px), font weight: normal). Expected contrast ratio of 4.5:1"
-            },
-            {
-              "target": [
-                "span[aria-current=\"page\"]"
-              ],
-              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.08 (foreground color: #ffffff, background color: #f7f6f2, font size: 9.6pt (12.75px), font weight: normal). Expected contrast ratio of 4.5:1"
-            }
-          ]
-        }
-      ],
+      "violations": [],
       "passes": 22,
       "incomplete": [
         {
@@ -3803,33 +3377,7 @@
     {
       "name": "taxonomias",
       "width": 360,
-      "violations": [
-        {
-          "id": "color-contrast",
-          "impact": "serious",
-          "help": "Elements must meet minimum color contrast ratio thresholds",
-          "nodes": [
-            {
-              "target": [
-                ".admin-location > span"
-              ],
-              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.56 (foreground color: #cdc6bb, background color: #f7f6f2, font size: 7.9pt (10.5px), font weight: normal). Expected contrast ratio of 4.5:1"
-            },
-            {
-              "target": [
-                "nav[aria-label=\"Ubicación actual\"] > a[href$=\"productos\"]"
-              ],
-              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.08 (foreground color: #ffffff, background color: #f7f6f2, font size: 9.6pt (12.75px), font weight: normal). Expected contrast ratio of 4.5:1"
-            },
-            {
-              "target": [
-                "span[aria-current=\"page\"]"
-              ],
-              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.08 (foreground color: #ffffff, background color: #f7f6f2, font size: 9.6pt (12.75px), font weight: normal). Expected contrast ratio of 4.5:1"
-            }
-          ]
-        }
-      ],
+      "violations": [],
       "passes": 17,
       "incomplete": [
         {
@@ -3942,6 +3490,25 @@
     },
     {
       "name": "tienda-banners",
+      "width": 360,
+      "violations": [],
+      "passes": 12,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "tienda-pages",
+      "width": 1440,
+      "violations": [],
+      "passes": 15,
+      "incomplete": []
+    },
+    {
+      "name": "tienda-pages",
       "width": 360,
       "violations": [],
       "passes": 13,
@@ -3953,25 +3520,6 @@
       ]
     },
     {
-      "name": "tienda-pages",
-      "width": 1440,
-      "violations": [],
-      "passes": 15,
-      "incomplete": []
-    },
-    {
-      "name": "tienda-pages",
-      "width": 360,
-      "violations": [],
-      "passes": 14,
-      "incomplete": [
-        {
-          "id": "color-contrast",
-          "nodes": 1
-        }
-      ]
-    },
-    {
       "name": "tienda-resenas",
       "width": 1440,
       "violations": [],
@@ -3987,7 +3535,7 @@
       "name": "tienda-resenas",
       "width": 360,
       "violations": [],
-      "passes": 16,
+      "passes": 15,
       "incomplete": [
         {
           "id": "aria-prohibited-attr",
@@ -4015,7 +3563,7 @@
       "name": "tienda-appearance",
       "width": 360,
       "violations": [],
-      "passes": 19,
+      "passes": 18,
       "incomplete": [
         {
           "id": "aria-prohibited-attr",
@@ -4041,6 +3589,74 @@
     },
     {
       "name": "marketing-popup",
+      "width": 360,
+      "violations": [],
+      "passes": 16,
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "nodes": 1
+        },
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "marketing-newsletter",
+      "width": 1440,
+      "violations": [],
+      "passes": 16,
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "nodes": 1
+        },
+        {
+          "id": "th-has-data-cells",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "marketing-newsletter",
+      "width": 360,
+      "violations": [],
+      "passes": 14,
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "nodes": 1
+        },
+        {
+          "id": "color-contrast",
+          "nodes": 1
+        },
+        {
+          "id": "th-has-data-cells",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "marketing-carritos",
+      "width": 1440,
+      "violations": [],
+      "passes": 19,
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "nodes": 1
+        },
+        {
+          "id": "th-has-data-cells",
+          "nodes": 1
+        }
+      ]
+    },
+    {
+      "name": "marketing-carritos",
       "width": 360,
       "violations": [],
       "passes": 17,
@@ -4052,74 +3668,6 @@
         {
           "id": "color-contrast",
           "nodes": 1
-        }
-      ]
-    },
-    {
-      "name": "marketing-newsletter",
-      "width": 1440,
-      "violations": [],
-      "passes": 16,
-      "incomplete": [
-        {
-          "id": "aria-prohibited-attr",
-          "nodes": 1
-        },
-        {
-          "id": "th-has-data-cells",
-          "nodes": 1
-        }
-      ]
-    },
-    {
-      "name": "marketing-newsletter",
-      "width": 360,
-      "violations": [],
-      "passes": 15,
-      "incomplete": [
-        {
-          "id": "aria-prohibited-attr",
-          "nodes": 1
-        },
-        {
-          "id": "color-contrast",
-          "nodes": 1
-        },
-        {
-          "id": "th-has-data-cells",
-          "nodes": 1
-        }
-      ]
-    },
-    {
-      "name": "marketing-carritos",
-      "width": 1440,
-      "violations": [],
-      "passes": 19,
-      "incomplete": [
-        {
-          "id": "aria-prohibited-attr",
-          "nodes": 1
-        },
-        {
-          "id": "th-has-data-cells",
-          "nodes": 1
-        }
-      ]
-    },
-    {
-      "name": "marketing-carritos",
-      "width": 360,
-      "violations": [],
-      "passes": 18,
-      "incomplete": [
-        {
-          "id": "aria-prohibited-attr",
-          "nodes": 1
-        },
-        {
-          "id": "color-contrast",
-          "nodes": 1
         },
         {
           "id": "th-has-data-cells",
@@ -4150,14 +3698,14 @@
       "name": "cupones",
       "width": 1440,
       "violations": [],
-      "passes": 18,
+      "passes": 17,
       "incomplete": []
     },
     {
       "name": "cupones",
       "width": 360,
       "violations": [],
-      "passes": 16,
+      "passes": 15,
       "incomplete": [
         {
           "id": "color-contrast",
@@ -4199,7 +3747,7 @@
       "name": "finanzas",
       "width": 360,
       "violations": [],
-      "passes": 19,
+      "passes": 20,
       "incomplete": [
         {
           "id": "aria-prohibited-attr",
@@ -4289,10 +3837,6 @@
     }
   ],
   "sprint08AxeNoSuperada": [
-    "productos@360",
-    "existencias@360",
-    "movimientos@360",
-    "taxonomias@360",
     "finanzas@1440"
   ],
   "sprint08A19NoSuperada": [
@@ -4301,8 +3845,7 @@
     "existencias@1440",
     "existencias@360",
     "movimientos@1440",
-    "movimientos@360",
-    "taxonomias@360"
+    "movimientos@360"
   ],
   "sprint08A25Color": "rgb(37, 39, 37)",
   "overflow": {
@@ -4311,8 +3854,8 @@
     "elements": []
   },
   "failure": {
-    "url": "http://127.0.0.1:52473/admin/productos?view=stock",
-    "text": "Ir al contenido\n\nDizor\n\nSuper Cierre\nSuperadministrador\n\nOPERACIÓN DIARIA\n\nInicio\nPedidos\nProductos\nProductos\nExistencias\nMovimientos\nConfiguración del catálogo\nAtención al cliente\n\nADMINISTRACIÓN\n\nTienda online\nMarketing\nFinanzas\nConfiguración\nVer tienda\nCerrar sesión\nDizor · Administración\nProductos / Existencias\n4\nExistencias\n\nRevisa el resumen y abre solo el producto que vas a ajustar.\n\nNuevo producto\nProductos\nExistencias\nMovimientos\nConfiguración del catálogo\n\nNombre o SKU\nExistencias\nTodas\nCon existencias activas\nStock bajo (sin agotados)\nCon agotados / sin variantes\nStock suficiente\nRequieren revisión\nFiltros\nAplicar filtros\n\nSi hay variantes agotadas y bajas, el producto aparece en Agotados. Las variantes inactivas se consultan por separado.\n\n1 producto · umbral bajo: 5 uds por variante\n\nActualizar productos\nSombrero de iraca · taller\n\nCierre fe02\n\n2 variantes · 11 unidades disponibles\n\n1 variante agotada\n\nPublicado\nHay variantes agotadas\n\nVer existencias\nMás opciones\nEditar datos\nVer movimientos\nVista pública\nDesactivar publicación\nCosto interno: $ 424.242",
-    "activeElement": "BODY: {\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"@id\":\"http://127.0.0.1:52473/#organization\""
+    "url": "http://127.0.0.1:65062/admin/productos?view=stock",
+    "text": "Ir al contenido\n\nDizor\n\nSuper Cierre\nSuperadministrador\n\nOPERACIÓN DIARIA\n\nInicio\nPedidos\nProductos\nProductos\nExistencias\nMovimientos\nConfiguración del catálogo\nAtención al cliente\n\nADMINISTRACIÓN\n\nTienda online\nMarketing\nFinanzas\nConfiguración\nVer tienda\nCerrar sesión\nDizor · Administración\nProductos / Existencias\n4\nExistencias\n\nRevisa el resumen y abre solo el producto que vas a ajustar.\n\nNuevo producto\nProductos\nExistencias\nMovimientos\nConfiguración del catálogo\n\nNombre o SKU\nExistencias\nTodas\nCon existencias activas\nStock bajo (sin agotados)\nCon agotados / sin variantes\nStock suficiente\nRequieren revisión\nFiltros\nAplicar filtros\n\nSi hay variantes agotadas y bajas, el producto aparece en Agotados. Las variantes inactivas se consultan por separado.\n\n1 producto · umbral bajo: 5 uds por variante\n\nActualizar productos\nSombrero de iraca · taller\n\nCierre 4da9\n\n2 variantes · 11 unidades disponibles\n\n1 variante agotada\n\nPublicado\nHay variantes agotadas\n\nVer existencias\nMás opciones\nEditar datos\nVer movimientos\nVista pública\nDesactivar publicación\nCosto interno: $ 424.242",
+    "activeElement": "BODY: {\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"@id\":\"http://127.0.0.1:65062/#organization\""
   }
 }

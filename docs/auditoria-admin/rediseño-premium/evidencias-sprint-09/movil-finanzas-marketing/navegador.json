@@ -1,0 +1,129 @@
+{
+  "mode": "despues",
+  "checks": [],
+  "pageErrors": [],
+  "hydrationErrors": [],
+  "externalRequests": [],
+  "screenshots": [
+    "antes-finanzas-panel.png",
+    "antes-finanzas-costos.png",
+    "antes-finanzas-historial.png",
+    "antes-cupones-vacio.png",
+    "antes-cupones.png",
+    "antes-marketing-popup.png",
+    "antes-marketing-newsletter.png",
+    "antes-marketing-carritos.png",
+    "antes-marketing-exportaciones.png"
+  ],
+  "measurements": [
+    {
+      "name": "antes-finanzas-panel-390",
+      "width": 390,
+      "height": 3602,
+      "overflow": false
+    },
+    {
+      "name": "antes-finanzas-costos-390",
+      "width": 390,
+      "height": 1319,
+      "overflow": false
+    },
+    {
+      "name": "antes-finanzas-historial-390",
+      "width": 390,
+      "height": 1133,
+      "overflow": false
+    },
+    {
+      "name": "antes-cupones-vacio-390",
+      "width": 390,
+      "height": 1237,
+      "overflow": false
+    },
+    {
+      "name": "antes-finanzas-panel-360",
+      "width": 360,
+      "height": 3632,
+      "overflow": false
+    },
+    {
+      "name": "antes-finanzas-costos-360",
+      "width": 360,
+      "height": 1454,
+      "overflow": false
+    },
+    {
+      "name": "antes-finanzas-historial-360",
+      "width": 360,
+      "height": 1325,
+      "overflow": false
+    },
+    {
+      "name": "antes-cupones-vacio-360",
+      "width": 360,
+      "height": 1237,
+      "overflow": false
+    },
+    {
+      "name": "antes-cupones-390",
+      "width": 390,
+      "height": 1650,
+      "overflow": false
+    },
+    {
+      "name": "antes-marketing-popup-390",
+      "width": 390,
+      "height": 1801,
+      "overflow": false
+    },
+    {
+      "name": "antes-marketing-newsletter-390",
+      "width": 390,
+      "height": 844,
+      "overflow": false
+    },
+    {
+      "name": "antes-marketing-carritos-390",
+      "width": 390,
+      "height": 844,
+      "overflow": false
+    },
+    {
+      "name": "antes-marketing-exportaciones-390",
+      "width": 390,
+      "height": 1092,
+      "overflow": false
+    },
+    {
+      "name": "antes-cupones-360",
+      "width": 360,
+      "height": 1650,
+      "overflow": false
+    },
+    {
+      "name": "antes-marketing-popup-360",
+      "width": 360,
+      "height": 1801,
+      "overflow": false
+    },
+    {
+      "name": "antes-marketing-newsletter-360",
+      "width": 360,
+      "height": 800,
+      "overflow": false
+    },
+    {
+      "name": "antes-marketing-carritos-360",
+      "width": 360,
+      "height": 800,
+      "overflow": false
+    },
+    {
+      "name": "antes-marketing-exportaciones-360",
+      "width": 360,
+      "height": 1121,
+      "overflow": false
+    }
+  ],
+  "passed": true
+}

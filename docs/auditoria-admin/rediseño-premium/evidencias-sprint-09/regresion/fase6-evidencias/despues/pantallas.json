@@ -199,12 +199,12 @@
   },
   {
     "name": "pedido",
-    "url": "/admin/pedidos/6b0864911e6fe7820383b6d6",
+    "url": "/admin/pedidos/6b09bbd30ef92fef96ecd9c1",
     "width": 1440,
     "document": 1440,
     "h1": [
       {
-        "text": "DIZ-20261126-C1977AC7416D81B15628",
+        "text": "DIZ-20261127-9E159CFD86E2F3731052",
         "font": "28.89px"
       }
     ],
@@ -213,12 +213,12 @@
   },
   {
     "name": "pedido",
-    "url": "/admin/pedidos/6b0864911e6fe7820383b6d6",
+    "url": "/admin/pedidos/6b09bbd30ef92fef96ecd9c1",
     "width": 1024,
     "document": 1024,
     "h1": [
       {
-        "text": "DIZ-20261126-C1977AC7416D81B15628",
+        "text": "DIZ-20261127-9E159CFD86E2F3731052",
         "font": "26.394px"
       }
     ],
@@ -227,12 +227,12 @@
   },
   {
     "name": "pedido",
-    "url": "/admin/pedidos/6b0864911e6fe7820383b6d6",
+    "url": "/admin/pedidos/6b09bbd30ef92fef96ecd9c1",
     "width": 820,
     "document": 820,
     "h1": [
       {
-        "text": "DIZ-20261126-C1977AC7416D81B15628",
+        "text": "DIZ-20261127-9E159CFD86E2F3731052",
         "font": "25.17px"
       }
     ],
@@ -241,12 +241,12 @@
   },
   {
     "name": "pedido",
-    "url": "/admin/pedidos/6b0864911e6fe7820383b6d6",
+    "url": "/admin/pedidos/6b09bbd30ef92fef96ecd9c1",
     "width": 390,
     "document": 390,
     "h1": [
       {
-        "text": "DIZ-20261126-C1977AC7416D81B15628",
+        "text": "DIZ-20261127-9E159CFD86E2F3731052",
         "font": "24px"
       }
     ],
@@ -255,12 +255,12 @@
   },
   {
     "name": "pedido",
-    "url": "/admin/pedidos/6b0864911e6fe7820383b6d6",
+    "url": "/admin/pedidos/6b09bbd30ef92fef96ecd9c1",
     "width": 360,
     "document": 360,
     "h1": [
       {
-        "text": "DIZ-20261126-C1977AC7416D81B15628",
+        "text": "DIZ-20261127-9E159CFD86E2F3731052",
         "font": "24px"
       }
     ],
@@ -467,7 +467,7 @@
   },
   {
     "name": "existencias",
-    "url": "/admin/productos?view=stock&productId=6b0864911e6fe7820383b6c7&variantId=6b0864911e6fe7820383b6c8",
+    "url": "/admin/productos?view=stock&productId=6b09bbd30ef92fef96ecd9b2&variantId=6b09bbd30ef92fef96ecd9b3",
     "width": 1440,
     "document": 1440,
     "h1": [
@@ -481,7 +481,7 @@
   },
   {
     "name": "existencias",
-    "url": "/admin/productos?view=stock&productId=6b0864911e6fe7820383b6c7&variantId=6b0864911e6fe7820383b6c8",
+    "url": "/admin/productos?view=stock&productId=6b09bbd30ef92fef96ecd9b2&variantId=6b09bbd30ef92fef96ecd9b3",
     "width": 1024,
     "document": 1024,
     "h1": [
@@ -495,7 +495,7 @@
   },
   {
     "name": "existencias",
-    "url": "/admin/productos?view=stock&productId=6b0864911e6fe7820383b6c7&variantId=6b0864911e6fe7820383b6c8",
+    "url": "/admin/productos?view=stock&productId=6b09bbd30ef92fef96ecd9b2&variantId=6b09bbd30ef92fef96ecd9b3",
     "width": 820,
     "document": 820,
     "h1": [
@@ -509,7 +509,7 @@
   },
   {
     "name": "existencias",
-    "url": "/admin/productos?view=stock&productId=6b0864911e6fe7820383b6c7&variantId=6b0864911e6fe7820383b6c8",
+    "url": "/admin/productos?view=stock&productId=6b09bbd30ef92fef96ecd9b2&variantId=6b09bbd30ef92fef96ecd9b3",
     "width": 390,
     "document": 390,
     "h1": [
@@ -523,7 +523,7 @@
   },
   {
     "name": "existencias",
-    "url": "/admin/productos?view=stock&productId=6b0864911e6fe7820383b6c7&variantId=6b0864911e6fe7820383b6c8",
+    "url": "/admin/productos?view=stock&productId=6b09bbd30ef92fef96ecd9b2&variantId=6b09bbd30ef92fef96ecd9b3",
     "width": 360,
     "document": 360,
     "h1": [
@@ -677,7 +677,7 @@
   },
   {
     "name": "producto-editar",
-    "url": "/admin/productos/6b0864911e6fe7820383b6c7/editar",
+    "url": "/admin/productos/6b09bbd30ef92fef96ecd9b2/editar",
     "width": 1440,
     "document": 1440,
     "h1": [
@@ -691,7 +691,7 @@
   },
   {
     "name": "producto-editar",
-    "url": "/admin/productos/6b0864911e6fe7820383b6c7/editar",
+    "url": "/admin/productos/6b09bbd30ef92fef96ecd9b2/editar",
     "width": 1024,
     "document": 1024,
     "h1": [
@@ -705,7 +705,7 @@
   },
   {
     "name": "producto-editar",
-    "url": "/admin/productos/6b0864911e6fe7820383b6c7/editar",
+    "url": "/admin/productos/6b09bbd30ef92fef96ecd9b2/editar",
     "width": 820,
     "document": 820,
     "h1": [
@@ -719,7 +719,7 @@
   },
   {
     "name": "producto-editar",
-    "url": "/admin/productos/6b0864911e6fe7820383b6c7/editar",
+    "url": "/admin/productos/6b09bbd30ef92fef96ecd9b2/editar",
     "width": 390,
     "document": 390,
     "h1": [
@@ -733,7 +733,7 @@
   },
   {
     "name": "producto-editar",
-    "url": "/admin/productos/6b0864911e6fe7820383b6c7/editar",
+    "url": "/admin/productos/6b09bbd30ef92fef96ecd9b2/editar",
     "width": 360,
     "document": 360,
     "h1": [
@@ -887,7 +887,7 @@
   },
   {
     "name": "solicitud",
-    "url": "/admin/solicitudes/6b0864911e6fe7820383b6eb",
+    "url": "/admin/solicitudes/6b09bbd30ef92fef96ecd9d6",
     "width": 1440,
     "document": 1440,
     "h1": [
@@ -901,7 +901,7 @@
   },
   {
     "name": "solicitud",
-    "url": "/admin/solicitudes/6b0864911e6fe7820383b6eb",
+    "url": "/admin/solicitudes/6b09bbd30ef92fef96ecd9d6",
     "width": 1024,
     "document": 1024,
     "h1": [
@@ -915,7 +915,7 @@
   },
   {
     "name": "solicitud",
-    "url": "/admin/solicitudes/6b0864911e6fe7820383b6eb",
+    "url": "/admin/solicitudes/6b09bbd30ef92fef96ecd9d6",
     "width": 820,
     "document": 820,
     "h1": [
@@ -929,7 +929,7 @@
   },
   {
     "name": "solicitud",
-    "url": "/admin/solicitudes/6b0864911e6fe7820383b6eb",
+    "url": "/admin/solicitudes/6b09bbd30ef92fef96ecd9d6",
     "width": 390,
     "document": 390,
     "h1": [
@@ -943,7 +943,7 @@
   },
   {
     "name": "solicitud",
-    "url": "/admin/solicitudes/6b0864911e6fe7820383b6eb",
+    "url": "/admin/solicitudes/6b09bbd30ef92fef96ecd9d6",
     "width": 360,
     "document": 360,
     "h1": [
@@ -1081,15 +1081,15 @@
     "unlabelled": [],
     "overflow": [
       {
-        "tag": "A",
+        "tag": "BUTTON",
         "class": "st-tab"
       },
       {
-        "tag": "A",
+        "tag": "BUTTON",
         "class": "st-tab"
       },
       {
-        "tag": "A",
+        "tag": "BUTTON",
         "class": "st-tab"
       },
       {
@@ -1128,15 +1128,15 @@
     "unlabelled": [],
     "overflow": [
       {
-        "tag": "A",
+        "tag": "BUTTON",
         "class": "st-tab"
       },
       {
-        "tag": "A",
+        "tag": "BUTTON",
         "class": "st-tab"
       },
       {
-        "tag": "A",
+        "tag": "BUTTON",
         "class": "st-tab"
       },
       {
@@ -1217,18 +1217,6 @@
     "unlabelled": [],
     "overflow": [
       {
-        "tag": "A",
-        "class": "st-tab"
-      },
-      {
-        "tag": "A",
-        "class": "st-tab"
-      },
-      {
-        "tag": "A",
-        "class": "st-tab"
-      },
-      {
         "tag": "BUTTON",
         "class": "st-tab"
       },
@@ -1263,18 +1251,6 @@
     ],
     "unlabelled": [],
     "overflow": [
-      {
-        "tag": "A",
-        "class": "st-tab"
-      },
-      {
-        "tag": "A",
-        "class": "st-tab"
-      },
-      {
-        "tag": "A",
-        "class": "st-tab"
-      },
       {
         "tag": "BUTTON",
         "class": "st-tab"
@@ -1351,20 +1327,7 @@
       }
     ],
     "unlabelled": [],
-    "overflow": [
-      {
-        "tag": "A",
-        "class": "st-tab"
-      },
-      {
-        "tag": "A",
-        "class": "st-tab"
-      },
-      {
-        "tag": "A",
-        "class": "st-tab"
-      }
-    ]
+    "overflow": []
   },
   {
     "name": "tienda-banners",
@@ -1378,20 +1341,7 @@
       }
     ],
     "unlabelled": [],
-    "overflow": [
-      {
-        "tag": "A",
-        "class": "st-tab"
-      },
-      {
-        "tag": "A",
-        "class": "st-tab"
-      },
-      {
-        "tag": "A",
-        "class": "st-tab"
-      }
-    ]
+    "overflow": []
   },
   {
     "name": "tienda-pages",
@@ -1447,20 +1397,7 @@
       }
     ],
     "unlabelled": [],
-    "overflow": [
-      {
-        "tag": "A",
-        "class": "st-tab active"
-      },
-      {
-        "tag": "A",
-        "class": "st-tab"
-      },
-      {
-        "tag": "A",
-        "class": "st-tab"
-      }
-    ]
+    "overflow": []
   },
   {
     "name": "tienda-pages",
@@ -1474,20 +1411,7 @@
       }
     ],
     "unlabelled": [],
-    "overflow": [
-      {
-        "tag": "A",
-        "class": "st-tab active"
-      },
-      {
-        "tag": "A",
-        "class": "st-tab"
-      },
-      {
-        "tag": "A",
-        "class": "st-tab"
-      }
-    ]
+    "overflow": []
   },
   {
     "name": "tienda-resenas",
@@ -1543,20 +1467,7 @@
       }
     ],
     "unlabelled": [],
-    "overflow": [
-      {
-        "tag": "A",
-        "class": "st-tab"
-      },
-      {
-        "tag": "A",
-        "class": "st-tab active"
-      },
-      {
-        "tag": "A",
-        "class": "st-tab"
-      }
-    ]
+    "overflow": []
   },
   {
     "name": "tienda-resenas",
@@ -1570,20 +1481,7 @@
       }
     ],
     "unlabelled": [],
-    "overflow": [
-      {
-        "tag": "A",
-        "class": "st-tab"
-      },
-      {
-        "tag": "A",
-        "class": "st-tab active"
-      },
-      {
-        "tag": "A",
-        "class": "st-tab"
-      }
-    ]
+    "overflow": []
   },
   {
     "name": "tienda-appearance",
@@ -1639,20 +1537,7 @@
       }
     ],
     "unlabelled": [],
-    "overflow": [
-      {
-        "tag": "A",
-        "class": "st-tab"
-      },
-      {
-        "tag": "A",
-        "class": "st-tab"
-      },
-      {
-        "tag": "A",
-        "class": "st-tab active"
-      }
-    ]
+    "overflow": []
   },
   {
     "name": "tienda-appearance",
@@ -1666,20 +1551,7 @@
       }
     ],
     "unlabelled": [],
-    "overflow": [
-      {
-        "tag": "A",
-        "class": "st-tab"
-      },
-      {
-        "tag": "A",
-        "class": "st-tab"
-      },
-      {
-        "tag": "A",
-        "class": "st-tab active"
-      }
-    ]
+    "overflow": []
   },
   {
     "name": "marketing-popup",
@@ -1749,12 +1621,7 @@
       }
     ],
     "unlabelled": [],
-    "overflow": [
-      {
-        "tag": "A",
-        "class": "mk-tab"
-      }
-    ]
+    "overflow": []
   },
   {
     "name": "marketing-newsletter",
@@ -1824,12 +1691,7 @@
       }
     ],
     "unlabelled": [],
-    "overflow": [
-      {
-        "tag": "A",
-        "class": "mk-tab"
-      }
-    ]
+    "overflow": []
   },
   {
     "name": "marketing-carritos",
@@ -1899,12 +1761,7 @@
       }
     ],
     "unlabelled": [],
-    "overflow": [
-      {
-        "tag": "A",
-        "class": "mk-tab active"
-      }
-    ]
+    "overflow": []
   },
   {
     "name": "exportaciones",
@@ -2199,7 +2056,28 @@
       }
     ],
     "unlabelled": [],
-    "overflow": []
+    "overflow": [
+      {
+        "tag": "BUTTON",
+        "class": "finance-period-tabs__btn"
+      },
+      {
+        "tag": "BUTTON",
+        "class": "finance-period-tabs__btn"
+      },
+      {
+        "tag": "BUTTON",
+        "class": "finance-period-tabs__btn"
+      },
+      {
+        "tag": "BUTTON",
+        "class": "finance-period-tabs__btn"
+      },
+      {
+        "tag": "BUTTON",
+        "class": "finance-period-tabs__btn"
+      }
+    ]
   },
   {
     "name": "finanzas",
@@ -2213,7 +2091,28 @@
       }
     ],
     "unlabelled": [],
-    "overflow": []
+    "overflow": [
+      {
+        "tag": "BUTTON",
+        "class": "finance-period-tabs__btn"
+      },
+      {
+        "tag": "BUTTON",
+        "class": "finance-period-tabs__btn"
+      },
+      {
+        "tag": "BUTTON",
+        "class": "finance-period-tabs__btn"
+      },
+      {
+        "tag": "BUTTON",
+        "class": "finance-period-tabs__btn"
+      },
+      {
+        "tag": "BUTTON",
+        "class": "finance-period-tabs__btn"
+      }
+    ]
   },
   {
     "name": "usuarios",

@@ -8,6 +8,7 @@ import {
   updateTaxonomyItem,
 } from "@/services/adminCatalogService";
 import ConfirmModal from "@/components/admin/AdminConfirmModal";
+import AdminSectionPicker from "@/components/admin/AdminSectionPicker";
 
 const TABS = [
   {
@@ -191,6 +192,9 @@ export default function TaxonomyManager({ initialTab = "categories", onTabChange
         onConfirm={confirmModal?.onConfirm}
         onCancel={() => setConfirmModal(null)}
       />
+      {/* Phones: five types do not fit one row; same picker as Productos (same changeTab handler). */}
+      <AdminSectionPicker className="taxonomy-picker" label="Tipo de catálogo" navLabel="Elegir tipo de catálogo"
+        items={TABS.map((tab) => ({ key: tab.type, label: tab.label, current: activeType === tab.type, disabled: saving, onSelect: () => changeTab(tab.type) }))} />
       <nav className="taxonomy-tabs" aria-label="Tipos de catálogo">
         {TABS.map((tab) => (
           <button

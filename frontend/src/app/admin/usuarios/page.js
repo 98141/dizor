@@ -146,7 +146,7 @@ function AdminUsuariosContent() {
       <AdminFeedback message={pageMessage.text} variant={pageMessage.error ? "error" : "success"} />
 
       <section id="cf-user-panel" ref={panel} className="cf-card cf-user-panel" aria-labelledby="cf-user-panel-title" hidden={!open}
-        onKeyDown={(e) => { if (e.key === "Escape") { e.preventDefault(); closeForm(); } }}>
+        onKeyDown={(e) => { if (e.key === "Escape" && !e.target.closest?.("select")) { e.preventDefault(); closeForm(); } }}>
         <div className="cf-card__head">
           <div className="cf-card__titles">
             <h2 id="cf-user-panel-title">Nuevo usuario</h2>

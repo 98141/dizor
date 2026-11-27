@@ -1,0 +1,55 @@
+{
+  "mode": "despues",
+  "checks": [
+    "M01 selector de sección/bandeja: visible solo en móvil, panel dentro de la pantalla a 390 y 360, sin desbordes",
+    "M02 selector operable con teclado (Enter, flechas, Escape con retorno de foco) y clic fuera",
+    "M03 cada opción es un enlace: cambia la URL y la sección actual (Productos, Existencias, Pedidos admin y vendedor)",
+    "M04 «Configuración del catálogo» abre /admin/catalogo desde el selector",
+    "M05 barra superior grafito con texto blanco en Productos, Catálogo y Pedidos (390 px)"
+  ],
+  "pageErrors": [],
+  "hydrationErrors": [],
+  "externalRequests": [],
+  "screenshots": [
+    "productos-abierto-390.png",
+    "existencias-abierto-390.png",
+    "pedidos-abierto-390.png",
+    "pedidos-vendedor-abierto-390.png",
+    "productos-barra-390.png"
+  ],
+  "measurements": [
+    {
+      "name": "productos-390",
+      "ok": true
+    },
+    {
+      "name": "existencias-390",
+      "ok": true
+    },
+    {
+      "name": "pedidos-390",
+      "ok": true
+    },
+    {
+      "name": "pedidos-vendedor-390",
+      "ok": true
+    },
+    {
+      "name": "productos-360",
+      "ok": true
+    },
+    {
+      "name": "existencias-360",
+      "ok": true
+    },
+    {
+      "name": "pedidos-360",
+      "ok": true
+    },
+    {
+      "name": "pedidos-vendedor-360",
+      "ok": true
+    }
+  ],
+  "passed": true
+}

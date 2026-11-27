@@ -4,6 +4,7 @@ import "@/styles/components/auth-form.css";
 import "@/styles/layouts/admin-premium.css";
 import "@/styles/layouts/admin-polish.css";
 import "@/styles/layouts/admin-buttons.css";
+import "@/styles/layouts/admin-controls.css";
 
 export const metadata = {
   robots: { index: false, follow: false },

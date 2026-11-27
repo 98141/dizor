@@ -95,53 +95,8 @@
     "name": "productos",
     "width": 360,
     "contrast": {
-      "text": [
-        {
-          "text": "☰",
-          "class": "admin-topbar__menu-btn",
-          "color": "rgb(255, 255, 255)",
-          "background": [
-            247,
-            246,
-            242,
-            1
-          ],
-          "contrast": 1.08,
-          "required": 4.5
-        },
-        {
-          "text": "Dizor · Administración",
-          "class": "",
-          "color": "rgb(205, 198, 187)",
-          "background": [
-            247,
-            246,
-            242,
-            1
-          ],
-          "contrast": 1.57,
-          "required": 4.5
-        },
-        {
-          "text": "Productos",
-          "class": "",
-          "color": "rgb(255, 255, 255)",
-          "background": [
-            247,
-            246,
-            242,
-            1
-          ],
-          "contrast": 1.08,
-          "required": 4.5
-        }
-      ],
+      "text": [],
       "controls": [
-        {
-          "name": "",
-          "contrast": 1.27,
-          "border": "rgb(232, 228, 219)"
-        },
         {
           "name": "q",
           "contrast": 1.27,
@@ -180,79 +135,8 @@
     "name": "existencias",
     "width": 360,
     "contrast": {
-      "text": [
-        {
-          "text": "☰",
-          "class": "admin-topbar__menu-btn",
-          "color": "rgb(255, 255, 255)",
-          "background": [
-            247,
-            246,
-            242,
-            1
-          ],
-          "contrast": 1.08,
-          "required": 4.5
-        },
-        {
-          "text": "Dizor · Administración",
-          "class": "",
-          "color": "rgb(205, 198, 187)",
-          "background": [
-            247,
-            246,
-            242,
-            1
-          ],
-          "contrast": 1.57,
-          "required": 4.5
-        },
-        {
-          "text": "Productos",
-          "class": "",
-          "color": "rgb(255, 255, 255)",
-          "background": [
-            247,
-            246,
-            242,
-            1
-          ],
-          "contrast": 1.08,
-          "required": 4.5
-        },
-        {
-          "text": "/",
-          "class": "",
-          "color": "rgb(255, 255, 255)",
-          "background": [
-            247,
-            246,
-            242,
-            1
-          ],
-          "contrast": 1.08,
-          "required": 4.5
-        },
-        {
-          "text": "Existencias",
-          "class": "",
-          "color": "rgb(255, 255, 255)",
-          "background": [
-            247,
-            246,
-            242,
-            1
-          ],
-          "contrast": 1.08,
-          "required": 4.5
-        }
-      ],
+      "text": [],
       "controls": [
-        {
-          "name": "",
-          "contrast": 1.27,
-          "border": "rgb(232, 228, 219)"
-        },
         {
           "name": "q",
           "contrast": 1.27,
@@ -291,79 +175,8 @@
     "name": "movimientos",
     "width": 360,
     "contrast": {
-      "text": [
-        {
-          "text": "☰",
-          "class": "admin-topbar__menu-btn",
-          "color": "rgb(255, 255, 255)",
-          "background": [
-            247,
-            246,
-            242,
-            1
-          ],
-          "contrast": 1.08,
-          "required": 4.5
-        },
-        {
-          "text": "Dizor · Administración",
-          "class": "",
-          "color": "rgb(205, 198, 187)",
-          "background": [
-            247,
-            246,
-            242,
-            1
-          ],
-          "contrast": 1.57,
-          "required": 4.5
-        },
-        {
-          "text": "Productos",
-          "class": "",
-          "color": "rgb(255, 255, 255)",
-          "background": [
-            247,
-            246,
-            242,
-            1
-          ],
-          "contrast": 1.08,
-          "required": 4.5
-        },
-        {
-          "text": "/",
-          "class": "",
-          "color": "rgb(255, 255, 255)",
-          "background": [
-            247,
-            246,
-            242,
-            1
-          ],
-          "contrast": 1.08,
-          "required": 4.5
-        },
-        {
-          "text": "Movimientos",
-          "class": "",
-          "color": "rgb(255, 255, 255)",
-          "background": [
-            247,
-            246,
-            242,
-            1
-          ],
-          "contrast": 1.08,
-          "required": 4.5
-        }
-      ],
+      "text": [],
       "controls": [
-        {
-          "name": "",
-          "contrast": 1.27,
-          "border": "rgb(232, 228, 219)"
-        },
         {
           "name": "term",
           "contrast": 1.27,
@@ -427,73 +240,7 @@
     "name": "taxonomias",
     "width": 360,
     "contrast": {
-      "text": [
-        {
-          "text": "☰",
-          "class": "admin-topbar__menu-btn",
-          "color": "rgb(255, 255, 255)",
-          "background": [
-            247,
-            246,
-            242,
-            1
-          ],
-          "contrast": 1.08,
-          "required": 4.5
-        },
-        {
-          "text": "Dizor · Administración",
-          "class": "",
-          "color": "rgb(205, 198, 187)",
-          "background": [
-            247,
-            246,
-            242,
-            1
-          ],
-          "contrast": 1.57,
-          "required": 4.5
-        },
-        {
-          "text": "Productos",
-          "class": "",
-          "color": "rgb(255, 255, 255)",
-          "background": [
-            247,
-            246,
-            242,
-            1
-          ],
-          "contrast": 1.08,
-          "required": 4.5
-        },
-        {
-          "text": "/",
-          "class": "",
-          "color": "rgb(255, 255, 255)",
-          "background": [
-            247,
-            246,
-            242,
-            1
-          ],
-          "contrast": 1.08,
-          "required": 4.5
-        },
-        {
-          "text": "Configuración del catálogo",
-          "class": "",
-          "color": "rgb(255, 255, 255)",
-          "background": [
-            247,
-            246,
-            242,
-            1
-          ],
-          "contrast": 1.08,
-          "required": 4.5
-        }
-      ],
+      "text": [],
       "controls": []
     },
     "unnamedButtons": 0

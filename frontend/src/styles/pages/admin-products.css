@@ -826,9 +826,9 @@
 
 /* Sprint 03 — catálogo operativo premium. No recorta la tabla de taxonomía. */
 .admin-shell:has(.op-catalog),
-.admin-shell:has(.op-tax),
-.admin-shell:has(.op-catalog) .admin-topbar,
-.admin-shell:has(.op-tax) .admin-topbar { background: var(--admin-canvas, #f7f6f2); }
+.admin-shell:has(.op-tax) { background: var(--admin-canvas, #f7f6f2); }
+/* The top bar keeps the shell colours: graphite with white text on phones, transparent over the
+   canvas on desktop. (Painting it ivory here hid the menu and location on phones.) */
 .op-catalog, .op-tax { min-width: 0; max-width: 100%; color: var(--admin-graphite, #252725); overflow-wrap: break-word; word-break: normal; }
 .op-catalog { container-type: inline-size; display: grid; gap: .85rem; }
 .admin-shell .op-catalog .op-hero { display: flex; flex-wrap: nowrap; align-items: flex-start; justify-content: space-between; gap: .75rem 1rem; }
@@ -1147,3 +1147,9 @@ html .admin-shell .admin-main > main .pe .pe-variant__toggle { white-space: nowr
 .admin-shell .pe :is(.pe-aside__pending, .pe-errors) ul { gap: .3rem; }
 /* Narrow screens: with nothing pending the save bar shows only its actions (lower bar, more room). */
 @container (max-width: 37.99rem) { .admin-shell .pe .pe-savebar__status[data-idle] { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; } }
+/* Configuración del catálogo · phones (2026-11-26): the five taxonomy types use the shared picker. */
+.admin-shell .taxonomy-manager .taxonomy-picker { display: none; margin: 0 0 1rem; }
+@media (max-width: 759px) {
+  .admin-shell .taxonomy-manager .taxonomy-picker { display: grid; }
+  .admin-shell .taxonomy-manager > .taxonomy-tabs { display: none; }
+}

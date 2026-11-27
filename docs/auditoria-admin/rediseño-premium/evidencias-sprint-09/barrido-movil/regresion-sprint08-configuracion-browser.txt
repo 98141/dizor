@@ -1,0 +1,34 @@
+ok - C01 configuración cargada en dos columnas, tasa de ancho acotado, transportadoras confirmadas
+ok - C04 envío incluido como condición vigente e histórico de solo lectura
+ok - C05 Inter Rapidísimo y Servientrega en una tarjeta compacta, sin edición
+ok - C03 impuestos editables, estado desactivado explicado y guardado {taxEnabled,taxRate}
+ok - C06 los campos de envío inactivos no viajan en el guardado
+ok - C08 doble envío produce un único PATCH
+ok - C07 guardado confirmado, validación previa, rechazo con borrador conservado y resultado desconocido verificable
+ok - C02 error de carga sin formulario ficticio y recuperación con Reintentar
+ok - U16 estado de carga anunciado sin afirmar un equipo vacío
+ok - U10 equipo en tabla compacta: nombre, correo, rol, estado y acciones, sin credenciales
+ok - U13 roles creables limitados a vendedor y administrador
+ok - U15 formulario contextual bajo demanda; Escape lo cierra y devuelve el foco
+ok - U12 validación nativa y regla de contraseña del servidor, con borrador conservado
+ok - U11 creación confirmada con una sola petición, lista actualizada y contraseña descartada
+ok - U08 doble clic en Crear usuario no duplica la creación
+ok - U18 desactivar exige confirmación y usa el endpoint existente una vez
+ok - U09 equipo vacío confirmado con estado propio y acceso a crear el primero
+ok - U17 error de consulta distinto de vacío, con recuperación
+ok - U19 resultado desconocido de creación comprobado contra el equipo real
+ok - U14 administrador sin acceso a Usuarios y vendedor sin acceso a Auditoría en la interfaz
+ok - A23 eventos de hoy (6) desde la fuente de estadísticas
+ok - A24 eventos fallidos (13) desde la fuente de estadísticas
+ok - A19 138 eventos: 15 por página desde el servidor, 10 páginas
+ok - A25 detalle expandible con fecha completa, usuario, rol, descripción, referencias e IP
+ok - A27 IP y datos solo en el detalle; claves sensibles ocultas
+ok - A26 historial de solo lectura: sin edición ni eliminación, solo consultas GET
+ok - A29 Ver detalle accesible con teclado y foco visible
+ok - A22 cambio de página por servidor, conservado en URL y tras recargar
+ok - A20 filtros combinados (búsqueda, módulo, resultado, desde, hasta) enviados al servidor y conservados en URL
+ok - A21 paginación y filtros restablecidos sin descargar el historial completo
+ok - A28 responsive 1440–360 sin desbordes, fichas compactas y filtros bajo demanda en móvil
+ok - A18 pocos eventos: sin paginación ni contenedores sobredimensionados
+ok - A17 error de consulta distinto de vacío, con indicadores no inventados y recuperación
+ok - N01 navegación secundaria: estado activo, permisos y una sola fila de 44 px en 360

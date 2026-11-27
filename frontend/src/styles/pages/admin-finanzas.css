@@ -349,3 +349,44 @@ html .admin-shell .fn-page .finance-history-chart__label { max-width: 4.5rem; ov
 @media (prefers-reduced-motion: reduce) {
   .fn-page * { scroll-behavior: auto; transition: none; }
 }
+
+/* ══ Finanzas · menús en móvil (2026-11-26) ══════════════════════════════════
+   Section tabs as one segmented row; period, grouping and cost filters as one
+   swipeable row of chips with the same gold active state; labelled exports;
+   dates in two columns. Desktop keeps its layout. */
+.fn-page .fn-caption { color: #5f5b54; font-size: .72rem; font-weight: 700; letter-spacing: .01em; }
+.fn-page .finance-period-label { display: flex; flex-wrap: wrap; align-items: baseline; gap: .4rem; color: #252725; font-weight: 600; }
+.fn-page .finance-export-btns { align-items: center; }
+.fn-page .fn-cost-controls { display: grid; gap: .6rem; margin-bottom: var(--space-md); }
+.fn-page .fn-chips { display: flex; flex-wrap: wrap; gap: .35rem; }
+.fn-page .fn-cost-tools { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .6rem; }
+.fn-page .fn-history-controls { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--space-md); margin-bottom: var(--space-lg); }
+.fn-page .fn-dates { display: flex; flex-wrap: wrap; align-items: flex-end; gap: .5rem; }
+.fn-page .fn-date { display: grid; gap: .2rem; color: #5f5b54; font-size: .78rem; font-weight: 600; }
+.fn-page .fn-refresh { margin-left: auto; }
+@media (max-width: 759px) {
+  html .admin-shell .admin-main > main .fn-page .fn-home { display: none; }
+  html .admin-shell .admin-main > main .fn-page .fn-tabs { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: .2rem; padding: .22rem; border: 1px solid #e8e4db; border-radius: 10px; background: #efebe3; }
+  html .admin-shell .admin-main > main .fn-page .fn-tab { justify-content: center; min-height: 44px; padding: .3rem .4rem; border: 0; border-radius: 8px; background: transparent; box-shadow: none; color: #4a4744; font-size: .78rem; line-height: 1.2; text-align: center; white-space: normal; }
+  html .admin-shell .admin-main > main .fn-page .fn-tab.is-active { background: #fff; color: #252725; box-shadow: 0 1px 2px rgba(37, 39, 37, .12), inset 0 -2px 0 #b87305; }
+  .fn-page .fn-toolbar { display: grid; gap: .55rem; }
+  html .admin-shell .admin-main > main .fn-page :is(.finance-period-tabs, .fn-chips) { flex-wrap: nowrap; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; padding-bottom: .3rem; scrollbar-width: thin; }
+  html .admin-shell .admin-main > main .fn-page :is(.finance-period-tabs, .fn-chips) > button { flex: 0 0 auto; min-height: 40px; padding: .35rem .75rem; font-size: .8rem; white-space: nowrap; scroll-snap-align: start; }
+  .fn-page .fn-range { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: .4rem .5rem; }
+  .fn-page .finance-export-btns { flex-wrap: nowrap; width: 100%; }
+  html .admin-shell .admin-main > main .fn-page .finance-export-btns .admin-btn { flex: 1 1 0; }
+  .fn-page .fn-history-controls { display: grid; gap: .6rem; }
+  .fn-page .fn-dates { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  html .admin-shell .fn-page .fn-dates #finance-history-from,
+  html .admin-shell .fn-page .fn-dates #finance-history-to { width: 100%; }
+  .fn-page .fn-dates > .admin-btn { grid-column: 1 / -1; justify-self: start; }
+  .fn-page .fn-refresh { margin-left: 0; justify-self: start; }
+  .fn-page .fn-cost-tools .fn-search { flex: 1 1 100%; flex-wrap: nowrap; }
+  .fn-page .fn-cost-tools .fn-search input { flex: 1 1 auto; min-width: 0; }
+}
+/* Panel: the six headline indicators in two columns on phones; values scale with the card. */
+@media (max-width: 759px) {
+  .fn-page .fn-kpis:not(.fn-kpis--secondary) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fn-page .fn-kpis:not(.fn-kpis--secondary) .fn-kpi { container-type: inline-size; }
+  .fn-page .fn-kpis:not(.fn-kpis--secondary) .fn-kpi p { font-size: clamp(.85rem, 11cqi, 1.2rem); overflow-wrap: normal; }
+}

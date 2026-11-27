@@ -1,0 +1,37 @@
+{
+  "checks": [
+    "1 productos compactos, sin SKU ni menú duplicado",
+    "19 filtros, URL y limpieza",
+    "2 existencias contraídas",
+    "3, 8, 9, 10 y 11 apertura, agotado, inactiva y revisión",
+    "4 cierre del mismo producto",
+    "5 acordeón móvil: abrir otro cierra el anterior",
+    "6 y 7 enlace de alerta, foco y un solo producto",
+    "12 y 14 ajuste positivo y doble clic",
+    "13 ajuste negativo",
+    "15 y 16 resultado ambiguo y clave conservada",
+    "17 y 18 historial y detalle",
+    "23 movimientos móvil",
+    "21 vendedor sin edición, costo ni historial",
+    "23 responsive sin desborde",
+    "24 F6-I01 acciones visibles",
+    "22 foco de teclado"
+  ],
+  "externalRequests": [],
+  "pageErrors": [],
+  "shots": [
+    "productos-escritorio.png",
+    "productos-filtros.png",
+    "existencias-contraidas.png",
+    "existencias-expandido.png",
+    "existencias-movil.png",
+    "ajuste-abierto.png",
+    "movimientos-escritorio.png",
+    "movimientos-movil.png",
+    "productos-movil-360.png",
+    "productos-movil.png",
+    "configuracion-escritorio.png",
+    "configuracion-movil.png"
+  ],
+  "passed": true
+}
